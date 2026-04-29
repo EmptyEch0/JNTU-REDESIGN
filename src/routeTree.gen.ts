@@ -9,8 +9,104 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WomenEmpowermentRouteImport } from './routes/women-empowerment'
+import { Route as SportsRouteImport } from './routes/sports'
+import { Route as RdCellRouteImport } from './routes/rd-cell'
+import { Route as PlacementsRouteImport } from './routes/placements'
+import { Route as NssRouteImport } from './routes/nss'
+import { Route as NoticesRouteImport } from './routes/notices'
+import { Route as LibraryRouteImport } from './routes/library'
+import { Route as HostelsRouteImport } from './routes/hostels'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as DispensaryRouteImport } from './routes/dispensary'
+import { Route as DepartmentsRouteImport } from './routes/departments'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CampusLifeRouteImport } from './routes/campus-life'
+import { Route as AdmissionsRouteImport } from './routes/admissions'
+import { Route as AcademicsRouteImport } from './routes/academics'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WomenEmpowermentRoute = WomenEmpowermentRouteImport.update({
+  id: '/women-empowerment',
+  path: '/women-empowerment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SportsRoute = SportsRouteImport.update({
+  id: '/sports',
+  path: '/sports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RdCellRoute = RdCellRouteImport.update({
+  id: '/rd-cell',
+  path: '/rd-cell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlacementsRoute = PlacementsRouteImport.update({
+  id: '/placements',
+  path: '/placements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NssRoute = NssRouteImport.update({
+  id: '/nss',
+  path: '/nss',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticesRoute = NoticesRouteImport.update({
+  id: '/notices',
+  path: '/notices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HostelsRoute = HostelsRouteImport.update({
+  id: '/hostels',
+  path: '/hostels',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DispensaryRoute = DispensaryRouteImport.update({
+  id: '/dispensary',
+  path: '/dispensary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DepartmentsRoute = DepartmentsRouteImport.update({
+  id: '/departments',
+  path: '/departments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CampusLifeRoute = CampusLifeRouteImport.update({
+  id: '/campus-life',
+  path: '/campus-life',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdmissionsRoute = AdmissionsRouteImport.update({
+  id: '/admissions',
+  path: '/admissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcademicsRoute = AcademicsRouteImport.update({
+  id: '/academics',
+  path: '/academics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +115,256 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/academics': typeof AcademicsRoute
+  '/admissions': typeof AdmissionsRoute
+  '/campus-life': typeof CampusLifeRoute
+  '/contact': typeof ContactRoute
+  '/departments': typeof DepartmentsRoute
+  '/dispensary': typeof DispensaryRoute
+  '/gallery': typeof GalleryRoute
+  '/hostels': typeof HostelsRoute
+  '/library': typeof LibraryRoute
+  '/notices': typeof NoticesRoute
+  '/nss': typeof NssRoute
+  '/placements': typeof PlacementsRoute
+  '/rd-cell': typeof RdCellRoute
+  '/sports': typeof SportsRoute
+  '/women-empowerment': typeof WomenEmpowermentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/academics': typeof AcademicsRoute
+  '/admissions': typeof AdmissionsRoute
+  '/campus-life': typeof CampusLifeRoute
+  '/contact': typeof ContactRoute
+  '/departments': typeof DepartmentsRoute
+  '/dispensary': typeof DispensaryRoute
+  '/gallery': typeof GalleryRoute
+  '/hostels': typeof HostelsRoute
+  '/library': typeof LibraryRoute
+  '/notices': typeof NoticesRoute
+  '/nss': typeof NssRoute
+  '/placements': typeof PlacementsRoute
+  '/rd-cell': typeof RdCellRoute
+  '/sports': typeof SportsRoute
+  '/women-empowerment': typeof WomenEmpowermentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/academics': typeof AcademicsRoute
+  '/admissions': typeof AdmissionsRoute
+  '/campus-life': typeof CampusLifeRoute
+  '/contact': typeof ContactRoute
+  '/departments': typeof DepartmentsRoute
+  '/dispensary': typeof DispensaryRoute
+  '/gallery': typeof GalleryRoute
+  '/hostels': typeof HostelsRoute
+  '/library': typeof LibraryRoute
+  '/notices': typeof NoticesRoute
+  '/nss': typeof NssRoute
+  '/placements': typeof PlacementsRoute
+  '/rd-cell': typeof RdCellRoute
+  '/sports': typeof SportsRoute
+  '/women-empowerment': typeof WomenEmpowermentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/academics'
+    | '/admissions'
+    | '/campus-life'
+    | '/contact'
+    | '/departments'
+    | '/dispensary'
+    | '/gallery'
+    | '/hostels'
+    | '/library'
+    | '/notices'
+    | '/nss'
+    | '/placements'
+    | '/rd-cell'
+    | '/sports'
+    | '/women-empowerment'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/academics'
+    | '/admissions'
+    | '/campus-life'
+    | '/contact'
+    | '/departments'
+    | '/dispensary'
+    | '/gallery'
+    | '/hostels'
+    | '/library'
+    | '/notices'
+    | '/nss'
+    | '/placements'
+    | '/rd-cell'
+    | '/sports'
+    | '/women-empowerment'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/academics'
+    | '/admissions'
+    | '/campus-life'
+    | '/contact'
+    | '/departments'
+    | '/dispensary'
+    | '/gallery'
+    | '/hostels'
+    | '/library'
+    | '/notices'
+    | '/nss'
+    | '/placements'
+    | '/rd-cell'
+    | '/sports'
+    | '/women-empowerment'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AcademicsRoute: typeof AcademicsRoute
+  AdmissionsRoute: typeof AdmissionsRoute
+  CampusLifeRoute: typeof CampusLifeRoute
+  ContactRoute: typeof ContactRoute
+  DepartmentsRoute: typeof DepartmentsRoute
+  DispensaryRoute: typeof DispensaryRoute
+  GalleryRoute: typeof GalleryRoute
+  HostelsRoute: typeof HostelsRoute
+  LibraryRoute: typeof LibraryRoute
+  NoticesRoute: typeof NoticesRoute
+  NssRoute: typeof NssRoute
+  PlacementsRoute: typeof PlacementsRoute
+  RdCellRoute: typeof RdCellRoute
+  SportsRoute: typeof SportsRoute
+  WomenEmpowermentRoute: typeof WomenEmpowermentRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/women-empowerment': {
+      id: '/women-empowerment'
+      path: '/women-empowerment'
+      fullPath: '/women-empowerment'
+      preLoaderRoute: typeof WomenEmpowermentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sports': {
+      id: '/sports'
+      path: '/sports'
+      fullPath: '/sports'
+      preLoaderRoute: typeof SportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rd-cell': {
+      id: '/rd-cell'
+      path: '/rd-cell'
+      fullPath: '/rd-cell'
+      preLoaderRoute: typeof RdCellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/placements': {
+      id: '/placements'
+      path: '/placements'
+      fullPath: '/placements'
+      preLoaderRoute: typeof PlacementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nss': {
+      id: '/nss'
+      path: '/nss'
+      fullPath: '/nss'
+      preLoaderRoute: typeof NssRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notices': {
+      id: '/notices'
+      path: '/notices'
+      fullPath: '/notices'
+      preLoaderRoute: typeof NoticesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hostels': {
+      id: '/hostels'
+      path: '/hostels'
+      fullPath: '/hostels'
+      preLoaderRoute: typeof HostelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dispensary': {
+      id: '/dispensary'
+      path: '/dispensary'
+      fullPath: '/dispensary'
+      preLoaderRoute: typeof DispensaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/departments': {
+      id: '/departments'
+      path: '/departments'
+      fullPath: '/departments'
+      preLoaderRoute: typeof DepartmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/campus-life': {
+      id: '/campus-life'
+      path: '/campus-life'
+      fullPath: '/campus-life'
+      preLoaderRoute: typeof CampusLifeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admissions': {
+      id: '/admissions'
+      path: '/admissions'
+      fullPath: '/admissions'
+      preLoaderRoute: typeof AdmissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/academics': {
+      id: '/academics'
+      path: '/academics'
+      fullPath: '/academics'
+      preLoaderRoute: typeof AcademicsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +377,22 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AcademicsRoute: AcademicsRoute,
+  AdmissionsRoute: AdmissionsRoute,
+  CampusLifeRoute: CampusLifeRoute,
+  ContactRoute: ContactRoute,
+  DepartmentsRoute: DepartmentsRoute,
+  DispensaryRoute: DispensaryRoute,
+  GalleryRoute: GalleryRoute,
+  HostelsRoute: HostelsRoute,
+  LibraryRoute: LibraryRoute,
+  NoticesRoute: NoticesRoute,
+  NssRoute: NssRoute,
+  PlacementsRoute: PlacementsRoute,
+  RdCellRoute: RdCellRoute,
+  SportsRoute: SportsRoute,
+  WomenEmpowermentRoute: WomenEmpowermentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

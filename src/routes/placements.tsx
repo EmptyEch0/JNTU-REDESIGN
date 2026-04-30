@@ -33,7 +33,7 @@ function PlacementsPage() {
       <PageHero
         eyebrow="Placements & Training"
         title="From classroom to career — together."
-        subtitle="A dedicated training and placement cell that prepares students from the second year and partners with recruiters across India."
+        subtitle="A dedicated training and placement cell that prepares students from the second year and partners with recruiters across India." image={placementsImg}
       />
 
       <section className="py-20 container-narrow">

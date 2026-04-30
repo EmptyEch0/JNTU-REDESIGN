@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
+import heroImg from "@/assets/hero-2.jpg";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ArrowRight, FileText, ClipboardList, IndianRupee, CheckCircle2 } from "lucide-react";
 
@@ -29,7 +30,7 @@ function AdmissionsPage() {
         eyebrow="Admissions"
         title="Your seat at JNTU-GV CEV."
         subtitle="Admissions are governed by JNTU-GV and the state counselling process. Here's a clear overview to get you started."
-      >
+       image={heroImg}>
         <div className="flex gap-3 flex-wrap">
           <Link to="/contact" className="btn-primary">Talk to admissions <ArrowRight className="h-4 w-4" /></Link>
           <Link to="/academics" className="btn-ghost">View programs</Link>

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
+import labImg from "@/assets/lab.jpg";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ProfileCard } from "@/components/ProfileCard";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -42,7 +43,7 @@ function RDPage() {
       <PageHero
         eyebrow="R&D Cell"
         title="Research that earns its keep."
-        subtitle="Funded projects, industry consultancy and a committee that turns ideas into outcomes."
+        subtitle="Funded projects, industry consultancy and a committee that turns ideas into outcomes." image={labImg}
       />
 
       <section className="py-20 container-narrow">

@@ -12,14 +12,33 @@ interface Props {
 export function PageHero({ eyebrow, title, subtitle, children, image }: Props) {
   return (
     <section className="relative pt-40 pb-20 md:pt-48 md:pb-28 overflow-hidden">
-      <div className="absolute inset-0 bg-[var(--gradient-royal)]" />
+      {/* Base image (when provided) */}
       {image && (
         <img
           src={image}
           alt=""
           aria-hidden
-          className="absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-luminosity"
+          className="absolute inset-0 h-full w-full object-cover"
           loading="eager"
+        />
+      )}
+      {/* Royal gradient — full opacity when no image, semi when image present */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "var(--gradient-royal)",
+          opacity: image ? 0.82 : 1,
+        }}
+      />
+      {/* Dark readability scrim over image */}
+      {image && (
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, oklch(0.18 0.05 260 / 0.55) 0%, oklch(0.18 0.05 260 / 0.35) 45%, oklch(0.18 0.05 260 / 0.75) 100%)",
+          }}
         />
       )}
       <div className="absolute inset-0 opacity-30" style={{ background: "var(--gradient-glow)" }} />

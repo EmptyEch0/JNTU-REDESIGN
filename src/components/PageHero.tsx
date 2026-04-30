@@ -6,12 +6,22 @@ interface Props {
   title: string;
   subtitle?: string;
   children?: ReactNode;
+  image?: string;
 }
 
-export function PageHero({ eyebrow, title, subtitle, children }: Props) {
+export function PageHero({ eyebrow, title, subtitle, children, image }: Props) {
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+    <section className="relative pt-40 pb-20 md:pt-48 md:pb-28 overflow-hidden">
       <div className="absolute inset-0 bg-[var(--gradient-royal)]" />
+      {image && (
+        <img
+          src={image}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-luminosity"
+          loading="eager"
+        />
+      )}
       <div className="absolute inset-0 opacity-30" style={{ background: "var(--gradient-glow)" }} />
       <div
         aria-hidden
@@ -23,6 +33,7 @@ export function PageHero({ eyebrow, title, subtitle, children }: Props) {
           "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
         backgroundSize: "32px 32px",
       }} />
+      <div aria-hidden className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
       <div className="container-narrow relative z-10 text-white">
         <div className="mb-5 animate-[fade-up_0.6s_ease-out]"><Breadcrumbs /></div>
         {eyebrow && (

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { Bell, ArrowRight } from "lucide-react";
+import libraryImg from "@/assets/library-interior.jpg";
 
 export const Route = createFileRoute("/notices")({
   head: () => ({
@@ -27,7 +28,7 @@ const NOTICES = [
 function NoticesPage() {
   return (
     <>
-      <PageHero eyebrow="Announcements" title="Notices, circulars & updates." subtitle="The latest from the office of the Principal, departments and student cells." />
+      <PageHero eyebrow="Announcements" title="Notices, circulars & updates." subtitle="The latest from the office of the Principal, departments and student cells." image={libraryImg} />
 
       <section className="py-20 container-narrow">
         <div className="space-y-3">

@@ -4,6 +4,7 @@ import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ProfileCard } from "@/components/ProfileCard";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Stethoscope, Pill, Ambulance, HeartPulse } from "lucide-react";
+import cultureImg from "@/assets/culture.jpg";
 
 export const Route = createFileRoute("/dispensary")({
   head: () => ({
@@ -27,7 +28,7 @@ const SERVICES = [
 function DispensaryPage() {
   return (
     <>
-      <PageHero eyebrow="Dispensary" title="Care that meets you on campus." subtitle="A small, focused clinic for the everyday — and a swift response when something more is needed." />
+      <PageHero eyebrow="Dispensary" title="Care that meets you on campus." subtitle="A small, focused clinic for the everyday — and a swift response when something more is needed." image={cultureImg} />
 
       <section className="py-20 container-narrow">
         <RevealOnScroll><SectionLabel eyebrow="Services" title="What we offer." /></RevealOnScroll>

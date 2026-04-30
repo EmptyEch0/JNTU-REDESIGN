@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ArrowRight, BookOpen, Calendar, FileCheck2, GraduationCap } from "lucide-react";
+import campusImg from "@/assets/campus-life.jpg";
 
 export const Route = createFileRoute("/academics")({
   head: () => ({
@@ -35,6 +36,7 @@ function AcademicsPage() {
         eyebrow="Academics"
         title="A program built around what graduates actually need."
         subtitle="From foundational sciences to capstone industry projects, our curriculum is designed for depth, hands-on practice and lifelong learning."
+        image={campusImg}
       />
 
       <section className="py-24 container-narrow">

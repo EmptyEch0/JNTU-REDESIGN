@@ -28,7 +28,7 @@ const PILLARS = [
 function CampusLifePage() {
   return (
     <>
-      <PageHero eyebrow="Campus Life" title="A campus that lives, all day." subtitle="Studies are only the beginning. The campus comes alive in clubs, fests, courts and the spaces in between." />
+      <PageHero eyebrow="Campus Life" title="A campus that lives, all day." subtitle="Studies are only the beginning. The campus comes alive in clubs, fests, courts and the spaces in between." image={campusImg} />
 
       <section className="py-20 container-narrow space-y-20">
         {PILLARS.map((p, i) => (

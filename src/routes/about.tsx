@@ -30,7 +30,7 @@ function AboutPage() {
       <PageHero
         eyebrow="About"
         title="A college built on quiet ambition."
-        subtitle="JNTU-GV College of Engineering Vizianagaram is a constituent college of Jawaharlal Nehru Technological University Gurajada Vizianagaram — established to serve the engineering aspirations of the north coastal districts of Andhra Pradesh."
+        subtitle="JNTU-GV College of Engineering Vizianagaram is a constituent college of Jawaharlal Nehru Technological University Gurajada Vizianagaram — established to serve the engineering aspirations of the north coastal districts of Andhra Pradesh." image={campusImg}
       />
       <section className="py-24 md:py-32 container-narrow grid lg:grid-cols-2 gap-16 items-center">
         <RevealOnScroll>

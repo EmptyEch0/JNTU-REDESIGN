@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
+import cultureImg from "@/assets/culture.jpg";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Heart, Leaf, Users, BookOpen } from "lucide-react";
@@ -26,7 +27,7 @@ const ACTIVITIES = [
 function NSSPage() {
   return (
     <>
-      <PageHero eyebrow="NSS" title="Not me, but you." subtitle="The National Service Scheme on campus is a quiet, consistent commitment to community — led entirely by students." />
+      <PageHero eyebrow="NSS" title="Not me, but you." subtitle="The National Service Scheme on campus is a quiet, consistent commitment to community — led entirely by students." image={cultureImg} />
 
       <section className="py-20 container-narrow">
         <RevealOnScroll><SectionLabel eyebrow="What we do" title="Service, every semester." /></RevealOnScroll>

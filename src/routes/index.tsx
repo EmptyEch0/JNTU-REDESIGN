@@ -1,6 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowDown, Bell, MapPin, GraduationCap, Building2, BookOpen, Trophy, Stethoscope, FlaskConical, Briefcase } from "lucide-react";
 import heroImg from "@/assets/hero-campus.jpg";
+import hero2 from "@/assets/hero-2.jpg";
+import hero3 from "@/assets/hero-3.jpg";
+import hero4 from "@/assets/hero-4.jpg";
 import campusLifeImg from "@/assets/campus-life.jpg";
 import labImg from "@/assets/lab.jpg";
 import hostelImg from "@/assets/hostel.jpg";
@@ -11,6 +14,7 @@ import placementsImg from "@/assets/placements-bg.jpg";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { StatCounter } from "@/components/StatCounter";
 import { ParallaxBg } from "@/components/ParallaxBg";
+import { HeroSlideshow } from "@/components/HeroSlideshow";
 import { SectionLabel } from "@/components/SectionLabel";
 import { MarqueeLogos } from "@/components/MarqueeLogos";
 import { STATS, DEPARTMENTS, RECRUITERS } from "@/lib/site";
@@ -39,16 +43,20 @@ const FACILITIES = [
 function HomePage() {
   return (
     <>
-      {/* HERO */}
+      {/* HERO — auto-rotating slideshow */}
       <section className="relative h-[100svh] min-h-[640px] w-full overflow-hidden">
-        <ParallaxBg
-          src={heroImg}
-          alt="JNTU-GV campus at golden hour"
-          speed={0.25}
+        <HeroSlideshow
+          images={[
+            { src: heroImg, alt: "JNTU-GV campus at golden hour" },
+            { src: hero2, alt: "Aerial view of campus at sunset" },
+            { src: hero3, alt: "Students walking through campus" },
+            { src: hero4, alt: "Library at dusk" },
+          ]}
+          interval={6500}
           minHeight="100svh"
           overlay="linear-gradient(180deg, oklch(0.18 0.05 260 / 0.55) 0%, oklch(0.18 0.05 260 / 0.35) 40%, oklch(0.18 0.05 260 / 0.85) 100%)"
         >
-          <div className="container-narrow h-full flex flex-col justify-end pb-20 md:pb-28 text-white">
+          <div className="container-narrow h-full min-h-[100svh] flex flex-col justify-end pt-32 pb-32 md:pb-36 text-white">
             <div className="text-eyebrow !text-white/80 animate-[fade-up_0.7s_ease-out_0.3s_both]">
               <MapPin className="inline h-3 w-3 mr-1.5 -mt-0.5" />
               Vizianagaram, Andhra Pradesh
@@ -70,8 +78,8 @@ function HomePage() {
               </Link>
             </div>
           </div>
-        </ParallaxBg>
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-xs uppercase tracking-[0.3em] flex flex-col items-center gap-2 animate-[float_3s_ease-in-out_infinite]">
+        </HeroSlideshow>
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-xs uppercase tracking-[0.3em] flex flex-col items-center gap-2 animate-[float_3s_ease-in-out_infinite] z-20 pointer-events-none">
           <span>Scroll</span>
           <ArrowDown className="h-4 w-4" />
         </div>

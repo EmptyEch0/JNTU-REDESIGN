@@ -37,7 +37,7 @@ const IMAGES = [
 function GalleryPage() {
   return (
     <>
-      <PageHero eyebrow="Gallery" title="A campus, in moments." subtitle="A growing visual record of the rhythms, faces and seasons of life at JNTU-GV CEV." />
+      <PageHero eyebrow="Gallery" title="A campus, in moments." subtitle="A growing visual record of the rhythms, faces and seasons of life at JNTU-GV CEV." image={cultureImg} />
       <section className="py-20 container-narrow">
         <RevealOnScroll>
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">

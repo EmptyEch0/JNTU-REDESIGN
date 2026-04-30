@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
+import heroImg from "@/assets/hero-3.jpg";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { ProfileCard } from "@/components/ProfileCard";
@@ -27,7 +28,7 @@ const PILLARS = [
 function WomenPage() {
   return (
     <>
-      <PageHero eyebrow="Women Empowerment Cell" title="Safe. Supported. Ambitious." subtitle="A campus-wide cell that ensures every woman at JNTU-GV CEV has the safety, mentorship and platform to lead." />
+      <PageHero eyebrow="Women Empowerment Cell" title="Safe. Supported. Ambitious." subtitle="A campus-wide cell that ensures every woman at JNTU-GV CEV has the safety, mentorship and platform to lead." image={heroImg} />
 
       <section className="py-20 container-narrow">
         <RevealOnScroll><SectionLabel eyebrow="Pillars" title="Four commitments." /></RevealOnScroll>

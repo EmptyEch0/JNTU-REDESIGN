@@ -1,13 +1,19 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Menu, X, ChevronDown, GraduationCap } from "lucide-react";
-import { NAV, SITE } from "@/lib/site";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Menu, X, ChevronDown, GraduationCap, Search, CornerDownLeft } from "lucide-react";
+import { NAV, SEARCH_INDEX, SITE } from "@/lib/site";
 
 export function MegaMenu() {
   const [scrolled, setScrolled] = useState(false);
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [activeResult, setActiveResult] = useState(0);
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+  const islandRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -16,27 +22,97 @@ export function MegaMenu() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Close on route change
   useEffect(() => {
     setMobileOpen(false);
     setOpenIdx(null);
+    setSearchOpen(false);
+    setQuery("");
   }, [path]);
 
-  const expanded = scrolled || openIdx !== null || mobileOpen;
+  const closeAll = () => {
+    setOpenIdx(null);
+    setMobileOpen(false);
+    setSearchOpen(false);
+  };
+
+  // Click outside + Escape
+  useEffect(() => {
+    if (openIdx === null && !mobileOpen && !searchOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (islandRef.current && !islandRef.current.contains(e.target as Node)) closeAll();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeAll();
+      // Cmd/Ctrl+K to open search
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [openIdx, mobileOpen, searchOpen]);
+
+  // Global Cmd+K (always available)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Focus the input when search opens
+  useEffect(() => {
+    if (searchOpen) {
+      setTimeout(() => searchInputRef.current?.focus(), 80);
+    } else {
+      setQuery("");
+      setActiveResult(0);
+    }
+  }, [searchOpen]);
+
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return SEARCH_INDEX.slice(0, 8);
+    return SEARCH_INDEX.filter(
+      (r) =>
+        r.label.toLowerCase().includes(q) ||
+        r.group.toLowerCase().includes(q) ||
+        (r.keywords ?? "").toLowerCase().includes(q),
+    ).slice(0, 8);
+  }, [query]);
+
+  const expanded = scrolled || openIdx !== null || mobileOpen || searchOpen;
+
+  const handleResultSelect = (to: string) => {
+    closeAll();
+    navigate({ to });
+  };
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 pointer-events-none">
       <div className="flex justify-center px-3 sm:px-4">
         <div
+          ref={islandRef}
           className={`pointer-events-auto mt-3 sm:mt-4 transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
             expanded
-              ? "w-full max-w-[1180px] rounded-[28px] bg-[oklch(0.18_0.04_255/0.82)] backdrop-blur-2xl shadow-[0_20px_60px_-20px_oklch(0.20_0.10_255/0.55),inset_0_1px_0_oklch(1_0_0/0.08)] border border-white/10"
+              ? "w-full max-w-[1180px] rounded-[28px] bg-[oklch(0.18_0.04_255/0.85)] backdrop-blur-2xl shadow-[0_20px_60px_-20px_oklch(0.20_0.10_255/0.55),inset_0_1px_0_oklch(1_0_0/0.08)] border border-white/10"
               : "w-auto rounded-full bg-[oklch(0.16_0.04_255/0.88)] backdrop-blur-2xl shadow-[0_12px_40px_-12px_oklch(0.20_0.10_255/0.6),inset_0_1px_0_oklch(1_0_0/0.1)] border border-white/10"
           }`}
           onMouseLeave={() => setOpenIdx(null)}
         >
           <div className={`flex items-center gap-2 transition-all duration-500 ${expanded ? "px-4 sm:px-5 h-16" : "px-3 h-12"}`}>
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 group shrink-0">
+            <Link to="/" className="flex items-center gap-2 group shrink-0" onClick={closeAll}>
               <div className={`rounded-full bg-gradient-to-br from-primary-glow to-primary text-primary-foreground grid place-items-center transition-all duration-500 ${expanded ? "h-9 w-9" : "h-7 w-7"}`}>
                 <GraduationCap className={expanded ? "h-4 w-4" : "h-3.5 w-3.5"} />
               </div>
@@ -87,6 +163,23 @@ export function MegaMenu() {
               })}
             </nav>
 
+            {/* Search trigger */}
+            <button
+              onClick={() => setSearchOpen((v) => !v)}
+              className={`hidden md:inline-flex items-center gap-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white transition-all shrink-0 ${
+                expanded ? "px-3 py-1.5 text-xs" : "px-2.5 py-1 text-[11px]"
+              }`}
+              aria-label="Search"
+            >
+              <Search className="h-3.5 w-3.5" />
+              {expanded && <span className="hidden xl:inline">Search</span>}
+              {expanded && (
+                <kbd className="hidden xl:inline-flex items-center gap-0.5 text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/10 text-white/60">
+                  ⌘K
+                </kbd>
+              )}
+            </button>
+
             {/* CTA */}
             <Link
               to="/admissions"
@@ -97,18 +190,88 @@ export function MegaMenu() {
               Apply
             </Link>
 
-            {/* Mobile toggle */}
-            <button
-              className="lg:hidden ml-auto p-1.5 text-white rounded-full hover:bg-white/10"
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label="Toggle menu"
-            >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
+            {/* Mobile actions */}
+            <div className="lg:hidden ml-auto flex items-center gap-1">
+              <button
+                className="p-2 text-white rounded-full hover:bg-white/10 active:scale-95 transition-transform"
+                onClick={() => { setSearchOpen((v) => !v); setMobileOpen(false); }}
+                aria-label="Search"
+              >
+                <Search className="h-5 w-5" />
+              </button>
+              <button
+                className="p-2 text-white rounded-full hover:bg-white/10 active:scale-95 transition-transform"
+                onClick={() => { setMobileOpen((v) => !v); setSearchOpen(false); }}
+                aria-label="Toggle menu"
+              >
+                {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
 
-          {/* Mega dropdown panel — morphs INSIDE the island */}
-          {openIdx !== null && NAV[openIdx]?.groups && (
+          {/* SEARCH PANEL */}
+          {searchOpen && (
+            <div className="px-4 sm:px-5 pb-5 animate-[fade-in_0.25s_ease-out]">
+              <div className="border-t border-white/10 pt-4">
+                <div className="flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-white/5 border border-white/10 focus-within:border-primary-glow/60 focus-within:bg-white/10 transition-colors">
+                  <Search className="h-4 w-4 text-white/50 shrink-0" />
+                  <input
+                    ref={searchInputRef}
+                    value={query}
+                    onChange={(e) => { setQuery(e.target.value); setActiveResult(0); }}
+                    onKeyDown={(e) => {
+                      if (e.key === "ArrowDown") { e.preventDefault(); setActiveResult((i) => Math.min(i + 1, results.length - 1)); }
+                      if (e.key === "ArrowUp") { e.preventDefault(); setActiveResult((i) => Math.max(i - 1, 0)); }
+                      if (e.key === "Enter" && results[activeResult]) { e.preventDefault(); handleResultSelect(results[activeResult].to); }
+                    }}
+                    placeholder="Search departments, facilities, pages…"
+                    className="flex-1 bg-transparent text-sm text-white placeholder:text-white/40 outline-none"
+                  />
+                  {query && (
+                    <button onClick={() => setQuery("")} className="text-white/40 hover:text-white text-xs">Clear</button>
+                  )}
+                </div>
+
+                {/* Results */}
+                <div className="mt-3 max-h-[55vh] overflow-y-auto">
+                  {results.length === 0 ? (
+                    <div className="text-center py-10 text-white/50 text-sm">No results for "{query}"</div>
+                  ) : (
+                    <ul className="space-y-0.5">
+                      {results.map((r, i) => (
+                        <li key={`${r.to}-${r.label}`}>
+                          <button
+                            onMouseEnter={() => setActiveResult(i)}
+                            onClick={() => handleResultSelect(r.to)}
+                            className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
+                              i === activeResult ? "bg-white/10" : "hover:bg-white/5"
+                            }`}
+                          >
+                            <div className="min-w-0">
+                              <div className="text-sm font-medium text-white truncate">{r.label}</div>
+                              <div className="text-[11px] uppercase tracking-[0.16em] text-primary-glow mt-0.5">{r.group}</div>
+                            </div>
+                            {i === activeResult && <CornerDownLeft className="h-3.5 w-3.5 text-white/50 shrink-0" />}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between text-[10px] text-white/40">
+                  <div className="flex items-center gap-3">
+                    <span><kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white/60">↑↓</kbd> navigate</span>
+                    <span><kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white/60">↵</kbd> select</span>
+                  </div>
+                  <span><kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white/60">esc</kbd> close</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Mega dropdown panel */}
+          {openIdx !== null && NAV[openIdx]?.groups && !searchOpen && (
             <div className="hidden lg:block px-5 pb-5 animate-[fade-in_0.3s_ease-out]">
               <div className="border-t border-white/10 pt-5 grid grid-cols-2 gap-6">
                 {NAV[openIdx].groups!.map((g) => (
@@ -139,33 +302,44 @@ export function MegaMenu() {
             </div>
           )}
 
-          {/* Mobile drawer — morphs INSIDE the island */}
+          {/* Mobile pill drawer */}
           {mobileOpen && (
-            <div className="lg:hidden px-4 pb-4 max-h-[75vh] overflow-y-auto animate-[fade-in_0.3s_ease-out]">
-              <div className="border-t border-white/10 pt-3 space-y-1">
+            <div className="lg:hidden px-3 pb-3 max-h-[78vh] overflow-y-auto animate-[fade-in_0.3s_ease-out]">
+              <div className="border-t border-white/10 pt-3 space-y-1.5">
                 {NAV.map((item) => (
-                  <div key={item.label} className="py-1">
+                  <div key={item.label}>
                     {item.to ? (
-                      <Link to={item.to} className="block py-2 px-2 text-sm font-medium text-white rounded-lg hover:bg-white/5">
+                      <Link
+                        to={item.to}
+                        className="flex items-center justify-between py-3.5 px-4 text-[15px] font-medium text-white rounded-2xl bg-white/5 hover:bg-white/10 active:scale-[0.98] transition-all"
+                      >
                         {item.label}
+                        <ChevronDown className="h-4 w-4 -rotate-90 text-white/40" />
                       </Link>
                     ) : (
-                      <>
-                        <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-primary-glow py-2 px-2">
+                      <div className="rounded-2xl bg-white/5 overflow-hidden">
+                        <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-primary-glow py-2.5 px-4 border-b border-white/5">
                           {item.label}
                         </div>
-                        <div className="pl-2 space-y-0.5">
+                        <div className="py-1">
                           {item.groups?.flatMap((g) => g.items).map((it) => (
-                            <Link key={it.label} to={it.to} className="block py-1.5 px-2 text-sm text-white/70 rounded-lg hover:bg-white/5 hover:text-white">
+                            <Link
+                              key={it.label}
+                              to={it.to}
+                              className="block py-3 px-4 text-[14px] text-white/80 hover:text-white hover:bg-white/5 active:scale-[0.98] transition-all"
+                            >
                               {it.label}
                             </Link>
                           ))}
                         </div>
-                      </>
+                      </div>
                     )}
                   </div>
                 ))}
-                <Link to="/admissions" className="block text-center mt-3 px-4 py-2.5 rounded-full bg-white text-ink font-medium text-sm">
+                <Link
+                  to="/admissions"
+                  className="block text-center mt-3 px-4 py-3.5 rounded-2xl bg-white text-ink font-semibold text-[15px] active:scale-[0.98] transition-transform"
+                >
                   Apply Now
                 </Link>
               </div>

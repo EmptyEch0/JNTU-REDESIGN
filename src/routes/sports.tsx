@@ -31,7 +31,7 @@ const SPORTS = [
 function SportsPage() {
   return (
     <>
-      <PageHero eyebrow="Sports" title="Engineers who run, swing, jump — and play to win." subtitle="A robust sports culture on campus, with facilities for every game and a calendar full of events." />
+      <PageHero eyebrow="Sports" title="Engineers who run, swing, jump — and play to win." subtitle="A robust sports culture on campus, with facilities for every game and a calendar full of events." image={sportsImg} />
 
       <section className="py-20 container-narrow">
         <RevealOnScroll>

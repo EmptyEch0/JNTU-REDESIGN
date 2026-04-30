@@ -29,7 +29,7 @@ const FEATURES = [
 function LibraryPage() {
   return (
     <>
-      <PageHero eyebrow="Library" title="A quiet place that does serious work." subtitle="Open from morning to late evening — a knowledge commons that anchors academic life on campus." />
+      <PageHero eyebrow="Library" title="A quiet place that does serious work." subtitle="Open from morning to late evening — a knowledge commons that anchors academic life on campus." image={libraryImg} />
 
       <section className="py-20 container-narrow grid md:grid-cols-2 gap-10 items-center">
         <RevealOnScroll>

@@ -45,7 +45,7 @@ function HostelsPage() {
       <PageHero
         eyebrow="Hostels"
         title="A campus that feels like home."
-        subtitle="Three residential blocks, 318+ rooms, full-time wardens and the small comforts that turn a building into a home."
+        subtitle="Three residential blocks, 318+ rooms, full-time wardens and the small comforts that turn a building into a home." image={hostelImg}
       />
 
       {/* Stats */}

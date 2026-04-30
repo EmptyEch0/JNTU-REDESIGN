@@ -121,17 +121,48 @@ export const STATS = [
 ];
 
 export const DEPARTMENTS = [
-  { code: "CSE", name: "Computer Science & Engineering", desc: "AI, systems, software, data." },
-  { code: "ECE", name: "Electronics & Communication", desc: "VLSI, signals, embedded." },
-  { code: "EEE", name: "Electrical & Electronics", desc: "Power, control, energy." },
-  { code: "MECH", name: "Mechanical Engineering", desc: "Design, manufacturing, thermal." },
-  { code: "CIVIL", name: "Civil Engineering", desc: "Structures, geotech, transport." },
-  { code: "IT", name: "Information Technology", desc: "Networks, cloud, security." },
-  { code: "MBA", name: "Management Studies", desc: "Strategy, finance, marketing." },
+  { code: "CSE", name: "Computer Science & Engineering", desc: "AI, systems, software, data.", accent: "from-[oklch(0.45_0.20_265)] to-[oklch(0.35_0.18_285)]" },
+  { code: "ECE", name: "Electronics & Communication", desc: "VLSI, signals, embedded.", accent: "from-[oklch(0.50_0.18_220)] to-[oklch(0.35_0.16_260)]" },
+  { code: "EEE", name: "Electrical & Electronics", desc: "Power, control, energy.", accent: "from-[oklch(0.55_0.18_60)] to-[oklch(0.40_0.18_30)]" },
+  { code: "MECH", name: "Mechanical Engineering", desc: "Design, manufacturing, thermal.", accent: "from-[oklch(0.45_0.10_30)] to-[oklch(0.30_0.05_250)]" },
+  { code: "CIVIL", name: "Civil Engineering", desc: "Structures, geotech, transport.", accent: "from-[oklch(0.50_0.12_140)] to-[oklch(0.32_0.10_180)]" },
+  { code: "IT", name: "Information Technology", desc: "Networks, cloud, security.", accent: "from-[oklch(0.50_0.18_300)] to-[oklch(0.35_0.16_270)]" },
+  { code: "MBA", name: "Management Studies", desc: "Strategy, finance, marketing.", accent: "from-[oklch(0.55_0.15_40)] to-[oklch(0.40_0.18_15)]" },
 ];
 
 export const RECRUITERS = [
   "TCS", "Infosys", "Wipro", "Cognizant", "Accenture", "Capgemini",
   "Tech Mahindra", "HCL", "L&T", "Hexaware", "Mindtree", "Mphasis",
   "Deloitte", "Amazon", "ZOHO",
+];
+
+// Flat search index for the Dynamic Island quick-search
+export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?: string }[] = [
+  { label: "Home", to: "/", group: "Pages" },
+  { label: "About", to: "/about", group: "Pages" },
+  { label: "Academics", to: "/academics", group: "Pages", keywords: "programs curriculum ug pg phd" },
+  { label: "Departments", to: "/departments", group: "Pages" },
+  { label: "Admissions", to: "/admissions", group: "Pages", keywords: "apply enroll" },
+  { label: "Contact", to: "/contact", group: "Pages" },
+  { label: "Notices", to: "/notices", group: "Pages", keywords: "announcements circulars" },
+  { label: "Gallery", to: "/gallery", group: "Pages" },
+  { label: "Placements", to: "/placements", group: "Pages", keywords: "jobs recruiters offers" },
+  { label: "R&D Cell", to: "/rd-cell", group: "Pages", keywords: "research development funding" },
+
+  { label: "Computer Science (CSE)", to: "/departments", group: "Departments", keywords: "cse software ai" },
+  { label: "Electronics (ECE)", to: "/departments", group: "Departments", keywords: "vlsi signals" },
+  { label: "Electrical (EEE)", to: "/departments", group: "Departments", keywords: "power energy" },
+  { label: "Mechanical", to: "/departments", group: "Departments", keywords: "design thermal" },
+  { label: "Civil", to: "/departments", group: "Departments", keywords: "structures geotech" },
+  { label: "Information Technology", to: "/departments", group: "Departments", keywords: "it networks cloud" },
+  { label: "MBA", to: "/departments", group: "Departments", keywords: "management business" },
+
+  { label: "Hostels", to: "/hostels", group: "Facilities", keywords: "rooms accommodation" },
+  { label: "Library", to: "/library", group: "Facilities", keywords: "books reading" },
+  { label: "Sports Complex", to: "/sports", group: "Facilities", keywords: "cricket gym fitness" },
+  { label: "Dispensary", to: "/dispensary", group: "Facilities", keywords: "health medical clinic" },
+  { label: "Campus Life", to: "/campus-life", group: "Facilities", keywords: "clubs events" },
+
+  { label: "NSS", to: "/nss", group: "Student Corner", keywords: "service community" },
+  { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner" },
 ];

@@ -18,6 +18,26 @@ export const NAV: {
 }[] = [
   { label: "Home", to: "/" },
   {
+    label: "About",
+    groups: [
+      {
+        title: "Institution",
+        items: [
+          { label: "About Institution", to: "/about/institution", desc: "History & administration of JNTU-GV CEV" },
+          { label: "Vision & Mission", to: "/about/vision-mission", desc: "Our purpose and guiding principles" },
+        ],
+      },
+      {
+        title: "Region",
+        items: [
+          { label: "About JNTUK", to: "/about/jntuk", desc: "The parent university" },
+          { label: "About Vizianagaram", to: "/about/vizianagaram", desc: "The city of victory" },
+          { label: "How to Reach", to: "/about/how-to-reach", desc: "Directions & transport" },
+        ],
+      },
+    ],
+  },
+  {
     label: "Academics",
     groups: [
       {
@@ -139,7 +159,11 @@ export const RECRUITERS = [
 // Flat search index for the Dynamic Island quick-search
 export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?: string }[] = [
   { label: "Home", to: "/", group: "Pages" },
-  { label: "About", to: "/about", group: "Pages" },
+  { label: "About Institution", to: "/about/institution", group: "About", keywords: "college campus history" },
+  { label: "About JNTUK", to: "/about/jntuk", group: "About", keywords: "university kakinada" },
+  { label: "About Vizianagaram", to: "/about/vizianagaram", group: "About", keywords: "city heritage culture" },
+  { label: "How to Reach", to: "/about/how-to-reach", group: "About", keywords: "directions transport bus train" },
+  { label: "Vision & Mission", to: "/about/vision-mission", group: "About", keywords: "ugc recognition 2f 12b" },
   { label: "Academics", to: "/academics", group: "Pages", keywords: "programs curriculum ug pg phd" },
   { label: "Departments", to: "/departments", group: "Pages" },
   { label: "Admissions", to: "/admissions", group: "Pages", keywords: "apply enroll" },

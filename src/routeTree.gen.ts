@@ -26,6 +26,12 @@ import { Route as AdmissionsRouteImport } from './routes/admissions'
 import { Route as AcademicsRouteImport } from './routes/academics'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutIndexRouteImport } from './routes/about.index'
+import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
+import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
+import { Route as AboutJntukRouteImport } from './routes/about.jntuk'
+import { Route as AboutInstitutionRouteImport } from './routes/about.institution'
+import { Route as AboutHowToReachRouteImport } from './routes/about.how-to-reach'
 
 const WomenEmpowermentRoute = WomenEmpowermentRouteImport.update({
   id: '/women-empowerment',
@@ -112,10 +118,40 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutIndexRoute = AboutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AboutRoute,
+} as any)
+const AboutVizianagaramRoute = AboutVizianagaramRouteImport.update({
+  id: '/vizianagaram',
+  path: '/vizianagaram',
+  getParentRoute: () => AboutRoute,
+} as any)
+const AboutVisionMissionRoute = AboutVisionMissionRouteImport.update({
+  id: '/vision-mission',
+  path: '/vision-mission',
+  getParentRoute: () => AboutRoute,
+} as any)
+const AboutJntukRoute = AboutJntukRouteImport.update({
+  id: '/jntuk',
+  path: '/jntuk',
+  getParentRoute: () => AboutRoute,
+} as any)
+const AboutInstitutionRoute = AboutInstitutionRouteImport.update({
+  id: '/institution',
+  path: '/institution',
+  getParentRoute: () => AboutRoute,
+} as any)
+const AboutHowToReachRoute = AboutHowToReachRouteImport.update({
+  id: '/how-to-reach',
+  path: '/how-to-reach',
+  getParentRoute: () => AboutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRoute
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
@@ -131,10 +167,15 @@ export interface FileRoutesByFullPath {
   '/rd-cell': typeof RdCellRoute
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
+  '/about/how-to-reach': typeof AboutHowToReachRoute
+  '/about/institution': typeof AboutInstitutionRoute
+  '/about/jntuk': typeof AboutJntukRoute
+  '/about/vision-mission': typeof AboutVisionMissionRoute
+  '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/about/': typeof AboutIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/academics': typeof AcademicsRoute
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
@@ -150,11 +191,17 @@ export interface FileRoutesByTo {
   '/rd-cell': typeof RdCellRoute
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
+  '/about/how-to-reach': typeof AboutHowToReachRoute
+  '/about/institution': typeof AboutInstitutionRoute
+  '/about/jntuk': typeof AboutJntukRoute
+  '/about/vision-mission': typeof AboutVisionMissionRoute
+  '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/about': typeof AboutIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRoute
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
@@ -170,6 +217,12 @@ export interface FileRoutesById {
   '/rd-cell': typeof RdCellRoute
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
+  '/about/how-to-reach': typeof AboutHowToReachRoute
+  '/about/institution': typeof AboutInstitutionRoute
+  '/about/jntuk': typeof AboutJntukRoute
+  '/about/vision-mission': typeof AboutVisionMissionRoute
+  '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/about/': typeof AboutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -191,10 +244,15 @@ export interface FileRouteTypes {
     | '/rd-cell'
     | '/sports'
     | '/women-empowerment'
+    | '/about/how-to-reach'
+    | '/about/institution'
+    | '/about/jntuk'
+    | '/about/vision-mission'
+    | '/about/vizianagaram'
+    | '/about/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
     | '/academics'
     | '/admissions'
     | '/campus-life'
@@ -210,6 +268,12 @@ export interface FileRouteTypes {
     | '/rd-cell'
     | '/sports'
     | '/women-empowerment'
+    | '/about/how-to-reach'
+    | '/about/institution'
+    | '/about/jntuk'
+    | '/about/vision-mission'
+    | '/about/vizianagaram'
+    | '/about'
   id:
     | '__root__'
     | '/'
@@ -229,11 +293,17 @@ export interface FileRouteTypes {
     | '/rd-cell'
     | '/sports'
     | '/women-empowerment'
+    | '/about/how-to-reach'
+    | '/about/institution'
+    | '/about/jntuk'
+    | '/about/vision-mission'
+    | '/about/vizianagaram'
+    | '/about/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  AboutRoute: typeof AboutRouteWithChildren
   AcademicsRoute: typeof AcademicsRoute
   AdmissionsRoute: typeof AdmissionsRoute
   CampusLifeRoute: typeof CampusLifeRoute
@@ -372,12 +442,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about/': {
+      id: '/about/'
+      path: '/'
+      fullPath: '/about/'
+      preLoaderRoute: typeof AboutIndexRouteImport
+      parentRoute: typeof AboutRoute
+    }
+    '/about/vizianagaram': {
+      id: '/about/vizianagaram'
+      path: '/vizianagaram'
+      fullPath: '/about/vizianagaram'
+      preLoaderRoute: typeof AboutVizianagaramRouteImport
+      parentRoute: typeof AboutRoute
+    }
+    '/about/vision-mission': {
+      id: '/about/vision-mission'
+      path: '/vision-mission'
+      fullPath: '/about/vision-mission'
+      preLoaderRoute: typeof AboutVisionMissionRouteImport
+      parentRoute: typeof AboutRoute
+    }
+    '/about/jntuk': {
+      id: '/about/jntuk'
+      path: '/jntuk'
+      fullPath: '/about/jntuk'
+      preLoaderRoute: typeof AboutJntukRouteImport
+      parentRoute: typeof AboutRoute
+    }
+    '/about/institution': {
+      id: '/about/institution'
+      path: '/institution'
+      fullPath: '/about/institution'
+      preLoaderRoute: typeof AboutInstitutionRouteImport
+      parentRoute: typeof AboutRoute
+    }
+    '/about/how-to-reach': {
+      id: '/about/how-to-reach'
+      path: '/how-to-reach'
+      fullPath: '/about/how-to-reach'
+      preLoaderRoute: typeof AboutHowToReachRouteImport
+      parentRoute: typeof AboutRoute
+    }
   }
 }
 
+interface AboutRouteChildren {
+  AboutHowToReachRoute: typeof AboutHowToReachRoute
+  AboutInstitutionRoute: typeof AboutInstitutionRoute
+  AboutJntukRoute: typeof AboutJntukRoute
+  AboutVisionMissionRoute: typeof AboutVisionMissionRoute
+  AboutVizianagaramRoute: typeof AboutVizianagaramRoute
+  AboutIndexRoute: typeof AboutIndexRoute
+}
+
+const AboutRouteChildren: AboutRouteChildren = {
+  AboutHowToReachRoute: AboutHowToReachRoute,
+  AboutInstitutionRoute: AboutInstitutionRoute,
+  AboutJntukRoute: AboutJntukRoute,
+  AboutVisionMissionRoute: AboutVisionMissionRoute,
+  AboutVizianagaramRoute: AboutVizianagaramRoute,
+  AboutIndexRoute: AboutIndexRoute,
+}
+
+const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  AboutRoute: AboutRouteWithChildren,
   AcademicsRoute: AcademicsRoute,
   AdmissionsRoute: AdmissionsRoute,
   CampusLifeRoute: CampusLifeRoute,

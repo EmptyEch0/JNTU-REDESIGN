@@ -180,15 +180,8 @@ export function MegaMenu() {
               )}
             </button>
 
-            {/* CTA */}
-            <Link
-              to="/admissions"
-              className={`hidden lg:inline-flex items-center justify-center rounded-full bg-white text-ink font-medium transition-all hover:bg-white/90 shrink-0 ${
-                expanded ? "px-4 py-1.5 text-[13px]" : "px-3 py-1 text-xs"
-              }`}
-            >
-              Apply
-            </Link>
+            {/* Spacer for balance */}
+            <div className="hidden lg:block w-1" />
 
             {/* Mobile actions */}
             <div className="lg:hidden ml-auto flex items-center gap-1">
@@ -336,12 +329,6 @@ export function MegaMenu() {
                     )}
                   </div>
                 ))}
-                <Link
-                  to="/admissions"
-                  className="block text-center mt-3 px-4 py-3.5 rounded-2xl bg-white text-ink font-semibold text-[15px] active:scale-[0.98] transition-transform"
-                >
-                  Apply Now
-                </Link>
               </div>
             </div>
           )}

@@ -18,6 +18,26 @@ export const NAV: {
 }[] = [
   { label: "Home", to: "/" },
   {
+    label: "About",
+    groups: [
+      {
+        title: "Institution",
+        items: [
+          { label: "About Institution", to: "/about/institution", desc: "History & administration of JNTU-GV CEV" },
+          { label: "Vision & Mission", to: "/about/vision-mission", desc: "Our purpose and guiding principles" },
+        ],
+      },
+      {
+        title: "Region",
+        items: [
+          { label: "About JNTUK", to: "/about/jntuk", desc: "The parent university" },
+          { label: "About Vizianagaram", to: "/about/vizianagaram", desc: "The city of victory" },
+          { label: "How to Reach", to: "/about/how-to-reach", desc: "Directions & transport" },
+        ],
+      },
+    ],
+  },
+  {
     label: "Academics",
     groups: [
       {

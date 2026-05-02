@@ -26,6 +26,9 @@ import { Route as AdmissionsRouteImport } from './routes/admissions'
 import { Route as AcademicsRouteImport } from './routes/academics'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RdCellIndexRouteImport } from './routes/rd-cell.index'
+import { Route as PlacementsIndexRouteImport } from './routes/placements.index'
+import { Route as AcademicsIndexRouteImport } from './routes/academics.index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
 import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
@@ -118,6 +121,21 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RdCellIndexRoute = RdCellIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const PlacementsIndexRoute = PlacementsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlacementsRoute,
+} as any)
+const AcademicsIndexRoute = AcademicsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AcademicsRoute,
+} as any)
 const AboutIndexRoute = AboutIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -152,7 +170,7 @@ const AboutHowToReachRoute = AboutHowToReachRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
-  '/academics': typeof AcademicsRoute
+  '/academics': typeof AcademicsRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
@@ -163,8 +181,8 @@ export interface FileRoutesByFullPath {
   '/library': typeof LibraryRoute
   '/notices': typeof NoticesRoute
   '/nss': typeof NssRoute
-  '/placements': typeof PlacementsRoute
-  '/rd-cell': typeof RdCellRoute
+  '/placements': typeof PlacementsRouteWithChildren
+  '/rd-cell': typeof RdCellRouteWithChildren
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
@@ -173,10 +191,12 @@ export interface FileRoutesByFullPath {
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/about/': typeof AboutIndexRoute
+  '/academics/': typeof AcademicsIndexRoute
+  '/placements/': typeof PlacementsIndexRoute
+  '/rd-cell/': typeof RdCellIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/academics': typeof AcademicsRoute
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
@@ -187,8 +207,6 @@ export interface FileRoutesByTo {
   '/library': typeof LibraryRoute
   '/notices': typeof NoticesRoute
   '/nss': typeof NssRoute
-  '/placements': typeof PlacementsRoute
-  '/rd-cell': typeof RdCellRoute
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
@@ -197,12 +215,15 @@ export interface FileRoutesByTo {
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/about': typeof AboutIndexRoute
+  '/academics': typeof AcademicsIndexRoute
+  '/placements': typeof PlacementsIndexRoute
+  '/rd-cell': typeof RdCellIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
-  '/academics': typeof AcademicsRoute
+  '/academics': typeof AcademicsRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
@@ -213,8 +234,8 @@ export interface FileRoutesById {
   '/library': typeof LibraryRoute
   '/notices': typeof NoticesRoute
   '/nss': typeof NssRoute
-  '/placements': typeof PlacementsRoute
-  '/rd-cell': typeof RdCellRoute
+  '/placements': typeof PlacementsRouteWithChildren
+  '/rd-cell': typeof RdCellRouteWithChildren
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
@@ -223,6 +244,9 @@ export interface FileRoutesById {
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/about/': typeof AboutIndexRoute
+  '/academics/': typeof AcademicsIndexRoute
+  '/placements/': typeof PlacementsIndexRoute
+  '/rd-cell/': typeof RdCellIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -250,10 +274,12 @@ export interface FileRouteTypes {
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/about/'
+    | '/academics/'
+    | '/placements/'
+    | '/rd-cell/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/academics'
     | '/admissions'
     | '/campus-life'
     | '/contact'
@@ -264,8 +290,6 @@ export interface FileRouteTypes {
     | '/library'
     | '/notices'
     | '/nss'
-    | '/placements'
-    | '/rd-cell'
     | '/sports'
     | '/women-empowerment'
     | '/about/how-to-reach'
@@ -274,6 +298,9 @@ export interface FileRouteTypes {
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/about'
+    | '/academics'
+    | '/placements'
+    | '/rd-cell'
   id:
     | '__root__'
     | '/'
@@ -299,12 +326,15 @@ export interface FileRouteTypes {
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/about/'
+    | '/academics/'
+    | '/placements/'
+    | '/rd-cell/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRouteWithChildren
-  AcademicsRoute: typeof AcademicsRoute
+  AcademicsRoute: typeof AcademicsRouteWithChildren
   AdmissionsRoute: typeof AdmissionsRoute
   CampusLifeRoute: typeof CampusLifeRoute
   ContactRoute: typeof ContactRoute
@@ -315,8 +345,8 @@ export interface RootRouteChildren {
   LibraryRoute: typeof LibraryRoute
   NoticesRoute: typeof NoticesRoute
   NssRoute: typeof NssRoute
-  PlacementsRoute: typeof PlacementsRoute
-  RdCellRoute: typeof RdCellRoute
+  PlacementsRoute: typeof PlacementsRouteWithChildren
+  RdCellRoute: typeof RdCellRouteWithChildren
   SportsRoute: typeof SportsRoute
   WomenEmpowermentRoute: typeof WomenEmpowermentRoute
 }
@@ -442,6 +472,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rd-cell/': {
+      id: '/rd-cell/'
+      path: '/'
+      fullPath: '/rd-cell/'
+      preLoaderRoute: typeof RdCellIndexRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/placements/': {
+      id: '/placements/'
+      path: '/'
+      fullPath: '/placements/'
+      preLoaderRoute: typeof PlacementsIndexRouteImport
+      parentRoute: typeof PlacementsRoute
+    }
+    '/academics/': {
+      id: '/academics/'
+      path: '/'
+      fullPath: '/academics/'
+      preLoaderRoute: typeof AcademicsIndexRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
     '/about/': {
       id: '/about/'
       path: '/'
@@ -507,10 +558,45 @@ const AboutRouteChildren: AboutRouteChildren = {
 
 const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
 
+interface AcademicsRouteChildren {
+  AcademicsIndexRoute: typeof AcademicsIndexRoute
+}
+
+const AcademicsRouteChildren: AcademicsRouteChildren = {
+  AcademicsIndexRoute: AcademicsIndexRoute,
+}
+
+const AcademicsRouteWithChildren = AcademicsRoute._addFileChildren(
+  AcademicsRouteChildren,
+)
+
+interface PlacementsRouteChildren {
+  PlacementsIndexRoute: typeof PlacementsIndexRoute
+}
+
+const PlacementsRouteChildren: PlacementsRouteChildren = {
+  PlacementsIndexRoute: PlacementsIndexRoute,
+}
+
+const PlacementsRouteWithChildren = PlacementsRoute._addFileChildren(
+  PlacementsRouteChildren,
+)
+
+interface RdCellRouteChildren {
+  RdCellIndexRoute: typeof RdCellIndexRoute
+}
+
+const RdCellRouteChildren: RdCellRouteChildren = {
+  RdCellIndexRoute: RdCellIndexRoute,
+}
+
+const RdCellRouteWithChildren =
+  RdCellRoute._addFileChildren(RdCellRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRouteWithChildren,
-  AcademicsRoute: AcademicsRoute,
+  AcademicsRoute: AcademicsRouteWithChildren,
   AdmissionsRoute: AdmissionsRoute,
   CampusLifeRoute: CampusLifeRoute,
   ContactRoute: ContactRoute,
@@ -521,8 +607,8 @@ const rootRouteChildren: RootRouteChildren = {
   LibraryRoute: LibraryRoute,
   NoticesRoute: NoticesRoute,
   NssRoute: NssRoute,
-  PlacementsRoute: PlacementsRoute,
-  RdCellRoute: RdCellRoute,
+  PlacementsRoute: PlacementsRouteWithChildren,
+  RdCellRoute: RdCellRouteWithChildren,
   SportsRoute: SportsRoute,
   WomenEmpowermentRoute: WomenEmpowermentRoute,
 }

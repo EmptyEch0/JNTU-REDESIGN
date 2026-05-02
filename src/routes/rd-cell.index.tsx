@@ -6,7 +6,7 @@ import { ProfileCard } from "@/components/ProfileCard";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FlaskConical, Cpu, Atom, Building2 } from "lucide-react";
 
-export const Route = createFileRoute("/rd-cell")({
+export const Route = createFileRoute("/rd-cell/")({
   head: () => ({
     meta: [
       { title: "R&D Cell — JNTU-GV CEV" },

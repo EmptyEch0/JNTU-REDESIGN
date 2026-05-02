@@ -36,6 +36,7 @@ function PlacementsPage() {
         title="From classroom to career — together."
         subtitle="A dedicated training and placement cell that prepares students from the second year and partners with recruiters across India." image={placementsImg}
       />
+      <SubNav items={PLACEMENTS_SUBNAV} />
 
       <section className="py-20 container-narrow">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-3xl overflow-hidden border border-border shadow-[var(--shadow-elegant)]">

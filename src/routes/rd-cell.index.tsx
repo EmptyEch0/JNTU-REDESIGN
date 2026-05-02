@@ -47,6 +47,7 @@ function RDPage() {
         title="Research that earns its keep."
         subtitle="Funded projects, industry consultancy and a committee that turns ideas into outcomes." image={labImg}
       />
+      <SubNav items={RD_SUBNAV} />
 
       <section className="py-20 container-narrow">
         <RevealOnScroll><SectionLabel eyebrow="Focus areas" title="Where our research goes." /></RevealOnScroll>

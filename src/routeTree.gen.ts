@@ -30,6 +30,14 @@ import { Route as RdCellIndexRouteImport } from './routes/rd-cell.index'
 import { Route as PlacementsIndexRouteImport } from './routes/placements.index'
 import { Route as AcademicsIndexRouteImport } from './routes/academics.index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
+import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
+import { Route as AcademicsSyllabusRouteImport } from './routes/academics.syllabus'
+import { Route as AcademicsScholarshipsRouteImport } from './routes/academics.scholarships'
+import { Route as AcademicsRegulationsRouteImport } from './routes/academics.regulations'
+import { Route as AcademicsProgramsRouteImport } from './routes/academics.programs'
+import { Route as AcademicsDownloadsRouteImport } from './routes/academics.downloads'
+import { Route as AcademicsCacRouteImport } from './routes/academics.cac'
+import { Route as AcademicsAdmissionsRouteImport } from './routes/academics.admissions'
 import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
 import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
 import { Route as AboutJntukRouteImport } from './routes/about.jntuk'
@@ -141,6 +149,46 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AboutRoute,
 } as any)
+const AcademicsTimeTablesRoute = AcademicsTimeTablesRouteImport.update({
+  id: '/time-tables',
+  path: '/time-tables',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsSyllabusRoute = AcademicsSyllabusRouteImport.update({
+  id: '/syllabus',
+  path: '/syllabus',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsScholarshipsRoute = AcademicsScholarshipsRouteImport.update({
+  id: '/scholarships',
+  path: '/scholarships',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsRegulationsRoute = AcademicsRegulationsRouteImport.update({
+  id: '/regulations',
+  path: '/regulations',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsProgramsRoute = AcademicsProgramsRouteImport.update({
+  id: '/programs',
+  path: '/programs',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsDownloadsRoute = AcademicsDownloadsRouteImport.update({
+  id: '/downloads',
+  path: '/downloads',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsCacRoute = AcademicsCacRouteImport.update({
+  id: '/cac',
+  path: '/cac',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsAdmissionsRoute = AcademicsAdmissionsRouteImport.update({
+  id: '/admissions',
+  path: '/admissions',
+  getParentRoute: () => AcademicsRoute,
+} as any)
 const AboutVizianagaramRoute = AboutVizianagaramRouteImport.update({
   id: '/vizianagaram',
   path: '/vizianagaram',
@@ -190,6 +238,14 @@ export interface FileRoutesByFullPath {
   '/about/jntuk': typeof AboutJntukRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/academics/admissions': typeof AcademicsAdmissionsRoute
+  '/academics/cac': typeof AcademicsCacRoute
+  '/academics/downloads': typeof AcademicsDownloadsRoute
+  '/academics/programs': typeof AcademicsProgramsRoute
+  '/academics/regulations': typeof AcademicsRegulationsRoute
+  '/academics/scholarships': typeof AcademicsScholarshipsRoute
+  '/academics/syllabus': typeof AcademicsSyllabusRoute
+  '/academics/time-tables': typeof AcademicsTimeTablesRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
   '/placements/': typeof PlacementsIndexRoute
@@ -214,6 +270,14 @@ export interface FileRoutesByTo {
   '/about/jntuk': typeof AboutJntukRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/academics/admissions': typeof AcademicsAdmissionsRoute
+  '/academics/cac': typeof AcademicsCacRoute
+  '/academics/downloads': typeof AcademicsDownloadsRoute
+  '/academics/programs': typeof AcademicsProgramsRoute
+  '/academics/regulations': typeof AcademicsRegulationsRoute
+  '/academics/scholarships': typeof AcademicsScholarshipsRoute
+  '/academics/syllabus': typeof AcademicsSyllabusRoute
+  '/academics/time-tables': typeof AcademicsTimeTablesRoute
   '/about': typeof AboutIndexRoute
   '/academics': typeof AcademicsIndexRoute
   '/placements': typeof PlacementsIndexRoute
@@ -243,6 +307,14 @@ export interface FileRoutesById {
   '/about/jntuk': typeof AboutJntukRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/academics/admissions': typeof AcademicsAdmissionsRoute
+  '/academics/cac': typeof AcademicsCacRoute
+  '/academics/downloads': typeof AcademicsDownloadsRoute
+  '/academics/programs': typeof AcademicsProgramsRoute
+  '/academics/regulations': typeof AcademicsRegulationsRoute
+  '/academics/scholarships': typeof AcademicsScholarshipsRoute
+  '/academics/syllabus': typeof AcademicsSyllabusRoute
+  '/academics/time-tables': typeof AcademicsTimeTablesRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
   '/placements/': typeof PlacementsIndexRoute
@@ -273,6 +345,14 @@ export interface FileRouteTypes {
     | '/about/jntuk'
     | '/about/vision-mission'
     | '/about/vizianagaram'
+    | '/academics/admissions'
+    | '/academics/cac'
+    | '/academics/downloads'
+    | '/academics/programs'
+    | '/academics/regulations'
+    | '/academics/scholarships'
+    | '/academics/syllabus'
+    | '/academics/time-tables'
     | '/about/'
     | '/academics/'
     | '/placements/'
@@ -297,6 +377,14 @@ export interface FileRouteTypes {
     | '/about/jntuk'
     | '/about/vision-mission'
     | '/about/vizianagaram'
+    | '/academics/admissions'
+    | '/academics/cac'
+    | '/academics/downloads'
+    | '/academics/programs'
+    | '/academics/regulations'
+    | '/academics/scholarships'
+    | '/academics/syllabus'
+    | '/academics/time-tables'
     | '/about'
     | '/academics'
     | '/placements'
@@ -325,6 +413,14 @@ export interface FileRouteTypes {
     | '/about/jntuk'
     | '/about/vision-mission'
     | '/about/vizianagaram'
+    | '/academics/admissions'
+    | '/academics/cac'
+    | '/academics/downloads'
+    | '/academics/programs'
+    | '/academics/regulations'
+    | '/academics/scholarships'
+    | '/academics/syllabus'
+    | '/academics/time-tables'
     | '/about/'
     | '/academics/'
     | '/placements/'
@@ -500,6 +596,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof AboutRoute
     }
+    '/academics/time-tables': {
+      id: '/academics/time-tables'
+      path: '/time-tables'
+      fullPath: '/academics/time-tables'
+      preLoaderRoute: typeof AcademicsTimeTablesRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/syllabus': {
+      id: '/academics/syllabus'
+      path: '/syllabus'
+      fullPath: '/academics/syllabus'
+      preLoaderRoute: typeof AcademicsSyllabusRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/scholarships': {
+      id: '/academics/scholarships'
+      path: '/scholarships'
+      fullPath: '/academics/scholarships'
+      preLoaderRoute: typeof AcademicsScholarshipsRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/regulations': {
+      id: '/academics/regulations'
+      path: '/regulations'
+      fullPath: '/academics/regulations'
+      preLoaderRoute: typeof AcademicsRegulationsRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/programs': {
+      id: '/academics/programs'
+      path: '/programs'
+      fullPath: '/academics/programs'
+      preLoaderRoute: typeof AcademicsProgramsRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/downloads': {
+      id: '/academics/downloads'
+      path: '/downloads'
+      fullPath: '/academics/downloads'
+      preLoaderRoute: typeof AcademicsDownloadsRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/cac': {
+      id: '/academics/cac'
+      path: '/cac'
+      fullPath: '/academics/cac'
+      preLoaderRoute: typeof AcademicsCacRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/admissions': {
+      id: '/academics/admissions'
+      path: '/admissions'
+      fullPath: '/academics/admissions'
+      preLoaderRoute: typeof AcademicsAdmissionsRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
     '/about/vizianagaram': {
       id: '/about/vizianagaram'
       path: '/vizianagaram'
@@ -559,10 +711,26 @@ const AboutRouteChildren: AboutRouteChildren = {
 const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
 
 interface AcademicsRouteChildren {
+  AcademicsAdmissionsRoute: typeof AcademicsAdmissionsRoute
+  AcademicsCacRoute: typeof AcademicsCacRoute
+  AcademicsDownloadsRoute: typeof AcademicsDownloadsRoute
+  AcademicsProgramsRoute: typeof AcademicsProgramsRoute
+  AcademicsRegulationsRoute: typeof AcademicsRegulationsRoute
+  AcademicsScholarshipsRoute: typeof AcademicsScholarshipsRoute
+  AcademicsSyllabusRoute: typeof AcademicsSyllabusRoute
+  AcademicsTimeTablesRoute: typeof AcademicsTimeTablesRoute
   AcademicsIndexRoute: typeof AcademicsIndexRoute
 }
 
 const AcademicsRouteChildren: AcademicsRouteChildren = {
+  AcademicsAdmissionsRoute: AcademicsAdmissionsRoute,
+  AcademicsCacRoute: AcademicsCacRoute,
+  AcademicsDownloadsRoute: AcademicsDownloadsRoute,
+  AcademicsProgramsRoute: AcademicsProgramsRoute,
+  AcademicsRegulationsRoute: AcademicsRegulationsRoute,
+  AcademicsScholarshipsRoute: AcademicsScholarshipsRoute,
+  AcademicsSyllabusRoute: AcademicsSyllabusRoute,
+  AcademicsTimeTablesRoute: AcademicsTimeTablesRoute,
   AcademicsIndexRoute: AcademicsIndexRoute,
 }
 

@@ -188,9 +188,11 @@ export const DEPARTMENTS = [
 ];
 
 export const RECRUITERS = [
-  "TCS", "Infosys", "Wipro", "Cognizant", "Accenture", "Capgemini",
-  "Tech Mahindra", "HCL", "L&T", "Hexaware", "Mindtree", "Mphasis",
-  "Deloitte", "Amazon", "ZOHO",
+  "TCS", "Wipro", "SoCtronics", "L&T", "Hyundai", "Apps Associates", "Medha",
+  "Cyient", "Nalsoft", "Efftronics", "Miracle Software", "Grey Campus",
+  "Cerium", "Zebi", "Sail Software Solutions", "Infosys", "Cognizant",
+  "Accenture", "Capgemini", "Tech Mahindra", "HCL", "Hexaware", "Mindtree",
+  "Mphasis", "Deloitte", "Amazon", "Zoho",
 ];
 
 // Flat search index for the Dynamic Island quick-search
@@ -208,7 +210,26 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   { label: "Notices", to: "/notices", group: "Pages", keywords: "announcements circulars" },
   { label: "Gallery", to: "/gallery", group: "Pages" },
   { label: "Placements", to: "/placements", group: "Pages", keywords: "jobs recruiters offers" },
+  { label: "Training & Placement Cell", to: "/placements/training", group: "Placements", keywords: "tpo vakula vision mission" },
+  { label: "Our Recruiters", to: "/placements/recruiters", group: "Placements" },
+  { label: "Students Placed", to: "/placements/students", group: "Placements" },
+  { label: "Placements Gallery", to: "/placements/gallery", group: "Placements" },
+
   { label: "R&D Cell", to: "/rd-cell", group: "Pages", keywords: "research development funding" },
+  { label: "About Research", to: "/rd-cell/about", group: "R&D", keywords: "naga raju coordinator" },
+  { label: "Areas of Research", to: "/rd-cell/areas", group: "R&D" },
+  { label: "Research Projects", to: "/rd-cell/projects", group: "R&D" },
+  { label: "Research Publications", to: "/rd-cell/publications", group: "R&D" },
+  { label: "Scholars under Supervision", to: "/rd-cell/scholars", group: "R&D" },
+  { label: "MOUs", to: "/rd-cell/mous", group: "R&D", keywords: "supraja blackbuck sarda" },
+
+  { label: "Programs Offered", to: "/academics/programs", group: "Academics" },
+  { label: "Academic Regulations", to: "/academics/regulations", group: "Academics" },
+  { label: "Syllabus", to: "/academics/syllabus", group: "Academics" },
+  { label: "Scholarships", to: "/academics/scholarships", group: "Academics" },
+  { label: "CAC", to: "/academics/cac", group: "Academics", keywords: "college academic committee" },
+  { label: "Time Tables", to: "/academics/time-tables", group: "Academics" },
+  { label: "Downloads", to: "/academics/downloads", group: "Academics" },
 
   { label: "Computer Science (CSE)", to: "/departments", group: "Departments", keywords: "cse software ai" },
   { label: "Electronics (ECE)", to: "/departments", group: "Departments", keywords: "vlsi signals" },

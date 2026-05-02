@@ -40,6 +40,7 @@ function AcademicsPage() {
         subtitle="From foundational sciences to capstone industry projects, our curriculum is designed for depth, hands-on practice and lifelong learning."
         image={campusImg}
       />
+      <SubNav items={ACADEMICS_SUBNAV} />
 
       <section className="py-24 container-narrow">
         <div className="grid md:grid-cols-3 gap-5">

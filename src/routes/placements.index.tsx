@@ -4,7 +4,8 @@ import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { StatCounter } from "@/components/StatCounter";
 import { SectionLabel } from "@/components/SectionLabel";
 import { MarqueeLogos } from "@/components/MarqueeLogos";
-import { RECRUITERS } from "@/lib/site";
+import { RECRUITERS, PLACEMENTS_SUBNAV } from "@/lib/site";
+import { SubNav } from "@/components/SubNav";
 import placementsImg from "@/assets/placements-bg.jpg";
 
 export const Route = createFileRoute("/placements/")({

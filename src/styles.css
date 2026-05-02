@@ -288,4 +288,6 @@
     width: max-content;
     animation: marquee 40s linear infinite;
   }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }

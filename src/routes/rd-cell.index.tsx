@@ -5,6 +5,8 @@ import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ProfileCard } from "@/components/ProfileCard";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FlaskConical, Cpu, Atom, Building2 } from "lucide-react";
+import { SubNav } from "@/components/SubNav";
+import { RD_SUBNAV } from "@/lib/site";
 
 export const Route = createFileRoute("/rd-cell/")({
   head: () => ({

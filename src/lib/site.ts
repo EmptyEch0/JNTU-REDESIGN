@@ -248,3 +248,51 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   { label: "NSS", to: "/nss", group: "Student Corner", keywords: "service community" },
   { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner" },
 ];
+
+export const ACADEMICS_SUBNAV = [
+  { label: "Overview", to: "/academics" },
+  { label: "Programs Offered", to: "/academics/programs" },
+  { label: "Admissions", to: "/academics/admissions" },
+  { label: "Regulations", to: "/academics/regulations" },
+  { label: "Syllabus", to: "/academics/syllabus" },
+  { label: "Scholarships", to: "/academics/scholarships" },
+  { label: "CAC", to: "/academics/cac" },
+  { label: "Time Tables", to: "/academics/time-tables" },
+  { label: "Downloads", to: "/academics/downloads" },
+];
+
+export const PLACEMENTS_SUBNAV = [
+  { label: "Overview", to: "/placements" },
+  { label: "Training & Placement", to: "/placements/training" },
+  { label: "Our Recruiters", to: "/placements/recruiters" },
+  { label: "Students Placed", to: "/placements/students" },
+  { label: "Gallery", to: "/placements/gallery" },
+];
+
+export const RD_SUBNAV = [
+  { label: "Overview", to: "/rd-cell" },
+  { label: "About Research", to: "/rd-cell/about" },
+  { label: "Areas of Research", to: "/rd-cell/areas" },
+  { label: "Research Projects", to: "/rd-cell/projects" },
+  { label: "Publications", to: "/rd-cell/publications" },
+  { label: "Scholars", to: "/rd-cell/scholars" },
+  { label: "MOUs", to: "/rd-cell/mous" },
+];
+
+export const RECRUITERS_2017_18 = [
+  "TCS — Tata Consultancy Service",
+  "Wipro",
+  "SoCtronics",
+  "L&T — Larsen & Toubro",
+  "Hyundai",
+  "Apps Associates",
+  "Medha",
+  "Cyient",
+  "Nalsoft",
+  "Efftronics",
+  "Miracle Software Systems",
+  "Grey Campus",
+  "Cerium",
+  "Zebi",
+  "Sail Software Solutions",
+];

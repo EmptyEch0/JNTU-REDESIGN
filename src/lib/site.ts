@@ -41,19 +41,22 @@ export const NAV: {
     label: "Academics",
     groups: [
       {
-        title: "Programs",
+        title: "Programs & Policy",
         items: [
-          { label: "Undergraduate", to: "/academics", desc: "B.Tech across 7 disciplines" },
-          { label: "Postgraduate", to: "/academics", desc: "M.Tech & MBA programs" },
-          { label: "Doctoral", to: "/academics", desc: "Ph.D research streams" },
+          { label: "Overview", to: "/academics", desc: "Programs at a glance" },
+          { label: "Programs Offered", to: "/academics/programs", desc: "UG, PG and Doctoral" },
+          { label: "Admissions", to: "/academics/admissions", desc: "How to apply" },
+          { label: "Academic Regulations", to: "/academics/regulations", desc: "R20, R23 frameworks" },
         ],
       },
       {
-        title: "Resources",
+        title: "Student Resources",
         items: [
-          { label: "Curriculum", to: "/academics", desc: "Outcome-based learning" },
-          { label: "Calendar", to: "/academics", desc: "Academic schedule" },
-          { label: "Examinations", to: "/academics", desc: "Evaluation framework" },
+          { label: "Syllabus", to: "/academics/syllabus", desc: "Course-wise curriculum" },
+          { label: "Scholarships", to: "/academics/scholarships", desc: "Merit & need-based" },
+          { label: "CAC", to: "/academics/cac", desc: "College Academic Committee" },
+          { label: "Time Tables", to: "/academics/time-tables", desc: "Class schedules" },
+          { label: "Downloads", to: "/academics/downloads", desc: "Forms & documents" },
         ],
       },
     ],
@@ -125,11 +128,45 @@ export const NAV: {
   },
   {
     label: "Placements",
-    to: "/placements",
+    groups: [
+      {
+        title: "Training & Placement Cell",
+        items: [
+          { label: "Overview", to: "/placements", desc: "Stats and highlights" },
+          { label: "Training & Placement", to: "/placements/training", desc: "Vision, mission, TPO" },
+          { label: "Our Recruiters", to: "/placements/recruiters", desc: "Companies that hire" },
+        ],
+      },
+      {
+        title: "Outcomes",
+        items: [
+          { label: "Students Placed", to: "/placements/students", desc: "Recent placement data" },
+          { label: "Gallery", to: "/placements/gallery", desc: "Drives & events" },
+        ],
+      },
+    ],
   },
   {
     label: "R&D",
-    to: "/rd-cell",
+    groups: [
+      {
+        title: "Cell",
+        items: [
+          { label: "Overview", to: "/rd-cell", desc: "R&D cell at a glance" },
+          { label: "About Research", to: "/rd-cell/about", desc: "Message & committee" },
+          { label: "Areas of Research", to: "/rd-cell/areas", desc: "Department-wise interests" },
+          { label: "MOUs", to: "/rd-cell/mous", desc: "Industry collaborations" },
+        ],
+      },
+      {
+        title: "Output",
+        items: [
+          { label: "Research Projects", to: "/rd-cell/projects", desc: "Funded projects" },
+          { label: "Publications", to: "/rd-cell/publications", desc: "Papers & patents" },
+          { label: "Scholars under Supervision", to: "/rd-cell/scholars", desc: "Ph.D scholars" },
+        ],
+      },
+    ],
   },
 ];
 
@@ -151,9 +188,11 @@ export const DEPARTMENTS = [
 ];
 
 export const RECRUITERS = [
-  "TCS", "Infosys", "Wipro", "Cognizant", "Accenture", "Capgemini",
-  "Tech Mahindra", "HCL", "L&T", "Hexaware", "Mindtree", "Mphasis",
-  "Deloitte", "Amazon", "ZOHO",
+  "TCS", "Wipro", "SoCtronics", "L&T", "Hyundai", "Apps Associates", "Medha",
+  "Cyient", "Nalsoft", "Efftronics", "Miracle Software", "Grey Campus",
+  "Cerium", "Zebi", "Sail Software Solutions", "Infosys", "Cognizant",
+  "Accenture", "Capgemini", "Tech Mahindra", "HCL", "Hexaware", "Mindtree",
+  "Mphasis", "Deloitte", "Amazon", "Zoho",
 ];
 
 // Flat search index for the Dynamic Island quick-search
@@ -171,7 +210,26 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   { label: "Notices", to: "/notices", group: "Pages", keywords: "announcements circulars" },
   { label: "Gallery", to: "/gallery", group: "Pages" },
   { label: "Placements", to: "/placements", group: "Pages", keywords: "jobs recruiters offers" },
+  { label: "Training & Placement Cell", to: "/placements/training", group: "Placements", keywords: "tpo vakula vision mission" },
+  { label: "Our Recruiters", to: "/placements/recruiters", group: "Placements" },
+  { label: "Students Placed", to: "/placements/students", group: "Placements" },
+  { label: "Placements Gallery", to: "/placements/gallery", group: "Placements" },
+
   { label: "R&D Cell", to: "/rd-cell", group: "Pages", keywords: "research development funding" },
+  { label: "About Research", to: "/rd-cell/about", group: "R&D", keywords: "naga raju coordinator" },
+  { label: "Areas of Research", to: "/rd-cell/areas", group: "R&D" },
+  { label: "Research Projects", to: "/rd-cell/projects", group: "R&D" },
+  { label: "Research Publications", to: "/rd-cell/publications", group: "R&D" },
+  { label: "Scholars under Supervision", to: "/rd-cell/scholars", group: "R&D" },
+  { label: "MOUs", to: "/rd-cell/mous", group: "R&D", keywords: "supraja blackbuck sarda" },
+
+  { label: "Programs Offered", to: "/academics/programs", group: "Academics" },
+  { label: "Academic Regulations", to: "/academics/regulations", group: "Academics" },
+  { label: "Syllabus", to: "/academics/syllabus", group: "Academics" },
+  { label: "Scholarships", to: "/academics/scholarships", group: "Academics" },
+  { label: "CAC", to: "/academics/cac", group: "Academics", keywords: "college academic committee" },
+  { label: "Time Tables", to: "/academics/time-tables", group: "Academics" },
+  { label: "Downloads", to: "/academics/downloads", group: "Academics" },
 
   { label: "Computer Science (CSE)", to: "/departments", group: "Departments", keywords: "cse software ai" },
   { label: "Electronics (ECE)", to: "/departments", group: "Departments", keywords: "vlsi signals" },
@@ -189,4 +247,52 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
 
   { label: "NSS", to: "/nss", group: "Student Corner", keywords: "service community" },
   { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner" },
+];
+
+export const ACADEMICS_SUBNAV = [
+  { label: "Overview", to: "/academics" },
+  { label: "Programs Offered", to: "/academics/programs" },
+  { label: "Admissions", to: "/academics/admissions" },
+  { label: "Regulations", to: "/academics/regulations" },
+  { label: "Syllabus", to: "/academics/syllabus" },
+  { label: "Scholarships", to: "/academics/scholarships" },
+  { label: "CAC", to: "/academics/cac" },
+  { label: "Time Tables", to: "/academics/time-tables" },
+  { label: "Downloads", to: "/academics/downloads" },
+];
+
+export const PLACEMENTS_SUBNAV = [
+  { label: "Overview", to: "/placements" },
+  { label: "Training & Placement", to: "/placements/training" },
+  { label: "Our Recruiters", to: "/placements/recruiters" },
+  { label: "Students Placed", to: "/placements/students" },
+  { label: "Gallery", to: "/placements/gallery" },
+];
+
+export const RD_SUBNAV = [
+  { label: "Overview", to: "/rd-cell" },
+  { label: "About Research", to: "/rd-cell/about" },
+  { label: "Areas of Research", to: "/rd-cell/areas" },
+  { label: "Research Projects", to: "/rd-cell/projects" },
+  { label: "Publications", to: "/rd-cell/publications" },
+  { label: "Scholars", to: "/rd-cell/scholars" },
+  { label: "MOUs", to: "/rd-cell/mous" },
+];
+
+export const RECRUITERS_2017_18 = [
+  "TCS — Tata Consultancy Service",
+  "Wipro",
+  "SoCtronics",
+  "L&T — Larsen & Toubro",
+  "Hyundai",
+  "Apps Associates",
+  "Medha",
+  "Cyient",
+  "Nalsoft",
+  "Efftronics",
+  "Miracle Software Systems",
+  "Grey Campus",
+  "Cerium",
+  "Zebi",
+  "Sail Software Solutions",
 ];

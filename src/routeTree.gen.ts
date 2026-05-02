@@ -26,7 +26,28 @@ import { Route as AdmissionsRouteImport } from './routes/admissions'
 import { Route as AcademicsRouteImport } from './routes/academics'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RdCellIndexRouteImport } from './routes/rd-cell.index'
+import { Route as PlacementsIndexRouteImport } from './routes/placements.index'
+import { Route as AcademicsIndexRouteImport } from './routes/academics.index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
+import { Route as RdCellScholarsRouteImport } from './routes/rd-cell.scholars'
+import { Route as RdCellPublicationsRouteImport } from './routes/rd-cell.publications'
+import { Route as RdCellProjectsRouteImport } from './routes/rd-cell.projects'
+import { Route as RdCellMousRouteImport } from './routes/rd-cell.mous'
+import { Route as RdCellAreasRouteImport } from './routes/rd-cell.areas'
+import { Route as RdCellAboutRouteImport } from './routes/rd-cell.about'
+import { Route as PlacementsTrainingRouteImport } from './routes/placements.training'
+import { Route as PlacementsStudentsRouteImport } from './routes/placements.students'
+import { Route as PlacementsRecruitersRouteImport } from './routes/placements.recruiters'
+import { Route as PlacementsGalleryRouteImport } from './routes/placements.gallery'
+import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
+import { Route as AcademicsSyllabusRouteImport } from './routes/academics.syllabus'
+import { Route as AcademicsScholarshipsRouteImport } from './routes/academics.scholarships'
+import { Route as AcademicsRegulationsRouteImport } from './routes/academics.regulations'
+import { Route as AcademicsProgramsRouteImport } from './routes/academics.programs'
+import { Route as AcademicsDownloadsRouteImport } from './routes/academics.downloads'
+import { Route as AcademicsCacRouteImport } from './routes/academics.cac'
+import { Route as AcademicsAdmissionsRouteImport } from './routes/academics.admissions'
 import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
 import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
 import { Route as AboutJntukRouteImport } from './routes/about.jntuk'
@@ -118,10 +139,115 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RdCellIndexRoute = RdCellIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const PlacementsIndexRoute = PlacementsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlacementsRoute,
+} as any)
+const AcademicsIndexRoute = AcademicsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AcademicsRoute,
+} as any)
 const AboutIndexRoute = AboutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AboutRoute,
+} as any)
+const RdCellScholarsRoute = RdCellScholarsRouteImport.update({
+  id: '/scholars',
+  path: '/scholars',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const RdCellPublicationsRoute = RdCellPublicationsRouteImport.update({
+  id: '/publications',
+  path: '/publications',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const RdCellProjectsRoute = RdCellProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const RdCellMousRoute = RdCellMousRouteImport.update({
+  id: '/mous',
+  path: '/mous',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const RdCellAreasRoute = RdCellAreasRouteImport.update({
+  id: '/areas',
+  path: '/areas',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const RdCellAboutRoute = RdCellAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const PlacementsTrainingRoute = PlacementsTrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
+  getParentRoute: () => PlacementsRoute,
+} as any)
+const PlacementsStudentsRoute = PlacementsStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => PlacementsRoute,
+} as any)
+const PlacementsRecruitersRoute = PlacementsRecruitersRouteImport.update({
+  id: '/recruiters',
+  path: '/recruiters',
+  getParentRoute: () => PlacementsRoute,
+} as any)
+const PlacementsGalleryRoute = PlacementsGalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => PlacementsRoute,
+} as any)
+const AcademicsTimeTablesRoute = AcademicsTimeTablesRouteImport.update({
+  id: '/time-tables',
+  path: '/time-tables',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsSyllabusRoute = AcademicsSyllabusRouteImport.update({
+  id: '/syllabus',
+  path: '/syllabus',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsScholarshipsRoute = AcademicsScholarshipsRouteImport.update({
+  id: '/scholarships',
+  path: '/scholarships',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsRegulationsRoute = AcademicsRegulationsRouteImport.update({
+  id: '/regulations',
+  path: '/regulations',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsProgramsRoute = AcademicsProgramsRouteImport.update({
+  id: '/programs',
+  path: '/programs',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsDownloadsRoute = AcademicsDownloadsRouteImport.update({
+  id: '/downloads',
+  path: '/downloads',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsCacRoute = AcademicsCacRouteImport.update({
+  id: '/cac',
+  path: '/cac',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsAdmissionsRoute = AcademicsAdmissionsRouteImport.update({
+  id: '/admissions',
+  path: '/admissions',
+  getParentRoute: () => AcademicsRoute,
 } as any)
 const AboutVizianagaramRoute = AboutVizianagaramRouteImport.update({
   id: '/vizianagaram',
@@ -152,7 +278,7 @@ const AboutHowToReachRoute = AboutHowToReachRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
-  '/academics': typeof AcademicsRoute
+  '/academics': typeof AcademicsRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
@@ -163,8 +289,8 @@ export interface FileRoutesByFullPath {
   '/library': typeof LibraryRoute
   '/notices': typeof NoticesRoute
   '/nss': typeof NssRoute
-  '/placements': typeof PlacementsRoute
-  '/rd-cell': typeof RdCellRoute
+  '/placements': typeof PlacementsRouteWithChildren
+  '/rd-cell': typeof RdCellRouteWithChildren
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
@@ -172,11 +298,31 @@ export interface FileRoutesByFullPath {
   '/about/jntuk': typeof AboutJntukRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/academics/admissions': typeof AcademicsAdmissionsRoute
+  '/academics/cac': typeof AcademicsCacRoute
+  '/academics/downloads': typeof AcademicsDownloadsRoute
+  '/academics/programs': typeof AcademicsProgramsRoute
+  '/academics/regulations': typeof AcademicsRegulationsRoute
+  '/academics/scholarships': typeof AcademicsScholarshipsRoute
+  '/academics/syllabus': typeof AcademicsSyllabusRoute
+  '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/placements/gallery': typeof PlacementsGalleryRoute
+  '/placements/recruiters': typeof PlacementsRecruitersRoute
+  '/placements/students': typeof PlacementsStudentsRoute
+  '/placements/training': typeof PlacementsTrainingRoute
+  '/rd-cell/about': typeof RdCellAboutRoute
+  '/rd-cell/areas': typeof RdCellAreasRoute
+  '/rd-cell/mous': typeof RdCellMousRoute
+  '/rd-cell/projects': typeof RdCellProjectsRoute
+  '/rd-cell/publications': typeof RdCellPublicationsRoute
+  '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about/': typeof AboutIndexRoute
+  '/academics/': typeof AcademicsIndexRoute
+  '/placements/': typeof PlacementsIndexRoute
+  '/rd-cell/': typeof RdCellIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/academics': typeof AcademicsRoute
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
@@ -187,8 +333,6 @@ export interface FileRoutesByTo {
   '/library': typeof LibraryRoute
   '/notices': typeof NoticesRoute
   '/nss': typeof NssRoute
-  '/placements': typeof PlacementsRoute
-  '/rd-cell': typeof RdCellRoute
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
@@ -196,13 +340,34 @@ export interface FileRoutesByTo {
   '/about/jntuk': typeof AboutJntukRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/academics/admissions': typeof AcademicsAdmissionsRoute
+  '/academics/cac': typeof AcademicsCacRoute
+  '/academics/downloads': typeof AcademicsDownloadsRoute
+  '/academics/programs': typeof AcademicsProgramsRoute
+  '/academics/regulations': typeof AcademicsRegulationsRoute
+  '/academics/scholarships': typeof AcademicsScholarshipsRoute
+  '/academics/syllabus': typeof AcademicsSyllabusRoute
+  '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/placements/gallery': typeof PlacementsGalleryRoute
+  '/placements/recruiters': typeof PlacementsRecruitersRoute
+  '/placements/students': typeof PlacementsStudentsRoute
+  '/placements/training': typeof PlacementsTrainingRoute
+  '/rd-cell/about': typeof RdCellAboutRoute
+  '/rd-cell/areas': typeof RdCellAreasRoute
+  '/rd-cell/mous': typeof RdCellMousRoute
+  '/rd-cell/projects': typeof RdCellProjectsRoute
+  '/rd-cell/publications': typeof RdCellPublicationsRoute
+  '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about': typeof AboutIndexRoute
+  '/academics': typeof AcademicsIndexRoute
+  '/placements': typeof PlacementsIndexRoute
+  '/rd-cell': typeof RdCellIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
-  '/academics': typeof AcademicsRoute
+  '/academics': typeof AcademicsRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
@@ -213,8 +378,8 @@ export interface FileRoutesById {
   '/library': typeof LibraryRoute
   '/notices': typeof NoticesRoute
   '/nss': typeof NssRoute
-  '/placements': typeof PlacementsRoute
-  '/rd-cell': typeof RdCellRoute
+  '/placements': typeof PlacementsRouteWithChildren
+  '/rd-cell': typeof RdCellRouteWithChildren
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
@@ -222,7 +387,28 @@ export interface FileRoutesById {
   '/about/jntuk': typeof AboutJntukRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/academics/admissions': typeof AcademicsAdmissionsRoute
+  '/academics/cac': typeof AcademicsCacRoute
+  '/academics/downloads': typeof AcademicsDownloadsRoute
+  '/academics/programs': typeof AcademicsProgramsRoute
+  '/academics/regulations': typeof AcademicsRegulationsRoute
+  '/academics/scholarships': typeof AcademicsScholarshipsRoute
+  '/academics/syllabus': typeof AcademicsSyllabusRoute
+  '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/placements/gallery': typeof PlacementsGalleryRoute
+  '/placements/recruiters': typeof PlacementsRecruitersRoute
+  '/placements/students': typeof PlacementsStudentsRoute
+  '/placements/training': typeof PlacementsTrainingRoute
+  '/rd-cell/about': typeof RdCellAboutRoute
+  '/rd-cell/areas': typeof RdCellAreasRoute
+  '/rd-cell/mous': typeof RdCellMousRoute
+  '/rd-cell/projects': typeof RdCellProjectsRoute
+  '/rd-cell/publications': typeof RdCellPublicationsRoute
+  '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about/': typeof AboutIndexRoute
+  '/academics/': typeof AcademicsIndexRoute
+  '/placements/': typeof PlacementsIndexRoute
+  '/rd-cell/': typeof RdCellIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -249,11 +435,31 @@ export interface FileRouteTypes {
     | '/about/jntuk'
     | '/about/vision-mission'
     | '/about/vizianagaram'
+    | '/academics/admissions'
+    | '/academics/cac'
+    | '/academics/downloads'
+    | '/academics/programs'
+    | '/academics/regulations'
+    | '/academics/scholarships'
+    | '/academics/syllabus'
+    | '/academics/time-tables'
+    | '/placements/gallery'
+    | '/placements/recruiters'
+    | '/placements/students'
+    | '/placements/training'
+    | '/rd-cell/about'
+    | '/rd-cell/areas'
+    | '/rd-cell/mous'
+    | '/rd-cell/projects'
+    | '/rd-cell/publications'
+    | '/rd-cell/scholars'
     | '/about/'
+    | '/academics/'
+    | '/placements/'
+    | '/rd-cell/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/academics'
     | '/admissions'
     | '/campus-life'
     | '/contact'
@@ -264,8 +470,6 @@ export interface FileRouteTypes {
     | '/library'
     | '/notices'
     | '/nss'
-    | '/placements'
-    | '/rd-cell'
     | '/sports'
     | '/women-empowerment'
     | '/about/how-to-reach'
@@ -273,7 +477,28 @@ export interface FileRouteTypes {
     | '/about/jntuk'
     | '/about/vision-mission'
     | '/about/vizianagaram'
+    | '/academics/admissions'
+    | '/academics/cac'
+    | '/academics/downloads'
+    | '/academics/programs'
+    | '/academics/regulations'
+    | '/academics/scholarships'
+    | '/academics/syllabus'
+    | '/academics/time-tables'
+    | '/placements/gallery'
+    | '/placements/recruiters'
+    | '/placements/students'
+    | '/placements/training'
+    | '/rd-cell/about'
+    | '/rd-cell/areas'
+    | '/rd-cell/mous'
+    | '/rd-cell/projects'
+    | '/rd-cell/publications'
+    | '/rd-cell/scholars'
     | '/about'
+    | '/academics'
+    | '/placements'
+    | '/rd-cell'
   id:
     | '__root__'
     | '/'
@@ -298,13 +523,34 @@ export interface FileRouteTypes {
     | '/about/jntuk'
     | '/about/vision-mission'
     | '/about/vizianagaram'
+    | '/academics/admissions'
+    | '/academics/cac'
+    | '/academics/downloads'
+    | '/academics/programs'
+    | '/academics/regulations'
+    | '/academics/scholarships'
+    | '/academics/syllabus'
+    | '/academics/time-tables'
+    | '/placements/gallery'
+    | '/placements/recruiters'
+    | '/placements/students'
+    | '/placements/training'
+    | '/rd-cell/about'
+    | '/rd-cell/areas'
+    | '/rd-cell/mous'
+    | '/rd-cell/projects'
+    | '/rd-cell/publications'
+    | '/rd-cell/scholars'
     | '/about/'
+    | '/academics/'
+    | '/placements/'
+    | '/rd-cell/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRouteWithChildren
-  AcademicsRoute: typeof AcademicsRoute
+  AcademicsRoute: typeof AcademicsRouteWithChildren
   AdmissionsRoute: typeof AdmissionsRoute
   CampusLifeRoute: typeof CampusLifeRoute
   ContactRoute: typeof ContactRoute
@@ -315,8 +561,8 @@ export interface RootRouteChildren {
   LibraryRoute: typeof LibraryRoute
   NoticesRoute: typeof NoticesRoute
   NssRoute: typeof NssRoute
-  PlacementsRoute: typeof PlacementsRoute
-  RdCellRoute: typeof RdCellRoute
+  PlacementsRoute: typeof PlacementsRouteWithChildren
+  RdCellRoute: typeof RdCellRouteWithChildren
   SportsRoute: typeof SportsRoute
   WomenEmpowermentRoute: typeof WomenEmpowermentRoute
 }
@@ -442,12 +688,159 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rd-cell/': {
+      id: '/rd-cell/'
+      path: '/'
+      fullPath: '/rd-cell/'
+      preLoaderRoute: typeof RdCellIndexRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/placements/': {
+      id: '/placements/'
+      path: '/'
+      fullPath: '/placements/'
+      preLoaderRoute: typeof PlacementsIndexRouteImport
+      parentRoute: typeof PlacementsRoute
+    }
+    '/academics/': {
+      id: '/academics/'
+      path: '/'
+      fullPath: '/academics/'
+      preLoaderRoute: typeof AcademicsIndexRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
     '/about/': {
       id: '/about/'
       path: '/'
       fullPath: '/about/'
       preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof AboutRoute
+    }
+    '/rd-cell/scholars': {
+      id: '/rd-cell/scholars'
+      path: '/scholars'
+      fullPath: '/rd-cell/scholars'
+      preLoaderRoute: typeof RdCellScholarsRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/rd-cell/publications': {
+      id: '/rd-cell/publications'
+      path: '/publications'
+      fullPath: '/rd-cell/publications'
+      preLoaderRoute: typeof RdCellPublicationsRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/rd-cell/projects': {
+      id: '/rd-cell/projects'
+      path: '/projects'
+      fullPath: '/rd-cell/projects'
+      preLoaderRoute: typeof RdCellProjectsRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/rd-cell/mous': {
+      id: '/rd-cell/mous'
+      path: '/mous'
+      fullPath: '/rd-cell/mous'
+      preLoaderRoute: typeof RdCellMousRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/rd-cell/areas': {
+      id: '/rd-cell/areas'
+      path: '/areas'
+      fullPath: '/rd-cell/areas'
+      preLoaderRoute: typeof RdCellAreasRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/rd-cell/about': {
+      id: '/rd-cell/about'
+      path: '/about'
+      fullPath: '/rd-cell/about'
+      preLoaderRoute: typeof RdCellAboutRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/placements/training': {
+      id: '/placements/training'
+      path: '/training'
+      fullPath: '/placements/training'
+      preLoaderRoute: typeof PlacementsTrainingRouteImport
+      parentRoute: typeof PlacementsRoute
+    }
+    '/placements/students': {
+      id: '/placements/students'
+      path: '/students'
+      fullPath: '/placements/students'
+      preLoaderRoute: typeof PlacementsStudentsRouteImport
+      parentRoute: typeof PlacementsRoute
+    }
+    '/placements/recruiters': {
+      id: '/placements/recruiters'
+      path: '/recruiters'
+      fullPath: '/placements/recruiters'
+      preLoaderRoute: typeof PlacementsRecruitersRouteImport
+      parentRoute: typeof PlacementsRoute
+    }
+    '/placements/gallery': {
+      id: '/placements/gallery'
+      path: '/gallery'
+      fullPath: '/placements/gallery'
+      preLoaderRoute: typeof PlacementsGalleryRouteImport
+      parentRoute: typeof PlacementsRoute
+    }
+    '/academics/time-tables': {
+      id: '/academics/time-tables'
+      path: '/time-tables'
+      fullPath: '/academics/time-tables'
+      preLoaderRoute: typeof AcademicsTimeTablesRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/syllabus': {
+      id: '/academics/syllabus'
+      path: '/syllabus'
+      fullPath: '/academics/syllabus'
+      preLoaderRoute: typeof AcademicsSyllabusRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/scholarships': {
+      id: '/academics/scholarships'
+      path: '/scholarships'
+      fullPath: '/academics/scholarships'
+      preLoaderRoute: typeof AcademicsScholarshipsRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/regulations': {
+      id: '/academics/regulations'
+      path: '/regulations'
+      fullPath: '/academics/regulations'
+      preLoaderRoute: typeof AcademicsRegulationsRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/programs': {
+      id: '/academics/programs'
+      path: '/programs'
+      fullPath: '/academics/programs'
+      preLoaderRoute: typeof AcademicsProgramsRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/downloads': {
+      id: '/academics/downloads'
+      path: '/downloads'
+      fullPath: '/academics/downloads'
+      preLoaderRoute: typeof AcademicsDownloadsRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/cac': {
+      id: '/academics/cac'
+      path: '/cac'
+      fullPath: '/academics/cac'
+      preLoaderRoute: typeof AcademicsCacRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/admissions': {
+      id: '/academics/admissions'
+      path: '/admissions'
+      fullPath: '/academics/admissions'
+      preLoaderRoute: typeof AcademicsAdmissionsRouteImport
+      parentRoute: typeof AcademicsRoute
     }
     '/about/vizianagaram': {
       id: '/about/vizianagaram'
@@ -507,10 +900,81 @@ const AboutRouteChildren: AboutRouteChildren = {
 
 const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
 
+interface AcademicsRouteChildren {
+  AcademicsAdmissionsRoute: typeof AcademicsAdmissionsRoute
+  AcademicsCacRoute: typeof AcademicsCacRoute
+  AcademicsDownloadsRoute: typeof AcademicsDownloadsRoute
+  AcademicsProgramsRoute: typeof AcademicsProgramsRoute
+  AcademicsRegulationsRoute: typeof AcademicsRegulationsRoute
+  AcademicsScholarshipsRoute: typeof AcademicsScholarshipsRoute
+  AcademicsSyllabusRoute: typeof AcademicsSyllabusRoute
+  AcademicsTimeTablesRoute: typeof AcademicsTimeTablesRoute
+  AcademicsIndexRoute: typeof AcademicsIndexRoute
+}
+
+const AcademicsRouteChildren: AcademicsRouteChildren = {
+  AcademicsAdmissionsRoute: AcademicsAdmissionsRoute,
+  AcademicsCacRoute: AcademicsCacRoute,
+  AcademicsDownloadsRoute: AcademicsDownloadsRoute,
+  AcademicsProgramsRoute: AcademicsProgramsRoute,
+  AcademicsRegulationsRoute: AcademicsRegulationsRoute,
+  AcademicsScholarshipsRoute: AcademicsScholarshipsRoute,
+  AcademicsSyllabusRoute: AcademicsSyllabusRoute,
+  AcademicsTimeTablesRoute: AcademicsTimeTablesRoute,
+  AcademicsIndexRoute: AcademicsIndexRoute,
+}
+
+const AcademicsRouteWithChildren = AcademicsRoute._addFileChildren(
+  AcademicsRouteChildren,
+)
+
+interface PlacementsRouteChildren {
+  PlacementsGalleryRoute: typeof PlacementsGalleryRoute
+  PlacementsRecruitersRoute: typeof PlacementsRecruitersRoute
+  PlacementsStudentsRoute: typeof PlacementsStudentsRoute
+  PlacementsTrainingRoute: typeof PlacementsTrainingRoute
+  PlacementsIndexRoute: typeof PlacementsIndexRoute
+}
+
+const PlacementsRouteChildren: PlacementsRouteChildren = {
+  PlacementsGalleryRoute: PlacementsGalleryRoute,
+  PlacementsRecruitersRoute: PlacementsRecruitersRoute,
+  PlacementsStudentsRoute: PlacementsStudentsRoute,
+  PlacementsTrainingRoute: PlacementsTrainingRoute,
+  PlacementsIndexRoute: PlacementsIndexRoute,
+}
+
+const PlacementsRouteWithChildren = PlacementsRoute._addFileChildren(
+  PlacementsRouteChildren,
+)
+
+interface RdCellRouteChildren {
+  RdCellAboutRoute: typeof RdCellAboutRoute
+  RdCellAreasRoute: typeof RdCellAreasRoute
+  RdCellMousRoute: typeof RdCellMousRoute
+  RdCellProjectsRoute: typeof RdCellProjectsRoute
+  RdCellPublicationsRoute: typeof RdCellPublicationsRoute
+  RdCellScholarsRoute: typeof RdCellScholarsRoute
+  RdCellIndexRoute: typeof RdCellIndexRoute
+}
+
+const RdCellRouteChildren: RdCellRouteChildren = {
+  RdCellAboutRoute: RdCellAboutRoute,
+  RdCellAreasRoute: RdCellAreasRoute,
+  RdCellMousRoute: RdCellMousRoute,
+  RdCellProjectsRoute: RdCellProjectsRoute,
+  RdCellPublicationsRoute: RdCellPublicationsRoute,
+  RdCellScholarsRoute: RdCellScholarsRoute,
+  RdCellIndexRoute: RdCellIndexRoute,
+}
+
+const RdCellRouteWithChildren =
+  RdCellRoute._addFileChildren(RdCellRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRouteWithChildren,
-  AcademicsRoute: AcademicsRoute,
+  AcademicsRoute: AcademicsRouteWithChildren,
   AdmissionsRoute: AdmissionsRoute,
   CampusLifeRoute: CampusLifeRoute,
   ContactRoute: ContactRoute,
@@ -521,8 +985,8 @@ const rootRouteChildren: RootRouteChildren = {
   LibraryRoute: LibraryRoute,
   NoticesRoute: NoticesRoute,
   NssRoute: NssRoute,
-  PlacementsRoute: PlacementsRoute,
-  RdCellRoute: RdCellRoute,
+  PlacementsRoute: PlacementsRouteWithChildren,
+  RdCellRoute: RdCellRouteWithChildren,
   SportsRoute: SportsRoute,
   WomenEmpowermentRoute: WomenEmpowermentRoute,
 }

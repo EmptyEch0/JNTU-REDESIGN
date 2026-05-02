@@ -41,19 +41,22 @@ export const NAV: {
     label: "Academics",
     groups: [
       {
-        title: "Programs",
+        title: "Programs & Policy",
         items: [
-          { label: "Undergraduate", to: "/academics", desc: "B.Tech across 7 disciplines" },
-          { label: "Postgraduate", to: "/academics", desc: "M.Tech & MBA programs" },
-          { label: "Doctoral", to: "/academics", desc: "Ph.D research streams" },
+          { label: "Overview", to: "/academics", desc: "Programs at a glance" },
+          { label: "Programs Offered", to: "/academics/programs", desc: "UG, PG and Doctoral" },
+          { label: "Admissions", to: "/academics/admissions", desc: "How to apply" },
+          { label: "Academic Regulations", to: "/academics/regulations", desc: "R20, R23 frameworks" },
         ],
       },
       {
-        title: "Resources",
+        title: "Student Resources",
         items: [
-          { label: "Curriculum", to: "/academics", desc: "Outcome-based learning" },
-          { label: "Calendar", to: "/academics", desc: "Academic schedule" },
-          { label: "Examinations", to: "/academics", desc: "Evaluation framework" },
+          { label: "Syllabus", to: "/academics/syllabus", desc: "Course-wise curriculum" },
+          { label: "Scholarships", to: "/academics/scholarships", desc: "Merit & need-based" },
+          { label: "CAC", to: "/academics/cac", desc: "College Academic Committee" },
+          { label: "Time Tables", to: "/academics/time-tables", desc: "Class schedules" },
+          { label: "Downloads", to: "/academics/downloads", desc: "Forms & documents" },
         ],
       },
     ],
@@ -125,11 +128,45 @@ export const NAV: {
   },
   {
     label: "Placements",
-    to: "/placements",
+    groups: [
+      {
+        title: "Training & Placement Cell",
+        items: [
+          { label: "Overview", to: "/placements", desc: "Stats and highlights" },
+          { label: "Training & Placement", to: "/placements/training", desc: "Vision, mission, TPO" },
+          { label: "Our Recruiters", to: "/placements/recruiters", desc: "Companies that hire" },
+        ],
+      },
+      {
+        title: "Outcomes",
+        items: [
+          { label: "Students Placed", to: "/placements/students", desc: "Recent placement data" },
+          { label: "Gallery", to: "/placements/gallery", desc: "Drives & events" },
+        ],
+      },
+    ],
   },
   {
     label: "R&D",
-    to: "/rd-cell",
+    groups: [
+      {
+        title: "Cell",
+        items: [
+          { label: "Overview", to: "/rd-cell", desc: "R&D cell at a glance" },
+          { label: "About Research", to: "/rd-cell/about", desc: "Message & committee" },
+          { label: "Areas of Research", to: "/rd-cell/areas", desc: "Department-wise interests" },
+          { label: "MOUs", to: "/rd-cell/mous", desc: "Industry collaborations" },
+        ],
+      },
+      {
+        title: "Output",
+        items: [
+          { label: "Research Projects", to: "/rd-cell/projects", desc: "Funded projects" },
+          { label: "Publications", to: "/rd-cell/publications", desc: "Papers & patents" },
+          { label: "Scholars under Supervision", to: "/rd-cell/scholars", desc: "Ph.D scholars" },
+        ],
+      },
+    ],
   },
 ];
 

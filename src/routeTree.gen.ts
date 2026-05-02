@@ -30,6 +30,12 @@ import { Route as RdCellIndexRouteImport } from './routes/rd-cell.index'
 import { Route as PlacementsIndexRouteImport } from './routes/placements.index'
 import { Route as AcademicsIndexRouteImport } from './routes/academics.index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
+import { Route as RdCellScholarsRouteImport } from './routes/rd-cell.scholars'
+import { Route as RdCellPublicationsRouteImport } from './routes/rd-cell.publications'
+import { Route as RdCellProjectsRouteImport } from './routes/rd-cell.projects'
+import { Route as RdCellMousRouteImport } from './routes/rd-cell.mous'
+import { Route as RdCellAreasRouteImport } from './routes/rd-cell.areas'
+import { Route as RdCellAboutRouteImport } from './routes/rd-cell.about'
 import { Route as PlacementsTrainingRouteImport } from './routes/placements.training'
 import { Route as PlacementsStudentsRouteImport } from './routes/placements.students'
 import { Route as PlacementsRecruitersRouteImport } from './routes/placements.recruiters'
@@ -153,6 +159,36 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AboutRoute,
 } as any)
+const RdCellScholarsRoute = RdCellScholarsRouteImport.update({
+  id: '/scholars',
+  path: '/scholars',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const RdCellPublicationsRoute = RdCellPublicationsRouteImport.update({
+  id: '/publications',
+  path: '/publications',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const RdCellProjectsRoute = RdCellProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const RdCellMousRoute = RdCellMousRouteImport.update({
+  id: '/mous',
+  path: '/mous',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const RdCellAreasRoute = RdCellAreasRouteImport.update({
+  id: '/areas',
+  path: '/areas',
+  getParentRoute: () => RdCellRoute,
+} as any)
+const RdCellAboutRoute = RdCellAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => RdCellRoute,
+} as any)
 const PlacementsTrainingRoute = PlacementsTrainingRouteImport.update({
   id: '/training',
   path: '/training',
@@ -274,6 +310,12 @@ export interface FileRoutesByFullPath {
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
   '/placements/training': typeof PlacementsTrainingRoute
+  '/rd-cell/about': typeof RdCellAboutRoute
+  '/rd-cell/areas': typeof RdCellAreasRoute
+  '/rd-cell/mous': typeof RdCellMousRoute
+  '/rd-cell/projects': typeof RdCellProjectsRoute
+  '/rd-cell/publications': typeof RdCellPublicationsRoute
+  '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
   '/placements/': typeof PlacementsIndexRoute
@@ -310,6 +352,12 @@ export interface FileRoutesByTo {
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
   '/placements/training': typeof PlacementsTrainingRoute
+  '/rd-cell/about': typeof RdCellAboutRoute
+  '/rd-cell/areas': typeof RdCellAreasRoute
+  '/rd-cell/mous': typeof RdCellMousRoute
+  '/rd-cell/projects': typeof RdCellProjectsRoute
+  '/rd-cell/publications': typeof RdCellPublicationsRoute
+  '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about': typeof AboutIndexRoute
   '/academics': typeof AcademicsIndexRoute
   '/placements': typeof PlacementsIndexRoute
@@ -351,6 +399,12 @@ export interface FileRoutesById {
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
   '/placements/training': typeof PlacementsTrainingRoute
+  '/rd-cell/about': typeof RdCellAboutRoute
+  '/rd-cell/areas': typeof RdCellAreasRoute
+  '/rd-cell/mous': typeof RdCellMousRoute
+  '/rd-cell/projects': typeof RdCellProjectsRoute
+  '/rd-cell/publications': typeof RdCellPublicationsRoute
+  '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
   '/placements/': typeof PlacementsIndexRoute
@@ -393,6 +447,12 @@ export interface FileRouteTypes {
     | '/placements/recruiters'
     | '/placements/students'
     | '/placements/training'
+    | '/rd-cell/about'
+    | '/rd-cell/areas'
+    | '/rd-cell/mous'
+    | '/rd-cell/projects'
+    | '/rd-cell/publications'
+    | '/rd-cell/scholars'
     | '/about/'
     | '/academics/'
     | '/placements/'
@@ -429,6 +489,12 @@ export interface FileRouteTypes {
     | '/placements/recruiters'
     | '/placements/students'
     | '/placements/training'
+    | '/rd-cell/about'
+    | '/rd-cell/areas'
+    | '/rd-cell/mous'
+    | '/rd-cell/projects'
+    | '/rd-cell/publications'
+    | '/rd-cell/scholars'
     | '/about'
     | '/academics'
     | '/placements'
@@ -469,6 +535,12 @@ export interface FileRouteTypes {
     | '/placements/recruiters'
     | '/placements/students'
     | '/placements/training'
+    | '/rd-cell/about'
+    | '/rd-cell/areas'
+    | '/rd-cell/mous'
+    | '/rd-cell/projects'
+    | '/rd-cell/publications'
+    | '/rd-cell/scholars'
     | '/about/'
     | '/academics/'
     | '/placements/'
@@ -643,6 +715,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/about/'
       preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof AboutRoute
+    }
+    '/rd-cell/scholars': {
+      id: '/rd-cell/scholars'
+      path: '/scholars'
+      fullPath: '/rd-cell/scholars'
+      preLoaderRoute: typeof RdCellScholarsRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/rd-cell/publications': {
+      id: '/rd-cell/publications'
+      path: '/publications'
+      fullPath: '/rd-cell/publications'
+      preLoaderRoute: typeof RdCellPublicationsRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/rd-cell/projects': {
+      id: '/rd-cell/projects'
+      path: '/projects'
+      fullPath: '/rd-cell/projects'
+      preLoaderRoute: typeof RdCellProjectsRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/rd-cell/mous': {
+      id: '/rd-cell/mous'
+      path: '/mous'
+      fullPath: '/rd-cell/mous'
+      preLoaderRoute: typeof RdCellMousRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/rd-cell/areas': {
+      id: '/rd-cell/areas'
+      path: '/areas'
+      fullPath: '/rd-cell/areas'
+      preLoaderRoute: typeof RdCellAreasRouteImport
+      parentRoute: typeof RdCellRoute
+    }
+    '/rd-cell/about': {
+      id: '/rd-cell/about'
+      path: '/about'
+      fullPath: '/rd-cell/about'
+      preLoaderRoute: typeof RdCellAboutRouteImport
+      parentRoute: typeof RdCellRoute
     }
     '/placements/training': {
       id: '/placements/training'
@@ -835,10 +949,22 @@ const PlacementsRouteWithChildren = PlacementsRoute._addFileChildren(
 )
 
 interface RdCellRouteChildren {
+  RdCellAboutRoute: typeof RdCellAboutRoute
+  RdCellAreasRoute: typeof RdCellAreasRoute
+  RdCellMousRoute: typeof RdCellMousRoute
+  RdCellProjectsRoute: typeof RdCellProjectsRoute
+  RdCellPublicationsRoute: typeof RdCellPublicationsRoute
+  RdCellScholarsRoute: typeof RdCellScholarsRoute
   RdCellIndexRoute: typeof RdCellIndexRoute
 }
 
 const RdCellRouteChildren: RdCellRouteChildren = {
+  RdCellAboutRoute: RdCellAboutRoute,
+  RdCellAreasRoute: RdCellAreasRoute,
+  RdCellMousRoute: RdCellMousRoute,
+  RdCellProjectsRoute: RdCellProjectsRoute,
+  RdCellPublicationsRoute: RdCellPublicationsRoute,
+  RdCellScholarsRoute: RdCellScholarsRoute,
   RdCellIndexRoute: RdCellIndexRoute,
 }
 

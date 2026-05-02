@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
 import { ArrowRight, BookOpen, Calendar, FileCheck2, GraduationCap } from "lucide-react";
 import campusImg from "@/assets/campus-life.jpg";
 

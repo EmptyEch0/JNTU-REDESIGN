@@ -30,6 +30,10 @@ import { Route as RdCellIndexRouteImport } from './routes/rd-cell.index'
 import { Route as PlacementsIndexRouteImport } from './routes/placements.index'
 import { Route as AcademicsIndexRouteImport } from './routes/academics.index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
+import { Route as PlacementsTrainingRouteImport } from './routes/placements.training'
+import { Route as PlacementsStudentsRouteImport } from './routes/placements.students'
+import { Route as PlacementsRecruitersRouteImport } from './routes/placements.recruiters'
+import { Route as PlacementsGalleryRouteImport } from './routes/placements.gallery'
 import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
 import { Route as AcademicsSyllabusRouteImport } from './routes/academics.syllabus'
 import { Route as AcademicsScholarshipsRouteImport } from './routes/academics.scholarships'
@@ -149,6 +153,26 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AboutRoute,
 } as any)
+const PlacementsTrainingRoute = PlacementsTrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
+  getParentRoute: () => PlacementsRoute,
+} as any)
+const PlacementsStudentsRoute = PlacementsStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => PlacementsRoute,
+} as any)
+const PlacementsRecruitersRoute = PlacementsRecruitersRouteImport.update({
+  id: '/recruiters',
+  path: '/recruiters',
+  getParentRoute: () => PlacementsRoute,
+} as any)
+const PlacementsGalleryRoute = PlacementsGalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => PlacementsRoute,
+} as any)
 const AcademicsTimeTablesRoute = AcademicsTimeTablesRouteImport.update({
   id: '/time-tables',
   path: '/time-tables',
@@ -246,6 +270,10 @@ export interface FileRoutesByFullPath {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/placements/gallery': typeof PlacementsGalleryRoute
+  '/placements/recruiters': typeof PlacementsRecruitersRoute
+  '/placements/students': typeof PlacementsStudentsRoute
+  '/placements/training': typeof PlacementsTrainingRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
   '/placements/': typeof PlacementsIndexRoute
@@ -278,6 +306,10 @@ export interface FileRoutesByTo {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/placements/gallery': typeof PlacementsGalleryRoute
+  '/placements/recruiters': typeof PlacementsRecruitersRoute
+  '/placements/students': typeof PlacementsStudentsRoute
+  '/placements/training': typeof PlacementsTrainingRoute
   '/about': typeof AboutIndexRoute
   '/academics': typeof AcademicsIndexRoute
   '/placements': typeof PlacementsIndexRoute
@@ -315,6 +347,10 @@ export interface FileRoutesById {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/placements/gallery': typeof PlacementsGalleryRoute
+  '/placements/recruiters': typeof PlacementsRecruitersRoute
+  '/placements/students': typeof PlacementsStudentsRoute
+  '/placements/training': typeof PlacementsTrainingRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
   '/placements/': typeof PlacementsIndexRoute
@@ -353,6 +389,10 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/placements/gallery'
+    | '/placements/recruiters'
+    | '/placements/students'
+    | '/placements/training'
     | '/about/'
     | '/academics/'
     | '/placements/'
@@ -385,6 +425,10 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/placements/gallery'
+    | '/placements/recruiters'
+    | '/placements/students'
+    | '/placements/training'
     | '/about'
     | '/academics'
     | '/placements'
@@ -421,6 +465,10 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/placements/gallery'
+    | '/placements/recruiters'
+    | '/placements/students'
+    | '/placements/training'
     | '/about/'
     | '/academics/'
     | '/placements/'
@@ -596,6 +644,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof AboutRoute
     }
+    '/placements/training': {
+      id: '/placements/training'
+      path: '/training'
+      fullPath: '/placements/training'
+      preLoaderRoute: typeof PlacementsTrainingRouteImport
+      parentRoute: typeof PlacementsRoute
+    }
+    '/placements/students': {
+      id: '/placements/students'
+      path: '/students'
+      fullPath: '/placements/students'
+      preLoaderRoute: typeof PlacementsStudentsRouteImport
+      parentRoute: typeof PlacementsRoute
+    }
+    '/placements/recruiters': {
+      id: '/placements/recruiters'
+      path: '/recruiters'
+      fullPath: '/placements/recruiters'
+      preLoaderRoute: typeof PlacementsRecruitersRouteImport
+      parentRoute: typeof PlacementsRoute
+    }
+    '/placements/gallery': {
+      id: '/placements/gallery'
+      path: '/gallery'
+      fullPath: '/placements/gallery'
+      preLoaderRoute: typeof PlacementsGalleryRouteImport
+      parentRoute: typeof PlacementsRoute
+    }
     '/academics/time-tables': {
       id: '/academics/time-tables'
       path: '/time-tables'
@@ -739,10 +815,18 @@ const AcademicsRouteWithChildren = AcademicsRoute._addFileChildren(
 )
 
 interface PlacementsRouteChildren {
+  PlacementsGalleryRoute: typeof PlacementsGalleryRoute
+  PlacementsRecruitersRoute: typeof PlacementsRecruitersRoute
+  PlacementsStudentsRoute: typeof PlacementsStudentsRoute
+  PlacementsTrainingRoute: typeof PlacementsTrainingRoute
   PlacementsIndexRoute: typeof PlacementsIndexRoute
 }
 
 const PlacementsRouteChildren: PlacementsRouteChildren = {
+  PlacementsGalleryRoute: PlacementsGalleryRoute,
+  PlacementsRecruitersRoute: PlacementsRecruitersRoute,
+  PlacementsStudentsRoute: PlacementsStudentsRoute,
+  PlacementsTrainingRoute: PlacementsTrainingRoute,
   PlacementsIndexRoute: PlacementsIndexRoute,
 }
 

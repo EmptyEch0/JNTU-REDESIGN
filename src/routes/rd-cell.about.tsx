@@ -7,6 +7,7 @@ import { ProfileCard } from "@/components/ProfileCard";
 import { RD_SUBNAV } from "@/lib/site";
 import { Quote } from "lucide-react";
 import labImg from "@/assets/lab.jpg";
+import nagaRajuImg from "@/assets/naga-raju.png";
 
 export const Route = createFileRoute("/rd-cell/about")({
   head: () => ({
@@ -45,23 +46,44 @@ function AboutResearchPage() {
       <SubNav items={RD_SUBNAV} />
 
       <section className="py-20 container-narrow">
-        <RevealOnScroll>
-          <div className="relative max-w-3xl mx-auto p-8 md:p-10 rounded-3xl bg-card border border-border shadow-[var(--shadow-elegant)]">
-            <Quote className="h-8 w-8 text-primary/40 absolute -top-4 -left-4 bg-background rounded-full p-1.5 border border-border" />
-            <p className="text-display text-2xl md:text-3xl text-ink leading-snug">
-              "Research is to see what everybody else has seen, and to think what nobody else has thought."
-            </p>
-            <p className="mt-4 text-sm text-muted-foreground">— Albert Szent-Györgyi</p>
-            <div className="mt-6 pt-6 border-t border-border">
-              <div className="text-eyebrow">Coordinator's message</div>
-              <p className="mt-3 text-muted-foreground leading-relaxed">
-                JNTUK-UCEV strives towards inculcating research culture among its students and faculty by encouraging multi-disciplinary research activities in pace with global standards. With this intention, the R&D Cell has been established to lend support and guidance to researchers involved in academic as well as sponsored research. The research areas include all major disciplines with the ultimate aim of addressing the needs and challenges of society. The research community has several peer-reviewed journal publications and patents to its credit. The faculty members are actively engaged in carrying out research projects sanctioned by funding agencies including UGC, DST, DAE, NRB and undertake major consultancy projects with industry partners.
-              </p>
-              <p className="mt-4 font-semibold text-ink">Dr. G. Naga Raju</p>
-              <div className="text-sm text-muted-foreground">Research Coordinator</div>
+        <div className="grid md:grid-cols-[300px_1fr] gap-10 items-start max-w-5xl mx-auto">
+          <RevealOnScroll>
+            <div className="relative group md:sticky md:top-32">
+              <div
+                aria-hidden
+                className="absolute -inset-3 rounded-3xl opacity-40 blur-2xl transition-opacity group-hover:opacity-70"
+                style={{ background: "var(--gradient-royal)" }}
+              />
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-[var(--shadow-elegant)] bg-card">
+                <img
+                  src={nagaRajuImg}
+                  alt="Dr. G. Naga Raju, Research Coordinator"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <div className="mt-4 text-center">
+                <p className="font-semibold text-ink">Dr. G. Naga Raju</p>
+                <div className="text-sm text-primary font-medium">Research Coordinator</div>
+              </div>
             </div>
-          </div>
-        </RevealOnScroll>
+          </RevealOnScroll>
+          <RevealOnScroll delay={120}>
+            <div className="relative p-8 md:p-10 rounded-3xl bg-card border border-border shadow-[var(--shadow-elegant)]">
+              <Quote className="h-8 w-8 text-primary/40 absolute -top-4 -left-4 bg-background rounded-full p-1.5 border border-border" />
+              <p className="text-display text-2xl md:text-3xl text-ink leading-snug">
+                "Research is to see what everybody else has seen, and to think what nobody else has thought."
+              </p>
+              <p className="mt-4 text-sm text-muted-foreground">— Albert Szent-Györgyi</p>
+              <div className="mt-6 pt-6 border-t border-border">
+                <div className="text-eyebrow">Coordinator's message</div>
+                <p className="mt-3 text-muted-foreground leading-relaxed">
+                  JNTUK-UCEV strives towards inculcating research culture among its students and faculty by encouraging multi-disciplinary research activities in pace with global standards. With this intention, the R&D Cell has been established to lend support and guidance to researchers involved in academic as well as sponsored research. The research areas include all major disciplines with the ultimate aim of addressing the needs and challenges of society. The research community has several peer-reviewed journal publications and patents to its credit. The faculty members are actively engaged in carrying out research projects sanctioned by funding agencies including UGC, DST, DAE, NRB and undertake major consultancy projects with industry partners.
+                </p>
+              </div>
+            </div>
+          </RevealOnScroll>
+        </div>
       </section>
 
       <section className="py-16 bg-sand">

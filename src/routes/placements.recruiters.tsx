@@ -2,9 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
-import { MarqueeLogos } from "@/components/MarqueeLogos";
+import { LogoCarousel } from "@/components/LogoCarousel";
 import { SectionLabel } from "@/components/SectionLabel";
-import { PLACEMENTS_SUBNAV, RECRUITERS, RECRUITERS_2017_18 } from "@/lib/site";
+import { PLACEMENTS_SUBNAV, RECRUITER_LOGOS } from "@/lib/site";
 import placementsImg from "@/assets/placements-bg.jpg";
 
 export const Route = createFileRoute("/placements/recruiters")({
@@ -17,53 +17,65 @@ export const Route = createFileRoute("/placements/recruiters")({
   component: RecruitersPage,
 });
 
-const TIERS = [
-  { tier: "Tier 1 — Product & MNCs", logos: ["Amazon", "TCS", "Wipro", "Hyundai", "L&T", "Cyient", "Deloitte"] },
-  { tier: "Tier 2 — Services & Consulting", logos: ["Infosys", "Cognizant", "Accenture", "Capgemini", "Tech Mahindra", "HCL", "Mphasis"] },
-  { tier: "Core & Embedded", logos: ["SoCtronics", "Medha", "Efftronics", "Apps Associates", "Nalsoft"] },
-  { tier: "Software & Innovation", logos: ["Miracle Software", "Grey Campus", "Cerium", "Zebi", "Sail Software Solutions"] },
-];
-
 function RecruitersPage() {
+  const half = Math.ceil(RECRUITER_LOGOS.length / 2);
+  const row1 = RECRUITER_LOGOS.slice(0, half);
+  const row2 = RECRUITER_LOGOS.slice(half);
+
   return (
     <>
-      <PageHero eyebrow="Placements" title="Our Recruiters" subtitle="A growing network of product, services, core engineering and consulting employers." image={placementsImg} />
+      <PageHero
+        eyebrow="Placements"
+        title="Our Recruiters"
+        subtitle="A growing network of product, services, core engineering and consulting employers."
+        image={placementsImg}
+      />
       <SubNav items={PLACEMENTS_SUBNAV} />
 
       <section className="py-16 container-narrow">
         <RevealOnScroll>
-          <SectionLabel eyebrow="On campus" title="Recruiters that visit every year" align="center" />
+          <SectionLabel
+            eyebrow="On campus"
+            title="Recruiters that hire from us"
+            align="center"
+          />
         </RevealOnScroll>
-        <div className="mt-10">
-          <MarqueeLogos items={RECRUITERS} />
+        <div className="mt-10 space-y-2">
+          <LogoCarousel logos={row1} speed={70} />
+          <LogoCarousel logos={row2} speed={80} reverse />
         </div>
       </section>
 
       <section className="py-16 bg-sand">
-        <div className="container-narrow space-y-10">
-          {TIERS.map((t, i) => (
-            <RevealOnScroll key={t.tier} delay={i * 80}>
-              <div>
-                <div className="text-eyebrow">{t.tier}</div>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  {t.logos.map((l) => (
-                    <span key={l} className="px-5 py-3 rounded-xl bg-card border border-border text-ink font-medium hover:border-primary/50 hover:-translate-y-0.5 transition-all">{l}</span>
-                  ))}
+        <div className="container-narrow">
+          <RevealOnScroll>
+            <SectionLabel eyebrow="Directory" title={`All ${RECRUITER_LOGOS.length} recruiters`} />
+          </RevealOnScroll>
+          <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {RECRUITER_LOGOS.map((logo, i) => (
+              <RevealOnScroll key={logo.name} delay={(i % 12) * 30}>
+                <div
+                  title={logo.name}
+                  className="aspect-[4/3] rounded-xl bg-card border border-border flex items-center justify-center p-3 hover:border-primary/40 hover:shadow-[var(--shadow-card-hover)] hover-lift"
+                >
+                  <img
+                    src={logo.url}
+                    alt={logo.name}
+                    loading="lazy"
+                    className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all duration-500"
+                    onError={(e) => {
+                      const t = e.currentTarget;
+                      t.style.display = "none";
+                      const fb = document.createElement("span");
+                      fb.textContent = logo.name;
+                      fb.className = "text-ink text-xs font-medium text-center px-1";
+                      t.parentElement?.appendChild(fb);
+                    }}
+                  />
                 </div>
-              </div>
-            </RevealOnScroll>
-          ))}
-        </div>
-      </section>
-
-      <section className="py-16 container-narrow">
-        <RevealOnScroll>
-          <SectionLabel eyebrow="Archive" title="Companies visited in 2017-18" />
-        </RevealOnScroll>
-        <div className="mt-8 flex flex-wrap gap-2">
-          {RECRUITERS_2017_18.map((r) => (
-            <span key={r} className="px-4 py-2 rounded-full bg-card border border-border text-sm text-ink">{r}</span>
-          ))}
+              </RevealOnScroll>
+            ))}
+          </div>
         </div>
       </section>
     </>

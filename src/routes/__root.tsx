@@ -2,6 +2,8 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } f
 import appCss from "../styles.css?url";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Footer } from "@/components/Footer";
+import { AdminProvider, useAdmin } from "@/context/AdminContext";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 function NotFoundComponent() {
   return (
@@ -50,6 +52,12 @@ export const Route = createRootRoute({
   notFoundComponent: NotFoundComponent,
 });
 
+declare module "@tanstack/react-router" {
+  interface StaticDataRouteContext {
+    queryClient: import("@tanstack/react-query").QueryClient;
+  }
+}
+
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -65,9 +73,55 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  const path = useRouterState({ select: (s) => s.location.pathname });
+  const { queryClient } = Route.useRouteContext();
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <QueryClientProvider client={queryClient}>
+      <AdminProvider>
+        <AdminContent />
+      </AdminProvider>
+    </QueryClientProvider>
+  );
+}
+
+function AdminContent() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  const { isAdmin, isEditMode, toggleEditMode, logout } = useAdmin();
+
+  return (
+    <div className={`min-h-screen flex flex-col ${isAdmin ? "pt-12" : ""}`}>
+      {isAdmin && (
+        <div className="fixed top-0 left-0 right-0 h-12 bg-black text-white px-6 flex items-center justify-between z-[100] shadow-lg">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Admin</span>
+              <span className="text-xs font-medium">Dashboard</span>
+            </div>
+            
+            <button
+              onClick={toggleEditMode}
+              className={`flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${
+                isEditMode 
+                ? "bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]" 
+                : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500"
+              }`}
+            >
+              <div className={`w-1.5 h-1.5 rounded-full ${isEditMode ? "bg-primary animate-pulse" : "bg-zinc-600"}`} />
+              {isEditMode ? "Editing Enabled" : "Enable Edit Mode"}
+            </button>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <Link to="/admin/placements" className="text-[11px] font-medium hover:text-primary transition-colors">Manage Placements</Link>
+            <button 
+              onClick={logout}
+              className="text-[11px] font-medium text-zinc-400 hover:text-white transition-colors"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      )}
       <MegaMenu />
       <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out]">
         <Outlet />

@@ -23,6 +23,7 @@ import { Route as DepartmentsRouteImport } from './routes/departments'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CampusLifeRouteImport } from './routes/campus-life'
 import { Route as AdmissionsRouteImport } from './routes/admissions'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademicsRouteImport } from './routes/academics'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -40,6 +41,7 @@ import { Route as PlacementsTrainingRouteImport } from './routes/placements.trai
 import { Route as PlacementsStudentsRouteImport } from './routes/placements.students'
 import { Route as PlacementsRecruitersRouteImport } from './routes/placements.recruiters'
 import { Route as PlacementsGalleryRouteImport } from './routes/placements.gallery'
+import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
 import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
 import { Route as AcademicsSyllabusRouteImport } from './routes/academics.syllabus'
 import { Route as AcademicsScholarshipsRouteImport } from './routes/academics.scholarships'
@@ -122,6 +124,11 @@ const CampusLifeRoute = CampusLifeRouteImport.update({
 const AdmissionsRoute = AdmissionsRouteImport.update({
   id: '/admissions',
   path: '/admissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AcademicsRoute = AcademicsRouteImport.update({
@@ -209,6 +216,11 @@ const PlacementsGalleryRoute = PlacementsGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => PlacementsRoute,
 } as any)
+const AdminPlacementsRoute = AdminPlacementsRouteImport.update({
+  id: '/placements',
+  path: '/placements',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AcademicsTimeTablesRoute = AcademicsTimeTablesRouteImport.update({
   id: '/time-tables',
   path: '/time-tables',
@@ -279,6 +291,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
+  '/admin': typeof AdminRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
@@ -306,6 +319,7 @@ export interface FileRoutesByFullPath {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/admin/placements': typeof AdminPlacementsRoute
   '/placements/gallery': typeof PlacementsGalleryRoute
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
@@ -323,6 +337,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
@@ -348,6 +363,7 @@ export interface FileRoutesByTo {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/admin/placements': typeof AdminPlacementsRoute
   '/placements/gallery': typeof PlacementsGalleryRoute
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
@@ -368,6 +384,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
+  '/admin': typeof AdminRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
@@ -395,6 +412,7 @@ export interface FileRoutesById {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/admin/placements': typeof AdminPlacementsRoute
   '/placements/gallery': typeof PlacementsGalleryRoute
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
@@ -416,6 +434,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/academics'
+    | '/admin'
     | '/admissions'
     | '/campus-life'
     | '/contact'
@@ -443,6 +462,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/admin/placements'
     | '/placements/gallery'
     | '/placements/recruiters'
     | '/placements/students'
@@ -460,6 +480,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/admissions'
     | '/campus-life'
     | '/contact'
@@ -485,6 +506,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/admin/placements'
     | '/placements/gallery'
     | '/placements/recruiters'
     | '/placements/students'
@@ -504,6 +526,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/academics'
+    | '/admin'
     | '/admissions'
     | '/campus-life'
     | '/contact'
@@ -531,6 +554,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/admin/placements'
     | '/placements/gallery'
     | '/placements/recruiters'
     | '/placements/students'
@@ -551,6 +575,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRouteWithChildren
   AcademicsRoute: typeof AcademicsRouteWithChildren
+  AdminRoute: typeof AdminRouteWithChildren
   AdmissionsRoute: typeof AdmissionsRoute
   CampusLifeRoute: typeof CampusLifeRoute
   ContactRoute: typeof ContactRoute
@@ -665,6 +690,13 @@ declare module '@tanstack/react-router' {
       path: '/admissions'
       fullPath: '/admissions'
       preLoaderRoute: typeof AdmissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/academics': {
@@ -785,6 +817,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/placements/gallery'
       preLoaderRoute: typeof PlacementsGalleryRouteImport
       parentRoute: typeof PlacementsRoute
+    }
+    '/admin/placements': {
+      id: '/admin/placements'
+      path: '/placements'
+      fullPath: '/admin/placements'
+      preLoaderRoute: typeof AdminPlacementsRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/academics/time-tables': {
       id: '/academics/time-tables'
@@ -928,6 +967,16 @@ const AcademicsRouteWithChildren = AcademicsRoute._addFileChildren(
   AcademicsRouteChildren,
 )
 
+interface AdminRouteChildren {
+  AdminPlacementsRoute: typeof AdminPlacementsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminPlacementsRoute: AdminPlacementsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface PlacementsRouteChildren {
   PlacementsGalleryRoute: typeof PlacementsGalleryRoute
   PlacementsRecruitersRoute: typeof PlacementsRecruitersRoute
@@ -975,6 +1024,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRouteWithChildren,
   AcademicsRoute: AcademicsRouteWithChildren,
+  AdminRoute: AdminRouteWithChildren,
   AdmissionsRoute: AdmissionsRoute,
   CampusLifeRoute: CampusLifeRoute,
   ContactRoute: ContactRoute,

@@ -17,9 +17,10 @@ export function SubNav({ items }: { items: Item[] }) {
               <Link
                 key={it.to}
                 to={it.to}
+                style={active ? { backgroundImage: "var(--gradient-royal)" } : undefined}
                 className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   active
-                    ? "bg-[var(--gradient-royal)] text-white shadow-[var(--shadow-card)]"
+                    ? "text-white shadow-[var(--shadow-card)]"
                     : "text-muted-foreground hover:text-ink hover:bg-sand"
                 }`}
               >

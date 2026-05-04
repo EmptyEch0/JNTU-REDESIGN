@@ -4,9 +4,10 @@ import labImg from "@/assets/lab.jpg";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ProfileCard } from "@/components/ProfileCard";
 import { SectionLabel } from "@/components/SectionLabel";
-import { FlaskConical, Cpu, Atom, Building2 } from "lucide-react";
+import { FlaskConical, Cpu, Atom, Building2, Quote } from "lucide-react";
 import { SubNav } from "@/components/SubNav";
 import { RD_SUBNAV } from "@/lib/site";
+import nagaRajuImg from "@/assets/naga-raju.png";
 
 export const Route = createFileRoute("/rd-cell/")({
   head: () => ({
@@ -48,6 +49,44 @@ function RDPage() {
         subtitle="Funded projects, industry consultancy and a committee that turns ideas into outcomes." image={labImg}
       />
       <SubNav items={RD_SUBNAV} />
+
+      <section className="py-20 container-narrow">
+        <RevealOnScroll>
+          <SectionLabel eyebrow="R&D Cell Message" title="From the Research Coordinator." align="center" />
+        </RevealOnScroll>
+        <div className="mt-12 grid md:grid-cols-[280px_1fr] gap-10 items-center max-w-4xl mx-auto">
+          <RevealOnScroll>
+            <div className="relative group">
+              <div
+                aria-hidden
+                className="absolute -inset-3 rounded-3xl opacity-40 blur-2xl transition-opacity group-hover:opacity-70"
+                style={{ background: "var(--gradient-royal)" }}
+              />
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-[var(--shadow-elegant)] bg-card">
+                <img
+                  src={nagaRajuImg}
+                  alt="Dr. G. Naga Raju, Research Coordinator"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </RevealOnScroll>
+          <RevealOnScroll delay={120}>
+            <div className="relative p-8 rounded-3xl bg-card border border-border shadow-[var(--shadow-card)]">
+              <Quote className="h-8 w-8 text-primary/40 absolute -top-4 -left-4 bg-background rounded-full p-1.5 border border-border" />
+              <p className="text-display text-xl md:text-2xl text-ink leading-snug">
+                "Research is to see what everybody else has seen, and to think what nobody else has thought."
+              </p>
+              <p className="mt-3 text-sm text-muted-foreground">— Albert Szent-Györgyi</p>
+              <div className="mt-6 pt-6 border-t border-border">
+                <p className="font-semibold text-ink">Dr. G. Naga Raju</p>
+                <div className="text-sm text-primary font-medium">Research Coordinator</div>
+              </div>
+            </div>
+          </RevealOnScroll>
+        </div>
+      </section>
 
       <section className="py-20 container-narrow">
         <RevealOnScroll><SectionLabel eyebrow="Focus areas" title="Where our research goes." /></RevealOnScroll>

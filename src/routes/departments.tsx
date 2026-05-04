@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
+import { SectionLabel } from "@/components/SectionLabel";
 import labImg from "@/assets/lab.jpg";
 
 type Department = {
@@ -47,13 +48,22 @@ function DepartmentsPage() {
     <>
       <PageHero
         eyebrow="Departments"
-        title="Seven departments. One academic culture."
+        title="Eight departments. One academic culture."
         subtitle="Each department is led by faculty who teach with conviction, mentor with care and research with rigour."
         image={labImg}
       />
-      <section className="py-24 container-narrow">
+      <section className="bg-sand/40 py-24">
+        <div className="container-narrow">
+          <RevealOnScroll>
+            <SectionLabel
+              eyebrow="Academic Units"
+              title="Explore Our Departments"
+              subtitle="Each department blends rigorous academics, practical exposure, and dedicated faculty mentoring."
+            />
+          </RevealOnScroll>
+
         {isPending ? (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, idx) => (
               <div key={idx} className="h-80 animate-pulse rounded-3xl border border-border bg-muted/30" />
             ))}
@@ -67,7 +77,7 @@ function DepartmentsPage() {
         ) : null}
 
         {!isPending && !isError ? (
-          <div className="grid auto-rows-[210px] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid auto-rows-[230px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {data?.map((department, index) => {
               const spanClass =
                 index % 5 === 0
@@ -79,25 +89,35 @@ function DepartmentsPage() {
               return (
                 <RevealOnScroll key={department.id} delay={index * 60}>
                   <article
-                    className={`group relative h-full overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-soft)] ${spanClass}`}
+                    className={`group relative h-full overflow-hidden rounded-3xl border border-white/20 bg-card shadow-[var(--shadow-soft)] ring-1 ring-black/5 ${spanClass}`}
                   >
                     <img
                       src={department.image}
                       alt={department.name}
                       loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/55 to-ink/20" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-black/36 to-black/8" />
+                    <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
 
-                    <div className="relative flex h-full flex-col justify-end p-6 text-white">
-                      <p className="text-xs uppercase tracking-[0.16em] text-white/70">Department</p>
-                      <h3 className="mt-2 text-2xl font-semibold leading-tight">{department.name}</h3>
-                      <p className="mt-2 text-sm text-white/85">
-                        <span className="font-semibold">HOD:</span> {department.hod}
-                      </p>
-                      <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-white/80">
-                        {department.description}
-                      </p>
+                    <div className="relative flex h-full flex-col justify-between p-5 text-white md:p-6">
+                      <div>
+                        <span className="inline-flex rounded-full bg-white/92 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink">
+                          Department
+                        </span>
+                      </div>
+
+                      <div>
+                        <h3 className="max-w-[20ch] text-2xl font-semibold leading-tight [text-wrap:balance] drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]">
+                          {department.name}
+                        </h3>
+                        <p className="mt-2 text-sm font-medium text-white">
+                          HOD: <span className="font-semibold">{department.hod}</span>
+                        </p>
+                        <p className="mt-3 line-clamp-3 max-w-[52ch] text-sm leading-relaxed text-white/92">
+                          {department.description}
+                        </p>
+                      </div>
                     </div>
                   </article>
                 </RevealOnScroll>
@@ -107,10 +127,11 @@ function DepartmentsPage() {
         ) : null}
 
         {!isPending && !isError && (!data || data.length === 0) ? (
-          <div className="rounded-2xl border border-border bg-card p-6 text-muted-foreground">
+          <div className="mt-12 rounded-2xl border border-border bg-card p-6 text-muted-foreground">
             No departments found in the database.
           </div>
         ) : null}
+        </div>
       </section>
     </>
   );

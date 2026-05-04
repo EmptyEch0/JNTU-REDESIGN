@@ -1,7 +1,9 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import { QueryClientProvider } from "@tanstack/react-query";
 import appCss from "../styles.css?url";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Footer } from "@/components/Footer";
+import { getQueryClient } from "@/lib/query-client";
 
 function NotFoundComponent() {
   return (
@@ -66,13 +68,17 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const queryClient = getQueryClient();
+
   return (
-    <div className="min-h-screen flex flex-col">
-      <MegaMenu />
-      <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out]">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="min-h-screen flex flex-col">
+        <MegaMenu />
+        <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out]">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
+    </QueryClientProvider>
   );
 }

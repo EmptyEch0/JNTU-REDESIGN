@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { db } from '../db';
-import { placementYears, placementHighlights, tpo, placementGoals, majorRecruiters, placementStaff, recruiters } from '../db/schema';
+import { placementYears, placementHighlights, tpo, placementGoals, majorRecruiters, placementStaff, recruiters, placementGallery } from '../db/schema';
 import { desc, eq } from 'drizzle-orm';
 
 export const getPlacementYears = createServerFn({ method: 'GET' })
@@ -116,5 +116,27 @@ export const updateStaff = createServerFn({ method: 'POST' })
 export const deleteStaff = createServerFn({ method: 'POST' })
   .handler(async ({ data }: { data: { id: number } }) => {
     return await db.delete(placementStaff).where(eq(placementStaff.id, data.id)).returning();
+  });
+
+// Gallery Functions
+export const getGallery = createServerFn({ method: 'GET' })
+  .handler(async () => {
+    return await db.select().from(placementGallery).orderBy(placementGallery.id);
+  });
+
+export const addGalleryItem = createServerFn({ method: 'POST' })
+  .handler(async ({ data }: { data: { src: string, caption: string } }) => {
+    return await db.insert(placementGallery).values(data).returning();
+  });
+
+export const updateGalleryItem = createServerFn({ method: 'POST' })
+  .handler(async ({ data }: { data: any }) => {
+    const { id, ...updateData } = data;
+    return await db.update(placementGallery).set(updateData).where(eq(placementGallery.id, id)).returning();
+  });
+
+export const deleteGalleryItem = createServerFn({ method: 'POST' })
+  .handler(async ({ data }: { data: { id: number } }) => {
+    return await db.delete(placementGallery).where(eq(placementGallery.id, data.id)).returning();
   });
 

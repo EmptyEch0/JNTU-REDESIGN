@@ -136,6 +136,8 @@ async function seed() {
     { name: "DST" },
     { name: "DAE" },
     { name: "NRB" },
+    { name: "EXAWIZARDS" },
+    { name: "RUSA" },
   ]);
 
   console.log("🌱 Seeding Consultancy...");
@@ -160,9 +162,21 @@ async function seed() {
 
   console.log("🌱 Seeding Projects...");
   await db.insert(rdProjects).values([
-    { deptId: mechId, title: "Synthesis and Characterization of nano red mud reinforced aluminium composites", pi: "Prof. G. Swami Naidu", agency: "UGC", amount: "₹ 13.902 L", period: "2013–2016", status: "Completed" },
-    { deptId: eceId, title: "Development of Digital Image and Video Forgery Detection System", pi: "Dr. Ch. Srinivasa Rao", agency: "RUSA", amount: "₹ 7.85 L", period: "—", status: "On going" },
-    { deptId: bshssId, title: "Diagnosis of ovarian cancer using decision tree classification of trace elemental data obtained by applying ion beam analysis", pi: "Dr. G. J. Naga Raju (Young Scientist)", agency: "Department of Science and Technology (DST), New Delhi, Govt. of India (DST SR/FTP/PS-139/2011)", amount: "Rs. 21.84 L", period: "11-12-2013 to 11-12-2016", status: "Completed" },
+    // Mechanical
+    { deptId: mechId, title: "Synthesis and Characterization of nano red mud reinforced aluminium composites", pi: "Prof. G. Swami Naidu", agency: "UGC", amount: "Rs 13.902 L", period: "2013-2016", status: "Completed" },
+    { deptId: mechId, title: "A novel ECAR technique to produce AA5083 aluminum alloy with high deformation homogeneity and improved mechanical properties for naval applications", pi: "Prof. G. Swami Naidu", agency: "NRB", amount: "Rs 33.628 L", period: "2019-2021", status: "On going" },
+    { deptId: mechId, title: "Development and mechanical characterization of Aluminium Silicon carbide metal matrix composite with soft computing tools", pi: "Dr. C. Neelima Devi", agency: "DST", amount: "Rs. 24.05 L", period: "2012-2015", status: "Completed" },
+    { deptId: mechId, title: "A novel ECAR technique to produce AA5083 aluminum alloy with high deformation homogeneity and improved mechanical properties for naval applications", pi: "Mr. K.Srinivasa Prasad (Co-PI)", agency: "NRB", amount: "Rs 33.628 L", period: "2019-2021", status: "On going" },
+    
+    // ECE
+    { deptId: eceId, title: "Development of Digital Image and Video Forgery Detection System", pi: "Dr. Ch. Srinivasa Rao", agency: "RUSA", amount: "Rs. 7.85 L", period: "—", status: "On going" },
+    
+    // CSE
+    { deptId: cseId, title: "MRI Coronary Artery Detection Applying Deep Learning techniques", pi: "Mr. D.D.V. Sivaram Rolangi", agency: "EXAWIZARDS", amount: "Rs. 5.00 L", period: "3 Months", status: "Completed" },
+    { deptId: cseId, title: "Improving Semantic Segmentation Model Accuracy using MSCOCO and PascalVOC Datasets", pi: "Mr. D.D.V. Sivaram Rolangi", agency: "EXAWIZARDS", amount: "Rs. 2.50 L", period: "10 Months", status: "Completed" },
+    
+    // BS & HSS
+    { deptId: bshssId, title: "Diagnosis of ovarian cancer using decision tree classification of trace elemental data obtained by applying ion beam analysis", pi: "Dr. G. J. Naga Raju", agency: "Department of Science and Technology (DST), New Delhi, Govt. of India (DST SR/FTP/PS-139/2011)", amount: "Rs. 21.84 L", period: "11-12-2013 to 11-12-2016", status: "Completed" },
   ]);
 
   console.log("🌱 Seeding Scholars...");

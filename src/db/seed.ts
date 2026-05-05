@@ -41,8 +41,7 @@ async function seed() {
 
   console.log("🌱 Seeding students...");
   await db.insert(students).values([
-    { name: "Likhith Kumar", rollNo: "21021A0501", branch: "CSE", year: "2023-24", campusType: "On", company: "Google" },
-    { name: "Ananya Rao", rollNo: "21021A0502", branch: "CSE", year: "2023-24", campusType: "On", company: "Microsoft" },
+    // Add student data here if needed
   ]);
 
   console.log("🌱 Seeding placement gallery...");

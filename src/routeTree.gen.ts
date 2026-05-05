@@ -12,16 +12,21 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WomenEmpowermentRouteImport } from './routes/women-empowerment'
 import { Route as SportsRouteImport } from './routes/sports'
 import { Route as RdCellRouteImport } from './routes/rd-cell'
+import { Route as ProfessionalBodiesRouteImport } from './routes/professional-bodies'
 import { Route as PlacementsRouteImport } from './routes/placements'
+import { Route as OtherAmenitiesRouteImport } from './routes/other-amenities'
 import { Route as NssRouteImport } from './routes/nss'
 import { Route as NoticesRouteImport } from './routes/notices'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as HostelsRouteImport } from './routes/hostels'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as EngineeringCellRouteImport } from './routes/engineering-cell'
 import { Route as DispensaryRouteImport } from './routes/dispensary'
 import { Route as DepartmentsRouteImport } from './routes/departments'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CanteenRouteImport } from './routes/canteen'
 import { Route as CampusLifeRouteImport } from './routes/campus-life'
+import { Route as BankingRouteImport } from './routes/banking'
 import { Route as AdmissionsRouteImport } from './routes/admissions'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademicsRouteImport } from './routes/academics'
@@ -29,6 +34,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RdCellIndexRouteImport } from './routes/rd-cell.index'
 import { Route as PlacementsIndexRouteImport } from './routes/placements.index'
+import { Route as DispensaryIndexRouteImport } from './routes/dispensary.index'
 import { Route as AcademicsIndexRouteImport } from './routes/academics.index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as RdCellScholarsRouteImport } from './routes/rd-cell.scholars'
@@ -41,6 +47,12 @@ import { Route as PlacementsTrainingRouteImport } from './routes/placements.trai
 import { Route as PlacementsStudentsRouteImport } from './routes/placements.students'
 import { Route as PlacementsRecruitersRouteImport } from './routes/placements.recruiters'
 import { Route as PlacementsGalleryRouteImport } from './routes/placements.gallery'
+import { Route as OtherAmenitiesStaffQuartersRouteImport } from './routes/other-amenities.staff-quarters'
+import { Route as OtherAmenitiesGuestHouseRouteImport } from './routes/other-amenities.guest-house'
+import { Route as CampusLifeStudentActivityClubRouteImport } from './routes/campus-life.student-activity-club'
+import { Route as CampusLifeMusicClubRouteImport } from './routes/campus-life.music-club'
+import { Route as BankingBankRouteImport } from './routes/banking.bank'
+import { Route as BankingAtmRouteImport } from './routes/banking.atm'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
 import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
 import { Route as AcademicsSyllabusRouteImport } from './routes/academics.syllabus'
@@ -71,9 +83,19 @@ const RdCellRoute = RdCellRouteImport.update({
   path: '/rd-cell',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfessionalBodiesRoute = ProfessionalBodiesRouteImport.update({
+  id: '/professional-bodies',
+  path: '/professional-bodies',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlacementsRoute = PlacementsRouteImport.update({
   id: '/placements',
   path: '/placements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OtherAmenitiesRoute = OtherAmenitiesRouteImport.update({
+  id: '/other-amenities',
+  path: '/other-amenities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NssRoute = NssRouteImport.update({
@@ -101,6 +123,11 @@ const GalleryRoute = GalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EngineeringCellRoute = EngineeringCellRouteImport.update({
+  id: '/engineering-cell',
+  path: '/engineering-cell',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DispensaryRoute = DispensaryRouteImport.update({
   id: '/dispensary',
   path: '/dispensary',
@@ -116,9 +143,19 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CanteenRoute = CanteenRouteImport.update({
+  id: '/canteen',
+  path: '/canteen',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CampusLifeRoute = CampusLifeRouteImport.update({
   id: '/campus-life',
   path: '/campus-life',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BankingRoute = BankingRouteImport.update({
+  id: '/banking',
+  path: '/banking',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdmissionsRoute = AdmissionsRouteImport.update({
@@ -155,6 +192,11 @@ const PlacementsIndexRoute = PlacementsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PlacementsRoute,
+} as any)
+const DispensaryIndexRoute = DispensaryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DispensaryRoute,
 } as any)
 const AcademicsIndexRoute = AcademicsIndexRouteImport.update({
   id: '/',
@@ -215,6 +257,39 @@ const PlacementsGalleryRoute = PlacementsGalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
   getParentRoute: () => PlacementsRoute,
+} as any)
+const OtherAmenitiesStaffQuartersRoute =
+  OtherAmenitiesStaffQuartersRouteImport.update({
+    id: '/staff-quarters',
+    path: '/staff-quarters',
+    getParentRoute: () => OtherAmenitiesRoute,
+  } as any)
+const OtherAmenitiesGuestHouseRoute =
+  OtherAmenitiesGuestHouseRouteImport.update({
+    id: '/guest-house',
+    path: '/guest-house',
+    getParentRoute: () => OtherAmenitiesRoute,
+  } as any)
+const CampusLifeStudentActivityClubRoute =
+  CampusLifeStudentActivityClubRouteImport.update({
+    id: '/student-activity-club',
+    path: '/student-activity-club',
+    getParentRoute: () => CampusLifeRoute,
+  } as any)
+const CampusLifeMusicClubRoute = CampusLifeMusicClubRouteImport.update({
+  id: '/music-club',
+  path: '/music-club',
+  getParentRoute: () => CampusLifeRoute,
+} as any)
+const BankingBankRoute = BankingBankRouteImport.update({
+  id: '/bank',
+  path: '/bank',
+  getParentRoute: () => BankingRoute,
+} as any)
+const BankingAtmRoute = BankingAtmRouteImport.update({
+  id: '/atm',
+  path: '/atm',
+  getParentRoute: () => BankingRoute,
 } as any)
 const AdminPlacementsRoute = AdminPlacementsRouteImport.update({
   id: '/placements',
@@ -293,16 +368,21 @@ export interface FileRoutesByFullPath {
   '/academics': typeof AcademicsRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
   '/admissions': typeof AdmissionsRoute
-  '/campus-life': typeof CampusLifeRoute
+  '/banking': typeof BankingRouteWithChildren
+  '/campus-life': typeof CampusLifeRouteWithChildren
+  '/canteen': typeof CanteenRoute
   '/contact': typeof ContactRoute
   '/departments': typeof DepartmentsRoute
-  '/dispensary': typeof DispensaryRoute
+  '/dispensary': typeof DispensaryRouteWithChildren
+  '/engineering-cell': typeof EngineeringCellRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
   '/library': typeof LibraryRoute
   '/notices': typeof NoticesRoute
   '/nss': typeof NssRoute
+  '/other-amenities': typeof OtherAmenitiesRouteWithChildren
   '/placements': typeof PlacementsRouteWithChildren
+  '/professional-bodies': typeof ProfessionalBodiesRoute
   '/rd-cell': typeof RdCellRouteWithChildren
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
@@ -320,6 +400,12 @@ export interface FileRoutesByFullPath {
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
   '/admin/placements': typeof AdminPlacementsRoute
+  '/banking/atm': typeof BankingAtmRoute
+  '/banking/bank': typeof BankingBankRoute
+  '/campus-life/music-club': typeof CampusLifeMusicClubRoute
+  '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
+  '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
+  '/other-amenities/staff-quarters': typeof OtherAmenitiesStaffQuartersRoute
   '/placements/gallery': typeof PlacementsGalleryRoute
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
@@ -332,6 +418,7 @@ export interface FileRoutesByFullPath {
   '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
+  '/dispensary/': typeof DispensaryIndexRoute
   '/placements/': typeof PlacementsIndexRoute
   '/rd-cell/': typeof RdCellIndexRoute
 }
@@ -339,15 +426,19 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admissions': typeof AdmissionsRoute
-  '/campus-life': typeof CampusLifeRoute
+  '/banking': typeof BankingRouteWithChildren
+  '/campus-life': typeof CampusLifeRouteWithChildren
+  '/canteen': typeof CanteenRoute
   '/contact': typeof ContactRoute
   '/departments': typeof DepartmentsRoute
-  '/dispensary': typeof DispensaryRoute
+  '/engineering-cell': typeof EngineeringCellRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
   '/library': typeof LibraryRoute
   '/notices': typeof NoticesRoute
   '/nss': typeof NssRoute
+  '/other-amenities': typeof OtherAmenitiesRouteWithChildren
+  '/professional-bodies': typeof ProfessionalBodiesRoute
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
@@ -364,6 +455,12 @@ export interface FileRoutesByTo {
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
   '/admin/placements': typeof AdminPlacementsRoute
+  '/banking/atm': typeof BankingAtmRoute
+  '/banking/bank': typeof BankingBankRoute
+  '/campus-life/music-club': typeof CampusLifeMusicClubRoute
+  '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
+  '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
+  '/other-amenities/staff-quarters': typeof OtherAmenitiesStaffQuartersRoute
   '/placements/gallery': typeof PlacementsGalleryRoute
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
@@ -376,6 +473,7 @@ export interface FileRoutesByTo {
   '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about': typeof AboutIndexRoute
   '/academics': typeof AcademicsIndexRoute
+  '/dispensary': typeof DispensaryIndexRoute
   '/placements': typeof PlacementsIndexRoute
   '/rd-cell': typeof RdCellIndexRoute
 }
@@ -386,16 +484,21 @@ export interface FileRoutesById {
   '/academics': typeof AcademicsRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
   '/admissions': typeof AdmissionsRoute
-  '/campus-life': typeof CampusLifeRoute
+  '/banking': typeof BankingRouteWithChildren
+  '/campus-life': typeof CampusLifeRouteWithChildren
+  '/canteen': typeof CanteenRoute
   '/contact': typeof ContactRoute
   '/departments': typeof DepartmentsRoute
-  '/dispensary': typeof DispensaryRoute
+  '/dispensary': typeof DispensaryRouteWithChildren
+  '/engineering-cell': typeof EngineeringCellRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
   '/library': typeof LibraryRoute
   '/notices': typeof NoticesRoute
   '/nss': typeof NssRoute
+  '/other-amenities': typeof OtherAmenitiesRouteWithChildren
   '/placements': typeof PlacementsRouteWithChildren
+  '/professional-bodies': typeof ProfessionalBodiesRoute
   '/rd-cell': typeof RdCellRouteWithChildren
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRoute
@@ -413,6 +516,12 @@ export interface FileRoutesById {
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
   '/admin/placements': typeof AdminPlacementsRoute
+  '/banking/atm': typeof BankingAtmRoute
+  '/banking/bank': typeof BankingBankRoute
+  '/campus-life/music-club': typeof CampusLifeMusicClubRoute
+  '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
+  '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
+  '/other-amenities/staff-quarters': typeof OtherAmenitiesStaffQuartersRoute
   '/placements/gallery': typeof PlacementsGalleryRoute
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
@@ -425,6 +534,7 @@ export interface FileRoutesById {
   '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
+  '/dispensary/': typeof DispensaryIndexRoute
   '/placements/': typeof PlacementsIndexRoute
   '/rd-cell/': typeof RdCellIndexRoute
 }
@@ -436,16 +546,21 @@ export interface FileRouteTypes {
     | '/academics'
     | '/admin'
     | '/admissions'
+    | '/banking'
     | '/campus-life'
+    | '/canteen'
     | '/contact'
     | '/departments'
     | '/dispensary'
+    | '/engineering-cell'
     | '/gallery'
     | '/hostels'
     | '/library'
     | '/notices'
     | '/nss'
+    | '/other-amenities'
     | '/placements'
+    | '/professional-bodies'
     | '/rd-cell'
     | '/sports'
     | '/women-empowerment'
@@ -463,6 +578,12 @@ export interface FileRouteTypes {
     | '/academics/syllabus'
     | '/academics/time-tables'
     | '/admin/placements'
+    | '/banking/atm'
+    | '/banking/bank'
+    | '/campus-life/music-club'
+    | '/campus-life/student-activity-club'
+    | '/other-amenities/guest-house'
+    | '/other-amenities/staff-quarters'
     | '/placements/gallery'
     | '/placements/recruiters'
     | '/placements/students'
@@ -475,6 +596,7 @@ export interface FileRouteTypes {
     | '/rd-cell/scholars'
     | '/about/'
     | '/academics/'
+    | '/dispensary/'
     | '/placements/'
     | '/rd-cell/'
   fileRoutesByTo: FileRoutesByTo
@@ -482,15 +604,19 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admissions'
+    | '/banking'
     | '/campus-life'
+    | '/canteen'
     | '/contact'
     | '/departments'
-    | '/dispensary'
+    | '/engineering-cell'
     | '/gallery'
     | '/hostels'
     | '/library'
     | '/notices'
     | '/nss'
+    | '/other-amenities'
+    | '/professional-bodies'
     | '/sports'
     | '/women-empowerment'
     | '/about/how-to-reach'
@@ -507,6 +633,12 @@ export interface FileRouteTypes {
     | '/academics/syllabus'
     | '/academics/time-tables'
     | '/admin/placements'
+    | '/banking/atm'
+    | '/banking/bank'
+    | '/campus-life/music-club'
+    | '/campus-life/student-activity-club'
+    | '/other-amenities/guest-house'
+    | '/other-amenities/staff-quarters'
     | '/placements/gallery'
     | '/placements/recruiters'
     | '/placements/students'
@@ -519,6 +651,7 @@ export interface FileRouteTypes {
     | '/rd-cell/scholars'
     | '/about'
     | '/academics'
+    | '/dispensary'
     | '/placements'
     | '/rd-cell'
   id:
@@ -528,16 +661,21 @@ export interface FileRouteTypes {
     | '/academics'
     | '/admin'
     | '/admissions'
+    | '/banking'
     | '/campus-life'
+    | '/canteen'
     | '/contact'
     | '/departments'
     | '/dispensary'
+    | '/engineering-cell'
     | '/gallery'
     | '/hostels'
     | '/library'
     | '/notices'
     | '/nss'
+    | '/other-amenities'
     | '/placements'
+    | '/professional-bodies'
     | '/rd-cell'
     | '/sports'
     | '/women-empowerment'
@@ -555,6 +693,12 @@ export interface FileRouteTypes {
     | '/academics/syllabus'
     | '/academics/time-tables'
     | '/admin/placements'
+    | '/banking/atm'
+    | '/banking/bank'
+    | '/campus-life/music-club'
+    | '/campus-life/student-activity-club'
+    | '/other-amenities/guest-house'
+    | '/other-amenities/staff-quarters'
     | '/placements/gallery'
     | '/placements/recruiters'
     | '/placements/students'
@@ -567,6 +711,7 @@ export interface FileRouteTypes {
     | '/rd-cell/scholars'
     | '/about/'
     | '/academics/'
+    | '/dispensary/'
     | '/placements/'
     | '/rd-cell/'
   fileRoutesById: FileRoutesById
@@ -577,16 +722,21 @@ export interface RootRouteChildren {
   AcademicsRoute: typeof AcademicsRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
   AdmissionsRoute: typeof AdmissionsRoute
-  CampusLifeRoute: typeof CampusLifeRoute
+  BankingRoute: typeof BankingRouteWithChildren
+  CampusLifeRoute: typeof CampusLifeRouteWithChildren
+  CanteenRoute: typeof CanteenRoute
   ContactRoute: typeof ContactRoute
   DepartmentsRoute: typeof DepartmentsRoute
-  DispensaryRoute: typeof DispensaryRoute
+  DispensaryRoute: typeof DispensaryRouteWithChildren
+  EngineeringCellRoute: typeof EngineeringCellRoute
   GalleryRoute: typeof GalleryRoute
   HostelsRoute: typeof HostelsRoute
   LibraryRoute: typeof LibraryRoute
   NoticesRoute: typeof NoticesRoute
   NssRoute: typeof NssRoute
+  OtherAmenitiesRoute: typeof OtherAmenitiesRouteWithChildren
   PlacementsRoute: typeof PlacementsRouteWithChildren
+  ProfessionalBodiesRoute: typeof ProfessionalBodiesRoute
   RdCellRoute: typeof RdCellRouteWithChildren
   SportsRoute: typeof SportsRoute
   WomenEmpowermentRoute: typeof WomenEmpowermentRoute
@@ -615,11 +765,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RdCellRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/professional-bodies': {
+      id: '/professional-bodies'
+      path: '/professional-bodies'
+      fullPath: '/professional-bodies'
+      preLoaderRoute: typeof ProfessionalBodiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/placements': {
       id: '/placements'
       path: '/placements'
       fullPath: '/placements'
       preLoaderRoute: typeof PlacementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/other-amenities': {
+      id: '/other-amenities'
+      path: '/other-amenities'
+      fullPath: '/other-amenities'
+      preLoaderRoute: typeof OtherAmenitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/nss': {
@@ -657,6 +821,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/engineering-cell': {
+      id: '/engineering-cell'
+      path: '/engineering-cell'
+      fullPath: '/engineering-cell'
+      preLoaderRoute: typeof EngineeringCellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dispensary': {
       id: '/dispensary'
       path: '/dispensary'
@@ -678,11 +849,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/canteen': {
+      id: '/canteen'
+      path: '/canteen'
+      fullPath: '/canteen'
+      preLoaderRoute: typeof CanteenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/campus-life': {
       id: '/campus-life'
       path: '/campus-life'
       fullPath: '/campus-life'
       preLoaderRoute: typeof CampusLifeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/banking': {
+      id: '/banking'
+      path: '/banking'
+      fullPath: '/banking'
+      preLoaderRoute: typeof BankingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admissions': {
@@ -733,6 +918,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/placements/'
       preLoaderRoute: typeof PlacementsIndexRouteImport
       parentRoute: typeof PlacementsRoute
+    }
+    '/dispensary/': {
+      id: '/dispensary/'
+      path: '/'
+      fullPath: '/dispensary/'
+      preLoaderRoute: typeof DispensaryIndexRouteImport
+      parentRoute: typeof DispensaryRoute
     }
     '/academics/': {
       id: '/academics/'
@@ -817,6 +1009,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/placements/gallery'
       preLoaderRoute: typeof PlacementsGalleryRouteImport
       parentRoute: typeof PlacementsRoute
+    }
+    '/other-amenities/staff-quarters': {
+      id: '/other-amenities/staff-quarters'
+      path: '/staff-quarters'
+      fullPath: '/other-amenities/staff-quarters'
+      preLoaderRoute: typeof OtherAmenitiesStaffQuartersRouteImport
+      parentRoute: typeof OtherAmenitiesRoute
+    }
+    '/other-amenities/guest-house': {
+      id: '/other-amenities/guest-house'
+      path: '/guest-house'
+      fullPath: '/other-amenities/guest-house'
+      preLoaderRoute: typeof OtherAmenitiesGuestHouseRouteImport
+      parentRoute: typeof OtherAmenitiesRoute
+    }
+    '/campus-life/student-activity-club': {
+      id: '/campus-life/student-activity-club'
+      path: '/student-activity-club'
+      fullPath: '/campus-life/student-activity-club'
+      preLoaderRoute: typeof CampusLifeStudentActivityClubRouteImport
+      parentRoute: typeof CampusLifeRoute
+    }
+    '/campus-life/music-club': {
+      id: '/campus-life/music-club'
+      path: '/music-club'
+      fullPath: '/campus-life/music-club'
+      preLoaderRoute: typeof CampusLifeMusicClubRouteImport
+      parentRoute: typeof CampusLifeRoute
+    }
+    '/banking/bank': {
+      id: '/banking/bank'
+      path: '/bank'
+      fullPath: '/banking/bank'
+      preLoaderRoute: typeof BankingBankRouteImport
+      parentRoute: typeof BankingRoute
+    }
+    '/banking/atm': {
+      id: '/banking/atm'
+      path: '/atm'
+      fullPath: '/banking/atm'
+      preLoaderRoute: typeof BankingAtmRouteImport
+      parentRoute: typeof BankingRoute
     }
     '/admin/placements': {
       id: '/admin/placements'
@@ -977,6 +1211,59 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface BankingRouteChildren {
+  BankingAtmRoute: typeof BankingAtmRoute
+  BankingBankRoute: typeof BankingBankRoute
+}
+
+const BankingRouteChildren: BankingRouteChildren = {
+  BankingAtmRoute: BankingAtmRoute,
+  BankingBankRoute: BankingBankRoute,
+}
+
+const BankingRouteWithChildren =
+  BankingRoute._addFileChildren(BankingRouteChildren)
+
+interface CampusLifeRouteChildren {
+  CampusLifeMusicClubRoute: typeof CampusLifeMusicClubRoute
+  CampusLifeStudentActivityClubRoute: typeof CampusLifeStudentActivityClubRoute
+}
+
+const CampusLifeRouteChildren: CampusLifeRouteChildren = {
+  CampusLifeMusicClubRoute: CampusLifeMusicClubRoute,
+  CampusLifeStudentActivityClubRoute: CampusLifeStudentActivityClubRoute,
+}
+
+const CampusLifeRouteWithChildren = CampusLifeRoute._addFileChildren(
+  CampusLifeRouteChildren,
+)
+
+interface DispensaryRouteChildren {
+  DispensaryIndexRoute: typeof DispensaryIndexRoute
+}
+
+const DispensaryRouteChildren: DispensaryRouteChildren = {
+  DispensaryIndexRoute: DispensaryIndexRoute,
+}
+
+const DispensaryRouteWithChildren = DispensaryRoute._addFileChildren(
+  DispensaryRouteChildren,
+)
+
+interface OtherAmenitiesRouteChildren {
+  OtherAmenitiesGuestHouseRoute: typeof OtherAmenitiesGuestHouseRoute
+  OtherAmenitiesStaffQuartersRoute: typeof OtherAmenitiesStaffQuartersRoute
+}
+
+const OtherAmenitiesRouteChildren: OtherAmenitiesRouteChildren = {
+  OtherAmenitiesGuestHouseRoute: OtherAmenitiesGuestHouseRoute,
+  OtherAmenitiesStaffQuartersRoute: OtherAmenitiesStaffQuartersRoute,
+}
+
+const OtherAmenitiesRouteWithChildren = OtherAmenitiesRoute._addFileChildren(
+  OtherAmenitiesRouteChildren,
+)
+
 interface PlacementsRouteChildren {
   PlacementsGalleryRoute: typeof PlacementsGalleryRoute
   PlacementsRecruitersRoute: typeof PlacementsRecruitersRoute
@@ -1026,16 +1313,21 @@ const rootRouteChildren: RootRouteChildren = {
   AcademicsRoute: AcademicsRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
   AdmissionsRoute: AdmissionsRoute,
-  CampusLifeRoute: CampusLifeRoute,
+  BankingRoute: BankingRouteWithChildren,
+  CampusLifeRoute: CampusLifeRouteWithChildren,
+  CanteenRoute: CanteenRoute,
   ContactRoute: ContactRoute,
   DepartmentsRoute: DepartmentsRoute,
-  DispensaryRoute: DispensaryRoute,
+  DispensaryRoute: DispensaryRouteWithChildren,
+  EngineeringCellRoute: EngineeringCellRoute,
   GalleryRoute: GalleryRoute,
   HostelsRoute: HostelsRoute,
   LibraryRoute: LibraryRoute,
   NoticesRoute: NoticesRoute,
   NssRoute: NssRoute,
+  OtherAmenitiesRoute: OtherAmenitiesRouteWithChildren,
   PlacementsRoute: PlacementsRouteWithChildren,
+  ProfessionalBodiesRoute: ProfessionalBodiesRoute,
   RdCellRoute: RdCellRouteWithChildren,
   SportsRoute: SportsRoute,
   WomenEmpowermentRoute: WomenEmpowermentRoute,

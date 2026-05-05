@@ -283,6 +283,21 @@
     border-color: oklch(1 0 0 / 0.7);
   }
 
+  .btn-secondary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-weight: 500;
+    transition: all 0.3s var(--transition-smooth);
+  }
+  .btn-secondary:hover {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    transform: translateY(-2px);
+  }
+
   .marquee-track {
     display: flex;
     width: max-content;

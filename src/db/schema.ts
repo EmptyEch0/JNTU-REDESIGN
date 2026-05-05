@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, integer, jsonb } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 export const placementYears = pgTable('placement_years', {
@@ -185,4 +185,58 @@ export const placementGallery = pgTable("placement_gallery", {
   id: serial("id").primaryKey(),
   src: text("src"),
   caption: text("caption"),
+});
+
+export const leadership = pgTable("leadership", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  name: text("name").notNull(),
+  image: text("image").notNull(),
+  email: text("email").notNull(),
+  designation: text("designation").notNull(),
+  quote: text("quote").notNull(),
+  message: text("message").notNull(),
+  profile: text("profile").notNull(),
+  extras: jsonb("extras"),
+});
+
+export const leadershipStaff = pgTable("leadership_staff", {
+  id: serial("id").primaryKey(),
+  leadershipSlug: text("leadership_slug").notNull().references(() => leadership.slug),
+  name: text("name").notNull(),
+  role: text("role").notNull(),
+  section: text("section").notNull(),
+});
+
+export const iqacComposition = pgTable("iqac_composition", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  designation: text("designation").notNull(),
+  role: text("role").notNull(),
+});
+
+export const iqacReports = pgTable("iqac_reports", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  year: text("year").notNull(),
+  type: text("type").notNull(), // 'AQAR' or 'Academic Audit'
+  link: text("link").notNull(),
+});
+
+export const iqacEvents = pgTable("iqac_events", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  date: text("date").notNull(),
+});
+
+export const iqacOutcomes = pgTable("iqac_outcomes", {
+  id: serial("id").primaryKey(),
+  text: text("text").notNull(),
+});
+
+export const iqacMous = pgTable("iqac_mous", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  image: text("image").notNull(),
 });

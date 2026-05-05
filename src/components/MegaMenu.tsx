@@ -113,8 +113,8 @@ export function MegaMenu() {
           <div className={`flex items-center gap-2 transition-all duration-500 ${expanded ? "px-4 sm:px-5 h-16" : "px-3 h-12"}`}>
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 group shrink-0" onClick={closeAll}>
-              <div className={`rounded-full bg-gradient-to-br from-primary-glow to-primary text-primary-foreground grid place-items-center transition-all duration-500 ${expanded ? "h-9 w-9" : "h-7 w-7"}`}>
-                <GraduationCap className={expanded ? "h-4 w-4" : "h-3.5 w-3.5"} />
+              <div className={`rounded-full bg-white grid place-items-center transition-all duration-500 overflow-hidden border border-white/20 ${expanded ? "h-9 w-9" : "h-7 w-7"}`}>
+                <img src="/logo.jpeg" alt="Logo" className="h-full w-full object-cover" />
               </div>
               <div className={`leading-tight overflow-hidden transition-all duration-500 ${expanded ? "max-w-[260px] opacity-100" : "max-w-0 opacity-0 lg:max-w-[120px] lg:opacity-100"}`}>
                 <div className="text-sm font-semibold text-white whitespace-nowrap">{SITE.name}</div>

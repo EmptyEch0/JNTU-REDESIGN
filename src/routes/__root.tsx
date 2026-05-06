@@ -1,9 +1,9 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import { Outlet, Link, createRootRouteWithContext, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Footer } from "@/components/Footer";
 import { AdminProvider, useAdmin } from "@/context/AdminContext";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 function NotFoundComponent() {
   return (
@@ -20,7 +20,11 @@ function NotFoundComponent() {
   );
 }
 
-export const Route = createRootRoute({
+interface MyRouterContext {
+  queryClient: QueryClient;
+}
+
+export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -52,11 +56,7 @@ export const Route = createRootRoute({
   notFoundComponent: NotFoundComponent,
 });
 
-declare module "@tanstack/react-router" {
-  interface StaticDataRouteContext {
-    queryClient: import("@tanstack/react-query").QueryClient;
-  }
-}
+
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (

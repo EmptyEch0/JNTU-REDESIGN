@@ -61,7 +61,7 @@ function BankingPage() {
 
           <div className="pt-4 flex justify-center">
             <img
-              src={bankImg}
+              src="/images/disp1.jpg" // Fallback image
               alt="Bank Facility"
               className="w-full max-w-lg object-cover rounded-xl shadow"
             />

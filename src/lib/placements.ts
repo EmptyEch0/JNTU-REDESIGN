@@ -14,34 +14,40 @@ export const getPlacementHighlights = createServerFn({ method: 'GET' })
   });
 
 export const addPlacementYear = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: any }) => {
+  .inputValidator((data: unknown) => data as any)
+  .handler(async ({ data }) => {
     return await db.insert(placementYears).values(data).returning();
   });
 
 export const addPlacementHighlight = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: any }) => {
+  .inputValidator((data: unknown) => data as any)
+  .handler(async ({ data }) => {
     return await db.insert(placementHighlights).values(data).returning();
   });
 
 export const updatePlacementYear = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: any }) => {
+  .inputValidator((data: unknown) => data as { id: number; [key: string]: any })
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return await db.update(placementYears).set(updateData).where(eq(placementYears.id, id)).returning();
   });
 
 export const deletePlacementYear = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: { id: number } }) => {
+  .inputValidator((data: unknown) => data as { id: number })
+  .handler(async ({ data }) => {
     return await db.delete(placementYears).where(eq(placementYears.id, data.id)).returning();
   });
 
 export const updatePlacementHighlight = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: any }) => {
+  .inputValidator((data: unknown) => data as { id: number; [key: string]: any })
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return await db.update(placementHighlights).set(updateData).where(eq(placementHighlights.id, id)).returning();
   });
 
 export const deletePlacementHighlight = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: { id: number } }) => {
+  .inputValidator((data: unknown) => data as { id: number })
+  .handler(async ({ data }) => {
     return await db.delete(placementHighlights).where(eq(placementHighlights.id, data.id)).returning();
   });
 
@@ -53,7 +59,8 @@ export const getTPO = createServerFn({ method: 'GET' })
   });
 
 export const updateTPO = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: any }) => {
+  .inputValidator((data: unknown) => data as { id: number; [key: string]: any })
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return await db.update(tpo).set(updateData).where(eq(tpo.id, id)).returning();
   });
@@ -65,18 +72,21 @@ export const getGoals = createServerFn({ method: 'GET' })
   });
 
 export const addGoal = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: { text: string } }) => {
+  .inputValidator((data: unknown) => data as { text: string })
+  .handler(async ({ data }) => {
     return await db.insert(placementGoals).values(data).returning();
   });
 
 export const updateGoal = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: any }) => {
+  .inputValidator((data: unknown) => data as { id: number; [key: string]: any })
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return await db.update(placementGoals).set(updateData).where(eq(placementGoals.id, id)).returning();
   });
 
 export const deleteGoal = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: { id: number } }) => {
+  .inputValidator((data: unknown) => data as { id: number })
+  .handler(async ({ data }) => {
     return await db.delete(placementGoals).where(eq(placementGoals.id, data.id)).returning();
   });
 
@@ -87,12 +97,14 @@ export const getRecruiters = createServerFn({ method: 'GET' })
   });
 
 export const addRecruiter = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: { name: string } }) => {
+  .inputValidator((data: unknown) => data as { name: string })
+  .handler(async ({ data }) => {
     return await db.insert(majorRecruiters).values(data).returning();
   });
 
 export const deleteRecruiter = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: { id: number } }) => {
+  .inputValidator((data: unknown) => data as { id: number })
+  .handler(async ({ data }) => {
     return await db.delete(majorRecruiters).where(eq(majorRecruiters.id, data.id)).returning();
   });
 
@@ -103,18 +115,20 @@ export const getStaff = createServerFn({ method: 'GET' })
   });
 
 export const addStaff = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: { name: string, role: string } }) => {
+  .inputValidator((data: unknown) => data as { name: string, role: string })
+  .handler(async ({ data }) => {
     return await db.insert(placementStaff).values(data).returning();
   });
 
 export const updateStaff = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: any }) => {
+  .inputValidator((data: unknown) => data as { id: number; [key: string]: any })
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return await db.update(placementStaff).set(updateData).where(eq(placementStaff.id, id)).returning();
   });
 
 export const deleteStaff = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: { id: number } }) => {
+  .inputValidator((data: unknown) => data as { id: number })
+  .handler(async ({ data }) => {
     return await db.delete(placementStaff).where(eq(placementStaff.id, data.id)).returning();
   });
-

@@ -100,7 +100,15 @@ export const NAV: {
         items: [
           { label: "Library", to: "/library", desc: "Knowledge commons" },
           { label: "Sports Complex", to: "/sports", desc: "Indoor & outdoor" },
-          { label: "Campus Life", to: "/campus-life", desc: "Clubs & events" },
+        ],
+      },
+      {
+        title: "Campus Services",
+        items: [
+          { label: "Canteen", to: "/canteen", desc: "Dining facilities" },
+          { label: "Banking & ATM", to: "/banking", desc: "On-campus bank" },
+          { label: "Engineering Cell", to: "/engineering-cell", desc: "Infrastructure maintenance" },
+          { label: "Other Amenities", to: "/other-amenities", desc: "Staff & guest quarters" },
         ],
       },
     ],
@@ -113,7 +121,16 @@ export const NAV: {
         items: [
           { label: "NSS", to: "/nss", desc: "Service & community" },
           { label: "Women Empowerment Cell", to: "/women-empowerment" },
+          { label: "Professional Bodies", to: "/professional-bodies", desc: "Student chapters & engagement" },
           { label: "Gallery", to: "/gallery", desc: "Moments on campus" },
+        ],
+      },
+      {
+        title: "Clubs & Activities",
+        items: [
+          { label: "Campus Life", to: "/campus-life", desc: "Overview" },
+          { label: "Student Activity Clubs", to: "/campus-life/student-activity-club", desc: "Vykya, Constelle, Yoga" },
+          { label: "Music Club", to: "/campus-life/music-club", desc: "Musical expression" },
         ],
       },
       {
@@ -243,10 +260,19 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   { label: "Library", to: "/library", group: "Facilities", keywords: "books reading" },
   { label: "Sports Complex", to: "/sports", group: "Facilities", keywords: "cricket gym fitness" },
   { label: "Dispensary", to: "/dispensary", group: "Facilities", keywords: "health medical clinic" },
-  { label: "Campus Life", to: "/campus-life", group: "Facilities", keywords: "clubs events" },
+
+  { label: "Campus Life Overview", to: "/campus-life", group: "Student Corner", keywords: "life overview clubs" },
+  { label: "Student Activity Clubs", to: "/campus-life/student-activity-club", group: "Student Corner", keywords: "vykya constelle yoga" },
+  { label: "Music Club", to: "/campus-life/music-club", group: "Student Corner", keywords: "music singing band" },
 
   { label: "NSS", to: "/nss", group: "Student Corner", keywords: "service community" },
   { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner" },
+  { label: "Professional Bodies", to: "/professional-bodies", group: "Student Corner", keywords: "chapters clubs engagement" },
+
+  { label: "Canteen", to: "/canteen", group: "Facilities", keywords: "food dining eating cafeteria" },
+  { label: "Engineering Cell", to: "/engineering-cell", group: "Facilities", keywords: "infrastructure maintenance buildings" },
+  { label: "Banking & ATM", to: "/banking", group: "Facilities", keywords: "bank money cash sbi" },
+  { label: "Other Amenities", to: "/other-amenities", group: "Facilities", keywords: "guest house quarters staff" },
 ];
 
 export const ACADEMICS_SUBNAV = [
@@ -352,4 +378,22 @@ export const RECRUITER_LOGOS: { name: string; url: string }[] = [
   { name: "Virtusa", url: `${R}/Virtusa.png` },
   { name: "Wipro", url: `${R}/wipro.jpg` },
   { name: "Zebi", url: `${R}/Zebi.png` },
+];
+
+export const BANKING_SUBNAV = [
+  { label: "Bank Overview", to: "/banking" },
+  { label: "ATM Facility", to: "/banking/atm" },
+];
+
+export const OTHER_AMENITIES_SUBNAV = [
+  { label: "Overview", to: "/other-amenities" },
+  { label: "Staff Quarters", to: "/other-amenities/staff-quarters" },
+  { label: "Faculty Quarters", to: "/other-amenities/faculty-quarters" },
+  { label: "Guest House", to: "/other-amenities/guest-house" },
+];
+
+export const CAMPUS_LIFE_SUBNAV = [
+  { label: "Campus Life Overview", to: "/campus-life" },
+  { label: "Student Activity Clubs", to: "/campus-life/student-activity-club" },
+  { label: "Music Club", to: "/campus-life/music-club" },
 ];

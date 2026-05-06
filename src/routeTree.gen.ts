@@ -35,6 +35,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as RdCellIndexRouteImport } from './routes/rd-cell.index'
 import { Route as PlacementsIndexRouteImport } from './routes/placements.index'
 import { Route as DispensaryIndexRouteImport } from './routes/dispensary.index'
+import { Route as CampusLifeIndexRouteImport } from './routes/campus-life.index'
 import { Route as AcademicsIndexRouteImport } from './routes/academics.index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as RdCellScholarsRouteImport } from './routes/rd-cell.scholars'
@@ -53,7 +54,11 @@ import { Route as CampusLifeStudentActivityClubRouteImport } from './routes/camp
 import { Route as CampusLifeMusicClubRouteImport } from './routes/campus-life.music-club'
 import { Route as BankingBankRouteImport } from './routes/banking.bank'
 import { Route as BankingAtmRouteImport } from './routes/banking.atm'
+import { Route as AdminSportsRouteImport } from './routes/admin/sports'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
+import { Route as AdminLibraryRouteImport } from './routes/admin/library'
+import { Route as AdminEngineeringCellRouteImport } from './routes/admin/engineering-cell'
+import { Route as AdminDispensaryRouteImport } from './routes/admin/dispensary'
 import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
 import { Route as AcademicsSyllabusRouteImport } from './routes/academics.syllabus'
 import { Route as AcademicsScholarshipsRouteImport } from './routes/academics.scholarships'
@@ -198,6 +203,11 @@ const DispensaryIndexRoute = DispensaryIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DispensaryRoute,
 } as any)
+const CampusLifeIndexRoute = CampusLifeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CampusLifeRoute,
+} as any)
 const AcademicsIndexRoute = AcademicsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -291,9 +301,29 @@ const BankingAtmRoute = BankingAtmRouteImport.update({
   path: '/atm',
   getParentRoute: () => BankingRoute,
 } as any)
+const AdminSportsRoute = AdminSportsRouteImport.update({
+  id: '/sports',
+  path: '/sports',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPlacementsRoute = AdminPlacementsRouteImport.update({
   id: '/placements',
   path: '/placements',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLibraryRoute = AdminLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEngineeringCellRoute = AdminEngineeringCellRouteImport.update({
+  id: '/engineering-cell',
+  path: '/engineering-cell',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDispensaryRoute = AdminDispensaryRouteImport.update({
+  id: '/dispensary',
+  path: '/dispensary',
   getParentRoute: () => AdminRoute,
 } as any)
 const AcademicsTimeTablesRoute = AcademicsTimeTablesRouteImport.update({
@@ -399,7 +429,11 @@ export interface FileRoutesByFullPath {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/admin/dispensary': typeof AdminDispensaryRoute
+  '/admin/engineering-cell': typeof AdminEngineeringCellRoute
+  '/admin/library': typeof AdminLibraryRoute
   '/admin/placements': typeof AdminPlacementsRoute
+  '/admin/sports': typeof AdminSportsRoute
   '/banking/atm': typeof BankingAtmRoute
   '/banking/bank': typeof BankingBankRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
@@ -418,6 +452,7 @@ export interface FileRoutesByFullPath {
   '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
+  '/campus-life/': typeof CampusLifeIndexRoute
   '/dispensary/': typeof DispensaryIndexRoute
   '/placements/': typeof PlacementsIndexRoute
   '/rd-cell/': typeof RdCellIndexRoute
@@ -427,7 +462,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/banking': typeof BankingRouteWithChildren
-  '/campus-life': typeof CampusLifeRouteWithChildren
   '/canteen': typeof CanteenRoute
   '/contact': typeof ContactRoute
   '/departments': typeof DepartmentsRoute
@@ -454,7 +488,11 @@ export interface FileRoutesByTo {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/admin/dispensary': typeof AdminDispensaryRoute
+  '/admin/engineering-cell': typeof AdminEngineeringCellRoute
+  '/admin/library': typeof AdminLibraryRoute
   '/admin/placements': typeof AdminPlacementsRoute
+  '/admin/sports': typeof AdminSportsRoute
   '/banking/atm': typeof BankingAtmRoute
   '/banking/bank': typeof BankingBankRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
@@ -473,6 +511,7 @@ export interface FileRoutesByTo {
   '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about': typeof AboutIndexRoute
   '/academics': typeof AcademicsIndexRoute
+  '/campus-life': typeof CampusLifeIndexRoute
   '/dispensary': typeof DispensaryIndexRoute
   '/placements': typeof PlacementsIndexRoute
   '/rd-cell': typeof RdCellIndexRoute
@@ -515,7 +554,11 @@ export interface FileRoutesById {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/admin/dispensary': typeof AdminDispensaryRoute
+  '/admin/engineering-cell': typeof AdminEngineeringCellRoute
+  '/admin/library': typeof AdminLibraryRoute
   '/admin/placements': typeof AdminPlacementsRoute
+  '/admin/sports': typeof AdminSportsRoute
   '/banking/atm': typeof BankingAtmRoute
   '/banking/bank': typeof BankingBankRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
@@ -534,6 +577,7 @@ export interface FileRoutesById {
   '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
+  '/campus-life/': typeof CampusLifeIndexRoute
   '/dispensary/': typeof DispensaryIndexRoute
   '/placements/': typeof PlacementsIndexRoute
   '/rd-cell/': typeof RdCellIndexRoute
@@ -577,7 +621,11 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/admin/dispensary'
+    | '/admin/engineering-cell'
+    | '/admin/library'
     | '/admin/placements'
+    | '/admin/sports'
     | '/banking/atm'
     | '/banking/bank'
     | '/campus-life/music-club'
@@ -596,6 +644,7 @@ export interface FileRouteTypes {
     | '/rd-cell/scholars'
     | '/about/'
     | '/academics/'
+    | '/campus-life/'
     | '/dispensary/'
     | '/placements/'
     | '/rd-cell/'
@@ -605,7 +654,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admissions'
     | '/banking'
-    | '/campus-life'
     | '/canteen'
     | '/contact'
     | '/departments'
@@ -632,7 +680,11 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/admin/dispensary'
+    | '/admin/engineering-cell'
+    | '/admin/library'
     | '/admin/placements'
+    | '/admin/sports'
     | '/banking/atm'
     | '/banking/bank'
     | '/campus-life/music-club'
@@ -651,6 +703,7 @@ export interface FileRouteTypes {
     | '/rd-cell/scholars'
     | '/about'
     | '/academics'
+    | '/campus-life'
     | '/dispensary'
     | '/placements'
     | '/rd-cell'
@@ -692,7 +745,11 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/admin/dispensary'
+    | '/admin/engineering-cell'
+    | '/admin/library'
     | '/admin/placements'
+    | '/admin/sports'
     | '/banking/atm'
     | '/banking/bank'
     | '/campus-life/music-club'
@@ -711,6 +768,7 @@ export interface FileRouteTypes {
     | '/rd-cell/scholars'
     | '/about/'
     | '/academics/'
+    | '/campus-life/'
     | '/dispensary/'
     | '/placements/'
     | '/rd-cell/'
@@ -926,6 +984,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DispensaryIndexRouteImport
       parentRoute: typeof DispensaryRoute
     }
+    '/campus-life/': {
+      id: '/campus-life/'
+      path: '/'
+      fullPath: '/campus-life/'
+      preLoaderRoute: typeof CampusLifeIndexRouteImport
+      parentRoute: typeof CampusLifeRoute
+    }
     '/academics/': {
       id: '/academics/'
       path: '/'
@@ -1052,11 +1117,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BankingAtmRouteImport
       parentRoute: typeof BankingRoute
     }
+    '/admin/sports': {
+      id: '/admin/sports'
+      path: '/sports'
+      fullPath: '/admin/sports'
+      preLoaderRoute: typeof AdminSportsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/placements': {
       id: '/admin/placements'
       path: '/placements'
       fullPath: '/admin/placements'
       preLoaderRoute: typeof AdminPlacementsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/library': {
+      id: '/admin/library'
+      path: '/library'
+      fullPath: '/admin/library'
+      preLoaderRoute: typeof AdminLibraryRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/engineering-cell': {
+      id: '/admin/engineering-cell'
+      path: '/engineering-cell'
+      fullPath: '/admin/engineering-cell'
+      preLoaderRoute: typeof AdminEngineeringCellRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/dispensary': {
+      id: '/admin/dispensary'
+      path: '/dispensary'
+      fullPath: '/admin/dispensary'
+      preLoaderRoute: typeof AdminDispensaryRouteImport
       parentRoute: typeof AdminRoute
     }
     '/academics/time-tables': {
@@ -1202,11 +1295,19 @@ const AcademicsRouteWithChildren = AcademicsRoute._addFileChildren(
 )
 
 interface AdminRouteChildren {
+  AdminDispensaryRoute: typeof AdminDispensaryRoute
+  AdminEngineeringCellRoute: typeof AdminEngineeringCellRoute
+  AdminLibraryRoute: typeof AdminLibraryRoute
   AdminPlacementsRoute: typeof AdminPlacementsRoute
+  AdminSportsRoute: typeof AdminSportsRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminDispensaryRoute: AdminDispensaryRoute,
+  AdminEngineeringCellRoute: AdminEngineeringCellRoute,
+  AdminLibraryRoute: AdminLibraryRoute,
   AdminPlacementsRoute: AdminPlacementsRoute,
+  AdminSportsRoute: AdminSportsRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -1227,11 +1328,13 @@ const BankingRouteWithChildren =
 interface CampusLifeRouteChildren {
   CampusLifeMusicClubRoute: typeof CampusLifeMusicClubRoute
   CampusLifeStudentActivityClubRoute: typeof CampusLifeStudentActivityClubRoute
+  CampusLifeIndexRoute: typeof CampusLifeIndexRoute
 }
 
 const CampusLifeRouteChildren: CampusLifeRouteChildren = {
   CampusLifeMusicClubRoute: CampusLifeMusicClubRoute,
   CampusLifeStudentActivityClubRoute: CampusLifeStudentActivityClubRoute,
+  CampusLifeIndexRoute: CampusLifeIndexRoute,
 }
 
 const CampusLifeRouteWithChildren = CampusLifeRoute._addFileChildren(

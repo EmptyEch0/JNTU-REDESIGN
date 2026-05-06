@@ -22,6 +22,13 @@
       "when": 1777895706917,
       "tag": "0002_harsh_roland_deschain",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1777971623318,
+      "tag": "0003_redundant_leech",
+      "breakpoints": true
     }
   ]
 }

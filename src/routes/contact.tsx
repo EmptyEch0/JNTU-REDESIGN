@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
-import { SITE } from "@/lib/site";
+import { SITE, STUDENT_SUBNAV } from "@/lib/site";
 import campusImg from "@/assets/hero-campus.jpg";
+import { SubNav } from "@/components/SubNav";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -28,6 +29,7 @@ function ContactPage() {
   return (
     <>
       <PageHero eyebrow="Contact" title="Talk to us." subtitle="For admissions queries, campus visits or general information — here is how to reach the office." image={campusImg} />
+      <SubNav items={STUDENT_SUBNAV} />
 
       <section className="py-20 container-narrow">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">

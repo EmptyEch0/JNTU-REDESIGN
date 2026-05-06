@@ -3,6 +3,8 @@ import { PageHero } from "@/components/PageHero";
 import heroImg from "@/assets/hero-2.jpg";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ArrowRight, FileText, ClipboardList, IndianRupee, CheckCircle2 } from "lucide-react";
+import { SubNav } from "@/components/SubNav";
+import { STUDENT_SUBNAV } from "@/lib/site";
 
 export const Route = createFileRoute("/admissions")({
   head: () => ({
@@ -36,6 +38,7 @@ function AdmissionsPage() {
           <Link to="/academics" className="btn-ghost">View programs</Link>
         </div>
       </PageHero>
+      <SubNav items={STUDENT_SUBNAV} />
 
       <section className="py-24 container-narrow">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">

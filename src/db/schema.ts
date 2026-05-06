@@ -240,3 +240,128 @@ export const iqacMous = pgTable("iqac_mous", {
   description: text("description").notNull(),
   image: text("image").notNull(),
 });
+
+export const nssProfile = pgTable("nss_profile", {
+  id: serial("id").primaryKey(),
+  aboutText: text("about_text").notNull(),
+  officerName: text("officer_name").notNull(),
+  officerImage: text("officer_image").notNull(),
+  officerMessage: text("officer_message").notNull(),
+  officerQuote: text("officer_quote").notNull(),
+});
+
+export const nssActivities = pgTable("nss_activities", {
+  id: serial("id").primaryKey(),
+  sNo: integer("s_no").notNull(),
+  activity: text("activity").notNull(),
+  dateConducted: text("date_conducted").notNull(),
+  venue: text("venue").notNull(),
+  description: text("description").notNull(),
+});
+
+export const nssSpecialCamp = pgTable("nss_special_camp", {
+  id: serial("id").primaryKey(),
+  day: text("day").notNull(),
+  description: text("description").notNull(),
+});
+
+export const nssGallery = pgTable("nss_gallery", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  imageUrl: text("image_url").notNull(),
+});
+
+export const weProfile = pgTable("we_profile", {
+  id: serial("id").primaryKey(),
+  aboutText: text("about_text").notNull(),
+  quote: text("quote").notNull(),
+  convenerName: text("convener_name").notNull(),
+  convenerImage: text("convener_image").notNull(),
+  convenerMessage: text("convener_message").notNull(),
+  vision: text("vision").notNull(),
+  mission: text("mission").notNull(),
+  objectives: jsonb("objectives").notNull(), // stored as string[]
+});
+
+export const weCommittee = pgTable("we_committee", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  role: text("role").notNull(),
+  email: text("email").notNull(),
+  subRole: text("sub_role"),
+});
+
+export const weActivities = pgTable("we_activities", {
+  id: serial("id").primaryKey(),
+  sNo: integer("s_no").notNull(),
+  title: text("title").notNull(),
+  date: text("date").notNull(),
+});
+
+export const weRecreation = pgTable("we_recreation", {
+  id: serial("id").primaryKey(),
+  description: text("description").notNull(),
+  images: jsonb("images").notNull(), // stored as string[]
+});
+
+export const weMagazine = pgTable("we_magazine", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  url: text("url").notNull(),
+});
+
+export const weGallery = pgTable("we_gallery", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  imageUrl: text("image_url").notNull(),
+});
+
+export const edcProfile = pgTable("edc_profile", {
+  id: serial("id").primaryKey(),
+  about: text("about").notNull(),
+  vision: jsonb("vision").notNull(), // string[]
+  mission: jsonb("mission").notNull(), // string[]
+  coordinatorName: text("coordinator_name").notNull(),
+  coordinatorRole: text("coordinator_role").notNull(),
+  coordinatorQuote: text("coordinator_quote").notNull(),
+  coordinatorImage: text("coordinator_image").notNull(),
+});
+
+export const edcCommittee = pgTable("edc_committee", {
+  id: serial("id").primaryKey(),
+  sNo: integer("s_no").notNull(),
+  name: text("name").notNull(),
+  designation: text("designation").notNull(),
+  role: text("role").notNull(),
+});
+
+export const edcActivities = pgTable("edc_activities", {
+  id: serial("id").primaryKey(),
+  sNo: integer("s_no").notNull(),
+  activityEvent: text("activity_event").notNull(),
+  academicYear: text("academic_year").notNull(),
+  date: text("date").notNull(),
+  theme: text("theme").notNull(),
+  studentParticipant: text("student_participant").notNull(),
+});
+
+
+export const profChapters = pgTable("prof_chapters", {
+  id: serial("id").primaryKey(),
+  code: text("code").notNull(), // "CSI", "IEEE", "IE", "IETE", "IIM"
+  name: text("name").notNull(),
+  about: text("about").notNull(),
+  coordinator: text("coordinator"),
+  facultyMembers: jsonb("faculty_members"), // { name: string, membershipNo: string }[] or null
+  events: jsonb("events").notNull(), // { sNo: number, title: string, date: string, details: string }[]
+});
+
+export const iipcCell = pgTable("iipc_cell", {
+  id: serial("id").primaryKey(),
+  about: text("about").notNull(),
+  objectives: jsonb("objectives").notNull(), // string[]
+  activities: jsonb("activities").notNull(), // { title: string, details: string }[]
+});
+
+
+

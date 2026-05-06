@@ -130,11 +130,11 @@ export const NAV: {
         ],
       },
       {
-        title: "Information",
+        title: "Professional Cells",
         items: [
-          { label: "Notices", to: "/notices", desc: "Latest announcements" },
-          { label: "Admissions", to: "/admissions" },
-          { label: "Contact", to: "/contact" },
+          { label: "EDC", to: "/edc", desc: "Entrepreneurship & startup cell" },
+          { label: "Professional Bodies", to: "/professional-bodies", desc: "IEEE, ACM, CSI chapters" },
+          { label: "IIPC", to: "/iipc", desc: "Industry interaction & consultancy" },
         ],
       },
     ],
@@ -269,6 +269,9 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
 
   { label: "NSS", to: "/nss", group: "Student Corner", keywords: "service community" },
   { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner" },
+  { label: "EDC", to: "/edc", group: "Student Corner", keywords: "entrepreneurship startup business incubation" },
+  { label: "Professional Bodies", to: "/professional-bodies", group: "Student Corner", keywords: "ieee acm csi chapters technical societies" },
+  { label: "IIPC", to: "/iipc", group: "Student Corner", keywords: "industry interaction consultancy internships" },
 ];
 
 export const ACADEMICS_SUBNAV = [
@@ -314,6 +317,34 @@ export const IQAC_SUBNAV = [
   { label: "AQAR", to: "/administration/iqac/aqar" },
   { label: "MOUs", to: "/administration/iqac/mous" },
 ];
+
+export const STUDENT_SUBNAV = [
+  { label: "NSS", to: "/nss" },
+  { label: "Women Empowerment", to: "/women-empowerment" },
+  { label: "EDC", to: "/edc" },
+  { label: "Professional Bodies", to: "/professional-bodies" },
+  { label: "IIPC", to: "/iipc" },
+  { label: "Gallery", to: "/gallery" },
+  { label: "Notices", to: "/notices" },
+  { label: "Admissions", to: "/admissions" },
+  { label: "Contact Us", to: "/contact" },
+];
+
+export const NSS_SUBNAV = [
+  { label: "About NSS", to: "/nss" },
+  { label: "NSS Activities", to: "/nss/activities" },
+  { label: "NSS Special Camp Activities", to: "/nss/special-camp" },
+];
+
+export const WE_SUBNAV = [
+  { label: "About WE&GC", to: "/women-empowerment" },
+  { label: "Activities & Events", to: "/women-empowerment/activities" },
+  { label: "Recreation Club", to: "/women-empowerment/recreation" },
+  { label: "Magazine", to: "/women-empowerment/magazine" },
+];
+
+
+
 
 export const RECRUITERS_2017_18 = [
   "TCS — Tata Consultancy Service",

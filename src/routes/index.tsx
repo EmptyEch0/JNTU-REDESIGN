@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowDown, Bell, MapPin, GraduationCap, Building2, BookOpen, Trophy, Stethoscope, FlaskConical, Briefcase } from "lucide-react";
+import { ArrowRight, ArrowDown, Bell, MapPin, GraduationCap, Building2, BookOpen, Trophy, Stethoscope, FlaskConical, Briefcase, Mail, Phone } from "lucide-react";
 import heroImg from "@/assets/hero-campus.jpg";
 import hero2 from "@/assets/hero-2.jpg";
 import hero3 from "@/assets/hero-3.jpg";
@@ -307,25 +307,44 @@ function HomePage() {
         </div>
       </section>
 
-      {/* CTA STRIP */}
+      {/* CONTACT STRIP */}
       <section className="py-24">
         <div className="container-narrow">
           <RevealOnScroll>
-            <div className="relative overflow-hidden rounded-3xl bg-[var(--gradient-royal)] p-10 md:p-16 text-white shadow-[var(--shadow-elegant)]">
-              <div aria-hidden className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
-              <div aria-hidden className="absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-accent/40 blur-3xl" />
-              <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-8">
-                <div className="max-w-2xl">
-                  <div className="text-eyebrow !text-white/70 flex items-center gap-2"><GraduationCap className="h-4 w-4" /> Begin your journey</div>
-                  <h3 className="text-display text-3xl md:text-5xl mt-3">
-                    Your seat at JNTU-GV starts with a single click.
+            <div className="relative overflow-hidden rounded-[40px] bg-[oklch(0.18_0.04_255)] p-10 md:p-16 text-white shadow-[var(--shadow-elegant)] border border-white/5">
+              <div aria-hidden className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
+              <div aria-hidden className="absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-accent/20 blur-3xl" />
+              
+              <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-12">
+                <div className="max-w-xl">
+                  <div className="text-eyebrow !text-white/60 flex items-center gap-2">Contact Us</div>
+                  <h3 className="text-display text-4xl md:text-5xl mt-4">
+                    Have questions? <br /><span className="text-primary-glow">We're here to help.</span>
                   </h3>
+                  <p className="mt-6 text-white/50 leading-relaxed max-w-md">
+                    Reach out to our administrative office for admissions, academic inquiries, or general information.
+                  </p>
                 </div>
-                <div className="flex gap-3 flex-wrap">
-                  <Link to="/admissions" className="btn-primary !bg-white !text-primary hover:!bg-white/90">
-                    Apply now <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link to="/contact" className="btn-ghost">Talk to us</Link>
+                
+                <div className="grid sm:grid-cols-2 gap-10 lg:gap-16">
+                  <div className="space-y-4">
+                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-bold">Contact Number</div>
+                    <div className="flex items-center gap-4">
+                      <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary-glow shadow-inner">
+                        <Phone className="h-5 w-5" />
+                      </div>
+                      <div className="text-2xl md:text-3xl font-bold tracking-tight">08922 277388</div>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-bold">Email Support</div>
+                    <div className="flex items-center gap-4">
+                      <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary-glow shadow-inner">
+                        <Mail className="h-5 w-5" />
+                      </div>
+                      <div className="text-2xl md:text-3xl font-bold tracking-tight">principal@jntugv.edu.in</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

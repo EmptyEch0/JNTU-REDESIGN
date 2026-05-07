@@ -38,6 +38,19 @@ export const NAV: {
     ],
   },
   {
+    label: "Administration",
+    groups: [
+      {
+        title: "Leadership",
+        items: [
+          { label: "Principal", to: "/administration/principal", desc: "Leadership and vision" },
+          { label: "Vice Principal", to: "/administration/vice-principal", desc: "Academic administration" },
+          { label: "IQAC", to: "/administration/iqac", desc: "Internal Quality Assurance Cell" },
+        ],
+      },
+    ],
+  },
+  {
     label: "Academics",
     groups: [
       {
@@ -117,11 +130,11 @@ export const NAV: {
         ],
       },
       {
-        title: "Information",
+        title: "Professional Cells",
         items: [
-          { label: "Notices", to: "/notices", desc: "Latest announcements" },
-          { label: "Admissions", to: "/admissions" },
-          { label: "Contact", to: "/contact" },
+          { label: "EDC", to: "/edc", desc: "Entrepreneurship & startup cell" },
+          { label: "Professional Bodies", to: "/professional-bodies", desc: "IEEE, ACM, CSI chapters" },
+          { label: "IIPC", to: "/iipc", desc: "Industry interaction & consultancy" },
         ],
       },
     ],
@@ -203,6 +216,15 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   { label: "About Vizianagaram", to: "/about/vizianagaram", group: "About", keywords: "city heritage culture" },
   { label: "How to Reach", to: "/about/how-to-reach", group: "About", keywords: "directions transport bus train" },
   { label: "Vision & Mission", to: "/about/vision-mission", group: "About", keywords: "ugc recognition 2f 12b" },
+
+  { label: "Principal", to: "/administration/principal", group: "Administration", keywords: "leadership head rajeswara rao" },
+  { label: "Vice Principal", to: "/administration/vice-principal", group: "Administration", keywords: "jaya suma academic" },
+  { label: "IQAC", to: "/administration/iqac", group: "Administration", keywords: "quality assurance cell" },
+  { label: "IQAC Composition", to: "/administration/iqac/composition", group: "Administration" },
+  { label: "IQAC Meetings", to: "/administration/iqac/meetings", group: "Administration" },
+  { label: "AQAR Reports", to: "/administration/iqac/aqar", group: "Administration" },
+  { label: "IQAC MOUs", to: "/administration/iqac/mous", group: "Administration" },
+
   { label: "Academics", to: "/academics", group: "Pages", keywords: "programs curriculum ug pg phd" },
   { label: "Departments", to: "/departments", group: "Pages" },
   { label: "Admissions", to: "/admissions", group: "Pages", keywords: "apply enroll" },
@@ -247,6 +269,9 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
 
   { label: "NSS", to: "/nss", group: "Student Corner", keywords: "service community" },
   { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner" },
+  { label: "EDC", to: "/edc", group: "Student Corner", keywords: "entrepreneurship startup business incubation" },
+  { label: "Professional Bodies", to: "/professional-bodies", group: "Student Corner", keywords: "ieee acm csi chapters technical societies" },
+  { label: "IIPC", to: "/iipc", group: "Student Corner", keywords: "industry interaction consultancy internships" },
 ];
 
 export const ACADEMICS_SUBNAV = [
@@ -279,6 +304,48 @@ export const RD_SUBNAV = [
   { label: "MOUs", to: "/rd-cell/mous" },
 ];
 
+export const ADMINISTRATION_SUBNAV = [
+  { label: "Principal", to: "/administration/principal" },
+  { label: "Vice Principal", to: "/administration/vice-principal" },
+  { label: "IQAC", to: "/administration/iqac" },
+];
+
+export const IQAC_SUBNAV = [
+  { label: "About IQAC", to: "/administration/iqac" },
+  { label: "Composition", to: "/administration/iqac/composition" },
+  { label: "Meetings & Events", to: "/administration/iqac/meetings" },
+  { label: "AQAR", to: "/administration/iqac/aqar" },
+  { label: "MOUs", to: "/administration/iqac/mous" },
+];
+
+export const STUDENT_SUBNAV = [
+  { label: "NSS", to: "/nss" },
+  { label: "Women Empowerment", to: "/women-empowerment" },
+  { label: "EDC", to: "/edc" },
+  { label: "Professional Bodies", to: "/professional-bodies" },
+  { label: "IIPC", to: "/iipc" },
+  { label: "Gallery", to: "/gallery" },
+  { label: "Notices", to: "/notices" },
+  { label: "Admissions", to: "/admissions" },
+  { label: "Contact Us", to: "/contact" },
+];
+
+export const NSS_SUBNAV = [
+  { label: "About NSS", to: "/nss" },
+  { label: "NSS Activities", to: "/nss/activities" },
+  { label: "NSS Special Camp Activities", to: "/nss/special-camp" },
+];
+
+export const WE_SUBNAV = [
+  { label: "About WE&GC", to: "/women-empowerment" },
+  { label: "Activities & Events", to: "/women-empowerment/activities" },
+  { label: "Recreation Club", to: "/women-empowerment/recreation" },
+  { label: "Magazine", to: "/women-empowerment/magazine" },
+];
+
+
+
+
 export const RECRUITERS_2017_18 = [
   "TCS — Tata Consultancy Service",
   "Wipro",
@@ -295,4 +362,61 @@ export const RECRUITERS_2017_18 = [
   "Cerium",
   "Zebi",
   "Sail Software Solutions",
+];
+
+const R = "https://jntugvcev.edu.in/wp-content/gallery/our-recruiters";
+export const RECRUITER_LOGOS: { name: string; url: string }[] = [
+  { name: "Agilitx", url: `${R}/Agilitx.png` },
+  { name: "Airtel", url: `${R}/airtel.png` },
+  { name: "Amazon", url: `${R}/amazon.png` },
+  { name: "Anjaney Alloyes Pvt Ltd", url: `${R}/Anjaney-Alloyes-PVt-Ltd.jpg` },
+  { name: "AppsAssociates", url: `${R}/AppsAssociates.png` },
+  { name: "Bhanu Special Costing", url: `${R}/bhanu-special-costing-PVT.LTD_.jpg` },
+  { name: "BMM Ispat Limited", url: `${R}/bmm-ispat-limited.jpg` },
+  { name: "Broadcom", url: `${R}/Broadcom.png` },
+  { name: "Capgemini", url: `${R}/cap-gemini.png` },
+  { name: "Cerium Systems", url: `${R}/Cerium-systems.png` },
+  { name: "Chegg India", url: `${R}/Cheggindia-Pvt.Ltd_.png` },
+  { name: "CMC", url: `${R}/CMC.jpg` },
+  { name: "Cognizant", url: `${R}/Cognizant.jpg` },
+  { name: "Computer Science Corporation", url: `${R}/Computer-Science-Corporation.png` },
+  { name: "Ctrls", url: `${R}/Ctrls.png` },
+  { name: "Cyient", url: `${R}/cyient.png` },
+  { name: "Dankuni Steels", url: `${R}/Dankuni-Steels.png` },
+  { name: "Data India", url: `${R}/data-india-PVT.LTD_.png` },
+  { name: "DST Worldwide Technologies", url: `${R}/DST-Worldwide-Technologies.jpg` },
+  { name: "Effetronics", url: `${R}/Effetronics.png` },
+  { name: "Everglades Technologies", url: `${R}/Everglades-Technologies.png` },
+  { name: "Genpact", url: `${R}/genpact.png` },
+  { name: "Glenwood", url: `${R}/Glenwood.jpg` },
+  { name: "GlobalLogic", url: `${R}/Global-Logic.png` },
+  { name: "GreyCampus", url: `${R}/GreyCampus.jpg` },
+  { name: "Honeywell Technology", url: `${R}/Honeywell-Technology.png` },
+  { name: "Hyundai", url: `${R}/hyundai.png` },
+  { name: "IBM", url: `${R}/IBM.png` },
+  { name: "Infosys", url: `${R}/Infosys.png` },
+  { name: "Infotech", url: `${R}/Infotech.png` },
+  { name: "Inspectorate Griffith India", url: `${R}/Inspectorate-Griffith-India-PVT.LTD_.jpg` },
+  { name: "J.K. Papers", url: `${R}/J.K.Papers.jpg` },
+  { name: "L&T InfoTech", url: `${R}/LT-InfoTech.png` },
+  { name: "Medha Servo", url: `${R}/Medha-Servo.jpg` },
+  { name: "Mindtree", url: `${R}/Mindtree.png` },
+  { name: "Miracle Software Systems", url: `${R}/Miracle-Soft-ware-Systems.png` },
+  { name: "MPHASIS", url: `${R}/MPHAS.png` },
+  { name: "NCR", url: `${R}/NCR.jpg` },
+  { name: "NeeLsys", url: `${R}/NeeLsys.jpg` },
+  { name: "Pratian Technologies", url: `${R}/Pratian-Technologies.png` },
+  { name: "Sails Software Solutions", url: `${R}/Sails-software-solutions.png` },
+  { name: "SoCtronics", url: `${R}/SoCtronics.png` },
+  { name: "Suneratech", url: `${R}/suneratech.png` },
+  { name: "Syntel", url: `${R}/Syntel.png` },
+  { name: "Tavisca", url: `${R}/Tavisca.jpg` },
+  { name: "TCS", url: `${R}/TCS.jpg` },
+  { name: "Tech Mahindra", url: `${R}/Tech-mahindra.jpg` },
+  { name: "Teradata", url: `${R}/teradata.png` },
+  { name: "Transcend Solutions", url: `${R}/transcend-solutions.png` },
+  { name: "Uurmi", url: `${R}/uurmi.png` },
+  { name: "Virtusa", url: `${R}/Virtusa.png` },
+  { name: "Wipro", url: `${R}/wipro.jpg` },
+  { name: "Zebi", url: `${R}/Zebi.png` },
 ];

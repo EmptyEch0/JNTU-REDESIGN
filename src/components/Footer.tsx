@@ -8,8 +8,8 @@ export function Footer() {
       <div className="container-narrow py-16 md:py-20 grid gap-12 md:grid-cols-12">
         <div className="md:col-span-4 space-y-4">
           <div className="flex items-center gap-2.5">
-            <div className="h-10 w-10 rounded-xl bg-primary grid place-items-center">
-              <GraduationCap className="h-5 w-5" />
+            <div className="h-10 w-10 rounded-xl bg-white grid place-items-center overflow-hidden border border-white/20">
+              <img src="/logo.jpeg" alt="Logo" className="h-full w-full object-cover" />
             </div>
             <div>
               <div className="text-display text-lg text-white">{SITE.name}</div>

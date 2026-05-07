@@ -3,6 +3,8 @@ import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { Bell, ArrowRight } from "lucide-react";
 import libraryImg from "@/assets/library-interior.jpg";
+import { SubNav } from "@/components/SubNav";
+import { STUDENT_SUBNAV } from "@/lib/site";
 
 export const Route = createFileRoute("/notices")({
   head: () => ({
@@ -29,6 +31,7 @@ function NoticesPage() {
   return (
     <>
       <PageHero eyebrow="Announcements" title="Notices, circulars & updates." subtitle="The latest from the office of the Principal, departments and student cells." image={libraryImg} />
+      <SubNav items={STUDENT_SUBNAV} />
 
       <section className="py-20 container-narrow">
         <div className="space-y-3">

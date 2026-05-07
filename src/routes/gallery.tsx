@@ -9,6 +9,8 @@ import sportsImg from "@/assets/sports.jpg";
 import libraryImg from "@/assets/library-interior.jpg";
 import cultureImg from "@/assets/culture.jpg";
 import placementsImg from "@/assets/placements-bg.jpg";
+import { SubNav } from "@/components/SubNav";
+import { STUDENT_SUBNAV } from "@/lib/site";
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({
@@ -38,6 +40,7 @@ function GalleryPage() {
   return (
     <>
       <PageHero eyebrow="Gallery" title="A campus, in moments." subtitle="A growing visual record of the rhythms, faces and seasons of life at JNTU-GV CEV." image={cultureImg} />
+      <SubNav items={STUDENT_SUBNAV} />
       <section className="py-20 container-narrow">
         <RevealOnScroll>
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">

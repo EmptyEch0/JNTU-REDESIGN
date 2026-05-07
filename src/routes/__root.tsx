@@ -4,6 +4,8 @@ import appCss from "../styles.css?url";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Footer } from "@/components/Footer";
 import { getQueryClient } from "@/lib/query-client";
+import { AdminProvider, useAdmin } from "@/context/AdminContext";
+
 
 function NotFoundComponent() {
   return (
@@ -19,8 +21,14 @@ function NotFoundComponent() {
     </div>
   );
 }
+interface MyRootContext {
+  queryClient: import("@tanstack/react-query").QueryClient;
+}
 
+// 2. The most stable way to define the route with types
 export const Route = createRootRoute({
+  // This "context" function tells the router what to expect
+  context: () => ({}) as MyRootContext, 
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -45,6 +53,7 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap",
       },
+      { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
     ],
   }),
   shellComponent: RootShell,
@@ -52,9 +61,14 @@ export const Route = createRootRoute({
   notFoundComponent: NotFoundComponent,
 });
 
+// 3. Keep this here so the 'useRouteContext' hook works
+declare module "@tanstack/react-router" {
+  interface StaticDataRouteContext extends MyRootContext {}
+}
+
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -67,18 +81,65 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  // 1. Get the current path for animations
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const queryClient = getQueryClient();
+  
+  // 2. Get the queryClient from the context (or the helper function)
+  const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen flex flex-col">
-        <MegaMenu />
-        <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out]">
-          <Outlet />
-        </main>
-        <Footer />
-      </div>
+      {/* AdminProvider allows the AdminContent to check if a user is logged in */}
+      <AdminProvider>
+        <AdminContent />
+      </AdminProvider>
     </QueryClientProvider>
+  );
+}
+
+function AdminContent() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  const { isAdmin, isEditMode, toggleEditMode, logout } = useAdmin();
+
+  return (
+    <div className={`min-h-screen flex flex-col ${isAdmin ? "pt-12" : ""}`}>
+      {isAdmin && (
+        <div className="fixed top-0 left-0 right-0 h-12 bg-black text-white px-6 flex items-center justify-between z-[100] shadow-lg">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Admin</span>
+              <span className="text-xs font-medium">Dashboard</span>
+            </div>
+            
+            <button
+              onClick={toggleEditMode}
+              className={`flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${
+                isEditMode 
+                ? "bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]" 
+                : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500"
+              }`}
+            >
+              <div className={`w-1.5 h-1.5 rounded-full ${isEditMode ? "bg-primary animate-pulse" : "bg-zinc-600"}`} />
+              {isEditMode ? "Editing Enabled" : "Enable Edit Mode"}
+            </button>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <Link to="/admin/placements" className="text-[11px] font-medium hover:text-primary transition-colors">Manage Placements</Link>
+            <button 
+              onClick={logout}
+              className="text-[11px] font-medium text-zinc-400 hover:text-white transition-colors"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      )}
+      <MegaMenu />
+      <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out]">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
   );
 }

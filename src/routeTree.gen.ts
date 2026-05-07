@@ -19,7 +19,6 @@ import { Route as LibraryRouteImport } from './routes/library'
 import { Route as HostelsRouteImport } from './routes/hostels'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as DispensaryRouteImport } from './routes/dispensary'
-import { Route as DepartmentsRouteImport } from './routes/departments'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CampusLifeRouteImport } from './routes/campus-life'
 import { Route as AdmissionsRouteImport } from './routes/admissions'
@@ -28,6 +27,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RdCellIndexRouteImport } from './routes/rd-cell.index'
 import { Route as PlacementsIndexRouteImport } from './routes/placements.index'
+import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
 import { Route as AcademicsIndexRouteImport } from './routes/academics.index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as RdCellScholarsRouteImport } from './routes/rd-cell.scholars'
@@ -40,6 +40,7 @@ import { Route as PlacementsTrainingRouteImport } from './routes/placements.trai
 import { Route as PlacementsStudentsRouteImport } from './routes/placements.students'
 import { Route as PlacementsRecruitersRouteImport } from './routes/placements.recruiters'
 import { Route as PlacementsGalleryRouteImport } from './routes/placements.gallery'
+import { Route as DepartmentsIdRouteImport } from './routes/departments.$id'
 import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
 import { Route as AcademicsSyllabusRouteImport } from './routes/academics.syllabus'
 import { Route as AcademicsScholarshipsRouteImport } from './routes/academics.scholarships'
@@ -53,6 +54,12 @@ import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mi
 import { Route as AboutJntukRouteImport } from './routes/about.jntuk'
 import { Route as AboutInstitutionRouteImport } from './routes/about.institution'
 import { Route as AboutHowToReachRouteImport } from './routes/about.how-to-reach'
+import { Route as DepartmentsIdIndexRouteImport } from './routes/departments.$id.index'
+import { Route as DepartmentsIdLabsRouteImport } from './routes/departments.$id.labs'
+import { Route as DepartmentsIdHodRouteImport } from './routes/departments.$id.hod'
+import { Route as DepartmentsIdFacultyRouteImport } from './routes/departments.$id.faculty'
+import { Route as DepartmentsIdCoursesRouteImport } from './routes/departments.$id.courses'
+import { Route as DepartmentsIdAchievementsRouteImport } from './routes/departments.$id.achievements.tsxts'
 
 const WomenEmpowermentRoute = WomenEmpowermentRouteImport.update({
   id: '/women-empowerment',
@@ -104,11 +111,6 @@ const DispensaryRoute = DispensaryRouteImport.update({
   path: '/dispensary',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DepartmentsRoute = DepartmentsRouteImport.update({
-  id: '/departments',
-  path: '/departments',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -148,6 +150,11 @@ const PlacementsIndexRoute = PlacementsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PlacementsRoute,
+} as any)
+const DepartmentsIndexRoute = DepartmentsIndexRouteImport.update({
+  id: '/departments/',
+  path: '/departments/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AcademicsIndexRoute = AcademicsIndexRouteImport.update({
   id: '/',
@@ -208,6 +215,11 @@ const PlacementsGalleryRoute = PlacementsGalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
   getParentRoute: () => PlacementsRoute,
+} as any)
+const DepartmentsIdRoute = DepartmentsIdRouteImport.update({
+  id: '/departments/$id',
+  path: '/departments/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AcademicsTimeTablesRoute = AcademicsTimeTablesRouteImport.update({
   id: '/time-tables',
@@ -274,6 +286,37 @@ const AboutHowToReachRoute = AboutHowToReachRouteImport.update({
   path: '/how-to-reach',
   getParentRoute: () => AboutRoute,
 } as any)
+const DepartmentsIdIndexRoute = DepartmentsIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DepartmentsIdRoute,
+} as any)
+const DepartmentsIdLabsRoute = DepartmentsIdLabsRouteImport.update({
+  id: '/labs',
+  path: '/labs',
+  getParentRoute: () => DepartmentsIdRoute,
+} as any)
+const DepartmentsIdHodRoute = DepartmentsIdHodRouteImport.update({
+  id: '/hod',
+  path: '/hod',
+  getParentRoute: () => DepartmentsIdRoute,
+} as any)
+const DepartmentsIdFacultyRoute = DepartmentsIdFacultyRouteImport.update({
+  id: '/faculty',
+  path: '/faculty',
+  getParentRoute: () => DepartmentsIdRoute,
+} as any)
+const DepartmentsIdCoursesRoute = DepartmentsIdCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => DepartmentsIdRoute,
+} as any)
+const DepartmentsIdAchievementsRoute =
+  DepartmentsIdAchievementsRouteImport.update({
+    id: '/achievements',
+    path: '/achievements',
+    getParentRoute: () => DepartmentsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -282,7 +325,6 @@ export interface FileRoutesByFullPath {
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
-  '/departments': typeof DepartmentsRoute
   '/dispensary': typeof DispensaryRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
@@ -306,6 +348,7 @@ export interface FileRoutesByFullPath {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/departments/$id': typeof DepartmentsIdRouteWithChildren
   '/placements/gallery': typeof PlacementsGalleryRoute
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
@@ -318,15 +361,21 @@ export interface FileRoutesByFullPath {
   '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
+  '/departments/': typeof DepartmentsIndexRoute
   '/placements/': typeof PlacementsIndexRoute
   '/rd-cell/': typeof RdCellIndexRoute
+  '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
+  '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
+  '/departments/$id/faculty': typeof DepartmentsIdFacultyRoute
+  '/departments/$id/hod': typeof DepartmentsIdHodRoute
+  '/departments/$id/labs': typeof DepartmentsIdLabsRoute
+  '/departments/$id/': typeof DepartmentsIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
-  '/departments': typeof DepartmentsRoute
   '/dispensary': typeof DispensaryRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
@@ -360,8 +409,15 @@ export interface FileRoutesByTo {
   '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about': typeof AboutIndexRoute
   '/academics': typeof AcademicsIndexRoute
+  '/departments': typeof DepartmentsIndexRoute
   '/placements': typeof PlacementsIndexRoute
   '/rd-cell': typeof RdCellIndexRoute
+  '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
+  '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
+  '/departments/$id/faculty': typeof DepartmentsIdFacultyRoute
+  '/departments/$id/hod': typeof DepartmentsIdHodRoute
+  '/departments/$id/labs': typeof DepartmentsIdLabsRoute
+  '/departments/$id': typeof DepartmentsIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -371,7 +427,6 @@ export interface FileRoutesById {
   '/admissions': typeof AdmissionsRoute
   '/campus-life': typeof CampusLifeRoute
   '/contact': typeof ContactRoute
-  '/departments': typeof DepartmentsRoute
   '/dispensary': typeof DispensaryRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
@@ -395,6 +450,7 @@ export interface FileRoutesById {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/departments/$id': typeof DepartmentsIdRouteWithChildren
   '/placements/gallery': typeof PlacementsGalleryRoute
   '/placements/recruiters': typeof PlacementsRecruitersRoute
   '/placements/students': typeof PlacementsStudentsRoute
@@ -407,8 +463,15 @@ export interface FileRoutesById {
   '/rd-cell/scholars': typeof RdCellScholarsRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
+  '/departments/': typeof DepartmentsIndexRoute
   '/placements/': typeof PlacementsIndexRoute
   '/rd-cell/': typeof RdCellIndexRoute
+  '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
+  '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
+  '/departments/$id/faculty': typeof DepartmentsIdFacultyRoute
+  '/departments/$id/hod': typeof DepartmentsIdHodRoute
+  '/departments/$id/labs': typeof DepartmentsIdLabsRoute
+  '/departments/$id/': typeof DepartmentsIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -419,7 +482,6 @@ export interface FileRouteTypes {
     | '/admissions'
     | '/campus-life'
     | '/contact'
-    | '/departments'
     | '/dispensary'
     | '/gallery'
     | '/hostels'
@@ -443,6 +505,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/departments/$id'
     | '/placements/gallery'
     | '/placements/recruiters'
     | '/placements/students'
@@ -455,15 +518,21 @@ export interface FileRouteTypes {
     | '/rd-cell/scholars'
     | '/about/'
     | '/academics/'
+    | '/departments/'
     | '/placements/'
     | '/rd-cell/'
+    | '/departments/$id/achievements'
+    | '/departments/$id/courses'
+    | '/departments/$id/faculty'
+    | '/departments/$id/hod'
+    | '/departments/$id/labs'
+    | '/departments/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admissions'
     | '/campus-life'
     | '/contact'
-    | '/departments'
     | '/dispensary'
     | '/gallery'
     | '/hostels'
@@ -497,8 +566,15 @@ export interface FileRouteTypes {
     | '/rd-cell/scholars'
     | '/about'
     | '/academics'
+    | '/departments'
     | '/placements'
     | '/rd-cell'
+    | '/departments/$id/achievements'
+    | '/departments/$id/courses'
+    | '/departments/$id/faculty'
+    | '/departments/$id/hod'
+    | '/departments/$id/labs'
+    | '/departments/$id'
   id:
     | '__root__'
     | '/'
@@ -507,7 +583,6 @@ export interface FileRouteTypes {
     | '/admissions'
     | '/campus-life'
     | '/contact'
-    | '/departments'
     | '/dispensary'
     | '/gallery'
     | '/hostels'
@@ -531,6 +606,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/departments/$id'
     | '/placements/gallery'
     | '/placements/recruiters'
     | '/placements/students'
@@ -543,8 +619,15 @@ export interface FileRouteTypes {
     | '/rd-cell/scholars'
     | '/about/'
     | '/academics/'
+    | '/departments/'
     | '/placements/'
     | '/rd-cell/'
+    | '/departments/$id/achievements'
+    | '/departments/$id/courses'
+    | '/departments/$id/faculty'
+    | '/departments/$id/hod'
+    | '/departments/$id/labs'
+    | '/departments/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -554,7 +637,6 @@ export interface RootRouteChildren {
   AdmissionsRoute: typeof AdmissionsRoute
   CampusLifeRoute: typeof CampusLifeRoute
   ContactRoute: typeof ContactRoute
-  DepartmentsRoute: typeof DepartmentsRoute
   DispensaryRoute: typeof DispensaryRoute
   GalleryRoute: typeof GalleryRoute
   HostelsRoute: typeof HostelsRoute
@@ -565,6 +647,8 @@ export interface RootRouteChildren {
   RdCellRoute: typeof RdCellRouteWithChildren
   SportsRoute: typeof SportsRoute
   WomenEmpowermentRoute: typeof WomenEmpowermentRoute
+  DepartmentsIdRoute: typeof DepartmentsIdRouteWithChildren
+  DepartmentsIndexRoute: typeof DepartmentsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -639,13 +723,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DispensaryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/departments': {
-      id: '/departments'
-      path: '/departments'
-      fullPath: '/departments'
-      preLoaderRoute: typeof DepartmentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -701,6 +778,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/placements/'
       preLoaderRoute: typeof PlacementsIndexRouteImport
       parentRoute: typeof PlacementsRoute
+    }
+    '/departments/': {
+      id: '/departments/'
+      path: '/departments'
+      fullPath: '/departments/'
+      preLoaderRoute: typeof DepartmentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/academics/': {
       id: '/academics/'
@@ -785,6 +869,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/placements/gallery'
       preLoaderRoute: typeof PlacementsGalleryRouteImport
       parentRoute: typeof PlacementsRoute
+    }
+    '/departments/$id': {
+      id: '/departments/$id'
+      path: '/departments/$id'
+      fullPath: '/departments/$id'
+      preLoaderRoute: typeof DepartmentsIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/academics/time-tables': {
       id: '/academics/time-tables'
@@ -876,6 +967,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/about/how-to-reach'
       preLoaderRoute: typeof AboutHowToReachRouteImport
       parentRoute: typeof AboutRoute
+    }
+    '/departments/$id/': {
+      id: '/departments/$id/'
+      path: '/'
+      fullPath: '/departments/$id/'
+      preLoaderRoute: typeof DepartmentsIdIndexRouteImport
+      parentRoute: typeof DepartmentsIdRoute
+    }
+    '/departments/$id/labs': {
+      id: '/departments/$id/labs'
+      path: '/labs'
+      fullPath: '/departments/$id/labs'
+      preLoaderRoute: typeof DepartmentsIdLabsRouteImport
+      parentRoute: typeof DepartmentsIdRoute
+    }
+    '/departments/$id/hod': {
+      id: '/departments/$id/hod'
+      path: '/hod'
+      fullPath: '/departments/$id/hod'
+      preLoaderRoute: typeof DepartmentsIdHodRouteImport
+      parentRoute: typeof DepartmentsIdRoute
+    }
+    '/departments/$id/faculty': {
+      id: '/departments/$id/faculty'
+      path: '/faculty'
+      fullPath: '/departments/$id/faculty'
+      preLoaderRoute: typeof DepartmentsIdFacultyRouteImport
+      parentRoute: typeof DepartmentsIdRoute
+    }
+    '/departments/$id/courses': {
+      id: '/departments/$id/courses'
+      path: '/courses'
+      fullPath: '/departments/$id/courses'
+      preLoaderRoute: typeof DepartmentsIdCoursesRouteImport
+      parentRoute: typeof DepartmentsIdRoute
+    }
+    '/departments/$id/achievements': {
+      id: '/departments/$id/achievements'
+      path: '/achievements'
+      fullPath: '/departments/$id/achievements'
+      preLoaderRoute: typeof DepartmentsIdAchievementsRouteImport
+      parentRoute: typeof DepartmentsIdRoute
     }
   }
 }
@@ -971,6 +1104,28 @@ const RdCellRouteChildren: RdCellRouteChildren = {
 const RdCellRouteWithChildren =
   RdCellRoute._addFileChildren(RdCellRouteChildren)
 
+interface DepartmentsIdRouteChildren {
+  DepartmentsIdAchievementsRoute: typeof DepartmentsIdAchievementsRoute
+  DepartmentsIdCoursesRoute: typeof DepartmentsIdCoursesRoute
+  DepartmentsIdFacultyRoute: typeof DepartmentsIdFacultyRoute
+  DepartmentsIdHodRoute: typeof DepartmentsIdHodRoute
+  DepartmentsIdLabsRoute: typeof DepartmentsIdLabsRoute
+  DepartmentsIdIndexRoute: typeof DepartmentsIdIndexRoute
+}
+
+const DepartmentsIdRouteChildren: DepartmentsIdRouteChildren = {
+  DepartmentsIdAchievementsRoute: DepartmentsIdAchievementsRoute,
+  DepartmentsIdCoursesRoute: DepartmentsIdCoursesRoute,
+  DepartmentsIdFacultyRoute: DepartmentsIdFacultyRoute,
+  DepartmentsIdHodRoute: DepartmentsIdHodRoute,
+  DepartmentsIdLabsRoute: DepartmentsIdLabsRoute,
+  DepartmentsIdIndexRoute: DepartmentsIdIndexRoute,
+}
+
+const DepartmentsIdRouteWithChildren = DepartmentsIdRoute._addFileChildren(
+  DepartmentsIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRouteWithChildren,
@@ -978,7 +1133,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdmissionsRoute: AdmissionsRoute,
   CampusLifeRoute: CampusLifeRoute,
   ContactRoute: ContactRoute,
-  DepartmentsRoute: DepartmentsRoute,
   DispensaryRoute: DispensaryRoute,
   GalleryRoute: GalleryRoute,
   HostelsRoute: HostelsRoute,
@@ -989,6 +1143,8 @@ const rootRouteChildren: RootRouteChildren = {
   RdCellRoute: RdCellRouteWithChildren,
   SportsRoute: SportsRoute,
   WomenEmpowermentRoute: WomenEmpowermentRoute,
+  DepartmentsIdRoute: DepartmentsIdRouteWithChildren,
+  DepartmentsIndexRoute: DepartmentsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

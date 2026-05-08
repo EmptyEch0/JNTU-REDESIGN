@@ -15,7 +15,10 @@ export const Route = createFileRoute("/nss")({
   head: () => ({
     meta: [
       { title: "NSS — JNTU-GV CEV" },
-      { name: "description", content: "National Service Scheme at JNTU-GV CEV — service, leadership and community." },
+      {
+        name: "description",
+        content: "National Service Scheme at JNTU-GV CEV — service, leadership and community.",
+      },
       { property: "og:title", content: "NSS at JNTU-GV CEV" },
       { property: "og:description", content: "Volunteer-led service projects across the year." },
     ],
@@ -70,7 +73,6 @@ function NSSLayout() {
     return () => clearInterval(interval);
   }, [isPlaying, slides.length, showAddModal]);
 
-
   const handlePrev = () => {
     if (slides.length === 0) return;
     setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
@@ -110,7 +112,7 @@ function NSSLayout() {
       {/* Shared Sliding Carousel */}
       <section className="pt-12 pb-6 container-narrow">
         <RevealOnScroll>
-          <div 
+          <div
             className="relative aspect-[16/9] md:aspect-[21/9] w-full rounded-3xl overflow-hidden border border-border shadow-elegant bg-card group/carousel"
             onMouseEnter={() => setIsPlaying(false)}
             onMouseLeave={() => setIsPlaying(true)}
@@ -135,7 +137,7 @@ function NSSLayout() {
                   />
                   {/* Overlay Gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30 flex flex-col justify-end p-6 md:p-12" />
-                  
+
                   {/* Slide Info */}
                   <div className="absolute bottom-6 left-6 md:bottom-12 md:left-12 right-6 md:right-12 z-10 text-white">
                     <span className="text-xs font-bold uppercase tracking-wider text-primary-light px-3 py-1 rounded-full bg-white/10 backdrop-blur-md">
@@ -157,8 +159,6 @@ function NSSLayout() {
                     </button>
                   )}
                 </div>
-
-
 
                 {/* Left/Right Controls */}
                 {slides.length > 1 && (
@@ -217,7 +217,9 @@ function NSSLayout() {
             <h3 className="text-xl font-bold text-ink mb-4">Add Carousel Slide</h3>
             <form onSubmit={handleAddSlide} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">Slide Title</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">
+                  Slide Title
+                </label>
                 <input
                   type="text"
                   required
@@ -228,7 +230,9 @@ function NSSLayout() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">Image URL</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">
+                  Image URL
+                </label>
                 <input
                   type="url"
                   required

@@ -10,7 +10,10 @@ export const Route = createFileRoute("/academics/cac")({
   head: () => ({
     meta: [
       { title: "College Academic Committee (CAC) — JNTU-GV CEV" },
-      { name: "description", content: "Composition and role of the College Academic Committee at JNTU-GV CEV." },
+      {
+        name: "description",
+        content: "Composition and role of the College Academic Committee at JNTU-GV CEV.",
+      },
     ],
   }),
   component: CACPage,
@@ -32,7 +35,12 @@ const MEMBERS = [
 function CACPage() {
   return (
     <>
-      <PageHero eyebrow="Academics" title="College Academic Committee" subtitle="The CAC sets academic policy, monitors quality, and reviews program outcomes." image={img} />
+      <PageHero
+        eyebrow="Academics"
+        title="College Academic Committee"
+        subtitle="The CAC sets academic policy, monitors quality, and reviews program outcomes."
+        image={img}
+      />
       <SubNav items={ACADEMICS_SUBNAV} />
 
       <section className="py-20 container-narrow">

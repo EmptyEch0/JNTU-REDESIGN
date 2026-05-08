@@ -25,7 +25,9 @@ function AdminLoginPage() {
       <div className="p-8 bg-card border border-border rounded-2xl shadow-[var(--shadow-elegant)] max-w-sm w-full space-y-6">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-ink">Admin Login</h2>
-          <p className="text-muted-foreground text-sm mt-1">Enter your password to access admin features.</p>
+          <p className="text-muted-foreground text-sm mt-1">
+            Enter your password to access admin features.
+          </p>
         </div>
         <form onSubmit={handleLogin} className="space-y-4">
           <input
@@ -36,8 +38,8 @@ function AdminLoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-primary/90 transition-colors shadow-md shadow-primary/20"
           >
             Login

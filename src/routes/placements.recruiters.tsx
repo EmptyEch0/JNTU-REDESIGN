@@ -8,12 +8,7 @@ import { PLACEMENTS_SUBNAV } from "@/lib/site";
 import placementsImg from "@/assets/placements-bg.jpg";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { 
-  getRecruiters, 
-  addRecruiter, 
-  updateRecruiter, 
-  deleteRecruiter 
-} from "@/funcs/recruiters";
+import { getRecruiters, addRecruiter, updateRecruiter, deleteRecruiter } from "@/funcs/recruiters";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Save } from "lucide-react";
@@ -39,9 +34,9 @@ function RecruitersPage() {
   });
 
   const handleRecruiterChange = (id: number, field: string, value: string) => {
-    setEditedRecruiters(prev => ({
+    setEditedRecruiters((prev) => ({
       ...prev,
-      [id]: { ...prev[id], [field]: value }
+      [id]: { ...prev[id], [field]: value },
     }));
   };
 
@@ -49,19 +44,19 @@ function RecruitersPage() {
     if (Object.keys(editedRecruiters).length === 0) return;
 
     const promise = Promise.all(
-      Object.entries(editedRecruiters).map(([id, data]) => 
-        updateRecruiter({ data: { id: parseInt(id), ...data } })
-      )
+      Object.entries(editedRecruiters).map(([id, data]) =>
+        updateRecruiter({ data: { id: parseInt(id), ...data } }),
+      ),
     );
 
     toast.promise(promise, {
-      loading: 'Saving recruiter updates...',
+      loading: "Saving recruiter updates...",
       success: () => {
         queryClient.invalidateQueries({ queryKey: ["recruiters"] });
         setEditedRecruiters({});
-        return 'All recruiters updated!';
+        return "All recruiters updated!";
       },
-      error: 'Failed to save updates.'
+      error: "Failed to save updates.",
     });
   };
 
@@ -89,12 +84,19 @@ function RecruitersPage() {
 
   return (
     <>
-      <PageHero eyebrow="Placements" title="Our Recruiters" subtitle="We are proud to be associated with some of the most prestigious names in the industry." image={placementsImg} />
+      <PageHero
+        eyebrow="Placements"
+        title="Our Recruiters"
+        subtitle="We are proud to be associated with some of the most prestigious names in the industry."
+        image={placementsImg}
+      />
       <SubNav items={PLACEMENTS_SUBNAV} />
 
       <section className="py-20 bg-white overflow-hidden">
         <div className="container-narrow">
-          <RevealOnScroll><SectionLabel eyebrow="Partnerships" title="Leading recruiters" align="center" /></RevealOnScroll>
+          <RevealOnScroll>
+            <SectionLabel eyebrow="Partnerships" title="Leading recruiters" align="center" />
+          </RevealOnScroll>
         </div>
         <div className="mt-10 space-y-2">
           <LogoCarousel logos={row1} speed={70} />
@@ -108,7 +110,7 @@ function RecruitersPage() {
             <div className="flex justify-between items-end mb-8">
               <SectionLabel eyebrow="Directory" title={`All ${recruiters.length} recruiters`} />
               {isEditMode && (
-                <button 
+                <button
                   onClick={handleAddRecruiter}
                   className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-lg shadow-primary/20"
                 >
@@ -117,34 +119,36 @@ function RecruitersPage() {
               )}
             </div>
           </RevealOnScroll>
-          
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {isLoading ? (
-              <div className="col-span-full py-20 text-center text-muted-foreground italic">Loading recruiter directory...</div>
+              <div className="col-span-full py-20 text-center text-muted-foreground italic">
+                Loading recruiter directory...
+              </div>
             ) : (
               recruiters.map((logo, i) => (
                 <RevealOnScroll key={logo.id} delay={(i % 12) * 30}>
                   <div
                     title={logo.name}
                     className={`aspect-[4/3] rounded-xl border flex flex-col items-center justify-center p-3 transition-all relative group ${
-                      isEditMode 
-                      ? "bg-amber-50/50 border-amber-200 shadow-sm" 
-                      : "bg-card border-border hover:border-primary/40 hover:shadow-[var(--shadow-card-hover)] hover-lift"
+                      isEditMode
+                        ? "bg-amber-50/50 border-amber-200 shadow-sm"
+                        : "bg-card border-border hover:border-primary/40 hover:shadow-[var(--shadow-card-hover)] hover-lift"
                     }`}
                   >
                     {isEditMode ? (
                       <div className="w-full space-y-2">
-                        <input 
+                        <input
                           className="w-full text-[10px] p-1 border border-amber-100 rounded bg-white text-center"
                           value={editedRecruiters[logo.id]?.name ?? logo.name}
                           onChange={(e) => handleRecruiterChange(logo.id, "name", e.target.value)}
                         />
-                        <input 
+                        <input
                           className="w-full text-[8px] p-1 border border-amber-100 rounded bg-white text-center text-muted-foreground truncate"
                           value={editedRecruiters[logo.id]?.url ?? logo.url}
                           onChange={(e) => handleRecruiterChange(logo.id, "url", e.target.value)}
                         />
-                        <button 
+                        <button
                           onClick={() => handleDelete(logo.id)}
                           className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full shadow-lg"
                         >
@@ -170,7 +174,7 @@ function RecruitersPage() {
       {/* Floating Save Button */}
       {isAdmin && isEditMode && Object.keys(editedRecruiters).length > 0 && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] animate-[bounce_2s_infinite]">
-          <button 
+          <button
             onClick={saveAllChanges}
             className="bg-primary text-white px-8 py-4 rounded-full font-bold shadow-2xl hover:bg-primary/90 hover:-translate-y-1 active:translate-y-0 transition-all flex items-center gap-3 border-2 border-white/20 backdrop-blur-sm"
           >

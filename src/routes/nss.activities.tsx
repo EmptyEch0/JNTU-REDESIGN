@@ -1,10 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getNssActivities, addNssActivity, updateNssActivity, deleteNssActivity } from "@/funcs/nss";
+import {
+  getNssActivities,
+  addNssActivity,
+  updateNssActivity,
+  deleteNssActivity,
+} from "@/funcs/nss";
 import { useAdmin } from "@/context/AdminContext";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Search, Plus, Edit2, Trash2, Check, X, Calendar, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Search,
+  Plus,
+  Edit2,
+  Trash2,
+  Check,
+  X,
+  Calendar,
+  MapPin,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 
@@ -21,11 +37,23 @@ function NSSActivitiesPage() {
 
   // Editing state
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<any>({ sNo: 0, activity: "", dateConducted: "", venue: "", description: "" });
+  const [editForm, setEditForm] = useState<any>({
+    sNo: 0,
+    activity: "",
+    dateConducted: "",
+    venue: "",
+    description: "",
+  });
 
   // Adding state
   const [showAddForm, setShowAddForm] = useState(false);
-  const [addForm, setAddForm] = useState<any>({ sNo: 0, activity: "", dateConducted: "", venue: "", description: "" });
+  const [addForm, setAddForm] = useState<any>({
+    sNo: 0,
+    activity: "",
+    dateConducted: "",
+    venue: "",
+    description: "",
+  });
 
   const { data: activities = [], isLoading } = useQuery({
     queryKey: ["nss-activities"],
@@ -112,7 +140,7 @@ function NSSActivitiesPage() {
       <RevealOnScroll>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-12">
           <SectionLabel eyebrow="Service History" title="NSS Activities" />
-          
+
           <div className="flex items-center gap-3">
             <div className="relative w-full sm:w-64">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -147,7 +175,9 @@ function NSSActivitiesPage() {
             <h3 className="text-lg font-bold text-ink mb-4">Add New NSS Activity</h3>
             <form onSubmit={handleAddSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">S.No</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  S.No
+                </label>
                 <input
                   type="number"
                   className="w-full bg-muted/50 border border-border rounded-xl p-3 text-xs outline-none focus:border-primary"
@@ -157,7 +187,9 @@ function NSSActivitiesPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Activity Name</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  Activity Name
+                </label>
                 <input
                   type="text"
                   required
@@ -168,7 +200,9 @@ function NSSActivitiesPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Date Conducted</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  Date Conducted
+                </label>
                 <input
                   type="text"
                   required
@@ -179,7 +213,9 @@ function NSSActivitiesPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Venue</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  Venue
+                </label>
                 <input
                   type="text"
                   required
@@ -190,7 +226,9 @@ function NSSActivitiesPage() {
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Description / Theme</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  Description / Theme
+                </label>
                 <textarea
                   required
                   className="w-full bg-muted/50 border border-border rounded-xl p-3 text-xs outline-none focus:border-primary min-h-[80px]"
@@ -226,25 +264,45 @@ function NSSActivitiesPage() {
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
                 <tr className="bg-muted/50 border-b border-border">
-                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-16">S.No</th>
-                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-1/4">Activity</th>
-                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-40">Date</th>
-                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-48">Venue</th>
-                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground">Description</th>
-                  {isEditMode && <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-28 text-center">Actions</th>}
+                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-16">
+                    S.No
+                  </th>
+                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-1/4">
+                    Activity
+                  </th>
+                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-40">
+                    Date
+                  </th>
+                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-48">
+                    Venue
+                  </th>
+                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Description
+                  </th>
+                  {isEditMode && (
+                    <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-28 text-center">
+                      Actions
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={isEditMode ? 6 : 5} className="px-6 py-16 text-center text-muted-foreground">
+                    <td
+                      colSpan={isEditMode ? 6 : 5}
+                      className="px-6 py-16 text-center text-muted-foreground"
+                    >
                       <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full mx-auto" />
                       <span className="block mt-2 text-xs">Loading activities...</span>
                     </td>
                   </tr>
                 ) : filteredActivities.length === 0 ? (
                   <tr>
-                    <td colSpan={isEditMode ? 6 : 5} className="px-6 py-12 text-center text-xs text-muted-foreground font-medium">
+                    <td
+                      colSpan={isEditMode ? 6 : 5}
+                      className="px-6 py-12 text-center text-xs text-muted-foreground font-medium"
+                    >
                       No activities found matching your search.
                     </td>
                   </tr>
@@ -252,7 +310,10 @@ function NSSActivitiesPage() {
                   paginatedActivities.map((act: any) => {
                     const isEditing = editingId === act.id;
                     return (
-                      <tr key={act.id} className="group hover:bg-primary/[0.01] transition-colors align-top">
+                      <tr
+                        key={act.id}
+                        className="group hover:bg-primary/[0.01] transition-colors align-top"
+                      >
                         {/* S.No */}
                         <td className="px-6 py-4.5 text-xs font-semibold text-muted-foreground">
                           {isEditing ? (
@@ -260,7 +321,9 @@ function NSSActivitiesPage() {
                               type="number"
                               className="w-full bg-primary/5 border border-primary/20 rounded-md p-1.5 text-xs font-semibold text-ink outline-none"
                               value={editForm.sNo}
-                              onChange={(e) => setEditForm({ ...editForm, sNo: parseInt(e.target.value) || 0 })}
+                              onChange={(e) =>
+                                setEditForm({ ...editForm, sNo: parseInt(e.target.value) || 0 })
+                              }
                             />
                           ) : (
                             act.sNo
@@ -274,7 +337,9 @@ function NSSActivitiesPage() {
                               type="text"
                               className="w-full bg-primary/5 border border-primary/20 rounded-md p-1.5 text-xs font-bold text-ink outline-none"
                               value={editForm.activity}
-                              onChange={(e) => setEditForm({ ...editForm, activity: e.target.value })}
+                              onChange={(e) =>
+                                setEditForm({ ...editForm, activity: e.target.value })
+                              }
                             />
                           ) : (
                             act.activity
@@ -288,11 +353,14 @@ function NSSActivitiesPage() {
                               type="text"
                               className="w-full bg-primary/5 border border-primary/20 rounded-md p-1.5 text-xs text-muted-foreground outline-none"
                               value={editForm.dateConducted}
-                              onChange={(e) => setEditForm({ ...editForm, dateConducted: e.target.value })}
+                              onChange={(e) =>
+                                setEditForm({ ...editForm, dateConducted: e.target.value })
+                              }
                             />
                           ) : (
                             <span className="inline-flex items-center gap-1.5">
-                              <Calendar className="h-3.5 w-3.5 text-primary/60" /> {act.dateConducted}
+                              <Calendar className="h-3.5 w-3.5 text-primary/60" />{" "}
+                              {act.dateConducted}
                             </span>
                           )}
                         </td>
@@ -308,7 +376,8 @@ function NSSActivitiesPage() {
                             />
                           ) : (
                             <span className="inline-flex items-center gap-1.5">
-                              <MapPin className="h-3.5 w-3.5 text-primary/60 shrink-0" /> {act.venue}
+                              <MapPin className="h-3.5 w-3.5 text-primary/60 shrink-0" />{" "}
+                              {act.venue}
                             </span>
                           )}
                         </td>
@@ -319,7 +388,9 @@ function NSSActivitiesPage() {
                             <textarea
                               className="w-full bg-primary/5 border border-primary/20 rounded-md p-1.5 text-xs text-muted-foreground outline-none min-h-[60px]"
                               value={editForm.description}
-                              onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                              onChange={(e) =>
+                                setEditForm({ ...editForm, description: e.target.value })
+                              }
                             />
                           ) : (
                             act.description
@@ -387,9 +458,10 @@ function NSSActivitiesPage() {
               <span className="font-semibold text-ink">
                 {Math.min(startIndex + itemsPerPage, filteredActivities.length)}
               </span>{" "}
-              of <span className="font-semibold text-ink">{filteredActivities.length}</span> activities
+              of <span className="font-semibold text-ink">{filteredActivities.length}</span>{" "}
+              activities
             </p>
-            
+
             <div className="flex items-center gap-2">
               <button
                 disabled={currentPage === 1}

@@ -10,7 +10,10 @@ export const Route = createFileRoute("/academics/downloads")({
   head: () => ({
     meta: [
       { title: "Downloads — Academics — JNTU-GV CEV" },
-      { name: "description", content: "Forms, applications and academic documents available for download." },
+      {
+        name: "description",
+        content: "Forms, applications and academic documents available for download.",
+      },
     ],
   }),
   component: DownloadsPage,
@@ -31,15 +34,25 @@ const FILES = [
 function DownloadsPage() {
   return (
     <>
-      <PageHero eyebrow="Academics" title="Downloads" subtitle="Forms, applications and academic documents — all in one place." image={img} />
+      <PageHero
+        eyebrow="Academics"
+        title="Downloads"
+        subtitle="Forms, applications and academic documents — all in one place."
+        image={img}
+      />
       <SubNav items={ACADEMICS_SUBNAV} />
 
       <section className="py-20 container-narrow">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {FILES.map((f, i) => (
             <RevealOnScroll key={f.name} delay={i * 50}>
-              <a href="#" className="group p-5 rounded-2xl bg-card border border-border hover-lift flex items-center gap-4">
-                <div className="h-11 w-11 rounded-xl bg-primary/10 text-primary grid place-items-center group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all"><FileText className="h-5 w-5" /></div>
+              <a
+                href="#"
+                className="group p-5 rounded-2xl bg-card border border-border hover-lift flex items-center gap-4"
+              >
+                <div className="h-11 w-11 rounded-xl bg-primary/10 text-primary grid place-items-center group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all">
+                  <FileText className="h-5 w-5" />
+                </div>
                 <div className="flex-1">
                   <div className="font-medium text-ink">{f.name}</div>
                   <div className="text-xs text-muted-foreground mt-0.5">PDF · {f.size}</div>

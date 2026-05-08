@@ -10,7 +10,10 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — JNTU-GV CEV" },
-      { name: "description", content: "Reach the principal's office, admissions and departments at JNTU-GV CEV." },
+      {
+        name: "description",
+        content: "Reach the principal's office, admissions and departments at JNTU-GV CEV.",
+      },
       { property: "og:title", content: "Contact JNTU-GV CEV" },
       { property: "og:description", content: "Address, phone and email for the college." },
     ],
@@ -28,7 +31,12 @@ const CARDS = [
 function ContactPage() {
   return (
     <>
-      <PageHero eyebrow="Contact" title="Talk to us." subtitle="For admissions queries, campus visits or general information — here is how to reach the office." image={campusImg} />
+      <PageHero
+        eyebrow="Contact"
+        title="Talk to us."
+        subtitle="For admissions queries, campus visits or general information — here is how to reach the office."
+        image={campusImg}
+      />
       <SubNav items={STUDENT_SUBNAV} />
 
       <section className="py-20 container-narrow">
@@ -58,7 +66,9 @@ function ContactPage() {
               referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
-          <p className="mt-3 text-xs text-muted-foreground text-center">JNTU-GV College of Engineering, Dwarapudi, Vizianagaram</p>
+          <p className="mt-3 text-xs text-muted-foreground text-center">
+            JNTU-GV College of Engineering, Dwarapudi, Vizianagaram
+          </p>
         </RevealOnScroll>
       </section>
     </>

@@ -18,7 +18,10 @@ export const Route = createFileRoute("/gallery")({
       { title: "Gallery — JNTU-GV CEV" },
       { name: "description", content: "Moments from across the JNTU-GV Vizianagaram campus." },
       { property: "og:title", content: "Gallery — JNTU-GV CEV" },
-      { property: "og:description", content: "Pictures from campus, classrooms, labs, sports and culture." },
+      {
+        property: "og:description",
+        content: "Pictures from campus, classrooms, labs, sports and culture.",
+      },
       { property: "og:image", content: campusImg },
     ],
   }),
@@ -39,14 +42,27 @@ const IMAGES = [
 function GalleryPage() {
   return (
     <>
-      <PageHero eyebrow="Gallery" title="A campus, in moments." subtitle="A growing visual record of the rhythms, faces and seasons of life at JNTU-GV CEV." image={cultureImg} />
+      <PageHero
+        eyebrow="Gallery"
+        title="A campus, in moments."
+        subtitle="A growing visual record of the rhythms, faces and seasons of life at JNTU-GV CEV."
+        image={cultureImg}
+      />
       <SubNav items={STUDENT_SUBNAV} />
       <section className="py-20 container-narrow">
         <RevealOnScroll>
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">
             {IMAGES.map((img, i) => (
-              <div key={i} className="break-inside-avoid mb-5 overflow-hidden rounded-2xl hover-lift">
-                <img src={img.src} alt={img.alt} loading="lazy" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+              <div
+                key={i}
+                className="break-inside-avoid mb-5 overflow-hidden rounded-2xl hover-lift"
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  loading="lazy"
+                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
+                />
               </div>
             ))}
           </div>

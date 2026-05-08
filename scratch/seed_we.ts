@@ -82,7 +82,7 @@ async function main() {
     "Conducting various competitions to encourage their artistic talents for creative thinking.",
     "To highlight the importance of spirituality, health, hygiene and safety.",
     "To inculcate entrepreneurial attitude among young girls at the earliest so that they can be “job providers” rather than “job seekers”.",
-    "To promote intellectual & cultural activities for overall personality development of students."
+    "To promote intellectual & cultural activities for overall personality development of students.",
   ];
 
   await sql`
@@ -102,16 +102,28 @@ async function main() {
   console.log("🌱 Seeding we_committee (11 members)...");
   const committee = [
     { name: "Dr. G. Swami Naidu", role: "Principal & Chairman WE&GC", email: "" },
-    { name: "Dr. G. Jaya Suma", role: "Professor & HOD of IT, Convener WE&GC", email: "wegcell_convener@jntugvcev.edu.in" },
-    { name: "Smt. M. Hema", role: "Asst.Prof of ECE, Secretary WE&GC", email: "secretary.wegc@jntugvcev.edu.in" },
+    {
+      name: "Dr. G. Jaya Suma",
+      role: "Professor & HOD of IT, Convener WE&GC",
+      email: "wegcell_convener@jntugvcev.edu.in",
+    },
+    {
+      name: "Smt. M. Hema",
+      role: "Asst.Prof of ECE, Secretary WE&GC",
+      email: "secretary.wegc@jntugvcev.edu.in",
+    },
     { name: "Dr. V. S. Vakula", role: "Asst.Prof. & HOD of EEE, Joint-Secretary WE&GC", email: "" },
     { name: "Dr. P. Aruna Kumari", role: "Asst. Prof. of CSE, Treasurer WE&GC", email: "" },
     { name: "Smt. A. Padmaja", role: "Asst. Prof. of EEE, Member WE&GC", email: "" },
     { name: "Dr. Ch. Neelima Devi", role: "Asst. Prof. of ME, Member WE&GC", email: "" },
     { name: "Smt. B. Nalini", role: "Asst. Prof. of ECE, Member WE&GC", email: "" },
     { name: "Dr. Ch. Bindu Madhuri", role: "Asst. Prof. of IT, Member WE&GC", email: "" },
-    { name: "Smt. M. Sowbhagya Lakshmi", role: "Asst. Prof. of Chemistry, Member WE&GC", email: "" },
-    { name: "Smt. S. Ganga Mani", role: "Sr. Asst. , Member(Non-Teaching) WE&GC", email: "" }
+    {
+      name: "Smt. M. Sowbhagya Lakshmi",
+      role: "Asst. Prof. of Chemistry, Member WE&GC",
+      email: "",
+    },
+    { name: "Smt. S. Ganga Mani", role: "Sr. Asst. , Member(Non-Teaching) WE&GC", email: "" },
   ];
 
   for (const member of committee) {
@@ -126,15 +138,32 @@ async function main() {
     { sNo: 1, title: "Women Empowerment And Grievance Cell Inauguration", date: "06-03-2014" },
     { sNo: 2, title: "One Day Workshop On “Awakening Women”", date: "06-03-2014" },
     { sNo: 3, title: "One Day Workshop On “Soft Skills”", date: "29-07-2014" },
-    { sNo: 4, title: "One Day Workshop On “Self-Empowerment”& Women’s day celebrations", date: "05-03-2015" },
+    {
+      sNo: 4,
+      title: "One Day Workshop On “Self-Empowerment”& Women’s day celebrations",
+      date: "05-03-2015",
+    },
     { sNo: 5, title: "Conducted Medical Camp", date: "20-02-2016" },
     { sNo: 6, title: "One Day Workshop on Women Empowerment -2016", date: "05-03-2016" },
     { sNo: 7, title: "International Women’s Day -2016", date: "08-03-2016" },
-    { sNo: 8, title: "A-One Day” Workshop On Women In Everything – 2017” Organized.", date: "18-02-2017" },
+    {
+      sNo: 8,
+      title: "A-One Day” Workshop On Women In Everything – 2017” Organized.",
+      date: "18-02-2017",
+    },
     { sNo: 9, title: "International Women’s Day -2017", date: "08-03-2017" },
-    { sNo: 10, title: "women empowerment sessions (like orientation towards Technology, goal setting, people skills by WEGC members", date: "Sept--2017" },
+    {
+      sNo: 10,
+      title:
+        "women empowerment sessions (like orientation towards Technology, goal setting, people skills by WEGC members",
+      date: "Sept--2017",
+    },
     { sNo: 11, title: "Legal awareness program to girl students", date: "23-10-2017" },
-    { sNo: 12, title: "Quiz competition on women rights by the direction of the National Women Commission", date: "23-10-2017" },
+    {
+      sNo: 12,
+      title: "Quiz competition on women rights by the direction of the National Women Commission",
+      date: "23-10-2017",
+    },
     { sNo: 13, title: "Poster presentation on empowerment in rural areas”", date: "29-11-2017" },
     { sNo: 14, title: "Medical camp for girl students and women fraternity", date: "21-12-2017" },
     { sNo: 15, title: "International Women’s Day-2018", date: "08-03-2018" },
@@ -142,7 +171,7 @@ async function main() {
     { sNo: 17, title: "Support to DISHA ACT-2019", date: "16-12-2019" },
     { sNo: 18, title: "Medical camp for girl students and women fraternity", date: "29-01-2020" },
     { sNo: 19, title: "International Women’s Day-2020", date: "07-03-2020" },
-    { sNo: 20, title: "KNACK Explore your Talent contest", date: "15-08-2020 to 20-08-2020" }
+    { sNo: 20, title: "KNACK Explore your Talent contest", date: "15-08-2020 to 20-08-2020" },
   ];
 
   for (const act of activities) {
@@ -157,9 +186,10 @@ async function main() {
     "https://jntugvcev.edu.in/wp-content/uploads/2020/08/Untitled-1.jpg",
     "https://jntugvcev.edu.in/wp-content/uploads/2020/08/1212.jpg",
     "https://jntugvcev.edu.in/wp-content/uploads/2020/08/21356.jpg",
-    "https://jntugvcev.edu.in/wp-content/uploads/2020/08/2115.jpg"
+    "https://jntugvcev.edu.in/wp-content/uploads/2020/08/2115.jpg",
   ];
-  const recDesc = "“All Work and no Play make Jack a dull boy” goes a popular saying.\n\nRecreation consists of activities or experiences carried on within leisure, usually chosen voluntarily by the participant — either because of satisfaction, pleasure, or creative enrichment derived, or because certain personal or social values are gained from them. It may also be perceived as the process of participation or as the emotional state derived from involvement.\n\nDue to the intricacies in present-day society and the way of living, students nowadays are weaker than older generations, both physically and emotionally. This is reflected in their physical, emotional, and mental health, behavior, and development, which makes recreation more important than ever.\n\nHaving a recreational area is one of the best ways of managing employees and improving team morale in the workplace.\n\nIt makes work fun and breaks the ice between employees, eventually building a strong workforce that performs better in customer service, client servicing, sales, and teamwork.\n\n“There are clear neurological links between feelings, thoughts, and actions” — Annie McKee\n\n“When we are in the grip of strong negative emotions, it’s like having blinders on. We don’t process information as well, think creatively, or make good decisions. Frustration, anger, and stress cause an important part of us to shut down — the thinking, engaged part.”\n\nA happy environment and satisfied employees are essential for the growth of any organization. Qualities such as dedication, motivation, and retention are results of inner satisfaction and contentment among the workforce.\n\nThe success of a company lies in the success of every individual employee.";
+  const recDesc =
+    "“All Work and no Play make Jack a dull boy” goes a popular saying.\n\nRecreation consists of activities or experiences carried on within leisure, usually chosen voluntarily by the participant — either because of satisfaction, pleasure, or creative enrichment derived, or because certain personal or social values are gained from them. It may also be perceived as the process of participation or as the emotional state derived from involvement.\n\nDue to the intricacies in present-day society and the way of living, students nowadays are weaker than older generations, both physically and emotionally. This is reflected in their physical, emotional, and mental health, behavior, and development, which makes recreation more important than ever.\n\nHaving a recreational area is one of the best ways of managing employees and improving team morale in the workplace.\n\nIt makes work fun and breaks the ice between employees, eventually building a strong workforce that performs better in customer service, client servicing, sales, and teamwork.\n\n“There are clear neurological links between feelings, thoughts, and actions” — Annie McKee\n\n“When we are in the grip of strong negative emotions, it’s like having blinders on. We don’t process information as well, think creatively, or make good decisions. Frustration, anger, and stress cause an important part of us to shut down — the thinking, engaged part.”\n\nA happy environment and satisfied employees are essential for the growth of any organization. Qualities such as dedication, motivation, and retention are results of inner satisfaction and contentment among the workforce.\n\nThe success of a company lies in the success of every individual employee.";
 
   await sql`
     INSERT INTO we_recreation (description, images)
@@ -168,8 +198,14 @@ async function main() {
 
   console.log("🌱 Seeding we_magazine (2 issues)...");
   const mags = [
-    { title: "Yuthika - Issue 1", url: "https://jntugvcev.edu.in/wp-content/uploads/2020/12/Womens-Day-Magazine-March-2020-compressed-compressed.pdf" },
-    { title: "Yuthika - Issue 2", url: "https://drive.google.com/file/d/1SfNTP9sXclVKgGJTqeNItDE0a3qP7IWG/view?usp=sharing" }
+    {
+      title: "Yuthika - Issue 1",
+      url: "https://jntugvcev.edu.in/wp-content/uploads/2020/12/Womens-Day-Magazine-March-2020-compressed-compressed.pdf",
+    },
+    {
+      title: "Yuthika - Issue 2",
+      url: "https://drive.google.com/file/d/1SfNTP9sXclVKgGJTqeNItDE0a3qP7IWG/view?usp=sharing",
+    },
   ];
 
   for (const mag of mags) {
@@ -181,16 +217,46 @@ async function main() {
 
   console.log("🌱 Seeding we_gallery (carousel slides)...");
   const slides = [
-    { title: "IMG-20191216-WA0038", imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/IMG-20191216-WA0038.jpg" },
-    { title: "DSCN0609", imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/DSCN0609-scaled.jpg" },
-    { title: "WhatsApp Image 2020-08-28 at 11.25.46 AM", imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/WhatsApp-Image-2020-08-28-at-11.25.46-AM.jpeg" },
-    { title: "DSCN0825", imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/DSCN0825-scaled.jpg" },
+    {
+      title: "IMG-20191216-WA0038",
+      imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/IMG-20191216-WA0038.jpg",
+    },
+    {
+      title: "DSCN0609",
+      imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/DSCN0609-scaled.jpg",
+    },
+    {
+      title: "WhatsApp Image 2020-08-28 at 11.25.46 AM",
+      imageUrl:
+        "https://jntugvcev.edu.in/wp-content/uploads/2020/08/WhatsApp-Image-2020-08-28-at-11.25.46-AM.jpeg",
+    },
+    {
+      title: "DSCN0825",
+      imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/DSCN0825-scaled.jpg",
+    },
     { title: "12", imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/12.jpg" },
-    { title: "DSCN0648", imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/DSCN0648-scaled.jpg" },
-    { title: "DSCN0649", imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/DSCN0649-scaled.jpg" },
-    { title: "WhatsApp Image 2020-08-28 at 11.09.16 AM (3)", imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/WhatsApp-Image-2020-08-28-at-11.09.16-AM-3.jpeg" },
-    { title: "WhatsApp Image 2020-08-28 at 11.27.17 AM", imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/WhatsApp-Image-2020-08-28-at-11.27.17-AM.jpeg" },
-    { title: "DSC02794", imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/DSC02794-scaled.jpg" }
+    {
+      title: "DSCN0648",
+      imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/DSCN0648-scaled.jpg",
+    },
+    {
+      title: "DSCN0649",
+      imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/DSCN0649-scaled.jpg",
+    },
+    {
+      title: "WhatsApp Image 2020-08-28 at 11.09.16 AM (3)",
+      imageUrl:
+        "https://jntugvcev.edu.in/wp-content/uploads/2020/08/WhatsApp-Image-2020-08-28-at-11.09.16-AM-3.jpeg",
+    },
+    {
+      title: "WhatsApp Image 2020-08-28 at 11.27.17 AM",
+      imageUrl:
+        "https://jntugvcev.edu.in/wp-content/uploads/2020/08/WhatsApp-Image-2020-08-28-at-11.27.17-AM.jpeg",
+    },
+    {
+      title: "DSC02794",
+      imageUrl: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/DSC02794-scaled.jpg",
+    },
   ];
 
   for (const s of slides) {

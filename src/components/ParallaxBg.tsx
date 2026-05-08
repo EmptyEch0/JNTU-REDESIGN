@@ -54,12 +54,7 @@ export function ParallaxBg({
       style={{ minHeight } as CSSProperties}
     >
       <div ref={imgRef} className="absolute inset-0 will-change-transform">
-        <img
-          src={src}
-          alt={alt}
-          className="h-full w-full object-cover"
-          loading="lazy"
-        />
+        <img src={src} alt={alt} className="h-full w-full object-cover" loading="lazy" />
       </div>
       {overlay && <div className="absolute inset-0" style={{ background: overlay }} />}
       <div className="relative z-10 h-full">{children}</div>

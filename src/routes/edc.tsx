@@ -14,12 +14,24 @@ import {
   getEdcActivities,
   addEdcActivity,
   updateEdcActivity,
-  deleteEdcActivity
+  deleteEdcActivity,
 } from "@/funcs/studentCorner";
 import { useAdmin } from "@/context/AdminContext";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Search, Plus, Edit2, Trash2, Check, X, Calendar, Award, Shield, Users, Save } from "lucide-react";
+import {
+  Search,
+  Plus,
+  Edit2,
+  Trash2,
+  Check,
+  X,
+  Calendar,
+  Award,
+  Shield,
+  Users,
+  Save,
+} from "lucide-react";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 
@@ -27,7 +39,10 @@ export const Route = createFileRoute("/edc")({
   head: () => ({
     meta: [
       { title: "Entrepreneurship Development Cell — JNTU-GV CEV" },
-      { name: "description", content: "Fostering startups, incubation, and entrepreneurial mindsets." },
+      {
+        name: "description",
+        content: "Fostering startups, incubation, and entrepreneurial mindsets.",
+      },
     ],
   }),
   component: EdcPage,
@@ -56,14 +71,38 @@ function EdcPage() {
   // Local editing states
   const [editedProfile, setEditedProfile] = useState<any>(null);
   const [editingCommId, setEditingCommId] = useState<number | null>(null);
-  const [editCommForm, setEditCommForm] = useState<any>({ sNo: 0, name: "", designation: "", role: "" });
+  const [editCommForm, setEditCommForm] = useState<any>({
+    sNo: 0,
+    name: "",
+    designation: "",
+    role: "",
+  });
   const [showAddComm, setShowAddComm] = useState(false);
-  const [addCommForm, setAddCommForm] = useState<any>({ sNo: 0, name: "", designation: "", role: "" });
+  const [addCommForm, setAddCommForm] = useState<any>({
+    sNo: 0,
+    name: "",
+    designation: "",
+    role: "",
+  });
 
   const [editingActId, setEditingActId] = useState<number | null>(null);
-  const [editActForm, setEditActForm] = useState<any>({ sNo: 0, activityEvent: "", academicYear: "", date: "", theme: "", studentParticipant: "" });
+  const [editActForm, setEditActForm] = useState<any>({
+    sNo: 0,
+    activityEvent: "",
+    academicYear: "",
+    date: "",
+    theme: "",
+    studentParticipant: "",
+  });
   const [showAddAct, setShowAddAct] = useState(false);
-  const [addActForm, setAddActForm] = useState<any>({ sNo: 0, activityEvent: "", academicYear: "", date: "", theme: "", studentParticipant: "" });
+  const [addActForm, setAddActForm] = useState<any>({
+    sNo: 0,
+    activityEvent: "",
+    academicYear: "",
+    date: "",
+    theme: "",
+    studentParticipant: "",
+  });
 
   const [actSearch, setActSearch] = useState("");
   const [actPage, setActPage] = useState(1);
@@ -77,7 +116,7 @@ function EdcPage() {
       setEditedProfile(null);
       toast.success("Profile updated successfully!");
     },
-    onError: () => toast.error("Failed to update profile.")
+    onError: () => toast.error("Failed to update profile."),
   });
 
   const addCommMutation = useMutation({
@@ -87,7 +126,7 @@ function EdcPage() {
       setShowAddComm(false);
       setAddCommForm({ sNo: 0, name: "", designation: "", role: "" });
       toast.success("Committee member added successfully!");
-    }
+    },
   });
 
   const updateCommMutation = useMutation({
@@ -96,7 +135,7 @@ function EdcPage() {
       queryClient.invalidateQueries({ queryKey: ["edc-committee"] });
       setEditingCommId(null);
       toast.success("Committee member updated!");
-    }
+    },
   });
 
   const deleteCommMutation = useMutation({
@@ -104,7 +143,7 @@ function EdcPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["edc-committee"] });
       toast.success("Committee member removed!");
-    }
+    },
   });
 
   const addActMutation = useMutation({
@@ -112,9 +151,16 @@ function EdcPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["edc-activities"] });
       setShowAddAct(false);
-      setAddActForm({ sNo: 0, activityEvent: "", academicYear: "", date: "", theme: "", studentParticipant: "" });
+      setAddActForm({
+        sNo: 0,
+        activityEvent: "",
+        academicYear: "",
+        date: "",
+        theme: "",
+        studentParticipant: "",
+      });
       toast.success("Activity added successfully!");
-    }
+    },
   });
 
   const updateActMutation = useMutation({
@@ -123,7 +169,7 @@ function EdcPage() {
       queryClient.invalidateQueries({ queryKey: ["edc-activities"] });
       setEditingActId(null);
       toast.success("Activity updated successfully!");
-    }
+    },
   });
 
   const deleteActMutation = useMutation({
@@ -131,7 +177,7 @@ function EdcPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["edc-activities"] });
       toast.success("Activity deleted!");
-    }
+    },
   });
 
   if (profileLoading || !profile) {
@@ -157,7 +203,10 @@ function EdcPage() {
   });
 
   const totalActPages = Math.ceil(filteredActivities.length / itemsPerPage);
-  const paginatedActivities = filteredActivities.slice((actPage - 1) * itemsPerPage, actPage * itemsPerPage);
+  const paginatedActivities = filteredActivities.slice(
+    (actPage - 1) * itemsPerPage,
+    actPage * itemsPerPage,
+  );
 
   return (
     <>
@@ -170,7 +219,6 @@ function EdcPage() {
       <SubNav items={STUDENT_SUBNAV} />
 
       <section className="py-16 container-narrow space-y-20">
-        
         {/* Coordinator Message Section */}
         <RevealOnScroll>
           <div className="grid md:grid-cols-[240px_1fr] gap-8 items-center bg-sand p-8 rounded-[32px] border border-border">
@@ -188,29 +236,39 @@ function EdcPage() {
                     <input
                       className="w-full bg-primary/5 border border-border p-1 rounded font-bold text-xs"
                       value={pData.coordinatorName}
-                      onChange={(e) => setEditedProfile({ ...pData, coordinatorName: e.target.value })}
+                      onChange={(e) =>
+                        setEditedProfile({ ...pData, coordinatorName: e.target.value })
+                      }
                     />
                     <input
                       className="w-full bg-primary/5 border border-border p-1 rounded text-[10px] text-muted-foreground"
                       value={pData.coordinatorRole}
-                      onChange={(e) => setEditedProfile({ ...pData, coordinatorRole: e.target.value })}
+                      onChange={(e) =>
+                        setEditedProfile({ ...pData, coordinatorRole: e.target.value })
+                      }
                     />
                     <input
                       className="w-full bg-primary/5 border border-border p-1 rounded text-[9px] text-muted-foreground"
                       value={pData.coordinatorImage}
                       placeholder="Photo URL"
-                      onChange={(e) => setEditedProfile({ ...pData, coordinatorImage: e.target.value })}
+                      onChange={(e) =>
+                        setEditedProfile({ ...pData, coordinatorImage: e.target.value })
+                      }
                     />
                   </div>
                 ) : (
                   <>
-                    <h4 className="font-bold text-ink text-sm leading-tight">{pData.coordinatorName}</h4>
-                    <p className="text-[11px] font-semibold text-muted-foreground mt-1 leading-tight">{pData.coordinatorRole}</p>
+                    <h4 className="font-bold text-ink text-sm leading-tight">
+                      {pData.coordinatorName}
+                    </h4>
+                    <p className="text-[11px] font-semibold text-muted-foreground mt-1 leading-tight">
+                      {pData.coordinatorRole}
+                    </p>
                   </>
                 )}
               </div>
             </div>
-            
+
             <div className="space-y-4">
               <SectionLabel eyebrow="Coordinator's Message" title="EDC Message" />
               {isEditMode ? (
@@ -254,8 +312,13 @@ function EdcPage() {
                 <SectionLabel eyebrow="Goalposts" title="Vision" />
                 <ul className="space-y-4 mt-6">
                   {visions.map((v, i) => (
-                    <li key={i} className="text-sm text-muted-foreground font-medium leading-relaxed flex gap-3.5 items-start">
-                      <span className="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">{i + 1}</span>
+                    <li
+                      key={i}
+                      className="text-sm text-muted-foreground font-medium leading-relaxed flex gap-3.5 items-start"
+                    >
+                      <span className="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                        {i + 1}
+                      </span>
                       {isEditMode ? (
                         <textarea
                           className="w-full bg-primary/5 border border-border p-1.5 rounded text-xs outline-none focus:border-primary"
@@ -282,8 +345,13 @@ function EdcPage() {
                 <SectionLabel eyebrow="Pathways" title="Mission" />
                 <ul className="space-y-4 mt-6">
                   {missions.map((m, i) => (
-                    <li key={i} className="text-sm text-muted-foreground font-medium leading-relaxed flex gap-3.5 items-start">
-                      <span className="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">{i + 1}</span>
+                    <li
+                      key={i}
+                      className="text-sm text-muted-foreground font-medium leading-relaxed flex gap-3.5 items-start"
+                    >
+                      <span className="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                        {i + 1}
+                      </span>
                       {isEditMode ? (
                         <textarea
                           className="w-full bg-primary/5 border border-border p-1.5 rounded text-xs outline-none focus:border-primary"
@@ -331,7 +399,9 @@ function EdcPage() {
                     type="number"
                     className="p-3 bg-muted/50 rounded-xl border border-border text-xs outline-none"
                     value={addCommForm.sNo || ""}
-                    onChange={(e) => setAddCommForm({ ...addCommForm, sNo: parseInt(e.target.value) || 0 })}
+                    onChange={(e) =>
+                      setAddCommForm({ ...addCommForm, sNo: parseInt(e.target.value) || 0 })
+                    }
                   />
                   <input
                     placeholder="Name"
@@ -343,7 +413,9 @@ function EdcPage() {
                     placeholder="Designation"
                     className="p-3 bg-muted/50 rounded-xl border border-border text-xs outline-none col-span-2"
                     value={addCommForm.designation}
-                    onChange={(e) => setAddCommForm({ ...addCommForm, designation: e.target.value })}
+                    onChange={(e) =>
+                      setAddCommForm({ ...addCommForm, designation: e.target.value })
+                    }
                   />
                   <input
                     placeholder="Role in EDC"
@@ -353,8 +425,18 @@ function EdcPage() {
                   />
                 </div>
                 <div className="flex justify-end gap-2.5 mt-4">
-                  <button onClick={() => setShowAddComm(false)} className="px-4 py-2 border border-border rounded-xl text-xs text-muted-foreground font-medium">Cancel</button>
-                  <button onClick={() => addCommMutation.mutate({ data: addCommForm })} className="px-4 py-2 bg-primary text-white rounded-xl text-xs font-semibold">Add Member</button>
+                  <button
+                    onClick={() => setShowAddComm(false)}
+                    className="px-4 py-2 border border-border rounded-xl text-xs text-muted-foreground font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => addCommMutation.mutate({ data: addCommForm })}
+                    className="px-4 py-2 bg-primary text-white rounded-xl text-xs font-semibold"
+                  >
+                    Add Member
+                  </button>
                 </div>
               </div>
             </RevealOnScroll>
@@ -376,14 +458,22 @@ function EdcPage() {
                   {committee.map((m: any) => {
                     const isEditing = editingCommId === m.id;
                     return (
-                      <tr key={m.id} className="hover:bg-primary/[0.01] transition-colors align-middle text-ink">
+                      <tr
+                        key={m.id}
+                        className="hover:bg-primary/[0.01] transition-colors align-middle text-ink"
+                      >
                         <td className="px-6 py-4 font-semibold text-muted-foreground">
                           {isEditing ? (
                             <input
                               type="number"
                               className="p-1 bg-primary/5 border border-primary/20 rounded w-full"
                               value={editCommForm.sNo}
-                              onChange={(e) => setEditCommForm({ ...editCommForm, sNo: parseInt(e.target.value) || 0 })}
+                              onChange={(e) =>
+                                setEditCommForm({
+                                  ...editCommForm,
+                                  sNo: parseInt(e.target.value) || 0,
+                                })
+                              }
                             />
                           ) : (
                             m.sNo
@@ -394,7 +484,9 @@ function EdcPage() {
                             <input
                               className="p-1 bg-primary/5 border border-primary/20 rounded w-full"
                               value={editCommForm.name}
-                              onChange={(e) => setEditCommForm({ ...editCommForm, name: e.target.value })}
+                              onChange={(e) =>
+                                setEditCommForm({ ...editCommForm, name: e.target.value })
+                              }
                             />
                           ) : (
                             m.name
@@ -405,7 +497,9 @@ function EdcPage() {
                             <input
                               className="p-1 bg-primary/5 border border-primary/20 rounded w-full"
                               value={editCommForm.designation}
-                              onChange={(e) => setEditCommForm({ ...editCommForm, designation: e.target.value })}
+                              onChange={(e) =>
+                                setEditCommForm({ ...editCommForm, designation: e.target.value })
+                              }
                             />
                           ) : (
                             m.designation
@@ -416,7 +510,9 @@ function EdcPage() {
                             <input
                               className="p-1 bg-primary/5 border border-primary/20 rounded w-full"
                               value={editCommForm.role}
-                              onChange={(e) => setEditCommForm({ ...editCommForm, role: e.target.value })}
+                              onChange={(e) =>
+                                setEditCommForm({ ...editCommForm, role: e.target.value })
+                              }
                             />
                           ) : (
                             m.role
@@ -427,13 +523,41 @@ function EdcPage() {
                             <div className="flex justify-center gap-1.5">
                               {isEditing ? (
                                 <>
-                                  <button onClick={() => updateCommMutation.mutate({ data: editCommForm })} className="p-1 rounded bg-green-500/10 text-green-600 hover:bg-green-500/20"><Check className="h-3.5 w-3.5" /></button>
-                                  <button onClick={() => setEditingCommId(null)} className="p-1 rounded bg-red-500/10 text-red-600 hover:bg-red-500/20"><X className="h-3.5 w-3.5" /></button>
+                                  <button
+                                    onClick={() =>
+                                      updateCommMutation.mutate({ data: editCommForm })
+                                    }
+                                    className="p-1 rounded bg-green-500/10 text-green-600 hover:bg-green-500/20"
+                                  >
+                                    <Check className="h-3.5 w-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => setEditingCommId(null)}
+                                    className="p-1 rounded bg-red-500/10 text-red-600 hover:bg-red-500/20"
+                                  >
+                                    <X className="h-3.5 w-3.5" />
+                                  </button>
                                 </>
                               ) : (
                                 <>
-                                  <button onClick={() => { setEditingCommId(m.id); setEditCommForm({ ...m }); }} className="p-1 rounded bg-primary/5 text-primary hover:bg-primary/10"><Edit2 className="h-3.5 w-3.5" /></button>
-                                  <button onClick={() => { if (confirm("Remove member?")) deleteCommMutation.mutate({ data: m.id }); }} className="p-1 rounded bg-red-500/5 text-red-600 hover:bg-red-500/10"><Trash2 className="h-3.5 w-3.5" /></button>
+                                  <button
+                                    onClick={() => {
+                                      setEditingCommId(m.id);
+                                      setEditCommForm({ ...m });
+                                    }}
+                                    className="p-1 rounded bg-primary/5 text-primary hover:bg-primary/10"
+                                  >
+                                    <Edit2 className="h-3.5 w-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      if (confirm("Remove member?"))
+                                        deleteCommMutation.mutate({ data: m.id });
+                                    }}
+                                    className="p-1 rounded bg-red-500/5 text-red-600 hover:bg-red-500/10"
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </button>
                                 </>
                               )}
                             </div>
@@ -460,7 +584,10 @@ function EdcPage() {
                     placeholder="Search activities..."
                     className="w-full bg-card border border-border pl-9 pr-4 py-2 rounded-full text-xs text-ink outline-none"
                     value={actSearch}
-                    onChange={(e) => { setActSearch(e.target.value); setActPage(1); }}
+                    onChange={(e) => {
+                      setActSearch(e.target.value);
+                      setActPage(1);
+                    }}
                   />
                 </div>
                 {isEditMode && (
@@ -485,7 +612,9 @@ function EdcPage() {
                     type="number"
                     className="p-3 bg-muted/50 rounded-xl border border-border text-xs outline-none"
                     value={addActForm.sNo || ""}
-                    onChange={(e) => setAddActForm({ ...addActForm, sNo: parseInt(e.target.value) || 0 })}
+                    onChange={(e) =>
+                      setAddActForm({ ...addActForm, sNo: parseInt(e.target.value) || 0 })
+                    }
                   />
                   <input
                     placeholder="Academic Year"
@@ -497,7 +626,9 @@ function EdcPage() {
                     placeholder="Activity Event"
                     className="p-3 bg-muted/50 rounded-xl border border-border text-xs outline-none col-span-2"
                     value={addActForm.activityEvent}
-                    onChange={(e) => setAddActForm({ ...addActForm, activityEvent: e.target.value })}
+                    onChange={(e) =>
+                      setAddActForm({ ...addActForm, activityEvent: e.target.value })
+                    }
                   />
                   <input
                     placeholder="Date"
@@ -515,12 +646,24 @@ function EdcPage() {
                     placeholder="Student Participants"
                     className="p-3 bg-muted/50 rounded-xl border border-border text-xs outline-none col-span-2"
                     value={addActForm.studentParticipant}
-                    onChange={(e) => setAddActForm({ ...addActForm, studentParticipant: e.target.value })}
+                    onChange={(e) =>
+                      setAddActForm({ ...addActForm, studentParticipant: e.target.value })
+                    }
                   />
                 </div>
                 <div className="flex justify-end gap-2.5">
-                  <button onClick={() => setShowAddAct(false)} className="px-4 py-2 border border-border rounded-xl text-xs text-muted-foreground font-medium">Cancel</button>
-                  <button onClick={() => addActMutation.mutate({ data: addActForm })} className="px-4 py-2 bg-primary text-white rounded-xl text-xs font-semibold">Add Activity</button>
+                  <button
+                    onClick={() => setShowAddAct(false)}
+                    className="px-4 py-2 border border-border rounded-xl text-xs text-muted-foreground font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => addActMutation.mutate({ data: addActForm })}
+                    className="px-4 py-2 bg-primary text-white rounded-xl text-xs font-semibold"
+                  >
+                    Add Activity
+                  </button>
                 </div>
               </div>
             </RevealOnScroll>
@@ -544,14 +687,22 @@ function EdcPage() {
                   {paginatedActivities.map((a: any) => {
                     const isEditing = editingActId === a.id;
                     return (
-                      <tr key={a.id} className="hover:bg-primary/[0.01] transition-colors align-middle text-ink">
+                      <tr
+                        key={a.id}
+                        className="hover:bg-primary/[0.01] transition-colors align-middle text-ink"
+                      >
                         <td className="px-6 py-4 font-semibold text-muted-foreground">
                           {isEditing ? (
                             <input
                               type="number"
                               className="p-1 bg-primary/5 border border-primary/20 rounded w-full"
                               value={editActForm.sNo}
-                              onChange={(e) => setEditActForm({ ...editActForm, sNo: parseInt(e.target.value) || 0 })}
+                              onChange={(e) =>
+                                setEditActForm({
+                                  ...editActForm,
+                                  sNo: parseInt(e.target.value) || 0,
+                                })
+                              }
                             />
                           ) : (
                             a.sNo
@@ -562,7 +713,9 @@ function EdcPage() {
                             <input
                               className="p-1 bg-primary/5 border border-primary/20 rounded w-full"
                               value={editActForm.activityEvent}
-                              onChange={(e) => setEditActForm({ ...editActForm, activityEvent: e.target.value })}
+                              onChange={(e) =>
+                                setEditActForm({ ...editActForm, activityEvent: e.target.value })
+                              }
                             />
                           ) : (
                             a.activityEvent
@@ -573,7 +726,9 @@ function EdcPage() {
                             <input
                               className="p-1 bg-primary/5 border border-primary/20 rounded w-full"
                               value={editActForm.academicYear}
-                              onChange={(e) => setEditActForm({ ...editActForm, academicYear: e.target.value })}
+                              onChange={(e) =>
+                                setEditActForm({ ...editActForm, academicYear: e.target.value })
+                              }
                             />
                           ) : (
                             a.academicYear
@@ -584,7 +739,9 @@ function EdcPage() {
                             <input
                               className="p-1 bg-primary/5 border border-primary/20 rounded w-full"
                               value={editActForm.date}
-                              onChange={(e) => setEditActForm({ ...editActForm, date: e.target.value })}
+                              onChange={(e) =>
+                                setEditActForm({ ...editActForm, date: e.target.value })
+                              }
                             />
                           ) : (
                             <span className="inline-flex items-center gap-1">
@@ -597,7 +754,9 @@ function EdcPage() {
                             <input
                               className="p-1 bg-primary/5 border border-primary/20 rounded w-full"
                               value={editActForm.theme}
-                              onChange={(e) => setEditActForm({ ...editActForm, theme: e.target.value })}
+                              onChange={(e) =>
+                                setEditActForm({ ...editActForm, theme: e.target.value })
+                              }
                             />
                           ) : (
                             a.theme
@@ -608,7 +767,12 @@ function EdcPage() {
                             <input
                               className="p-1 bg-primary/5 border border-primary/20 rounded w-full"
                               value={editActForm.studentParticipant}
-                              onChange={(e) => setEditActForm({ ...editActForm, studentParticipant: e.target.value })}
+                              onChange={(e) =>
+                                setEditActForm({
+                                  ...editActForm,
+                                  studentParticipant: e.target.value,
+                                })
+                              }
                             />
                           ) : (
                             a.studentParticipant
@@ -619,13 +783,39 @@ function EdcPage() {
                             <div className="flex justify-center gap-1.5">
                               {isEditing ? (
                                 <>
-                                  <button onClick={() => updateActMutation.mutate({ data: editActForm })} className="p-1 rounded bg-green-500/10 text-green-600 hover:bg-green-500/20"><Check className="h-3.5 w-3.5" /></button>
-                                  <button onClick={() => setEditingActId(null)} className="p-1 rounded bg-red-500/10 text-red-600 hover:bg-red-500/20"><X className="h-3.5 w-3.5" /></button>
+                                  <button
+                                    onClick={() => updateActMutation.mutate({ data: editActForm })}
+                                    className="p-1 rounded bg-green-500/10 text-green-600 hover:bg-green-500/20"
+                                  >
+                                    <Check className="h-3.5 w-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => setEditingActId(null)}
+                                    className="p-1 rounded bg-red-500/10 text-red-600 hover:bg-red-500/20"
+                                  >
+                                    <X className="h-3.5 w-3.5" />
+                                  </button>
                                 </>
                               ) : (
                                 <>
-                                  <button onClick={() => { setEditingActId(a.id); setEditActForm({ ...a }); }} className="p-1 rounded bg-primary/5 text-primary hover:bg-primary/10"><Edit2 className="h-3.5 w-3.5" /></button>
-                                  <button onClick={() => { if (confirm("Delete activity?")) deleteActMutation.mutate({ data: a.id }); }} className="p-1 rounded bg-red-500/5 text-red-600 hover:bg-red-500/10"><Trash2 className="h-3.5 w-3.5" /></button>
+                                  <button
+                                    onClick={() => {
+                                      setEditingActId(a.id);
+                                      setEditActForm({ ...a });
+                                    }}
+                                    className="p-1 rounded bg-primary/5 text-primary hover:bg-primary/10"
+                                  >
+                                    <Edit2 className="h-3.5 w-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      if (confirm("Delete activity?"))
+                                        deleteActMutation.mutate({ data: a.id });
+                                    }}
+                                    className="p-1 rounded bg-red-500/5 text-red-600 hover:bg-red-500/10"
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </button>
                                 </>
                               )}
                             </div>
@@ -643,16 +833,30 @@ function EdcPage() {
           {totalActPages > 1 && (
             <RevealOnScroll>
               <div className="flex items-center justify-between pt-2">
-                <p className="text-xs text-muted-foreground">Showing page <span className="font-semibold text-ink">{actPage}</span> of <span className="font-semibold text-ink">{totalActPages}</span></p>
+                <p className="text-xs text-muted-foreground">
+                  Showing page <span className="font-semibold text-ink">{actPage}</span> of{" "}
+                  <span className="font-semibold text-ink">{totalActPages}</span>
+                </p>
                 <div className="flex gap-1">
-                  <button disabled={actPage === 1} onClick={() => setActPage(p => p - 1)} className="px-3 py-1 border border-border rounded text-xs hover:bg-muted disabled:opacity-40">Prev</button>
-                  <button disabled={actPage === totalActPages} onClick={() => setActPage(p => p + 1)} className="px-3 py-1 border border-border rounded text-xs hover:bg-muted disabled:opacity-40">Next</button>
+                  <button
+                    disabled={actPage === 1}
+                    onClick={() => setActPage((p) => p - 1)}
+                    className="px-3 py-1 border border-border rounded text-xs hover:bg-muted disabled:opacity-40"
+                  >
+                    Prev
+                  </button>
+                  <button
+                    disabled={actPage === totalActPages}
+                    onClick={() => setActPage((p) => p + 1)}
+                    className="px-3 py-1 border border-border rounded text-xs hover:bg-muted disabled:opacity-40"
+                  >
+                    Next
+                  </button>
                 </div>
               </div>
             </RevealOnScroll>
           )}
         </div>
-
       </section>
 
       {/* Persistent admin save */}

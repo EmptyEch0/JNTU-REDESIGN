@@ -3,9 +3,9 @@ import postgres from "postgres";
 
 async function main() {
   const sql = postgres(process.env.DATABASE_URL!);
-  
+
   console.log("🔨 Creating leadership_staff table manually...");
-  
+
   await sql`
     CREATE TABLE IF NOT EXISTS leadership_staff (
       id SERIAL PRIMARY KEY,
@@ -15,7 +15,7 @@ async function main() {
       section TEXT NOT NULL
     );
   `;
-  
+
   console.log("✅ Table created.");
   process.exit(0);
 }

@@ -1,6 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getNssSpecialCamp, addNssSpecialCamp, updateNssSpecialCamp, deleteNssSpecialCamp } from "@/funcs/nss";
+import {
+  getNssSpecialCamp,
+  addNssSpecialCamp,
+  updateNssSpecialCamp,
+  deleteNssSpecialCamp,
+} from "@/funcs/nss";
 import { useAdmin } from "@/context/AdminContext";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -94,7 +99,10 @@ function NSSSpecialCampPage() {
           <div>
             <SectionLabel eyebrow="Annual Special Camps" title="Dwarapudi Village Camp" />
             <p className="mt-2 text-sm text-muted-foreground max-w-xl font-medium">
-              Conducted from <span className="text-primary font-bold">06-03-2020 to 12-03-2020</span> at Dwarapudi Village, Vizianagaram district to raise community health, environment, and social awareness.
+              Conducted from{" "}
+              <span className="text-primary font-bold">06-03-2020 to 12-03-2020</span> at Dwarapudi
+              Village, Vizianagaram district to raise community health, environment, and social
+              awareness.
             </p>
           </div>
 
@@ -116,7 +124,9 @@ function NSSSpecialCampPage() {
             <h3 className="text-lg font-bold text-ink mb-4">Add New Camp Day</h3>
             <form onSubmit={handleAddSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Day Header</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  Day Header
+                </label>
                 <input
                   type="text"
                   required
@@ -127,7 +137,9 @@ function NSSSpecialCampPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Activities Description</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  Activities Description
+                </label>
                 <textarea
                   required
                   className="w-full bg-muted/50 border border-border rounded-xl p-3 text-xs outline-none focus:border-primary min-h-[100px]"
@@ -178,8 +190,9 @@ function NSSSpecialCampPage() {
 
               return (
                 <RevealOnScroll key={dayRecord.id} delay={idx * 60}>
-                  <div className={`relative flex flex-col sm:flex-row items-stretch ${isEven ? "sm:flex-row-reverse" : ""}`}>
-                    
+                  <div
+                    className={`relative flex flex-col sm:flex-row items-stretch ${isEven ? "sm:flex-row-reverse" : ""}`}
+                  >
                     {/* Circle Dot Indicator */}
                     <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 top-1.5 h-4 w-4 rounded-full border-[3px] border-primary bg-background shadow-elegant z-10" />
 
@@ -206,7 +219,9 @@ function NSSSpecialCampPage() {
                           <textarea
                             className="w-full text-sm text-muted-foreground leading-relaxed bg-primary/5 border border-primary/20 rounded-md p-2 outline-none min-h-[80px]"
                             value={editForm.description}
-                            onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                            onChange={(e) =>
+                              setEditForm({ ...editForm, description: e.target.value })
+                            }
                           />
                         ) : (
                           <p className="text-sm text-muted-foreground leading-relaxed font-medium">

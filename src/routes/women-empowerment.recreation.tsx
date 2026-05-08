@@ -50,22 +50,37 @@ function WERecreationPage() {
 
   // Descriptive text pieces to accompany the zigzag images beautifully
   const zigzagDetails = [
-    { title: "Leisure & Creativity", desc: "Providing a peaceful space for women to connect, express themselves, and build strong bonds through leisure.", icon: Smile },
-    { title: "Team Building Morale", desc: "Enhancing collaboration and communication through regular group games and creative workshops.", icon: Sparkles },
-    { title: "Physical & Mental Balance", desc: "A happy, positive environment essential for healthy, stress-free, and successful academic careers.", icon: Heart },
-    { title: "Talents & Competitions", desc: "Fostering artistic talent, leadership qualities, and critical thinking with unique student engagements.", icon: Trophy }
+    {
+      title: "Leisure & Creativity",
+      desc: "Providing a peaceful space for women to connect, express themselves, and build strong bonds through leisure.",
+      icon: Smile,
+    },
+    {
+      title: "Team Building Morale",
+      desc: "Enhancing collaboration and communication through regular group games and creative workshops.",
+      icon: Sparkles,
+    },
+    {
+      title: "Physical & Mental Balance",
+      desc: "A happy, positive environment essential for healthy, stress-free, and successful academic careers.",
+      icon: Heart,
+    },
+    {
+      title: "Talents & Competitions",
+      desc: "Fostering artistic talent, leadership qualities, and critical thinking with unique student engagements.",
+      icon: Trophy,
+    },
   ];
 
   return (
     <>
       <section className="py-16 container-narrow">
         <div className="space-y-12">
-          
           {/* Introductory Description */}
           <RevealOnScroll>
             <div className="space-y-6">
               <SectionLabel eyebrow="Leisure & Well-being" title="Recreation Club" />
-              
+
               {isEditMode ? (
                 <textarea
                   className="w-full text-base text-muted-foreground leading-relaxed bg-primary/5 p-4 rounded-2xl border border-border outline-none min-h-[300px] focus:border-primary"
@@ -87,8 +102,9 @@ function WERecreationPage() {
               const detail = zigzagDetails[idx % zigzagDetails.length];
               return (
                 <RevealOnScroll key={idx} delay={idx * 50}>
-                  <div className={`grid md:grid-cols-2 gap-12 md:gap-16 items-center ${isEven ? "" : "md:flex-row-reverse"}`}>
-                    
+                  <div
+                    className={`grid md:grid-cols-2 gap-12 md:gap-16 items-center ${isEven ? "" : "md:flex-row-reverse"}`}
+                  >
                     {/* Image Box */}
                     <div className={`relative group ${isEven ? "" : "md:order-2"}`}>
                       <div className="absolute -inset-3 rounded-[32px] bg-primary/5 blur-xl group-hover:bg-primary/10 transition-all duration-500" />
@@ -100,7 +116,9 @@ function WERecreationPage() {
                         />
                         {isEditMode && (
                           <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-white text-xs font-semibold mb-2">Image URL {idx + 1}</span>
+                            <span className="text-white text-xs font-semibold mb-2">
+                              Image URL {idx + 1}
+                            </span>
                             <input
                               className="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-xs text-white outline-none focus:border-primary"
                               value={imgUrl}
@@ -126,13 +144,11 @@ function WERecreationPage() {
                         {detail.desc}
                       </p>
                     </div>
-
                   </div>
                 </RevealOnScroll>
               );
             })}
           </div>
-
         </div>
       </section>
 

@@ -9,7 +9,11 @@ export const Route = createFileRoute("/about/jntuk")({
   head: () => ({
     meta: [
       { title: "About JNTUK — JNTU-GV CEV" },
-      { name: "description", content: "Jawaharlal Nehru Technological University Kakinada – the parent university of JNTU-GV CEV, established in 1946." },
+      {
+        name: "description",
+        content:
+          "Jawaharlal Nehru Technological University Kakinada – the parent university of JNTU-GV CEV, established in 1946.",
+      },
       { property: "og:title", content: "About JNTUK" },
       { property: "og:description", content: "History and legacy of JNTUK since 1946." },
     ],
@@ -18,9 +22,17 @@ export const Route = createFileRoute("/about/jntuk")({
 });
 
 const FACTS = [
-  { icon: School, title: "Est. 1946", desc: "Originally 'The College of Engineering – Vizagapatnam'" },
+  {
+    icon: School,
+    title: "Est. 1946",
+    desc: "Originally 'The College of Engineering – Vizagapatnam'",
+  },
   { icon: MapPin, title: "110 Acres", desc: "Sprawling campus in the port city of Kakinada" },
-  { icon: Building2, title: "2 Constituent Colleges", desc: "UCEK (Autonomous) Kakinada & UCEV Vizianagaram" },
+  {
+    icon: Building2,
+    title: "2 Constituent Colleges",
+    desc: "UCEK (Autonomous) Kakinada & UCEV Vizianagaram",
+  },
   { icon: Users, title: "268 Affiliated Colleges", desc: "Under the jurisdiction of 8 districts" },
 ];
 
@@ -38,16 +50,25 @@ function JntukPage() {
         <RevealOnScroll>
           <div className="max-w-3xl mx-auto">
             <div className="text-eyebrow">History</div>
-            <h2 className="text-display text-3xl md:text-4xl mt-3 text-ink">From a single college to a multi-campus university</h2>
+            <h2 className="text-display text-3xl md:text-4xl mt-3 text-ink">
+              From a single college to a multi-campus university
+            </h2>
             <div className="mt-6 space-y-4 text-muted-foreground text-lg leading-relaxed">
               <p>
-                Jawaharlal Nehru Technological University Kakinada (JNTUK) was initially incepted with the name "The College of Engineering – Vizagapatnam" in 1946. The university grew out of that college.
+                Jawaharlal Nehru Technological University Kakinada (JNTUK) was initially incepted
+                with the name "The College of Engineering – Vizagapatnam" in 1946. The university
+                grew out of that college.
               </p>
               <p>
-                Spread over a sprawling campus of 110 acres in the port city of Kakinada, the college became a constituent unit of JNTU Hyderabad in 1972. Subject to the bifurcation of JNTU, it was notified as JNTUK by the act of legislature in 2008 as a separate university.
+                Spread over a sprawling campus of 110 acres in the port city of Kakinada, the
+                college became a constituent unit of JNTU Hyderabad in 1972. Subject to the
+                bifurcation of JNTU, it was notified as JNTUK by the act of legislature in 2008 as a
+                separate university.
               </p>
               <p>
-                JNTUK has two constituent colleges under its fold: University College of Engineering (Autonomous) Kakinada and University College of Engineering Vizianagaram. The university has nearly 268 affiliated colleges under the jurisdiction of 8 districts.
+                JNTUK has two constituent colleges under its fold: University College of Engineering
+                (Autonomous) Kakinada and University College of Engineering Vizianagaram. The
+                university has nearly 268 affiliated colleges under the jurisdiction of 8 districts.
               </p>
             </div>
             <a
@@ -86,8 +107,12 @@ function JntukPage() {
 
       <section className="py-16 container-narrow text-center">
         <div className="flex flex-wrap justify-center gap-3">
-          <Link to="/about/institution" className="btn-secondary">About Institution <ArrowRight className="h-4 w-4" /></Link>
-          <Link to="/about/vizianagaram" className="btn-primary">About Vizianagaram <ArrowRight className="h-4 w-4" /></Link>
+          <Link to="/about/institution" className="btn-secondary">
+            About Institution <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link to="/about/vizianagaram" className="btn-primary">
+            About Vizianagaram <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
     </>

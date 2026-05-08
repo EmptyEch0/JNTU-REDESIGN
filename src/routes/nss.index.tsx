@@ -53,13 +53,12 @@ function NSSAboutPage() {
     <>
       <section className="py-16 container-narrow">
         <div className="grid lg:grid-cols-[1fr_400px] gap-16 items-start">
-          
           {/* About NSS content */}
           <div className="space-y-8">
             <RevealOnScroll>
               <SectionLabel eyebrow="History & Vision" title="About NSS" />
             </RevealOnScroll>
-            
+
             <RevealOnScroll delay={100}>
               {isEditMode ? (
                 <textarea
@@ -79,7 +78,7 @@ function NSSAboutPage() {
           <RevealOnScroll delay={150}>
             <div className="space-y-8 bg-card border border-border rounded-[32px] p-6 shadow-sm">
               <div className="text-eyebrow">Programme Officer</div>
-              
+
               {/* Photo */}
               <div className="relative group">
                 <div className="absolute -inset-2 rounded-[24px] bg-primary/10 blur-xl group-hover:bg-primary/20 transition-colors duration-500" />
@@ -95,7 +94,13 @@ function NSSAboutPage() {
                       <input
                         className="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-xs text-white outline-none focus:border-primary"
                         value={data.imageUrl || data.officerImage}
-                        onChange={(e) => setEditedData({ ...data, officerImage: e.target.value, imageUrl: e.target.value })}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...data,
+                            officerImage: e.target.value,
+                            imageUrl: e.target.value,
+                          })
+                        }
                         placeholder="https://example.com/photo.jpg"
                       />
                     </div>
@@ -116,7 +121,13 @@ function NSSAboutPage() {
                       className="w-full text-primary font-medium bg-primary/5 p-2 rounded outline-none border border-border text-xs"
                       value={data.officerQuote}
                       placeholder="Officer Quote or Message"
-                      onChange={(e) => setEditedData({ ...data, officerQuote: e.target.value, officerMessage: e.target.value })}
+                      onChange={(e) =>
+                        setEditedData({
+                          ...data,
+                          officerQuote: e.target.value,
+                          officerMessage: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 ) : (

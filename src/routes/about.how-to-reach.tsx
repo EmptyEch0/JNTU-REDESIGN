@@ -10,9 +10,16 @@ export const Route = createFileRoute("/about/how-to-reach")({
   head: () => ({
     meta: [
       { title: "How to Reach — JNTU-GV CEV" },
-      { name: "description", content: "Directions to JNTU-GV College of Engineering Vizianagaram campus – by road, rail and air." },
+      {
+        name: "description",
+        content:
+          "Directions to JNTU-GV College of Engineering Vizianagaram campus – by road, rail and air.",
+      },
       { property: "og:title", content: "How to Reach JNTU-GV CEV" },
-      { property: "og:description", content: "Driving directions, bus routes and transport options to reach the campus." },
+      {
+        property: "og:description",
+        content: "Driving directions, bus routes and transport options to reach the campus.",
+      },
     ],
   }),
   component: HowToReachPage,
@@ -40,7 +47,10 @@ const TRANSPORT = [
 const DIRECTIONS = [
   { step: "Head west on Bus Stand Rd towards Railway Station Rd", dist: "180 m" },
   { step: "Continue straight at Mayura Junction (Traffic Signals)", dist: "130 m" },
-  { step: "At the roundabout, take the 2nd exit and stay on NH 43. Pass by Police Barracks (on the left in 1.1 km)", dist: "5.2 km" },
+  {
+    step: "At the roundabout, take the 2nd exit and stay on NH 43. Pass by Police Barracks (on the left in 1.1 km)",
+    dist: "5.2 km",
+  },
   { step: "Pass by Collectorate Junction, KL Puram and RTA Office", dist: "" },
   { step: "Continue on JNTUK-Campus Rd to your destination", dist: "2.2 km / 5 min" },
   { step: "Turn left onto JNTUK-Campus Rd", dist: "1.5 km" },
@@ -125,7 +135,8 @@ function HowToReachPage() {
             />
           </div>
           <p className="mt-4 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
-            <MapPin className="h-3.5 w-3.5" /> JNTU-GV College of Engineering, Dwarapudi, Vizianagaram – 535003
+            <MapPin className="h-3.5 w-3.5" /> JNTU-GV College of Engineering, Dwarapudi,
+            Vizianagaram – 535003
           </p>
         </RevealOnScroll>
       </section>
@@ -146,7 +157,9 @@ function HowToReachPage() {
       </section>
 
       <section className="py-16 container-narrow text-center">
-        <Link to="/contact" className="btn-primary">Contact Us <ArrowRight className="h-4 w-4" /></Link>
+        <Link to="/contact" className="btn-primary">
+          Contact Us <ArrowRight className="h-4 w-4" />
+        </Link>
       </section>
     </>
   );

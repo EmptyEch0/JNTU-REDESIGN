@@ -23,8 +23,16 @@ export const NAV: {
       {
         title: "Institution",
         items: [
-          { label: "About Institution", to: "/about/institution", desc: "History & administration of JNTU-GV CEV" },
-          { label: "Vision & Mission", to: "/about/vision-mission", desc: "Our purpose and guiding principles" },
+          {
+            label: "About Institution",
+            to: "/about/institution",
+            desc: "History & administration of JNTU-GV CEV",
+          },
+          {
+            label: "Vision & Mission",
+            to: "/about/vision-mission",
+            desc: "Our purpose and guiding principles",
+          },
         ],
       },
       {
@@ -44,7 +52,11 @@ export const NAV: {
         title: "Leadership",
         items: [
           { label: "Principal", to: "/administration/principal", desc: "Leadership and vision" },
-          { label: "Vice Principal", to: "/administration/vice-principal", desc: "Academic administration" },
+          {
+            label: "Vice Principal",
+            to: "/administration/vice-principal",
+            desc: "Academic administration",
+          },
           { label: "IQAC", to: "/administration/iqac", desc: "Internal Quality Assurance Cell" },
         ],
       },
@@ -59,7 +71,11 @@ export const NAV: {
           { label: "Overview", to: "/academics", desc: "Programs at a glance" },
           { label: "Programs Offered", to: "/academics/programs", desc: "UG, PG and Doctoral" },
           { label: "Admissions", to: "/academics/admissions", desc: "How to apply" },
-          { label: "Academic Regulations", to: "/academics/regulations", desc: "R20, R23 frameworks" },
+          {
+            label: "Academic Regulations",
+            to: "/academics/regulations",
+            desc: "R20, R23 frameworks",
+          },
         ],
       },
       {
@@ -133,7 +149,11 @@ export const NAV: {
         title: "Professional Cells",
         items: [
           { label: "EDC", to: "/edc", desc: "Entrepreneurship & startup cell" },
-          { label: "Professional Bodies", to: "/professional-bodies", desc: "IEEE, ACM, CSI chapters" },
+          {
+            label: "Professional Bodies",
+            to: "/professional-bodies",
+            desc: "IEEE, ACM, CSI chapters",
+          },
           { label: "IIPC", to: "/iipc", desc: "Industry interaction & consultancy" },
         ],
       },
@@ -146,7 +166,11 @@ export const NAV: {
         title: "Training & Placement Cell",
         items: [
           { label: "Overview", to: "/placements", desc: "Stats and highlights" },
-          { label: "Training & Placement", to: "/placements/training", desc: "Vision, mission, TPO" },
+          {
+            label: "Training & Placement",
+            to: "/placements/training",
+            desc: "Vision, mission, TPO",
+          },
           { label: "Our Recruiters", to: "/placements/recruiters", desc: "Companies that hire" },
         ],
       },
@@ -191,54 +215,161 @@ export const STATS = [
 ];
 
 export const DEPARTMENTS = [
-  { code: "CSE", name: "Computer Science & Engineering", desc: "AI, systems, software, data.", accent: "from-[oklch(0.45_0.20_265)] to-[oklch(0.35_0.18_285)]" },
-  { code: "ECE", name: "Electronics & Communication", desc: "VLSI, signals, embedded.", accent: "from-[oklch(0.50_0.18_220)] to-[oklch(0.35_0.16_260)]" },
-  { code: "EEE", name: "Electrical & Electronics", desc: "Power, control, energy.", accent: "from-[oklch(0.55_0.18_60)] to-[oklch(0.40_0.18_30)]" },
-  { code: "MECH", name: "Mechanical Engineering", desc: "Design, manufacturing, thermal.", accent: "from-[oklch(0.45_0.10_30)] to-[oklch(0.30_0.05_250)]" },
-  { code: "CIVIL", name: "Civil Engineering", desc: "Structures, geotech, transport.", accent: "from-[oklch(0.50_0.12_140)] to-[oklch(0.32_0.10_180)]" },
-  { code: "IT", name: "Information Technology", desc: "Networks, cloud, security.", accent: "from-[oklch(0.50_0.18_300)] to-[oklch(0.35_0.16_270)]" },
-  { code: "MBA", name: "Management Studies", desc: "Strategy, finance, marketing.", accent: "from-[oklch(0.55_0.15_40)] to-[oklch(0.40_0.18_15)]" },
+  {
+    code: "CSE",
+    name: "Computer Science & Engineering",
+    desc: "AI, systems, software, data.",
+    accent: "from-[oklch(0.45_0.20_265)] to-[oklch(0.35_0.18_285)]",
+  },
+  {
+    code: "ECE",
+    name: "Electronics & Communication",
+    desc: "VLSI, signals, embedded.",
+    accent: "from-[oklch(0.50_0.18_220)] to-[oklch(0.35_0.16_260)]",
+  },
+  {
+    code: "EEE",
+    name: "Electrical & Electronics",
+    desc: "Power, control, energy.",
+    accent: "from-[oklch(0.55_0.18_60)] to-[oklch(0.40_0.18_30)]",
+  },
+  {
+    code: "MECH",
+    name: "Mechanical Engineering",
+    desc: "Design, manufacturing, thermal.",
+    accent: "from-[oklch(0.45_0.10_30)] to-[oklch(0.30_0.05_250)]",
+  },
+  {
+    code: "CIVIL",
+    name: "Civil Engineering",
+    desc: "Structures, geotech, transport.",
+    accent: "from-[oklch(0.50_0.12_140)] to-[oklch(0.32_0.10_180)]",
+  },
+  {
+    code: "IT",
+    name: "Information Technology",
+    desc: "Networks, cloud, security.",
+    accent: "from-[oklch(0.50_0.18_300)] to-[oklch(0.35_0.16_270)]",
+  },
+  {
+    code: "MBA",
+    name: "Management Studies",
+    desc: "Strategy, finance, marketing.",
+    accent: "from-[oklch(0.55_0.15_40)] to-[oklch(0.40_0.18_15)]",
+  },
 ];
 
 export const RECRUITERS = [
-  "TCS", "Wipro", "SoCtronics", "L&T", "Hyundai", "Apps Associates", "Medha",
-  "Cyient", "Nalsoft", "Efftronics", "Miracle Software", "Grey Campus",
-  "Cerium", "Zebi", "Sail Software Solutions", "Infosys", "Cognizant",
-  "Accenture", "Capgemini", "Tech Mahindra", "HCL", "Hexaware", "Mindtree",
-  "Mphasis", "Deloitte", "Amazon", "Zoho",
+  "TCS",
+  "Wipro",
+  "SoCtronics",
+  "L&T",
+  "Hyundai",
+  "Apps Associates",
+  "Medha",
+  "Cyient",
+  "Nalsoft",
+  "Efftronics",
+  "Miracle Software",
+  "Grey Campus",
+  "Cerium",
+  "Zebi",
+  "Sail Software Solutions",
+  "Infosys",
+  "Cognizant",
+  "Accenture",
+  "Capgemini",
+  "Tech Mahindra",
+  "HCL",
+  "Hexaware",
+  "Mindtree",
+  "Mphasis",
+  "Deloitte",
+  "Amazon",
+  "Zoho",
 ];
 
 // Flat search index for the Dynamic Island quick-search
 export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?: string }[] = [
   { label: "Home", to: "/", group: "Pages" },
-  { label: "About Institution", to: "/about/institution", group: "About", keywords: "college campus history" },
+  {
+    label: "About Institution",
+    to: "/about/institution",
+    group: "About",
+    keywords: "college campus history",
+  },
   { label: "About JNTUK", to: "/about/jntuk", group: "About", keywords: "university kakinada" },
-  { label: "About Vizianagaram", to: "/about/vizianagaram", group: "About", keywords: "city heritage culture" },
-  { label: "How to Reach", to: "/about/how-to-reach", group: "About", keywords: "directions transport bus train" },
-  { label: "Vision & Mission", to: "/about/vision-mission", group: "About", keywords: "ugc recognition 2f 12b" },
+  {
+    label: "About Vizianagaram",
+    to: "/about/vizianagaram",
+    group: "About",
+    keywords: "city heritage culture",
+  },
+  {
+    label: "How to Reach",
+    to: "/about/how-to-reach",
+    group: "About",
+    keywords: "directions transport bus train",
+  },
+  {
+    label: "Vision & Mission",
+    to: "/about/vision-mission",
+    group: "About",
+    keywords: "ugc recognition 2f 12b",
+  },
 
-  { label: "Principal", to: "/administration/principal", group: "Administration", keywords: "leadership head rajeswara rao" },
-  { label: "Vice Principal", to: "/administration/vice-principal", group: "Administration", keywords: "jaya suma academic" },
-  { label: "IQAC", to: "/administration/iqac", group: "Administration", keywords: "quality assurance cell" },
+  {
+    label: "Principal",
+    to: "/administration/principal",
+    group: "Administration",
+    keywords: "leadership head rajeswara rao",
+  },
+  {
+    label: "Vice Principal",
+    to: "/administration/vice-principal",
+    group: "Administration",
+    keywords: "jaya suma academic",
+  },
+  {
+    label: "IQAC",
+    to: "/administration/iqac",
+    group: "Administration",
+    keywords: "quality assurance cell",
+  },
   { label: "IQAC Composition", to: "/administration/iqac/composition", group: "Administration" },
   { label: "IQAC Meetings", to: "/administration/iqac/meetings", group: "Administration" },
   { label: "AQAR Reports", to: "/administration/iqac/aqar", group: "Administration" },
   { label: "IQAC MOUs", to: "/administration/iqac/mous", group: "Administration" },
 
-  { label: "Academics", to: "/academics", group: "Pages", keywords: "programs curriculum ug pg phd" },
+  {
+    label: "Academics",
+    to: "/academics",
+    group: "Pages",
+    keywords: "programs curriculum ug pg phd",
+  },
   { label: "Departments", to: "/departments", group: "Pages" },
   { label: "Admissions", to: "/admissions", group: "Pages", keywords: "apply enroll" },
   { label: "Contact", to: "/contact", group: "Pages" },
   { label: "Notices", to: "/notices", group: "Pages", keywords: "announcements circulars" },
   { label: "Gallery", to: "/gallery", group: "Pages" },
   { label: "Placements", to: "/placements", group: "Pages", keywords: "jobs recruiters offers" },
-  { label: "Training & Placement Cell", to: "/placements/training", group: "Placements", keywords: "tpo vakula vision mission" },
+  {
+    label: "Training & Placement Cell",
+    to: "/placements/training",
+    group: "Placements",
+    keywords: "tpo vakula vision mission",
+  },
   { label: "Our Recruiters", to: "/placements/recruiters", group: "Placements" },
   { label: "Students Placed", to: "/placements/students", group: "Placements" },
   { label: "Placements Gallery", to: "/placements/gallery", group: "Placements" },
 
   { label: "R&D Cell", to: "/rd-cell", group: "Pages", keywords: "research development funding" },
-  { label: "About Research", to: "/rd-cell/about", group: "R&D", keywords: "naga raju coordinator" },
+  {
+    label: "About Research",
+    to: "/rd-cell/about",
+    group: "R&D",
+    keywords: "naga raju coordinator",
+  },
   { label: "Areas of Research", to: "/rd-cell/areas", group: "R&D" },
   { label: "Research Projects", to: "/rd-cell/projects", group: "R&D" },
   { label: "Research Publications", to: "/rd-cell/publications", group: "R&D" },
@@ -249,29 +380,69 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   { label: "Academic Regulations", to: "/academics/regulations", group: "Academics" },
   { label: "Syllabus", to: "/academics/syllabus", group: "Academics" },
   { label: "Scholarships", to: "/academics/scholarships", group: "Academics" },
-  { label: "CAC", to: "/academics/cac", group: "Academics", keywords: "college academic committee" },
+  {
+    label: "CAC",
+    to: "/academics/cac",
+    group: "Academics",
+    keywords: "college academic committee",
+  },
   { label: "Time Tables", to: "/academics/time-tables", group: "Academics" },
   { label: "Downloads", to: "/academics/downloads", group: "Academics" },
 
-  { label: "Computer Science (CSE)", to: "/departments", group: "Departments", keywords: "cse software ai" },
-  { label: "Electronics (ECE)", to: "/departments", group: "Departments", keywords: "vlsi signals" },
+  {
+    label: "Computer Science (CSE)",
+    to: "/departments",
+    group: "Departments",
+    keywords: "cse software ai",
+  },
+  {
+    label: "Electronics (ECE)",
+    to: "/departments",
+    group: "Departments",
+    keywords: "vlsi signals",
+  },
   { label: "Electrical (EEE)", to: "/departments", group: "Departments", keywords: "power energy" },
   { label: "Mechanical", to: "/departments", group: "Departments", keywords: "design thermal" },
   { label: "Civil", to: "/departments", group: "Departments", keywords: "structures geotech" },
-  { label: "Information Technology", to: "/departments", group: "Departments", keywords: "it networks cloud" },
+  {
+    label: "Information Technology",
+    to: "/departments",
+    group: "Departments",
+    keywords: "it networks cloud",
+  },
   { label: "MBA", to: "/departments", group: "Departments", keywords: "management business" },
 
   { label: "Hostels", to: "/hostels", group: "Facilities", keywords: "rooms accommodation" },
   { label: "Library", to: "/library", group: "Facilities", keywords: "books reading" },
   { label: "Sports Complex", to: "/sports", group: "Facilities", keywords: "cricket gym fitness" },
-  { label: "Dispensary", to: "/dispensary", group: "Facilities", keywords: "health medical clinic" },
+  {
+    label: "Dispensary",
+    to: "/dispensary",
+    group: "Facilities",
+    keywords: "health medical clinic",
+  },
   { label: "Campus Life", to: "/campus-life", group: "Facilities", keywords: "clubs events" },
 
   { label: "NSS", to: "/nss", group: "Student Corner", keywords: "service community" },
   { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner" },
-  { label: "EDC", to: "/edc", group: "Student Corner", keywords: "entrepreneurship startup business incubation" },
-  { label: "Professional Bodies", to: "/professional-bodies", group: "Student Corner", keywords: "ieee acm csi chapters technical societies" },
-  { label: "IIPC", to: "/iipc", group: "Student Corner", keywords: "industry interaction consultancy internships" },
+  {
+    label: "EDC",
+    to: "/edc",
+    group: "Student Corner",
+    keywords: "entrepreneurship startup business incubation",
+  },
+  {
+    label: "Professional Bodies",
+    to: "/professional-bodies",
+    group: "Student Corner",
+    keywords: "ieee acm csi chapters technical societies",
+  },
+  {
+    label: "IIPC",
+    to: "/iipc",
+    group: "Student Corner",
+    keywords: "industry interaction consultancy internships",
+  },
 ];
 
 export const ACADEMICS_SUBNAV = [
@@ -342,9 +513,6 @@ export const WE_SUBNAV = [
   { label: "Recreation Club", to: "/women-empowerment/recreation" },
   { label: "Magazine", to: "/women-empowerment/magazine" },
 ];
-
-
-
 
 export const RECRUITERS_2017_18 = [
   "TCS — Tata Consultancy Service",

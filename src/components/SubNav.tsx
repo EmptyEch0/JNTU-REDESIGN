@@ -7,7 +7,7 @@ interface Item {
 
 export function SubNav({ items }: { items: Item[] }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
-  
+
   return (
     <div className="sticky top-[80px] z-40 flex justify-center w-full px-4 pointer-events-none">
       <div className="pointer-events-auto rounded-full bg-[oklch(0.16_0.04_255/0.88)] backdrop-blur-2xl shadow-[0_12px_40px_-12px_oklch(0.20_0.10_255/0.6),inset_0_1px_0_oklch(1_0_0/0.1)] border border-white/10 p-1.5 flex gap-1 items-center overflow-x-auto no-scrollbar max-w-full sm:max-w-max">

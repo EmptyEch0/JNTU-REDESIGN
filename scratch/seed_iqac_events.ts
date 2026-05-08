@@ -17,7 +17,7 @@ async function main() {
     "Involvement in reducing curricular gap and thus upgrading of UG, PG regulations",
     "Improved infrastructure facilities",
     "Improvement in number of titles and volumes in the library",
-    "Improvement in research, extension & consultancy activities"
+    "Improvement in research, extension & consultancy activities",
   ];
 
   await db.delete(iqacOutcomes);
@@ -28,8 +28,14 @@ async function main() {
 
   const events = [
     { title: "5 Day FDP on “MOODLE Learning Management System”", date: "22-07-2020 to 26-07-2020" },
-    { title: "A 15 day online FDP on “Data Science and it's Applications in STEM “", date: "07-09-2020 to 21-09-2020" },
-    { title: "Workshop on “Systems office Administration and Fundamentals”", date: "16-09-2020 to 30-09-2020(3PM to 5 PM)" }
+    {
+      title: "A 15 day online FDP on “Data Science and it's Applications in STEM “",
+      date: "07-09-2020 to 21-09-2020",
+    },
+    {
+      title: "Workshop on “Systems office Administration and Fundamentals”",
+      date: "16-09-2020 to 30-09-2020(3PM to 5 PM)",
+    },
   ];
 
   await db.delete(iqacEvents);

@@ -10,19 +10,41 @@ export const Route = createFileRoute("/admissions")({
   head: () => ({
     meta: [
       { title: "Admissions — JNTU-GV CEV" },
-      { name: "description", content: "How to apply, eligibility, fees and the admissions process at JNTU-GV CEV." },
+      {
+        name: "description",
+        content: "How to apply, eligibility, fees and the admissions process at JNTU-GV CEV.",
+      },
       { property: "og:title", content: "Admissions at JNTU-GV CEV" },
-      { property: "og:description", content: "Eligibility, process and key dates for B.Tech, M.Tech and MBA programs." },
+      {
+        property: "og:description",
+        content: "Eligibility, process and key dates for B.Tech, M.Tech and MBA programs.",
+      },
     ],
   }),
   component: AdmissionsPage,
 });
 
 const STEPS = [
-  { icon: ClipboardList, title: "Eligibility check", desc: "Confirm program-specific eligibility (rank, qualifying exam)." },
-  { icon: FileText, title: "Application", desc: "Apply through the JNTU-GV / state counselling portal." },
-  { icon: IndianRupee, title: "Fee payment", desc: "Pay tuition and hostel fees through the official portal." },
-  { icon: CheckCircle2, title: "Confirmation", desc: "Report on campus on the assigned date with documents." },
+  {
+    icon: ClipboardList,
+    title: "Eligibility check",
+    desc: "Confirm program-specific eligibility (rank, qualifying exam).",
+  },
+  {
+    icon: FileText,
+    title: "Application",
+    desc: "Apply through the JNTU-GV / state counselling portal.",
+  },
+  {
+    icon: IndianRupee,
+    title: "Fee payment",
+    desc: "Pay tuition and hostel fees through the official portal.",
+  },
+  {
+    icon: CheckCircle2,
+    title: "Confirmation",
+    desc: "Report on campus on the assigned date with documents.",
+  },
 ];
 
 function AdmissionsPage() {
@@ -32,10 +54,15 @@ function AdmissionsPage() {
         eyebrow="Admissions"
         title="Your seat at JNTU-GV CEV."
         subtitle="Admissions are governed by JNTU-GV and the state counselling process. Here's a clear overview to get you started."
-       image={heroImg}>
+        image={heroImg}
+      >
         <div className="flex gap-3 flex-wrap">
-          <Link to="/contact" className="btn-primary">Talk to admissions <ArrowRight className="h-4 w-4" /></Link>
-          <Link to="/academics" className="btn-ghost">View programs</Link>
+          <Link to="/contact" className="btn-primary">
+            Talk to admissions <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link to="/academics" className="btn-ghost">
+            View programs
+          </Link>
         </div>
       </PageHero>
       <SubNav items={STUDENT_SUBNAV} />

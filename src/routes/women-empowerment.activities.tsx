@@ -4,7 +4,17 @@ import { getWeActivities, addWeActivity, updateWeActivity, deleteWeActivity } fr
 import { useAdmin } from "@/context/AdminContext";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Search, Plus, Edit2, Trash2, Check, X, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Search,
+  Plus,
+  Edit2,
+  Trash2,
+  Check,
+  X,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 
@@ -94,10 +104,7 @@ function WEActivitiesPage() {
   // Filter items based on search term
   const filteredActivities = activities.filter((act: any) => {
     const term = searchTerm.toLowerCase();
-    return (
-      act.title.toLowerCase().includes(term) ||
-      act.date.toLowerCase().includes(term)
-    );
+    return act.title.toLowerCase().includes(term) || act.date.toLowerCase().includes(term);
   });
 
   // Pagination calculation
@@ -110,7 +117,7 @@ function WEActivitiesPage() {
       <RevealOnScroll>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-12">
           <SectionLabel eyebrow="Service History" title="WE&GC Activities" />
-          
+
           <div className="flex items-center gap-3">
             <div className="relative w-full sm:w-64">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -145,7 +152,9 @@ function WEActivitiesPage() {
             <h3 className="text-lg font-bold text-ink mb-4">Add New WE&GC Activity</h3>
             <form onSubmit={handleAddSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">S.No</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  S.No
+                </label>
                 <input
                   type="number"
                   className="w-full bg-muted/50 border border-border rounded-xl p-3 text-xs outline-none focus:border-primary"
@@ -155,7 +164,9 @@ function WEActivitiesPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Activity Title</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  Activity Title
+                </label>
                 <input
                   type="text"
                   required
@@ -166,7 +177,9 @@ function WEActivitiesPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Date</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  Date
+                </label>
                 <input
                   type="text"
                   required
@@ -203,23 +216,39 @@ function WEActivitiesPage() {
             <table className="w-full text-left border-collapse min-w-[700px]">
               <thead>
                 <tr className="bg-muted/50 border-b border-border">
-                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-16">S.No</th>
-                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-3/5">Title of the Program</th>
-                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground">Date</th>
-                  {isEditMode && <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-28 text-center">Actions</th>}
+                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-16">
+                    S.No
+                  </th>
+                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-3/5">
+                    Title of the Program
+                  </th>
+                  <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Date
+                  </th>
+                  {isEditMode && (
+                    <th className="px-6 py-4.5 text-xs font-bold uppercase tracking-wider text-muted-foreground w-28 text-center">
+                      Actions
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={isEditMode ? 4 : 3} className="px-6 py-16 text-center text-muted-foreground">
+                    <td
+                      colSpan={isEditMode ? 4 : 3}
+                      className="px-6 py-16 text-center text-muted-foreground"
+                    >
                       <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full mx-auto" />
                       <span className="block mt-2 text-xs">Loading activities...</span>
                     </td>
                   </tr>
                 ) : filteredActivities.length === 0 ? (
                   <tr>
-                    <td colSpan={isEditMode ? 4 : 3} className="px-6 py-12 text-center text-xs text-muted-foreground font-medium">
+                    <td
+                      colSpan={isEditMode ? 4 : 3}
+                      className="px-6 py-12 text-center text-xs text-muted-foreground font-medium"
+                    >
                       No activities found matching your search.
                     </td>
                   </tr>
@@ -227,7 +256,10 @@ function WEActivitiesPage() {
                   paginatedActivities.map((act: any) => {
                     const isEditing = editingId === act.id;
                     return (
-                      <tr key={act.id} className="group hover:bg-primary/[0.01] transition-colors align-middle">
+                      <tr
+                        key={act.id}
+                        className="group hover:bg-primary/[0.01] transition-colors align-middle"
+                      >
                         {/* S.No */}
                         <td className="px-6 py-4.5 text-xs font-semibold text-muted-foreground">
                           {isEditing ? (
@@ -235,7 +267,9 @@ function WEActivitiesPage() {
                               type="number"
                               className="w-full bg-primary/5 border border-primary/20 rounded-md p-1.5 text-xs font-semibold text-ink outline-none"
                               value={editForm.sNo}
-                              onChange={(e) => setEditForm({ ...editForm, sNo: parseInt(e.target.value) || 0 })}
+                              onChange={(e) =>
+                                setEditForm({ ...editForm, sNo: parseInt(e.target.value) || 0 })
+                              }
                             />
                           ) : (
                             act.sNo
@@ -333,9 +367,10 @@ function WEActivitiesPage() {
               <span className="font-semibold text-ink">
                 {Math.min(startIndex + itemsPerPage, filteredActivities.length)}
               </span>{" "}
-              of <span className="font-semibold text-ink">{filteredActivities.length}</span> activities
+              of <span className="font-semibold text-ink">{filteredActivities.length}</span>{" "}
+              activities
             </p>
-            
+
             <div className="flex items-center gap-2">
               <button
                 disabled={currentPage === 1}

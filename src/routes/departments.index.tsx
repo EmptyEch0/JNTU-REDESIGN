@@ -33,14 +33,14 @@ export const getDepartmentBySlug = createServerFn({ method: "GET" })
   .inputValidator((slug: string) => slug) // This tells TS that 'data' is a string
   .handler(async ({ data }) => {
     const { sql } = await import("@/lib/db");
-    
+
     // Now TS knows 'data' is a string and not 'undefined'
     const [department] = await sql`
       SELECT * FROM departments WHERE slug = ${data}
     `;
-    
+
     return department || null;
-  })
+  });
 
 export const Route = createFileRoute("/departments/")({
   head: () => ({
@@ -48,7 +48,10 @@ export const Route = createFileRoute("/departments/")({
       { title: "Departments — JNTU-GV CEV" },
       { name: "description", content: "Engineering and management departments at JNTU-GV CEV." },
       { property: "og:title", content: "Departments at JNTU-GV CEV" },
-      { property: "og:description", content: "CSE, ECE, EEE, Mech, Civil, IT and MBA — meet the people and programs." },
+      {
+        property: "og:description",
+        content: "CSE, ECE, EEE, Mech, Civil, IT and MBA — meet the people and programs.",
+      },
     ],
   }),
   component: DepartmentsPage,
@@ -81,7 +84,10 @@ function DepartmentsPage() {
           {isPending ? (
             <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, idx) => (
-                <div key={idx} className="h-80 animate-pulse rounded-3xl border border-border bg-muted/30" />
+                <div
+                  key={idx}
+                  className="h-80 animate-pulse rounded-3xl border border-border bg-muted/30"
+                />
               ))}
             </div>
           ) : null}
@@ -118,7 +124,7 @@ function DepartmentsPage() {
                           className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                        
+
                         <div className="relative flex h-full flex-col justify-between p-5 text-white md:p-6">
                           <div>
                             <span className="inline-flex rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black">

@@ -10,10 +10,13 @@ async function main() {
     slug: "iqac-coordinator",
     name: "Dr. T. S. N. Murthy",
     designation: "IQAC Coordinator",
-    image: "https://jntugvcev.edu.in/wp-content/uploads/2024/01/WhatsApp-Image-2024-01-30-at-10.56.26-1.jpeg",
+    image:
+      "https://jntugvcev.edu.in/wp-content/uploads/2024/01/WhatsApp-Image-2024-01-30-at-10.56.26-1.jpeg",
     email: "iqac@jntugvcev.edu.in",
-    quote: "To ensure quality culture as the prime concern for the Higher Education Institutions through institutionalizing and internalizing all the initiatives taken with internal and external support.",
-    message: "The IQAC is meant for planning, guiding, and monitoring Quality Assurance (QA) and Quality Enhancement (QE) activities of the University. It channelizes and systematizes institutional efforts towards academic excellence.",
+    quote:
+      "To ensure quality culture as the prime concern for the Higher Education Institutions through institutionalizing and internalizing all the initiatives taken with internal and external support.",
+    message:
+      "The IQAC is meant for planning, guiding, and monitoring Quality Assurance (QA) and Quality Enhancement (QE) activities of the University. It channelizes and systematizes institutional efforts towards academic excellence.",
     profile: `### About IQACELL
 The IQAC is meant for planning, guiding, and monitoring Quality Assurance (QA) and Quality Enhancement (QE) activities of the University. It channelizes and systematizes institutional efforts towards academic excellence. It is not a hierarchical or record-keeping body, but a facilitative and participative organ.
 
@@ -50,7 +53,11 @@ The IQAC is meant for planning, guiding, and monitoring Quality Assurance (QA) a
 IQAC submits the Annual Quality Assurance Report (AQAR) to NAAC annually. AQAR is prepared based on quality benchmarks, and interaction with quality assurance bodies is maintained.`,
   };
 
-  const existing = await db.select().from(leadership).where(eq(leadership.slug, data.slug)).limit(1);
+  const existing = await db
+    .select()
+    .from(leadership)
+    .where(eq(leadership.slug, data.slug))
+    .limit(1);
 
   if (existing.length > 0) {
     await db.update(leadership).set(data).where(eq(leadership.slug, data.slug));

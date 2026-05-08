@@ -7,7 +7,7 @@ async function main() {
   console.log("🚀 Seeding Principal's office staff...");
 
   const slug = "principal";
-  
+
   // Clear existing staff for this slug to avoid duplicates
   await db.delete(leadershipStaff).where(eq(leadershipStaff.leadershipSlug, slug));
 

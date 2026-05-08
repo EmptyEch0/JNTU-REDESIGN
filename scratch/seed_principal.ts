@@ -12,8 +12,10 @@ async function main() {
     designation: "Professor & Principal i/c",
     image: "/Principal.png",
     email: "principal@jntugvcev.edu.in",
-    quote: "JNTU-GV University College of Engineering, Vizianagaram is laureled as one of the best Engineering Colleges in the state of Andhra Pradesh.",
-    message: "JNTU-GV University College of Engineering, Vizianagaram is laureled as one of the best Engineering Colleges in the state of Andhra Pradesh. Established in 2007 and its commitment to excellence is not restricted to the high calibre of its faculty but ensures that the students admitted are exposed to strong graduate employability skills in addition to conceptual skills in Engineering and technology. In recent times, the institution is entering into collaborations with technology giants to share the expertize and find solutions to technological problems. In the coming years, the institution aims to be counted among the best institutions in India. The institution will continue to build its strength by developing world class teaching programmes at postgraduate and undergraduate levels in addition to pursuing research in cutting edge technologies. Further, we are conscious of our social responsibility and will continue to carry out activities with direct social impact, such as school and undergraduate teachers training, development and dissemination of sustainable technologies, and research with direct relevance to society such as climate change, healthcare, water resources management, and renewable energy.",
+    quote:
+      "JNTU-GV University College of Engineering, Vizianagaram is laureled as one of the best Engineering Colleges in the state of Andhra Pradesh.",
+    message:
+      "JNTU-GV University College of Engineering, Vizianagaram is laureled as one of the best Engineering Colleges in the state of Andhra Pradesh. Established in 2007 and its commitment to excellence is not restricted to the high calibre of its faculty but ensures that the students admitted are exposed to strong graduate employability skills in addition to conceptual skills in Engineering and technology. In recent times, the institution is entering into collaborations with technology giants to share the expertize and find solutions to technological problems. In the coming years, the institution aims to be counted among the best institutions in India. The institution will continue to build its strength by developing world class teaching programmes at postgraduate and undergraduate levels in addition to pursuing research in cutting edge technologies. Further, we are conscious of our social responsibility and will continue to carry out activities with direct social impact, such as school and undergraduate teachers training, development and dissemination of sustainable technologies, and research with direct relevance to society such as climate change, healthcare, water resources management, and renewable energy.",
     profile: `Dr. K. Chandra Bhushana Rao
 Principal, JNTU-GV College of Engineering Vizianagaram
 Professor, Department of Computer Science and Engineering
@@ -64,11 +66,15 @@ He served as Assistant Professor, Associate Professor, Professor, HOD, Dean, and
 – Initiated MoU with TCS under TAAP as TPO (2015).
 – Executed 3 MoUs for ECE Department (2020-21).
 – Pioneered mobile-based Virtual Labs training.
-– Delivered 23 webinars during 2020-21 lockdown as a resource person.`
+– Delivered 23 webinars during 2020-21 lockdown as a resource person.`,
   };
 
   // Upsert principal data
-  const existing = await db.select().from(leadership).where(eq(leadership.slug, "principal")).limit(1);
+  const existing = await db
+    .select()
+    .from(leadership)
+    .where(eq(leadership.slug, "principal"))
+    .limit(1);
   if (existing.length > 0) {
     await db.update(leadership).set(principalData).where(eq(leadership.slug, "principal"));
     console.log("✅ Principal data updated.");

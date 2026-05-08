@@ -9,21 +9,24 @@ import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Save, X } from "lucide-react";
-import { 
-  getDepartmentsWithAreas, 
-  addDepartment, 
-  updateDepartment, 
-  deleteDepartment, 
-  addArea, 
-  updateArea, 
-  deleteArea 
+import {
+  getDepartmentsWithAreas,
+  addDepartment,
+  updateDepartment,
+  deleteDepartment,
+  addArea,
+  updateArea,
+  deleteArea,
 } from "@/funcs/rd";
 
 export const Route = createFileRoute("/rd-cell/areas")({
   head: () => ({
     meta: [
       { title: "Areas of Research — R&D Cell — JNTU-GV CEV" },
-      { name: "description", content: "Department-wise research interests across engineering and sciences." },
+      {
+        name: "description",
+        content: "Department-wise research interests across engineering and sciences.",
+      },
     ],
   }),
   component: AreasPage,
@@ -43,22 +46,22 @@ function AreasPage() {
   });
 
   const handleDeptChange = (id: number, name: string) => {
-    setEditedDepts(prev => ({ ...prev, [id]: { ...prev[id], name } }));
+    setEditedDepts((prev) => ({ ...prev, [id]: { ...prev[id], name } }));
   };
 
   const handleAreaChange = (id: number, area: string) => {
-    setEditedAreas(prev => ({ ...prev, [id]: { ...prev[id], area } }));
+    setEditedAreas((prev) => ({ ...prev, [id]: { ...prev[id], area } }));
   };
 
   const handleAddArea = (deptId: number) => {
-    setNewAreas(prev => ({
+    setNewAreas((prev) => ({
       ...prev,
-      [deptId]: [...(prev[deptId] || []), ""]
+      [deptId]: [...(prev[deptId] || []), ""],
     }));
   };
 
   const handleNewAreaChange = (deptId: number, index: number, value: string) => {
-    setNewAreas(prev => {
+    setNewAreas((prev) => {
       const updated = [...(prev[deptId] || [])];
       updated[index] = value;
       return { ...prev, [deptId]: updated };
@@ -66,7 +69,7 @@ function AreasPage() {
   };
 
   const handleRemoveNewArea = (deptId: number, index: number) => {
-    setNewAreas(prev => {
+    setNewAreas((prev) => {
       const updated = [...(prev[deptId] || [])];
       updated.splice(index, 1);
       return { ...prev, [deptId]: updated };
@@ -75,17 +78,29 @@ function AreasPage() {
 
   const saveAll = async () => {
     const promises = [
-      ...Object.entries(editedDepts).map(([id, data]) => updateDepartment({ data: { id: parseInt(id), ...data } })),
-      ...Object.entries(editedAreas).map(([id, data]) => updateArea({ data: { id: parseInt(id), ...data } })),
-      ...Object.entries(newAreas).flatMap(([deptId, areas]) => 
-        areas.filter(a => a.trim()).map(a => addArea({ data: { deptId: parseInt(deptId), area: a } }))
+      ...Object.entries(editedDepts).map(([id, data]) =>
+        updateDepartment({ data: { id: parseInt(id), ...data } }),
       ),
-      ...newDepts.filter(d => d.name.trim()).map(async (d) => {
-        const [inserted] = await addDepartment({ data: { name: d.name } });
-        if (d.areas.length > 0) {
-          await Promise.all(d.areas.filter(a => a.trim()).map(a => addArea({ data: { deptId: inserted.id, area: a } })));
-        }
-      })
+      ...Object.entries(editedAreas).map(([id, data]) =>
+        updateArea({ data: { id: parseInt(id), ...data } }),
+      ),
+      ...Object.entries(newAreas).flatMap(([deptId, areas]) =>
+        areas
+          .filter((a) => a.trim())
+          .map((a) => addArea({ data: { deptId: parseInt(deptId), area: a } })),
+      ),
+      ...newDepts
+        .filter((d) => d.name.trim())
+        .map(async (d) => {
+          const [inserted] = await addDepartment({ data: { name: d.name } });
+          if (d.areas.length > 0) {
+            await Promise.all(
+              d.areas
+                .filter((a) => a.trim())
+                .map((a) => addArea({ data: { deptId: inserted.id, area: a } })),
+            );
+          }
+        }),
     ];
 
     if (promises.length === 0) return;
@@ -100,19 +115,20 @@ function AreasPage() {
         setNewAreas({});
         return "All changes saved!";
       },
-      error: "Failed to save changes."
+      error: "Failed to save changes.",
     });
   };
 
   const handleDeleteDept = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this department and all its research areas?")) return;
+    if (!confirm("Are you sure you want to delete this department and all its research areas?"))
+      return;
     toast.promise(deleteDepartment({ data: { id } }), {
       loading: "Deleting department...",
       success: () => {
         queryClient.invalidateQueries({ queryKey: ["rdDepartments"] });
         return "Department deleted!";
       },
-      error: "Failed to delete department."
+      error: "Failed to delete department.",
     });
   };
 
@@ -123,19 +139,24 @@ function AreasPage() {
         queryClient.invalidateQueries({ queryKey: ["rdDepartments"] });
         return "Area deleted!";
       },
-      error: "Failed to delete area."
+      error: "Failed to delete area.",
     });
   };
 
   return (
     <>
-      <PageHero eyebrow="R&D Cell" title="Areas of Research" subtitle="Department-wise interests — from power systems to deep learning to materials science." image={labImg} />
+      <PageHero
+        eyebrow="R&D Cell"
+        title="Areas of Research"
+        subtitle="Department-wise interests — from power systems to deep learning to materials science."
+        image={labImg}
+      />
       <SubNav items={RD_SUBNAV} />
 
       <section className="py-20 container-narrow space-y-16 relative">
         {isLoading ? (
           <div className="flex flex-col gap-12 animate-pulse">
-            {[1, 2, 3].map(i => (
+            {[1, 2, 3].map((i) => (
               <div key={i} className="space-y-4">
                 <div className="h-4 w-24 bg-card rounded" />
                 <div className="h-8 w-3/4 bg-card rounded" />
@@ -161,11 +182,13 @@ function AreasPage() {
                           className="text-display text-2xl md:text-3xl text-ink mt-1 bg-transparent border-b border-dashed border-primary/30 focus:border-primary outline-none w-full"
                         />
                       ) : (
-                        <h2 className="text-display text-2xl md:text-3xl text-ink mt-1">{d.name}</h2>
+                        <h2 className="text-display text-2xl md:text-3xl text-ink mt-1">
+                          {d.name}
+                        </h2>
                       )}
                     </div>
                     {isEditMode && (
-                      <button 
+                      <button
                         onClick={() => handleDeleteDept(d.id)}
                         className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                       >
@@ -184,7 +207,7 @@ function AreasPage() {
                               onChange={(e) => handleAreaChange(a.id, e.target.value)}
                               className="bg-transparent text-sm text-ink outline-none min-w-[120px]"
                             />
-                            <button 
+                            <button
                               onClick={() => handleDeleteArea(a.id)}
                               className="text-red-400 hover:text-red-600 transition-colors"
                             >
@@ -198,10 +221,13 @@ function AreasPage() {
                         )}
                       </div>
                     ))}
-                    
+
                     {/* New areas for existing dept */}
                     {newAreas[d.id]?.map((a, i) => (
-                      <div key={i} className="flex items-center gap-1 px-4 py-2 rounded-full bg-primary/5 border border-primary/50 border-dashed">
+                      <div
+                        key={i}
+                        className="flex items-center gap-1 px-4 py-2 rounded-full bg-primary/5 border border-primary/50 border-dashed"
+                      >
                         <input
                           autoFocus
                           placeholder="New area..."
@@ -209,7 +235,10 @@ function AreasPage() {
                           onChange={(e) => handleNewAreaChange(d.id, i, e.target.value)}
                           className="bg-transparent text-sm text-ink outline-none min-w-[120px]"
                         />
-                        <button onClick={() => handleRemoveNewArea(d.id, i)} className="text-muted-foreground hover:text-ink">
+                        <button
+                          onClick={() => handleRemoveNewArea(d.id, i)}
+                          className="text-muted-foreground hover:text-ink"
+                        >
                           <X className="h-3 w-3" />
                         </button>
                       </div>
@@ -230,7 +259,10 @@ function AreasPage() {
 
             {/* New Departments */}
             {newDepts.map((nd, ni) => (
-              <div key={ni} className="p-6 rounded-2xl border-2 border-dashed border-primary/20 bg-primary/5 animate-in fade-in slide-in-from-bottom-4">
+              <div
+                key={ni}
+                className="p-6 rounded-2xl border-2 border-dashed border-primary/20 bg-primary/5 animate-in fade-in slide-in-from-bottom-4"
+              >
                 <div className="flex justify-between">
                   <div className="flex-1">
                     <div className="text-eyebrow text-primary/60">New Department</div>
@@ -246,8 +278,8 @@ function AreasPage() {
                       className="text-display text-2xl md:text-3xl text-ink mt-1 bg-transparent border-b border-primary/30 focus:border-primary outline-none w-full"
                     />
                   </div>
-                  <button 
-                    onClick={() => setNewDepts(prev => prev.filter((_, i) => i !== ni))}
+                  <button
+                    onClick={() => setNewDepts((prev) => prev.filter((_, i) => i !== ni))}
                     className="p-2 text-muted-foreground hover:text-red-500 transition-colors"
                   >
                     <X className="h-6 w-6" />
@@ -259,7 +291,7 @@ function AreasPage() {
             {isEditMode && (
               <div className="flex flex-col items-center gap-6 pt-8 border-t border-border/50">
                 <button
-                  onClick={() => setNewDepts(prev => [...prev, { name: "", areas: [] }])}
+                  onClick={() => setNewDepts((prev) => [...prev, { name: "", areas: [] }])}
                   className="px-8 py-4 rounded-2xl border-2 border-dashed border-primary/30 text-primary font-medium hover:bg-primary/5 hover:border-primary/50 transition-all flex items-center gap-2"
                 >
                   <Plus className="h-5 w-5" /> Add New Department
@@ -271,17 +303,21 @@ function AreasPage() {
       </section>
 
       {/* Save FAB */}
-      {isEditMode && (Object.keys(editedDepts).length > 0 || Object.keys(editedAreas).length > 0 || Object.keys(newAreas).length > 0 || newDepts.length > 0) && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in slide-in-from-bottom-4">
-          <button
-            onClick={saveAll}
-            className="flex items-center gap-2 px-6 py-4 rounded-full bg-primary text-white shadow-2xl hover:scale-105 active:scale-95 transition-all font-semibold"
-          >
-            <Save className="h-5 w-5" />
-            Save All Changes
-          </button>
-        </div>
-      )}
+      {isEditMode &&
+        (Object.keys(editedDepts).length > 0 ||
+          Object.keys(editedAreas).length > 0 ||
+          Object.keys(newAreas).length > 0 ||
+          newDepts.length > 0) && (
+          <div className="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in slide-in-from-bottom-4">
+            <button
+              onClick={saveAll}
+              className="flex items-center gap-2 px-6 py-4 rounded-full bg-primary text-white shadow-2xl hover:scale-105 active:scale-95 transition-all font-semibold"
+            >
+              <Save className="h-5 w-5" />
+              Save All Changes
+            </button>
+          </div>
+        )}
     </>
   );
 }

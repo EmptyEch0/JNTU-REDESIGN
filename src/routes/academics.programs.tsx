@@ -10,7 +10,10 @@ export const Route = createFileRoute("/academics/programs")({
   head: () => ({
     meta: [
       { title: "Programs Offered — Academics — JNTU-GV CEV" },
-      { name: "description", content: "Undergraduate, postgraduate and doctoral programs offered at JNTU-GV CEV." },
+      {
+        name: "description",
+        content: "Undergraduate, postgraduate and doctoral programs offered at JNTU-GV CEV.",
+      },
     ],
   }),
   component: ProgramsPage,
@@ -44,7 +47,12 @@ const PHD = [
 function ProgramsPage() {
   return (
     <>
-      <PageHero eyebrow="Academics" title="Programs Offered" subtitle="A full ladder from undergraduate to doctoral, taught by research-active faculty." image={campusImg} />
+      <PageHero
+        eyebrow="Academics"
+        title="Programs Offered"
+        subtitle="A full ladder from undergraduate to doctoral, taught by research-active faculty."
+        image={campusImg}
+      />
       <SubNav items={ACADEMICS_SUBNAV} />
 
       <section className="py-20 container-narrow">
@@ -69,7 +77,9 @@ function ProgramsPage() {
         <div className="container-narrow">
           <RevealOnScroll>
             <div className="text-eyebrow">Postgraduate</div>
-            <h2 className="text-display text-3xl md:text-4xl mt-2 text-ink">M.Tech & MBA — 2 years</h2>
+            <h2 className="text-display text-3xl md:text-4xl mt-2 text-ink">
+              M.Tech & MBA — 2 years
+            </h2>
           </RevealOnScroll>
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {PG.map((p, i) => (
@@ -88,7 +98,9 @@ function ProgramsPage() {
       <section className="py-20 container-narrow">
         <RevealOnScroll>
           <div className="text-eyebrow">Doctoral</div>
-          <h2 className="text-display text-3xl md:text-4xl mt-2 text-ink">Ph.D — Research streams</h2>
+          <h2 className="text-display text-3xl md:text-4xl mt-2 text-ink">
+            Ph.D — Research streams
+          </h2>
         </RevealOnScroll>
         <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {PHD.map((d, i) => (

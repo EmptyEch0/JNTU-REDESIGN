@@ -10,27 +10,62 @@ export const Route = createFileRoute("/notices")({
   head: () => ({
     meta: [
       { title: "Notices — JNTU-GV CEV" },
-      { name: "description", content: "Latest announcements, circulars and notices from JNTU-GV CEV." },
+      {
+        name: "description",
+        content: "Latest announcements, circulars and notices from JNTU-GV CEV.",
+      },
       { property: "og:title", content: "Notices — JNTU-GV CEV" },
-      { property: "og:description", content: "Stay updated with academic, hostel and event notices." },
+      {
+        property: "og:description",
+        content: "Stay updated with academic, hostel and event notices.",
+      },
     ],
   }),
   component: NoticesPage,
 });
 
 const NOTICES = [
-  { date: "29 Apr 2026", tag: "Academic", title: "End-semester examinations schedule released for B.Tech IV-II." },
-  { date: "24 Apr 2026", tag: "Placements", title: "Pre-placement talks for Capgemini and Hexaware on 02 May." },
-  { date: "18 Apr 2026", tag: "Hostel", title: "Vacation guidelines for residents staying through summer." },
-  { date: "12 Apr 2026", tag: "R&D", title: "Call for proposals — UGC minor research grants 2026." },
-  { date: "05 Apr 2026", tag: "Event", title: "Annual cultural fest 'Spandana 2026' opens for registrations." },
-  { date: "28 Mar 2026", tag: "General", title: "Library timings extended during examination weeks." },
+  {
+    date: "29 Apr 2026",
+    tag: "Academic",
+    title: "End-semester examinations schedule released for B.Tech IV-II.",
+  },
+  {
+    date: "24 Apr 2026",
+    tag: "Placements",
+    title: "Pre-placement talks for Capgemini and Hexaware on 02 May.",
+  },
+  {
+    date: "18 Apr 2026",
+    tag: "Hostel",
+    title: "Vacation guidelines for residents staying through summer.",
+  },
+  {
+    date: "12 Apr 2026",
+    tag: "R&D",
+    title: "Call for proposals — UGC minor research grants 2026.",
+  },
+  {
+    date: "05 Apr 2026",
+    tag: "Event",
+    title: "Annual cultural fest 'Spandana 2026' opens for registrations.",
+  },
+  {
+    date: "28 Mar 2026",
+    tag: "General",
+    title: "Library timings extended during examination weeks.",
+  },
 ];
 
 function NoticesPage() {
   return (
     <>
-      <PageHero eyebrow="Announcements" title="Notices, circulars & updates." subtitle="The latest from the office of the Principal, departments and student cells." image={libraryImg} />
+      <PageHero
+        eyebrow="Announcements"
+        title="Notices, circulars & updates."
+        subtitle="The latest from the office of the Principal, departments and student cells."
+        image={libraryImg}
+      />
       <SubNav items={STUDENT_SUBNAV} />
 
       <section className="py-20 container-narrow">

@@ -1,11 +1,17 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import {
+  Outlet,
+  Link,
+  createRootRoute,
+  HeadContent,
+  Scripts,
+  useRouterState,
+} from "@tanstack/react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
 import appCss from "../styles.css?url";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Footer } from "@/components/Footer";
 import { getQueryClient } from "@/lib/query-client";
 import { AdminProvider, useAdmin } from "@/context/AdminContext";
-
 
 function NotFoundComponent() {
   return (
@@ -16,7 +22,9 @@ function NotFoundComponent() {
         <p className="mt-3 text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.
         </p>
-        <Link to="/" className="btn-primary mt-6 inline-flex">Back home</Link>
+        <Link to="/" className="btn-primary mt-6 inline-flex">
+          Back home
+        </Link>
       </div>
     </div>
   );
@@ -28,22 +36,39 @@ interface MyRootContext {
 // 2. The most stable way to define the route with types
 export const Route = createRootRoute({
   // This "context" function tells the router what to expect
-  context: () => ({}) as MyRootContext, 
+  context: () => ({}) as MyRootContext,
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "JNTU-GV College of Engineering Vizianagaram" },
-      { name: "description", content: "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV." },
+      {
+        name: "description",
+        content: "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV.",
+      },
       { name: "author", content: "JNTU-GV CEV" },
       { property: "og:title", content: "JNTU-GV College of Engineering Vizianagaram" },
-      { property: "og:description", content: "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV." },
+      {
+        property: "og:description",
+        content: "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "JNTU-GV College of Engineering Vizianagaram" },
-      { name: "twitter:description", content: "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/456b7283-b8f9-4b85-ab44-c95de54f717f/id-preview-dd487b58--97bf9169-b7f5-4566-9e17-2db61f222788.lovable.app-1777518152701.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/456b7283-b8f9-4b85-ab44-c95de54f717f/id-preview-dd487b58--97bf9169-b7f5-4566-9e17-2db61f222788.lovable.app-1777518152701.png" },
+      {
+        name: "twitter:description",
+        content: "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/456b7283-b8f9-4b85-ab44-c95de54f717f/id-preview-dd487b58--97bf9169-b7f5-4566-9e17-2db61f222788.lovable.app-1777518152701.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/456b7283-b8f9-4b85-ab44-c95de54f717f/id-preview-dd487b58--97bf9169-b7f5-4566-9e17-2db61f222788.lovable.app-1777518152701.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -81,15 +106,11 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  // 1. Get the current path for animations
-  const path = useRouterState({ select: (s) => s.location.pathname });
-  
-  // 2. Get the queryClient from the context (or the helper function)
-  const { queryClient } = Route.useRouteContext();
+  // Use a type assertion 'as MyRootContext' to force TypeScript to recognize queryClient
+  const { queryClient } = Route.useRouteContext() as MyRootContext;
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* AdminProvider allows the AdminContent to check if a user is logged in */}
       <AdminProvider>
         <AdminContent />
       </AdminProvider>
@@ -107,26 +128,35 @@ function AdminContent() {
         <div className="fixed top-0 left-0 right-0 h-12 bg-black text-white px-6 flex items-center justify-between z-[100] shadow-lg">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Admin</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
+                Admin
+              </span>
               <span className="text-xs font-medium">Dashboard</span>
             </div>
-            
+
             <button
               onClick={toggleEditMode}
               className={`flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${
-                isEditMode 
-                ? "bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]" 
-                : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500"
+                isEditMode
+                  ? "bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]"
+                  : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500"
               }`}
             >
-              <div className={`w-1.5 h-1.5 rounded-full ${isEditMode ? "bg-primary animate-pulse" : "bg-zinc-600"}`} />
+              <div
+                className={`w-1.5 h-1.5 rounded-full ${isEditMode ? "bg-primary animate-pulse" : "bg-zinc-600"}`}
+              />
               {isEditMode ? "Editing Enabled" : "Enable Edit Mode"}
             </button>
           </div>
 
           <div className="flex items-center gap-6">
-            <Link to="/admin/placements" className="text-[11px] font-medium hover:text-primary transition-colors">Manage Placements</Link>
-            <button 
+            <Link
+              to="/admin/placements"
+              className="text-[11px] font-medium hover:text-primary transition-colors"
+            >
+              Manage Placements
+            </Link>
+            <button
               onClick={logout}
               className="text-[11px] font-medium text-zinc-400 hover:text-white transition-colors"
             >

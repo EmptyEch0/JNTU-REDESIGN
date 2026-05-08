@@ -47,7 +47,9 @@ export function HeroSlideshow({
         ))}
       </div>
 
-      {overlay && <div className="absolute inset-0 pointer-events-none" style={{ background: overlay }} />}
+      {overlay && (
+        <div className="absolute inset-0 pointer-events-none" style={{ background: overlay }} />
+      )}
 
       {/* Slide indicators */}
       {images.length > 1 && (

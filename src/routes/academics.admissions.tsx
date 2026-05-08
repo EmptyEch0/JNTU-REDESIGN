@@ -10,7 +10,10 @@ export const Route = createFileRoute("/academics/admissions")({
   head: () => ({
     meta: [
       { title: "Admissions — Academics — JNTU-GV CEV" },
-      { name: "description", content: "Admission process for B.Tech, M.Tech, MBA and Ph.D at JNTU-GV CEV." },
+      {
+        name: "description",
+        content: "Admission process for B.Tech, M.Tech, MBA and Ph.D at JNTU-GV CEV.",
+      },
     ],
   }),
   component: AdmissionsPage,
@@ -34,7 +37,12 @@ const STEPS = [
 function AdmissionsPage() {
   return (
     <>
-      <PageHero eyebrow="Academics" title="Admissions" subtitle="A clear, counselling-based admission process aligned with APSCHE and JNTU-GV norms." image={img} />
+      <PageHero
+        eyebrow="Academics"
+        title="Admissions"
+        subtitle="A clear, counselling-based admission process aligned with APSCHE and JNTU-GV norms."
+        image={img}
+      />
       <SubNav items={ACADEMICS_SUBNAV} />
 
       <section className="py-20 container-narrow grid lg:grid-cols-2 gap-10">
@@ -58,14 +66,21 @@ function AdmissionsPage() {
           <h2 className="text-display text-3xl md:text-4xl mt-2 text-ink">The process</h2>
           <ol className="mt-8 space-y-3">
             {STEPS.map((s, i) => (
-              <li key={s} className="flex gap-4 p-4 rounded-xl bg-card border border-border hover-lift">
-                <div className="h-8 w-8 rounded-lg bg-[var(--gradient-royal)] text-white grid place-items-center shrink-0 font-semibold">{i + 1}</div>
+              <li
+                key={s}
+                className="flex gap-4 p-4 rounded-xl bg-card border border-border hover-lift"
+              >
+                <div className="h-8 w-8 rounded-lg bg-[var(--gradient-royal)] text-white grid place-items-center shrink-0 font-semibold">
+                  {i + 1}
+                </div>
                 <span className="text-ink">{s}</span>
               </li>
             ))}
           </ol>
           <div className="mt-8">
-            <Link to="/contact" className="btn-primary">Talk to admissions <ArrowRight className="h-4 w-4" /></Link>
+            <Link to="/contact" className="btn-primary">
+              Talk to admissions <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </RevealOnScroll>
       </section>

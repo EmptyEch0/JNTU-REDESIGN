@@ -13,7 +13,8 @@ async function main() {
     image: "https://via.placeholder.com/800x1000?text=Vice+Principal", // Placeholder for now
     email: "viceprincipal@jntugvcev.edu.in",
     quote: "Dedicated to fostering academic excellence and scientific inquiry at JNTU-GV.",
-    message: "Prof. G. J. Naga Raju is presently working as Professor in the Department of Physics, JNTU-GV, CEV, Vizianagaram. He brings extensive experience in academic administration and scientific research to the office of the Vice Principal.",
+    message:
+      "Prof. G. J. Naga Raju is presently working as Professor in the Department of Physics, JNTU-GV, CEV, Vizianagaram. He brings extensive experience in academic administration and scientific research to the office of the Vice Principal.",
     profile: `Prof. G. J. Naga Raju
 Ph.D
 
@@ -27,7 +28,11 @@ Contact:
 Official Email: viceprincipal@jntugvcev.edu.in`,
   };
 
-  const existing = await db.select().from(leadership).where(eq(leadership.slug, data.slug)).limit(1);
+  const existing = await db
+    .select()
+    .from(leadership)
+    .where(eq(leadership.slug, data.slug))
+    .limit(1);
 
   if (existing.length > 0) {
     await db.update(leadership).set(data).where(eq(leadership.slug, data.slug));

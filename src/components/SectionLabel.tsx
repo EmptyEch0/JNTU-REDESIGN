@@ -14,7 +14,9 @@ export function SectionLabel({ eyebrow, title, subtitle, align = "left", light }
         {title}
       </h2>
       {subtitle && (
-        <p className={`mt-4 text-base md:text-lg ${light ? "text-white/75" : "text-muted-foreground"}`}>
+        <p
+          className={`mt-4 text-base md:text-lg ${light ? "text-white/75" : "text-muted-foreground"}`}
+        >
           {subtitle}
         </p>
       )}

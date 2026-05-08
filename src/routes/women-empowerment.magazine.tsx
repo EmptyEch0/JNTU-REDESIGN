@@ -92,7 +92,7 @@ function WEMagazinePage() {
       <RevealOnScroll>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-12">
           <SectionLabel eyebrow="Publications" title="Magazine - Yuthika" />
-          
+
           {isEditMode && (
             <button
               onClick={() => setShowAddForm(true)}
@@ -111,7 +111,9 @@ function WEMagazinePage() {
             <h3 className="text-lg font-bold text-ink mb-4">Add New Yuthika Issue</h3>
             <form onSubmit={handleAddSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Issue Title</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  Issue Title
+                </label>
                 <input
                   type="text"
                   required
@@ -122,7 +124,9 @@ function WEMagazinePage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Document/Drive Link</label>
+                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                  Document/Drive Link
+                </label>
                 <input
                   type="url"
                   required
@@ -168,7 +172,6 @@ function WEMagazinePage() {
             return (
               <RevealOnScroll key={mag.id} delay={idx * 50}>
                 <div className="bg-card border border-border rounded-[24px] p-6 shadow-sm hover-lift flex flex-col justify-between h-full relative group/mag">
-                  
                   {/* Inline admin controls */}
                   {isEditMode && !isEditing && (
                     <div className="absolute top-6 right-6 flex gap-1.5 opacity-0 group-hover/mag:opacity-100 transition-opacity">
@@ -256,7 +259,6 @@ function WEMagazinePage() {
                       </>
                     )}
                   </div>
-
                 </div>
               </RevealOnScroll>
             );

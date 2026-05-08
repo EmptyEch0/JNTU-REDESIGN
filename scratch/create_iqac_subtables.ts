@@ -3,9 +3,9 @@ import postgres from "postgres";
 
 async function main() {
   const sql = postgres(process.env.DATABASE_URL!);
-  
+
   console.log("🔨 Creating IQAC tables manually...");
-  
+
   await sql`
     CREATE TABLE IF NOT EXISTS iqac_composition (
       id SERIAL PRIMARY KEY,
@@ -24,7 +24,7 @@ async function main() {
       link TEXT NOT NULL
     );
   `;
-  
+
   console.log("✅ Tables created.");
   process.exit(0);
 }

@@ -10,25 +10,62 @@ export const Route = createFileRoute("/academics/")({
   head: () => ({
     meta: [
       { title: "Academics — JNTU-GV CEV" },
-      { name: "description", content: "Programs, curriculum, calendar and examinations at JNTU-GV CEV." },
+      {
+        name: "description",
+        content: "Programs, curriculum, calendar and examinations at JNTU-GV CEV.",
+      },
       { property: "og:title", content: "Academics at JNTU-GV CEV" },
-      { property: "og:description", content: "UG, PG and doctoral programs across seven engineering disciplines." },
+      {
+        property: "og:description",
+        content: "UG, PG and doctoral programs across seven engineering disciplines.",
+      },
     ],
   }),
   component: AcademicsPage,
 });
 
 const PROGRAMS = [
-  { tier: "Undergraduate", title: "B.Tech", desc: "Four-year engineering programs across CSE, ECE, EEE, Mech, Civil, IT.", years: "4 years" },
-  { tier: "Postgraduate", title: "M.Tech / MBA", desc: "Specialised master's tracks led by research-active faculty.", years: "2 years" },
-  { tier: "Doctoral", title: "Ph.D", desc: "Research streams in core and interdisciplinary areas.", years: "3-5 years" },
+  {
+    tier: "Undergraduate",
+    title: "B.Tech",
+    desc: "Four-year engineering programs across CSE, ECE, EEE, Mech, Civil, IT.",
+    years: "4 years",
+  },
+  {
+    tier: "Postgraduate",
+    title: "M.Tech / MBA",
+    desc: "Specialised master's tracks led by research-active faculty.",
+    years: "2 years",
+  },
+  {
+    tier: "Doctoral",
+    title: "Ph.D",
+    desc: "Research streams in core and interdisciplinary areas.",
+    years: "3-5 years",
+  },
 ];
 
 const PILLARS = [
-  { icon: BookOpen, title: "Outcome-Based Curriculum", desc: "Every course maps to measurable program outcomes." },
-  { icon: Calendar, title: "Structured Calendar", desc: "Predictable semesters, mid-terms and end-of-term reviews." },
-  { icon: FileCheck2, title: "Transparent Examinations", desc: "JNTU-GV evaluation framework with internal & external review." },
-  { icon: GraduationCap, title: "Mentorship First", desc: "Every student is assigned a faculty mentor across years." },
+  {
+    icon: BookOpen,
+    title: "Outcome-Based Curriculum",
+    desc: "Every course maps to measurable program outcomes.",
+  },
+  {
+    icon: Calendar,
+    title: "Structured Calendar",
+    desc: "Predictable semesters, mid-terms and end-of-term reviews.",
+  },
+  {
+    icon: FileCheck2,
+    title: "Transparent Examinations",
+    desc: "JNTU-GV evaluation framework with internal & external review.",
+  },
+  {
+    icon: GraduationCap,
+    title: "Mentorship First",
+    desc: "Every student is assigned a faculty mentor across years.",
+  },
 ];
 
 function AcademicsPage() {
@@ -76,7 +113,9 @@ function AcademicsPage() {
       </section>
 
       <section className="py-24 container-narrow text-center">
-        <Link to="/departments" className="btn-primary">Explore departments <ArrowRight className="h-4 w-4" /></Link>
+        <Link to="/departments" className="btn-primary">
+          Explore departments <ArrowRight className="h-4 w-4" />
+        </Link>
       </section>
     </>
   );

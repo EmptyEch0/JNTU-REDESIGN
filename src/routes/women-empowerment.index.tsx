@@ -1,10 +1,30 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getWeProfile, updateWeProfile, getWeCommittee, addWeCommitteeMember, updateWeCommitteeMember, deleteWeCommitteeMember } from "@/funcs/we";
+import {
+  getWeProfile,
+  updateWeProfile,
+  getWeCommittee,
+  addWeCommitteeMember,
+  updateWeCommitteeMember,
+  deleteWeCommitteeMember,
+} from "@/funcs/we";
 import { useAdmin } from "@/context/AdminContext";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Quote, Save, X, Mail, Plus, Edit2, Trash2, Check, Target, Heart, Award, Shield } from "lucide-react";
+import {
+  Quote,
+  Save,
+  X,
+  Mail,
+  Plus,
+  Edit2,
+  Trash2,
+  Check,
+  Target,
+  Heart,
+  Award,
+  Shield,
+} from "lucide-react";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 
@@ -122,15 +142,13 @@ function WEAboutPage() {
     <>
       <section className="py-16 container-narrow">
         <div className="grid lg:grid-cols-[1fr_400px] gap-16 items-start">
-          
           {/* Main About & Vision/Mission/Objectives Section */}
           <div className="space-y-12">
-            
             {/* About Text */}
             <RevealOnScroll>
               <div className="space-y-6">
                 <SectionLabel eyebrow="History & Purpose" title="About WE&GC" />
-                
+
                 {isEditMode ? (
                   <textarea
                     className="w-full text-base text-muted-foreground leading-relaxed bg-primary/5 p-4 rounded-2xl border border-border outline-none min-h-[300px] focus:border-primary"
@@ -212,7 +230,10 @@ function WEAboutPage() {
                 <h3 className="text-xl font-bold text-ink">Objectives</h3>
                 <ul className="grid gap-3.5">
                   {(pData.objectives as string[])?.map((obj: string, idx: number) => (
-                    <li key={idx} className="flex gap-3 items-start text-sm text-muted-foreground font-medium leading-relaxed">
+                    <li
+                      key={idx}
+                      className="flex gap-3 items-start text-sm text-muted-foreground font-medium leading-relaxed"
+                    >
                       <span className="h-5 w-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
                         {idx + 1}
                       </span>
@@ -240,7 +261,7 @@ function WEAboutPage() {
           <RevealOnScroll delay={200}>
             <div className="space-y-8 bg-card border border-border rounded-[32px] p-6 shadow-sm lg:sticky lg:top-32">
               <div className="text-eyebrow">Convener Desk</div>
-              
+
               {/* Photo */}
               <div className="relative group">
                 <div className="absolute -inset-2 rounded-[24px] bg-primary/10 blur-xl group-hover:bg-primary/20 transition-colors duration-500" />
@@ -256,7 +277,9 @@ function WEAboutPage() {
                       <input
                         className="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-xs text-white outline-none focus:border-primary"
                         value={pData.convenerImage}
-                        onChange={(e) => setEditedProfile({ ...pData, convenerImage: e.target.value })}
+                        onChange={(e) =>
+                          setEditedProfile({ ...pData, convenerImage: e.target.value })
+                        }
                         placeholder="https://example.com/photo.jpg"
                       />
                     </div>
@@ -276,7 +299,9 @@ function WEAboutPage() {
                     <textarea
                       className="w-full text-xs text-muted-foreground bg-primary/5 p-2 rounded outline-none border border-border min-h-[60px]"
                       value={pData.convenerMessage}
-                      onChange={(e) => setEditedProfile({ ...pData, convenerMessage: e.target.value })}
+                      onChange={(e) =>
+                        setEditedProfile({ ...pData, convenerMessage: e.target.value })
+                      }
                     />
                   </div>
                 ) : (
@@ -306,7 +331,8 @@ function WEAboutPage() {
               <div>
                 <SectionLabel eyebrow="Organization" title="Executive Committee Members" />
                 <p className="mt-2 text-sm text-muted-foreground font-medium">
-                  Leading, organizing, and maintaining the dynamic initiatives of WE&GC across the campus.
+                  Leading, organizing, and maintaining the dynamic initiatives of WE&GC across the
+                  campus.
                 </p>
               </div>
 
@@ -328,7 +354,9 @@ function WEAboutPage() {
                 <h3 className="text-lg font-bold text-ink mb-4">Add Committee Member</h3>
                 <form onSubmit={handleAddMemberSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Name</label>
+                    <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                      Name
+                    </label>
                     <input
                       type="text"
                       required
@@ -339,7 +367,9 @@ function WEAboutPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Role / Designation</label>
+                    <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                      Role / Designation
+                    </label>
                     <input
                       type="text"
                       required
@@ -350,12 +380,16 @@ function WEAboutPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">Email</label>
+                    <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
+                      Email
+                    </label>
                     <input
                       type="email"
                       className="w-full bg-muted/50 border border-border rounded-xl p-3 text-xs outline-none focus:border-primary"
                       value={addMemberForm.email}
-                      onChange={(e) => setAddMemberForm({ ...addMemberForm, email: e.target.value })}
+                      onChange={(e) =>
+                        setAddMemberForm({ ...addMemberForm, email: e.target.value })
+                      }
                       placeholder="e.g., principal@jntugvcev.edu.in"
                     />
                   </div>
@@ -385,100 +419,109 @@ function WEAboutPage() {
               <div className="col-span-full py-12 text-center text-xs text-muted-foreground animate-pulse">
                 Loading committee members...
               </div>
-            ) : committee.map((member: any, idx: number) => {
-              const isEditing = editingMemberId === member.id;
-              return (
-                <RevealOnScroll key={member.id} delay={idx * 50}>
-                  <div className="p-6 bg-card border border-border rounded-2xl shadow-sm hover-lift flex flex-col justify-between h-full relative group/member">
-                    
-                    {/* Header Dot */}
-                    <div className="absolute top-6 right-6 flex gap-1.5 opacity-0 group-hover/member:opacity-100 transition-opacity">
-                      {isEditMode && !isEditing && (
-                        <>
-                          <button
-                            onClick={() => handleEditMemberClick(member)}
-                            className="p-1 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-                          >
-                            <Edit2 className="h-3 w-3" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteMember(member.id)}
-                            className="p-1 rounded-full bg-red-500/10 text-red-600 hover:bg-red-500/20 transition-colors"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
-                        </>
-                      )}
-                    </div>
-
-                    <div className="space-y-3">
-                      <div className="h-10 w-10 rounded-xl bg-primary/5 text-primary grid place-items-center">
-                        <Shield className="h-5 w-5 text-primary/60" />
+            ) : (
+              committee.map((member: any, idx: number) => {
+                const isEditing = editingMemberId === member.id;
+                return (
+                  <RevealOnScroll key={member.id} delay={idx * 50}>
+                    <div className="p-6 bg-card border border-border rounded-2xl shadow-sm hover-lift flex flex-col justify-between h-full relative group/member">
+                      {/* Header Dot */}
+                      <div className="absolute top-6 right-6 flex gap-1.5 opacity-0 group-hover/member:opacity-100 transition-opacity">
+                        {isEditMode && !isEditing && (
+                          <>
+                            <button
+                              onClick={() => handleEditMemberClick(member)}
+                              className="p-1 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                            >
+                              <Edit2 className="h-3 w-3" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteMember(member.id)}
+                              className="p-1 rounded-full bg-red-500/10 text-red-600 hover:bg-red-500/20 transition-colors"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                          </>
+                        )}
                       </div>
 
-                      {isEditing ? (
-                        <div className="space-y-2 pt-2">
-                          <input
-                            className="w-full bg-primary/5 border border-primary/20 rounded p-1 text-xs font-bold outline-none text-ink"
-                            value={editMemberForm.name}
-                            onChange={(e) => setEditMemberForm({ ...editMemberForm, name: e.target.value })}
-                          />
-                          <input
-                            className="w-full bg-primary/5 border border-primary/20 rounded p-1 text-xs outline-none text-muted-foreground"
-                            value={editMemberForm.role}
-                            onChange={(e) => setEditMemberForm({ ...editMemberForm, role: e.target.value })}
-                          />
+                      <div className="space-y-3">
+                        <div className="h-10 w-10 rounded-xl bg-primary/5 text-primary grid place-items-center">
+                          <Shield className="h-5 w-5 text-primary/60" />
                         </div>
-                      ) : (
-                        <div>
-                          <h4 className="font-bold text-ink text-sm leading-tight">{member.name}</h4>
-                          <p className="text-xs text-primary font-bold mt-1 tracking-tight leading-snug">
-                            {member.role}
-                          </p>
-                        </div>
-                      )}
-                    </div>
 
-                    {/* Email and controls footer */}
-                    <div className="pt-4 border-t border-border mt-4 flex items-center justify-between">
-                      {isEditing ? (
-                        <div className="flex items-center justify-between w-full">
-                          <input
-                            className="bg-primary/5 border border-primary/20 rounded p-1 text-xs outline-none text-muted-foreground w-[120px]"
-                            value={editMemberForm.email}
-                            placeholder="Email address"
-                            onChange={(e) => setEditMemberForm({ ...editMemberForm, email: e.target.value })}
-                          />
-                          <div className="flex gap-1.5 shrink-0">
-                            <button
-                              onClick={handleEditMemberSave}
-                              className="p-1 rounded-full bg-green-500/10 text-green-600 hover:bg-green-500/20"
-                            >
-                              <Check className="h-3 w-3" />
-                            </button>
-                            <button
-                              onClick={() => setEditingMemberId(null)}
-                              className="p-1 rounded-full bg-red-500/10 text-red-600 hover:bg-red-500/20"
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
+                        {isEditing ? (
+                          <div className="space-y-2 pt-2">
+                            <input
+                              className="w-full bg-primary/5 border border-primary/20 rounded p-1 text-xs font-bold outline-none text-ink"
+                              value={editMemberForm.name}
+                              onChange={(e) =>
+                                setEditMemberForm({ ...editMemberForm, name: e.target.value })
+                              }
+                            />
+                            <input
+                              className="w-full bg-primary/5 border border-primary/20 rounded p-1 text-xs outline-none text-muted-foreground"
+                              value={editMemberForm.role}
+                              onChange={(e) =>
+                                setEditMemberForm({ ...editMemberForm, role: e.target.value })
+                              }
+                            />
                           </div>
-                        </div>
-                      ) : (
-                        member.email && (
-                          <a
-                            href={`mailto:${member.email}`}
-                            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary font-medium transition-colors"
-                          >
-                            <Mail className="h-3.5 w-3.5" /> Mail Profile
-                          </a>
-                        )
-                      )}
+                        ) : (
+                          <div>
+                            <h4 className="font-bold text-ink text-sm leading-tight">
+                              {member.name}
+                            </h4>
+                            <p className="text-xs text-primary font-bold mt-1 tracking-tight leading-snug">
+                              {member.role}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Email and controls footer */}
+                      <div className="pt-4 border-t border-border mt-4 flex items-center justify-between">
+                        {isEditing ? (
+                          <div className="flex items-center justify-between w-full">
+                            <input
+                              className="bg-primary/5 border border-primary/20 rounded p-1 text-xs outline-none text-muted-foreground w-[120px]"
+                              value={editMemberForm.email}
+                              placeholder="Email address"
+                              onChange={(e) =>
+                                setEditMemberForm({ ...editMemberForm, email: e.target.value })
+                              }
+                            />
+                            <div className="flex gap-1.5 shrink-0">
+                              <button
+                                onClick={handleEditMemberSave}
+                                className="p-1 rounded-full bg-green-500/10 text-green-600 hover:bg-green-500/20"
+                              >
+                                <Check className="h-3 w-3" />
+                              </button>
+                              <button
+                                onClick={() => setEditingMemberId(null)}
+                                className="p-1 rounded-full bg-red-500/10 text-red-600 hover:bg-red-500/20"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          member.email && (
+                            <a
+                              href={`mailto:${member.email}`}
+                              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary font-medium transition-colors"
+                            >
+                              <Mail className="h-3.5 w-3.5" /> Mail Profile
+                            </a>
+                          )
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </RevealOnScroll>
-              );
-            })}
+                  </RevealOnScroll>
+                );
+              })
+            )}
           </div>
         </div>
       </section>

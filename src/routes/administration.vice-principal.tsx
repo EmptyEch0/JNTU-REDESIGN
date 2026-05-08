@@ -15,7 +15,11 @@ export const Route = createFileRoute("/administration/vice-principal")({
   head: () => ({
     meta: [
       { title: "Vice Principal — Administration — JNTU-GV CEV" },
-      { name: "description", content: "Vice Principal's message and profile of JNTU-GV College of Engineering Vizianagaram." },
+      {
+        name: "description",
+        content:
+          "Vice Principal's message and profile of JNTU-GV College of Engineering Vizianagaram.",
+      },
     ],
   }),
   component: VicePrincipalPage,
@@ -40,7 +44,7 @@ function VicePrincipalPage() {
     },
     onError: () => {
       toast.error("Failed to update Vice Principal's information.");
-    }
+    },
   });
 
   const handleSave = () => {
@@ -48,17 +52,22 @@ function VicePrincipalPage() {
     updateMutation.mutate({ data: { id: vicePrincipal.id, ...editedData } });
   };
 
-  if (isLoading || !vicePrincipal) return <div className="min-h-screen grid place-items-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>;
+  if (isLoading || !vicePrincipal)
+    return (
+      <div className="min-h-screen grid place-items-center">
+        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
 
   const data = editedData || vicePrincipal;
 
   return (
     <>
-      <PageHero 
-        eyebrow="Administration" 
-        title="Vice Principal's Desk" 
-        subtitle="Supporting academic excellence and administrative efficiency." 
-        image={campusImg} 
+      <PageHero
+        eyebrow="Administration"
+        title="Vice Principal's Desk"
+        subtitle="Supporting academic excellence and administrative efficiency."
+        image={campusImg}
       />
       <SubNav items={ADMINISTRATION_SUBNAV} />
 
@@ -70,18 +79,18 @@ function VicePrincipalPage() {
               <div className="relative group">
                 <div className="absolute -inset-4 rounded-[40px] bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-colors duration-500" />
                 <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white shadow-elegant bg-card">
-                  <img 
-                    src={data.image} 
-                    alt={data.name} 
-                    className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-700" 
+                  <img
+                    src={data.image}
+                    alt={data.name}
+                    className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                   />
                   {isEditMode && (
                     <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity p-6 text-center">
                       <p className="text-white text-xs font-medium">Profile Image URL</p>
-                      <input 
+                      <input
                         className="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-xs text-white outline-none focus:border-primary"
                         value={data.image}
-                        onChange={e => setEditedData({...data, image: e.target.value})}
+                        onChange={(e) => setEditedData({ ...data, image: e.target.value })}
                       />
                     </div>
                   )}
@@ -91,15 +100,15 @@ function VicePrincipalPage() {
               <div className="space-y-4">
                 {isEditMode ? (
                   <div className="space-y-2">
-                    <input 
+                    <input
                       className="w-full text-2xl font-bold text-ink bg-primary/5 p-2 rounded outline-none"
                       value={data.name}
-                      onChange={e => setEditedData({...data, name: e.target.value})}
+                      onChange={(e) => setEditedData({ ...data, name: e.target.value })}
                     />
-                    <input 
+                    <input
                       className="w-full text-primary font-medium bg-primary/5 p-2 rounded outline-none"
                       value={data.designation}
-                      onChange={e => setEditedData({...data, designation: e.target.value})}
+                      onChange={(e) => setEditedData({ ...data, designation: e.target.value })}
                     />
                   </div>
                 ) : (
@@ -108,15 +117,15 @@ function VicePrincipalPage() {
                     <p className="text-primary font-medium">{data.designation}</p>
                   </div>
                 )}
-                
+
                 <div className="space-y-3 pt-4 border-t border-border">
                   <div className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors">
                     <Mail className="h-4 w-4" />
                     {isEditMode ? (
-                      <input 
+                      <input
                         className="flex-1 bg-primary/5 p-1 rounded outline-none text-sm"
                         value={data.email}
-                        onChange={e => setEditedData({...data, email: e.target.value})}
+                        onChange={(e) => setEditedData({ ...data, email: e.target.value })}
                       />
                     ) : (
                       <span className="text-sm">{data.email}</span>
@@ -137,10 +146,10 @@ function VicePrincipalPage() {
               <div className="relative">
                 <Quote className="h-12 w-12 text-primary/10 absolute -top-6 -left-6" />
                 {isEditMode ? (
-                  <textarea 
+                  <textarea
                     className="w-full text-display text-2xl md:text-3xl text-ink leading-tight italic bg-primary/5 p-4 rounded outline-none min-h-[120px]"
                     value={data.quote}
-                    onChange={e => setEditedData({...data, quote: e.target.value})}
+                    onChange={(e) => setEditedData({ ...data, quote: e.target.value })}
                   />
                 ) : (
                   <p className="text-display text-2xl md:text-3xl text-ink leading-tight italic">
@@ -158,7 +167,8 @@ function VicePrincipalPage() {
                   </div>
                   <h3 className="text-xl font-bold text-ink mb-3">Academic Coordination</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    Overseeing the implementation of academic regulations, course delivery, and examination schedules across all departments.
+                    Overseeing the implementation of academic regulations, course delivery, and
+                    examination schedules across all departments.
                   </p>
                 </div>
 
@@ -168,7 +178,8 @@ function VicePrincipalPage() {
                   </div>
                   <h3 className="text-xl font-bold text-ink mb-3">Student Affairs</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    Managing student welfare programs, discipline, and campus life initiatives to foster a holistic learning environment.
+                    Managing student welfare programs, discipline, and campus life initiatives to
+                    foster a holistic learning environment.
                   </p>
                 </div>
               </div>

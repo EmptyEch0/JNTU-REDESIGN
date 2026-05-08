@@ -1,13 +1,13 @@
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
 import { getDepartmentDetails, type DepartmentData } from "@/functions/departments";
-import { 
-  BookOpen, 
-  Users, 
-  GraduationCap, 
-  FlaskConical, 
-  Trophy, 
-  Image, 
-  ChevronRight 
+import {
+  BookOpen,
+  Users,
+  GraduationCap,
+  FlaskConical,
+  Trophy,
+  Image,
+  ChevronRight,
 } from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id")({
@@ -41,21 +41,17 @@ function DepartmentLayout() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className="relative h-[300px] w-full overflow-hidden bg-slate-900">
-        <img 
-          src={data.image} 
-          className="h-full w-full object-cover opacity-40" 
-          alt={data.name} 
-        />
+        <img src={data.image} className="h-full w-full object-cover opacity-40" alt={data.name} />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight uppercase px-4">
               Department of {data.name}
             </h1>
             <div className="mt-4 flex items-center justify-center gap-2 text-blue-300 font-medium">
-              <span>Home</span> 
-              <ChevronRight size={14} /> 
-              <span>Departments</span> 
-              <ChevronRight size={14} /> 
+              <span>Home</span>
+              <ChevronRight size={14} />
+              <span>Departments</span>
+              <ChevronRight size={14} />
               <span className="text-white">{data.slug.toUpperCase()}</span>
             </div>
           </div>
@@ -73,15 +69,15 @@ function DepartmentLayout() {
               {navLinks.map((link) => {
                 const fullPath = `/departments/${data.slug}${link.path}`;
                 const isActive = location.pathname === fullPath;
-                
+
                 return (
                   <Link
                     key={link.path}
                     to={fullPath}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                      isActive 
-                      ? "bg-blue-600 text-white shadow-md shadow-blue-200" 
-                      : "text-slate-600 hover:bg-white hover:shadow-sm"
+                      isActive
+                        ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                        : "text-slate-600 hover:bg-white hover:shadow-sm"
                     }`}
                   >
                     {link.icon}

@@ -1,5 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowDown, Bell, MapPin, GraduationCap, Building2, BookOpen, Trophy, Stethoscope, FlaskConical, Briefcase, Mail, Phone } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowDown,
+  Bell,
+  MapPin,
+  GraduationCap,
+  Building2,
+  BookOpen,
+  Trophy,
+  Stethoscope,
+  FlaskConical,
+  Briefcase,
+  Mail,
+  Phone,
+} from "lucide-react";
 import heroImg from "@/assets/hero-campus.jpg";
 import hero2 from "@/assets/hero-2.jpg";
 import hero3 from "@/assets/hero-3.jpg";
@@ -23,21 +37,64 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "JNTU-GV CEV — Engineering Tomorrow, Together" },
-      { name: "description", content: "JNTU-GV College of Engineering Vizianagaram: a premier institution for engineering, research and innovation in Andhra Pradesh." },
+      {
+        name: "description",
+        content:
+          "JNTU-GV College of Engineering Vizianagaram: a premier institution for engineering, research and innovation in Andhra Pradesh.",
+      },
       { property: "og:title", content: "JNTU-GV College of Engineering Vizianagaram" },
-      { property: "og:description", content: "1450 students. 7 disciplines. One ambition — engineering tomorrow." },
+      {
+        property: "og:description",
+        content: "1450 students. 7 disciplines. One ambition — engineering tomorrow.",
+      },
     ],
   }),
   component: HomePage,
 });
 
 const FACILITIES = [
-  { title: "Hostels", desc: "318+ rooms across UG & PG residences with modern amenities.", img: hostelImg, to: "/hostels", icon: Building2 },
-  { title: "Library", desc: "A quiet, well-stocked knowledge commons open all day.", img: libraryImg, to: "/library", icon: BookOpen },
-  { title: "Sports", desc: "Cricket, athletics, indoor games and a fitness gym.", img: sportsImg, to: "/sports", icon: Trophy },
-  { title: "Dispensary", desc: "On-campus medical care with full-time health assistants.", img: cultureImg, to: "/dispensary", icon: Stethoscope },
-  { title: "R&D Cell", desc: "Funded research with UGC, DST, DAE and NRB.", img: labImg, to: "/rd-cell", icon: FlaskConical },
-  { title: "Placements", desc: "Top recruiters every year — TCS, Infosys, Amazon and more.", img: placementsImg, to: "/placements", icon: Briefcase },
+  {
+    title: "Hostels",
+    desc: "318+ rooms across UG & PG residences with modern amenities.",
+    img: hostelImg,
+    to: "/hostels",
+    icon: Building2,
+  },
+  {
+    title: "Library",
+    desc: "A quiet, well-stocked knowledge commons open all day.",
+    img: libraryImg,
+    to: "/library",
+    icon: BookOpen,
+  },
+  {
+    title: "Sports",
+    desc: "Cricket, athletics, indoor games and a fitness gym.",
+    img: sportsImg,
+    to: "/sports",
+    icon: Trophy,
+  },
+  {
+    title: "Dispensary",
+    desc: "On-campus medical care with full-time health assistants.",
+    img: cultureImg,
+    to: "/dispensary",
+    icon: Stethoscope,
+  },
+  {
+    title: "R&D Cell",
+    desc: "Funded research with UGC, DST, DAE and NRB.",
+    img: labImg,
+    to: "/rd-cell",
+    icon: FlaskConical,
+  },
+  {
+    title: "Placements",
+    desc: "Top recruiters every year — TCS, Infosys, Amazon and more.",
+    img: placementsImg,
+    to: "/placements",
+    icon: Briefcase,
+  },
 ];
 
 function HomePage() {
@@ -62,17 +119,21 @@ function HomePage() {
               Vizianagaram, Andhra Pradesh
             </div>
             <h1 className="text-display text-5xl sm:text-6xl md:text-8xl mt-4 max-w-5xl animate-[fade-up_0.9s_ease-out_0.5s_both]">
-              Engineering tomorrow,<br />
+              Engineering tomorrow,
+              <br />
               <span className="italic text-white/85">together.</span>
             </h1>
             <p className="mt-6 text-base md:text-xl text-white/80 max-w-2xl leading-relaxed animate-[fade-up_0.9s_ease-out_0.8s_both]">
-              A constituent college of JNTU-GV — where 1,450 minds learn, build and shape the future of engineering on a campus that lives and breathes ideas.
+              A constituent college of JNTU-GV — where 1,450 minds learn, build and shape the future
+              of engineering on a campus that lives and breathes ideas.
             </p>
             <div className="mt-10 flex flex-wrap gap-3 animate-[fade-up_0.9s_ease-out_1s_both]">
               <Link to="/admissions" className="btn-primary">
                 Admissions <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link to="/campus-life" className="btn-ghost">Explore Campus</Link>
+              <Link to="/campus-life" className="btn-ghost">
+                Explore Campus
+              </Link>
               <Link to="/notices" className="btn-ghost">
                 <Bell className="h-4 w-4" /> Notices
               </Link>
@@ -87,7 +148,11 @@ function HomePage() {
 
       {/* ABOUT + STATS SPLIT */}
       <section className="py-24 md:py-36 relative">
-        <div aria-hidden className="absolute inset-0 -z-10" style={{ background: "var(--gradient-glow)" }} />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10"
+          style={{ background: "var(--gradient-glow)" }}
+        />
         <div className="container-narrow grid lg:grid-cols-12 gap-12 lg:gap-20 items-center">
           <RevealOnScroll className="lg:col-span-6">
             <div className="text-eyebrow">Who we are</div>
@@ -95,12 +160,19 @@ function HomePage() {
               A campus where <span className="italic text-primary">curiosity</span> meets craft.
             </h2>
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              Established as a constituent college of Jawaharlal Nehru Technological University Gurajada Vizianagaram, our campus brings together rigorous academics, practical labs, and a thriving residential community. From first-year orientation to final-year placements, every step is designed for depth.
+              Established as a constituent college of Jawaharlal Nehru Technological University
+              Gurajada Vizianagaram, our campus brings together rigorous academics, practical labs,
+              and a thriving residential community. From first-year orientation to final-year
+              placements, every step is designed for depth.
             </p>
             <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-              We believe great engineering is born in the everyday — in honest classrooms, in late-night lab benches, in the quiet of the library at dawn.
+              We believe great engineering is born in the everyday — in honest classrooms, in
+              late-night lab benches, in the quiet of the library at dawn.
             </p>
-            <Link to="/about" className="story-link mt-8 inline-flex items-center gap-2 text-primary font-medium">
+            <Link
+              to="/about"
+              className="story-link mt-8 inline-flex items-center gap-2 text-primary font-medium"
+            >
               Read our story <ArrowRight className="h-4 w-4" />
             </Link>
           </RevealOnScroll>
@@ -149,13 +221,17 @@ function HomePage() {
                   />
                   <div className="absolute inset-0 p-7 md:p-8 flex flex-col justify-between text-white">
                     <div className="flex items-center justify-between">
-                      <span className="text-eyebrow !text-white/70">Dept {String(i + 1).padStart(2, "0")}</span>
+                      <span className="text-eyebrow !text-white/70">
+                        Dept {String(i + 1).padStart(2, "0")}
+                      </span>
                       <div className="h-10 w-10 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-primary transition-all duration-500">
                         <ArrowRight className="h-4 w-4" />
                       </div>
                     </div>
                     <div>
-                      <div className="text-display text-5xl md:text-6xl font-semibold opacity-90">{d.code}</div>
+                      <div className="text-display text-5xl md:text-6xl font-semibold opacity-90">
+                        {d.code}
+                      </div>
                       <div className="mt-3 text-base font-medium leading-snug">{d.name}</div>
                       <div className="mt-2 text-sm text-white/70">{d.desc}</div>
                     </div>
@@ -213,7 +289,8 @@ function HomePage() {
                         {f.desc}
                       </p>
                       <div className="mt-3 inline-flex items-center gap-1.5 text-sm text-white/80 group-hover:text-white">
-                        Explore <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                        Explore{" "}
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                       </div>
                     </div>
                   </Link>
@@ -241,7 +318,9 @@ function HomePage() {
                   Where studies end and stories begin.
                 </h2>
                 <p className="mt-6 text-lg text-white/80 leading-relaxed">
-                  A residential campus that hums with cultural fests, technical clubs, NSS drives, sports tournaments and quiet conversations under the trees. There is rhythm here — and room for every kind of student.
+                  A residential campus that hums with cultural fests, technical clubs, NSS drives,
+                  sports tournaments and quiet conversations under the trees. There is rhythm here —
+                  and room for every kind of student.
                 </p>
                 <Link to="/campus-life" className="btn-ghost mt-8">
                   Step inside <ArrowRight className="h-4 w-4" />
@@ -264,10 +343,18 @@ function HomePage() {
           </RevealOnScroll>
 
           <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-3xl overflow-hidden border border-border">
-            <RevealOnScroll className="bg-card p-8"><StatCounter value={420} label="Offers / Year" suffix="+" /></RevealOnScroll>
-            <RevealOnScroll className="bg-card p-8" delay={80}><StatCounter value={42} label="LPA Top Package" suffix="L" /></RevealOnScroll>
-            <RevealOnScroll className="bg-card p-8" delay={160}><StatCounter value={85} label="Recruiters" suffix="+" /></RevealOnScroll>
-            <RevealOnScroll className="bg-card p-8" delay={240}><StatCounter value={92} label="Placement %" suffix="%" /></RevealOnScroll>
+            <RevealOnScroll className="bg-card p-8">
+              <StatCounter value={420} label="Offers / Year" suffix="+" />
+            </RevealOnScroll>
+            <RevealOnScroll className="bg-card p-8" delay={80}>
+              <StatCounter value={42} label="LPA Top Package" suffix="L" />
+            </RevealOnScroll>
+            <RevealOnScroll className="bg-card p-8" delay={160}>
+              <StatCounter value={85} label="Recruiters" suffix="+" />
+            </RevealOnScroll>
+            <RevealOnScroll className="bg-card p-8" delay={240}>
+              <StatCounter value={92} label="Placement %" suffix="%" />
+            </RevealOnScroll>
           </div>
 
           <div className="mt-14">
@@ -289,7 +376,10 @@ function HomePage() {
           <RevealOnScroll>
             <div className="flex items-end justify-between flex-wrap gap-6">
               <SectionLabel eyebrow="Gallery" title="A campus, in moments." />
-              <Link to="/gallery" className="story-link text-primary font-medium inline-flex items-center gap-2">
+              <Link
+                to="/gallery"
+                className="story-link text-primary font-medium inline-flex items-center gap-2"
+              >
                 Open gallery <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -297,11 +387,36 @@ function HomePage() {
 
           <RevealOnScroll className="mt-12" delay={120}>
             <div className="grid grid-cols-12 gap-4 md:gap-5">
-              <img src={cultureImg} alt="Cultural fest" loading="lazy" className="col-span-12 md:col-span-7 aspect-[16/10] w-full object-cover rounded-3xl hover-lift" />
-              <img src={labImg} alt="Lab" loading="lazy" className="col-span-12 md:col-span-5 aspect-[16/10] w-full object-cover rounded-3xl hover-lift" />
-              <img src={sportsImg} alt="Sports" loading="lazy" className="col-span-6 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift" />
-              <img src={libraryImg} alt="Library" loading="lazy" className="col-span-6 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift" />
-              <img src={hostelImg} alt="Hostel" loading="lazy" className="col-span-12 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift" />
+              <img
+                src={cultureImg}
+                alt="Cultural fest"
+                loading="lazy"
+                className="col-span-12 md:col-span-7 aspect-[16/10] w-full object-cover rounded-3xl hover-lift"
+              />
+              <img
+                src={labImg}
+                alt="Lab"
+                loading="lazy"
+                className="col-span-12 md:col-span-5 aspect-[16/10] w-full object-cover rounded-3xl hover-lift"
+              />
+              <img
+                src={sportsImg}
+                alt="Sports"
+                loading="lazy"
+                className="col-span-6 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
+              />
+              <img
+                src={libraryImg}
+                alt="Library"
+                loading="lazy"
+                className="col-span-6 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
+              />
+              <img
+                src={hostelImg}
+                alt="Hostel"
+                loading="lazy"
+                className="col-span-12 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
+              />
             </div>
           </RevealOnScroll>
         </div>
@@ -312,37 +427,55 @@ function HomePage() {
         <div className="container-narrow">
           <RevealOnScroll>
             <div className="relative overflow-hidden rounded-[40px] bg-[oklch(0.18_0.04_255)] p-10 md:p-16 text-white shadow-[var(--shadow-elegant)] border border-white/5">
-              <div aria-hidden className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
-              <div aria-hidden className="absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-accent/20 blur-3xl" />
-              
+              <div
+                aria-hidden
+                className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/20 blur-3xl"
+              />
+              <div
+                aria-hidden
+                className="absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-accent/20 blur-3xl"
+              />
+
               <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-12">
                 <div className="max-w-xl">
-                  <div className="text-eyebrow !text-white/60 flex items-center gap-2">Contact Us</div>
+                  <div className="text-eyebrow !text-white/60 flex items-center gap-2">
+                    Contact Us
+                  </div>
                   <h3 className="text-display text-4xl md:text-5xl mt-4">
-                    Have questions? <br /><span className="text-primary-glow">We're here to help.</span>
+                    Have questions? <br />
+                    <span className="text-primary-glow">We're here to help.</span>
                   </h3>
                   <p className="mt-6 text-white/50 leading-relaxed max-w-md">
-                    Reach out to our administrative office for admissions, academic inquiries, or general information.
+                    Reach out to our administrative office for admissions, academic inquiries, or
+                    general information.
                   </p>
                 </div>
-                
+
                 <div className="grid sm:grid-cols-2 gap-10 lg:gap-16">
                   <div className="space-y-4">
-                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-bold">Contact Number</div>
+                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-bold">
+                      Contact Number
+                    </div>
                     <div className="flex items-center gap-4">
                       <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary-glow shadow-inner">
                         <Phone className="h-5 w-5" />
                       </div>
-                      <div className="text-2xl md:text-3xl font-bold tracking-tight">08922 277388</div>
+                      <div className="text-2xl md:text-3xl font-bold tracking-tight">
+                        08922 277388
+                      </div>
                     </div>
                   </div>
                   <div className="space-y-4">
-                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-bold">Email Support</div>
+                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-bold">
+                      Email Support
+                    </div>
                     <div className="flex items-center gap-4">
                       <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary-glow shadow-inner">
                         <Mail className="h-5 w-5" />
                       </div>
-                      <div className="text-2xl md:text-3xl font-bold tracking-tight">principal@jntugv.edu.in</div>
+                      <div className="text-2xl md:text-3xl font-bold tracking-tight">
+                        principal@jntugv.edu.in
+                      </div>
                     </div>
                   </div>
                 </div>

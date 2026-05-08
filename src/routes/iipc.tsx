@@ -16,7 +16,10 @@ export const Route = createFileRoute("/iipc")({
   head: () => ({
     meta: [
       { title: "Industry Institution Interaction Cell (IIPC) — JNTU-GV CEV" },
-      { name: "description", content: "Bridging the gap between engineering classrooms and corporate industries." },
+      {
+        name: "description",
+        content: "Bridging the gap between engineering classrooms and corporate industries.",
+      },
     ],
   }),
   component: IipcPage,
@@ -72,7 +75,6 @@ function IipcPage() {
       <SubNav items={STUDENT_SUBNAV} />
 
       <section className="py-16 container-narrow space-y-16">
-        
         {/* About IIPC */}
         <RevealOnScroll>
           <div className="space-y-6">
@@ -84,9 +86,7 @@ function IipcPage() {
                 onChange={(e) => setEditedData({ ...data, about: e.target.value })}
               />
             ) : (
-              <p className="text-base text-muted-foreground leading-relaxed">
-                {data.about}
-              </p>
+              <p className="text-base text-muted-foreground leading-relaxed">{data.about}</p>
             )}
           </div>
         </RevealOnScroll>
@@ -98,7 +98,10 @@ function IipcPage() {
               <h3 className="text-xl font-bold text-ink">Objectives</h3>
               <ul className="grid gap-4">
                 {objectives.map((obj, idx) => (
-                  <li key={idx} className="flex gap-3.5 items-start text-sm text-muted-foreground font-medium leading-relaxed">
+                  <li
+                    key={idx}
+                    className="flex gap-3.5 items-start text-sm text-muted-foreground font-medium leading-relaxed"
+                  >
                     <span className="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
                       {idx + 1}
                     </span>
@@ -124,15 +127,25 @@ function IipcPage() {
           {/* Quick Stats Block */}
           <RevealOnScroll delay={100}>
             <div className="p-6 bg-sand border border-border rounded-3xl space-y-6">
-              <h4 className="font-bold text-ink text-sm uppercase tracking-wider">Industrial Ties</h4>
+              <h4 className="font-bold text-ink text-sm uppercase tracking-wider">
+                Industrial Ties
+              </h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-card border border-border rounded-2xl p-4 text-center">
-                  <span className="block text-3xl font-extrabold text-primary font-display">25+</span>
-                  <span className="block text-[10px] uppercase font-bold text-muted-foreground mt-1">Active MoUs</span>
+                  <span className="block text-3xl font-extrabold text-primary font-display">
+                    25+
+                  </span>
+                  <span className="block text-[10px] uppercase font-bold text-muted-foreground mt-1">
+                    Active MoUs
+                  </span>
                 </div>
                 <div className="bg-card border border-border rounded-2xl p-4 text-center">
-                  <span className="block text-3xl font-extrabold text-primary font-display">150+</span>
-                  <span className="block text-[10px] uppercase font-bold text-muted-foreground mt-1">Internships</span>
+                  <span className="block text-3xl font-extrabold text-primary font-display">
+                    150+
+                  </span>
+                  <span className="block text-[10px] uppercase font-bold text-muted-foreground mt-1">
+                    Internships
+                  </span>
                 </div>
               </div>
             </div>
@@ -191,7 +204,6 @@ function IipcPage() {
             })}
           </div>
         </div>
-
       </section>
 
       {/* Persistent admin controls */}

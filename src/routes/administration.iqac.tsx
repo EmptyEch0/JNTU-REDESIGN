@@ -11,11 +11,11 @@ export const Route = createFileRoute("/administration/iqac")({
 function IQACLayout() {
   return (
     <>
-      <PageHero 
-        eyebrow="Administration" 
-        title="Internal Quality Assurance Cell" 
-        subtitle="Ensuring continuous quality enhancement in academic and administrative activities." 
-        image={campusImg} 
+      <PageHero
+        eyebrow="Administration"
+        title="Internal Quality Assurance Cell"
+        subtitle="Ensuring continuous quality enhancement in academic and administrative activities."
+        image={campusImg}
       />
       <SubNav items={IQAC_SUBNAV} />
 

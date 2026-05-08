@@ -35,7 +35,9 @@ export function Breadcrumbs() {
         {parts.map((p, i) => (
           <li key={p} className="flex items-center gap-1.5">
             <ChevronRight className="h-3.5 w-3.5 opacity-50" />
-            <span className={i === parts.length - 1 ? "text-white font-medium" : "hover:text-white"}>
+            <span
+              className={i === parts.length - 1 ? "text-white font-medium" : "hover:text-white"}
+            >
               {labels[p] ?? p}
             </span>
           </li>

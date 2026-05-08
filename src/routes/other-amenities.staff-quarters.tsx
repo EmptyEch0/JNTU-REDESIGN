@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import img1 from "@/assets/faculity-quaters1.jpg";
+import img2 from "@/assets/faculity-quaters2.jpg";
 
 export const Route = createFileRoute("/other-amenities/staff-quarters")({
   component: StaffQuartersPage,
@@ -6,32 +8,52 @@ export const Route = createFileRoute("/other-amenities/staff-quarters")({
 
 function StaffQuartersPage() {
   return (
-    <div className="bg-slate-50 min-h-screen">
-      <section className="max-w-4xl mx-auto px-4 py-10 space-y-6 text-sm text-gray-800">
-        <div>
-          <h2 className="text-2xl font-semibold text-ink">Staff Housing</h2>
-          <p className="leading-relaxed text-justify">
-            The campus offers dedicated residential quarters for faculty and support staff, ensuring that team members can stay near academic and administrative facilities.
+    <div className="bg-white min-h-screen animate-[fade-in_0.5s_ease-out]">
+      <section className="max-w-4xl mx-auto px-4 py-10 space-y-8 text-sm text-gray-800">
+        <div className="border-b border-primary/20 pb-3">
+          <h1 className="text-3xl font-bold text-primary tracking-tight">Staff Quarters</h1>
+        </div>
+
+        <div className="space-y-6 text-base leading-relaxed text-slate-600 text-justify">
+          <p>
+            Staff quarters are an integral part of the university's welfare initiatives, providing
+            residential units for the accommodation of employees. The primary goal is to enhance the
+            quality of life for staff members and strategically attract and retain talent by
+            offering a convenient living environment.
+          </p>
+          <p>
+            Equipped with essential facilities such as kitchens, living areas, and utilities, these
+            quarters provide a comfortable and welcoming atmosphere. The proximity of the quarters to
+            the campus enhances accessibility and fosters a strong sense of community among the
+            university's employees, reinforcing a positive organizational culture.
           </p>
         </div>
 
-        <div>
-          <h3 className="text-lg font-semibold text-ink">Facilities Included</h3>
-          <ul className="mt-3 list-disc list-inside space-y-2 text-muted-foreground">
-            <li>Well-appointed living spaces</li>
-            <li>Access to water, power, and Wi-Fi</li>
-            <li>Close proximity to campus amenities</li>
-            <li>Safe, guarded residential environment</li>
-          </ul>
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+          <div className="relative group overflow-hidden rounded-2xl border-2 border-primary/20 shadow-md">
+            <img
+              src={img1}
+              alt="Staff Quarters Block A"
+              className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+              <span className="text-white font-semibold">Residential Block A</span>
+            </div>
+          </div>
 
-        <div>
-          <h3 className="text-lg font-semibold text-ink">Purpose</h3>
-          <p className="leading-relaxed text-justify">
-            These quarters are designed to support teaching staff, administrative personnel, and other long-term campus employees with convenient on-campus living.
-          </p>
+          <div className="relative group overflow-hidden rounded-2xl border-2 border-primary/20 shadow-md">
+            <img
+              src={img2}
+              alt="Staff Quarters Block B"
+              className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+              <span className="text-white font-semibold">Residential Block B</span>
+            </div>
+          </div>
         </div>
       </section>
     </div>
   );
 }
+

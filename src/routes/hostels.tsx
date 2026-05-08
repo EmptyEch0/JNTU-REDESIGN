@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageHero } from "@/components/PageHero";
 import hostelImg from "@/assets/hostel.jpg";
 import { getHostelData } from "@/funcs/hostel.server";
@@ -236,7 +236,7 @@ function HostelsPage() {
         {/* ================= OFFICE ================= */}
         {tab === "office" && (
           <div className="space-y-6">
-            <ImageCarousel images={getImages("office")} />
+            <ImageCarousel images={getImages("office")} fallback={hostelImg} />
 
             {/* ABOUT */}
             <Card title="About Hostel Office">
@@ -249,7 +249,14 @@ function HostelsPage() {
             {officer && (
               <Card title="Officer in Charge">
                 <div className="flex flex-col sm:flex-row gap-6 items-center">
-                  <img src={officer.image || undefined} className="w-32 h-32 rounded-lg object-cover border-2 border-[var(--luxury-gold)] shadow-md" />
+                  <img
+                    src={officer.image || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=250"}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=250";
+                    }}
+                    className="w-32 h-32 rounded-lg object-cover border-2 border-[var(--luxury-gold)] shadow-md"
+                  />
                   <div>
                     <h4 className="font-display font-bold text-xl text-[var(--luxury-dark)] mb-1">{officer.name}</h4>
                     <p className="text-[var(--luxury-gold)] font-semibold text-sm tracking-wide uppercase">{officer.role}</p>
@@ -284,7 +291,7 @@ function HostelsPage() {
         {/* ================= GIRLS ================= */}
         {tab === "girls" && (
           <div className="space-y-6">
-            <ImageCarousel images={getImages("girls")} />
+            <ImageCarousel images={getImages("girls")} fallback="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1000" />
 
             {girlsBlocks.map((b: any) => (
               <Card key={b.id} title={b.title}>
@@ -309,7 +316,7 @@ function HostelsPage() {
         {/* ================= BOYS ================= */}
         {tab === "boys" && (
           <div className="space-y-6">
-            <ImageCarousel images={getImages("boys")} />
+            <ImageCarousel images={getImages("boys")} fallback="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000" />
 
             {boysBlocks.map((b: any) => (
               <Card key={b.id} title={b.title}>
@@ -359,11 +366,25 @@ function Card({ title, children }: any) {
   );
 }
 
-function ImageCarousel({ images }: any) {
-  if (!images?.length) return null;
+function ImageCarousel({ images, fallback }: any) {
+  const [src, setSrc] = useState(images?.[0] || fallback);
+
+  useEffect(() => {
+    if (images?.[0]) {
+      setSrc(images[0]);
+    } else {
+      setSrc(fallback);
+    }
+  }, [images, fallback]);
+
   return (
-    <div className="relative rounded-xl overflow-hidden shadow-md border border-[#e0d5c7] mb-8">
-      <img src={images[0]} className="w-full h-80 object-cover" />
+    <div className="relative rounded-xl overflow-hidden shadow-md border border-[#e0d5c7] mb-8 bg-amber-50/20">
+      <img
+        src={src}
+        alt="Hostel Moment"
+        className="w-full h-80 object-cover"
+        onError={() => setSrc(fallback)}
+      />
     </div>
   );
 }

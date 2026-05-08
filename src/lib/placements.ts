@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { db } from '../db';
-import { placementYears, placementHighlights, tpo, placementGoals, majorRecruiters, placementStaff, recruiters } from '../db/schema';
+import { placementYears, placementHighlights, tpo, placementGoals, majorRecruiters, placementStaff, recruiters, placementGallery } from '../db/schema';
 import { desc, eq } from 'drizzle-orm';
 
 export const getPlacementYears = createServerFn({ method: 'GET' })
@@ -132,3 +132,4 @@ export const deleteStaff = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     return await db.delete(placementStaff).where(eq(placementStaff.id, data.id)).returning();
   });
+

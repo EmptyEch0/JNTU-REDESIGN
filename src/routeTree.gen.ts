@@ -28,6 +28,7 @@ import { Route as CanteenRouteImport } from './routes/canteen'
 import { Route as CampusLifeRouteImport } from './routes/campus-life'
 import { Route as BankingRouteImport } from './routes/banking'
 import { Route as AdmissionsRouteImport } from './routes/admissions'
+import { Route as AdministrationRouteImport } from './routes/administration'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademicsRouteImport } from './routes/academics'
 import { Route as AboutRouteImport } from './routes/about'
@@ -52,8 +53,10 @@ import { Route as OtherAmenitiesStaffQuartersRouteImport } from './routes/other-
 import { Route as OtherAmenitiesGuestHouseRouteImport } from './routes/other-amenities.guest-house'
 import { Route as CampusLifeStudentActivityClubRouteImport } from './routes/campus-life.student-activity-club'
 import { Route as CampusLifeMusicClubRouteImport } from './routes/campus-life.music-club'
-import { Route as BankingBankRouteImport } from './routes/banking.bank'
-import { Route as BankingAtmRouteImport } from './routes/banking.atm'
+import { Route as AdministrationVicePrincipalRouteImport } from './routes/administration.vice-principal'
+import { Route as AdministrationPrincipalsOfficeRouteImport } from './routes/administration.principals-office'
+import { Route as AdministrationPrincipalRouteImport } from './routes/administration.principal'
+import { Route as AdministrationIqacRouteImport } from './routes/administration.iqac'
 import { Route as AdminSportsRouteImport } from './routes/admin/sports'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
 import { Route as AdminLibraryRouteImport } from './routes/admin/library'
@@ -72,6 +75,11 @@ import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mi
 import { Route as AboutJntukRouteImport } from './routes/about.jntuk'
 import { Route as AboutInstitutionRouteImport } from './routes/about.institution'
 import { Route as AboutHowToReachRouteImport } from './routes/about.how-to-reach'
+import { Route as AdministrationIqacIndexRouteImport } from './routes/administration.iqac.index'
+import { Route as AdministrationIqacMousRouteImport } from './routes/administration.iqac.mous'
+import { Route as AdministrationIqacMeetingsRouteImport } from './routes/administration.iqac.meetings'
+import { Route as AdministrationIqacCompositionRouteImport } from './routes/administration.iqac.composition'
+import { Route as AdministrationIqacAqarRouteImport } from './routes/administration.iqac.aqar'
 
 const WomenEmpowermentRoute = WomenEmpowermentRouteImport.update({
   id: '/women-empowerment',
@@ -166,6 +174,11 @@ const BankingRoute = BankingRouteImport.update({
 const AdmissionsRoute = AdmissionsRouteImport.update({
   id: '/admissions',
   path: '/admissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdministrationRoute = AdministrationRouteImport.update({
+  id: '/administration',
+  path: '/administration',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -291,15 +304,27 @@ const CampusLifeMusicClubRoute = CampusLifeMusicClubRouteImport.update({
   path: '/music-club',
   getParentRoute: () => CampusLifeRoute,
 } as any)
-const BankingBankRoute = BankingBankRouteImport.update({
-  id: '/bank',
-  path: '/bank',
-  getParentRoute: () => BankingRoute,
+const AdministrationVicePrincipalRoute =
+  AdministrationVicePrincipalRouteImport.update({
+    id: '/vice-principal',
+    path: '/vice-principal',
+    getParentRoute: () => AdministrationRoute,
+  } as any)
+const AdministrationPrincipalsOfficeRoute =
+  AdministrationPrincipalsOfficeRouteImport.update({
+    id: '/principals-office',
+    path: '/principals-office',
+    getParentRoute: () => AdministrationRoute,
+  } as any)
+const AdministrationPrincipalRoute = AdministrationPrincipalRouteImport.update({
+  id: '/principal',
+  path: '/principal',
+  getParentRoute: () => AdministrationRoute,
 } as any)
-const BankingAtmRoute = BankingAtmRouteImport.update({
-  id: '/atm',
-  path: '/atm',
-  getParentRoute: () => BankingRoute,
+const AdministrationIqacRoute = AdministrationIqacRouteImport.update({
+  id: '/iqac',
+  path: '/iqac',
+  getParentRoute: () => AdministrationRoute,
 } as any)
 const AdminSportsRoute = AdminSportsRouteImport.update({
   id: '/sports',
@@ -391,14 +416,42 @@ const AboutHowToReachRoute = AboutHowToReachRouteImport.update({
   path: '/how-to-reach',
   getParentRoute: () => AboutRoute,
 } as any)
+const AdministrationIqacIndexRoute = AdministrationIqacIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdministrationIqacRoute,
+} as any)
+const AdministrationIqacMousRoute = AdministrationIqacMousRouteImport.update({
+  id: '/mous',
+  path: '/mous',
+  getParentRoute: () => AdministrationIqacRoute,
+} as any)
+const AdministrationIqacMeetingsRoute =
+  AdministrationIqacMeetingsRouteImport.update({
+    id: '/meetings',
+    path: '/meetings',
+    getParentRoute: () => AdministrationIqacRoute,
+  } as any)
+const AdministrationIqacCompositionRoute =
+  AdministrationIqacCompositionRouteImport.update({
+    id: '/composition',
+    path: '/composition',
+    getParentRoute: () => AdministrationIqacRoute,
+  } as any)
+const AdministrationIqacAqarRoute = AdministrationIqacAqarRouteImport.update({
+  id: '/aqar',
+  path: '/aqar',
+  getParentRoute: () => AdministrationIqacRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
+  '/administration': typeof AdministrationRouteWithChildren
   '/admissions': typeof AdmissionsRoute
-  '/banking': typeof BankingRouteWithChildren
+  '/banking': typeof BankingRoute
   '/campus-life': typeof CampusLifeRouteWithChildren
   '/canteen': typeof CanteenRoute
   '/contact': typeof ContactRoute
@@ -434,8 +487,10 @@ export interface FileRoutesByFullPath {
   '/admin/library': typeof AdminLibraryRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/admin/sports': typeof AdminSportsRoute
-  '/banking/atm': typeof BankingAtmRoute
-  '/banking/bank': typeof BankingBankRoute
+  '/administration/iqac': typeof AdministrationIqacRouteWithChildren
+  '/administration/principal': typeof AdministrationPrincipalRoute
+  '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
+  '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
   '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
@@ -456,12 +511,18 @@ export interface FileRoutesByFullPath {
   '/dispensary/': typeof DispensaryIndexRoute
   '/placements/': typeof PlacementsIndexRoute
   '/rd-cell/': typeof RdCellIndexRoute
+  '/administration/iqac/aqar': typeof AdministrationIqacAqarRoute
+  '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
+  '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
+  '/administration/iqac/mous': typeof AdministrationIqacMousRoute
+  '/administration/iqac/': typeof AdministrationIqacIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/administration': typeof AdministrationRouteWithChildren
   '/admissions': typeof AdmissionsRoute
-  '/banking': typeof BankingRouteWithChildren
+  '/banking': typeof BankingRoute
   '/canteen': typeof CanteenRoute
   '/contact': typeof ContactRoute
   '/departments': typeof DepartmentsRoute
@@ -493,8 +554,9 @@ export interface FileRoutesByTo {
   '/admin/library': typeof AdminLibraryRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/admin/sports': typeof AdminSportsRoute
-  '/banking/atm': typeof BankingAtmRoute
-  '/banking/bank': typeof BankingBankRoute
+  '/administration/principal': typeof AdministrationPrincipalRoute
+  '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
+  '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
   '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
@@ -515,6 +577,11 @@ export interface FileRoutesByTo {
   '/dispensary': typeof DispensaryIndexRoute
   '/placements': typeof PlacementsIndexRoute
   '/rd-cell': typeof RdCellIndexRoute
+  '/administration/iqac/aqar': typeof AdministrationIqacAqarRoute
+  '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
+  '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
+  '/administration/iqac/mous': typeof AdministrationIqacMousRoute
+  '/administration/iqac': typeof AdministrationIqacIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -522,8 +589,9 @@ export interface FileRoutesById {
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
+  '/administration': typeof AdministrationRouteWithChildren
   '/admissions': typeof AdmissionsRoute
-  '/banking': typeof BankingRouteWithChildren
+  '/banking': typeof BankingRoute
   '/campus-life': typeof CampusLifeRouteWithChildren
   '/canteen': typeof CanteenRoute
   '/contact': typeof ContactRoute
@@ -559,8 +627,10 @@ export interface FileRoutesById {
   '/admin/library': typeof AdminLibraryRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/admin/sports': typeof AdminSportsRoute
-  '/banking/atm': typeof BankingAtmRoute
-  '/banking/bank': typeof BankingBankRoute
+  '/administration/iqac': typeof AdministrationIqacRouteWithChildren
+  '/administration/principal': typeof AdministrationPrincipalRoute
+  '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
+  '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
   '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
@@ -581,6 +651,11 @@ export interface FileRoutesById {
   '/dispensary/': typeof DispensaryIndexRoute
   '/placements/': typeof PlacementsIndexRoute
   '/rd-cell/': typeof RdCellIndexRoute
+  '/administration/iqac/aqar': typeof AdministrationIqacAqarRoute
+  '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
+  '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
+  '/administration/iqac/mous': typeof AdministrationIqacMousRoute
+  '/administration/iqac/': typeof AdministrationIqacIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -589,6 +664,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/academics'
     | '/admin'
+    | '/administration'
     | '/admissions'
     | '/banking'
     | '/campus-life'
@@ -626,8 +702,10 @@ export interface FileRouteTypes {
     | '/admin/library'
     | '/admin/placements'
     | '/admin/sports'
-    | '/banking/atm'
-    | '/banking/bank'
+    | '/administration/iqac'
+    | '/administration/principal'
+    | '/administration/principals-office'
+    | '/administration/vice-principal'
     | '/campus-life/music-club'
     | '/campus-life/student-activity-club'
     | '/other-amenities/guest-house'
@@ -648,10 +726,16 @@ export interface FileRouteTypes {
     | '/dispensary/'
     | '/placements/'
     | '/rd-cell/'
+    | '/administration/iqac/aqar'
+    | '/administration/iqac/composition'
+    | '/administration/iqac/meetings'
+    | '/administration/iqac/mous'
+    | '/administration/iqac/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
+    | '/administration'
     | '/admissions'
     | '/banking'
     | '/canteen'
@@ -685,8 +769,9 @@ export interface FileRouteTypes {
     | '/admin/library'
     | '/admin/placements'
     | '/admin/sports'
-    | '/banking/atm'
-    | '/banking/bank'
+    | '/administration/principal'
+    | '/administration/principals-office'
+    | '/administration/vice-principal'
     | '/campus-life/music-club'
     | '/campus-life/student-activity-club'
     | '/other-amenities/guest-house'
@@ -707,12 +792,18 @@ export interface FileRouteTypes {
     | '/dispensary'
     | '/placements'
     | '/rd-cell'
+    | '/administration/iqac/aqar'
+    | '/administration/iqac/composition'
+    | '/administration/iqac/meetings'
+    | '/administration/iqac/mous'
+    | '/administration/iqac'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/academics'
     | '/admin'
+    | '/administration'
     | '/admissions'
     | '/banking'
     | '/campus-life'
@@ -750,8 +841,10 @@ export interface FileRouteTypes {
     | '/admin/library'
     | '/admin/placements'
     | '/admin/sports'
-    | '/banking/atm'
-    | '/banking/bank'
+    | '/administration/iqac'
+    | '/administration/principal'
+    | '/administration/principals-office'
+    | '/administration/vice-principal'
     | '/campus-life/music-club'
     | '/campus-life/student-activity-club'
     | '/other-amenities/guest-house'
@@ -772,6 +865,11 @@ export interface FileRouteTypes {
     | '/dispensary/'
     | '/placements/'
     | '/rd-cell/'
+    | '/administration/iqac/aqar'
+    | '/administration/iqac/composition'
+    | '/administration/iqac/meetings'
+    | '/administration/iqac/mous'
+    | '/administration/iqac/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -779,8 +877,9 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRouteWithChildren
   AcademicsRoute: typeof AcademicsRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
+  AdministrationRoute: typeof AdministrationRouteWithChildren
   AdmissionsRoute: typeof AdmissionsRoute
-  BankingRoute: typeof BankingRouteWithChildren
+  BankingRoute: typeof BankingRoute
   CampusLifeRoute: typeof CampusLifeRouteWithChildren
   CanteenRoute: typeof CanteenRoute
   ContactRoute: typeof ContactRoute
@@ -933,6 +1032,13 @@ declare module '@tanstack/react-router' {
       path: '/admissions'
       fullPath: '/admissions'
       preLoaderRoute: typeof AdmissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/administration': {
+      id: '/administration'
+      path: '/administration'
+      fullPath: '/administration'
+      preLoaderRoute: typeof AdministrationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -1103,19 +1209,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CampusLifeMusicClubRouteImport
       parentRoute: typeof CampusLifeRoute
     }
-    '/banking/bank': {
-      id: '/banking/bank'
-      path: '/bank'
-      fullPath: '/banking/bank'
-      preLoaderRoute: typeof BankingBankRouteImport
-      parentRoute: typeof BankingRoute
+    '/administration/vice-principal': {
+      id: '/administration/vice-principal'
+      path: '/vice-principal'
+      fullPath: '/administration/vice-principal'
+      preLoaderRoute: typeof AdministrationVicePrincipalRouteImport
+      parentRoute: typeof AdministrationRoute
     }
-    '/banking/atm': {
-      id: '/banking/atm'
-      path: '/atm'
-      fullPath: '/banking/atm'
-      preLoaderRoute: typeof BankingAtmRouteImport
-      parentRoute: typeof BankingRoute
+    '/administration/principals-office': {
+      id: '/administration/principals-office'
+      path: '/principals-office'
+      fullPath: '/administration/principals-office'
+      preLoaderRoute: typeof AdministrationPrincipalsOfficeRouteImport
+      parentRoute: typeof AdministrationRoute
+    }
+    '/administration/principal': {
+      id: '/administration/principal'
+      path: '/principal'
+      fullPath: '/administration/principal'
+      preLoaderRoute: typeof AdministrationPrincipalRouteImport
+      parentRoute: typeof AdministrationRoute
+    }
+    '/administration/iqac': {
+      id: '/administration/iqac'
+      path: '/iqac'
+      fullPath: '/administration/iqac'
+      preLoaderRoute: typeof AdministrationIqacRouteImport
+      parentRoute: typeof AdministrationRoute
     }
     '/admin/sports': {
       id: '/admin/sports'
@@ -1243,6 +1363,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutHowToReachRouteImport
       parentRoute: typeof AboutRoute
     }
+    '/administration/iqac/': {
+      id: '/administration/iqac/'
+      path: '/'
+      fullPath: '/administration/iqac/'
+      preLoaderRoute: typeof AdministrationIqacIndexRouteImport
+      parentRoute: typeof AdministrationIqacRoute
+    }
+    '/administration/iqac/mous': {
+      id: '/administration/iqac/mous'
+      path: '/mous'
+      fullPath: '/administration/iqac/mous'
+      preLoaderRoute: typeof AdministrationIqacMousRouteImport
+      parentRoute: typeof AdministrationIqacRoute
+    }
+    '/administration/iqac/meetings': {
+      id: '/administration/iqac/meetings'
+      path: '/meetings'
+      fullPath: '/administration/iqac/meetings'
+      preLoaderRoute: typeof AdministrationIqacMeetingsRouteImport
+      parentRoute: typeof AdministrationIqacRoute
+    }
+    '/administration/iqac/composition': {
+      id: '/administration/iqac/composition'
+      path: '/composition'
+      fullPath: '/administration/iqac/composition'
+      preLoaderRoute: typeof AdministrationIqacCompositionRouteImport
+      parentRoute: typeof AdministrationIqacRoute
+    }
+    '/administration/iqac/aqar': {
+      id: '/administration/iqac/aqar'
+      path: '/aqar'
+      fullPath: '/administration/iqac/aqar'
+      preLoaderRoute: typeof AdministrationIqacAqarRouteImport
+      parentRoute: typeof AdministrationIqacRoute
+    }
   }
 }
 
@@ -1312,18 +1467,42 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
-interface BankingRouteChildren {
-  BankingAtmRoute: typeof BankingAtmRoute
-  BankingBankRoute: typeof BankingBankRoute
+interface AdministrationIqacRouteChildren {
+  AdministrationIqacAqarRoute: typeof AdministrationIqacAqarRoute
+  AdministrationIqacCompositionRoute: typeof AdministrationIqacCompositionRoute
+  AdministrationIqacMeetingsRoute: typeof AdministrationIqacMeetingsRoute
+  AdministrationIqacMousRoute: typeof AdministrationIqacMousRoute
+  AdministrationIqacIndexRoute: typeof AdministrationIqacIndexRoute
 }
 
-const BankingRouteChildren: BankingRouteChildren = {
-  BankingAtmRoute: BankingAtmRoute,
-  BankingBankRoute: BankingBankRoute,
+const AdministrationIqacRouteChildren: AdministrationIqacRouteChildren = {
+  AdministrationIqacAqarRoute: AdministrationIqacAqarRoute,
+  AdministrationIqacCompositionRoute: AdministrationIqacCompositionRoute,
+  AdministrationIqacMeetingsRoute: AdministrationIqacMeetingsRoute,
+  AdministrationIqacMousRoute: AdministrationIqacMousRoute,
+  AdministrationIqacIndexRoute: AdministrationIqacIndexRoute,
 }
 
-const BankingRouteWithChildren =
-  BankingRoute._addFileChildren(BankingRouteChildren)
+const AdministrationIqacRouteWithChildren =
+  AdministrationIqacRoute._addFileChildren(AdministrationIqacRouteChildren)
+
+interface AdministrationRouteChildren {
+  AdministrationIqacRoute: typeof AdministrationIqacRouteWithChildren
+  AdministrationPrincipalRoute: typeof AdministrationPrincipalRoute
+  AdministrationPrincipalsOfficeRoute: typeof AdministrationPrincipalsOfficeRoute
+  AdministrationVicePrincipalRoute: typeof AdministrationVicePrincipalRoute
+}
+
+const AdministrationRouteChildren: AdministrationRouteChildren = {
+  AdministrationIqacRoute: AdministrationIqacRouteWithChildren,
+  AdministrationPrincipalRoute: AdministrationPrincipalRoute,
+  AdministrationPrincipalsOfficeRoute: AdministrationPrincipalsOfficeRoute,
+  AdministrationVicePrincipalRoute: AdministrationVicePrincipalRoute,
+}
+
+const AdministrationRouteWithChildren = AdministrationRoute._addFileChildren(
+  AdministrationRouteChildren,
+)
 
 interface CampusLifeRouteChildren {
   CampusLifeMusicClubRoute: typeof CampusLifeMusicClubRoute
@@ -1415,8 +1594,9 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRouteWithChildren,
   AcademicsRoute: AcademicsRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
+  AdministrationRoute: AdministrationRouteWithChildren,
   AdmissionsRoute: AdmissionsRoute,
-  BankingRoute: BankingRouteWithChildren,
+  BankingRoute: BankingRoute,
   CampusLifeRoute: CampusLifeRouteWithChildren,
   CanteenRoute: CanteenRoute,
   ContactRoute: ContactRoute,

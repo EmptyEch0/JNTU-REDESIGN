@@ -37,7 +37,7 @@ function PlacementsPage() {
 
   const saveTPO = async () => {
     if (!editedTPO) return;
-    toast.promise(updateTPO({ data: { id: tpoData.id, ...editedTPO } }), {
+    toast.promise(updateTPO({ data: { id: tpoData?.id, ...editedTPO } }), {
       loading: 'Saving...',
       success: () => {
         queryClient.invalidateQueries({ queryKey: ['tpo'] });

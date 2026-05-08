@@ -1,7 +1,7 @@
     import { createFileRoute } from "@tanstack/react-router";
     import { PageHero } from "@/components/PageHero";
 
-    import canteenImg from "@/assets/culture.jpg";
+    import canteenImg from "@/assets/canteen.jpg";
 
     export const Route = createFileRoute("/canteen")({
     component: CanteenPage,

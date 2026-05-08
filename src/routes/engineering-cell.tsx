@@ -11,7 +11,6 @@ export const Route = createFileRoute("/engineering-cell")({
 const TABS = [
   "Construction Activities",
   "PE (Elec) Section",
-  "Vision & Mission",
 ];
 
 function EngineeringCellPage() {
@@ -134,11 +133,10 @@ function EngineeringCellPage() {
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`premium-tab-btn ${
-                tab === t
+              className={`premium-tab-btn ${tab === t
                   ? "premium-tab-active"
                   : "premium-tab-inactive"
-              }`}
+                }`}
             >
               {t}
             </button>
@@ -163,95 +161,88 @@ function EngineeringCellPage() {
           {/* ================= CONSTRUCTION ================= */}
           {tab ===
             "Construction Activities" && (
-            <div className="space-y-6">
+              <div className="space-y-6">
 
-              {/* ACTIVITIES */}
-              <div className="premium-card">
-                <h2 className="section-title">
-                  Construction Activities
-                </h2>
+                {/* ACTIVITIES */}
+                <div className="premium-card">
+                  <h2 className="section-title">
+                    Construction Activities
+                  </h2>
 
-                {!construction.length ? (
-                  <p>
-                    No construction activities
-                    available.
-                  </p>
-                ) : (
-                  <ul className="space-y-3">
-                    {construction.map(
-                      (
-                        item: string,
-                        i: number
-                      ) => (
-                        <li
-                          key={i}
-                          className="leading-relaxed"
-                        >
-                          ✦ {item}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                )}
+                  {!construction.length ? (
+                    <p>
+                      No construction activities
+                      available.
+                    </p>
+                  ) : (
+                    <ul className="space-y-3">
+                      {construction.map(
+                        (
+                          item: string,
+                          i: number
+                        ) => (
+                          <li
+                            key={i}
+                            className="leading-relaxed"
+                          >
+                            ✦ {item}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  )}
+                </div>
+
+                {/* CIVIL STAFF */}
+                <StaffSection
+                  title="Engineering Cell Staff"
+                  staff={civilStaff}
+                />
               </div>
-
-              {/* CIVIL STAFF */}
-              <StaffSection
-                title="Engineering Cell Staff"
-                staff={civilStaff}
-              />
-            </div>
-          )}
+            )}
 
           {/* ================= ELECTRICAL ================= */}
           {tab === "PE (Elec) Section" && (
             <div className="grid md:grid-cols-12 gap-8">
 
               {/* LEFT PROFILE CARD */}
-              <div className="md:col-span-4">
+{/* LEFT PROFILE CARD */}
+<div className="md:col-span-4">
 
-                <div className="bg-white rounded-2xl border overflow-hidden shadow-sm">
+  <div className="bg-white rounded-2xl border overflow-hidden shadow-sm">
 
-                  <div className="h-1.5 bg-red-600" />
+    <div className="h-1.5 bg-red-600" />
 
-                  <div className="p-5">
+    <div className="p-5">
 
-                    {/* IMAGE */}
-                    <div className="aspect-[4/5] rounded-xl overflow-hidden bg-gray-100">
-                      <img
-                        src={
-                          electrical?.img ||
-                          "/fallback.jpg"
-                        }
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src =
-                            "/fallback.jpg";
-                        }}
-                        alt={
-                          electrical?.engineer ||
-                          "Engineer"
-                        }
-                      />
-                    </div>
+      {/* IMAGE */}
+      <div className="aspect-[4/5] rounded-xl overflow-hidden bg-gray-100">
+        <img
+          src={electrical?.img || ""}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.currentTarget.src = "/fallback.jpg";
+          }}
+          alt={electrical?.engineer || "Engineer"}
+        />
+      </div>
 
-                    {/* DETAILS */}
-                    <div className="mt-5 text-center">
+      {/* DETAILS */}
+      <div className="mt-5 text-left">
 
-                      {/* ✅ PADMAJA FROM DB */}
-                      <h3 className="font-display text-red-600 text-2xl font-bold">
-                        {electrical?.engineer ||
-                          "Project Engineer"}
-                      </h3>
+        {/* NAME */}
+        <h3 className="font-display text-red-600 text-2xl font-bold leading-snug">
+          {electrical?.engineer || "Dr. A. Padmaja"}
+        </h3>
 
-                      <p className="text-sm text-gray-500 mt-1">
-                        {electrical?.name ||
-                          "Project Engineer"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        {/* DESIGNATION */}
+        <p className="text-sm text-gray-700 mt-2 font-semibold tracking-wide">
+          {electrical?.designation || "Project Engineer"}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
               {/* RIGHT DETAILS */}
               <div className="md:col-span-8 space-y-6">

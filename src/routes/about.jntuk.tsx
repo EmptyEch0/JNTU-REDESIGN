@@ -86,7 +86,7 @@ function JntukPage() {
 
       <section className="py-16 container-narrow text-center">
         <div className="flex flex-wrap justify-center gap-3">
-          <Link to="/about/institution" className="btn-ghost">About Institution <ArrowRight className="h-4 w-4" /></Link>
+          <Link to="/about/institution" className="btn-secondary">About Institution <ArrowRight className="h-4 w-4" /></Link>
           <Link to="/about/vizianagaram" className="btn-primary">About Vizianagaram <ArrowRight className="h-4 w-4" /></Link>
         </div>
       </section>

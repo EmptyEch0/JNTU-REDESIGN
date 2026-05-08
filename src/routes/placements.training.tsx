@@ -46,7 +46,7 @@ function TrainingPage() {
 
   const saveAllChanges = async () => {
     const promises = [];
-    if (editedTPO) promises.push(updateTPO({ data: { id: tpoData.id, ...editedTPO } }));
+    if (editedTPO) promises.push(updateTPO({ data: { id: tpoData?.id, ...editedTPO } }));
     
     Object.entries(editedGoals).forEach(([id, data]) => {
       promises.push(updateGoal({ data: { id: parseInt(id), ...data } }));

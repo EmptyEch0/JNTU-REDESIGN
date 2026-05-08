@@ -161,6 +161,12 @@ export const recruiters = pgTable(
   })
 );
 
+export const placementGallery = pgTable("placement_gallery", {
+  id: serial("id").primaryKey(),
+  src: text("src").notNull(),
+  caption: text("caption").notNull(),
+});
+
 /* ===========================
    🔹 ENUMS
 =========================== */

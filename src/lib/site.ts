@@ -38,6 +38,19 @@ export const NAV: {
     ],
   },
   {
+    label: "Administration",
+    groups: [
+      {
+        title: "Leadership",
+        items: [
+          { label: "Principal", to: "/administration/principal", desc: "Leadership and vision" },
+          { label: "Vice Principal", to: "/administration/vice-principal", desc: "Academic administration" },
+          { label: "IQAC", to: "/administration/iqac", desc: "Internal Quality Assurance Cell" },
+        ],
+      },
+    ],
+  },
+  {
     label: "Academics",
     groups: [
       {
@@ -106,7 +119,7 @@ export const NAV: {
         title: "Campus Services",
         items: [
           { label: "Canteen", to: "/canteen", desc: "Dining facilities" },
-          { label: "Banking & ATM", to: "/banking", desc: "On-campus bank" },
+          { label: "Banking", to: "/banking", desc: "On-campus bank" },
           { label: "Engineering Cell", to: "/engineering-cell", desc: "Infrastructure maintenance" },
           { label: "Other Amenities", to: "/other-amenities", desc: "Staff & guest quarters" },
         ],
@@ -220,6 +233,15 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   { label: "About Vizianagaram", to: "/about/vizianagaram", group: "About", keywords: "city heritage culture" },
   { label: "How to Reach", to: "/about/how-to-reach", group: "About", keywords: "directions transport bus train" },
   { label: "Vision & Mission", to: "/about/vision-mission", group: "About", keywords: "ugc recognition 2f 12b" },
+
+  { label: "Principal", to: "/administration/principal", group: "Administration", keywords: "leadership head rajeswara rao" },
+  { label: "Vice Principal", to: "/administration/vice-principal", group: "Administration", keywords: "jaya suma academic" },
+  { label: "IQAC", to: "/administration/iqac", group: "Administration", keywords: "quality assurance cell" },
+  { label: "IQAC Composition", to: "/administration/iqac/composition", group: "Administration" },
+  { label: "IQAC Meetings", to: "/administration/iqac/meetings", group: "Administration" },
+  { label: "AQAR Reports", to: "/administration/iqac/aqar", group: "Administration" },
+  { label: "IQAC MOUs", to: "/administration/iqac/mous", group: "Administration" },
+
   { label: "Academics", to: "/academics", group: "Pages", keywords: "programs curriculum ug pg phd" },
   { label: "Departments", to: "/departments", group: "Pages" },
   { label: "Admissions", to: "/admissions", group: "Pages", keywords: "apply enroll" },
@@ -271,7 +293,7 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
 
   { label: "Canteen", to: "/canteen", group: "Facilities", keywords: "food dining eating cafeteria" },
   { label: "Engineering Cell", to: "/engineering-cell", group: "Facilities", keywords: "infrastructure maintenance buildings" },
-  { label: "Banking & ATM", to: "/banking", group: "Facilities", keywords: "bank money cash sbi" },
+  { label: "Banking", to: "/banking", group: "Facilities", keywords: "bank money cash sbi" },
   { label: "Other Amenities", to: "/other-amenities", group: "Facilities", keywords: "guest house quarters staff" },
 ];
 
@@ -303,6 +325,20 @@ export const RD_SUBNAV = [
   { label: "Publications", to: "/rd-cell/publications" },
   { label: "Scholars", to: "/rd-cell/scholars" },
   { label: "MOUs", to: "/rd-cell/mous" },
+];
+
+export const ADMINISTRATION_SUBNAV = [
+  { label: "Principal", to: "/administration/principal" },
+  { label: "Vice Principal", to: "/administration/vice-principal" },
+  { label: "IQAC", to: "/administration/iqac" },
+];
+
+export const IQAC_SUBNAV = [
+  { label: "About IQAC", to: "/administration/iqac" },
+  { label: "Composition", to: "/administration/iqac/composition" },
+  { label: "Meetings & Events", to: "/administration/iqac/meetings" },
+  { label: "AQAR", to: "/administration/iqac/aqar" },
+  { label: "MOUs", to: "/administration/iqac/mous" },
 ];
 
 export const RECRUITERS_2017_18 = [
@@ -380,15 +416,11 @@ export const RECRUITER_LOGOS: { name: string; url: string }[] = [
   { name: "Zebi", url: `${R}/Zebi.png` },
 ];
 
-export const BANKING_SUBNAV = [
-  { label: "Bank Overview", to: "/banking" },
-  { label: "ATM Facility", to: "/banking/atm" },
-];
+
 
 export const OTHER_AMENITIES_SUBNAV = [
   { label: "Overview", to: "/other-amenities" },
   { label: "Staff Quarters", to: "/other-amenities/staff-quarters" },
-  { label: "Faculty Quarters", to: "/other-amenities/faculty-quarters" },
   { label: "Guest House", to: "/other-amenities/guest-house" },
 ];
 

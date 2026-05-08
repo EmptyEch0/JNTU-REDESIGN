@@ -2,7 +2,21 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { getSportsData } from "@/funcs/sports.server";
-import { Award, Users, Shield, Trophy, MapPin, Mail, Phone, Image as ImageIcon, BookOpen } from "lucide-react";
+import cultureImg from "@/assets/culture.jpg";
+import { 
+  Award, 
+  User,
+  Users, 
+  Shield, 
+  Trophy, 
+  MapPin, 
+  Mail, 
+  Phone, 
+  Image as ImageIcon, 
+  BookOpen,
+  Sparkles,
+  Building
+} from "lucide-react";
 
 export const Route = createFileRoute("/sports")({
   loader: async () => await getSportsData(),
@@ -10,12 +24,12 @@ export const Route = createFileRoute("/sports")({
 });
 
 const TABS = [
-  { name: "Overview", icon: BookOpen },
-  { name: "Staff & Team", icon: Users },
-  { name: "Achievements", icon: Trophy },
-  { name: "Play Fields", icon: MapPin },
-  { name: "Gymnasium", icon: Shield },
-  { name: "Gallery", icon: ImageIcon },
+  "Overview",
+  "Staff & Team",
+  "Achievements",
+  "Play Fields",
+  "Gymnasium",
+  "Gallery",
 ];
 
 function SportsPage() {
@@ -24,6 +38,8 @@ function SportsPage() {
 
   const images = data?.images || [];
   const sportsContentList = Array.isArray(data?.info) ? data?.info : [];
+
+  const getCarouselImages = () => images.map((i: any) => i.url);
 
   // Get coordinators from sportsContentList
   const coordinators = sportsContentList.filter((item: any) =>
@@ -35,13 +51,13 @@ function SportsPage() {
 
   const welcomeMessage = (msg: string) => {
     if (!msg || msg === "---" || msg.trim() === "") {
-      return "Welcome to the Department of Physical Education and Sports. We believe in nurturing a healthy mind in a healthy body through regular physical activity, training bootcamps, and competitive athletic events. Our state-of-the-art play fields and gymnasium are open to all residential and day scholar students to cultivate physical fitness, excellence, and exceptional sportsmanship.";
+      return "Welcome to the Department of Physical Education and Sports. We believe in nurturing a healthy mind in a healthy body through regular physical activity, training bootcamps, and competitive athletic events.";
     }
     return msg;
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen font-sans pb-16">
+    <div className="min-h-screen bg-[oklch(0.972_0.012_85)] text-slate-800 pb-20">
       <PageHero
         eyebrow="Athletics & Recreation"
         title="Sports & Physical Education"
@@ -49,294 +65,391 @@ function SportsPage() {
         image={images?.length ? images[0].url : undefined}
       />
 
-      <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          
-          {/* ================= LEFT SIDEBAR ================= */}
-          <aside className="lg:col-span-3 space-y-6">
-            
-            {/* Elegant Side Tabs */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 space-y-1">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider px-3 mb-3">
-                Sports Menu
-              </h3>
-              {TABS.map((t) => {
-                const Icon = t.icon;
-                const active = tab === t.name;
-                return (
-                  <button
-                    key={t.name}
-                    onClick={() => setTab(t.name)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                      active
-                        ? "bg-slate-900 text-white shadow-md shadow-slate-950/10 scale-[1.01]"
-                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                    }`}
-                  >
-                    <Icon className={`w-4 h-4 ${active ? "text-[#d4af37]" : "text-slate-400"}`} />
-                    {t.name}
-                  </button>
-                );
-              })}
-            </div>
+      <section className="container-narrow py-12">
+        {/* TABS */}
+        <div className="flex flex-wrap gap-2.5 mb-12 justify-center">
+          {TABS.map((t) => (
+            <TabBtn 
+              key={t}
+              label={t} 
+              active={tab === t} 
+              onClick={() => setTab(t)} 
+              icon={
+                t === "Overview" ? BookOpen : 
+                t === "Staff & Team" ? Users : 
+                t === "Achievements" ? Trophy : 
+                t === "Play Fields" ? MapPin : 
+                t === "Gymnasium" ? Shield : ImageIcon
+              } 
+            />
+          ))}
+        </div>
 
-            {/* Quick Contact Info */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                Department Office
-              </h4>
-              <div className="space-y-3 text-sm text-slate-600">
-                <p className="leading-relaxed">
-                  JNTU-GV University College of Engineering, Vizianagaram – 535003, A.P., India.
+        <div className="space-y-8 max-w-5xl mx-auto animate-[fade-in_0.4s_ease-out]">
+          <ImageCarousel images={getCarouselImages()} fallback={cultureImg} />
+
+          {/* ================= OVERVIEW ================= */}
+          {tab === "Overview" && (
+            <div className="space-y-8 animate-[fade-in_0.4s_ease-out]">
+              
+              {/* SPORTS COORDINATOR */}
+              {displayPeople[0] && (
+                <Card title="Sports Coordinator" icon={User}>
+                  <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
+                    <img
+                      src={displayPeople[0].img || "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=250"}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=250";
+                      }}
+                      className="w-24 h-24 rounded-2xl object-cover border border-slate-200/50 shadow-sm shrink-0"
+                      alt={displayPeople[0].name}
+                    />
+                    <div>
+                      <h4 className="font-display font-bold text-lg text-slate-900 mb-0.5">
+                        {displayPeople[0].name}
+                      </h4>
+                      <p className="text-[oklch(0.42_0.18_265)] font-semibold text-xs tracking-wider uppercase">
+                        {displayPeople[0].designation || "Sports Coordinator"}
+                      </p>
+                      <p className="text-[10px] text-slate-400 font-medium">{displayPeople[0].qualification}</p>
+                      <p className="text-sm text-slate-500 mt-2 leading-relaxed italic">
+                        "{welcomeMessage(displayPeople[0].message)}"
+                      </p>
+                      <div className="flex flex-wrap gap-4 mt-3 text-xs text-slate-500">
+                        {displayPeople[0].email && (
+                          <span className="flex items-center gap-1">
+                            <Mail className="w-3.5 h-3.5 text-slate-400" />
+                            {displayPeople[0].email}
+                          </span>
+                        )}
+                        {displayPeople[0].phone && (
+                          <span className="flex items-center gap-1">
+                            <Phone className="w-3.5 h-3.5 text-slate-400" />
+                            {displayPeople[0].phone}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              )}
+
+              {/* WELCOME / ABOUT */}
+              <Card title="Physical Education Department" icon={Sparkles}>
+                <p className="text-slate-600 leading-relaxed text-sm md:text-base">
+                  The Department of Physical Education plays a key role in the overall development of our students' personality. 
+                  With a firm belief that athletic participation builds integrity, resilience, and collaboration, the university provides excellent infrastructure, 
+                  modern training equipment, and opportunities to represent the institution at state, zone, and national levels.
                 </p>
-                <div className="pt-2 border-t border-slate-100 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-slate-400" />
-                    <span>08922-277918</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-slate-400" />
-                    <span className="text-xs break-all">phyedu@jntukucev.ac.in</span>
-                  </div>
-                </div>
-              </div>
+              </Card>
             </div>
-          </aside>
+          )}
 
-          {/* ================= RIGHT MAIN PANEL ================= */}
-          <main className="lg:col-span-9 space-y-10">
+          {/* ================= STAFF & TEAM ================= */}
+          {tab === "Staff & Team" && (
+            <div className="space-y-8 animate-[fade-in_0.4s_ease-out]">
+              {data?.faculty?.length > 0 && (
+                <Card title="Physical Education Faculty" icon={Users}>
+                  <StaffTable data={data.faculty} />
+                </Card>
+              )}
 
-            {/* ================= OVERVIEW TAB ================= */}
-            {tab === "Overview" && (
-              <div className="space-y-10">
-                
-                {/* Introduction */}
-                <div className="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#d4af37]" />
-                  <h2 className="text-2xl font-extrabold text-slate-900 mb-4 tracking-tight">
-                    Department of Physical Education & Sports
-                  </h2>
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    The Department of Physical Education plays a key role in the overall development of our students' personality. 
-                    With a firm belief that athletic participation builds integrity, resilience, and collaboration, the university provides excellent infrastructure, 
-                    modern training equipment, and opportunities to represent the institution at state, zone, and national levels.
-                  </p>
-                </div>
+              {data?.nonTeaching?.length > 0 && (
+                <Card title="Supporting / Non-Teaching Staff" icon={Users}>
+                  <StaffTable data={data.nonTeaching} />
+                </Card>
+              )}
+            </div>
+          )}
 
-                {/* Coordinators / Personnel Carousel */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  {displayPeople.map((person: any) => (
-                    <div key={person.id} className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
-                      <div className="p-6 space-y-4">
-                        <div className="flex gap-4 items-start">
-                          <img
-                            src={person.img || "/fallback.jpg"}
-                            alt={person.name}
-                            className="w-16 h-16 rounded-xl object-cover shadow-sm border border-slate-100 shrink-0"
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = "/fallback.jpg";
-                            }}
-                          />
-                          <div>
-                            <h4 className="font-bold text-slate-900 text-sm leading-tight">
-                              {person.name}
-                            </h4>
-                            <p className="text-[11px] text-[#d4af37] font-semibold uppercase tracking-wider mt-0.5">
-                              {person.designation}
-                            </p>
-                            <p className="text-[10px] text-slate-400 font-medium">
-                              {person.qualification}
-                            </p>
-                          </div>
-                        </div>
+          {/* ================= ACHIEVEMENTS ================= */}
+          {tab === "Achievements" && (
+            <Card title="Recent Sports Achievements & Accolades" icon={Trophy}>
+              <AchievementsTable data={data?.achievements || []} />
+            </Card>
+          )}
 
-                        <p className="text-slate-600 text-xs leading-relaxed italic border-t border-slate-100 pt-3">
-                          "{welcomeMessage(person.message)}"
-                        </p>
-                      </div>
+          {/* ================= PLAY FIELDS ================= */}
+          {tab === "Play Fields" && (
+            <Card title="Outdoor & Indoor Playfields" icon={MapPin}>
+              <FieldsTable data={data?.fields || []} />
+            </Card>
+          )}
 
-                      <div className="bg-slate-50/50 px-6 py-3 border-t border-slate-100 flex justify-between text-[11px] text-slate-500">
-                        <span className="flex items-center gap-1">
-                          <Mail className="w-3 h-3" /> {person.email?.split(",")?.[0]}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Phone className="w-3 h-3" /> {person.phone?.split("/")?.[0]?.trim()}
-                        </span>
-                      </div>
+          {/* ================= GYMNASIUM ================= */}
+          {tab === "Gymnasium" && (
+            <Card title="Gymnasium Equipment & Infrastructure" icon={Shield}>
+              <GymTable data={data?.gym || []} />
+            </Card>
+          )}
+
+          {/* ================= GALLERY ================= */}
+          {tab === "Gallery" && (
+            <Card title="Campus Athletic Moments" icon={ImageIcon} subtitle="A glimpse into training camps, tournaments, and fitness sessions">
+              {images.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {images.map((img: any) => (
+                    <div key={img.id} className="relative group overflow-hidden rounded-2xl border border-slate-100 aspect-[4/3] bg-slate-50">
+                      <img
+                        src={img.url}
+                        alt="Athletic Moment"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
-
-            {/* ================= STAFF & TEAM TAB ================= */}
-            {tab === "Staff & Team" && (
-              <div className="space-y-10">
-                {/* Faculty Card Display */}
-                <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 overflow-hidden">
-                  <h3 className="text-lg font-bold text-slate-900 mb-4 px-2 flex items-center gap-2">
-                    <Users className="w-5 h-5 text-slate-400" />
-                    Physical Education Faculty
-                  </h3>
-                  <Table
-                    columns={["S.No", "Name", "Designation"]}
-                    data={(data?.faculty || []).map((f: any, i: number) => [
-                      i + 1,
-                      f.name,
-                      f.designation,
-                    ])}
-                  />
+              ) : (
+                <div className="text-center py-12 text-slate-400 italic text-sm">
+                  No gallery images uploaded.
                 </div>
+              )}
+            </Card>
+          )}
 
-                {/* Non Teaching */}
-                {data?.nonTeaching?.length > 0 && (
-                  <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 overflow-hidden">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4 px-2 flex items-center gap-2">
-                      <Users className="w-5 h-5 text-slate-400" />
-                      Supporting / Non-Teaching Staff
-                    </h3>
-                    <Table
-                      columns={["S.No", "Name", "Designation"]}
-                      data={(data?.nonTeaching || []).map((n: any, i: number) => [
-                        i + 1,
-                        n.name,
-                        n.designation,
-                      ])}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* ================= ACHIEVEMENTS TAB ================= */}
-            {tab === "Achievements" && (
-              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 overflow-hidden">
-                <h3 className="text-lg font-bold text-slate-900 mb-4 px-2 flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-slate-400" />
-                  Recent Sports Achievements & Accolades
-                </h3>
-                <Table
-                  columns={["S.No", "Student Name", "Branch", "Game / Event", "Tournament Name", "Venue"]}
-                  data={(data?.achievements || []).map((a: any, i: number) => [
-                    i + 1,
-                    a.student,
-                    a.branch,
-                    a.game,
-                    a.tournament,
-                    a.venue,
-                  ])}
-                />
-              </div>
-            )}
-
-            {/* ================= PLAY FIELDS TAB ================= */}
-            {tab === "Play Fields" && (
-              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 overflow-hidden">
-                <h3 className="text-lg font-bold text-slate-900 mb-4 px-2 flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-slate-400" />
-                  Outdoor & Indoor Playfields
-                </h3>
-                <Table
-                  columns={["S.No", "Field / Court Name", "Quantity Available"]}
-                  data={(data?.fields || []).map((f: any, i: number) => [
-                    i + 1,
-                    f.name,
-                    f.qty,
-                  ])}
-                />
-              </div>
-            )}
-
-            {/* ================= GYMNASIUM TAB ================= */}
-            {tab === "Gymnasium" && (
-              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 overflow-hidden">
-                <h3 className="text-lg font-bold text-slate-900 mb-4 px-2 flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-slate-400" />
-                  Gymnasium Equipment & Infrastructure
-                </h3>
-                <Table
-                  columns={["S.No", "Equipment Name", "Quantity Available", "Estimated Cost"]}
-                  data={(data?.gym || []).map((g: any, i: number) => [
-                    i + 1,
-                    g.name,
-                    g.qty,
-                    g.cost,
-                  ])}
-                />
-              </div>
-            )}
-
-            {/* ================= GALLERY TAB ================= */}
-            {tab === "Gallery" && (
-              <div className="space-y-6">
-                <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">
-                  <h3 className="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
-                    <ImageIcon className="w-5 h-5 text-slate-400" />
-                    Campus Athletic Moments
-                  </h3>
-                  <p className="text-sm text-slate-500 mb-6">
-                    A glimpse into our training camps, annual tournaments, and physical fitness activities.
-                  </p>
-
-                  {images.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                      {images.map((img: any) => (
-                        <div key={img.id} className="relative group overflow-hidden rounded-xl border border-slate-100 aspect-[4/3] bg-slate-50">
-                          <img
-                            src={img.url}
-                            alt="Athletic Moment"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            loading="lazy"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-12 text-slate-400 italic text-sm">
-                      No gallery images uploaded.
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </main>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
 
-/* ================= PREMIUM TABLE ================= */
-function Table({ columns, data }: any) {
-  if (!data.length) {
+/* ---------- UI COMPONENTS ---------- */
+
+function TabBtn({ label, active, onClick, icon: Icon }: any) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300 active:scale-95 border cursor-pointer ${
+        active
+          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow-sm"
+          : "bg-white border-slate-200/80 text-slate-500 hover:text-slate-800 hover:bg-slate-50 hover:border-slate-300 shadow-sm"
+      }`}
+    >
+      {Icon && <Icon className="w-4 h-4 shrink-0" />}
+      {label}
+    </button>
+  );
+}
+
+function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
+  return (
+    <div className={`bg-white rounded-2xl border border-slate-200/60 p-6 md:p-8 hover:shadow-md transition-all duration-300 shadow-sm ${className}`}>
+      {title && (
+        <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-slate-100">
+          {Icon && <Icon className="w-5 h-5 text-[oklch(0.42_0.18_265)]" />}
+          <div>
+            <h3 className="font-display font-semibold text-lg md:text-xl text-slate-900">{title}</h3>
+            {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
+          </div>
+        </div>
+      )}
+      {children}
+    </div>
+  );
+}
+
+function ImageCarousel({ images, fallback }: any) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
+
+  useEffect(() => {
+    if (!autoplay || !images || images.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [autoplay, images]);
+
+  if (!images || images.length === 0) {
     return (
-      <div className="text-center py-8 text-slate-400 italic text-sm">
-        No record available.
+      <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-100 mb-8 aspect-[16/6] min-h-[240px] max-h-[380px] bg-slate-100">
+        <img src={fallback} className="w-full h-full object-cover" alt="Sports fallback" />
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-100">
+    <div 
+      className="relative rounded-2xl overflow-hidden shadow-md border border-slate-150 mb-8 aspect-[16/6] min-h-[240px] max-h-[380px] bg-slate-100 group"
+      onMouseEnter={() => setAutoplay(false)}
+      onMouseLeave={() => setAutoplay(true)}
+    >
+      <div className="w-full h-full relative">
+        {images.map((img: string, i: number) => (
+          <img
+            key={i}
+            src={img}
+            alt={`Sports view ${i + 1}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+              currentIndex === i ? "opacity-100" : "opacity-0"
+            }`}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = fallback;
+            }}
+          />
+        ))}
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
+
+      {images.length > 1 && (
+        <>
+          <button
+            onClick={() => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 w-9 h-9 rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 cursor-pointer z-10"
+          >
+            ‹
+          </button>
+          <button
+            onClick={() => setCurrentIndex((prev) => (prev + 1) % images.length)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 w-9 h-9 rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 cursor-pointer z-10"
+          >
+            ›
+          </button>
+
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {images.map((_, index: number) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`transition-all duration-300 rounded-full h-1.5 ${
+                  currentIndex === index 
+                    ? "w-6 bg-white" 
+                    : "w-1.5 bg-white/50 hover:bg-white"
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ---------- TABLES ---------- */
+
+function StaffTable({ data }: any) {
+  return (
+    <div className="overflow-x-auto">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="bg-slate-50 border-b border-slate-100">
-            {columns.map((c: string, i: number) => (
-              <th key={i} className="p-4 text-xs font-bold uppercase tracking-wider text-slate-500">
-                {c}
-              </th>
-            ))}
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">S.No</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Designation</th>
           </tr>
         </thead>
-        <tbody>
-          {data.map((row: any, i: number) => (
-            <tr key={i} className="border-b border-slate-100 hover:bg-slate-50/50 transition duration-150">
-              {row.map((cell: any, j: number) => (
-                <td key={j} className="p-4 text-sm font-medium text-slate-700">
-                  {cell}
-                </td>
-              ))}
+        <tbody className="divide-y divide-slate-50">
+          {data.map((f: any, i: number) => (
+            <tr key={i} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 text-sm font-semibold text-slate-400">{i + 1}</td>
+              <td className="py-3.5 font-semibold text-slate-900 text-sm flex items-center gap-3">
+                <div className="w-7 h-7 rounded-full bg-slate-100 grid place-items-center text-[oklch(0.42_0.18_265)] font-display text-xs font-bold shrink-0">
+                  {f.name?.[0]}
+                </div>
+                {f.name}
+              </td>
+              <td className="py-3.5 text-sm text-slate-500 font-semibold">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-50 text-slate-600 border border-slate-100">
+                  {f.designation}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function AchievementsTable({ data }: any) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse">
+        <thead>
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">S.No</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Student Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Branch</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Game / Event</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Tournament</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Venue</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-50">
+          {data.map((a: any, i: number) => (
+            <tr key={i} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 text-sm font-semibold text-slate-400">{i + 1}</td>
+              <td className="py-3.5 font-semibold text-slate-900 text-sm">{a.student}</td>
+              <td className="py-3.5 text-sm text-slate-500 font-semibold">{a.branch}</td>
+              <td className="py-3.5 text-sm text-slate-600">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                  {a.game}
+                </span>
+              </td>
+              <td className="py-3.5 text-sm text-slate-600">{a.tournament}</td>
+              <td className="py-3.5 text-sm text-slate-400 font-medium">{a.venue}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function FieldsTable({ data }: any) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse">
+        <thead>
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">S.No</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Field / Court Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400 text-center">Quantity</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-50">
+          {data.map((f: any, i: number) => (
+            <tr key={i} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 text-sm font-semibold text-slate-400">{i + 1}</td>
+              <td className="py-3.5 font-semibold text-slate-900 text-sm">{f.name}</td>
+              <td className="py-3.5 text-sm font-bold text-indigo-600 text-center">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                  {f.qty}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function GymTable({ data }: any) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse">
+        <thead>
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">S.No</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Equipment Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400 text-center">Quantity</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400 text-right">Estimated Cost</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-50">
+          {data.map((g: any, i: number) => (
+            <tr key={i} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 text-sm font-semibold text-slate-400">{i + 1}</td>
+              <td className="py-3.5 font-semibold text-slate-900 text-sm">{g.name}</td>
+              <td className="py-3.5 text-sm font-bold text-indigo-600 text-center">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                  {g.qty}
+                </span>
+              </td>
+              <td className="py-3.5 text-sm text-slate-500 font-semibold text-right">{g.cost}</td>
             </tr>
           ))}
         </tbody>

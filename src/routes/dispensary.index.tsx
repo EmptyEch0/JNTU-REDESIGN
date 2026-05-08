@@ -1,19 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import cultureImg from "@/assets/culture.jpg";
 import { getDispensaryData } from "@/funcs/dispensary.server";
+import { 
+  Building, 
+  User, 
+  Activity, 
+  Sparkles, 
+  Coffee, 
+  Phone 
+} from "lucide-react";
 
 export const Route = createFileRoute("/dispensary/")({
   loader: async () => await getDispensaryData(),
   component: DispensaryPage,
 });
 
-const TABS = ["Doctors", "Facilities", "Supporting Staff"];
-
 function DispensaryPage() {
   const data = Route.useLoaderData() as any;
-  const [tab, setTab] = useState("Doctors");
+  const [tab, setTab] = useState<"Doctors" | "Facilities" | "Supporting Staff">("Doctors");
 
   const doctors = data?.doctors ?? [];
   const facilities = data?.facilities ?? [];
@@ -22,409 +28,225 @@ function DispensaryPage() {
   const drivers = data?.drivers ?? [];
   const images = data?.images ?? [];
 
+  const getCarouselImages = () => images.map((i: any) => i.url);
+
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Lora:wght@400;500;600&display=swap');
-
-        :root {
-          --luxury-dark: #1a1a1a;
-          --luxury-gold: #d4af37;
-          --luxury-light: #f8f5f0;
-          --luxury-gray: #4a4a4a;
-          --luxury-accent: #2d5a6f;
-        }
-
-        * {
-          font-family: 'Lora', serif;
-        }
-
-        .font-display {
-          font-family: 'Playfair Display', serif;
-        }
-
-        .tab-btn-active {
-          background: linear-gradient(135deg, var(--luxury-gold) 0%, #e6c200 100%);
-          color: var(--luxury-dark);
-          font-weight: 600;
-          box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
-        }
-
-        .tab-btn-inactive {
-          background: var(--luxury-light);
-          color: var(--luxury-gray);
-          border: 1px solid #e0d5c7;
-          transition: all 0.3s ease;
-        }
-
-        .tab-btn-inactive:hover {
-          background: #f0e6d8;
-          border-color: var(--luxury-gold);
-        }
-
-        .premium-card {
-          background: white;
-          border: 1px solid #e0d5c7;
-          border-radius: 12px;
-          padding: 28px;
-          transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .premium-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 3px;
-          background: linear-gradient(90deg, var(--luxury-gold) 0%, transparent 100%);
-        }
-
-        .premium-card:hover {
-          border-color: var(--luxury-gold);
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-          transform: translateY(-4px);
-        }
-
-        .section-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 32px;
-          font-weight: 700;
-          color: var(--luxury-dark);
-          margin-bottom: 32px;
-          position: relative;
-          padding-bottom: 16px;
-        }
-
-        .section-title::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 60px;
-          height: 3px;
-          background: var(--luxury-gold);
-          border-radius: 2px;
-        }
-
-        .premium-table {
-          width: 100%;
-          border-collapse: separate;
-          border-spacing: 0;
-          margin-top: 16px;
-        }
-
-        .premium-table thead {
-          background: var(--luxury-light);
-        }
-
-        .premium-table th {
-          padding: 16px 20px;
-          text-align: left;
-          font-family: 'Playfair Display', serif;
-          font-weight: 600;
-          color: var(--luxury-dark);
-          font-size: 14px;
-          letter-spacing: 0.5px;
-          text-transform: uppercase;
-          border-bottom: 2px solid var(--luxury-gold);
-          white-space: nowrap;
-        }
-
-        .premium-table td {
-          padding: 16px 20px;
-          border-bottom: 1px solid #e0d5c7;
-          color: var(--luxury-gray);
-          font-size: 14px;
-        }
-
-        .premium-table tbody tr {
-          transition: background-color 0.3s ease;
-        }
-
-        .premium-table tbody tr:hover {
-          background-color: var(--luxury-light);
-        }
-
-        .premium-table tbody tr:last-child td {
-          border-bottom: none;
-        }
-
-        .tab-container {
-          display: flex;
-          gap: 12px;
-          margin-bottom: 40px;
-          justify-content: flex-start;
-          flex-wrap: wrap;
-          animation: fadeInDown 0.6s ease-out;
-        }
-
-        .divider {
-          height: 1px;
-          background: linear-gradient(90deg, transparent, var(--luxury-gold), transparent);
-          margin: 48px 0;
-        }
-
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInDown {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        .content-section {
-          animation: fadeInUp 0.6s ease-out 0.2s both;
-        }
-
-        /* Responsive refinements */
-        @media (max-width: 768px) {
-          .section-title {
-            font-size: 24px;
-          }
-          .premium-table th, .premium-table td {
-            padding: 12px 16px;
-          }
-        }
-      `}</style>
-
+    <div className="min-h-screen bg-[oklch(0.972_0.012_85)] text-slate-800 pb-20">
       <PageHero
         title="Dispensary"
         subtitle="Campus medical care & emergency support"
         image={images[0]?.url || cultureImg}
       />
 
-      <section className="px-4 py-12 sm:px-6 lg:py-16 max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 lg:gap-12">
-        {/* LEFT SIDEBAR */}
-        <aside className="lg:col-span-4 space-y-6">
-          <div className="premium-card !p-0 overflow-hidden">
-            <div className="w-full aspect-[4/3] sm:aspect-auto sm:h-56 lg:h-64 overflow-hidden relative">
-              <img
-                src={data?.info?.img || "/images/nurse.jpg"}
-                alt="Dispensary"
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                onError={(e) => { e.currentTarget.src = "/fallback.jpg" }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4">
-                <p className="text-white font-display text-lg shadow-sm">
-                  {data?.info?.hodName || "Medical Officer"}
-                </p>
-                <p className="text-[var(--luxury-gold)] text-xs font-semibold uppercase tracking-wider">
-                  In-charge
-                </p>
-              </div>
+      <section className="container-narrow py-12">
+        {/* TABS */}
+        <div className="flex flex-wrap gap-2.5 mb-12 justify-center">
+          <TabBtn 
+            label="Doctors & Officers" 
+            active={tab === "Doctors"} 
+            onClick={() => setTab("Doctors")} 
+            icon={User} 
+          />
+          <TabBtn 
+            label="Facilities & Medicine" 
+            active={tab === "Facilities"} 
+            onClick={() => setTab("Facilities")} 
+            icon={Sparkles} 
+          />
+          <TabBtn 
+            label="Supporting Staff" 
+            active={tab === "Supporting Staff"} 
+            onClick={() => setTab("Supporting Staff")} 
+            icon={Building} 
+          />
+        </div>
+
+        <div className="space-y-8 max-w-5xl mx-auto animate-[fade-in_0.4s_ease-out]">
+          <ImageCarousel images={getCarouselImages()} fallback={cultureImg} />
+
+          {/* ================= DOCTORS ================= */}
+          {tab === "Doctors" && (
+            <div className="space-y-8 animate-[fade-in_0.4s_ease-out]">
+              {data?.info && (
+                <Card title="Medical Officer in Charge" icon={User}>
+                  <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
+                    <img
+                      src={data?.info?.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250";
+                      }}
+                      className="w-24 h-24 rounded-2xl object-cover border border-slate-200/50 shadow-sm shrink-0"
+                      alt={data?.info?.hodName || "Medical Officer"}
+                    />
+                    <div>
+                      <h4 className="font-display font-bold text-lg text-slate-900 mb-0.5">
+                        {data?.info?.hodName || "Medical Officer"}
+                      </h4>
+                      <p className="text-[oklch(0.42_0.18_265)] font-semibold text-xs tracking-wider uppercase">In-charge</p>
+                      <p className="text-sm text-slate-500 mt-2 leading-relaxed italic">
+                        "{data?.info?.message || "Providing essential medical support, first aid, basic medicines, and emergency assistance for the well-being of our students and staff."}"
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              )}
+
+              {doctors.length > 0 && (
+                <Card title="Medical Officers & Doctors" icon={User}>
+                  <DoctorTable data={doctors} />
+                </Card>
+              )}
             </div>
-            
-            <div className="p-6 sm:p-8">
-              <p className="font-display text-[var(--luxury-dark)] text-xl mb-4 border-b border-[#e0d5c7] pb-3">
-                Message
-              </p>
-              <p className="text-[15px] leading-relaxed text-[var(--luxury-gray)] italic">
-                "{data?.info?.message || "Providing essential medical support, first aid, basic medicines, and emergency assistance for the well-being of our students and staff."}"
-              </p>
-            </div>
-          </div>
-        </aside>
+          )}
 
-        {/* RIGHT CONTENT */}
-        <main className="lg:col-span-8 space-y-8 min-w-0">
-          <div className="w-full shadow-lg rounded-xl overflow-hidden mb-10 border border-[#e0d5c7]">
-            <ImageCarousel images={images.map((i: any) => i.url)} />
-          </div>
+          {/* ================= FACILITIES ================= */}
+          {tab === "Facilities" && (
+            <div className="space-y-8 animate-[fade-in_0.4s_ease-out]">
+              <Card title="Available Facilities" icon={Sparkles}>
+                <FacilityList facilities={facilities} />
+              </Card>
 
-          <div className="premium-card">
-            <h2 className="section-title">Dispensary Services</h2>
-
-            {/* TABS */}
-            <div className="tab-container">
-              {TABS.map(t => (
-                <button
-                  key={t}
-                  onClick={() => setTab(t)}
-                  className={tab === t ? "tab-btn-active" : "tab-btn-inactive"}
-                  style={{
-                    padding: '10px 24px',
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    cursor: 'pointer',
-                    border: tab === t ? 'none' : undefined,
-                  }}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-
-            {/* ================= DOCTORS ================= */}
-            {tab === "Doctors" && (
-              <div className="content-section overflow-x-auto rounded-lg border border-[#e0d5c7]">
-                <Table
-                  columns={["S.No", "Name", "Qualification", "Working Hours", "Photo", "Contact"]}
-                  data={doctors.map((d: any, i: number) => [
-                    i + 1,
-                    <span className="font-display font-medium text-[var(--luxury-dark)]">{d.name}</span>,
-                    d.qualification,
-                    d.workingHours,
-                    d.img,
-                    <span className="text-[var(--luxury-accent)] font-medium">{d.contact}</span>,
-                  ])}
-                />
-              </div>
-            )}
-
-            {/* ================= FACILITIES ================= */}
-            {tab === "Facilities" && (
-              <div className="content-section space-y-10">
-                <div>
-                  <h3 className="font-display text-xl text-[var(--luxury-dark)] mb-4">Available Facilities</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {facilities.map((f: any) => (
-                      <div key={f.id} className="bg-[var(--luxury-light)] p-4 rounded-lg border-l-4 border-[var(--luxury-gold)] shadow-sm flex items-center transition-transform hover:-translate-y-1">
-                        <span className="text-[var(--luxury-gold)] text-xl mr-3">✓</span>
-                        <span className="text-[var(--luxury-gray)] font-medium">{f.name}</span>
+              {medicines.length > 0 && (
+                <Card title="Medicines Stocked" icon={Coffee}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {medicines.map((m: any, i: number) => (
+                      <div key={i} className="flex items-center gap-2.5 bg-slate-50/80 border border-slate-100 px-4 py-3 rounded-xl hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all duration-300">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                        <span className="text-sm font-medium text-slate-700">{m.name}</span>
                       </div>
                     ))}
-                    {facilities.length === 0 && <p className="text-[var(--luxury-gray)] italic">No facilities listed.</p>}
                   </div>
-                </div>
+                </Card>
+              )}
+            </div>
+          )}
 
-                <div className="divider"></div>
+          {/* ================= STAFF ================= */}
+          {tab === "Supporting Staff" && (
+            <div className="space-y-8 animate-[fade-in_0.4s_ease-out]">
+              {staff.length > 0 && (
+                <Card title="Medical Support Staff" icon={User}>
+                  <StaffTable data={staff} />
+                </Card>
+              )}
 
-                <div>
-                  <h3 className="font-display text-xl text-[var(--luxury-dark)] mb-4">Medicines Available</h3>
-                  <div className="overflow-x-auto rounded-lg border border-[#e0d5c7]">
-                    <Table
-                      columns={["S.No", "Medicine Name"]}
-                      data={medicines.map((m: any, i: number) => [
-                        i + 1,
-                        <span className="font-medium text-[var(--luxury-gray)]">{m.name}</span>,
-                      ])}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ================= STAFF ================= */}
-            {tab === "Supporting Staff" && (
-              <div className="content-section space-y-10">
-                <div>
-                  <h3 className="font-display text-xl text-[var(--luxury-dark)] mb-4">Supporting Staff</h3>
-                  <div className="overflow-x-auto rounded-lg border border-[#e0d5c7]">
-                    <Table
-                      columns={["S.No", "Name", "Qualification", "Contact"]}
-                      data={staff.map((s: any, i: number) => [
-                        i + 1,
-                        <span className="font-display font-medium text-[var(--luxury-dark)]">{s.name}</span>,
-                        s.qualification,
-                        <span className="text-[var(--luxury-accent)] font-medium">{s.contact}</span>,
-                      ])}
-                    />
-                  </div>
-                </div>
-
-                <div className="divider"></div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
-                    <h3 className="font-display text-xl text-[var(--luxury-dark)]">Ambulance Services</h3>
-                    <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-4 py-1.5 rounded-full text-sm font-semibold shadow-sm">
-                      🚑 24/7 Available
-                    </span>
-                  </div>
-                  <div className="overflow-x-auto rounded-lg border border-[#e0d5c7]">
-                    <Table
-                      columns={["S.No", "Driver Name", "Contact Number"]}
-                      data={drivers.map((d: any, i: number) => [
-                        i + 1,
-                        <span className="font-display font-medium text-[var(--luxury-dark)]">{d.name}</span>,
-                        <span className="text-[var(--luxury-accent)] font-medium">{d.contact}</span>,
-                      ])}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </div>
-        </main>
+              {drivers.length > 0 && (
+                <Card title="Ambulance Services" icon={Activity} subtitle="🚑 Available 24/7 on Campus">
+                  <AmbulanceTable data={drivers} />
+                </Card>
+              )}
+            </div>
+          )}
+        </div>
       </section>
-    </>
+    </div>
   );
 }
 
-/* ---------------- CAROUSEL ---------------- */
-function ImageCarousel({ images }: { images: string[] }) {
+/* ---------- UI COMPONENTS ---------- */
+
+function TabBtn({ label, active, onClick, icon: Icon }: any) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300 active:scale-95 border cursor-pointer ${
+        active
+          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow-sm"
+          : "bg-white border-slate-200/80 text-slate-500 hover:text-slate-800 hover:bg-slate-50 hover:border-slate-300 shadow-sm"
+      }`}
+    >
+      {Icon && <Icon className="w-4 h-4 shrink-0" />}
+      {label}
+    </button>
+  );
+}
+
+function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
+  return (
+    <div className={`bg-white rounded-2xl border border-slate-200/60 p-6 md:p-8 hover:shadow-md transition-all duration-300 shadow-sm ${className}`}>
+      {title && (
+        <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-slate-100">
+          {Icon && <Icon className="w-5 h-5 text-[oklch(0.42_0.18_265)]" />}
+          <div>
+            <h3 className="font-display font-semibold text-lg md:text-xl text-slate-900">{title}</h3>
+            {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
+          </div>
+        </div>
+      )}
+      {children}
+    </div>
+  );
+}
+
+function ImageCarousel({ images, fallback }: any) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
 
   useEffect(() => {
-    if (!autoplay || images.length <= 1) return;
+    if (!autoplay || !images || images.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 5000);
+    }, 4000);
     return () => clearInterval(timer);
-  }, [autoplay, images.length]);
+  }, [autoplay, images]);
 
-  if (!images || images.length === 0) return null;
-
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-    setAutoplay(false);
-  };
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-    setAutoplay(false);
-  };
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-    setAutoplay(false);
-  };
+  if (!images || images.length === 0) {
+    return (
+      <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-100 mb-8 aspect-[16/6] min-h-[240px] max-h-[380px] bg-slate-100">
+        <img src={fallback} className="w-full h-full object-cover" alt="Dispensary fallback" />
+      </div>
+    );
+  }
 
   return (
-    <div
-      className="relative w-full aspect-[16/9] md:aspect-[21/9] bg-[var(--luxury-light)] group overflow-hidden"
+    <div 
+      className="relative rounded-2xl overflow-hidden shadow-md border border-slate-150 mb-8 aspect-[16/6] min-h-[240px] max-h-[380px] bg-slate-100 group"
       onMouseEnter={() => setAutoplay(false)}
       onMouseLeave={() => setAutoplay(true)}
     >
-      <img
-        src={images[currentIndex]}
-        alt={`Dispensary view ${currentIndex + 1}`}
-        className="w-full h-full object-cover transition-opacity duration-500"
-      />
-      
+      <div className="w-full h-full relative">
+        {images.map((img: string, i: number) => (
+          <img
+            key={i}
+            src={img}
+            alt={`Dispensary view ${i + 1}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+              currentIndex === i ? "opacity-100" : "opacity-0"
+            }`}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = fallback;
+            }}
+          />
+        ))}
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
+
       {images.length > 1 && (
         <>
-          <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-md z-10">
-            {currentIndex + 1} / {images.length}
-          </div>
-
           <button
-            onClick={goToPrevious}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-[var(--luxury-dark)] w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform hover:scale-110 z-10"
+            onClick={() => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 w-9 h-9 rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 cursor-pointer z-10"
           >
             ‹
           </button>
           <button
-            onClick={goToNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-[var(--luxury-dark)] w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform hover:scale-110 z-10"
+            onClick={() => setCurrentIndex((prev) => (prev + 1) % images.length)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 w-9 h-9 rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 cursor-pointer z-10"
           >
             ›
           </button>
 
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-            {images.map((_, index) => (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {images.map((_: any, index: number) => (
               <button
                 key={index}
-                onClick={() => goToSlide(index)}
-                className={`transition-all duration-300 rounded-full ${
+                onClick={() => setCurrentIndex(index)}
+                className={`transition-all duration-300 rounded-full h-1.5 ${
                   currentIndex === index 
-                    ? 'w-8 h-2 bg-[var(--luxury-gold)] shadow-[0_0_8px_rgba(212,175,55,0.8)]' 
-                    : 'w-2 h-2 bg-white/60 hover:bg-white'
+                    ? "w-6 bg-white" 
+                    : "w-1.5 bg-white/50 hover:bg-white"
                 }`}
               />
             ))}
@@ -435,39 +257,155 @@ function ImageCarousel({ images }: { images: string[] }) {
   );
 }
 
-/* ---------------- TABLE ---------------- */
-function Table({ columns, data }: { columns: string[], data: any[] }) {
-  if (!data || data.length === 0) return <div className="p-8 text-center text-[var(--luxury-gray)] italic">No data available at the moment.</div>;
-  
+/* ---------- TABLES ---------- */
+
+function DoctorTable({ data }: any) {
   return (
-    <table className="premium-table">
-      <thead>
-        <tr>
-          {columns.map((c, i) => (
-            <th key={i}>{c}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, i) => (
-          <tr key={i}>
-            {row.map((cell: any, j: number) => (
-              <td key={j}>
-                {typeof cell === "string" && (cell.startsWith("http") || cell.includes("/images")) ? (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse">
+        <thead>
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Qualification</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Working Hours</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Contact</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-50">
+          {data.map((d: any, i: number) => (
+            <tr key={i} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 font-semibold text-slate-900 text-sm flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-100 shrink-0 bg-slate-50">
                   <img
-                    src={cell}
-                    alt="Profile"
-                    className="w-12 h-12 rounded-full object-cover border-2 border-[var(--luxury-gold)] shadow-sm"
-                    onError={(e) => { e.currentTarget.style.display = 'none' }}
+                    src={d.img || "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=150"}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=150";
+                    }}
+                    className="w-full h-full object-cover"
+                    alt={d.name}
                   />
+                </div>
+                {d.name}
+              </td>
+              <td className="py-3.5 text-sm text-slate-600">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-50 text-slate-600 border border-slate-100">
+                  {d.qualification}
+                </span>
+              </td>
+              <td className="py-3.5 text-sm text-slate-500 font-medium">
+                {d.workingHours}
+              </td>
+              <td className="py-3.5 text-sm font-semibold text-[oklch(0.42_0.18_265)]">
+                {d.contact ? (
+                  <a href={`tel:${d.contact}`} className="hover:underline flex items-center gap-1">
+                    <Phone className="w-3.5 h-3.5 inline text-[oklch(0.42_0.18_265)]/70" />
+                    {d.contact}
+                  </a>
                 ) : (
-                  cell
+                  <span className="text-slate-400">-</span>
                 )}
               </td>
-            ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function StaffTable({ data }: any) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse">
+        <thead>
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Qualification</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Contact</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody className="divide-y divide-slate-50">
+          {data.map((s: any, i: number) => (
+            <tr key={i} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 font-semibold text-slate-900 text-sm flex items-center gap-3">
+                <div className="w-7 h-7 rounded-full bg-slate-100 grid place-items-center text-slate-500 font-display text-xs font-bold shrink-0">
+                  {s.name?.[0]}
+                </div>
+                {s.name}
+              </td>
+              <td className="py-3.5 text-sm text-slate-600">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-50 text-slate-600 border border-slate-100">
+                  {s.qualification}
+                </span>
+              </td>
+              <td className="py-3.5 text-sm font-semibold text-[oklch(0.42_0.18_265)]">
+                {s.contact ? (
+                  <a href={`tel:${s.contact}`} className="hover:underline flex items-center gap-1">
+                    <Phone className="w-3.5 h-3.5 inline text-[oklch(0.42_0.18_265)]/70" />
+                    {s.contact}
+                  </a>
+                ) : (
+                  <span className="text-slate-400">-</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function AmbulanceTable({ data }: any) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse">
+        <thead>
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Driver Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Contact Number</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-50">
+          {data.map((d: any, i: number) => (
+            <tr key={i} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 font-semibold text-slate-900 text-sm flex items-center gap-3">
+                <div className="w-7 h-7 rounded-full bg-emerald-50 text-emerald-600 grid place-items-center font-display text-xs font-bold shrink-0">
+                  {d.name?.[0]}
+                </div>
+                {d.name}
+              </td>
+              <td className="py-3.5 text-sm font-semibold text-emerald-600">
+                {d.contact ? (
+                  <a href={`tel:${d.contact}`} className="hover:underline flex items-center gap-1">
+                    <Phone className="w-3.5 h-3.5 inline text-emerald-500/70" />
+                    {d.contact}
+                  </a>
+                ) : (
+                  <span className="text-slate-400">-</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function FacilityList({ facilities }: any) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+      {facilities.map((f: any) => (
+        <div 
+          key={f.id} 
+          className="flex items-center gap-2.5 bg-slate-50/80 border border-slate-100 px-4 py-3 rounded-xl hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all duration-300 group"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-[oklch(0.42_0.18_265)] group-hover:scale-110 transition-transform shrink-0" />
+          <span className="text-sm font-medium text-slate-700">{f.name}</span>
+        </div>
+      ))}
+    </div>
   );
 }

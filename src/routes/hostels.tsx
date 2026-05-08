@@ -3,6 +3,16 @@ import { useEffect, useState } from "react";
 import { PageHero } from "@/components/PageHero";
 import hostelImg from "@/assets/hostel.jpg";
 import { getHostelData } from "@/funcs/hostel.server";
+import {
+  Building,
+  Bed,
+  Phone,
+  User,
+  Activity,
+  Sparkles,
+  Coffee,
+  Utensils
+} from "lucide-react";
 
 export const Route = createFileRoute("/hostels")({
   loader: async () => await getHostelData(),
@@ -38,229 +48,69 @@ function HostelsPage() {
   const boysFacilities = facilities.filter((f: any) => f.type === "boys");
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Lora:wght@400;500;600&display=swap');
-
-        :root {
-          --luxury-dark: #1a1a1a;
-          --luxury-gold: #d4af37;
-          --luxury-light: #f8f5f0;
-          --luxury-gray: #4a4a4a;
-          --luxury-accent: #2d5a6f;
-        }
-
-        .premium-container {
-          font-family: 'Lora', serif;
-        }
-
-        .font-display {
-          font-family: 'Playfair Display', serif;
-        }
-
-        .premium-tab-btn {
-          padding: 12px 32px;
-          border-radius: 8px;
-          font-size: 15px;
-          font-weight: 600;
-          letter-spacing: 0.5px;
-          transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .premium-tab-active {
-          background: linear-gradient(135deg, var(--luxury-gold) 0%, #e6c200 100%);
-          color: var(--luxury-dark);
-          box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-        }
-
-        .premium-tab-inactive {
-          background: var(--luxury-light);
-          color: var(--luxury-gray);
-          border: 1px solid #e0d5c7;
-        }
-
-        .premium-tab-inactive:hover {
-          background: #f0e6d8;
-          border-color: var(--luxury-gold);
-        }
-
-        .premium-card {
-          background: white;
-          border: 1px solid #e0d5c7;
-          border-radius: 12px;
-          padding: 28px;
-          transition: all 0.4s ease;
-          position: relative;
-          overflow: hidden;
-          margin-bottom: 24px;
-        }
-
-        .premium-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 3px;
-          background: linear-gradient(90deg, var(--luxury-gold) 0%, transparent 100%);
-        }
-
-        .premium-card:hover {
-          border-color: var(--luxury-gold);
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
-        }
-
-        .section-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 24px;
-          font-weight: 700;
-          color: var(--luxury-dark);
-          margin-bottom: 20px;
-          position: relative;
-          padding-bottom: 12px;
-        }
-
-        .section-title::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 50px;
-          height: 3px;
-          background: var(--luxury-gold);
-          border-radius: 2px;
-        }
-
-        .premium-table {
-          width: 100%;
-          border-collapse: separate;
-          border-spacing: 0;
-          background: white;
-          border: 1px solid #e0d5c7;
-          border-radius: 8px;
-          overflow: hidden;
-        }
-        .premium-table th {
-          padding: 14px 18px;
-          text-align: left;
-          font-family: 'Playfair Display', serif;
-          font-weight: 600;
-          color: var(--luxury-dark);
-          font-size: 14px;
-          background: var(--luxury-light);
-          border-bottom: 2px solid var(--luxury-gold);
-        }
-        .premium-table td {
-          padding: 14px 18px;
-          border-bottom: 1px solid #e0d5c7;
-          color: var(--luxury-gray);
-          font-size: 14px;
-        }
-        .premium-table tbody tr:hover {
-          background-color: var(--luxury-light);
-        }
-        .premium-table tbody tr:last-child td {
-          border-bottom: none;
-        }
-
-        .block-info-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-          gap: 16px;
-        }
-
-        .info-stat {
-          background: linear-gradient(135deg, var(--luxury-light) 0%, #f0e6d8 100%);
-          padding: 18px;
-          border-radius: 8px;
-          text-align: center;
-          border: 1px solid #e0d5c7;
-        }
-
-        .stat-value {
-          font-family: 'Playfair Display', serif;
-          font-size: 26px;
-          font-weight: 700;
-          color: var(--luxury-dark);
-          margin-bottom: 4px;
-        }
-
-        .stat-label {
-          font-size: 11px;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          color: var(--luxury-gray);
-          font-weight: 600;
-        }
-
-        .facility-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 14px;
-        }
-
-        .facility-item {
-          background: var(--luxury-light);
-          padding: 14px 18px;
-          border-radius: 8px;
-          border-left: 4px solid var(--luxury-gold);
-          font-size: 14px;
-          color: var(--luxury-gray);
-          display: flex;
-          align-items: center;
-        }
-
-        .facility-item::before {
-          content: '✦';
-          color: var(--luxury-gold);
-          margin-right: 10px;
-          font-size: 16px;
-        }
-      `}</style>
-
+    <div className="min-h-screen bg-[oklch(0.972_0.012_85)] text-slate-800 pb-20">
       <PageHero
-        title="HOSTELS"
-        subtitle={data?.about?.description || "Hostel Information"}
+        title="Hostels & Residences"
+        subtitle={data?.about?.description || "Providing a comfortable, secure, and modern living experience for students."}
         image={getImages("office")[0] || hostelImg}
       />
 
-      <section className="max-w-6xl mx-auto px-4 py-12 premium-container">
-
+      <section className="container-narrow py-12">
         {/* TABS */}
-        <div className="flex gap-4 mb-10 justify-center">
-          <TabBtn label="Hostel Office" value="office" tab={tab} setTab={setTab} />
-          <TabBtn label="Girls Hostel" value="girls" tab={tab} setTab={setTab} />
-          <TabBtn label="Boys Hostel" value="boys" tab={tab} setTab={setTab} />
+        <div className="flex flex-wrap gap-2.5 mb-12 justify-center">
+          <TabBtn
+            label="Hostel Office"
+            value="office"
+            active={tab === "office"}
+            onClick={() => setTab("office")}
+            icon={Building}
+          />
+          <TabBtn
+            label="Girls Hostel"
+            value="girls"
+            active={tab === "girls"}
+            onClick={() => setTab("girls")}
+            icon={Bed}
+          />
+          <TabBtn
+            label="Boys Hostel"
+            value="boys"
+            active={tab === "boys"}
+            onClick={() => setTab("boys")}
+            icon={Bed}
+          />
         </div>
 
         {/* ================= OFFICE ================= */}
         {tab === "office" && (
-          <div className="space-y-6">
+          <div className="space-y-8 max-w-5xl mx-auto animate-[fade-in_0.4s_ease-out]">
             <ImageCarousel images={getImages("office")} fallback={hostelImg} />
 
             {/* ABOUT */}
-            <Card title="About Hostel Office">
-              <p className="text-[16px] leading-[1.8] text-[var(--luxury-gray)]">
+            <Card title="About Hostel Office" icon={Building}>
+              <p className="text-base leading-relaxed text-slate-600">
                 {data?.about?.description}
               </p>
             </Card>
 
             {/* OFFICER */}
             {officer && (
-              <Card title="Officer in Charge">
-                <div className="flex flex-col sm:flex-row gap-6 items-center">
+              <Card title="Officer in Charge" icon={User}>
+                <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
                   <img
                     src={officer.image || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=250"}
                     onError={(e) => {
                       e.currentTarget.onerror = null;
                       e.currentTarget.src = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=250";
                     }}
-                    className="w-32 h-32 rounded-lg object-cover border-2 border-[var(--luxury-gold)] shadow-md"
+                    className="w-24 h-24 rounded-2xl object-cover border border-slate-200/50 shadow-sm shrink-0"
                   />
                   <div>
-                    <h4 className="font-display font-bold text-xl text-[var(--luxury-dark)] mb-1">{officer.name}</h4>
-                    <p className="text-[var(--luxury-gold)] font-semibold text-sm tracking-wide uppercase">{officer.role}</p>
-                    <p className="text-sm text-[var(--luxury-gray)] mt-2">Overseeing hostel operations and residential student welfare.</p>
+                    <h4 className="font-display font-bold text-lg text-slate-900 mb-0.5">{officer.name}</h4>
+                    <p className="text-[oklch(0.42_0.18_265)] font-semibold text-xs tracking-wider uppercase">{officer.role}</p>
+                    <p className="text-sm text-slate-500 mt-2 leading-relaxed">
+                      Overseeing administrative coordination, student welfare programs, residential operations, and university policy implementation at the hostels.
+                    </p>
                   </div>
                 </div>
               </Card>
@@ -268,20 +118,20 @@ function HostelsPage() {
 
             {/* WARDENS */}
             {girlsWardens.length > 0 && (
-              <Card title="Girls Hostel Wardens">
+              <Card title="Girls Hostel Wardens" icon={User}>
                 <WardenTable data={girlsWardens} />
               </Card>
             )}
 
             {boysWardens.length > 0 && (
-              <Card title="Boys Hostel Wardens">
+              <Card title="Boys Hostel Wardens" icon={User}>
                 <WardenTable data={boysWardens} />
               </Card>
             )}
 
             {/* STAFF */}
             {staff.length > 0 && (
-              <Card title="Supporting Staff">
+              <Card title="Supporting Staff" icon={User}>
                 <StaffTable data={staff} />
               </Card>
             )}
@@ -290,23 +140,23 @@ function HostelsPage() {
 
         {/* ================= GIRLS ================= */}
         {tab === "girls" && (
-          <div className="space-y-6">
+          <div className="space-y-8 max-w-5xl mx-auto animate-[fade-in_0.4s_ease-out]">
             <ImageCarousel images={getImages("girls")} fallback="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1000" />
 
             {girlsBlocks.map((b: any) => (
-              <Card key={b.id} title={b.title}>
+              <Card key={b.id} title={b.title} icon={Building}>
                 <BlockInfo block={b} />
               </Card>
             ))}
 
             {girlsFacilities.length > 0 && (
-              <Card title="Facilities Available">
+              <Card title="Facilities Available" icon={Sparkles}>
                 <FacilityList facilities={girlsFacilities} />
               </Card>
             )}
 
             {health && (
-              <Card title="Health Assistant Services">
+              <Card title="Health Assistant Services" icon={Activity}>
                 <HealthTable health={health} />
               </Card>
             )}
@@ -315,76 +165,141 @@ function HostelsPage() {
 
         {/* ================= BOYS ================= */}
         {tab === "boys" && (
-          <div className="space-y-6">
+          <div className="space-y-8 max-w-5xl mx-auto animate-[fade-in_0.4s_ease-out]">
             <ImageCarousel images={getImages("boys")} fallback="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000" />
 
             {boysBlocks.map((b: any) => (
-              <Card key={b.id} title={b.title}>
+              <Card key={b.id} title={b.title} icon={Building}>
                 <BlockInfo block={b} />
               </Card>
             ))}
 
             {boysFacilities.length > 0 && (
-              <Card title="Facilities Available">
+              <Card title="Facilities Available" icon={Sparkles}>
                 <FacilityList facilities={boysFacilities} />
               </Card>
             )}
 
             {health && (
-              <Card title="Health Assistant Services">
+              <Card title="Health Assistant Services" icon={Activity}>
                 <HealthTable health={health} />
               </Card>
             )}
           </div>
         )}
       </section>
-    </>
+    </div>
   );
 }
 
 /* ---------- UI COMPONENTS ---------- */
 
-function TabBtn({ label, value, tab, setTab }: any) {
+function TabBtn({ label, active, onClick, icon: Icon }: any) {
   return (
     <button
-      onClick={() => setTab(value)}
-      className={`premium-tab-btn ${
-        tab === value ? "premium-tab-active" : "premium-tab-inactive"
-      }`}
+      onClick={onClick}
+      className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300 active:scale-95 border cursor-pointer ${active
+          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow-sm"
+          : "bg-white border-slate-200/80 text-slate-500 hover:text-slate-800 hover:bg-slate-50 hover:border-slate-300 shadow-sm"
+        }`}
     >
+      {Icon && <Icon className="w-4 h-4 shrink-0" />}
       {label}
     </button>
   );
 }
 
-function Card({ title, children }: any) {
+function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (
-    <div className="premium-card">
-      <h3 className="section-title">{title}</h3>
+    <div className={`bg-white rounded-2xl border border-slate-200/60 p-6 md:p-8 hover:shadow-md transition-all duration-300 shadow-sm ${className}`}>
+      {title && (
+        <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-slate-100">
+          {Icon && <Icon className="w-5 h-5 text-[oklch(0.42_0.18_265)]" />}
+          <div>
+            <h3 className="font-display font-semibold text-lg md:text-xl text-slate-900">{title}</h3>
+            {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
+          </div>
+        </div>
+      )}
       {children}
     </div>
   );
 }
 
 function ImageCarousel({ images, fallback }: any) {
-  const [src, setSrc] = useState(images?.[0] || fallback);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
 
   useEffect(() => {
-    if (images?.[0]) {
-      setSrc(images[0]);
-    } else {
-      setSrc(fallback);
-    }
-  }, [images, fallback]);
+    if (!autoplay || !images || images.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [autoplay, images]);
+
+  if (!images || images.length === 0) {
+    return (
+      <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-100 mb-8 aspect-[16/6] min-h-[240px] max-h-[380px] bg-slate-100">
+        <img src={fallback} className="w-full h-full object-cover" alt="Hostel fallback" />
+      </div>
+    );
+  }
 
   return (
-    <div className="relative rounded-xl overflow-hidden shadow-md border border-[#e0d5c7] mb-8 bg-amber-50/20">
-      <img
-        src={src}
-        alt="Hostel Moment"
-        className="w-full h-80 object-cover"
-        onError={() => setSrc(fallback)}
-      />
+    <div 
+      className="relative rounded-2xl overflow-hidden shadow-md border border-slate-150 mb-8 aspect-[16/6] min-h-[240px] max-h-[380px] bg-slate-100 group"
+      onMouseEnter={() => setAutoplay(false)}
+      onMouseLeave={() => setAutoplay(true)}
+    >
+      <div className="w-full h-full relative">
+        {images.map((img: string, i: number) => (
+          <img
+            key={i}
+            src={img}
+            alt={`Hostel view ${i + 1}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+              currentIndex === i ? "opacity-100" : "opacity-0"
+            }`}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = fallback;
+            }}
+          />
+        ))}
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
+
+      {images.length > 1 && (
+        <>
+          <button
+            onClick={() => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 w-9 h-9 rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 cursor-pointer z-10"
+          >
+            ‹
+          </button>
+          <button
+            onClick={() => setCurrentIndex((prev) => (prev + 1) % images.length)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 w-9 h-9 rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 cursor-pointer z-10"
+          >
+            ›
+          </button>
+
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {images.map((_: any, index: number) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`transition-all duration-300 rounded-full h-1.5 ${
+                  currentIndex === index 
+                    ? "w-6 bg-white" 
+                    : "w-1.5 bg-white/50 hover:bg-white"
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -394,20 +309,38 @@ function ImageCarousel({ images, fallback }: any) {
 function WardenTable({ data }: any) {
   return (
     <div className="overflow-x-auto">
-      <table className="premium-table">
+      <table className="w-full text-left border-collapse">
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Designation</th>
-            <th>Phone</th>
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Designation</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Phone</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-slate-50">
           {data.map((w: any) => (
-            <tr key={w.id}>
-              <td className="font-display font-semibold text-[var(--luxury-dark)]">{w.name}</td>
-              <td className="text-[var(--luxury-gray)]">{w.designation || "Warden"}</td>
-              <td className="font-semibold text-[var(--luxury-accent)]">{w.phone || "-"}</td>
+            <tr key={w.id} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 font-semibold text-slate-900 text-sm flex items-center gap-3">
+                <div className="w-7 h-7 rounded-full bg-slate-100 grid place-items-center text-[oklch(0.42_0.18_265)] font-display text-xs font-bold shrink-0">
+                  {w.name?.[0]}
+                </div>
+                {w.name}
+              </td>
+              <td className="py-3.5 text-sm text-slate-600">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-50 text-slate-600 border border-slate-100">
+                  {w.designation || "Warden"}
+                </span>
+              </td>
+              <td className="py-3.5 text-sm font-semibold text-[oklch(0.42_0.18_265)]">
+                {w.phone ? (
+                  <a href={`tel:${w.phone}`} className="hover:underline flex items-center gap-1">
+                    <Phone className="w-3.5 h-3.5 inline text-[oklch(0.42_0.18_265)]/70" />
+                    {w.phone}
+                  </a>
+                ) : (
+                  <span className="text-slate-400">-</span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -419,18 +352,27 @@ function WardenTable({ data }: any) {
 function StaffTable({ data }: any) {
   return (
     <div className="overflow-x-auto">
-      <table className="premium-table">
+      <table className="w-full text-left border-collapse">
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Role</th>
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Role</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-slate-50">
           {data.map((s: any) => (
-            <tr key={s.id}>
-              <td className="font-display font-semibold text-[var(--luxury-dark)]">{s.name}</td>
-              <td className="text-[var(--luxury-gray)]">{s.role || "Staff"}</td>
+            <tr key={s.id} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 font-semibold text-slate-900 text-sm flex items-center gap-3">
+                <div className="w-7 h-7 rounded-full bg-slate-100 grid place-items-center text-slate-500 font-display text-xs font-bold shrink-0">
+                  {s.name?.[0]}
+                </div>
+                {s.name}
+              </td>
+              <td className="py-3.5 text-sm text-slate-600">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-50 text-slate-600 border border-slate-100">
+                  {s.role || "Supporting Staff"}
+                </span>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -441,18 +383,18 @@ function StaffTable({ data }: any) {
 
 function BlockInfo({ block }: any) {
   return (
-    <div className="block-info-grid">
-      <div className="info-stat">
-        <div className="stat-value">{block.rooms}</div>
-        <div className="stat-label">Total Rooms</div>
+    <div className="grid grid-cols-3 gap-2 divide-x divide-slate-100 bg-slate-50/50 rounded-xl py-4 border border-slate-100/80">
+      <div className="text-center">
+        <div className="text-2xl font-display font-bold text-slate-900">{block.rooms}</div>
+        <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">Total Rooms</div>
       </div>
-      <div className="info-stat">
-        <div className="stat-value">{block.diningHall || "0"}</div>
-        <div className="stat-label">Dining Halls</div>
+      <div className="text-center">
+        <div className="text-2xl font-display font-bold text-slate-900">{block.diningHall || "0"}</div>
+        <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">Dining Halls</div>
       </div>
-      <div className="info-stat">
-        <div className="stat-value">{block.kitchen || "0"}</div>
-        <div className="stat-label">Kitchens</div>
+      <div className="text-center">
+        <div className="text-2xl font-display font-bold text-slate-900">{block.kitchen || "0"}</div>
+        <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">Kitchens</div>
       </div>
     </div>
   );
@@ -460,10 +402,14 @@ function BlockInfo({ block }: any) {
 
 function FacilityList({ facilities }: any) {
   return (
-    <div className="facility-grid">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
       {facilities.map((f: any) => (
-        <div key={f.id} className="facility-item">
-          {f.name}
+        <div
+          key={f.id}
+          className="flex items-center gap-2.5 bg-slate-50/80 border border-slate-100 px-4 py-3 rounded-xl hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all duration-300 group"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-[oklch(0.42_0.18_265)] group-hover:scale-110 transition-transform shrink-0" />
+          <span className="text-sm font-medium text-slate-700">{f.name}</span>
         </div>
       ))}
     </div>
@@ -473,15 +419,25 @@ function FacilityList({ facilities }: any) {
 function HealthTable({ health }: any) {
   return (
     <div className="overflow-x-auto">
-      <table className="premium-table">
-        <tbody>
-          <tr>
-            <th>Staff Incharge</th>
-            <td className="font-display font-semibold text-[var(--luxury-dark)]">{health.name}</td>
+      <table className="w-full text-left border-collapse">
+        <tbody className="divide-y divide-slate-50">
+          <tr className="hover:bg-slate-50/40 transition-colors">
+            <th className="py-4 text-xs font-semibold uppercase tracking-wider text-slate-400 w-1/3">Staff Incharge</th>
+            <td className="py-4 font-semibold text-slate-900 text-sm flex items-center gap-3">
+              <div className="w-7 h-7 rounded-full bg-emerald-50 text-emerald-600 grid place-items-center font-display text-xs font-bold shrink-0">
+                {health.name?.[0]}
+              </div>
+              {health.name}
+            </td>
           </tr>
-          <tr>
-            <th>Timings / Availability</th>
-            <td className="text-[var(--luxury-gray)]">{health.timing}</td>
+          <tr className="hover:bg-slate-50/40 transition-colors">
+            <th className="py-4 text-xs font-semibold uppercase tracking-wider text-slate-400">Timings / Availability</th>
+            <td className="py-4 text-sm font-medium text-slate-700">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                <Activity className="w-3.5 h-3.5 mr-1.5 animate-pulse text-emerald-600" />
+                {health.timing}
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>

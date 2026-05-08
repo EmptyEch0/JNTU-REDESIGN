@@ -354,6 +354,98 @@ export const sportsImages = pgTable("sports_images", {
 });
 ;
 
+/* ===========================
+   🎵 MUSIC CONTENT
+=========================== */
+export const musicContent = pgTable("music_content", {
+  id: serial("id").primaryKey(),
+
+  title: text("title"),
+  subtitle: text("subtitle"),
+
+  message: text("message"),
+
+  vision: text("vision"),
+  mission: text("mission"),
+
+  objectives: text("objectives"),
+
+  process: text("process"),
+});
+
+/* ===========================
+   👥 MUSIC PEOPLE
+=========================== */
+export const musicPeople = pgTable(
+  "music_people",
+  {
+    id: serial("id").primaryKey(),
+
+    // faculty | student
+    roleType: text("role_type").notNull(),
+
+    // male | female
+    gender: text("gender"),
+
+    name: text("name").notNull(),
+
+    designation: text("designation"),
+
+    branch: text("branch"),
+    year: text("year"),
+
+    img: text("img"),
+  },
+  (table) => ({
+    roleIdx: index("music_people_role_idx").on(
+      table.roleType
+    ),
+  })
+);
+
+/* ===========================
+   🎸 MUSIC EQUIPMENT
+=========================== */
+export const musicEquipment = pgTable(
+  "music_equipment",
+  {
+    id: serial("id").primaryKey(),
+
+    item: text("item").notNull(),
+
+    cost: text("cost"),
+  }
+);
+
+/* ===========================
+   🎶 MUSIC MEMBERS
+=========================== */
+export const musicMembers = pgTable(
+  "music_members",
+  {
+    id: serial("id").primaryKey(),
+
+    instrument: text("instrument"),
+
+    name: text("name").notNull(),
+
+    branch: text("branch"),
+
+    year: text("year"),
+  }
+);
+
+/* ===========================
+   🖼️ MUSIC IMAGES
+=========================== */
+export const musicImages = pgTable(
+  "music_images",
+  {
+    id: serial("id").primaryKey(),
+
+    url: text("url").notNull(),
+  }
+);
 
 /* ===========================
    🔹 ENUMS
@@ -525,4 +617,47 @@ export const hostelImages = pgTable(
   (table) => ({
     typeIdx: index("images_type_idx").on(table.type),
   })
+);
+export const studentClubs = pgTable("student_clubs", {
+  id: serial("id").primaryKey(),
+
+  slug: text("slug").notNull(),
+
+  name: text("name").notNull(),
+
+  category: text("category"),
+
+  title: text("title"),
+
+  description: text("description"),
+
+  badge: text("badge"),
+
+  heroImage: text("hero_image"),
+});
+export const studentClubContent = pgTable(
+  "student_club_content",
+  {
+    id: serial("id").primaryKey(),
+
+    clubId: integer("club_id").notNull(),
+
+    sectionType: text("section_type").notNull(),
+
+    heading: text("heading"),
+
+    content: text("content"),
+
+    image: text("image"),
+  }
+);
+export const studentClubImages = pgTable(
+  "student_club_images",
+  {
+    id: serial("id").primaryKey(),
+
+    clubId: integer("club_id").notNull(),
+
+    url: text("url").notNull(),
+  }
 );

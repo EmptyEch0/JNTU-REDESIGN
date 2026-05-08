@@ -124,6 +124,14 @@ export const NAV: {
           { label: "Other Amenities", to: "/other-amenities", desc: "Staff & guest quarters" },
         ],
       },
+      {
+        title: "Campus Life",
+        items: [
+          { label: "Campus Life", to: "/campus-life", desc: "Overview" },
+          { label: "Student Activity Clubs", to: "/campus-life/student-activity-club", desc: "Vykya, Constelle, Yoga" },
+          { label: "Music Club", to: "/campus-life/music-club", desc: "Musical expression" },
+        ],
+      },
     ],
   },
   {
@@ -136,14 +144,6 @@ export const NAV: {
           { label: "Women Empowerment Cell", to: "/women-empowerment" },
           { label: "Professional Bodies", to: "/professional-bodies", desc: "Student chapters & engagement" },
           { label: "Gallery", to: "/gallery", desc: "Moments on campus" },
-        ],
-      },
-      {
-        title: "Clubs & Activities",
-        items: [
-          { label: "Campus Life", to: "/campus-life", desc: "Overview" },
-          { label: "Student Activity Clubs", to: "/campus-life/student-activity-club", desc: "Vykya, Constelle, Yoga" },
-          { label: "Music Club", to: "/campus-life/music-club", desc: "Musical expression" },
         ],
       },
       {
@@ -283,9 +283,9 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   { label: "Sports Complex", to: "/sports", group: "Facilities", keywords: "cricket gym fitness" },
   { label: "Dispensary", to: "/dispensary", group: "Facilities", keywords: "health medical clinic" },
 
-  { label: "Campus Life Overview", to: "/campus-life", group: "Student Corner", keywords: "life overview clubs" },
-  { label: "Student Activity Clubs", to: "/campus-life/student-activity-club", group: "Student Corner", keywords: "vykya constelle yoga" },
-  { label: "Music Club", to: "/campus-life/music-club", group: "Student Corner", keywords: "music singing band" },
+  { label: "Campus Life Overview", to: "/campus-life", group: "Facilities", keywords: "life overview clubs" },
+  { label: "Student Activity Clubs", to: "/campus-life/student-activity-club", group: "Facilities", keywords: "vykya constelle yoga" },
+  { label: "Music Club", to: "/campus-life/music-club", group: "Facilities", keywords: "music singing band" },
 
   { label: "NSS", to: "/nss", group: "Student Corner", keywords: "service community" },
   { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner" },

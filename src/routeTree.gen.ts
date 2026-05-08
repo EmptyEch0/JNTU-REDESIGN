@@ -57,11 +57,7 @@ import { Route as AdministrationVicePrincipalRouteImport } from './routes/admini
 import { Route as AdministrationPrincipalsOfficeRouteImport } from './routes/administration.principals-office'
 import { Route as AdministrationPrincipalRouteImport } from './routes/administration.principal'
 import { Route as AdministrationIqacRouteImport } from './routes/administration.iqac'
-import { Route as AdminSportsRouteImport } from './routes/admin/sports'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
-import { Route as AdminLibraryRouteImport } from './routes/admin/library'
-import { Route as AdminEngineeringCellRouteImport } from './routes/admin/engineering-cell'
-import { Route as AdminDispensaryRouteImport } from './routes/admin/dispensary'
 import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
 import { Route as AcademicsSyllabusRouteImport } from './routes/academics.syllabus'
 import { Route as AcademicsScholarshipsRouteImport } from './routes/academics.scholarships'
@@ -326,29 +322,9 @@ const AdministrationIqacRoute = AdministrationIqacRouteImport.update({
   path: '/iqac',
   getParentRoute: () => AdministrationRoute,
 } as any)
-const AdminSportsRoute = AdminSportsRouteImport.update({
-  id: '/sports',
-  path: '/sports',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminPlacementsRoute = AdminPlacementsRouteImport.update({
   id: '/placements',
   path: '/placements',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminLibraryRoute = AdminLibraryRouteImport.update({
-  id: '/library',
-  path: '/library',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminEngineeringCellRoute = AdminEngineeringCellRouteImport.update({
-  id: '/engineering-cell',
-  path: '/engineering-cell',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminDispensaryRoute = AdminDispensaryRouteImport.update({
-  id: '/dispensary',
-  path: '/dispensary',
   getParentRoute: () => AdminRoute,
 } as any)
 const AcademicsTimeTablesRoute = AcademicsTimeTablesRouteImport.update({
@@ -482,11 +458,7 @@ export interface FileRoutesByFullPath {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
-  '/admin/dispensary': typeof AdminDispensaryRoute
-  '/admin/engineering-cell': typeof AdminEngineeringCellRoute
-  '/admin/library': typeof AdminLibraryRoute
   '/admin/placements': typeof AdminPlacementsRoute
-  '/admin/sports': typeof AdminSportsRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
@@ -549,11 +521,7 @@ export interface FileRoutesByTo {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
-  '/admin/dispensary': typeof AdminDispensaryRoute
-  '/admin/engineering-cell': typeof AdminEngineeringCellRoute
-  '/admin/library': typeof AdminLibraryRoute
   '/admin/placements': typeof AdminPlacementsRoute
-  '/admin/sports': typeof AdminSportsRoute
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
   '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
@@ -622,11 +590,7 @@ export interface FileRoutesById {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
-  '/admin/dispensary': typeof AdminDispensaryRoute
-  '/admin/engineering-cell': typeof AdminEngineeringCellRoute
-  '/admin/library': typeof AdminLibraryRoute
   '/admin/placements': typeof AdminPlacementsRoute
-  '/admin/sports': typeof AdminSportsRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
@@ -697,11 +661,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
-    | '/admin/dispensary'
-    | '/admin/engineering-cell'
-    | '/admin/library'
     | '/admin/placements'
-    | '/admin/sports'
     | '/administration/iqac'
     | '/administration/principal'
     | '/administration/principals-office'
@@ -764,11 +724,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
-    | '/admin/dispensary'
-    | '/admin/engineering-cell'
-    | '/admin/library'
     | '/admin/placements'
-    | '/admin/sports'
     | '/administration/principal'
     | '/administration/principals-office'
     | '/administration/vice-principal'
@@ -836,11 +792,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
-    | '/admin/dispensary'
-    | '/admin/engineering-cell'
-    | '/admin/library'
     | '/admin/placements'
-    | '/admin/sports'
     | '/administration/iqac'
     | '/administration/principal'
     | '/administration/principals-office'
@@ -1237,39 +1189,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationIqacRouteImport
       parentRoute: typeof AdministrationRoute
     }
-    '/admin/sports': {
-      id: '/admin/sports'
-      path: '/sports'
-      fullPath: '/admin/sports'
-      preLoaderRoute: typeof AdminSportsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/placements': {
       id: '/admin/placements'
       path: '/placements'
       fullPath: '/admin/placements'
       preLoaderRoute: typeof AdminPlacementsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/library': {
-      id: '/admin/library'
-      path: '/library'
-      fullPath: '/admin/library'
-      preLoaderRoute: typeof AdminLibraryRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/engineering-cell': {
-      id: '/admin/engineering-cell'
-      path: '/engineering-cell'
-      fullPath: '/admin/engineering-cell'
-      preLoaderRoute: typeof AdminEngineeringCellRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/dispensary': {
-      id: '/admin/dispensary'
-      path: '/dispensary'
-      fullPath: '/admin/dispensary'
-      preLoaderRoute: typeof AdminDispensaryRouteImport
       parentRoute: typeof AdminRoute
     }
     '/academics/time-tables': {
@@ -1450,19 +1374,11 @@ const AcademicsRouteWithChildren = AcademicsRoute._addFileChildren(
 )
 
 interface AdminRouteChildren {
-  AdminDispensaryRoute: typeof AdminDispensaryRoute
-  AdminEngineeringCellRoute: typeof AdminEngineeringCellRoute
-  AdminLibraryRoute: typeof AdminLibraryRoute
   AdminPlacementsRoute: typeof AdminPlacementsRoute
-  AdminSportsRoute: typeof AdminSportsRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminDispensaryRoute: AdminDispensaryRoute,
-  AdminEngineeringCellRoute: AdminEngineeringCellRoute,
-  AdminLibraryRoute: AdminLibraryRoute,
   AdminPlacementsRoute: AdminPlacementsRoute,
-  AdminSportsRoute: AdminSportsRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

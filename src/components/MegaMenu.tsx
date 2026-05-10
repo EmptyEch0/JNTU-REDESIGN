@@ -147,12 +147,12 @@ export function MegaMenu() {
                   <div
                     key={item.label}
                     className="relative"
-                    onMouseEnter={() => setOpenIdx(item.groups ? i : null)}
+                    onMouseEnter={() => setOpenIdx(item.groups || item.simpleItems ? i : null)}
                   >
                     {item.to ? (
                       <Link
                         to={item.to}
-                        className={`px-3.5 py-1.5 text-[13px] font-medium rounded-full transition-all ${
+                        className={`px-2.5 py-1.5 text-[13px] font-medium rounded-full transition-all ${
                           active
                             ? "bg-white/10 text-white"
                             : "text-white/75 hover:text-white hover:bg-white/5"
@@ -162,7 +162,7 @@ export function MegaMenu() {
                       </Link>
                     ) : (
                       <button
-                        className={`flex items-center gap-1 px-3.5 py-1.5 text-[13px] font-medium rounded-full transition-all ${
+                        className={`flex items-center gap-1 px-2.5 py-1.5 text-[13px] font-medium rounded-full transition-all ${
                           active || openIdx === i
                             ? "bg-white/10 text-white"
                             : "text-white/75 hover:text-white hover:bg-white/5"
@@ -321,7 +321,17 @@ export function MegaMenu() {
           {/* Mega dropdown panel */}
           {openIdx !== null && NAV[openIdx]?.groups && !searchOpen && (
             <div className="hidden lg:block px-5 pb-5 animate-[fade-in_0.3s_ease-out]">
-              <div className="border-t border-white/10 pt-5 grid grid-cols-2 gap-6">
+              <div
+                className={`border-t border-white/10 pt-5 grid gap-6 ${
+                  NAV[openIdx].groups!.length === 1
+                    ? "grid-cols-1 max-w-xs mx-auto"
+                    : NAV[openIdx].groups!.length === 2
+                    ? "grid-cols-2 max-w-2xl mx-auto"
+                    : NAV[openIdx].groups!.length === 3
+                    ? "grid-cols-3 max-w-4xl mx-auto"
+                    : "grid-cols-2 lg:grid-cols-4"
+                }`}
+              >
                 {NAV[openIdx].groups!.map((g) => (
                   <div key={g.title}>
                     <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-primary-glow mb-3">
@@ -346,6 +356,62 @@ export function MegaMenu() {
                     </ul>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Simple nested list dropdown */}
+          {openIdx !== null && NAV[openIdx]?.simpleItems && !searchOpen && (
+            <div className="hidden lg:block px-5 pb-5 animate-[fade-in_0.3s_ease-out]">
+              <div className="border-t border-white/10 pt-5 max-w-xs mx-auto">
+                <ul className="space-y-0.5">
+                  {NAV[openIdx].simpleItems!.map((it) => (
+                    <li key={it.label} className="group/item relative">
+                      {it.children ? (
+                        <div>
+                          <div className="flex items-center justify-between rounded-xl p-2.5 hover:bg-white/5 transition-colors cursor-pointer group/trigger">
+                            <Link to={it.to} className="flex-1 min-w-0">
+                              <div className="text-sm font-medium text-white group-hover/trigger:text-primary-glow transition-colors">
+                                {it.label}
+                              </div>
+                              {it.desc && (
+                                <div className="text-[11px] text-white/50 mt-0.5">{it.desc}</div>
+                              )}
+                            </Link>
+                            <ChevronDown className="h-3.5 w-3.5 text-white/40 group-hover/item:rotate-180 transition-transform duration-300" />
+                          </div>
+                          {/* Nested flyout list on hover */}
+                          <div className="max-h-0 group-hover/item:max-h-96 overflow-hidden transition-all duration-500 ease-in-out">
+                            <ul className="pl-4 pr-2 pb-2 pt-1 space-y-0.5 border-l border-white/10 ml-3 mt-1">
+                              {it.children.map((child) => (
+                                <li key={child.label}>
+                                  <Link
+                                    to={child.to}
+                                    className="block px-3 py-1.5 rounded-lg text-[13px] text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+                                  >
+                                    {child.label}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      ) : (
+                        <Link
+                          to={it.to}
+                          className="block rounded-xl p-2.5 hover:bg-white/5 transition-colors"
+                        >
+                          <div className="text-sm font-medium text-white hover:text-primary-glow transition-colors">
+                            {it.label}
+                          </div>
+                          {it.desc && (
+                            <div className="text-[11px] text-white/50 mt-0.5">{it.desc}</div>
+                          )}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           )}
@@ -381,6 +447,20 @@ export function MegaMenu() {
                                 {it.label}
                               </Link>
                             ))}
+                          {item.simpleItems?.flatMap((it) => [
+                            it,
+                            ...(it.children?.map(c => ({ ...c, label: `└ ${c.label}` })) || [])
+                          ]).map((sub) => (
+                            <Link
+                              key={sub.label + sub.to}
+                              to={sub.to}
+                              className={`block py-2.5 px-5 text-[13px] transition-all hover:bg-white/5 ${
+                                sub.label.startsWith('└') ? 'text-white/50 pl-8' : 'text-white/80 mt-1 font-medium border-t border-white/5 pt-3'
+                              }`}
+                            >
+                              {sub.label}
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     )}

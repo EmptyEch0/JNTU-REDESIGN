@@ -1,193 +1,456 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
-import { RevealOnScroll } from "@/components/RevealOnScroll";
-import { ProfileCard } from "@/components/ProfileCard";
-import { StatCounter } from "@/components/StatCounter";
-import { SectionLabel } from "@/components/SectionLabel";
-import { Droplets, Dumbbell, UtensilsCrossed, Wifi, Shield, Sparkles } from "lucide-react";
 import hostelImg from "@/assets/hostel.jpg";
+import { getHostelData } from "@/funcs/hostel.server";
+import {
+  Building,
+  User,
+  Activity,
+  Sparkles,
+  Coffee,
+  Phone,
+  Tent,
+  Home,
+  Utensils,
+  Clock
+} from "lucide-react";
 
 export const Route = createFileRoute("/hostels")({
-  head: () => ({
-    meta: [
-      { title: "Hostels — JNTU-GV CEV" },
-      {
-        name: "description",
-        content: "Residential life at JNTU-GV CEV — UG and PG hostels with full amenities.",
-      },
-      { property: "og:title", content: "Hostels at JNTU-GV CEV" },
-      {
-        property: "og:description",
-        content:
-          "318+ rooms across UG Boys, PG Boys and Girls residences with RO water, gym and dining.",
-      },
-      { property: "og:image", content: hostelImg },
-    ],
-  }),
+  loader: async () => await getHostelData(),
   component: HostelsPage,
 });
 
-const TABS = [
-  {
-    key: "ug-boys",
-    label: "UG Boys",
-    rooms: 109,
-    warden: { name: "Dr. K. Srinivasa Rao", role: "Chief Warden, UG Boys" },
-  },
-  {
-    key: "pg-boys",
-    label: "PG Boys",
-    rooms: 96,
-    warden: { name: "Dr. M. Ramesh Babu", role: "Chief Warden, PG Boys" },
-  },
-  {
-    key: "girls",
-    label: "Girls",
-    rooms: 113,
-    warden: { name: "Dr. Ch. Bindu Madhuri", role: "Chief Warden, Girls Hostel" },
-  },
-];
-
-const FACILITIES = [
-  { icon: Droplets, title: "RO Drinking Water", desc: "Filtered drinking water on every floor." },
-  {
-    icon: UtensilsCrossed,
-    title: "Dining Hall",
-    desc: "Hygienic mess with rotating multi-cuisine menus.",
-  },
-  { icon: Dumbbell, title: "Gym & Recreation", desc: "Fitness equipment and indoor games." },
-  { icon: Wifi, title: "Wi-Fi Connectivity", desc: "Campus-wide internet across all blocks." },
-  { icon: Shield, title: "24×7 Security", desc: "Manned entry, biometric access for residents." },
-  { icon: Sparkles, title: "Housekeeping", desc: "Daily cleaning of common areas." },
-];
-
 function HostelsPage() {
-  const [tab, setTab] = useState(TABS[0].key);
-  const active = TABS.find((t) => t.key === tab)!;
+  const data = Route.useLoaderData() as any;
+
+  const blocks = data?.blocks ?? [];
+  const wardens = data?.wardens ?? [];
+  const facilities = data?.facilities ?? [];
+  const officer = data?.officer;
+  const health = data?.health;
+  const staff = data?.staff ?? [];
+  const images = data?.images ?? [];
+
+  const [tab, setTab] = useState<"office" | "girls" | "boys">("office");
+
+  const getImages = (type: string) =>
+    images.filter((img: any) => img.type === type).map((i: any) => i.url);
+
+  const girlsBlocks = blocks.filter((b: any) => b.type === "girls");
+  const boysBlocks = blocks.filter((b: any) => b.type === "boys");
+
+  const girlsWardens = wardens.filter((w: any) => w.hostelType === "girls");
+  const boysWardens = wardens.filter((w: any) => w.hostelType === "boys");
+
+  const girlsFacilities = facilities.filter((f: any) => f.type === "girls");
+  const boysFacilities = facilities.filter((f: any) => f.type === "boys");
 
   return (
-    <>
+    <div className="min-h-screen bg-[oklch(0.972_0.012_85)] text-slate-800 pb-20">
       <PageHero
-        eyebrow="Hostels"
-        title="A campus that feels like home."
-        subtitle="Three residential blocks, 318+ rooms, full-time wardens and the small comforts that turn a building into a home."
-        image={hostelImg}
+        title="Hostels"
+        subtitle={data?.about?.description || "Providing comfortable and safe accommodation for all students."}
+        image={getImages("office")[0] || hostelImg}
       />
 
-      {/* Stats */}
-      <section className="py-20 container-narrow">
-        <div className="grid grid-cols-3 gap-px bg-border rounded-3xl overflow-hidden border border-border shadow-[var(--shadow-elegant)]">
-          {TABS.map((t) => (
-            <div key={t.key} className="bg-card p-8 text-center">
-              <StatCounter value={t.rooms} label={`${t.label} Rooms`} />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Tabs */}
-      <section className="py-12 container-narrow">
-        <div className="flex flex-wrap gap-2 justify-center">
-          {TABS.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
-                tab === t.key
-                  ? "bg-primary text-primary-foreground shadow-[var(--shadow-elegant)]"
-                  : "bg-card text-foreground border border-border hover:border-primary/40"
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-
-        <RevealOnScroll className="mt-12">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <img
-              src={hostelImg}
-              alt={`${active.label} hostel`}
-              loading="lazy"
-              className="rounded-3xl aspect-[4/3] object-cover w-full"
-            />
-            <div>
-              <div className="text-eyebrow">{active.label} Residence</div>
-              <h2 className="text-display text-3xl md:text-4xl mt-3 text-ink">
-                {active.rooms} rooms · full-time warden support
-              </h2>
-              <p className="mt-4 text-muted-foreground leading-relaxed">
-                The {active.label.toLowerCase()} hostel is led by {active.warden.name}, supported by
-                a deputy warden team and dedicated health assistants. Rooms are designed for focused
-                study and easy living.
-              </p>
-              <div className="mt-6">
-                <ProfileCard
-                  name={active.warden.name}
-                  role={active.warden.role}
-                  badge="Chief Warden"
-                />
-              </div>
-            </div>
-          </div>
-        </RevealOnScroll>
-      </section>
-
-      {/* Facilities */}
-      <section className="py-24 bg-sand">
-        <div className="container-narrow">
-          <RevealOnScroll>
-            <SectionLabel
-              eyebrow="In every block"
-              title="The everyday essentials, well-handled."
-              align="center"
-            />
-          </RevealOnScroll>
-          <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {FACILITIES.map((f, i) => (
-              <RevealOnScroll key={f.title} delay={i * 60}>
-                <div className="bg-card p-6 rounded-2xl border border-border hover-lift h-full">
-                  <div className="h-11 w-11 rounded-xl bg-[var(--gradient-royal)] text-white grid place-items-center mb-4">
-                    <f.icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="font-semibold text-ink">{f.title}</h3>
-                  <p className="mt-1.5 text-sm text-muted-foreground">{f.desc}</p>
-                </div>
-              </RevealOnScroll>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Health team */}
-      <section className="py-24 container-narrow">
-        <RevealOnScroll>
-          <SectionLabel
-            eyebrow="Health Assistants"
-            title="Care, around the clock."
-            align="center"
+      <section className="container-narrow py-12">
+        {/* TABS */}
+        <div className="flex flex-wrap gap-2.5 mb-12 justify-center">
+          <TabBtn
+            label="Hostel Office"
+            active={tab === "office"}
+            onClick={() => setTab("office")}
+            icon={Building}
           />
-        </RevealOnScroll>
-        <div className="mt-12 grid sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
-          <RevealOnScroll>
-            <ProfileCard
-              name="Sri Venkata Krishna"
-              role="Health Assistant"
-              detail="On-site first response and routine care for resident students."
-              badge="Hostel Care"
-            />
-          </RevealOnScroll>
-          <RevealOnScroll delay={120}>
-            <ProfileCard
-              name="Ms. G. Krishna Veni"
-              role="Health Assistant"
-              detail="Coordinates clinic visits and student wellness checks."
-              badge="Hostel Care"
-            />
-          </RevealOnScroll>
+          <TabBtn
+            label="Girls Hostel"
+            active={tab === "girls"}
+            onClick={() => setTab("girls")}
+            icon={Home}
+          />
+          <TabBtn
+            label="Boys Hostel"
+            active={tab === "boys"}
+            onClick={() => setTab("boys")}
+            icon={Tent}
+          />
+        </div>
+
+        <div className="space-y-8 max-w-5xl mx-auto animate-[fade-in_0.4s_ease-out]">
+          <ImageCarousel images={getImages(tab)} fallback={hostelImg} />
+
+          {/* OFFICE */}
+          {tab === "office" && (
+            <div className="space-y-8 animate-[fade-in_0.4s_ease-out]">
+              {data?.about && (
+                <Card title="About Hostel Office" icon={Building}>
+                  <p className="text-slate-600 leading-relaxed text-sm">
+                    {data?.about?.description}
+                  </p>
+                </Card>
+              )}
+
+              {officer && (
+                <Card title="Officer In Charge" icon={User}>
+                  <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
+                    {officer.image && (
+                      <img
+                        src={officer.image}
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src =
+                            "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250";
+                        }}
+                        className="w-24 h-24 rounded-2xl object-cover border border-slate-200/50 shadow-sm shrink-0"
+                        alt={officer.name}
+                      />
+                    )}
+                    <div>
+                      <h4 className="font-display font-bold text-lg text-slate-900 mb-0.5">
+                        {officer.name}
+                      </h4>
+                      <p className="text-[oklch(0.42_0.18_265)] font-semibold text-xs tracking-wider uppercase">
+                        {officer.role}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              )}
+
+              {girlsWardens.length > 0 && (
+                <Card title="Girls Wardens" icon={User}>
+                  <WardenTable data={girlsWardens} />
+                </Card>
+              )}
+
+              {boysWardens.length > 0 && (
+                <Card title="Boys Wardens" icon={User}>
+                  <WardenTable data={boysWardens} />
+                </Card>
+              )}
+
+              {staff.length > 0 && (
+                <Card title="Supporting Staff" icon={Sparkles}>
+                  <StaffTable data={staff} />
+                </Card>
+              )}
+            </div>
+          )}
+
+          {/* GIRLS HOSTEL */}
+          {tab === "girls" && (
+            <div className="space-y-8 animate-[fade-in_0.4s_ease-out]">
+              {girlsBlocks.map((b: any) => (
+                <Card key={b.id} title={b.title} icon={Home}>
+                  <BlockInfo block={b} />
+                </Card>
+              ))}
+
+              {girlsFacilities.length > 0 && (
+                <Card title="Facilities" icon={Sparkles}>
+                  <FacilityList facilities={girlsFacilities} />
+                </Card>
+              )}
+
+              {health && (
+                <Card title="Health Assistant" icon={Activity}>
+                  <HealthCard health={health} />
+                </Card>
+              )}
+            </div>
+          )}
+
+          {/* BOYS HOSTEL */}
+          {tab === "boys" && (
+            <div className="space-y-8 animate-[fade-in_0.4s_ease-out]">
+              {boysBlocks.map((b: any) => (
+                <Card key={b.id} title={b.title} icon={Tent}>
+                  <BlockInfo block={b} />
+                </Card>
+              ))}
+
+              {boysFacilities.length > 0 && (
+                <Card title="Facilities" icon={Sparkles}>
+                  <FacilityList facilities={boysFacilities} />
+                </Card>
+              )}
+
+              {health && (
+                <Card title="Health Assistant" icon={Activity}>
+                  <HealthCard health={health} />
+                </Card>
+              )}
+            </div>
+          )}
         </div>
       </section>
-    </>
+    </div>
   );
 }
+
+/* ---------- UI COMPONENTS ---------- */
+
+function TabBtn({ label, active, onClick, icon: Icon }: any) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300 active:scale-95 border cursor-pointer ${
+        active
+          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow-sm"
+          : "bg-white border-slate-200/80 text-slate-500 hover:text-slate-800 hover:bg-slate-50 hover:border-slate-300 shadow-sm"
+      }`}
+    >
+      {Icon && <Icon className="w-4 h-4 shrink-0" />}
+      {label}
+    </button>
+  );
+}
+
+function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
+  return (
+    <div
+      className={`bg-white rounded-2xl border border-slate-200/60 p-6 md:p-8 hover:shadow-md transition-all duration-300 shadow-sm ${className}`}
+    >
+      {title && (
+        <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-slate-100">
+          {Icon && <Icon className="w-5 h-5 text-[oklch(0.42_0.18_265)]" />}
+          <div>
+            <h3 className="font-display font-semibold text-lg md:text-xl text-slate-900">
+              {title}
+            </h3>
+            {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
+          </div>
+        </div>
+      )}
+      {children}
+    </div>
+  );
+}
+
+function ImageCarousel({ images, fallback }: any) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
+
+  useEffect(() => {
+    if (!autoplay || !images || images.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [autoplay, images]);
+
+  if (!images || images.length === 0) {
+    return (
+      <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-100 mb-8 aspect-[16/6] min-h-[240px] max-h-[380px] bg-slate-100">
+        <img src={fallback} className="w-full h-full object-cover" alt="Hostel fallback" />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="relative rounded-2xl overflow-hidden shadow-md border border-slate-150 mb-8 aspect-[16/6] min-h-[240px] max-h-[380px] bg-slate-100 group"
+      onMouseEnter={() => setAutoplay(false)}
+      onMouseLeave={() => setAutoplay(true)}
+    >
+      <div className="w-full h-full relative">
+        {images.map((img: string, i: number) => (
+          <img
+            key={i}
+            src={img}
+            alt={`Hostel view ${i + 1}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+              currentIndex === i ? "opacity-100" : "opacity-0"
+            }`}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = fallback;
+            }}
+          />
+        ))}
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
+
+      {images.length > 1 && (
+        <>
+          <button
+            onClick={() => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 w-9 h-9 rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 cursor-pointer z-10"
+          >
+            ‹
+          </button>
+          <button
+            onClick={() => setCurrentIndex((prev) => (prev + 1) % images.length)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 w-9 h-9 rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 cursor-pointer z-10"
+          >
+            ›
+          </button>
+
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {images.map((_: any, index: number) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`transition-all duration-300 rounded-full h-1.5 ${
+                  currentIndex === index ? "w-6 bg-white" : "w-1.5 bg-white/50 hover:bg-white"
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ---------- TABLES ---------- */
+
+function WardenTable({ data }: any) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse">
+        <thead>
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Designation
+            </th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Contact</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-50">
+          {data.map((w: any, i: number) => (
+            <tr key={w.id || i} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 font-semibold text-slate-900 text-sm flex items-center gap-3">
+                <div className="w-7 h-7 rounded-full bg-slate-100 grid place-items-center text-slate-500 font-display text-xs font-bold shrink-0">
+                  {w.name?.[0]}
+                </div>
+                {w.name}
+              </td>
+              <td className="py-3.5 text-sm text-slate-600">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-50 text-slate-600 border border-slate-100">
+                  {w.designation}
+                </span>
+              </td>
+              <td className="py-3.5 text-sm font-semibold text-[oklch(0.42_0.18_265)]">
+                {w.phone ? (
+                  <a href={`tel:${w.phone}`} className="hover:underline flex items-center gap-1">
+                    <Phone className="w-3.5 h-3.5 inline text-[oklch(0.42_0.18_265)]/70" />
+                    {w.phone}
+                  </a>
+                ) : (
+                  <span className="text-slate-400">-</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function StaffTable({ data }: any) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse">
+        <thead>
+          <tr className="border-b border-slate-100">
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Name</th>
+            <th className="py-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Role</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-50">
+          {data.map((s: any, i: number) => (
+            <tr key={s.id || i} className="hover:bg-slate-50/40 transition-colors">
+              <td className="py-3.5 font-semibold text-slate-900 text-sm flex items-center gap-3">
+                <div className="w-7 h-7 rounded-full bg-slate-100 grid place-items-center text-slate-500 font-display text-xs font-bold shrink-0">
+                  {s.name?.[0]}
+                </div>
+                {s.name}
+              </td>
+              <td className="py-3.5 text-sm text-slate-600">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-50 text-slate-600 border border-slate-100">
+                  {s.role}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ---------- EXTRAS ---------- */
+
+function BlockInfo({ block }: any) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="flex items-center gap-4 bg-slate-50/80 border border-slate-100 px-5 py-4 rounded-2xl">
+        <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[oklch(0.42_0.18_265)]">
+          <Building className="w-5 h-5" />
+        </div>
+        <div>
+          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Rooms</p>
+          <p className="text-lg font-bold text-slate-900">{block.rooms || "-"}</p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4 bg-slate-50/80 border border-slate-100 px-5 py-4 rounded-2xl">
+        <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-emerald-600">
+          <Utensils className="w-5 h-5" />
+        </div>
+        <div>
+          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Dining Hall</p>
+          <p className="text-lg font-bold text-slate-900">{block.diningHall || "-"}</p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4 bg-slate-50/80 border border-slate-100 px-5 py-4 rounded-2xl">
+        <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-amber-600">
+          <Coffee className="w-5 h-5" />
+        </div>
+        <div>
+          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Kitchen</p>
+          <p className="text-lg font-bold text-slate-900">{block.kitchen || "-"}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FacilityList({ facilities }: any) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+      {facilities.map((f: any, i: number) => (
+        <div
+          key={f.id || i}
+          className="flex items-center gap-2.5 bg-slate-50/80 border border-slate-100 px-4 py-3 rounded-xl hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all duration-300 group"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-[oklch(0.42_0.18_265)] group-hover:scale-110 transition-transform shrink-0" />
+          <span className="text-sm font-medium text-slate-700">{f.name}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function HealthCard({ health }: any) {
+  return (
+    <div className="flex flex-col md:flex-row gap-6 items-start md:items-center bg-slate-50/50 border border-slate-100 p-5 rounded-2xl">
+      <div className="w-12 h-12 rounded-xl bg-[oklch(0.42_0.18_265)]/10 grid place-items-center text-[oklch(0.42_0.18_265)] shrink-0">
+        <Activity className="w-6 h-6" />
+      </div>
+      <div className="flex-1">
+        <h4 className="font-semibold text-slate-900">{health.name}</h4>
+        <p className="text-sm text-slate-500">Health Assistant</p>
+      </div>
+      <div className="flex items-center gap-2 text-sm font-medium text-slate-700 bg-white border border-slate-200/80 px-3 py-1.5 rounded-lg shadow-sm">
+        <Clock className="w-4 h-4 text-slate-400" />
+        {health.timing}
+      </div>
+    </div>
+  );
+}

@@ -15,6 +15,12 @@ export const NAV: {
   label: string;
   to?: string;
   groups?: { title: string; items: { label: string; to: string; desc?: string }[] }[];
+  simpleItems?: {
+    label: string;
+    to: string;
+    desc?: string;
+    children?: { label: string; to: string }[];
+  }[];
 }[] = [
   { label: "Home", to: "/" },
   {
@@ -121,15 +127,31 @@ export const NAV: {
         items: [
           { label: "Hostels", to: "/hostels", desc: "UG & PG residences" },
           { label: "Dispensary", to: "/dispensary", desc: "On-campus health" },
-          { label: "Transport", to: "/campus-life", desc: "Bus & shuttle network" },
+          { label: "Banking", to: "/banking", desc: "Campus banking services" },
         ],
       },
       {
-        title: "Learning",
+        title: "Infrastructure",
         items: [
           { label: "Library", to: "/library", desc: "Knowledge commons" },
           { label: "Sports Complex", to: "/sports", desc: "Indoor & outdoor" },
-          { label: "Campus Life", to: "/campus-life", desc: "Clubs & events" },
+          { label: "Engineering Cell", to: "/engineering-cell", desc: "Campus planning & maintenance" },
+        ],
+      },
+      {
+        title: "Campus Life",
+        items: [
+          { label: "Overview", to: "/campus-life", desc: "Clubs, events & culture" },
+          { label: "Music Club", to: "/campus-life/music-club" },
+          { label: "Activity Club", to: "/campus-life/student-activity-club" },
+        ],
+      },
+      {
+        title: "Other Amenities",
+        items: [
+          { label: "Overview", to: "/other-amenities", desc: "Accommodation & transport" },
+          { label: "Staff Quarters", to: "/other-amenities/staff-quarters" },
+          { label: "Guest House", to: "/other-amenities/guest-house" },
         ],
       },
     ],
@@ -422,6 +444,31 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
     keywords: "health medical clinic",
   },
   { label: "Campus Life", to: "/campus-life", group: "Facilities", keywords: "clubs events" },
+  { label: "Music Club", to: "/campus-life/music-club", group: "Facilities", keywords: "music band performance" },
+  {
+    label: "Student Activity Club",
+    to: "/campus-life/student-activity-club",
+    group: "Facilities",
+    keywords: "clubs events leadership",
+  },
+  {
+    label: "Other Amenities",
+    to: "/other-amenities",
+    group: "Facilities",
+    keywords: "guest house staff quarters hospitality",
+  },
+  {
+    label: "Staff Quarters",
+    to: "/other-amenities/staff-quarters",
+    group: "Facilities",
+    keywords: "staff housing accommodation",
+  },
+  {
+    label: "Guest House",
+    to: "/other-amenities/guest-house",
+    group: "Facilities",
+    keywords: "visitor lodging hospitality",
+  },
 
   { label: "NSS", to: "/nss", group: "Student Corner", keywords: "service community" },
   { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner" },
@@ -465,6 +512,13 @@ export const PLACEMENTS_SUBNAV = [
   { label: "Gallery", to: "/placements/gallery" },
 ];
 
+export const CAMPUS_LIFE_SUBNAV = [
+  { label: "Overview", to: "/campus-life" },
+  { label: "Music Club", to: "/campus-life/music-club" },
+  { label: "Student Activity Club", to: "/campus-life/student-activity-club" },
+  { label: "Sports", to: "/sports" },
+];
+
 export const RD_SUBNAV = [
   { label: "Overview", to: "/rd-cell" },
   { label: "About Research", to: "/rd-cell/about" },
@@ -479,6 +533,12 @@ export const ADMINISTRATION_SUBNAV = [
   { label: "Principal", to: "/administration/principal" },
   { label: "Vice Principal", to: "/administration/vice-principal" },
   { label: "IQAC", to: "/administration/iqac" },
+];
+
+export const OTHER_AMENITIES_SUBNAV = [
+  { label: "Overview", to: "/other-amenities" },
+  { label: "Staff Quarters", to: "/other-amenities/staff-quarters" },
+  { label: "Guest House", to: "/other-amenities/guest-house" },
 ];
 
 export const IQAC_SUBNAV = [

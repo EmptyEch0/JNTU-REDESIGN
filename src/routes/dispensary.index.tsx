@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
-import cultureImg from "@/assets/culture.jpg";
+import cultureImg from "@/assets/culture.jpeg";
 import { getDispensaryData } from "@/funcs/dispensary.server";
 import { 
   Building, 

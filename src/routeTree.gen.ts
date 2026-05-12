@@ -39,7 +39,7 @@ import { Route as NssIndexRouteImport } from './routes/nss.index'
 import { Route as DispensaryIndexRouteImport } from './routes/dispensary.index'
 import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
 import { Route as CampusLifeIndexRouteImport } from './routes/campus-life.index'
-import { Route as AcademicsIndexRouteImport } from './routes/academics.index'
+import { Route as AcademicsIndexRouteImport } from './routes/academics/index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as WomenEmpowermentRecreationRouteImport } from './routes/women-empowerment.recreation'
 import { Route as WomenEmpowermentMagazineRouteImport } from './routes/women-empowerment.magazine'
@@ -67,13 +67,17 @@ import { Route as AdministrationPrincipalRouteImport } from './routes/administra
 import { Route as AdministrationIqacRouteImport } from './routes/administration.iqac'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
 import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
-import { Route as AcademicsSyllabusRouteImport } from './routes/academics.syllabus'
-import { Route as AcademicsScholarshipsRouteImport } from './routes/academics.scholarships'
-import { Route as AcademicsRegulationsRouteImport } from './routes/academics.regulations'
-import { Route as AcademicsProgramsRouteImport } from './routes/academics.programs'
-import { Route as AcademicsDownloadsRouteImport } from './routes/academics.downloads'
+import { Route as AcademicsSyllabusRouteImport } from './routes/academics/syllabus'
+import { Route as AcademicsScholarshipsRouteImport } from './routes/academics/scholarships'
+import { Route as AcademicsRegulationsRouteImport } from './routes/academics/regulations'
+import { Route as AcademicsProgramsRouteImport } from './routes/academics/programs'
+import { Route as AcademicsMissionVisionRouteImport } from './routes/academics/mission-vision'
+import { Route as AcademicsHodDeskRouteImport } from './routes/academics/hod-desk'
+import { Route as AcademicsExaminationRouteImport } from './routes/academics/examination'
+import { Route as AcademicsDownloadsRouteImport } from './routes/academics/downloads'
 import { Route as AcademicsCacRouteImport } from './routes/academics.cac'
-import { Route as AcademicsAdmissionsRouteImport } from './routes/academics.admissions'
+import { Route as AcademicsAdmissionsRouteImport } from './routes/academics/admissions'
+import { Route as AcademicsAcademicCalendarRouteImport } from './routes/academics/academic-calendar'
 import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
 import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
 import { Route as AboutJntukRouteImport } from './routes/about.jntuk'
@@ -410,6 +414,21 @@ const AcademicsProgramsRoute = AcademicsProgramsRouteImport.update({
   path: '/programs',
   getParentRoute: () => AcademicsRoute,
 } as any)
+const AcademicsMissionVisionRoute = AcademicsMissionVisionRouteImport.update({
+  id: '/mission-vision',
+  path: '/mission-vision',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsHodDeskRoute = AcademicsHodDeskRouteImport.update({
+  id: '/hod-desk',
+  path: '/hod-desk',
+  getParentRoute: () => AcademicsRoute,
+} as any)
+const AcademicsExaminationRoute = AcademicsExaminationRouteImport.update({
+  id: '/examination',
+  path: '/examination',
+  getParentRoute: () => AcademicsRoute,
+} as any)
 const AcademicsDownloadsRoute = AcademicsDownloadsRouteImport.update({
   id: '/downloads',
   path: '/downloads',
@@ -425,6 +444,12 @@ const AcademicsAdmissionsRoute = AcademicsAdmissionsRouteImport.update({
   path: '/admissions',
   getParentRoute: () => AcademicsRoute,
 } as any)
+const AcademicsAcademicCalendarRoute =
+  AcademicsAcademicCalendarRouteImport.update({
+    id: '/academic-calendar',
+    path: '/academic-calendar',
+    getParentRoute: () => AcademicsRoute,
+  } as any)
 const AboutVizianagaramRoute = AboutVizianagaramRouteImport.update({
   id: '/vizianagaram',
   path: '/vizianagaram',
@@ -543,9 +568,13 @@ export interface FileRoutesByFullPath {
   '/about/jntuk': typeof AboutJntukRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
   '/academics/admissions': typeof AcademicsAdmissionsRoute
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
+  '/academics/examination': typeof AcademicsExaminationRoute
+  '/academics/hod-desk': typeof AcademicsHodDeskRoute
+  '/academics/mission-vision': typeof AcademicsMissionVisionRoute
   '/academics/programs': typeof AcademicsProgramsRoute
   '/academics/regulations': typeof AcademicsRegulationsRoute
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
@@ -620,9 +649,13 @@ export interface FileRoutesByTo {
   '/about/jntuk': typeof AboutJntukRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
   '/academics/admissions': typeof AcademicsAdmissionsRoute
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
+  '/academics/examination': typeof AcademicsExaminationRoute
+  '/academics/hod-desk': typeof AcademicsHodDeskRoute
+  '/academics/mission-vision': typeof AcademicsMissionVisionRoute
   '/academics/programs': typeof AcademicsProgramsRoute
   '/academics/regulations': typeof AcademicsRegulationsRoute
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
@@ -703,9 +736,13 @@ export interface FileRoutesById {
   '/about/jntuk': typeof AboutJntukRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
+  '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
   '/academics/admissions': typeof AcademicsAdmissionsRoute
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
+  '/academics/examination': typeof AcademicsExaminationRoute
+  '/academics/hod-desk': typeof AcademicsHodDeskRoute
+  '/academics/mission-vision': typeof AcademicsMissionVisionRoute
   '/academics/programs': typeof AcademicsProgramsRoute
   '/academics/regulations': typeof AcademicsRegulationsRoute
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
@@ -789,9 +826,13 @@ export interface FileRouteTypes {
     | '/about/jntuk'
     | '/about/vision-mission'
     | '/about/vizianagaram'
+    | '/academics/academic-calendar'
     | '/academics/admissions'
     | '/academics/cac'
     | '/academics/downloads'
+    | '/academics/examination'
+    | '/academics/hod-desk'
+    | '/academics/mission-vision'
     | '/academics/programs'
     | '/academics/regulations'
     | '/academics/scholarships'
@@ -866,9 +907,13 @@ export interface FileRouteTypes {
     | '/about/jntuk'
     | '/about/vision-mission'
     | '/about/vizianagaram'
+    | '/academics/academic-calendar'
     | '/academics/admissions'
     | '/academics/cac'
     | '/academics/downloads'
+    | '/academics/examination'
+    | '/academics/hod-desk'
+    | '/academics/mission-vision'
     | '/academics/programs'
     | '/academics/regulations'
     | '/academics/scholarships'
@@ -948,9 +993,13 @@ export interface FileRouteTypes {
     | '/about/jntuk'
     | '/about/vision-mission'
     | '/about/vizianagaram'
+    | '/academics/academic-calendar'
     | '/academics/admissions'
     | '/academics/cac'
     | '/academics/downloads'
+    | '/academics/examination'
+    | '/academics/hod-desk'
+    | '/academics/mission-vision'
     | '/academics/programs'
     | '/academics/regulations'
     | '/academics/scholarships'
@@ -1469,6 +1518,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcademicsProgramsRouteImport
       parentRoute: typeof AcademicsRoute
     }
+    '/academics/mission-vision': {
+      id: '/academics/mission-vision'
+      path: '/mission-vision'
+      fullPath: '/academics/mission-vision'
+      preLoaderRoute: typeof AcademicsMissionVisionRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/hod-desk': {
+      id: '/academics/hod-desk'
+      path: '/hod-desk'
+      fullPath: '/academics/hod-desk'
+      preLoaderRoute: typeof AcademicsHodDeskRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/examination': {
+      id: '/academics/examination'
+      path: '/examination'
+      fullPath: '/academics/examination'
+      preLoaderRoute: typeof AcademicsExaminationRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
     '/academics/downloads': {
       id: '/academics/downloads'
       path: '/downloads'
@@ -1488,6 +1558,13 @@ declare module '@tanstack/react-router' {
       path: '/admissions'
       fullPath: '/academics/admissions'
       preLoaderRoute: typeof AcademicsAdmissionsRouteImport
+      parentRoute: typeof AcademicsRoute
+    }
+    '/academics/academic-calendar': {
+      id: '/academics/academic-calendar'
+      path: '/academic-calendar'
+      fullPath: '/academics/academic-calendar'
+      preLoaderRoute: typeof AcademicsAcademicCalendarRouteImport
       parentRoute: typeof AcademicsRoute
     }
     '/about/vizianagaram': {
@@ -1633,9 +1710,13 @@ const AboutRouteChildren: AboutRouteChildren = {
 const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
 
 interface AcademicsRouteChildren {
+  AcademicsAcademicCalendarRoute: typeof AcademicsAcademicCalendarRoute
   AcademicsAdmissionsRoute: typeof AcademicsAdmissionsRoute
   AcademicsCacRoute: typeof AcademicsCacRoute
   AcademicsDownloadsRoute: typeof AcademicsDownloadsRoute
+  AcademicsExaminationRoute: typeof AcademicsExaminationRoute
+  AcademicsHodDeskRoute: typeof AcademicsHodDeskRoute
+  AcademicsMissionVisionRoute: typeof AcademicsMissionVisionRoute
   AcademicsProgramsRoute: typeof AcademicsProgramsRoute
   AcademicsRegulationsRoute: typeof AcademicsRegulationsRoute
   AcademicsScholarshipsRoute: typeof AcademicsScholarshipsRoute
@@ -1645,9 +1726,13 @@ interface AcademicsRouteChildren {
 }
 
 const AcademicsRouteChildren: AcademicsRouteChildren = {
+  AcademicsAcademicCalendarRoute: AcademicsAcademicCalendarRoute,
   AcademicsAdmissionsRoute: AcademicsAdmissionsRoute,
   AcademicsCacRoute: AcademicsCacRoute,
   AcademicsDownloadsRoute: AcademicsDownloadsRoute,
+  AcademicsExaminationRoute: AcademicsExaminationRoute,
+  AcademicsHodDeskRoute: AcademicsHodDeskRoute,
+  AcademicsMissionVisionRoute: AcademicsMissionVisionRoute,
   AcademicsProgramsRoute: AcademicsProgramsRoute,
   AcademicsRegulationsRoute: AcademicsRegulationsRoute,
   AcademicsScholarshipsRoute: AcademicsScholarshipsRoute,

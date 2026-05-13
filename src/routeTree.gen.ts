@@ -28,7 +28,6 @@ import { Route as CampusLifeRouteImport } from './routes/campus-life'
 import { Route as BankingRouteImport } from './routes/banking'
 import { Route as AdmissionsRouteImport } from './routes/admissions'
 import { Route as AdministrationRouteImport } from './routes/administration'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademicsRouteImport } from './routes/academics'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -39,6 +38,7 @@ import { Route as NssIndexRouteImport } from './routes/nss.index'
 import { Route as DispensaryIndexRouteImport } from './routes/dispensary.index'
 import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
 import { Route as CampusLifeIndexRouteImport } from './routes/campus-life.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AcademicsIndexRouteImport } from './routes/academics/index'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as WomenEmpowermentRecreationRouteImport } from './routes/women-empowerment.recreation'
@@ -66,6 +66,7 @@ import { Route as AdministrationPrincipalsOfficeRouteImport } from './routes/adm
 import { Route as AdministrationPrincipalRouteImport } from './routes/administration.principal'
 import { Route as AdministrationIqacRouteImport } from './routes/administration.iqac'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
+import { Route as AdminDepartmentsRouteImport } from './routes/admin.departments'
 import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
 import { Route as AcademicsSyllabusRouteImport } from './routes/academics/syllabus'
 import { Route as AcademicsScholarshipsRouteImport } from './routes/academics/scholarships'
@@ -191,11 +192,6 @@ const AdministrationRoute = AdministrationRouteImport.update({
   path: '/administration',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AcademicsRoute = AcademicsRouteImport.update({
   id: '/academics',
   path: '/academics',
@@ -245,6 +241,11 @@ const CampusLifeIndexRoute = CampusLifeIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => CampusLifeRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AcademicsIndexRoute = AcademicsIndexRouteImport.update({
   id: '/',
@@ -388,6 +389,11 @@ const AdminPlacementsRoute = AdminPlacementsRouteImport.update({
   id: '/placements',
   path: '/placements',
   getParentRoute: () => AdminRoute,
+} as any)
+const AdminDepartmentsRoute = AdminDepartmentsRouteImport.update({
+  id: '/admin/departments',
+  path: '/admin/departments',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AcademicsTimeTablesRoute = AcademicsTimeTablesRouteImport.update({
   id: '/time-tables',
@@ -543,7 +549,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
-  '/admin': typeof AdminRouteWithChildren
   '/administration': typeof AdministrationRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/banking': typeof BankingRoute
@@ -580,6 +585,7 @@ export interface FileRoutesByFullPath {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
   '/administration/principal': typeof AdministrationPrincipalRoute
@@ -607,6 +613,7 @@ export interface FileRoutesByFullPath {
   '/women-empowerment/recreation': typeof WomenEmpowermentRecreationRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/campus-life/': typeof CampusLifeIndexRoute
   '/departments/': typeof DepartmentsIndexRoute
   '/dispensary/': typeof DispensaryIndexRoute
@@ -629,7 +636,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
   '/administration': typeof AdministrationRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/banking': typeof BankingRoute
@@ -661,6 +667,7 @@ export interface FileRoutesByTo {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
@@ -686,6 +693,7 @@ export interface FileRoutesByTo {
   '/women-empowerment/recreation': typeof WomenEmpowermentRecreationRoute
   '/about': typeof AboutIndexRoute
   '/academics': typeof AcademicsIndexRoute
+  '/admin': typeof AdminIndexRoute
   '/campus-life': typeof CampusLifeIndexRoute
   '/departments': typeof DepartmentsIndexRoute
   '/dispensary': typeof DispensaryIndexRoute
@@ -711,7 +719,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
-  '/admin': typeof AdminRouteWithChildren
   '/administration': typeof AdministrationRouteWithChildren
   '/admissions': typeof AdmissionsRoute
   '/banking': typeof BankingRoute
@@ -748,6 +755,7 @@ export interface FileRoutesById {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
   '/administration/principal': typeof AdministrationPrincipalRoute
@@ -775,6 +783,7 @@ export interface FileRoutesById {
   '/women-empowerment/recreation': typeof WomenEmpowermentRecreationRoute
   '/about/': typeof AboutIndexRoute
   '/academics/': typeof AcademicsIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/campus-life/': typeof CampusLifeIndexRoute
   '/departments/': typeof DepartmentsIndexRoute
   '/dispensary/': typeof DispensaryIndexRoute
@@ -801,7 +810,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/academics'
-    | '/admin'
     | '/administration'
     | '/admissions'
     | '/banking'
@@ -838,6 +846,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/admin/departments'
     | '/admin/placements'
     | '/administration/iqac'
     | '/administration/principal'
@@ -865,6 +874,7 @@ export interface FileRouteTypes {
     | '/women-empowerment/recreation'
     | '/about/'
     | '/academics/'
+    | '/admin/'
     | '/campus-life/'
     | '/departments/'
     | '/dispensary/'
@@ -887,7 +897,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/administration'
     | '/admissions'
     | '/banking'
@@ -919,6 +928,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/admin/departments'
     | '/admin/placements'
     | '/administration/principal'
     | '/administration/principals-office'
@@ -944,6 +954,7 @@ export interface FileRouteTypes {
     | '/women-empowerment/recreation'
     | '/about'
     | '/academics'
+    | '/admin'
     | '/campus-life'
     | '/departments'
     | '/dispensary'
@@ -968,7 +979,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/academics'
-    | '/admin'
     | '/administration'
     | '/admissions'
     | '/banking'
@@ -1005,6 +1015,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/time-tables'
+    | '/admin/departments'
     | '/admin/placements'
     | '/administration/iqac'
     | '/administration/principal'
@@ -1032,6 +1043,7 @@ export interface FileRouteTypes {
     | '/women-empowerment/recreation'
     | '/about/'
     | '/academics/'
+    | '/admin/'
     | '/campus-life/'
     | '/departments/'
     | '/dispensary/'
@@ -1057,7 +1069,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRouteWithChildren
   AcademicsRoute: typeof AcademicsRouteWithChildren
-  AdminRoute: typeof AdminRouteWithChildren
   AdministrationRoute: typeof AdministrationRouteWithChildren
   AdmissionsRoute: typeof AdmissionsRoute
   BankingRoute: typeof BankingRoute
@@ -1077,7 +1088,9 @@ export interface RootRouteChildren {
   RdCellRoute: typeof RdCellRouteWithChildren
   SportsRoute: typeof SportsRoute
   WomenEmpowermentRoute: typeof WomenEmpowermentRouteWithChildren
+  AdminDepartmentsRoute: typeof AdminDepartmentsRoute
   DepartmentsIdRoute: typeof DepartmentsIdRouteWithChildren
+  AdminIndexRoute: typeof AdminIndexRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
   DispensaryIndexRoute: typeof DispensaryIndexRoute
 }
@@ -1217,13 +1230,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/academics': {
       id: '/academics'
       path: '/academics'
@@ -1293,6 +1299,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/campus-life/'
       preLoaderRoute: typeof CampusLifeIndexRouteImport
       parentRoute: typeof CampusLifeRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/academics/': {
       id: '/academics/'
@@ -1482,6 +1495,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/placements'
       preLoaderRoute: typeof AdminPlacementsRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/admin/departments': {
+      id: '/admin/departments'
+      path: '/admin/departments'
+      fullPath: '/admin/departments'
+      preLoaderRoute: typeof AdminDepartmentsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/academics/time-tables': {
       id: '/academics/time-tables'
@@ -1745,16 +1765,6 @@ const AcademicsRouteWithChildren = AcademicsRoute._addFileChildren(
   AcademicsRouteChildren,
 )
 
-interface AdminRouteChildren {
-  AdminPlacementsRoute: typeof AdminPlacementsRoute
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminPlacementsRoute: AdminPlacementsRoute,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
-
 interface AdministrationIqacRouteChildren {
   AdministrationIqacAqarRoute: typeof AdministrationIqacAqarRoute
   AdministrationIqacCompositionRoute: typeof AdministrationIqacCompositionRoute
@@ -1924,7 +1934,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRouteWithChildren,
   AcademicsRoute: AcademicsRouteWithChildren,
-  AdminRoute: AdminRouteWithChildren,
   AdministrationRoute: AdministrationRouteWithChildren,
   AdmissionsRoute: AdmissionsRoute,
   BankingRoute: BankingRoute,
@@ -1944,7 +1953,9 @@ const rootRouteChildren: RootRouteChildren = {
   RdCellRoute: RdCellRouteWithChildren,
   SportsRoute: SportsRoute,
   WomenEmpowermentRoute: WomenEmpowermentRouteWithChildren,
+  AdminDepartmentsRoute: AdminDepartmentsRoute,
   DepartmentsIdRoute: DepartmentsIdRouteWithChildren,
+  AdminIndexRoute: AdminIndexRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,
   DispensaryIndexRoute: DispensaryIndexRoute,
 }

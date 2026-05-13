@@ -1,24 +1,36 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/")({
   component: AdminLoginPage,
 });
 
 function AdminLoginPage() {
   const [password, setPassword] = useState("");
-  const { login } = useAdmin();
+  // 1. Added isAdmin to the destructuring
+  const { login, isAdmin } = useAdmin(); 
   const navigate = useNavigate();
+
+  // 2. SMART REDIRECT: If already logged in, skip this page!
+  useEffect(() => {
+    if (isAdmin) {
+      navigate({ to: "/" });
+    }
+  }, [isAdmin, navigate]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (login(password)) {
-      navigate({ to: "/" });
+      // 3. Navigate to the DASHBOARD on success, not the Home page
+      navigate({ to: "/" }); 
     } else {
       alert("Wrong password");
     }
   };
+
+  // 4. Safety: Don't show the login form if we are already logged in
+  if (isAdmin) return null;
 
   return (
     <div className="h-screen flex items-center justify-center bg-sand/30 px-6">

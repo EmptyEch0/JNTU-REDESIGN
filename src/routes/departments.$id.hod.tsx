@@ -1,6 +1,20 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
-import { Mail, Quote, UserCircle, GraduationCap, Calendar, Award } from "lucide-react";
+import { updateDepartment } from "@/lib/departments";
+import { useAdmin } from "@/context/AdminContext";
+import { useState, useEffect } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { 
+  Mail, 
+  Quote, 
+  UserCircle, 
+  GraduationCap, 
+  Save, 
+  Image as ImageIcon, 
+  Mail as MailIcon,
+  MessageSquare
+} from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id/hod")({
   component: HodPage,
@@ -8,13 +22,41 @@ export const Route = createFileRoute("/departments/$id/hod")({
 
 function HodPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
+  const { isEditMode } = useAdmin();
+  const queryClient = useQueryClient();
 
-  if (!data)
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-slate-600">Loading...</div>
-      </div>
-    );
+  // Local state for editing HOD details
+  const [editData, setEditData] = useState({
+    hod_photo: data?.hod_photo || "",
+    hod_contact: data?.hod_contact || "",
+    hod_message: data?.hod_message || "",
+  });
+
+  // Sync state if data changes
+  useEffect(() => {
+    if (data) {
+      setEditData({
+        hod_photo: data.hod_photo || "",
+        hod_contact: data.hod_contact || "",
+        hod_message: data.hod_message || "",
+      });
+    }
+  }, [data]);
+
+  const mutation = useMutation({
+    mutationFn: (updatedFields: any) =>
+      updateDepartment({ data: { id: data.id, ...updatedFields } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["department", data.slug] });
+      toast.success("HOD details updated successfully!");
+    },
+  });
+
+  if (!data) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="text-slate-600">Loading...</div>
+    </div>
+  );
 
   const hodDetails = data.faculty?.find((f) => f.designation.includes("HOD"));
   const hodName = hodDetails ? hodDetails.name : `HOD, Dept of ${data.name}`;
@@ -27,73 +69,101 @@ function HodPage() {
         <div className="relative z-20 max-w-7xl mx-auto px-6 py-16 md:py-20">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-6">
-              <GraduationCap className="w-4 h-4" />
+              <GraduationCap className="w-4 h-4 text-blue-300" />
               <span>Department Leadership</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
               From the HOD's Desk
             </h1>
             <p className="text-lg md:text-xl text-blue-100 max-w-2xl">
-              A message from our department head, sharing vision, achievements, and future
-              directions.
+              A message from our department head, sharing vision, achievements, and future directions.
             </p>
           </div>
         </div>
-        {/* Decorative elements */}
         <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-slate-50 to-transparent z-20"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-16">
+        {isEditMode && (
+          <div className="mb-8 p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl flex items-center justify-between">
+            <p className="text-amber-800 text-sm font-medium">
+              <strong>Admin Mode:</strong> You are currently editing the HOD's profile and message.
+            </p>
+            <button 
+              onClick={() => mutation.mutate(editData)}
+              className="flex items-center gap-2 bg-amber-600 text-white px-6 py-2 rounded-xl font-bold shadow-sm hover:bg-amber-700 transition-all"
+            >
+              <Save size={18} /> Save All Changes
+            </button>
+          </div>
+        )}
+
         <div className="grid lg:grid-cols-12 gap-12">
           {/* Left Column - HOD Card */}
           <div className="lg:col-span-4">
             <div className="sticky top-24">
-              {/* Main Profile Card */}
-              <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
-                {/* Header gradient */}
-                <div className="h-32 bg-gradient-to-r from-blue-600 to-blue-800"></div>
+              <div className={`bg-white rounded-2xl shadow-xl overflow-hidden border transition-all ${isEditMode ? 'border-amber-300 ring-2 ring-amber-100' : 'border-slate-200'}`}>
+                <div className={`h-32 bg-gradient-to-r ${isEditMode ? 'from-amber-500 to-amber-600' : 'from-blue-600 to-blue-800'}`}></div>
 
-                {/* Profile Image */}
-                <div className="relative -mt-16 px-6">
+                {/* Profile Image & Photo URL Edit */}
+                <div className="relative -mt-16 px-6 text-center">
                   <div className="relative inline-block">
-                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white">
-                      {data.hod_photo ? (
-                        <img
-                          src={data.hod_photo}
-                          alt={hodName}
-                          className="h-full w-full object-cover"
-                          onError={(e) => {
-                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${hodName}&background=2563EB&color=fff&bold=true&size=128`;
-                          }}
-                        />
-                      ) : (
-                        <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200">
-                          <UserCircle size={64} className="text-blue-600" />
-                        </div>
-                      )}
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white mx-auto">
+                      <img
+                        src={editData.hod_photo}
+                        alt={hodName}
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = `https://ui-avatars.com/api/?name=${hodName}&background=2563EB&color=fff&bold=true&size=128`;
+                        }}
+                      />
                     </div>
                   </div>
-                </div>
 
-                {/* Profile Info */}
-                <div className="px-6 pb-6 text-center">
+                  {isEditMode && (
+                    <div className="mt-4 text-left">
+                      <label className="text-[10px] font-bold text-amber-600 uppercase flex items-center gap-1 mb-1">
+                        <ImageIcon size={12} /> Photo URL
+                      </label>
+                      <input 
+                        className="w-full text-xs p-2 border border-amber-200 rounded bg-amber-50/50"
+                        value={editData.hod_photo}
+                        onChange={(e) => setEditData({...editData, hod_photo: e.target.value})}
+                        placeholder="https://..."
+                      />
+                    </div>
+                  )}
+
                   <h2 className="text-2xl font-bold text-slate-900 mt-4">{hodName}</h2>
                   <p className="text-blue-600 font-semibold mt-1">Head of the Department</p>
-                  <p className="text-slate-500 text-sm mt-2">Department of {data.name}</p>
-
-                  {/* Contact */}
-                  {data.hod_contact && (
-                    <div className="mt-6 pt-6 border-t border-slate-100">
+                  <p className="text-slate-500 text-sm mt-2">Dept. of {data.name}</p>
+                  
+                  {/* Contact Edit */}
+                  <div className="mt-6 pt-6 border-t border-slate-100 pb-6">
+                    {isEditMode ? (
+                      <div className="text-left">
+                        <label className="text-[10px] font-bold text-amber-600 uppercase flex items-center gap-1 mb-1">
+                          <MailIcon size={12} /> Contact Email
+                        </label>
+                        <input 
+                          className="w-full text-xs p-2 border border-amber-200 rounded bg-amber-50/50"
+                          value={editData.hod_contact}
+                          onChange={(e) => setEditData({...editData, hod_contact: e.target.value})}
+                          placeholder="hod@jntugvcev.edu.in"
+                        />
+                      </div>
+                    ) : editData.hod_contact && (
                       <a
-                        href={`mailto:${data.hod_contact}`}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                        href={`mailto:${editData.hod_contact}`}
+                        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all shadow-md"
                       >
                         <Mail size={18} />
                         <span className="font-medium">Email HOD</span>
                       </a>
-                      <p className="text-xs text-slate-400 mt-3 break-all">{data.hod_contact}</p>
-                    </div>
-                  )}
+
+                    )}
+                    <p className="text-xs text-slate-400 mt-3 break-all">{data.hod_contact}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -101,51 +171,57 @@ function HodPage() {
 
           {/* Right Column - Message */}
           <div className="lg:col-span-8">
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-              {/* Message Header */}
-              <div className="bg-gradient-to-r from-slate-50 to-white px-8 py-6 border-b border-slate-200">
+            <div className={`bg-white rounded-2xl shadow-xl border overflow-hidden transition-all ${isEditMode ? 'border-amber-300' : 'border-slate-200'}`}>
+              <div className={`px-8 py-6 border-b flex items-center justify-between ${isEditMode ? 'bg-amber-50 border-amber-200' : 'bg-slate-50 border-slate-200'}`}>
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-blue-50 rounded-xl">
-                    <Quote className="w-6 h-6 text-blue-600" />
+                  <div className={`p-3 rounded-xl ${isEditMode ? 'bg-amber-100' : 'bg-blue-50'}`}>
+                    <MessageSquare className={`w-6 h-6 ${isEditMode ? 'text-amber-600' : 'text-blue-600'}`} />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-slate-900">A Message from the Head</h3>
                     <p className="text-slate-500 text-sm mt-1">
-                      Updated on {new Date().toLocaleDateString()}
+                      Last updated: {new Date().toLocaleDateString()}
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Message Content */}
               <div className="px-8 py-10">
-                <div className="prose prose-lg prose-blue max-w-none">
-                  {data.hod_message ? (
-                    <div className="space-y-6">
+                {isEditMode ? (
+                  <div className="space-y-4">
+                    <label className="text-xs font-bold text-amber-600 uppercase">Message Content</label>
+                    <textarea 
+                      className="w-full min-h-[400px] p-6 border-2 border-amber-100 rounded-2xl bg-amber-50/30 text-slate-700 leading-relaxed outline-none focus:border-amber-300 transition-all"
+                      value={editData.hod_message}
+                      onChange={(e) => setEditData({...editData, hod_message: e.target.value})}
+                      placeholder="Write the HOD message here..."
+                    />
+                  </div>
+                ) : (
+                  <div className="prose prose-lg prose-blue max-w-none">
+                    {editData.hod_message ? (
                       <div className="relative">
-                        <Quote className="absolute -top-2 -left-2 w-12 h-12 text-blue-100 -z-10" />
+                        <Quote className="absolute -top-4 -left-4 w-12 h-12 text-blue-50 -z-10" />
                         <p className="text-slate-700 leading-relaxed whitespace-pre-line text-lg">
-                          {data.hod_message}
+                          {editData.hod_message}
                         </p>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="text-center py-12">
-                      <Quote className="w-16 h-16 text-slate-200 mx-auto mb-4" />
-                      <p className="text-slate-400 text-lg">No message has been uploaded yet.</p>
-                      <p className="text-slate-400 text-sm mt-2">Please check back soon.</p>
-                    </div>
-                  )}
-                </div>
+                    ) : (
+                      <div className="text-center py-12">
+                        <Quote className="w-16 h-16 text-slate-200 mx-auto mb-4" />
+                        <p className="text-slate-400 text-lg">No message has been uploaded yet.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
 
-                {/* Signature */}
-                {data.hod_message && (
+                {editData.hod_message && !isEditMode && (
                   <div className="mt-12 pt-8 border-t border-slate-200">
                     <div className="flex flex-col items-end">
                       <div className="text-right">
-                        <p className="text-2xl font-serif text-slate-800 mb-2">Best Regards,</p>
+                        <p className="text-2xl font-serif text-slate-400 mb-2 italic">Best Regards,</p>
                         <p className="text-xl font-bold text-slate-900">{hodName}</p>
-                        <p className="text-slate-500 text-sm">Head of the Department</p>
+                        <p className="text-slate-500 text-sm font-medium">Head of the Department</p>
                       </div>
                     </div>
                   </div>

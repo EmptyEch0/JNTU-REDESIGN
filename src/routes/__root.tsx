@@ -148,6 +148,7 @@ function AdminContent() {
               {isEditMode ? "Editing Enabled" : "Enable Edit Mode"}
             </button>
           </div>
+          
 
           <div className="flex items-center gap-6">
             <Link
@@ -156,6 +157,7 @@ function AdminContent() {
             >
               Manage Placements
             </Link>
+            
             <button
               onClick={logout}
               className="text-[11px] font-medium text-zinc-400 hover:text-white transition-colors"

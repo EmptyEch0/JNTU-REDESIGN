@@ -9,7 +9,6 @@ import {
   jsonb
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-
 export const placementYears = pgTable("placement_years", {
   id: serial("id").primaryKey(),
   year: text("year").notNull(),
@@ -17,7 +16,7 @@ export const placementYears = pgTable("placement_years", {
   top: text("top").notNull(), // using text since user provided "42 LPA"
   recruiters: integer("recruiters").notNull(),
 });
-
+import {  uuid, varchar } from "drizzle-orm/pg-core";
 export const placementHighlights = pgTable("placement_highlights", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -949,3 +948,72 @@ export const studentClubImages = pgTable(
     url: text("url").notNull(),
   }
 );
+
+
+
+export const departments = pgTable("departments", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull(),
+  hod: text("hod"),
+  description: text("description"),
+  image: text("image"),
+  vision: text("vision"),
+  mission: text("mission"),
+  hod_photo: text("hod_photo"),
+  hod_message: text("hod_message"),
+  hod_contact: text("hod_contact"),
+  about_details: text("about_details"),
+  created_at: timestamp("created_at").defaultNow(),
+});
+
+export const faculty = pgTable("faculty", {
+  id: serial("id").primaryKey(),
+  dept_id: uuid("dept_id").references(() => departments.id, { onDelete: 'cascade' }),
+  name: text("name").notNull(),
+  designation: text("designation"),
+  photo_url: text("photo_url"),
+  profile_link: text("profile_link"),
+  specialization: text("specialization"),
+});
+
+export const achievements = pgTable("achievements", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  dept_id: uuid("dept_id").references(() => departments.id, { onDelete: 'cascade' }),
+  category: varchar("category", { length: 50 }),
+  subcategory: varchar("subcategory", { length: 100 }),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  year: varchar("year", { length: 20 }),
+  course: varchar("course", { length: 50 }),
+  created_at: timestamp("created_at").defaultNow(),
+});
+
+export const laboratories = pgTable("laboratories", {
+  id: serial("id").primaryKey(),
+  dept_id: uuid("dept_id").references(() => departments.id, { onDelete: 'cascade' }),
+  name: text("name").notNull(),
+  description: text("description"),
+  location: text("location"),
+  photo_url: text("photo_url"),
+  specs: jsonb("specs"), // For dynamic equipment lists
+});
+
+export const courses = pgTable("courses", {
+  id: serial("id").primaryKey(),
+  dept_id: uuid("dept_id").references(() => departments.id, { onDelete: 'cascade' }),
+  level: text("level"), // UG/PG
+  name: text("name").notNull(),
+  syllabus_url: text("syllabus_url"),
+  regulation: text("regulation"),
+});
+
+export const departmentGallery = pgTable("department_gallery", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  dept_id: uuid("dept_id").references(() => departments.id, { onDelete: 'cascade' }),
+  title: varchar("title", { length: 255 }),
+  image_url: text("image_url").notNull(),
+  category: varchar("category", { length: 100 }),
+  description: text("description"),
+  created_at: timestamp("created_at").defaultNow(),
+});

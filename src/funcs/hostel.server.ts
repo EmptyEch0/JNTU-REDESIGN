@@ -69,7 +69,20 @@ export const getHostelData = createServerFn({ method: "GET" })
       };
     }
   });
-
+export const updateImage = createServerFn({
+  method: "POST",
+})
+  .inputValidator((data: any) => data)
+  .handler(async ({ data }) => {
+    return db
+      .update(hostelImages)
+      .set({
+        url: data.url,
+        type: data.type,
+      })
+      .where(eq(hostelImages.id, data.id))
+      .returning();
+  });
 
 // =======================================
 // 📝 CONTENT

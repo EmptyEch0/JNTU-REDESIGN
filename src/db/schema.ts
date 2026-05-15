@@ -6,7 +6,8 @@ import {
   timestamp,
   index,
   pgEnum,
-  jsonb
+  jsonb,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 export const placementYears = pgTable("placement_years", {
@@ -722,21 +723,86 @@ export const sportsInfra = pgTable(
 );
 
 /* ===========================
-   🥇 ACHIEVEMENTS (KEEP)
+   🥇 SPORTS ACHIEVEMENTS
+   SINGLE TABLE ARCHITECTURE
 =========================== */
-export const sportsAchievements = pgTable("sports_achievements", {
-  id: serial("id").primaryKey(),
 
-  student: text("student").notNull(),
-  branch: text("branch"),
-  game: text("game"),
-  tournament: text("tournament"),
-  venue: text("venue"),
-});
+export const sportsAchievements =
+  pgTable(
+    "sports_achievements",
+    {
+      id: serial("id").primaryKey(),
 
-/* ===========================
-   🖼️ IMAGES (KEEP)
-=========================== */
+      /* ================= YEAR ================= */
+
+      // Example:
+      // 2013-2014
+      yearLabel: text(
+        "year_label"
+      ),
+
+      /* ================= CATEGORY ================= */
+
+      // inter_collegiate
+      // tournaments
+      // sports_stars
+      // athletics
+      // seminars
+      // coaching_camps
+      category: text(
+        "category"
+      ),
+
+      /* ================= TABLE DATA ================= */
+
+      sno: integer("sno"),
+
+      /* STUDENT / TEAM NAME */
+      student: text(
+        "student"
+      ).notNull(),
+
+      /* BRANCH */
+      branch: text("branch"),
+
+      /* MEDAL / PLACE */
+      medal: text("medal"),
+
+      /* GAME / EVENT */
+      game: text("game"),
+
+      /* TOURNAMENT */
+      tournament: text(
+        "tournament"
+      ),
+
+      /* ORGANIZING COLLEGE */
+      venue: text("venue"),
+
+      /* DATE */
+      tournamentDate: text(
+        "tournament_date"
+      ),
+
+      /* EXTRA INFO */
+      remarks: text("remarks"),
+
+      /* CREATED TIME */
+      createdAt: timestamp(
+        "created_at"
+      ).defaultNow(),
+    },
+
+    (table) => ({
+      yearIdx: index(
+        "sports_achievements_year_idx"
+      ).on(table.yearLabel),
+
+      categoryIdx: index(
+        "sports_achievements_category_idx"
+      ).on(table.category),
+    })
+  );
 export const sportsImages = pgTable("sports_images", {
   id: serial("id").primaryKey(),
   url: text("url").notNull(),
@@ -1016,4 +1082,16 @@ export const departmentGallery = pgTable("department_gallery", {
   category: varchar("category", { length: 100 }),
   description: text("description"),
   created_at: timestamp("created_at").defaultNow(),
+});
+
+/* ===========================
+   🌐 SCALABLE GENERIC SITE CONTENT
+=========================== */
+export const siteContent = pgTable("site_content", {
+  id: serial("id").primaryKey(),
+  page: text("page").notNull(),
+  sectionKey: text("section_key").notNull(),
+  title: text("title"),
+  content: text("content"),
+  imageUrl: text("image_url"),
 });

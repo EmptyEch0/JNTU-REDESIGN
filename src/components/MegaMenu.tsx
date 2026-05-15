@@ -2,8 +2,10 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Menu, X, ChevronDown, GraduationCap, Search, CornerDownLeft } from "lucide-react";
 import { NAV, SEARCH_INDEX, SITE } from "@/lib/site";
+import { useAdmin } from "@/context/AdminContext";
 
 export function MegaMenu() {
+  const { isAdmin } = useAdmin() || {};
   const [scrolled, setScrolled] = useState(false);
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -99,7 +101,7 @@ export function MegaMenu() {
   };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 pointer-events-none">
+    <header className={`fixed inset-x-0 z-50 pointer-events-none transition-all duration-300 ${isAdmin ? "top-12" : "top-0"}`}>
       <div className="flex justify-center px-3 sm:px-4">
         <div
           ref={islandRef}

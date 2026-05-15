@@ -2,7 +2,7 @@ import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { NSS_SUBNAV } from "@/lib/site";
-import cultureImg from "@/assets/culture.jpg";
+import cultureImg from "@/assets/culture.jpeg";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getNssGallery, addNssGalleryImage, deleteNssGalleryImage } from "@/funcs/nss";
 import { useAdmin } from "@/context/AdminContext";

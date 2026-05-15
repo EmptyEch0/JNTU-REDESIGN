@@ -17,7 +17,8 @@ export const getLibraryData = createServerFn({
   try {
     const [content] = await db
       .select()
-      .from(libraryContent);
+      .from(libraryContent)
+      .orderBy(libraryContent.id);
 
     const images = await db
       .select()

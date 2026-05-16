@@ -136,3 +136,101 @@ export const syncFaculty = createServerFn({ method: "POST" })
     }
     return { success: true };
   });
+
+// --- Faculty ---
+export const getFacultyByDept = createServerFn({ method: "GET" })
+  .inputValidator((deptId: string) => deptId)
+  .handler(async ({ input }) => {
+    return await db.select().from(faculty).where(eq(faculty.dept_id, input));
+  });
+
+export const addFaculty = createServerFn({ method: "POST" })
+  .inputValidator((data: any) => data)
+  .handler(async ({ data }) => {
+    await db.insert(faculty).values(data);
+    return { success: true };
+  });
+
+export const deleteFaculty = createServerFn({ method: "POST" })
+  .inputValidator((id: number) => id)
+  .handler(async ({ data }) => {
+    await db.delete(faculty).where(eq(faculty.id, data));
+    return { success: true };
+  });
+
+// --- Laboratories ---
+export const getLabsByDept = createServerFn({ method: "GET" })
+  .inputValidator((deptId: string) => deptId)
+  .handler(async ({ input }) => {
+    return await db.select().from(laboratories).where(eq(laboratories.dept_id, input));
+  });
+
+export const addLaboratory = createServerFn({ method: "POST" })
+  .inputValidator((data: any) => data)
+  .handler(async ({ data }) => {
+    await db.insert(laboratories).values(data);
+    return { success: true };
+  });
+
+export const deleteLaboratory = createServerFn({ method: "POST" })
+  .inputValidator((id: number) => id)
+  .handler(async ({ data }) => {
+    await db.delete(laboratories).where(eq(laboratories.id, data));
+    return { success: true };
+  });
+
+// --- Achievements ---
+export const getAchievementsByDept = createServerFn({ method: "GET" })
+  .inputValidator((deptId: string) => deptId)
+  .handler(async ({ input }) => {
+    return await db.select().from(achievements).where(eq(achievements.dept_id, input));
+  });
+
+export const addAchievement = createServerFn({ method: "POST" })
+  .inputValidator((data: any) => data)
+  .handler(async ({ data }) => {
+    await db.insert(achievements).values(data);
+    return { success: true };
+  });
+
+// --- Courses ---
+export const getCoursesByDept = createServerFn({ method: "GET" })
+  .inputValidator((deptId: string) => deptId)
+  .handler(async ({ input }) => {
+    return await db.select().from(courses).where(eq(courses.dept_id, input));
+  });
+
+export const addCourse = createServerFn({ method: "POST" })
+  .inputValidator((data: any) => data)
+  .handler(async ({ data }) => {
+    await db.insert(courses).values(data);
+    return { success: true };
+  });
+
+export const deleteCourse = createServerFn({ method: "POST" })
+  .inputValidator((id: number) => id)
+  .handler(async ({ data }) => {
+    await db.delete(courses).where(eq(courses.id, data));
+    return { success: true };
+  });
+
+// --- Gallery ---
+export const getGalleryByDept = createServerFn({ method: "GET" })
+  .inputValidator((deptId: string) => deptId)
+  .handler(async ({ input }) => {
+    return await db.select().from(departmentGallery).where(eq(departmentGallery.dept_id, input));
+  });
+
+export const addToGallery = createServerFn({ method: "POST" })
+  .inputValidator((data: any) => data)
+  .handler(async ({ data }) => {
+    await db.insert(departmentGallery).values(data);
+    return { success: true };
+  });
+
+export const deleteFromGallery = createServerFn({ method: "POST" })
+  .inputValidator((id: string) => id)
+  .handler(async ({ data }) => {
+    await db.delete(departmentGallery).where(eq(departmentGallery.id, data));
+    return { success: true };
+  });

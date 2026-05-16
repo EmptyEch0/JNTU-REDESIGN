@@ -4,7 +4,15 @@ import atmpic from "@/assets/Atm-bank.jpeg";
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
-import { Save, Lock, Edit, Image as ImageIcon } from "lucide-react";
+import { PageHero } from "@/components/PageHero";
+import { 
+  Save, 
+  Lock, 
+  Edit, 
+  Image as ImageIcon,
+  Landmark,
+  Sparkles
+} from "lucide-react";
 
 export const Route = createFileRoute("/banking")({
   loader: async () => await getPageContent({ data: "banking" }),
@@ -81,128 +89,172 @@ function BankingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/30 pb-24 w-full">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-800 pb-24">
       {isEditMode && (
         <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
           <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
-          <span>Live Banking Editorial Enabled</span>
+          <span>Banking CMS Dashboard Live</span>
           <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
           <span className="hidden md:block text-amber-100 normal-case italic font-medium">
-            Make text or image edits and click save to push updates.
+            Real-time alignment activated. Save to push updates.
           </span>
         </div>
       )}
 
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-10 text-slate-800 animate-[fade-in_0.5s_ease-out]">
-        <div className="border-b border-indigo-200/60 pb-5 flex items-center justify-between">
-          <h1 className="text-3xl sm:text-4xl font-black text-indigo-950 tracking-tight flex items-center gap-3">
-            🏦 Bank Facilities
-          </h1>
-        </div>
+      <PageHero
+        title="Banking Facilities"
+        subtitle="Comprehensive financial services and 24/7 access points active on the JNTU-GV campus."
+        image={imgRec?.imageUrl || atmpic}
+      />
 
-        {/* INTRO SECTION */}
-        {isEditMode ? (
-          <div className="p-6 bg-amber-50/40 border-2 border-amber-200 rounded-3xl space-y-4 animate-[fade-in_0.3s]">
-            <div className="flex items-center justify-between border-b border-amber-200/50 pb-2">
-              <span className="text-[10px] font-black text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
-                <Edit className="w-3 h-3" /> Intro Paragraph
-              </span>
-              <button
-                onClick={() => handleSaveSection("intro")}
-                className="bg-amber-500 text-amber-950 hover:bg-amber-600 font-black px-4.5 py-2 rounded-xl text-[10px] uppercase tracking-wider shadow active:scale-95 transition flex items-center gap-1.5 cursor-pointer"
-              >
-                <Save className="w-3.5 h-3.5" /> Save
-              </button>
-            </div>
-            <textarea
-              value={editTexts.intro}
-              onChange={(e) => setEditTexts({ ...editTexts, intro: e.target.value })}
-              className="w-full h-28 rounded-2xl border-2 border-amber-200/60 bg-white p-4 text-sm font-medium outline-none focus:border-amber-400"
-            />
-          </div>
-        ) : (
-          <p className="leading-relaxed text-justify text-base text-slate-600 font-medium bg-indigo-50/30 p-6 rounded-3xl border border-indigo-100/50 shadow-sm">
-            {introRec?.content || DEFAULTS.intro}
-          </p>
-        )}
+      <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
+        
+        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
 
-        {/* BRANCH DETAILS */}
-        {isEditMode ? (
-          <div className="p-6 bg-amber-50/40 border-2 border-amber-200 rounded-3xl space-y-5 animate-[fade-in_0.3s]">
-            <div className="flex items-center justify-between border-b border-amber-200/50 pb-2">
-              <span className="text-[10px] font-black text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
-                <Edit className="w-3 h-3" /> Branch Card Details
-              </span>
-              <button
-                onClick={() => handleSaveSection("branch")}
-                className="bg-amber-500 text-amber-950 hover:bg-amber-600 font-black px-4.5 py-2 rounded-xl text-[10px] uppercase tracking-wider shadow active:scale-95 transition flex items-center gap-1.5 cursor-pointer"
-              >
-                <Save className="w-3.5 h-3.5" /> Save
-              </button>
-            </div>
-            <div className="space-y-3">
-              <input
-                value={editTexts.branchTitle}
-                onChange={(e) =>
-                  setEditTexts({ ...editTexts, branchTitle: e.target.value })
-                }
-                className="w-full border-2 border-amber-200/60 bg-white p-3.5 rounded-xl text-sm font-bold outline-none focus:border-amber-400"
-                placeholder="Card Title (e.g., Bank Branch)"
+          {/* IMAGE STACK */}
+          <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-[32px] shadow-md border border-slate-200/60 bg-slate-200 transition-all duration-300">
+            <div className="relative aspect-[21/9] md:aspect-[16/7] min-h-[200px] max-h-[340px] w-full overflow-hidden group bg-slate-900">
+              <img
+                src={imgRec?.imageUrl || atmpic}
+                alt="Banking Infrastructure"
+                className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
               />
-              <textarea
-                value={editTexts.branchContent}
-                onChange={(e) =>
-                  setEditTexts({ ...editTexts, branchContent: e.target.value })
-                }
-                className="w-full h-28 rounded-2xl border-2 border-amber-200/60 bg-white p-4 text-sm font-medium outline-none focus:border-amber-400"
-                placeholder="Card content paragraphs..."
-              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent z-10" />
             </div>
-          </div>
-        ) : (
-          <div className="bg-white rounded-[32px] border border-slate-200/60 shadow-lg shadow-slate-200/30 p-8 space-y-4 transition-all duration-300 hover:shadow-xl">
-            <h3 className="text-indigo-600 font-black text-xl tracking-tight">
-              {branchRec?.title || DEFAULTS.branchTitle}
-            </h3>
-            <p className="leading-relaxed text-justify text-[15px] text-slate-600 font-medium whitespace-pre-line">
-              {branchRec?.content || DEFAULTS.branchContent}
-            </p>
-          </div>
-        )}
-
-        {/* FACILITY IMAGE */}
-        <div className="pt-6 flex flex-col items-center gap-5">
-          <img
-            src={imgRec?.imageUrl || atmpic}
-            alt="Bank Facility"
-            className="w-full max-w-2xl object-cover aspect-[16/10] rounded-[32px] shadow-xl border border-slate-200/40 shadow-slate-300/40"
-          />
-
-          {isEditMode && (
-            <div className="w-full max-w-2xl bg-amber-50/40 border-2 border-amber-200 rounded-3xl p-5 flex flex-col gap-3 animate-[fade-in_0.3s]">
-              <span className="text-[10px] font-black text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
-                <ImageIcon className="w-3.5 h-3.5" /> Swap Banner Image
-              </span>
-              <div className="flex gap-3">
-                <input
-                  value={editTexts.imageUrl}
-                  onChange={(e) =>
-                    setEditTexts({ ...editTexts, imageUrl: e.target.value })
-                  }
-                  placeholder="Paste image URL here..."
-                  className="flex-1 border-2 border-amber-200/60 bg-white px-4 py-3 rounded-xl text-xs font-semibold outline-none focus:border-amber-400"
-                />
-                <button
-                  onClick={() => handleSaveSection("image")}
-                  className="bg-amber-500 text-amber-950 hover:bg-amber-600 font-black px-5 py-3 rounded-xl text-[10px] uppercase shadow active:scale-95 cursor-pointer transition flex items-center gap-1.5 shrink-0"
-                >
-                  <Save className="w-3.5 h-3.5" /> Save
-                </button>
+            {isEditMode && (
+              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-4 animate-[fade-in_0.4s]">
+                <div className="flex items-center gap-2 pb-1.5 border-b border-amber-200/60">
+                  <div className="w-9 h-9 rounded-2xl bg-amber-100 text-amber-700 grid place-items-center shrink-0 shadow-sm">
+                    <ImageIcon className="w-4.5 h-4.5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black text-amber-950 tracking-tight">Display Graphic Override</h4>
+                    <p className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">Swap banner photo</p>
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3 w-full mt-1">
+                  <input
+                    value={editTexts.imageUrl}
+                    onChange={(e) =>
+                      setEditTexts({ ...editTexts, imageUrl: e.target.value })
+                    }
+                    placeholder="Paste new image source URL..."
+                    className="flex-1 border border-amber-200 rounded-xl px-4 py-3.5 text-sm font-bold bg-white outline-none shadow-inner"
+                  />
+                  <button
+                    onClick={() => handleSaveSection("image")}
+                    className="bg-amber-500 text-amber-950 hover:bg-amber-600 font-black px-6 py-3 rounded-xl text-xs uppercase active:scale-95 cursor-pointer shadow transition flex gap-2 items-center justify-center shrink-0"
+                  >
+                    <Save className="w-4 h-4" /> Save Graphic
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+
+          {/* DETAILS GRID */}
+          <div className="grid grid-cols-1 gap-8">
+            <Card 
+              title="SBI Campus Branch & ATM" 
+              subtitle="Institutional Banking Hub" 
+              icon={Landmark}
+              className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
+            >
+              {isEditMode ? (
+                <div className="space-y-6 animate-[fade-in_0.3s]">
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-black text-amber-800 uppercase tracking-wider">Intro Explainer Narrative</label>
+                    <textarea
+                      value={editTexts.intro}
+                      onChange={(e) => setEditTexts({ ...editTexts, intro: e.target.value })}
+                      className="w-full h-24 rounded-xl border bg-white p-3.5 text-xs font-bold outline-none focus:border-amber-400 shadow-inner"
+                    />
+                    <div className="flex justify-end">
+                      <button 
+                        onClick={() => handleSaveSection("intro")} 
+                        className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-amber-950 font-black px-4.5 py-2.5 rounded-xl text-xs uppercase shadow active:scale-95 cursor-pointer transition"
+                      >
+                        <Save className="w-4 h-4"/> Store Intro
+                      </button>
+                    </div>
+                  </div>
+
+                  <hr className="border-amber-200/40" />
+
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-black text-amber-800 uppercase tracking-wider">Service Node Title</label>
+                      <input
+                        value={editTexts.branchTitle}
+                        onChange={(e) => setEditTexts({ ...editTexts, branchTitle: e.target.value })}
+                        className="w-full border bg-white text-xs font-bold p-3 rounded-xl shadow-inner focus:border-amber-400 outline-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-black text-amber-800 uppercase tracking-wider">Operational Specifics</label>
+                      <textarea
+                        value={editTexts.branchContent}
+                        onChange={(e) => setEditTexts({ ...editTexts, branchContent: e.target.value })}
+                        className="w-full h-32 border bg-white text-xs font-medium p-3.5 rounded-xl shadow-inner focus:border-amber-400 outline-none"
+                      />
+                    </div>
+                    <div className="flex justify-end">
+                      <button 
+                        onClick={() => handleSaveSection("branch")} 
+                        className="flex items-center gap-2 bg-slate-950 hover:bg-amber-600 text-white font-black px-5 py-2.5 rounded-xl text-xs uppercase shadow active:scale-95 cursor-pointer transition"
+                      >
+                        <Save className="w-4 h-4"/> Store Branch Details
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-8">
+                  <p className="text-[15px] leading-relaxed text-slate-600 text-justify font-medium bg-slate-50 border p-6 rounded-2xl shadow-inner italic">
+                    "{introRec?.content || DEFAULTS.intro}"
+                  </p>
+                  
+                  <div className="bg-indigo-50/40 border border-indigo-100/80 p-6 rounded-2xl space-y-3 shadow-sm">
+                    <div className="flex items-center gap-2 text-[oklch(0.42_0.18_265)]">
+                      <Sparkles className="w-4.5 h-4.5 shrink-0 animate-pulse" />
+                      <h4 className="font-black font-display text-xl tracking-tight text-slate-900">
+                        {branchRec?.title || DEFAULTS.branchTitle}
+                      </h4>
+                    </div>
+                    <p className="text-slate-600 leading-relaxed font-medium whitespace-pre-line text-justify text-[14.5px]">
+                      {branchRec?.content || DEFAULTS.branchContent}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </Card>
+          </div>
+
         </div>
       </section>
     </div>
   );
 }
+
+/* ---------- STANDARDIZED WIDGET COMPONENT ---------- */
+
+function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
+  return (
+    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-500 shadow-sm overflow-hidden w-full ${className}`}>
+      {title && (
+        <div className="flex items-center gap-3.5 mb-6 md:mb-8 pb-5 border-b border-slate-100">
+          <div className="w-12 h-12 rounded-[20px] bg-slate-50 border border-slate-200/60 text-[oklch(0.42_0.18_265)] grid place-items-center shrink-0 shadow-sm">
+            {Icon && <Icon className="w-5.5 h-5.5" />}
+          </div>
+          <div>
+            <h3 className="font-display font-black text-xl text-slate-900 tracking-tight leading-none">{title}</h3>
+            {subtitle && <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mt-1.5">{subtitle}</p>}
+          </div>
+        </div>
+      )}
+      <div className="w-full">{children}</div>
+    </div>
+  );
+}
+
+export default BankingPage;

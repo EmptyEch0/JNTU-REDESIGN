@@ -40,6 +40,7 @@ import {
   X,
   RefreshCw,
 } from "lucide-react";
+import { LocalSubNav } from "@/components/LocalSubNav";
 
 export const Route = createFileRoute("/library")({
   loader: async () => await getLibraryData(),
@@ -207,46 +208,18 @@ function LibraryPage() {
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
         
         {/* TABS CONSOLE - Sleeker clean UI */}
-        <div className="w-full flex justify-center mb-8 md:mb-12">
-          <div className="flex items-center gap-2 p-2 bg-white/80 border border-slate-200/80 backdrop-blur-md rounded-2xl shadow-sm overflow-x-auto no-scrollbar max-w-full">
-            <TabBtn
-              label="About Library"
-              active={tab === "About Library"}
-              onClick={() => setTab("About Library")}
-              icon={Info}
-            />
-            <TabBtn
-              label="Titles & Volumes"
-              active={tab === "Titles & Volumes"}
-              onClick={() => setTab("Titles & Volumes")}
-              icon={BookOpen}
-            />
-            <TabBtn
-              label="Periodicals"
-              active={tab === "Periodicals"}
-              onClick={() => setTab("Periodicals")}
-              icon={Newspaper}
-            />
-            <TabBtn
-              label="Digital Library"
-              active={tab === "Digital Library"}
-              onClick={() => setTab("Digital Library")}
-              icon={Monitor}
-            />
-            <TabBtn
-              label="Team"
-              active={tab === "Team"}
-              onClick={() => setTab("Team")}
-              icon={Users}
-            />
-            <TabBtn
-              label="Ekeeda Portal"
-              active={tab === "Ekeeda Video Library"}
-              onClick={() => setTab("Ekeeda Video Library")}
-              icon={Video}
-            />
-          </div>
-        </div>
+        <LocalSubNav
+          activeTab={tab}
+          setActiveTab={setTab}
+          items={[
+            { label: "About Library", icon: Info },
+            { label: "Titles & Volumes", icon: BookOpen },
+            { label: "Periodicals", icon: Newspaper },
+            { label: "Digital Library", icon: Monitor },
+            { label: "Team", icon: Users },
+            { label: "Ekeeda Video Library", icon: Video },
+          ]}
+        />
 
         <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
           
@@ -743,22 +716,6 @@ function LibraryPage() {
 }
 
 /* ---------- SHARED UI WRAPPERS ---------- */
-
-function TabBtn({ label, active, onClick, icon: Icon }: any) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-300 shrink-0 active:scale-95 border cursor-pointer ${
-        active
-          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow shadow-indigo-500/20"
-          : "bg-white border-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-50/50 hover:shadow-sm"
-      }`}
-    >
-      {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
-      <span>{label}</span>
-    </button>
-  );
-}
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (

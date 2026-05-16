@@ -33,11 +33,11 @@ import {
   Trash2,
   Camera,
   AlertCircle,
-  X,
   Lock,
   RefreshCw,
   ChevronRight,
 } from "lucide-react";
+import { LocalSubNav } from "@/components/LocalSubNav";
 
 export const Route = createFileRoute("/hostels")({
   loader: async () => await getHostelData(),
@@ -183,28 +183,15 @@ function HostelsPage() {
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
         
         {/* TABS CONTROLLER - Sleeker, modern, clean UI */}
-        <div className="w-full flex justify-center mb-8 md:mb-12">
-          <div className="flex items-center gap-2 p-2 bg-white/80 border border-slate-200/80 backdrop-blur-md rounded-2xl shadow-sm overflow-x-auto no-scrollbar max-w-full">
-            <TabBtn
-              label="Hostel Office"
-              active={tab === "office"}
-              onClick={() => setTab("office")}
-              icon={Building}
-            />
-            <TabBtn
-              label="Girls Dormitory"
-              active={tab === "girls"}
-              onClick={() => setTab("girls")}
-              icon={Home}
-            />
-            <TabBtn
-              label="Boys Dormitory"
-              active={tab === "boys"}
-              onClick={() => setTab("boys")}
-              icon={Tent}
-            />
-          </div>
-        </div>
+        <LocalSubNav
+          activeTab={tab}
+          setActiveTab={setTab as (tab: string) => void}
+          items={[
+            { label: "office", icon: Building },
+            { label: "girls", icon: Home },
+            { label: "boys", icon: Tent },
+          ]}
+        />
 
         <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
           
@@ -507,22 +494,6 @@ function HostelsPage() {
 }
 
 /* ---------- UI SUBCOMPONENTS ---------- */
-
-function TabBtn({ label, active, onClick, icon: Icon }: any) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-300 shrink-0 active:scale-95 border cursor-pointer ${
-        active
-          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow shadow-indigo-500/20"
-          : "bg-white border-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-50/50 hover:shadow-sm"
-      }`}
-    >
-      {Icon && <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? "text-white" : "text-slate-400"}`} />}
-      <span>{label}</span>
-    </button>
-  );
-}
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (

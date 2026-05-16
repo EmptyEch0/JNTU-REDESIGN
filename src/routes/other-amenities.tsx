@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
 import { OTHER_AMENITIES_SUBNAV } from "@/lib/site";
 import { useAdmin } from "@/context/AdminContext";
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
@@ -179,29 +180,8 @@ function OtherAmenitiesPage() {
         </div>
       )}
 
-      {/* SUB NAV */}
-      <div className="sticky top-0 z-10 border-b border-slate-200/80 bg-white/80 backdrop-blur-md transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-2 overflow-x-auto py-3 no-scrollbar justify-start sm:justify-center">
-            {OTHER_AMENITIES_SUBNAV.map((item) => {
-              const active = path === item.to || path.startsWith(item.to + "/");
-              return (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={`shrink-0 rounded-full px-5 py-2 text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 border ${
-                    active
-                      ? "bg-primary text-white border-primary shadow-md shadow-primary/20 scale-[1.02]"
-                      : "bg-white text-slate-600 border-slate-200 hover:text-primary hover:border-primary/40 hover:bg-slate-50/50"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      {/* SUB NAV — same style as Student Corner */}
+      <SubNav items={OTHER_AMENITIES_SUBNAV} />
 
       {isOverview ? (
         <section className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 animate-[fade-in_0.5s_ease-out] space-y-16">

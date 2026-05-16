@@ -81,6 +81,7 @@ import { Route as AcademicsAdmissionsRouteImport } from './routes/academics/admi
 import { Route as AcademicsAcademicCalendarRouteImport } from './routes/academics/academic-calendar'
 import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
 import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
+import { Route as AboutNormsRouteImport } from './routes/about.norms'
 import { Route as AboutJntukRouteImport } from './routes/about.jntuk'
 import { Route as AboutInstitutionRouteImport } from './routes/about.institution'
 import { Route as AboutHowToReachRouteImport } from './routes/about.how-to-reach'
@@ -466,6 +467,11 @@ const AboutVisionMissionRoute = AboutVisionMissionRouteImport.update({
   path: '/vision-mission',
   getParentRoute: () => AboutRoute,
 } as any)
+const AboutNormsRoute = AboutNormsRouteImport.update({
+  id: '/norms',
+  path: '/norms',
+  getParentRoute: () => AboutRoute,
+} as any)
 const AboutJntukRoute = AboutJntukRouteImport.update({
   id: '/jntuk',
   path: '/jntuk',
@@ -571,6 +577,7 @@ export interface FileRoutesByFullPath {
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
   '/about/jntuk': typeof AboutJntukRoute
+  '/about/norms': typeof AboutNormsRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
@@ -653,6 +660,7 @@ export interface FileRoutesByTo {
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
   '/about/jntuk': typeof AboutJntukRoute
+  '/about/norms': typeof AboutNormsRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
@@ -741,6 +749,7 @@ export interface FileRoutesById {
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
   '/about/jntuk': typeof AboutJntukRoute
+  '/about/norms': typeof AboutNormsRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
@@ -832,6 +841,7 @@ export interface FileRouteTypes {
     | '/about/how-to-reach'
     | '/about/institution'
     | '/about/jntuk'
+    | '/about/norms'
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/academics/academic-calendar'
@@ -914,6 +924,7 @@ export interface FileRouteTypes {
     | '/about/how-to-reach'
     | '/about/institution'
     | '/about/jntuk'
+    | '/about/norms'
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/academics/academic-calendar'
@@ -1001,6 +1012,7 @@ export interface FileRouteTypes {
     | '/about/how-to-reach'
     | '/about/institution'
     | '/about/jntuk'
+    | '/about/norms'
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/academics/academic-calendar'
@@ -1602,6 +1614,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutVisionMissionRouteImport
       parentRoute: typeof AboutRoute
     }
+    '/about/norms': {
+      id: '/about/norms'
+      path: '/norms'
+      fullPath: '/about/norms'
+      preLoaderRoute: typeof AboutNormsRouteImport
+      parentRoute: typeof AboutRoute
+    }
     '/about/jntuk': {
       id: '/about/jntuk'
       path: '/jntuk'
@@ -1714,6 +1733,7 @@ interface AboutRouteChildren {
   AboutHowToReachRoute: typeof AboutHowToReachRoute
   AboutInstitutionRoute: typeof AboutInstitutionRoute
   AboutJntukRoute: typeof AboutJntukRoute
+  AboutNormsRoute: typeof AboutNormsRoute
   AboutVisionMissionRoute: typeof AboutVisionMissionRoute
   AboutVizianagaramRoute: typeof AboutVizianagaramRoute
   AboutIndexRoute: typeof AboutIndexRoute
@@ -1723,6 +1743,7 @@ const AboutRouteChildren: AboutRouteChildren = {
   AboutHowToReachRoute: AboutHowToReachRoute,
   AboutInstitutionRoute: AboutInstitutionRoute,
   AboutJntukRoute: AboutJntukRoute,
+  AboutNormsRoute: AboutNormsRoute,
   AboutVisionMissionRoute: AboutVisionMissionRoute,
   AboutVizianagaramRoute: AboutVizianagaramRoute,
   AboutIndexRoute: AboutIndexRoute,

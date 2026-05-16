@@ -15,6 +15,7 @@ import {
   Mail as MailIcon,
   MessageSquare
 } from "lucide-react";
+import { ProfileRenderer } from "@/components/ProfileRenderer";
 
 export const Route = createFileRoute("/departments/$id/hod")({
   component: HodPage,
@@ -202,9 +203,9 @@ function HodPage() {
                     {editData.hod_message ? (
                       <div className="relative">
                         <Quote className="absolute -top-4 -left-4 w-12 h-12 text-blue-50 -z-10" />
-                        <p className="text-slate-700 leading-relaxed whitespace-pre-line text-lg">
-                          {editData.hod_message}
-                        </p>
+                        <div className="text-slate-700">
+                          <ProfileRenderer content={editData.hod_message} />
+                        </div>
                       </div>
                     ) : (
                       <div className="text-center py-12">

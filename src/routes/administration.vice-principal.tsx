@@ -3,7 +3,7 @@ import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ADMINISTRATION_SUBNAV } from "@/lib/site";
-import { Quote, Mail, MapPin, Save, X } from "lucide-react";
+import { Quote, Mail, MapPin, Save, X, BookOpen, Award } from "lucide-react";
 import campusImg from "@/assets/hero-campus.jpg";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";

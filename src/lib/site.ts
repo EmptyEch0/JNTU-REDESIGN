@@ -22,7 +22,6 @@ export const NAV: {
     children?: { label: string; to: string }[];
   }[];
 }[] = [
-  { label: "Home", to: "/" },
   {
     label: "About",
     groups: [
@@ -38,6 +37,11 @@ export const NAV: {
             label: "Vision & Mission",
             to: "/about/vision-mission",
             desc: "Our purpose and guiding principles",
+          },
+          {
+            label: "Norms & Recognition",
+            to: "/about/norms",
+            desc: "UGC status and establishment orders",
           },
         ],
       },

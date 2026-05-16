@@ -123,20 +123,20 @@ function AdminContent() {
   const { isAdmin, isEditMode, toggleEditMode, logout } = useAdmin();
 
   return (
-    <div className={`min-h-screen flex flex-col ${isAdmin ? "pt-12" : ""}`}>
+    <div className={`min-h-screen flex flex-col ${isAdmin ? "pt-12" : ""} w-full max-w-full overflow-x-hidden`}>
       {isAdmin && (
-        <div className="fixed top-0 left-0 right-0 h-12 bg-black text-white px-6 flex items-center justify-between z-[100] shadow-lg">
-          <div className="flex items-center gap-6">
+        <div className="fixed top-0 left-0 right-0 h-12 bg-black text-white px-4 md:px-6 flex items-center justify-between z-[100] shadow-lg overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-3 md:gap-6 shrink-0">
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
                 Admin
               </span>
-              <span className="text-xs font-medium">Dashboard</span>
+              <span className="text-xs font-medium hidden sm:inline">Dashboard</span>
             </div>
 
             <button
               onClick={toggleEditMode}
-              className={`flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${
+              className={`flex items-center gap-2 px-2.5 py-1 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-wider transition-all border shrink-0 ${
                 isEditMode
                   ? "bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]"
                   : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500"
@@ -145,22 +145,22 @@ function AdminContent() {
               <div
                 className={`w-1.5 h-1.5 rounded-full ${isEditMode ? "bg-primary animate-pulse" : "bg-zinc-600"}`}
               />
-              {isEditMode ? "Editing Enabled" : "Enable Edit Mode"}
+              <span>{isEditMode ? "Editing Active" : "Edit Mode"}</span>
             </button>
           </div>
           
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 md:gap-6 shrink-0 ml-4">
             <Link
               to="/admin/placements"
-              className="text-[11px] font-medium hover:text-primary transition-colors"
+              className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0"
             >
-              Manage Placements
+              Placements
             </Link>
             
             <button
               onClick={logout}
-              className="text-[11px] font-medium text-zinc-400 hover:text-white transition-colors"
+              className="text-[10px] md:text-[11px] font-semibold text-zinc-400 hover:text-white transition-colors shrink-0"
             >
               Logout
             </button>
@@ -168,7 +168,7 @@ function AdminContent() {
         </div>
       )}
       <MegaMenu />
-      <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out]">
+      <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out] w-full max-w-full overflow-x-hidden">
         <Outlet />
       </main>
       <Footer />

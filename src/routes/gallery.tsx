@@ -7,7 +7,7 @@ import labImg from "@/assets/lab.jpg";
 import hostelImg from "@/assets/hostel.jpg";
 import sportsImg from "@/assets/sports.jpg";
 import libraryImg from "@/assets/library-interior.jpg";
-import cultureImg from "@/assets/culture.jpg";
+import cultureImg from "@/assets/culture.jpeg";
 import placementsImg from "@/assets/placements-bg.jpg";
 import { SubNav } from "@/components/SubNav";
 import { STUDENT_SUBNAV } from "@/lib/site";

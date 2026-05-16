@@ -386,9 +386,9 @@ const AdministrationIqacRoute = AdministrationIqacRouteImport.update({
   getParentRoute: () => AdministrationRoute,
 } as any)
 const AdminPlacementsRoute = AdminPlacementsRouteImport.update({
-  id: '/placements',
-  path: '/placements',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/placements',
+  path: '/admin/placements',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDepartmentsRoute = AdminDepartmentsRouteImport.update({
   id: '/admin/departments',
@@ -1089,6 +1089,7 @@ export interface RootRouteChildren {
   SportsRoute: typeof SportsRoute
   WomenEmpowermentRoute: typeof WomenEmpowermentRouteWithChildren
   AdminDepartmentsRoute: typeof AdminDepartmentsRoute
+  AdminPlacementsRoute: typeof AdminPlacementsRoute
   DepartmentsIdRoute: typeof DepartmentsIdRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
@@ -1491,10 +1492,10 @@ declare module '@tanstack/react-router' {
     }
     '/admin/placements': {
       id: '/admin/placements'
-      path: '/placements'
+      path: '/admin/placements'
       fullPath: '/admin/placements'
       preLoaderRoute: typeof AdminPlacementsRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/departments': {
       id: '/admin/departments'
@@ -1954,6 +1955,7 @@ const rootRouteChildren: RootRouteChildren = {
   SportsRoute: SportsRoute,
   WomenEmpowermentRoute: WomenEmpowermentRouteWithChildren,
   AdminDepartmentsRoute: AdminDepartmentsRoute,
+  AdminPlacementsRoute: AdminPlacementsRoute,
   DepartmentsIdRoute: DepartmentsIdRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,

@@ -6,13 +6,19 @@ import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { PageHero } from "@/components/PageHero";
 import { 
-  Save, 
-  Lock, 
-  Edit, 
   Image as ImageIcon,
   Landmark,
   Sparkles
 } from "lucide-react";
+import {
+  AdminModeBanner,
+  AdminPanel,
+  AdminPanelHeader,
+  AdminField,
+  AdminInput,
+  AdminTextarea,
+  AdminSaveButton,
+} from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/banking")({
   loader: async () => await getPageContent({ data: "banking" }),
@@ -90,16 +96,7 @@ function BankingPage() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-800 pb-24">
-      {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
-          <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
-          <span>Banking CMS Dashboard Live</span>
-          <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
-          <span className="hidden md:block text-amber-100 normal-case italic font-medium">
-            Real-time alignment activated. Save to push updates.
-          </span>
-        </div>
-      )}
+      {isEditMode && <AdminModeBanner label="Banking CMS Dashboard Live" />}
 
       <PageHero
         title="Banking Facilities"
@@ -122,32 +119,18 @@ function BankingPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent z-10" />
             </div>
             {isEditMode && (
-              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-4 animate-[fade-in_0.4s]">
-                <div className="flex items-center gap-2 pb-1.5 border-b border-amber-200/60">
-                  <div className="w-9 h-9 rounded-2xl bg-amber-100 text-amber-700 grid place-items-center shrink-0 shadow-sm">
-                    <ImageIcon className="w-4.5 h-4.5" />
+              <div className="border-t border-amber-200">
+                <AdminPanel className="rounded-t-none border-0">
+                  <AdminPanelHeader title="Display Graphic Override" />
+                  <div className="flex flex-col sm:flex-row gap-3 w-full">
+                    <AdminInput
+                      value={editTexts.imageUrl}
+                      onChange={(e) => setEditTexts({ ...editTexts, imageUrl: e.target.value })}
+                      placeholder="Paste new image source URL..."
+                    />
+                    <AdminSaveButton onClick={() => handleSaveSection("image")} label="Save Graphic" className="shrink-0" />
                   </div>
-                  <div>
-                    <h4 className="text-sm font-black text-amber-950 tracking-tight">Display Graphic Override</h4>
-                    <p className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">Swap banner photo</p>
-                  </div>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-3 w-full mt-1">
-                  <input
-                    value={editTexts.imageUrl}
-                    onChange={(e) =>
-                      setEditTexts({ ...editTexts, imageUrl: e.target.value })
-                    }
-                    placeholder="Paste new image source URL..."
-                    className="flex-1 border border-amber-200 rounded-xl px-4 py-3.5 text-sm font-bold bg-white outline-none shadow-inner"
-                  />
-                  <button
-                    onClick={() => handleSaveSection("image")}
-                    className="bg-amber-500 text-amber-950 hover:bg-amber-600 font-black px-6 py-3 rounded-xl text-xs uppercase active:scale-95 cursor-pointer shadow transition flex gap-2 items-center justify-center shrink-0"
-                  >
-                    <Save className="w-4 h-4" /> Save Graphic
-                  </button>
-                </div>
+                </AdminPanel>
               </div>
             )}
           </div>
@@ -161,53 +144,39 @@ function BankingPage() {
               className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
             >
               {isEditMode ? (
-                <div className="space-y-6 animate-[fade-in_0.3s]">
-                  <div className="space-y-2">
-                    <label className="text-[9px] font-black text-amber-800 uppercase tracking-wider">Intro Explainer Narrative</label>
-                    <textarea
+                <AdminPanel>
+                  <AdminPanelHeader title="Intro Explainer Narrative">
+                    <AdminSaveButton onClick={() => handleSaveSection("intro")} label="Store Intro" />
+                  </AdminPanelHeader>
+                  <AdminField label="Narrative">
+                    <AdminTextarea
                       value={editTexts.intro}
                       onChange={(e) => setEditTexts({ ...editTexts, intro: e.target.value })}
-                      className="w-full h-24 rounded-xl border bg-white p-3.5 text-xs font-bold outline-none focus:border-amber-400 shadow-inner"
+                      rows={3}
                     />
-                    <div className="flex justify-end">
-                      <button 
-                        onClick={() => handleSaveSection("intro")} 
-                        className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-amber-950 font-black px-4.5 py-2.5 rounded-xl text-xs uppercase shadow active:scale-95 cursor-pointer transition"
-                      >
-                        <Save className="w-4 h-4"/> Store Intro
-                      </button>
-                    </div>
-                  </div>
-
-                  <hr className="border-amber-200/40" />
-
+                  </AdminField>
+                  
+                  <div className="my-4 border-b border-amber-200/40" />
+                  
+                  <AdminPanelHeader title="Branch Details">
+                    <AdminSaveButton onClick={() => handleSaveSection("branch")} label="Store Branch Details" className="!bg-slate-900 !text-white hover:!bg-amber-600" />
+                  </AdminPanelHeader>
                   <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label className="text-[9px] font-black text-amber-800 uppercase tracking-wider">Service Node Title</label>
-                      <input
+                    <AdminField label="Service Node Title">
+                      <AdminInput
                         value={editTexts.branchTitle}
                         onChange={(e) => setEditTexts({ ...editTexts, branchTitle: e.target.value })}
-                        className="w-full border bg-white text-xs font-bold p-3 rounded-xl shadow-inner focus:border-amber-400 outline-none"
                       />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[9px] font-black text-amber-800 uppercase tracking-wider">Operational Specifics</label>
-                      <textarea
+                    </AdminField>
+                    <AdminField label="Operational Specifics">
+                      <AdminTextarea
                         value={editTexts.branchContent}
                         onChange={(e) => setEditTexts({ ...editTexts, branchContent: e.target.value })}
-                        className="w-full h-32 border bg-white text-xs font-medium p-3.5 rounded-xl shadow-inner focus:border-amber-400 outline-none"
+                        rows={4}
                       />
-                    </div>
-                    <div className="flex justify-end">
-                      <button 
-                        onClick={() => handleSaveSection("branch")} 
-                        className="flex items-center gap-2 bg-slate-950 hover:bg-amber-600 text-white font-black px-5 py-2.5 rounded-xl text-xs uppercase shadow active:scale-95 cursor-pointer transition"
-                      >
-                        <Save className="w-4 h-4"/> Store Branch Details
-                      </button>
-                    </div>
+                    </AdminField>
                   </div>
-                </div>
+                </AdminPanel>
               ) : (
                 <div className="space-y-8">
                   <p className="text-[15px] leading-relaxed text-slate-600 text-justify font-medium bg-slate-50 border p-6 rounded-2xl shadow-inner italic">

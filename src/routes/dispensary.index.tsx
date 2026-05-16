@@ -23,8 +23,6 @@ import {
   Sparkles, 
   Coffee, 
   Phone,
-  Lock,
-  Save,
   Camera,
   Trash2,
   Plus,
@@ -33,6 +31,15 @@ import {
   ShieldAlert
 } from "lucide-react";
 import { LocalSubNav } from "@/components/LocalSubNav";
+import {
+  AdminModeBanner,
+  AdminPanel,
+  AdminField,
+  AdminInput,
+  AdminTextarea,
+  AdminSaveButton,
+  AdminAddRow,
+} from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/dispensary/")({
   loader: async () => await getDispensaryData(),
@@ -113,14 +120,7 @@ function DispensaryPage() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-800 pb-24">
-      {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
-          <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
-          <span>Dispensary Control Panel CMS Live</span>
-          <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
-          <span className="hidden md:block text-amber-100 normal-case italic font-medium">Real-time alignment activated. Perform edits via standard fields.</span>
-        </div>
-      )}
+      {isEditMode && <AdminModeBanner label="Dispensary Control Panel — Live Edit" />}
 
       <PageHero
         title="University Dispensary"
@@ -200,33 +200,32 @@ function DispensaryPage() {
                 title="Medical Directorate In-Charge" 
                 icon={User}
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
-              >
-                {isEditMode ? (
-                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.3s]">
-                    <div className="w-32 h-32 bg-slate-100 border-2 border-amber-200 rounded-[32px] overflow-hidden relative group shadow-sm">
+              >              {isEditMode ? (
+                <AdminPanel>
+                  <div className="flex flex-col md:flex-row gap-6 items-start">
+                    <div className="w-24 h-24 bg-slate-100 border-2 border-amber-200 rounded-2xl overflow-hidden relative group shadow-sm shrink-0">
                       <img src={editInfo.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"} className="w-full h-full object-cover" />
-                      <input 
+                      <input
                         placeholder="Photo URL"
                         value={editInfo.img}
-                        onChange={(e)=>setEditInfo({...editInfo, img:e.target.value})}
-                        className="absolute inset-0 opacity-0 bg-amber-950/80 backdrop-blur focus:opacity-100 group-hover:opacity-100 outline-none text-white text-[9px] font-black p-2 text-center cursor-pointer"
+                        onChange={(e) => setEditInfo({...editInfo, img: e.target.value})}
+                        className="absolute inset-0 opacity-0 bg-amber-950/80 focus:opacity-100 group-hover:opacity-100 outline-none text-white text-[9px] font-black p-2 text-center cursor-pointer transition"
                       />
                     </div>
-                    <div className="flex-1 space-y-4 w-full">
-                      <div>
-                        <label className="text-[9px] font-black text-amber-800 uppercase">Director Name</label>
-                        <input value={editInfo.hodName} onChange={(e)=>setEditInfo({...editInfo, hodName:e.target.value})} className="w-full border bg-white text-xs font-bold p-2.5 rounded-xl" />
-                      </div>
-                      <div>
-                        <label className="text-[9px] font-black text-amber-800 uppercase">Desk Notice Message</label>
-                        <textarea value={editInfo.message} onChange={(e)=>setEditInfo({...editInfo, message:e.target.value})} className="w-full h-24 border bg-white text-xs font-medium p-2.5 rounded-xl outline-none" />
-                      </div>
+                    <div className="flex-1 space-y-3 w-full">
+                      <AdminField label="Director Name">
+                        <AdminInput value={editInfo.hodName} onChange={(e) => setEditInfo({...editInfo, hodName: e.target.value})} placeholder="e.g. Dr. K. Ramesh" />
+                      </AdminField>
+                      <AdminField label="Notice / Message">
+                        <AdminTextarea value={editInfo.message} onChange={(e) => setEditInfo({...editInfo, message: e.target.value})} rows={3} placeholder="Desk notice message…" />
+                      </AdminField>
                       <div className="flex justify-end">
-                        <button onClick={handleSaveInfo} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-amber-950 font-black px-6 py-3 rounded-xl text-xs uppercase shadow active:scale-95 cursor-pointer transition"><Save className="w-4 h-4"/> Store Officer Profile</button>
+                        <AdminSaveButton onClick={handleSaveInfo} label="Save Profile" />
                       </div>
                     </div>
                   </div>
-                ) : (
+                </AdminPanel>
+              ) : (
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
                     <img
                       src={data?.info?.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}

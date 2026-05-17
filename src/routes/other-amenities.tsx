@@ -1,17 +1,26 @@
 import {
   createFileRoute,
-  Link,
   Outlet,
   useRouterState,
   useRouter,
 } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
 import { OTHER_AMENITIES_SUBNAV } from "@/lib/site";
 import { useAdmin } from "@/context/AdminContext";
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { toast } from "sonner";
-import { Save, Lock, Edit, Image as ImageIcon } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
+import {
+  AdminModeBanner,
+  AdminPanel,
+  AdminPanelHeader,
+  AdminField,
+  AdminInput,
+  AdminTextarea,
+  AdminSaveButton,
+} from "@/components/AdminEditPanel";
 
 import typeA from "@/assets/faculity-quaters1.jpg";
 import guest from "@/assets/guestoffice.jpg";
@@ -126,16 +135,7 @@ function OtherAmenitiesPage() {
 
   return (
     <div className="min-h-screen bg-slate-50/50">
-      {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
-          <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
-          <span>Live Amenities Editorial Enabled</span>
-          <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
-          <span className="hidden md:block text-amber-100 normal-case italic font-medium">
-            Click inline editors and save modifications live.
-          </span>
-        </div>
-      )}
+      {isEditMode && <AdminModeBanner label="Amenities Live Editorial Mode" />}
 
       <PageHero
         title={heroRec?.title || DEFAULTS.heroTitle}
@@ -145,99 +145,61 @@ function OtherAmenitiesPage() {
       {/* EDIT HERO SECTION */}
       {isEditMode && (
         <div className="max-w-4xl mx-auto px-4 mt-6">
-          <div className="bg-amber-50/40 border-2 border-amber-200 rounded-3xl p-5 space-y-4 shadow-sm">
-            <div className="flex items-center justify-between border-b border-amber-200/50 pb-2">
-              <span className="text-[10px] font-black text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
-                <Edit className="w-3 h-3" /> Page Hero Title & Subtitle
-              </span>
-              <button
-                onClick={() => handleSaveSection("hero")}
-                className="bg-amber-500 text-amber-950 hover:bg-amber-600 font-black px-4.5 py-2 rounded-xl text-[10px] uppercase shadow active:scale-95 transition flex items-center gap-1.5 cursor-pointer"
-              >
-                <Save className="w-3.5 h-3.5" /> Save Hero
-              </button>
-            </div>
+          <AdminPanel>
+            <AdminPanelHeader title="Hero Title & Subtitle">
+              <AdminSaveButton onClick={() => handleSaveSection("hero")} label="Save Hero" />
+            </AdminPanelHeader>
             <div className="space-y-3">
-              <input
-                value={editTexts.heroTitle}
-                onChange={(e) =>
-                  setEditTexts({ ...editTexts, heroTitle: e.target.value })
-                }
-                placeholder="Hero Title (e.g., Other Amenities)"
-                className="w-full border-2 border-amber-200/60 bg-white p-3 rounded-xl text-sm font-bold outline-none focus:border-amber-400"
-              />
-              <input
-                value={editTexts.heroSubtitle}
-                onChange={(e) =>
-                  setEditTexts({ ...editTexts, heroSubtitle: e.target.value })
-                }
-                placeholder="Hero Subtitle copy..."
-                className="w-full border-2 border-amber-200/60 bg-white p-3 rounded-xl text-sm font-medium outline-none focus:border-amber-400"
-              />
+              <AdminField label="Page Title">
+                <AdminInput
+                  value={editTexts.heroTitle}
+                  onChange={(e) => setEditTexts({ ...editTexts, heroTitle: e.target.value })}
+                  placeholder="e.g. Other Amenities"
+                />
+              </AdminField>
+              <AdminField label="Subtitle">
+                <AdminInput
+                  value={editTexts.heroSubtitle}
+                  onChange={(e) => setEditTexts({ ...editTexts, heroSubtitle: e.target.value })}
+                  placeholder="Hero subtitle copy…"
+                />
+              </AdminField>
             </div>
-          </div>
+          </AdminPanel>
         </div>
       )}
 
-      {/* SUB NAV */}
-      <div className="sticky top-0 z-10 border-b border-slate-200/80 bg-white/80 backdrop-blur-md transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-2 overflow-x-auto py-3 no-scrollbar justify-start sm:justify-center">
-            {OTHER_AMENITIES_SUBNAV.map((item) => {
-              const active = path === item.to || path.startsWith(item.to + "/");
-              return (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={`shrink-0 rounded-full px-5 py-2 text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 border ${
-                    active
-                      ? "bg-primary text-white border-primary shadow-md shadow-primary/20 scale-[1.02]"
-                      : "bg-white text-slate-600 border-slate-200 hover:text-primary hover:border-primary/40 hover:bg-slate-50/50"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      {/* SUB NAV — same style as Student Corner */}
+      <SubNav items={OTHER_AMENITIES_SUBNAV} />
 
       {isOverview ? (
         <section className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 animate-[fade-in_0.5s_ease-out] space-y-16">
           
           {/* INTRO EXPLAINER */}
           {isEditMode ? (
-            <div className="max-w-3xl mx-auto p-6 bg-amber-50/40 border-2 border-amber-200 rounded-3xl space-y-5 animate-[fade-in_0.3s]">
-              <div className="flex items-center justify-between border-b border-amber-200/50 pb-2">
-                <span className="text-[10px] font-black text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <Edit className="w-3 h-3" /> Intro Banner Text
-                </span>
-                <button
-                  onClick={() => handleSaveSection("intro")}
-                  className="bg-amber-500 text-amber-950 hover:bg-amber-600 font-black px-4.5 py-2 rounded-xl text-[10px] uppercase shadow active:scale-95 transition flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Save className="w-3.5 h-3.5" /> Save Section
-                </button>
-              </div>
-              <div className="space-y-3">
-                <input
-                  value={editTexts.introTitle}
-                  onChange={(e) =>
-                    setEditTexts({ ...editTexts, introTitle: e.target.value })
-                  }
-                  className="w-full border-2 border-amber-200/60 bg-white p-3 rounded-xl text-sm font-extrabold focus:border-amber-400 outline-none"
-                  placeholder="Intro Header"
-                />
-                <textarea
-                  value={editTexts.introText}
-                  onChange={(e) =>
-                    setEditTexts({ ...editTexts, introText: e.target.value })
-                  }
-                  className="w-full h-28 border-2 border-amber-200/60 bg-white p-4 rounded-xl text-sm font-medium focus:border-amber-400 outline-none"
-                  placeholder="Description payload..."
-                />
-              </div>
+            <div className="max-w-3xl mx-auto">
+              <AdminPanel>
+                <AdminPanelHeader title="Intro Banner Text">
+                  <AdminSaveButton onClick={() => handleSaveSection("intro")} label="Save Section" />
+                </AdminPanelHeader>
+                <div className="space-y-3">
+                  <AdminField label="Intro Header">
+                    <AdminInput
+                      value={editTexts.introTitle}
+                      onChange={(e) => setEditTexts({ ...editTexts, introTitle: e.target.value })}
+                      placeholder="Intro Header"
+                    />
+                  </AdminField>
+                  <AdminField label="Description Payload">
+                    <AdminTextarea
+                      value={editTexts.introText}
+                      onChange={(e) => setEditTexts({ ...editTexts, introText: e.target.value })}
+                      rows={4}
+                      placeholder="Description payload..."
+                    />
+                  </AdminField>
+                </div>
+              </AdminPanel>
             </div>
           ) : (
             <div className="text-center max-w-3xl mx-auto space-y-4">
@@ -287,49 +249,36 @@ function OtherAmenitiesPage() {
               </Link>
 
               {isEditMode && (
-                <div className="p-5 bg-amber-50/40 border-2 border-amber-200 rounded-3xl space-y-4 animate-[fade-in_0.3s]">
-                  <div className="flex items-center justify-between border-b border-amber-200/50 pb-2">
-                    <span className="text-[10px] font-black text-amber-800 uppercase flex items-center gap-1">
-                      <Edit className="w-3 h-3" /> Quarters Card Edits
-                    </span>
-                    <button
-                      onClick={() => handleSaveSection("staff")}
-                      className="bg-amber-500 text-amber-950 hover:bg-amber-600 font-black px-3.5 py-1.5 rounded-xl text-[9px] uppercase tracking-wider shadow active:scale-95 transition cursor-pointer"
-                    >
-                      Save Card
-                    </button>
-                  </div>
-                  <div className="space-y-2.5">
-                    <input
-                      value={editTexts.staffTitle}
-                      onChange={(e) =>
-                        setEditTexts({ ...editTexts, staffTitle: e.target.value })
-                      }
-                      placeholder="Card Title (e.g. Staff Quarters)"
-                      className="w-full border bg-white text-xs px-3 py-2 rounded-xl font-bold outline-none focus:border-amber-400"
-                    />
-                    <textarea
-                      value={editTexts.staffDesc}
-                      onChange={(e) =>
-                        setEditTexts({ ...editTexts, staffDesc: e.target.value })
-                      }
-                      className="w-full h-20 border bg-white text-xs p-3 rounded-xl font-medium outline-none focus:border-amber-400"
-                      placeholder="Quarters summary..."
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[9px] font-black text-amber-800 uppercase flex items-center gap-1">
-                      <ImageIcon className="w-2.5 h-2.5" /> Image Overrides
-                    </label>
-                    <input
-                      value={editTexts.staffImg}
-                      onChange={(e) =>
-                        setEditTexts({ ...editTexts, staffImg: e.target.value })
-                      }
-                      placeholder="Paste URL (optional)"
-                      className="w-full border bg-white px-3 py-2 text-xs rounded-xl outline-none font-semibold"
-                    />
-                  </div>
+                <div className="mt-4">
+                  <AdminPanel>
+                    <AdminPanelHeader title="Quarters Card Edits">
+                      <AdminSaveButton onClick={() => handleSaveSection("staff")} label="Save Card" />
+                    </AdminPanelHeader>
+                    <div className="space-y-3">
+                      <AdminField label="Card Title">
+                        <AdminInput
+                          value={editTexts.staffTitle}
+                          onChange={(e) => setEditTexts({ ...editTexts, staffTitle: e.target.value })}
+                          placeholder="e.g. Staff Quarters"
+                        />
+                      </AdminField>
+                      <AdminField label="Summary">
+                        <AdminTextarea
+                          value={editTexts.staffDesc}
+                          onChange={(e) => setEditTexts({ ...editTexts, staffDesc: e.target.value })}
+                          rows={3}
+                          placeholder="Quarters summary..."
+                        />
+                      </AdminField>
+                      <AdminField label="Image Override URL">
+                        <AdminInput
+                          value={editTexts.staffImg}
+                          onChange={(e) => setEditTexts({ ...editTexts, staffImg: e.target.value })}
+                          placeholder="Paste URL (optional)"
+                        />
+                      </AdminField>
+                    </div>
+                  </AdminPanel>
                 </div>
               )}
             </div>
@@ -367,49 +316,36 @@ function OtherAmenitiesPage() {
               </Link>
 
               {isEditMode && (
-                <div className="p-5 bg-amber-50/40 border-2 border-amber-200 rounded-3xl space-y-4 animate-[fade-in_0.3s]">
-                  <div className="flex items-center justify-between border-b border-amber-200/50 pb-2">
-                    <span className="text-[10px] font-black text-amber-800 uppercase flex items-center gap-1">
-                      <Edit className="w-3 h-3" /> Guest House Card Edits
-                    </span>
-                    <button
-                      onClick={() => handleSaveSection("guest")}
-                      className="bg-amber-500 text-amber-950 hover:bg-amber-600 font-black px-3.5 py-1.5 rounded-xl text-[9px] uppercase tracking-wider shadow active:scale-95 transition cursor-pointer"
-                    >
-                      Save Card
-                    </button>
-                  </div>
-                  <div className="space-y-2.5">
-                    <input
-                      value={editTexts.guestTitle}
-                      onChange={(e) =>
-                        setEditTexts({ ...editTexts, guestTitle: e.target.value })
-                      }
-                      placeholder="Card Title (e.g. Guest House)"
-                      className="w-full border bg-white text-xs px-3 py-2 rounded-xl font-bold outline-none focus:border-amber-400"
-                    />
-                    <textarea
-                      value={editTexts.guestDesc}
-                      onChange={(e) =>
-                        setEditTexts({ ...editTexts, guestDesc: e.target.value })
-                      }
-                      className="w-full h-20 border bg-white text-xs p-3 rounded-xl font-medium outline-none focus:border-amber-400"
-                      placeholder="Guest summary..."
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[9px] font-black text-amber-800 uppercase flex items-center gap-1">
-                      <ImageIcon className="w-2.5 h-2.5" /> Image Overrides
-                    </label>
-                    <input
-                      value={editTexts.guestImg}
-                      onChange={(e) =>
-                        setEditTexts({ ...editTexts, guestImg: e.target.value })
-                      }
-                      placeholder="Paste URL (optional)"
-                      className="w-full border bg-white px-3 py-2 text-xs rounded-xl outline-none font-semibold"
-                    />
-                  </div>
+                <div className="mt-4">
+                  <AdminPanel>
+                    <AdminPanelHeader title="Guest House Card Edits">
+                      <AdminSaveButton onClick={() => handleSaveSection("guest")} label="Save Card" />
+                    </AdminPanelHeader>
+                    <div className="space-y-3">
+                      <AdminField label="Card Title">
+                        <AdminInput
+                          value={editTexts.guestTitle}
+                          onChange={(e) => setEditTexts({ ...editTexts, guestTitle: e.target.value })}
+                          placeholder="e.g. Guest House"
+                        />
+                      </AdminField>
+                      <AdminField label="Summary">
+                        <AdminTextarea
+                          value={editTexts.guestDesc}
+                          onChange={(e) => setEditTexts({ ...editTexts, guestDesc: e.target.value })}
+                          rows={3}
+                          placeholder="Guest summary..."
+                        />
+                      </AdminField>
+                      <AdminField label="Image Override URL">
+                        <AdminInput
+                          value={editTexts.guestImg}
+                          onChange={(e) => setEditTexts({ ...editTexts, guestImg: e.target.value })}
+                          placeholder="Paste URL (optional)"
+                        />
+                      </AdminField>
+                    </div>
+                  </AdminPanel>
                 </div>
               )}
             </div>

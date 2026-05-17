@@ -164,7 +164,7 @@ function HomePage() {
       </section>
 
       {/* ABOUT, VISION & PRINCIPAL SECTION */}
-      <section className="py-24 md:py-36 relative overflow-hidden">
+      <section className="py-20 md:py-28 relative overflow-hidden">
         <div
           aria-hidden
           className="absolute inset-0 -z-10"
@@ -307,7 +307,7 @@ function HomePage() {
           </div>
 
           {/* Stats integrated as a lower strip */}
-          <RevealOnScroll delay={400} className="mt-20 lg:mt-28">
+          <RevealOnScroll delay={400} className="mt-14 lg:mt-20">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-[32px] overflow-hidden border border-border shadow-sm">
               {STATS.map((s, i) => (
                 <div key={s.label} className="bg-white p-8 lg:p-10 hover:bg-slate-50 transition-colors group">
@@ -321,7 +321,7 @@ function HomePage() {
       </section>
 
       {/* DEPARTMENTS — horizontal scroll */}
-      <section className="py-24 md:py-32 bg-sand">
+      <section className="py-20 md:py-28 bg-sand">
         <div className="container-narrow">
           <RevealOnScroll>
             <SectionLabel
@@ -331,7 +331,7 @@ function HomePage() {
             />
           </RevealOnScroll>
         </div>
-        <RevealOnScroll className="mt-12" delay={150}>
+        <RevealOnScroll className="mt-10" delay={150}>
           <div className="overflow-x-auto pb-6 [scrollbar-width:thin] snap-x snap-mandatory">
             <div className="flex gap-5 px-[max(1.25rem,calc((100vw-1280px)/2+2rem))]">
               {DEPARTMENTS.map((d, i) => (
@@ -372,44 +372,43 @@ function HomePage() {
       </section>
 
       {/* FACILITIES — interactive showcase */}
-      <section className="py-24 md:py-32">
+      <section className="py-20 md:py-28">
         <div className="container-narrow">
           <RevealOnScroll>
             <div className="flex items-end justify-between flex-wrap gap-6">
               <SectionLabel
                 eyebrow="Facilities"
                 title="Everything you need, on campus."
-                subtitle="Hover to see more. Click any tile to step inside."
+                subtitle="Click any tile to explore — hostels, library, sports, healthcare and more."
               />
             </div>
           </RevealOnScroll>
 
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {FACILITIES.map((f, i) => {
               return (
-                <RevealOnScroll key={f.title} delay={i * 80}>
+                <RevealOnScroll key={f.title} delay={i * 70} className="h-full">
                   <Link
                     to={f.to}
-                    className="group relative block rounded-3xl overflow-hidden h-[340px] hover-lift"
+                    className="group relative flex flex-col rounded-3xl overflow-hidden h-[260px] sm:h-[300px] lg:h-[320px] hover-lift"
                   >
                     <img
                       src={f.img}
                       alt={f.title}
                       loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] lg:group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent" />
-                    <div className="absolute inset-0 p-6 md:p-7 flex flex-col justify-end text-white">
-                      <div className="flex items-center gap-2 text-eyebrow !text-white/70 mb-2">
-                        <f.icon className="h-3.5 w-3.5" /> Facility
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/50 to-ink/10" />
+                    <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-end text-white">
+                      <div className="flex items-center gap-2 text-eyebrow !text-white/60 mb-2">
+                        <f.icon className="h-3 w-3" /> Facility
                       </div>
-                      <h3 className="text-display text-2xl md:text-3xl">{f.title}</h3>
-                      <p className="mt-2 text-sm text-white/75 max-w-md max-h-0 opacity-0 group-hover:max-h-32 group-hover:opacity-100 transition-all duration-500 overflow-hidden">
+                      <h3 className="text-display text-xl md:text-2xl leading-tight">{f.title}</h3>
+                      <p className="mt-1.5 text-sm text-white/80 max-w-md overflow-hidden line-clamp-2">
                         {f.desc}
                       </p>
-                      <div className="mt-3 inline-flex items-center gap-1.5 text-sm text-white/80 group-hover:text-white">
-                        Explore{" "}
-                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                      <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-white/70 group-hover:text-white transition-colors">
+                        Explore <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
                       </div>
                     </div>
                   </Link>
@@ -451,7 +450,7 @@ function HomePage() {
       </ParallaxBg>
 
       {/* PLACEMENTS */}
-      <section className="py-24 md:py-32 bg-sand">
+      <section className="py-20 md:py-28 bg-sand">
         <div className="container-narrow">
           <RevealOnScroll>
             <SectionLabel
@@ -461,27 +460,29 @@ function HomePage() {
             />
           </RevealOnScroll>
 
-          <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-3xl overflow-hidden border border-border">
-            <RevealOnScroll className="bg-card p-8">
-              <StatCounter value={420} label="Offers / Year" suffix="+" />
-            </RevealOnScroll>
-            <RevealOnScroll className="bg-card p-8" delay={80}>
-              <StatCounter value={42} label="LPA Top Package" suffix="L" />
-            </RevealOnScroll>
-            <RevealOnScroll className="bg-card p-8" delay={160}>
-              <StatCounter value={85} label="Recruiters" suffix="+" />
-            </RevealOnScroll>
-            <RevealOnScroll className="bg-card p-8" delay={240}>
-              <StatCounter value={92} label="Placement %" suffix="%" />
-            </RevealOnScroll>
-          </div>
+          <RevealOnScroll className="mt-10" delay={100}>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-3xl overflow-hidden border border-border">
+              <div className="bg-card p-6 md:p-8">
+                <StatCounter value={420} label="Offers / Year" suffix="+" />
+              </div>
+              <div className="bg-card p-6 md:p-8">
+                <StatCounter value={42} label="LPA Top Package" suffix="L" />
+              </div>
+              <div className="bg-card p-6 md:p-8">
+                <StatCounter value={85} label="Recruiters" suffix="+" />
+              </div>
+              <div className="bg-card p-6 md:p-8">
+                <StatCounter value={92} label="Placement %" suffix="%" />
+              </div>
+            </div>
+          </RevealOnScroll>
 
-          <div className="mt-14">
+          <RevealOnScroll className="mt-10" delay={150}>
             <div className="text-eyebrow text-center mb-4">Trusted by recruiters</div>
             <MarqueeLogos items={RECRUITERS} />
-          </div>
+          </RevealOnScroll>
 
-          <div className="mt-10 text-center">
+          <div className="mt-8 text-center">
             <Link to="/placements" className="btn-primary">
               View placements report <ArrowRight className="h-4 w-4" />
             </Link>
@@ -490,22 +491,22 @@ function HomePage() {
       </section>
 
       {/* GALLERY TEASER */}
-      <section className="py-24 md:py-32">
+      <section className="py-20 md:py-28">
         <div className="container-narrow">
           <RevealOnScroll>
             <div className="flex items-end justify-between flex-wrap gap-6">
               <SectionLabel eyebrow="Gallery" title="A campus, in moments." />
               <Link
                 to="/gallery"
-                className="story-link text-primary font-medium inline-flex items-center gap-2"
+                className="story-link text-primary font-semibold inline-flex items-center gap-2"
               >
                 Open gallery <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </RevealOnScroll>
 
-          <RevealOnScroll className="mt-12" delay={120}>
-            <div className="grid grid-cols-12 gap-4 md:gap-5">
+          <RevealOnScroll className="mt-10" delay={120}>
+            <div className="grid grid-cols-12 gap-3 md:gap-4">
               <img
                 src={cultureImg}
                 alt="Cultural fest"
@@ -542,10 +543,10 @@ function HomePage() {
       </section>
 
       {/* CONTACT STRIP */}
-      <section className="py-24">
+      <section className="py-20">
         <div className="container-narrow">
           <RevealOnScroll>
-            <div className="relative overflow-hidden rounded-[40px] bg-[oklch(0.18_0.04_255)] p-10 md:p-16 text-white shadow-[var(--shadow-elegant)] border border-white/5">
+            <div className="relative overflow-hidden rounded-[40px] bg-[oklch(0.18_0.04_255)] p-8 md:p-14 text-white shadow-[var(--shadow-elegant)] border border-white/5">
               <div
                 aria-hidden
                 className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/20 blur-3xl"

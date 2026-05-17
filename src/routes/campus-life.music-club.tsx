@@ -37,6 +37,7 @@ import {
   HelpCircle,
   Coins
 } from "lucide-react";
+import { LocalSubNav } from "@/components/LocalSubNav";
 
 export const Route = createFileRoute("/campus-life/music-club")({
   loader: async () => await getMusicClubData(),
@@ -167,14 +168,16 @@ function MusicClubPage() {
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
         
-        {/* NAVIGATION SWITCHER */}
-        <div className="w-full flex justify-center mb-12 md:mb-16">
-          <div className="flex items-center gap-2 p-1.5 bg-slate-200/60 backdrop-blur-sm rounded-[24px] overflow-x-auto no-scrollbar max-w-full pb-1.5 md:pb-1.5">
-            <TabBtn label="Overview" active={tab === "Overview"} onClick={() => setTab("Overview")} icon={Sparkles} />
-            <TabBtn label="Equipment Available" active={tab === "Equipment Available"} onClick={() => setTab("Equipment Available")} icon={Music} />
-            <TabBtn label="Active Club Members" active={tab === "Club Members"} onClick={() => setTab("Club Members")} icon={User} />
-          </div>
-        </div>
+        {/* DYNAMIC SYSTEM NAV - Premium consistent tabs */}
+        <LocalSubNav
+          activeTab={tab}
+          setActiveTab={setTab}
+          items={[
+            { label: "Overview", icon: Sparkles },
+            { label: "Equipment Available", icon: Music },
+            { label: "Club Members", icon: User },
+          ]}
+        />
 
         <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
           
@@ -382,22 +385,6 @@ function MusicClubPage() {
 }
 
 /* ---------- COMMON WIDGET HELPERS ---------- */
-
-function TabBtn({ label, active, onClick, icon: Icon }: any) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2.5 px-6 py-3.5 rounded-[18px] font-bold text-sm transition duration-500 shrink-0 active:scale-95 border shadow-sm cursor-pointer ${
-        active
-          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow-md"
-          : "bg-white border-transparent text-slate-500 hover:text-slate-900 hover:bg-slate-50"
-      }`}
-    >
-      {Icon && <Icon className="w-4.5 h-4.5 shrink-0" />}
-      <span>{label}</span>
-    </button>
-  );
-}
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (

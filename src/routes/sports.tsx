@@ -37,9 +37,9 @@ import {
   Camera,
   Trash2,
   Plus,
-  X,
   RefreshCw,
 } from "lucide-react";
+import { LocalSubNav } from "@/components/LocalSubNav";
 
 export const Route = createFileRoute("/sports")({
   loader: async () => await getSportsData(),
@@ -208,15 +208,17 @@ function SportsPage() {
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
         
         {/* DYNAMIC SYSTEM NAV - Sleeker clean UI */}
-        <div className="w-full flex justify-center mb-8 md:mb-12">
-          <div className="flex items-center gap-2 p-2 bg-white/80 border border-slate-200/80 backdrop-blur-md rounded-2xl shadow-sm overflow-x-auto no-scrollbar max-w-full">
-            <TabBtn label="Overview" active={tab === "Overview"} onClick={() => setTab("Overview")} icon={Info} />
-            <TabBtn label="Staff & Faculty" active={tab === "Staff"} onClick={() => setTab("Staff")} icon={Users} />
-            <TabBtn label="Achievements" active={tab === "Achievements"} onClick={() => setTab("Achievements")} icon={Trophy} />
-            <TabBtn label="Play Fields" active={tab === "Play Fields"} onClick={() => setTab("Play Fields")} icon={Map} />
-            <TabBtn label="Gymnasium" active={tab === "Gymnasium"} onClick={() => setTab("Gymnasium")} icon={Dumbbell} />
-          </div>
-        </div>
+        <LocalSubNav
+          activeTab={tab}
+          setActiveTab={setTab}
+          items={[
+            { label: "Overview", icon: Info },
+            { label: "Staff", icon: Users },
+            { label: "Achievements", icon: Trophy },
+            { label: "Play Fields", icon: Map },
+            { label: "Gymnasium", icon: Dumbbell },
+          ]}
+        />
 
         <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
           
@@ -638,22 +640,6 @@ function SportsPage() {
 }
 
 /* ---------- SHARED COMMON HELPERS ---------- */
-
-function TabBtn({ label, active, onClick, icon: Icon }: any) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-300 shrink-0 active:scale-95 border cursor-pointer ${
-        active
-          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow shadow-indigo-500/20"
-          : "bg-white border-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-50/50 hover:shadow-sm"
-      }`}
-    >
-      {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
-      <span>{label}</span>
-    </button>
-  );
-}
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (

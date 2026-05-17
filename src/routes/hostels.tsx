@@ -28,16 +28,30 @@ import {
   Home,
   Utensils,
   Clock,
-  Save,
   Plus,
   Trash2,
   Camera,
-  AlertCircle,
-  X,
-  Lock,
   RefreshCw,
   ChevronRight,
+  X,
+  Save,
+  Lock,
 } from "lucide-react";
+
+import { LocalSubNav } from "@/components/LocalSubNav";
+import {
+  AdminModeBanner,
+  AdminPanel,
+  AdminPanelHeader,
+  AdminField,
+  AdminInput,
+  AdminTextarea,
+  AdminSaveButton,
+  AdminAddButton,
+  AdminDeleteButton,
+  AdminRemoveButton,
+  AdminAddRow,
+} from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/hostels")({
   loader: async () => await getHostelData(),
@@ -165,14 +179,7 @@ function HostelsPage() {
       <div className="absolute top-[30%] -left-48 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[130px] pointer-events-none -z-10 animate-pulse duration-[8s]" />
       <div className="absolute bottom-[20%] -right-48 w-[600px] h-[600px] rounded-full bg-accent/5 blur-[130px] pointer-events-none -z-10 animate-pulse duration-[10s]" />
       {/* STICKY ADIMINISTRATOR CONTROL STRIP */}
-      {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
-          <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
-          <span>Live Editorial Mode Enabled</span>
-          <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
-          <span className="hidden md:block text-amber-100 normal-case italic font-medium">Modify any fields and save seamlessly inline</span>
-        </div>
-      )}
+      {isEditMode && <AdminModeBanner label="Hostel Live Editorial Mode" />}
 
       <PageHero
         title="Campus Hostels"
@@ -183,28 +190,15 @@ function HostelsPage() {
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
         
         {/* TABS CONTROLLER - Sleeker, modern, clean UI */}
-        <div className="w-full flex justify-center mb-8 md:mb-12">
-          <div className="flex items-center gap-2 p-2 bg-white/80 border border-slate-200/80 backdrop-blur-md rounded-2xl shadow-sm overflow-x-auto no-scrollbar max-w-full">
-            <TabBtn
-              label="Hostel Office"
-              active={tab === "office"}
-              onClick={() => setTab("office")}
-              icon={Building}
-            />
-            <TabBtn
-              label="Girls Dormitory"
-              active={tab === "girls"}
-              onClick={() => setTab("girls")}
-              icon={Home}
-            />
-            <TabBtn
-              label="Boys Dormitory"
-              active={tab === "boys"}
-              onClick={() => setTab("boys")}
-              icon={Tent}
-            />
-          </div>
-        </div>
+        <LocalSubNav
+          activeTab={tab}
+          setActiveTab={setTab as (tab: string) => void}
+          items={[
+            { label: "office", icon: Building },
+            { label: "girls", icon: Home },
+            { label: "boys", icon: Tent },
+          ]}
+        />
 
         <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
           
@@ -272,27 +266,22 @@ function HostelsPage() {
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20 shadow-xl duration-500" : "hover:-translate-y-1.5 shadow-[0_10px_35px_rgba(0,0,0,0.04)] duration-500"}
               >
                 {isEditMode ? (
-                  <div className="space-y-4 animate-[fade-in_0.3s]">
-                    <textarea
-                      value={editAbout}
-                      onChange={(e) => setEditAbout(e.target.value)}
-                      className="w-full h-48 rounded-[24px] border-2 border-amber-200 p-5 font-medium text-sm bg-white focus:ring-4 focus:ring-amber-500/10 focus:border-amber-400 outline-none resize-none transition-all shadow-inner text-slate-700 leading-relaxed"
-                      placeholder="Enter governing description..."
-                    />
-                    <div className="flex justify-end">
-                      <button 
-                        onClick={handleSaveAbout}
-                        className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-amber-950 font-black px-6 py-3.5 rounded-[16px] text-xs uppercase tracking-widest shadow-md active:scale-95 transition-all cursor-pointer"
-                      >
-                        <Save className="w-4 h-4" /> Synchronize Desk Profile
-                      </button>
-                    </div>
+                <AdminPanel>
+                  <AdminTextarea
+                    value={editAbout}
+                    onChange={(e) => setEditAbout(e.target.value)}
+                    rows={6}
+                    placeholder="Enter governing description…"
+                  />
+                  <div className="flex justify-end">
+                    <AdminSaveButton onClick={handleSaveAbout} label="Save Description" />
                   </div>
-                ) : (
-                  <p className="text-slate-600 leading-relaxed text-sm md:text-[15px] whitespace-pre-line font-medium">
-                    {data?.about?.description || "Governance descriptions have yet to be detailed."}
-                  </p>
-                )}
+                </AdminPanel>
+              ) : (
+                <p className="text-slate-600 leading-relaxed text-sm md:text-[15px] whitespace-pre-line font-medium">
+                  {data?.about?.description || "Governance descriptions have yet to be detailed."}
+                </p>
+              )}
               </Card>
 
               {/* GOVERNING HEAD CARD */}
@@ -303,78 +292,52 @@ function HostelsPage() {
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20" : "hover:-translate-y-1.5 shadow-[0_10px_35px_rgba(0,0,0,0.04)]"}
               >
                 {isEditMode ? (
-                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.3s]">
-                    <div className="w-32 h-32 bg-slate-100 border-2 border-amber-200 rounded-[28px] overflow-hidden shadow-md flex-shrink-0 relative group transition-all">
-                      <img 
-                        src={editOfficer.image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"} 
-                        className="w-full h-full object-cover" 
-                      />
+                <AdminPanel>
+                  <div className="flex flex-col sm:flex-row gap-6 items-start">
+                    <div className="w-28 h-28 bg-slate-100 border-2 border-amber-200 rounded-2xl overflow-hidden relative group shadow-sm shrink-0">
+                      <img src={editOfficer.image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"} className="w-full h-full object-cover" />
                       <input
                         type="text"
                         value={editOfficer.image}
                         onChange={(e) => setEditOfficer({ ...editOfficer, image: e.target.value })}
-                        placeholder="Paste URL"
-                        className="absolute inset-0 opacity-0 focus:opacity-100 bg-amber-950/80 backdrop-blur-sm text-[10px] text-white font-bold p-2 text-center outline-none group-hover:opacity-100 transition duration-300"
+                        placeholder="Paste image URL"
+                        className="absolute inset-0 opacity-0 focus:opacity-100 group-hover:opacity-100 bg-amber-950/80 text-[10px] text-white font-bold p-2 text-center outline-none transition"
                       />
                     </div>
-                    
-                    <div className="flex-1 space-y-4 w-full">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-black text-amber-800 uppercase tracking-wider">Officer Name</label>
-                          <input
-                            type="text"
-                            value={editOfficer.name}
-                            onChange={(e) => setEditOfficer({ ...editOfficer, name: e.target.value })}
-                            className="w-full bg-white border-2 border-amber-150 rounded-[14px] px-4 py-3 font-bold text-slate-800 text-sm focus:border-amber-400 outline-none"
-                          />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-black text-amber-800 uppercase tracking-wider">Designation Rank</label>
-                          <input
-                            type="text"
-                            value={editOfficer.role}
-                            onChange={(e) => setEditOfficer({ ...editOfficer, role: e.target.value })}
-                            className="w-full bg-white border-2 border-amber-150 rounded-[14px] px-4 py-3 font-semibold text-slate-600 text-sm focus:border-amber-400 outline-none"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex justify-end pt-2">
-                        <button 
-                          onClick={handleSaveOfficer}
-                          className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-amber-950 font-black px-6 py-3.5 rounded-[16px] text-xs uppercase tracking-widest shadow active:scale-95 transition cursor-pointer"
-                        >
-                          <Save className="w-4 h-4" /> Store Governing Profile
-                        </button>
+                    <div className="flex-1 space-y-3 w-full">
+                      <AdminField label="Officer Name">
+                        <AdminInput value={editOfficer.name} onChange={(e) => setEditOfficer({ ...editOfficer, name: e.target.value })} placeholder="Full name" />
+                      </AdminField>
+                      <AdminField label="Designation">
+                        <AdminInput value={editOfficer.role} onChange={(e) => setEditOfficer({ ...editOfficer, role: e.target.value })} placeholder="e.g. Chief Hostel Officer" />
+                      </AdminField>
+                      <div className="flex justify-end pt-1">
+                        <AdminSaveButton onClick={handleSaveOfficer} label="Save Officer" />
                       </div>
                     </div>
                   </div>
-                ) : (
-                  officer && (
-                    <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-                      <div className="relative shrink-0">
-                        <img
-                          src={officer.image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
-                          onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250";
-                          }}
-                          className="w-24 h-24 rounded-[24px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-500 hover:scale-[1.03]"
-                          alt={officer.name}
-                        />
-                      </div>
-                      <div>
-                        <h4 className="font-display font-black text-xl text-slate-900 tracking-tight mb-1">
-                          {officer.name}
-                        </h4>
-                        <div className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] font-bold text-xs tracking-widest uppercase px-3 py-1.5 rounded-full">
-                          <Sparkles className="w-3.5 h-3.5" />
-                          {officer.role}
-                        </div>
+                </AdminPanel>
+              ) : (
+                officer && (
+                  <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+                    <div className="relative shrink-0">
+                      <img
+                        src={officer.image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
+                        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
+                        className="w-24 h-24 rounded-[24px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-500 hover:scale-[1.03]"
+                        alt={officer.name}
+                      />
+                    </div>
+                    <div>
+                      <h4 className="font-display font-black text-xl text-slate-900 tracking-tight mb-1">{officer.name}</h4>
+                      <div className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] font-bold text-xs tracking-widest uppercase px-3 py-1.5 rounded-full">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        {officer.role}
                       </div>
                     </div>
-                  )
-                )}
+                  </div>
+                )
+              )}
               </Card>
 
               {/* WARDENS ACTIVE DIRECTORIES */}
@@ -507,22 +470,6 @@ function HostelsPage() {
 }
 
 /* ---------- UI SUBCOMPONENTS ---------- */
-
-function TabBtn({ label, active, onClick, icon: Icon }: any) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-300 shrink-0 active:scale-95 border cursor-pointer ${
-        active
-          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow shadow-indigo-500/20"
-          : "bg-white border-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-50/50 hover:shadow-sm"
-      }`}
-    >
-      {Icon && <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? "text-white" : "text-slate-400"}`} />}
-      <span>{label}</span>
-    </button>
-  );
-}
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (

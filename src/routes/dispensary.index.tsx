@@ -23,8 +23,6 @@ import {
   Sparkles, 
   Coffee, 
   Phone,
-  Lock,
-  Save,
   Camera,
   Trash2,
   Plus,
@@ -32,6 +30,16 @@ import {
   CalendarDays,
   ShieldAlert
 } from "lucide-react";
+import { LocalSubNav } from "@/components/LocalSubNav";
+import {
+  AdminModeBanner,
+  AdminPanel,
+  AdminField,
+  AdminInput,
+  AdminTextarea,
+  AdminSaveButton,
+  AdminAddRow,
+} from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/dispensary/")({
   loader: async () => await getDispensaryData(),
@@ -112,14 +120,7 @@ function DispensaryPage() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-800 pb-24">
-      {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
-          <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
-          <span>Dispensary Control Panel CMS Live</span>
-          <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
-          <span className="hidden md:block text-amber-100 normal-case italic font-medium">Real-time alignment activated. Perform edits via standard fields.</span>
-        </div>
-      )}
+      {isEditMode && <AdminModeBanner label="Dispensary Control Panel — Live Edit" />}
 
       <PageHero
         title="University Dispensary"
@@ -129,14 +130,16 @@ function DispensaryPage() {
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
         
-        {/* TAB SYSTEM NAV */}
-        <div className="w-full flex justify-center mb-12 md:mb-16">
-          <div className="flex items-center gap-2 p-1.5 bg-slate-200/60 backdrop-blur-sm rounded-[24px] overflow-x-auto no-scrollbar max-w-full pb-1.5 md:pb-1.5">
-            <TabBtn label="Doctors & Officers" active={tab === "Doctors"} onClick={() => setTab("Doctors")} icon={User} />
-            <TabBtn label="Facilities & Medicines" active={tab === "Facilities"} onClick={() => setTab("Facilities")} icon={Sparkles} />
-            <TabBtn label="Supporting Staff" active={tab === "Supporting Staff"} onClick={() => setTab("Supporting Staff")} icon={Building} />
-          </div>
-        </div>
+        {/* DYNAMIC SYSTEM NAV - Premium consistent tabs */}
+        <LocalSubNav
+          activeTab={tab}
+          setActiveTab={setTab as (tab: string) => void}
+          items={[
+            { label: "Doctors", icon: User },
+            { label: "Facilities", icon: Sparkles },
+            { label: "Supporting Staff", icon: Building },
+          ]}
+        />
 
         <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
           
@@ -197,33 +200,32 @@ function DispensaryPage() {
                 title="Medical Directorate In-Charge" 
                 icon={User}
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
-              >
-                {isEditMode ? (
-                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.3s]">
-                    <div className="w-32 h-32 bg-slate-100 border-2 border-amber-200 rounded-[32px] overflow-hidden relative group shadow-sm">
+              >              {isEditMode ? (
+                <AdminPanel>
+                  <div className="flex flex-col md:flex-row gap-6 items-start">
+                    <div className="w-24 h-24 bg-slate-100 border-2 border-amber-200 rounded-2xl overflow-hidden relative group shadow-sm shrink-0">
                       <img src={editInfo.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"} className="w-full h-full object-cover" />
-                      <input 
+                      <input
                         placeholder="Photo URL"
                         value={editInfo.img}
-                        onChange={(e)=>setEditInfo({...editInfo, img:e.target.value})}
-                        className="absolute inset-0 opacity-0 bg-amber-950/80 backdrop-blur focus:opacity-100 group-hover:opacity-100 outline-none text-white text-[9px] font-black p-2 text-center cursor-pointer"
+                        onChange={(e) => setEditInfo({...editInfo, img: e.target.value})}
+                        className="absolute inset-0 opacity-0 bg-amber-950/80 focus:opacity-100 group-hover:opacity-100 outline-none text-white text-[9px] font-black p-2 text-center cursor-pointer transition"
                       />
                     </div>
-                    <div className="flex-1 space-y-4 w-full">
-                      <div>
-                        <label className="text-[9px] font-black text-amber-800 uppercase">Director Name</label>
-                        <input value={editInfo.hodName} onChange={(e)=>setEditInfo({...editInfo, hodName:e.target.value})} className="w-full border bg-white text-xs font-bold p-2.5 rounded-xl" />
-                      </div>
-                      <div>
-                        <label className="text-[9px] font-black text-amber-800 uppercase">Desk Notice Message</label>
-                        <textarea value={editInfo.message} onChange={(e)=>setEditInfo({...editInfo, message:e.target.value})} className="w-full h-24 border bg-white text-xs font-medium p-2.5 rounded-xl outline-none" />
-                      </div>
+                    <div className="flex-1 space-y-3 w-full">
+                      <AdminField label="Director Name">
+                        <AdminInput value={editInfo.hodName} onChange={(e) => setEditInfo({...editInfo, hodName: e.target.value})} placeholder="e.g. Dr. K. Ramesh" />
+                      </AdminField>
+                      <AdminField label="Notice / Message">
+                        <AdminTextarea value={editInfo.message} onChange={(e) => setEditInfo({...editInfo, message: e.target.value})} rows={3} placeholder="Desk notice message…" />
+                      </AdminField>
                       <div className="flex justify-end">
-                        <button onClick={handleSaveInfo} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-amber-950 font-black px-6 py-3 rounded-xl text-xs uppercase shadow active:scale-95 cursor-pointer transition"><Save className="w-4 h-4"/> Store Officer Profile</button>
+                        <AdminSaveButton onClick={handleSaveInfo} label="Save Profile" />
                       </div>
                     </div>
                   </div>
-                ) : (
+                </AdminPanel>
+              ) : (
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
                     <img
                       src={data?.info?.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
@@ -341,22 +343,6 @@ function DispensaryPage() {
 }
 
 /* ---------- SHARED WIDGET COMPONENTS ---------- */
-
-function TabBtn({ label, active, onClick, icon: Icon }: any) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2.5 px-6 py-3.5 rounded-[18px] font-bold text-sm transition duration-500 shrink-0 active:scale-95 border shadow-sm cursor-pointer ${
-        active
-          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow-md"
-          : "bg-white border-transparent text-slate-500 hover:text-slate-900 hover:bg-slate-50"
-      }`}
-    >
-      {Icon && <Icon className="w-4.5 h-4.5 shrink-0" />}
-      <span>{label}</span>
-    </button>
-  );
-}
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (
@@ -487,15 +473,15 @@ function PeopleRegistryEditable({ data, roleType, isEdit, onRefetch }: any) {
         </div>
       )}
 
-      <div className="overflow-x-auto no-scrollbar border border-slate-200/60 rounded-[24px]">
-        <table className="w-full border-collapse text-left font-bold text-[14px] text-slate-850 min-w-[700px]">
+      <div className="overflow-x-auto border border-slate-200/60 rounded-[24px]">
+        <table className="w-full border-collapse text-left font-bold text-[14px] text-slate-850">
           <thead>
             <tr className="bg-slate-50 border-b text-slate-400 text-[10px] font-black uppercase tracking-wider">
-              <th className="py-4 px-6">Medical Officer</th>
-              <th className="py-4 px-6">Degrees / Ranks</th>
-              <th className="py-4 px-6">Clinical Active Shifts</th>
-              <th className="py-4 px-6">Emergency Contact</th>
-              {isEdit && <th className="py-4 px-6 text-center w-16">Action</th>}
+              <th className="py-3.5 px-4">Medical Officer</th>
+              <th className="py-3.5 px-4">Degrees / Ranks</th>
+              <th className="py-3.5 px-4">Active Shifts</th>
+              <th className="py-3.5 px-4">Contact</th>
+              {isEdit && <th className="py-3.5 px-4 text-center w-12">Del</th>}
             </tr>
           </thead>
           <tbody className="divide-y text-slate-800">
@@ -504,32 +490,34 @@ function PeopleRegistryEditable({ data, roleType, isEdit, onRefetch }: any) {
             ) : (
               data.map((p: any, idx: number)=>(
                 <tr key={p.id || idx} className="hover:bg-slate-50/40 transition">
-                  <td className="py-4 px-6 font-extrabold text-slate-950">
-                    <div className="flex items-center gap-3">
+                  <td className="py-3.5 px-4 font-extrabold text-slate-950">
+                    <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
                         {p.img ? <img src={p.img} className="w-full h-full object-cover" /> : <div className="text-[11px] font-black text-slate-400 uppercase">{p.name?.[0]}</div>}
                       </div>
-                      {isEdit ? <InlineCellEdit val={p.name} onCommit={async (n)=>{ await updatePerson({data:{...p, name:n}}); onRefetch(); }} /> : p.name}
+                      {isEdit ? <InlineCellEdit val={p.name} onCommit={async (n)=>{ await updatePerson({data:{...p, name:n}}); onRefetch(); }} /> : <span className="truncate">{p.name}</span>}
                     </div>
                   </td>
-                  <td className="py-4 px-6 font-bold text-slate-600">
+                  <td className="py-3.5 px-4 font-bold text-slate-600">
                     {isEdit ? <InlineCellEdit val={p.qualification || ""} onCommit={async (n)=>{ await updatePerson({data:{...p, qualification:n}}); onRefetch(); }} /> : <span className="inline-flex bg-slate-100 border px-2 py-0.5 rounded text-[11px] uppercase tracking-wider font-black">{p.qualification || "N/A"}</span>}
                   </td>
-                  <td className="py-4 px-6 text-slate-500 flex items-center gap-1.5">
-                    <CalendarDays className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    {isEdit ? <InlineCellEdit val={p.workingHours || ""} onCommit={async (n)=>{ await updatePerson({data:{...p, workingHours:n}}); onRefetch(); }} /> : <span>{p.workingHours || "General"}</span>}
+                  <td className="py-3.5 px-4 text-slate-500">
+                    <div className="flex items-center gap-1.5">
+                      <CalendarDays className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      {isEdit ? <InlineCellEdit val={p.workingHours || ""} onCommit={async (n)=>{ await updatePerson({data:{...p, workingHours:n}}); onRefetch(); }} /> : <span>{p.workingHours || "General"}</span>}
+                    </div>
                   </td>
-                  <td className="py-4 px-6">
+                  <td className="py-3.5 px-4">
                     {isEdit ? (
                       <InlineCellEdit val={p.contact || ""} onCommit={async (n)=>{ await updatePerson({data:{...p, contact:n}}); onRefetch(); }} />
                     ) : p.contact ? (
-                      <a href={`tel:${p.contact}`} className="inline-flex items-center gap-1.5 font-black text-[oklch(0.42_0.18_265)] bg-indigo-50 px-3 py-1 rounded-xl border border-indigo-100 shadow-sm hover:bg-indigo-100 transition">
-                        <Phone className="w-3.5 h-3.5" /> {p.contact}
+                      <a href={`tel:${p.contact}`} className="inline-flex items-center gap-1.5 font-black text-[oklch(0.42_0.18_265)] bg-indigo-50 px-2.5 py-1 rounded-xl border border-indigo-100 shadow-sm hover:bg-indigo-100 transition text-[12px]">
+                        <Phone className="w-3 h-3" /> {p.contact}
                       </a>
                     ) : <span className="text-slate-300 italic font-medium">[Null]</span>}
                   </td>
                   {isEdit && (
-                    <td className="py-4 px-6 text-center">
+                    <td className="py-3.5 px-4 text-center">
                       <button onClick={()=>handleDelete(p.id)} className="w-8 h-8 text-slate-300 hover:text-rose-600 hover:bg-rose-50 rounded-xl inline-grid place-items-center transition active:scale-90 cursor-pointer"><Trash2 className="w-4 h-4"/></button>
                     </td>
                   )}

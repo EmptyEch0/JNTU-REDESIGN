@@ -27,6 +27,7 @@ import {
   Trash2,
   RefreshCw,
 } from "lucide-react";
+import { LocalSubNav } from "@/components/LocalSubNav";
 
 export const Route = createFileRoute("/engineering-cell")({
   loader: async () => await getEngineeringData(),
@@ -139,14 +140,16 @@ function EngineeringCellPage() {
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
         
         {/* SYSTEM NAVIGATION TABS - Sleeker clean UI */}
-        <div className="w-full flex justify-center mb-8 md:mb-12">
-          <div className="flex items-center gap-2 p-2 bg-white/80 border border-slate-200/80 backdrop-blur-md rounded-2xl shadow-sm overflow-x-auto no-scrollbar max-w-full">
-            <TabBtn label="Overview" active={tab === "Overview"} onClick={() => setTab("Overview")} icon={Building} />
-            <TabBtn label="Construction" active={tab === "Construction Activities"} onClick={() => setTab("Construction Activities")} icon={Hammer} />
-            <TabBtn label="Electrical" active={tab === "PE (Elec) Section"} onClick={() => setTab("PE (Elec) Section")} icon={Zap} />
-            <TabBtn label="Vision / Mission" active={tab === "Vision & Mission"} onClick={() => setTab("Vision & Mission")} icon={Eye} />
-          </div>
-        </div>
+        <LocalSubNav
+          activeTab={tab}
+          setActiveTab={setTab}
+          items={[
+            { label: "Overview", icon: Building },
+            { label: "Construction Activities", icon: Hammer },
+            { label: "PE (Elec) Section", icon: Zap },
+            { label: "Vision & Mission", icon: Eye },
+          ]}
+        />
 
         <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
           
@@ -356,22 +359,6 @@ function EngineeringCellPage() {
 }
 
 /* ---------- BUTTONS AND LAYOUT WRAPPERS ---------- */
-
-function TabBtn({ label, active, onClick, icon: Icon }: any) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-300 shrink-0 active:scale-95 border cursor-pointer ${
-        active
-          ? "bg-[oklch(0.42_0.18_265)] text-white border-transparent shadow shadow-indigo-500/20"
-          : "bg-white border-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-50/50 hover:shadow-sm"
-      }`}
-    >
-      {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
-      <span>{label}</span>
-    </button>
-  );
-}
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (

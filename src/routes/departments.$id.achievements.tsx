@@ -1,7 +1,8 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { Trophy, Medal, Star, Rocket, GraduationCap, Plus, Trash2, Save, Type, Calendar, BookOpen } from "lucide-react";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAdmin } from "@/context/AdminContext";
+import { type DepartmentData } from "@/functions/departments";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { syncAchievements } from "@/lib/departments";
 import { toast } from "sonner";
@@ -11,9 +12,16 @@ export const Route = createFileRoute("/departments/$id/achievements")({
 });
 
 function AchievementsPage() {
-  const data = useLoaderData({ from: "/departments/$id" }) as any;
-  const { isEditMode } = useAdmin();
+  const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id/achievements" });
+  
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+  
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
 
   // Local state for all achievements (un-grouped for easy editing)
   const [list, setList] = useState<any[]>(data?.achievements || []);

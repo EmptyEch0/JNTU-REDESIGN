@@ -1,4 +1,4 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
 import { 
   BookOpen, 
@@ -23,8 +23,15 @@ export const Route = createFileRoute("/departments/$id/courses")({
 
 function ProgrammesPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id/courses" });
+  
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+  
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
 
   const [courseList, setCourseList] = useState<any[]>(data?.courses || []);
 

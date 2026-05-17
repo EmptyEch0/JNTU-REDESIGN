@@ -90,13 +90,14 @@ import { Route as AdministrationIqacIndexRouteImport } from './routes/administra
 import { Route as DepartmentsIdLabsRouteImport } from './routes/departments.$id.labs'
 import { Route as DepartmentsIdHodRouteImport } from './routes/departments.$id.hod'
 import { Route as DepartmentsIdGalleryRouteImport } from './routes/departments.$id.gallery'
-import { Route as DepartmentsIdFacultyRouteImport } from './routes/departments.$id.faculty'
 import { Route as DepartmentsIdCoursesRouteImport } from './routes/departments.$id.courses'
 import { Route as DepartmentsIdAchievementsRouteImport } from './routes/departments.$id.achievements'
 import { Route as AdministrationIqacMousRouteImport } from './routes/administration.iqac.mous'
 import { Route as AdministrationIqacMeetingsRouteImport } from './routes/administration.iqac.meetings'
 import { Route as AdministrationIqacCompositionRouteImport } from './routes/administration.iqac.composition'
 import { Route as AdministrationIqacAqarRouteImport } from './routes/administration.iqac.aqar'
+import { Route as DepartmentsIdFacultyIndexRouteImport } from './routes/departments.$id.faculty/index'
+import { Route as DepartmentsIdFacultyFacultyIdRouteImport } from './routes/departments.$id.faculty/$facultyId'
 
 const WomenEmpowermentRoute = WomenEmpowermentRouteImport.update({
   id: '/women-empowerment',
@@ -512,11 +513,6 @@ const DepartmentsIdGalleryRoute = DepartmentsIdGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => DepartmentsIdRoute,
 } as any)
-const DepartmentsIdFacultyRoute = DepartmentsIdFacultyRouteImport.update({
-  id: '/faculty',
-  path: '/faculty',
-  getParentRoute: () => DepartmentsIdRoute,
-} as any)
 const DepartmentsIdCoursesRoute = DepartmentsIdCoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
@@ -550,6 +546,18 @@ const AdministrationIqacAqarRoute = AdministrationIqacAqarRouteImport.update({
   path: '/aqar',
   getParentRoute: () => AdministrationIqacRoute,
 } as any)
+const DepartmentsIdFacultyIndexRoute =
+  DepartmentsIdFacultyIndexRouteImport.update({
+    id: '/faculty/',
+    path: '/faculty/',
+    getParentRoute: () => DepartmentsIdRoute,
+  } as any)
+const DepartmentsIdFacultyFacultyIdRoute =
+  DepartmentsIdFacultyFacultyIdRouteImport.update({
+    id: '/faculty/$facultyId',
+    path: '/faculty/$facultyId',
+    getParentRoute: () => DepartmentsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -634,12 +642,13 @@ export interface FileRoutesByFullPath {
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
-  '/departments/$id/faculty': typeof DepartmentsIdFacultyRoute
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
   '/administration/iqac/': typeof AdministrationIqacIndexRoute
   '/departments/$id/': typeof DepartmentsIdIndexRoute
+  '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
+  '/departments/$id/faculty/': typeof DepartmentsIdFacultyIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -715,12 +724,13 @@ export interface FileRoutesByTo {
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
-  '/departments/$id/faculty': typeof DepartmentsIdFacultyRoute
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
   '/administration/iqac': typeof AdministrationIqacIndexRoute
   '/departments/$id': typeof DepartmentsIdIndexRoute
+  '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
+  '/departments/$id/faculty': typeof DepartmentsIdFacultyIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -806,12 +816,13 @@ export interface FileRoutesById {
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
-  '/departments/$id/faculty': typeof DepartmentsIdFacultyRoute
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
   '/administration/iqac/': typeof AdministrationIqacIndexRoute
   '/departments/$id/': typeof DepartmentsIdIndexRoute
+  '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
+  '/departments/$id/faculty/': typeof DepartmentsIdFacultyIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -898,12 +909,13 @@ export interface FileRouteTypes {
     | '/administration/iqac/mous'
     | '/departments/$id/achievements'
     | '/departments/$id/courses'
-    | '/departments/$id/faculty'
     | '/departments/$id/gallery'
     | '/departments/$id/hod'
     | '/departments/$id/labs'
     | '/administration/iqac/'
     | '/departments/$id/'
+    | '/departments/$id/faculty/$facultyId'
+    | '/departments/$id/faculty/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -979,12 +991,13 @@ export interface FileRouteTypes {
     | '/administration/iqac/mous'
     | '/departments/$id/achievements'
     | '/departments/$id/courses'
-    | '/departments/$id/faculty'
     | '/departments/$id/gallery'
     | '/departments/$id/hod'
     | '/departments/$id/labs'
     | '/administration/iqac'
     | '/departments/$id'
+    | '/departments/$id/faculty/$facultyId'
+    | '/departments/$id/faculty'
   id:
     | '__root__'
     | '/'
@@ -1069,12 +1082,13 @@ export interface FileRouteTypes {
     | '/administration/iqac/mous'
     | '/departments/$id/achievements'
     | '/departments/$id/courses'
-    | '/departments/$id/faculty'
     | '/departments/$id/gallery'
     | '/departments/$id/hod'
     | '/departments/$id/labs'
     | '/administration/iqac/'
     | '/departments/$id/'
+    | '/departments/$id/faculty/$facultyId'
+    | '/departments/$id/faculty/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1677,13 +1691,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsIdGalleryRouteImport
       parentRoute: typeof DepartmentsIdRoute
     }
-    '/departments/$id/faculty': {
-      id: '/departments/$id/faculty'
-      path: '/faculty'
-      fullPath: '/departments/$id/faculty'
-      preLoaderRoute: typeof DepartmentsIdFacultyRouteImport
-      parentRoute: typeof DepartmentsIdRoute
-    }
     '/departments/$id/courses': {
       id: '/departments/$id/courses'
       path: '/courses'
@@ -1725,6 +1732,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/administration/iqac/aqar'
       preLoaderRoute: typeof AdministrationIqacAqarRouteImport
       parentRoute: typeof AdministrationIqacRoute
+    }
+    '/departments/$id/faculty/': {
+      id: '/departments/$id/faculty/'
+      path: '/faculty'
+      fullPath: '/departments/$id/faculty/'
+      preLoaderRoute: typeof DepartmentsIdFacultyIndexRouteImport
+      parentRoute: typeof DepartmentsIdRoute
+    }
+    '/departments/$id/faculty/$facultyId': {
+      id: '/departments/$id/faculty/$facultyId'
+      path: '/faculty/$facultyId'
+      fullPath: '/departments/$id/faculty/$facultyId'
+      preLoaderRoute: typeof DepartmentsIdFacultyFacultyIdRouteImport
+      parentRoute: typeof DepartmentsIdRoute
     }
   }
 }
@@ -1931,21 +1952,23 @@ const WomenEmpowermentRouteWithChildren =
 interface DepartmentsIdRouteChildren {
   DepartmentsIdAchievementsRoute: typeof DepartmentsIdAchievementsRoute
   DepartmentsIdCoursesRoute: typeof DepartmentsIdCoursesRoute
-  DepartmentsIdFacultyRoute: typeof DepartmentsIdFacultyRoute
   DepartmentsIdGalleryRoute: typeof DepartmentsIdGalleryRoute
   DepartmentsIdHodRoute: typeof DepartmentsIdHodRoute
   DepartmentsIdLabsRoute: typeof DepartmentsIdLabsRoute
   DepartmentsIdIndexRoute: typeof DepartmentsIdIndexRoute
+  DepartmentsIdFacultyFacultyIdRoute: typeof DepartmentsIdFacultyFacultyIdRoute
+  DepartmentsIdFacultyIndexRoute: typeof DepartmentsIdFacultyIndexRoute
 }
 
 const DepartmentsIdRouteChildren: DepartmentsIdRouteChildren = {
   DepartmentsIdAchievementsRoute: DepartmentsIdAchievementsRoute,
   DepartmentsIdCoursesRoute: DepartmentsIdCoursesRoute,
-  DepartmentsIdFacultyRoute: DepartmentsIdFacultyRoute,
   DepartmentsIdGalleryRoute: DepartmentsIdGalleryRoute,
   DepartmentsIdHodRoute: DepartmentsIdHodRoute,
   DepartmentsIdLabsRoute: DepartmentsIdLabsRoute,
   DepartmentsIdIndexRoute: DepartmentsIdIndexRoute,
+  DepartmentsIdFacultyFacultyIdRoute: DepartmentsIdFacultyFacultyIdRoute,
+  DepartmentsIdFacultyIndexRoute: DepartmentsIdFacultyIndexRoute,
 }
 
 const DepartmentsIdRouteWithChildren = DepartmentsIdRoute._addFileChildren(

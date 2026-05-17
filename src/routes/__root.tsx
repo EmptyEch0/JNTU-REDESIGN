@@ -5,6 +5,7 @@ import {
   HeadContent,
   Scripts,
   useRouterState,
+  useMatch,
 } from "@tanstack/react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
 import appCss from "../styles.css?url";
@@ -35,7 +36,6 @@ interface MyRootContext {
 
 // 2. The most stable way to define the route with types
 export const Route = createRootRoute({
-  // This "context" function tells the router what to expect
   context: () => ({}) as MyRootContext,
   head: () => ({
     meta: [
@@ -86,7 +86,6 @@ export const Route = createRootRoute({
   notFoundComponent: NotFoundComponent,
 });
 
-// 3. Keep this here so the 'useRouteContext' hook works
 declare module "@tanstack/react-router" {
   interface StaticDataRouteContext extends MyRootContext {}
 }
@@ -106,7 +105,6 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  // Use a type assertion 'as MyRootContext' to force TypeScript to recognize queryClient
   const { queryClient } = Route.useRouteContext() as MyRootContext;
 
   return (
@@ -119,8 +117,39 @@ function RootComponent() {
 }
 
 function AdminContent() {
+  // 1. Safely pull the active pathname string
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const { isAdmin, isEditMode, toggleEditMode, logout } = useAdmin();
+
+  const { 
+    isAdmin, 
+    isEditMode, 
+    setGlobalEditMode, 
+    isDeptEditing, 
+    setDeptEditing,
+    hasEditPermission, 
+    logout 
+  } = useAdmin();
+
+  // 2. Identify if the user is actively viewing a department sub-route
+  const pathSegments = path.split("/").filter(Boolean); // e.g., ["departments", "cse"]
+  const isDepartmentPage = pathSegments[0] === "departments" && pathSegments[1];
+  
+  // The unique identifier for our department matching lookup maps (e.g., "cse", "it")
+  const activeDepartmentId = isDepartmentPage ? pathSegments[1] : undefined;
+  
+  // 3. Compute edit permissions based on the active path parameters string
+  const currentEditActive = (isDepartmentPage && activeDepartmentId)
+    ? isDeptEditing(activeDepartmentId) 
+    : isEditMode;
+
+  const handleEditToggleClick = () => {
+    if (isDepartmentPage && activeDepartmentId) {
+      if (!hasEditPermission(activeDepartmentId)) return;
+      setDeptEditing(activeDepartmentId, !currentEditActive);
+    } else {
+      setGlobalEditMode(!currentEditActive);
+    }
+  };
 
   return (
     <div className={`min-h-screen flex flex-col ${isAdmin ? "pt-12" : ""} w-full max-w-full overflow-x-hidden`}>
@@ -128,49 +157,43 @@ function AdminContent() {
         <div className="fixed top-0 left-0 right-0 h-12 bg-black text-white px-4 md:px-6 flex items-center justify-between z-[100] shadow-lg overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-3 md:gap-6 shrink-0">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                Admin
-              </span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Admin</span>
               <span className="text-xs font-medium hidden sm:inline">Dashboard</span>
             </div>
-
-            <button
-              onClick={toggleEditMode}
+            
+            <button 
+              onClick={handleEditToggleClick} 
               className={`flex items-center gap-2 px-2.5 py-1 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-wider transition-all border shrink-0 ${
-                isEditMode
-                  ? "bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]"
+                currentEditActive 
+                  ? "bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]" 
                   : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500"
               }`}
             >
-              <div
-                className={`w-1.5 h-1.5 rounded-full ${isEditMode ? "bg-primary animate-pulse" : "bg-zinc-600"}`}
-              />
-              <span>{isEditMode ? "Editing Active" : "Edit Mode"}</span>
+              <div className={`w-1.5 h-1.5 rounded-full ${currentEditActive ? "bg-primary animate-pulse" : "bg-zinc-600"}`} />
+              <span>{currentEditActive ? "Editing Active" : "Edit Mode"}</span>
             </button>
           </div>
           
-
           <div className="flex items-center gap-4 md:gap-6 shrink-0 ml-4">
-            <Link
-              to="/admin/placements"
-              className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0"
-            >
-              Placements
-            </Link>
+            <Link to="/admin/placements" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Placements</Link>
             
-            <button
-              onClick={logout}
+            <Link 
+              to="/" 
+              onClick={() => logout()} 
               className="text-[10px] md:text-[11px] font-semibold text-zinc-400 hover:text-white transition-colors shrink-0"
             >
               Logout
-            </button>
+            </Link>
           </div>
         </div>
       )}
+
       <MegaMenu />
+
       <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out] w-full max-w-full overflow-x-hidden">
         <Outlet />
       </main>
+      
       <Footer />
     </div>
   );

@@ -1021,6 +1021,7 @@ export const departments = pgTable("departments", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   slug: text("slug").notNull(),
+  hod_password: text("hod_password").default("hod@jntu"),
   hod: text("hod"),
   description: text("description"),
   image: text("image"),
@@ -1035,13 +1036,35 @@ export const departments = pgTable("departments", {
 
 export const faculty = pgTable("faculty", {
   id: serial("id").primaryKey(),
-  dept_id: uuid("dept_id").references(() => departments.id, { onDelete: 'cascade' }),
+  dept_id: uuid("dept_id").references(() => departments.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   designation: text("designation"),
   photo_url: text("photo_url"),
   profile_link: text("profile_link"),
-  specialization: text("specialization"),
-});
+  biography: text("biography").default(""),
+  
+  // Section 1: Profile Details
+  qualifications: text("qualifications").array().default([]),
+  specialization: text("specialization").default(""),
+  experience_years: integer("experience_years").default(0),
+
+  // Section 2: Achievements
+  awards: text("awards").array().default([]),
+  fellowships: text("fellowships").array().default([]),
+  professional_memberships: text("professional_memberships").array().default([]),
+
+  // Section 3: Exchange & Sabbaticals
+  international_exchanges: text("international_exchanges").array().default([]),
+  sabbaticals: text("sabbaticals").array().default([]),
+
+  // Section 4: Consultancy Assignments
+  consultancy_projects: jsonb("consultancy_projects").default([]),
+
+  // Section 5: Professional Development
+  fdps_attended: text("fdps_attended").array().default([]),
+  conferences_attended: text("conferences_attended").array().default([]),
+  workshops_completed: text("workshops_completed").array().default([]),
+})
 
 export const achievements = pgTable("achievements", {
   id: uuid("id").primaryKey().defaultRandom(),

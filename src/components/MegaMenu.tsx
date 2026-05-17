@@ -498,7 +498,7 @@ export function MegaMenu() {
           )}
         </div>
       </div>
-      {!searchOpen && <NoticeTicker />}
+      {!searchOpen && path === "/" && <NoticeTicker />}
     </header>
   );
 }

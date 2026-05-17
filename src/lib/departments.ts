@@ -3,7 +3,7 @@ import { db } from "../db";
 import { departments, faculty, achievements, courses, laboratories, departmentGallery } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-
+import bcrypt from "bcryptjs";
 // --- Department Core ---
 export const getDepartments = createServerFn({ method: "GET" }).handler(async () => {
   return await db.select().from(departments);
@@ -233,4 +233,67 @@ export const deleteFromGallery = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     await db.delete(departmentGallery).where(eq(departmentGallery.id, data));
     return { success: true };
+  });
+
+  export const updateFacultyProfile = createServerFn({ method: "POST" })
+  .inputValidator((d: { facultyId: string | number; profileData: any }) => d)
+  .handler(async ({ data }) => {
+    const { facultyId, profileData } = data;
+
+    await db
+      .update(faculty)
+      .set({
+        name: profileData.name,
+        designation: profileData.designation,
+        photo_url: profileData.photo_url,
+        specialization: profileData.specialization,
+        experience_years: parseInt(profileData.experience_years) || 0,
+        qualifications: profileData.qualifications,
+        awards: profileData.awards,
+        fellowships: profileData.fellowships,
+        professional_memberships: profileData.professional_memberships,
+        international_exchanges: profileData.international_exchanges,
+        sabbaticals: profileData.sabbaticals,
+        consultancy_projects: profileData.consultancy_projects,
+        fdps_attended: profileData.fdps_attended,
+        conferences_attended: profileData.conferences_attended,
+      })
+      .where(eq(faculty.id, Number(facultyId)));
+
+    return { success: true };
+  });
+
+  export const verifyDepartmentAccess = createServerFn({ method: "POST" })
+  .inputValidator((d: { deptId: string; password: string }) => d)
+  .handler(async ({ data }) => {
+    const { deptId, password } = data;
+
+    // 1. Guard Rule: Explicitly reject the admin password here
+    if (password === "jntu@2026") {
+      return { valid: false, role: null };
+    }
+
+    // 2. Fetch the department record string directly by its UUID
+    const [dept] = await db
+      .select({ hod_password: departments.hod_password })
+      .from(departments)
+      .where(eq(departments.id, deptId))
+      .limit(1);
+
+    // If the department doesn't exist or doesn't have a password set, reject access
+    if (!dept || !dept.hod_password) {
+      return { valid: false, role: null };
+    }
+
+    // 3. CRYPTOGRAPHIC MATCH VALIDATION
+    // Since Bcrypt hashes contain random salts, you cannot use "===" to compare strings.
+    // Instead, bcrypt.compare will securely hash the user's typed input and verify if it matches the pattern of the stored hash.
+    const isPasswordMatch = await bcrypt.compare(password, dept.hod_password);
+
+    if (isPasswordMatch) {
+      return { valid: true, role: "hod" };
+    }
+
+    // Fallback: Access Denied
+    return { valid: false, role: null };
   });

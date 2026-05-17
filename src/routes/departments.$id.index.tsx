@@ -1,5 +1,6 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { type DepartmentData, updateDepartment } from "@/lib/departments";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
+import {updateDepartment } from "@/lib/departments";
+import { type DepartmentData } from "@/functions/departments";
 import { Target, Lightbulb, BookOpenText, Save } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 import { useState, useEffect } from "react";
@@ -12,8 +13,15 @@ export const Route = createFileRoute("/departments/$id/")({
 
 function AboutPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id" });
+  
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+  
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
 
   // Local state to track edits before saving
   const [editData, setEditData] = useState<Partial<DepartmentData>>({});

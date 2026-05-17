@@ -1,4 +1,4 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
 import { updateDepartment } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
@@ -23,8 +23,15 @@ export const Route = createFileRoute("/departments/$id/hod")({
 
 function HodPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id/hod" });
+  
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+  
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
 
   // Local state for editing HOD details
   const [editData, setEditData] = useState({
@@ -161,7 +168,6 @@ function HodPage() {
                         <Mail size={18} />
                         <span className="font-medium">Email HOD</span>
                       </a>
-
                     )}
                     <p className="text-xs text-slate-400 mt-3 break-all">{data.hod_contact}</p>
                   </div>

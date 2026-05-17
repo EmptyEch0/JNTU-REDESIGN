@@ -1,19 +1,26 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Camera, Maximize2, X, Plus, Trash2, Save, Image as ImageIcon, Type, Tag, AlignLeft } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { syncGallery } from "@/lib/departments";
 import { toast } from "sonner";
-
+import { type DepartmentData } from "@/functions/departments";
 export const Route = createFileRoute("/departments/$id/gallery")({
   component: GalleryPage,
 });
 
 function GalleryPage() {
-  const data = useLoaderData({ from: "/departments/$id" }) as any;
-  const { isEditMode } = useAdmin();
+  const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id/gallery" });
+  
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+  
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
 
   const [galleryList, setGalleryList] = useState<any[]>(data?.gallery || []);
   const [activeFilter, setActiveFilter] = useState("All");

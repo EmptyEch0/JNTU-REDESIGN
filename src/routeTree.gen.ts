@@ -67,13 +67,13 @@ import { Route as AdministrationPrincipalRouteImport } from './routes/administra
 import { Route as AdministrationIqacRouteImport } from './routes/administration.iqac'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
 import { Route as AdminDepartmentsRouteImport } from './routes/admin.departments'
-import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
+import { Route as AcademicsTimetablesRouteImport } from './routes/academics/timetables'
 import { Route as AcademicsSyllabusRouteImport } from './routes/academics/syllabus'
 import { Route as AcademicsScholarshipsRouteImport } from './routes/academics/scholarships'
 import { Route as AcademicsRegulationsRouteImport } from './routes/academics/regulations'
 import { Route as AcademicsProgramsRouteImport } from './routes/academics/programs'
 import { Route as AcademicsMissionVisionRouteImport } from './routes/academics/mission-vision'
-import { Route as AcademicsHodDeskRouteImport } from './routes/academics/hod-desk'
+import { Route as AcademicsFacultyRouteImport } from './routes/academics/faculty'
 import { Route as AcademicsExaminationRouteImport } from './routes/academics/examination'
 import { Route as AcademicsDownloadsRouteImport } from './routes/academics/downloads'
 import { Route as AcademicsCacRouteImport } from './routes/academics.cac'
@@ -386,18 +386,18 @@ const AdministrationIqacRoute = AdministrationIqacRouteImport.update({
   getParentRoute: () => AdministrationRoute,
 } as any)
 const AdminPlacementsRoute = AdminPlacementsRouteImport.update({
-  id: '/placements',
-  path: '/placements',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/placements',
+  path: '/admin/placements',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDepartmentsRoute = AdminDepartmentsRouteImport.update({
   id: '/admin/departments',
   path: '/admin/departments',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AcademicsTimeTablesRoute = AcademicsTimeTablesRouteImport.update({
-  id: '/time-tables',
-  path: '/time-tables',
+const AcademicsTimetablesRoute = AcademicsTimetablesRouteImport.update({
+  id: '/timetables',
+  path: '/timetables',
   getParentRoute: () => AcademicsRoute,
 } as any)
 const AcademicsSyllabusRoute = AcademicsSyllabusRouteImport.update({
@@ -425,9 +425,9 @@ const AcademicsMissionVisionRoute = AcademicsMissionVisionRouteImport.update({
   path: '/mission-vision',
   getParentRoute: () => AcademicsRoute,
 } as any)
-const AcademicsHodDeskRoute = AcademicsHodDeskRouteImport.update({
-  id: '/hod-desk',
-  path: '/hod-desk',
+const AcademicsFacultyRoute = AcademicsFacultyRouteImport.update({
+  id: '/faculty',
+  path: '/faculty',
   getParentRoute: () => AcademicsRoute,
 } as any)
 const AcademicsExaminationRoute = AcademicsExaminationRouteImport.update({
@@ -578,13 +578,13 @@ export interface FileRoutesByFullPath {
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
   '/academics/examination': typeof AcademicsExaminationRoute
-  '/academics/hod-desk': typeof AcademicsHodDeskRoute
+  '/academics/faculty': typeof AcademicsFacultyRoute
   '/academics/mission-vision': typeof AcademicsMissionVisionRoute
   '/academics/programs': typeof AcademicsProgramsRoute
   '/academics/regulations': typeof AcademicsRegulationsRoute
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
-  '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/academics/timetables': typeof AcademicsTimetablesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
@@ -660,13 +660,13 @@ export interface FileRoutesByTo {
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
   '/academics/examination': typeof AcademicsExaminationRoute
-  '/academics/hod-desk': typeof AcademicsHodDeskRoute
+  '/academics/faculty': typeof AcademicsFacultyRoute
   '/academics/mission-vision': typeof AcademicsMissionVisionRoute
   '/academics/programs': typeof AcademicsProgramsRoute
   '/academics/regulations': typeof AcademicsRegulationsRoute
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
-  '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/academics/timetables': typeof AcademicsTimetablesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/administration/principal': typeof AdministrationPrincipalRoute
@@ -748,13 +748,13 @@ export interface FileRoutesById {
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
   '/academics/examination': typeof AcademicsExaminationRoute
-  '/academics/hod-desk': typeof AcademicsHodDeskRoute
+  '/academics/faculty': typeof AcademicsFacultyRoute
   '/academics/mission-vision': typeof AcademicsMissionVisionRoute
   '/academics/programs': typeof AcademicsProgramsRoute
   '/academics/regulations': typeof AcademicsRegulationsRoute
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
-  '/academics/time-tables': typeof AcademicsTimeTablesRoute
+  '/academics/timetables': typeof AcademicsTimetablesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
@@ -839,13 +839,13 @@ export interface FileRouteTypes {
     | '/academics/cac'
     | '/academics/downloads'
     | '/academics/examination'
-    | '/academics/hod-desk'
+    | '/academics/faculty'
     | '/academics/mission-vision'
     | '/academics/programs'
     | '/academics/regulations'
     | '/academics/scholarships'
     | '/academics/syllabus'
-    | '/academics/time-tables'
+    | '/academics/timetables'
     | '/admin/departments'
     | '/admin/placements'
     | '/administration/iqac'
@@ -921,13 +921,13 @@ export interface FileRouteTypes {
     | '/academics/cac'
     | '/academics/downloads'
     | '/academics/examination'
-    | '/academics/hod-desk'
+    | '/academics/faculty'
     | '/academics/mission-vision'
     | '/academics/programs'
     | '/academics/regulations'
     | '/academics/scholarships'
     | '/academics/syllabus'
-    | '/academics/time-tables'
+    | '/academics/timetables'
     | '/admin/departments'
     | '/admin/placements'
     | '/administration/principal'
@@ -1008,13 +1008,13 @@ export interface FileRouteTypes {
     | '/academics/cac'
     | '/academics/downloads'
     | '/academics/examination'
-    | '/academics/hod-desk'
+    | '/academics/faculty'
     | '/academics/mission-vision'
     | '/academics/programs'
     | '/academics/regulations'
     | '/academics/scholarships'
     | '/academics/syllabus'
-    | '/academics/time-tables'
+    | '/academics/timetables'
     | '/admin/departments'
     | '/admin/placements'
     | '/administration/iqac'
@@ -1089,6 +1089,7 @@ export interface RootRouteChildren {
   SportsRoute: typeof SportsRoute
   WomenEmpowermentRoute: typeof WomenEmpowermentRouteWithChildren
   AdminDepartmentsRoute: typeof AdminDepartmentsRoute
+  AdminPlacementsRoute: typeof AdminPlacementsRoute
   DepartmentsIdRoute: typeof DepartmentsIdRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
@@ -1491,10 +1492,10 @@ declare module '@tanstack/react-router' {
     }
     '/admin/placements': {
       id: '/admin/placements'
-      path: '/placements'
+      path: '/admin/placements'
       fullPath: '/admin/placements'
       preLoaderRoute: typeof AdminPlacementsRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/departments': {
       id: '/admin/departments'
@@ -1503,11 +1504,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDepartmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/academics/time-tables': {
-      id: '/academics/time-tables'
-      path: '/time-tables'
-      fullPath: '/academics/time-tables'
-      preLoaderRoute: typeof AcademicsTimeTablesRouteImport
+    '/academics/timetables': {
+      id: '/academics/timetables'
+      path: '/timetables'
+      fullPath: '/academics/timetables'
+      preLoaderRoute: typeof AcademicsTimetablesRouteImport
       parentRoute: typeof AcademicsRoute
     }
     '/academics/syllabus': {
@@ -1545,11 +1546,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcademicsMissionVisionRouteImport
       parentRoute: typeof AcademicsRoute
     }
-    '/academics/hod-desk': {
-      id: '/academics/hod-desk'
-      path: '/hod-desk'
-      fullPath: '/academics/hod-desk'
-      preLoaderRoute: typeof AcademicsHodDeskRouteImport
+    '/academics/faculty': {
+      id: '/academics/faculty'
+      path: '/faculty'
+      fullPath: '/academics/faculty'
+      preLoaderRoute: typeof AcademicsFacultyRouteImport
       parentRoute: typeof AcademicsRoute
     }
     '/academics/examination': {
@@ -1735,13 +1736,13 @@ interface AcademicsRouteChildren {
   AcademicsCacRoute: typeof AcademicsCacRoute
   AcademicsDownloadsRoute: typeof AcademicsDownloadsRoute
   AcademicsExaminationRoute: typeof AcademicsExaminationRoute
-  AcademicsHodDeskRoute: typeof AcademicsHodDeskRoute
+  AcademicsFacultyRoute: typeof AcademicsFacultyRoute
   AcademicsMissionVisionRoute: typeof AcademicsMissionVisionRoute
   AcademicsProgramsRoute: typeof AcademicsProgramsRoute
   AcademicsRegulationsRoute: typeof AcademicsRegulationsRoute
   AcademicsScholarshipsRoute: typeof AcademicsScholarshipsRoute
   AcademicsSyllabusRoute: typeof AcademicsSyllabusRoute
-  AcademicsTimeTablesRoute: typeof AcademicsTimeTablesRoute
+  AcademicsTimetablesRoute: typeof AcademicsTimetablesRoute
   AcademicsIndexRoute: typeof AcademicsIndexRoute
 }
 
@@ -1751,13 +1752,13 @@ const AcademicsRouteChildren: AcademicsRouteChildren = {
   AcademicsCacRoute: AcademicsCacRoute,
   AcademicsDownloadsRoute: AcademicsDownloadsRoute,
   AcademicsExaminationRoute: AcademicsExaminationRoute,
-  AcademicsHodDeskRoute: AcademicsHodDeskRoute,
+  AcademicsFacultyRoute: AcademicsFacultyRoute,
   AcademicsMissionVisionRoute: AcademicsMissionVisionRoute,
   AcademicsProgramsRoute: AcademicsProgramsRoute,
   AcademicsRegulationsRoute: AcademicsRegulationsRoute,
   AcademicsScholarshipsRoute: AcademicsScholarshipsRoute,
   AcademicsSyllabusRoute: AcademicsSyllabusRoute,
-  AcademicsTimeTablesRoute: AcademicsTimeTablesRoute,
+  AcademicsTimetablesRoute: AcademicsTimetablesRoute,
   AcademicsIndexRoute: AcademicsIndexRoute,
 }
 
@@ -1954,6 +1955,7 @@ const rootRouteChildren: RootRouteChildren = {
   SportsRoute: SportsRoute,
   WomenEmpowermentRoute: WomenEmpowermentRouteWithChildren,
   AdminDepartmentsRoute: AdminDepartmentsRoute,
+  AdminPlacementsRoute: AdminPlacementsRoute,
   DepartmentsIdRoute: DepartmentsIdRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,

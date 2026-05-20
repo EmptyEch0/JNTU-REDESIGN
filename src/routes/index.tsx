@@ -14,6 +14,7 @@ import {
   Mail,
   Phone,
 } from "lucide-react";
+import heroSunrise from "@/assets/hero-college-sunrise.png";
 import heroImg from "@/assets/hero-campus.jpg";
 import hero2 from "@/assets/hero-2.jpg";
 import hero3 from "@/assets/hero-3.jpg";
@@ -23,6 +24,8 @@ import labImg from "@/assets/lab.jpg";
 import hostelImg from "@/assets/hostel.jpg";
 import sportsImg from "@/assets/sports.jpg";
 import libraryImg from "@/assets/library-interior.jpg";
+import { NotificationTicker } from "@/components/academics/ui/NotificationTicker";
+import { TICKER_NOTIFICATIONS } from "@/data/academics-events";
 import cultureImg from "@/assets/culture.jpeg";
 import placementsImg from "@/assets/placements-bg.jpg";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -104,6 +107,7 @@ function HomePage() {
       <section className="relative h-[100svh] min-h-[640px] w-full overflow-hidden">
         <HeroSlideshow
           images={[
+            { src: heroSunrise, alt: "JNTU-GV campus academic hall at sunrise" },
             { src: heroImg, alt: "JNTU-GV campus at golden hour" },
             { src: hero2, alt: "Aerial view of campus at sunset" },
             { src: hero3, alt: "Students walking through campus" },
@@ -145,6 +149,11 @@ function HomePage() {
           <ArrowDown className="h-4 w-4" />
         </div>
       </section>
+
+      {/* Dynamic scrolling notification ticker - slowed down for maximum readability */}
+      <div className="max-w-7xl mx-auto px-4 md:px-8 mt-6">
+        <NotificationTicker items={TICKER_NOTIFICATIONS} speedSeconds={75} />
+      </div>
 
       {/* ABOUT + STATS SPLIT */}
       <section className="py-24 md:py-36 relative">

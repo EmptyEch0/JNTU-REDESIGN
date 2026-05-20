@@ -90,7 +90,7 @@ export const NAV: {
           { label: "Syllabus", to: "/academics/syllabus", desc: "Course-wise curriculum" },
           { label: "Scholarships", to: "/academics/scholarships", desc: "Merit & need-based" },
           { label: "CAC", to: "/academics/cac", desc: "College Academic Committee" },
-          { label: "Time Tables", to: "/academics/time-tables", desc: "Class schedules" },
+          { label: "Time Tables", to: "/academics/timetables", desc: "Class schedules" },
           { label: "Downloads", to: "/academics/downloads", desc: "Forms & documents" },
         ],
       },
@@ -408,7 +408,7 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
     group: "Academics",
     keywords: "college academic committee",
   },
-  { label: "Time Tables", to: "/academics/time-tables", group: "Academics" },
+  { label: "Time Tables", to: "/academics/timetables", group: "Academics" },
   { label: "Downloads", to: "/academics/downloads", group: "Academics" },
 
   {
@@ -500,7 +500,7 @@ export const ACADEMICS_SUBNAV = [
   { label: "Syllabus", to: "/academics/syllabus" },
   { label: "Scholarships", to: "/academics/scholarships" },
   { label: "CAC", to: "/academics/cac" },
-  { label: "Time Tables", to: "/academics/time-tables" },
+  { label: "Time Tables", to: "/academics/timetables" },
   { label: "Downloads", to: "/academics/downloads" },
 ];
 

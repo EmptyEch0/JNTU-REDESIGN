@@ -22,9 +22,9 @@ export function AnnouncementTicker({ announcements }: AnnouncementTickerProps) {
         <Bell className="w-4 h-4 animate-swing" />
         <span>Latest Updates</span>
       </div>
-      
+
       <div className="flex-grow overflow-hidden relative h-full">
-        <motion.div 
+        <motion.div
           className="flex whitespace-nowrap h-full items-center"
           animate={{ x: [0, -1000] }}
           transition={{

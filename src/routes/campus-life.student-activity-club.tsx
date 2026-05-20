@@ -4,7 +4,7 @@ import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { CAMPUS_LIFE_SUBNAV } from "@/lib/site";
 import { getStudentActivityData } from "@/funcs/studentactivity.server";
-import cultureImg from "@/assets/culture.jpg";
+import cultureImg from "@/assets/culture.jpeg";
 import { 
   Building, 
   Sparkles, 

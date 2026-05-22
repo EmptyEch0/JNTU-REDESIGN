@@ -13,8 +13,13 @@ import {
   Briefcase,
   Mail,
   Phone,
+  Eye,
+  Target,
+  Shield,
+  Quote,
+  CheckCircle2,
+  Users,
 } from "lucide-react";
-import heroSunrise from "@/assets/hero-college-sunrise.png";
 import heroImg from "@/assets/hero-campus.jpg";
 import hero2 from "@/assets/hero-2.jpg";
 import hero3 from "@/assets/hero-3.jpg";
@@ -24,8 +29,6 @@ import labImg from "@/assets/lab.jpg";
 import hostelImg from "@/assets/hostel.jpg";
 import sportsImg from "@/assets/sports.jpg";
 import libraryImg from "@/assets/library-interior.jpg";
-import { NotificationTicker } from "@/components/academics/ui/NotificationTicker";
-import { TICKER_NOTIFICATIONS } from "@/data/academics-events";
 import cultureImg from "@/assets/culture.jpeg";
 import placementsImg from "@/assets/placements-bg.jpg";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -34,7 +37,10 @@ import { ParallaxBg } from "@/components/ParallaxBg";
 import { HeroSlideshow } from "@/components/HeroSlideshow";
 import { SectionLabel } from "@/components/SectionLabel";
 import { MarqueeLogos } from "@/components/MarqueeLogos";
-import { STATS, DEPARTMENTS, RECRUITERS } from "@/lib/site";
+import { STATS, RECRUITERS } from "@/lib/site"; // Removed static DEPARTMENTS import
+import { useQuery } from "@tanstack/react-query";
+import { getLeadershipData } from "@/funcs/leadership";
+import { getAllDepartments } from "@/functions/departments"; // Added our new query hook target
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -101,13 +107,23 @@ const FACILITIES = [
 ];
 
 function HomePage() {
+  const { data: principal } = useQuery({
+    queryKey: ["leadership", "principal"],
+    queryFn: () => getLeadershipData({ data: "principal" }),
+  });
+
+  // Pull array dynamically from Neon database
+  const { data: liveDepartments = [], isLoading } = useQuery({
+    queryKey: ["departments", "all"],
+    queryFn: () => getAllDepartments(),
+  });
+
   return (
     <>
       {/* HERO — auto-rotating slideshow */}
       <section className="relative h-[100svh] min-h-[640px] w-full overflow-hidden">
         <HeroSlideshow
           images={[
-            { src: heroSunrise, alt: "JNTU-GV campus academic hall at sunrise" },
             { src: heroImg, alt: "JNTU-GV campus at golden hour" },
             { src: hero2, alt: "Aerial view of campus at sunset" },
             { src: hero3, alt: "Students walking through campus" },
@@ -118,9 +134,13 @@ function HomePage() {
           overlay="linear-gradient(180deg, oklch(0.18 0.05 260 / 0.55) 0%, oklch(0.18 0.05 260 / 0.35) 40%, oklch(0.18 0.05 260 / 0.85) 100%)"
         >
           <div className="container-narrow h-full min-h-[100svh] flex flex-col justify-end pt-32 pb-32 md:pb-36 text-white">
-            <div className="text-eyebrow !text-white/80 animate-[fade-up_0.7s_ease-out_0.3s_both]">
-              <MapPin className="inline h-3 w-3 mr-1.5 -mt-0.5" />
-              Vizianagaram, Andhra Pradesh
+            <div className="text-eyebrow !text-white/80 animate-[fade-up_0.7s_ease-out_0.3s_both] flex items-center gap-3">
+              <span className="flex items-center gap-1.5">
+                <MapPin className="h-3 w-3" />
+                Vizianagaram, AP
+              </span>
+              <span className="h-1 w-1 rounded-full bg-white/30" />
+              <span>Established in 2007</span>
             </div>
             <h1 className="text-display text-5xl sm:text-6xl md:text-8xl mt-4 max-w-5xl animate-[fade-up_0.9s_ease-out_0.5s_both]">
               Engineering tomorrow,
@@ -128,8 +148,8 @@ function HomePage() {
               <span className="italic text-white/85">together.</span>
             </h1>
             <p className="mt-6 text-base md:text-xl text-white/80 max-w-2xl leading-relaxed animate-[fade-up_0.9s_ease-out_0.8s_both]">
-              A constituent college of JNTU-GV — where 1,450 minds learn, build and shape the future
-              of engineering on a campus that lives and breathes ideas.
+              A constituent college of JNTU-GV, approved by AICTE New Delhi, and recognized by UGC
+              under section 2(f) & 12(B) of UGC Act 1956 — shaping the future of engineering since 2007.
             </p>
             <div className="mt-10 flex flex-wrap gap-3 animate-[fade-up_0.9s_ease-out_1s_both]">
               <Link to="/admissions" className="btn-primary">
@@ -150,156 +170,275 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Dynamic scrolling notification ticker - slowed down for maximum readability */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 mt-6">
-        <NotificationTicker items={TICKER_NOTIFICATIONS} speedSeconds={75} />
-      </div>
-
-      {/* ABOUT + STATS SPLIT */}
-      <section className="py-24 md:py-36 relative">
+      {/* ABOUT, VISION & PRINCIPAL SECTION */}
+      <section className="py-20 md:py-28 relative overflow-hidden">
         <div
           aria-hidden
           className="absolute inset-0 -z-10"
           style={{ background: "var(--gradient-glow)" }}
         />
-        <div className="container-narrow grid lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-          <RevealOnScroll className="lg:col-span-6">
-            <div className="text-eyebrow">Who we are</div>
-            <h2 className="text-display text-4xl md:text-6xl mt-3 text-ink">
-              A campus where <span className="italic text-primary">curiosity</span> meets craft.
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              Established as a constituent college of Jawaharlal Nehru Technological University
-              Gurajada Vizianagaram, our campus brings together rigorous academics, practical labs,
-              and a thriving residential community. From first-year orientation to final-year
-              placements, every step is designed for depth.
-            </p>
-            <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-              We believe great engineering is born in the everyday — in honest classrooms, in
-              late-night lab benches, in the quiet of the library at dawn.
-            </p>
-            <Link
-              to="/about"
-              className="story-link mt-8 inline-flex items-center gap-2 text-primary font-medium"
-            >
-              Read our story <ArrowRight className="h-4 w-4" />
-            </Link>
-          </RevealOnScroll>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-10 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[100px] -z-10" />
 
-          <RevealOnScroll className="lg:col-span-6" delay={150}>
-            <div className="grid grid-cols-2 gap-px bg-border rounded-3xl overflow-hidden border border-border shadow-[var(--shadow-elegant)]">
-              {STATS.map((s) => (
-                <div key={s.label} className="bg-card p-8 md:p-10">
+        <div className="container-narrow">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+            <div className="lg:col-span-8 space-y-10">
+              <RevealOnScroll>
+                <div className="text-eyebrow">Who we are</div>
+                <h2 className="text-display text-4xl md:text-6xl mt-3 text-ink leading-[1.1]">
+                  Building <span className="italic text-primary">excellence</span>,<br />
+                  shaping futures.
+                </h2>
+                <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                  Established in 2007 as a constituent college of JNTU-GV, our institution is 
+                  recognized by UGC under section 2(f) & 12(B) and approved by AICTE. We bring 
+                  together rigorous academics and a thriving research community.
+                </p>
+              </RevealOnScroll>
+
+              <div className="space-y-6">
+                <RevealOnScroll delay={100}>
+                  <div className="group p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-500">
+                    <div className="flex gap-6 items-start">
+                      <div className="h-12 w-12 shrink-0 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Eye className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-ink mb-2">Our Vision</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          To emerge as a premier technical Institution in the field of engineering and 
+                          research, with a dedicated focus on producing professionally competent and 
+                          socially sensitive engineers capable of thriving in a multidisciplinary 
+                          global environment.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </RevealOnScroll>
+
+                <RevealOnScroll delay={200}>
+                  <div className="group p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-500">
+                    <div className="flex gap-6 items-start">
+                      <div className="h-12 w-12 shrink-0 rounded-2xl bg-accent/10 text-accent flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Target className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-ink mb-2">Core Mission</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          We are committed to providing high-quality technical education through a 
+                          creative balance of academia and industry. By adopting highly effective 
+                          teaching-learning processes and promoting multidisciplinary research, 
+                          we inculcate ethical and moral values that contribute to professional 
+                          growth and societal development.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </RevealOnScroll>
+              </div>
+
+              <RevealOnScroll delay={300}>
+                <div className="flex flex-wrap items-center gap-6 pt-4">
+                  <Link to="/about/vision-mission" className="story-link inline-flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest">
+                    View full mandate <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <div className="h-px w-12 bg-border hidden sm:block" />
+                  <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">
+                    <Shield className="h-3.5 w-3.5" /> AICTE Approved
+                  </div>
+                </div>
+              </RevealOnScroll>
+            </div>
+
+            <div className="lg:col-span-4 lg:sticky lg:top-32">
+              <RevealOnScroll delay={200}>
+                <div className="relative group mx-auto max-w-[380px]">
+                  <div className="absolute -top-8 -right-8 w-32 h-32 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+                  <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-accent/10 rounded-full blur-3xl" />
+                  
+                  <div className="relative bg-card rounded-[40px] p-6 md:p-8 border border-border shadow-elegant overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
+                    <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden mb-6 border border-white/50 shadow-inner group/img bg-slate-100">
+                      {principal?.image ? (
+                        <img 
+                          src={principal.image} 
+                          alt={principal.name} 
+                          className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover/img:scale-105"
+                        />
+                      ) : (
+                        <div className="h-full w-full grid place-items-center bg-slate-50">
+                          <Users className="h-12 w-12 text-slate-200" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
+                      <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
+                         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-[10px] font-bold text-white uppercase tracking-widest">
+                           <CheckCircle2 className="h-3 w-3" /> {principal?.designation?.split(',')[0] || "Principal"}
+                         </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-[0.25em] text-primary font-black mb-2">Leadership</div>
+                        <h3 className="text-2xl font-bold text-ink leading-tight">{principal?.name || "Dr. K. Chandra Bhushana Rao"}</h3>
+                        <p className="text-muted-foreground text-sm font-medium mt-1">
+                          {principal?.designation?.includes(',') ? principal.designation.split(',').slice(1).join(',') : "Principal, JNTU-GV CEV"}
+                        </p>
+                      </div>
+                      
+                      <div className="relative">
+                        <Quote className="h-10 w-10 text-primary/10 absolute -top-4 -left-4 -z-10" />
+                        <p className="text-sm text-muted-foreground leading-relaxed italic">
+                          "{principal?.quote || "Our goal is to produce engineers who are not only technically competent but also socially sensitive to global challenges."}"
+                        </p>
+                      </div>
+
+                      <div className="pt-6 border-t border-border flex items-center justify-between">
+                        <Link to="/administration/principal" className="btn-primary !px-6 !py-3 !text-[11px]">
+                          Principal's Desk <ArrowRight className="h-4 w-4" />
+                        </Link>
+                        <div className="flex flex-col items-end">
+                           <div className="text-[9px] uppercase tracking-tighter text-muted-foreground font-bold">Member</div>
+                           <div className="text-[11px] font-black text-ink">IEEE Senior Member</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </RevealOnScroll>
+            </div>
+          </div>
+
+          <RevealOnScroll delay={400} className="mt-20 lg:mt-28">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-[32px] overflow-hidden border border-border shadow-sm">
+              {STATS.map((s, i) => (
+                <div key={s.label} className="bg-white p-8 lg:p-10 hover:bg-slate-50 transition-colors group">
                   <StatCounter value={s.value} label={s.label} />
+                  <div className="mt-2 h-1 w-0 bg-primary group-hover:w-full transition-all duration-500 rounded-full" />
                 </div>
               ))}
             </div>
-            <p className="mt-4 text-xs text-muted-foreground text-center">
-              A residential campus by design — most students live, learn and grow on-site.
-            </p>
           </RevealOnScroll>
         </div>
       </section>
 
-      {/* DEPARTMENTS — horizontal scroll */}
+      {/* DEPARTMENTS — horizontal scroll dynamically sourced from Neon */}
       <section className="py-24 md:py-32 bg-sand">
         <div className="container-narrow">
           <RevealOnScroll>
             <SectionLabel
               eyebrow="Departments"
-              title="Seven disciplines, one rigorous mind."
-              subtitle="From the foundational sciences to applied engineering, each department is led by faculty who teach, research and mentor in equal measure."
+              title="Eight departments. One academic culture."
+              subtitle="Each department is led by faculty who teach with conviction, mentor with care and research with rigour."
             />
           </RevealOnScroll>
         </div>
-        <RevealOnScroll className="mt-12" delay={150}>
+        <RevealOnScroll className="mt-10" delay={150}>
           <div className="overflow-x-auto pb-6 [scrollbar-width:thin] snap-x snap-mandatory">
             <div className="flex gap-5 px-[max(1.25rem,calc((100vw-1280px)/2+2rem))]">
-              {DEPARTMENTS.map((d, i) => (
-                <Link
-                  key={d.code}
-                  to="/departments"
-                  className="snap-start group shrink-0 w-[280px] md:w-[340px] aspect-[3/4] relative rounded-3xl overflow-hidden bg-[var(--gradient-royal)] hover-lift"
-                >
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 opacity-20 mix-blend-overlay"
-                    style={{
-                      background: `radial-gradient(circle at ${20 + i * 12}% ${30 + i * 8}%, white, transparent 60%)`,
-                    }}
-                  />
-                  <div className="absolute inset-0 p-7 md:p-8 flex flex-col justify-between text-white">
-                    <div className="flex items-center justify-between">
-                      <span className="text-eyebrow !text-white/70">
-                        Dept {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <div className="h-10 w-10 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-primary transition-all duration-500">
-                        <ArrowRight className="h-4 w-4" />
+              {isLoading ? (
+                // Clean loading cards layout fallback 
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="animate-pulse shrink-0 w-[280px] md:w-[340px] aspect-[3/4] rounded-3xl bg-slate-200" />
+                ))
+              ) : (
+                liveDepartments.map((d: any, i: number) => (
+                  <Link
+                    key={d.id}
+                    to="/departments" 
+                    className="snap-start group shrink-0 w-[280px] md:w-[340px] aspect-[3/4] relative rounded-3xl overflow-hidden bg-slate-900 shadow-xl hover-lift"
+                  >
+                    {/* Background Visual Image with full visibility and smooth dark overlay */}
+                    {d.image ? (
+                      <img
+                        src={d.image}
+                        alt={`${d.name} representation`}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div
+                        aria-hidden
+                        className="absolute inset-0 bg-slate-800"
+                      />
+                    )}
+                    
+                    {/* High contrast dark gradient overlay mirroring the main grid design */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 transition-opacity group-hover:opacity-95" />
+                    
+                    {/* Content Area */}
+                    <div className="absolute inset-0 p-6 md:p-7 flex flex-col justify-between text-white z-10">
+                      <div className="flex items-center justify-between">
+                        <span className="px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white/90">
+                          VIEW DEPT
+                        </span>
+                        <div className="h-9 w-9 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-slate-900 transition-all duration-500">
+                          <ArrowRight className="h-4 w-4" />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white leading-tight">
+                          {d.name.includes("(") ? d.name : `${d.name} (${d.slug.toUpperCase()})`}
+                        </h3>
+                        
+                        {/* HOD Information Line */}
+                        {d.hod && (
+                          <div className="text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded inline-block">
+                            HOD: <span className="text-white">{d.hod}</span>
+                          </div>
+                        )}
+                        
+                        <p className="text-xs md:text-sm text-white/80 line-clamp-2 md:line-clamp-3 font-medium leading-relaxed pt-1">
+                          {d.description}
+                        </p>
                       </div>
                     </div>
-                    <div>
-                      <div className="text-display text-5xl md:text-6xl font-semibold opacity-90">
-                        {d.code}
-                      </div>
-                      <div className="mt-3 text-base font-medium leading-snug">{d.name}</div>
-                      <div className="mt-2 text-sm text-white/70">{d.desc}</div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))
+              )}
             </div>
           </div>
         </RevealOnScroll>
       </section>
 
       {/* FACILITIES — interactive showcase */}
-      <section className="py-24 md:py-32">
+      <section className="py-20 md:py-28">
         <div className="container-narrow">
           <RevealOnScroll>
             <div className="flex items-end justify-between flex-wrap gap-6">
               <SectionLabel
                 eyebrow="Facilities"
                 title="Everything you need, on campus."
-                subtitle="Hover to see more. Click any tile to step inside."
+                subtitle="Click any tile to explore — hostels, library, sports, healthcare and more."
               />
             </div>
           </RevealOnScroll>
 
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-6 gap-5">
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {FACILITIES.map((f, i) => {
-              const span = [
-                "md:col-span-3 md:row-span-2",
-                "md:col-span-3",
-                "md:col-span-2",
-                "md:col-span-2",
-                "md:col-span-2",
-                "md:col-span-3",
-              ][i];
-              const tall = i === 0;
               return (
-                <RevealOnScroll key={f.title} className={span} delay={i * 80}>
+                <RevealOnScroll key={f.title} delay={i * 70} className="h-full">
                   <Link
                     to={f.to}
-                    className={`group relative block rounded-3xl overflow-hidden ${tall ? "h-[480px] md:h-full min-h-[440px]" : "h-[260px]"} hover-lift`}
+                    className="group relative flex flex-col rounded-3xl overflow-hidden h-[260px] sm:h-[300px] lg:h-[320px] hover-lift"
                   >
                     <img
                       src={f.img}
                       alt={f.title}
                       loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] lg:group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent" />
-                    <div className="absolute inset-0 p-6 md:p-7 flex flex-col justify-end text-white">
-                      <div className="flex items-center gap-2 text-eyebrow !text-white/70 mb-2">
-                        <f.icon className="h-3.5 w-3.5" /> Facility
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/50 to-ink/10" />
+                    <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-end text-white">
+                      <div className="flex items-center gap-2 text-eyebrow !text-white/60 mb-2">
+                        <f.icon className="h-3 w-3" /> Facility
                       </div>
-                      <h3 className="text-display text-2xl md:text-3xl">{f.title}</h3>
-                      <p className="mt-2 text-sm text-white/75 max-w-md max-h-0 opacity-0 group-hover:max-h-32 group-hover:opacity-100 transition-all duration-500 overflow-hidden">
+                      <h3 className="text-display text-xl md:text-2xl leading-tight">{f.title}</h3>
+                      <p className="mt-1.5 text-sm text-white/80 max-w-md overflow-hidden line-clamp-2">
                         {f.desc}
                       </p>
-                      <div className="mt-3 inline-flex items-center gap-1.5 text-sm text-white/80 group-hover:text-white">
-                        Explore{" "}
-                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                      <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-white/70 group-hover:text-white transition-colors">
+                        Explore <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
                       </div>
                     </div>
                   </Link>
@@ -341,7 +480,7 @@ function HomePage() {
       </ParallaxBg>
 
       {/* PLACEMENTS */}
-      <section className="py-24 md:py-32 bg-sand">
+      <section className="py-20 md:py-28 bg-sand">
         <div className="container-narrow">
           <RevealOnScroll>
             <SectionLabel
@@ -351,27 +490,29 @@ function HomePage() {
             />
           </RevealOnScroll>
 
-          <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-3xl overflow-hidden border border-border">
-            <RevealOnScroll className="bg-card p-8">
-              <StatCounter value={420} label="Offers / Year" suffix="+" />
-            </RevealOnScroll>
-            <RevealOnScroll className="bg-card p-8" delay={80}>
-              <StatCounter value={42} label="LPA Top Package" suffix="L" />
-            </RevealOnScroll>
-            <RevealOnScroll className="bg-card p-8" delay={160}>
-              <StatCounter value={85} label="Recruiters" suffix="+" />
-            </RevealOnScroll>
-            <RevealOnScroll className="bg-card p-8" delay={240}>
-              <StatCounter value={92} label="Placement %" suffix="%" />
-            </RevealOnScroll>
-          </div>
+          <RevealOnScroll className="mt-10" delay={100}>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-3xl overflow-hidden border border-border">
+              <div className="bg-card p-6 md:p-8">
+                <StatCounter value={420} label="Offers / Year" suffix="+" />
+              </div>
+              <div className="bg-card p-6 md:p-8">
+                <StatCounter value={42} label="LPA Top Package" suffix="L" />
+              </div>
+              <div className="bg-card p-6 md:p-8">
+                <StatCounter value={85} label="Recruiters" suffix="+" />
+              </div>
+              <div className="bg-card p-6 md:p-8">
+                <StatCounter value={92} label="Placement %" suffix="%" />
+              </div>
+            </div>
+          </RevealOnScroll>
 
-          <div className="mt-14">
+          <RevealOnScroll className="mt-10" delay={150}>
             <div className="text-eyebrow text-center mb-4">Trusted by recruiters</div>
             <MarqueeLogos items={RECRUITERS} />
-          </div>
+          </RevealOnScroll>
 
-          <div className="mt-10 text-center">
+          <div className="mt-8 text-center">
             <Link to="/placements" className="btn-primary">
               View placements report <ArrowRight className="h-4 w-4" />
             </Link>
@@ -380,22 +521,22 @@ function HomePage() {
       </section>
 
       {/* GALLERY TEASER */}
-      <section className="py-24 md:py-32">
+      <section className="py-20 md:py-28">
         <div className="container-narrow">
           <RevealOnScroll>
             <div className="flex items-end justify-between flex-wrap gap-6">
               <SectionLabel eyebrow="Gallery" title="A campus, in moments." />
               <Link
                 to="/gallery"
-                className="story-link text-primary font-medium inline-flex items-center gap-2"
+                className="story-link text-primary font-semibold inline-flex items-center gap-2"
               >
                 Open gallery <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </RevealOnScroll>
 
-          <RevealOnScroll className="mt-12" delay={120}>
-            <div className="grid grid-cols-12 gap-4 md:gap-5">
+          <RevealOnScroll className="mt-10" delay={120}>
+            <div className="grid grid-cols-12 gap-3 md:gap-4">
               <img
                 src={cultureImg}
                 alt="Cultural fest"
@@ -432,10 +573,10 @@ function HomePage() {
       </section>
 
       {/* CONTACT STRIP */}
-      <section className="py-24">
+      <section className="py-20">
         <div className="container-narrow">
           <RevealOnScroll>
-            <div className="relative overflow-hidden rounded-[40px] bg-[oklch(0.18_0.04_255)] p-10 md:p-16 text-white shadow-[var(--shadow-elegant)] border border-white/5">
+            <div className="relative overflow-hidden rounded-[40px] bg-[oklch(0.18_0.04_255)] p-8 md:p-14 text-white shadow-[var(--shadow-elegant)] border border-white/5">
               <div
                 aria-hidden
                 className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/20 blur-3xl"

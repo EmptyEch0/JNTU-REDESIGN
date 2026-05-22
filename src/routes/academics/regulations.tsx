@@ -115,7 +115,7 @@ function RegulationsPage() {
           </p>
           <button 
             onClick={startAddReg}
-            className="flex items-center gap-1 bg-[#A02021] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-800 transition-all shadow-md shadow-red-900/20"
+            className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-900/20"
           >
             <Plus size={14} /> Add Regulation PDF
           </button>
@@ -228,8 +228,8 @@ function RegulationsPage() {
             onClick={() => { setActiveCategory(cat); setSelectedBranch("All"); }}
             className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
               activeCategory === cat 
-                ? "bg-white dark:bg-slate-700 text-[#A02021] dark:text-white shadow-sm" 
-                : "text-slate-650 dark:text-slate-400 hover:text-[#A02021]"
+                ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm" 
+                : "text-slate-650 dark:text-slate-400 hover:text-blue-600"
             }`}
           >
             {cat === "UG" ? "UG Regulations" : cat === "PG" ? "PG Regulations" : "PhD Regulations"}
@@ -251,7 +251,7 @@ function RegulationsPage() {
                   placeholder="Search code (R23, R20)..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 bg-slate-105 dark:bg-slate-800/50 border border-slate-200/30 rounded-xl text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-[#A02021]/50 outline-none transition-all placeholder:text-slate-500"
+                  className="w-full pl-9 pr-3 py-2.5 bg-slate-105 dark:bg-slate-800/50 border border-slate-200/30 rounded-xl text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500/50 outline-none transition-all placeholder:text-slate-500"
                 />
               </div>
             </div>
@@ -262,7 +262,7 @@ function RegulationsPage() {
                 <select
                   value={selectedBranch}
                   onChange={(e) => setSelectedBranch(e.target.value as any)}
-                  className="w-full px-3 py-2.5 bg-slate-105 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-750 dark:text-slate-300 border border-slate-200/30 focus:ring-2 focus:ring-[#A02021]/50 outline-none appearance-none cursor-pointer"
+                  className="w-full px-3 py-2.5 bg-slate-105 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-750 dark:text-slate-300 border border-slate-200/30 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none cursor-pointer"
                 >
                   <option value="All">All Branches</option>
                   <option value="B.Tech">B.Tech</option>
@@ -300,14 +300,14 @@ function RegulationsPage() {
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.25, delay: idx * 0.05 }}
                   >
-                    <GlassCard className="p-6 relative overflow-hidden group hover:border-[#A02021]/30 transition-all duration-300">
-                      <div className="absolute right-0 top-0 w-32 h-32 bg-[#A02021]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                    <GlassCard className="p-6 relative overflow-hidden group hover:border-blue-500/30 transition-all duration-300">
+                      <div className="absolute right-0 top-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
                       
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 relative z-10">
                         <div className="flex-1">
                           <div className="flex items-center justify-between gap-3 mb-2.5">
                             <div className="flex items-center gap-3">
-                              <span className="px-3 py-1 bg-red-105 text-[#A02021] dark:bg-red-950/40 dark:text-red-400 rounded-lg text-xs font-extrabold">
+                              <span className="px-3 py-1 bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 rounded-lg text-xs font-extrabold">
                                 {reg.regulation} Code
                               </span>
                               <span className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
@@ -335,8 +335,7 @@ function RegulationsPage() {
                               </div>
                             )}
                           </div>
-                          
-                          <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2 group-hover:text-[#A02021] transition-colors">
+                                                    <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors">
                             {reg.title}
                           </h3>
                           <p className="text-xs text-slate-400">
@@ -355,7 +354,7 @@ function RegulationsPage() {
                           
                           <button 
                             onClick={() => window.open(reg.pdf_url, "_blank")}
-                            className="flex items-center justify-center gap-2 px-4 py-2 bg-[#A02021] text-white rounded-xl text-xs font-bold hover:bg-red-850 transition-all shadow-md shadow-red-900/10"
+                            className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-900/10"
                           >
                             <Download className="w-3.5 h-3.5" />
                             Download PDF

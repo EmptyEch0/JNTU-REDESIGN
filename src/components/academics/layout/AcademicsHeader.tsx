@@ -19,7 +19,7 @@ export function AcademicsHeader() {
         </button>
 
         <div className="hidden sm:flex items-center gap-2 text-sm font-medium">
-          <Link to="/" className="text-slate-500 hover:text-[#A02021] transition-colors">
+          <Link to="/" className="text-slate-500 hover:text-blue-600 transition-colors">
             Home
           </Link>
           {pathnames.length > 0 && (
@@ -41,7 +41,7 @@ export function AcademicsHeader() {
                   </motion.span>
                 ) : (
                   <>
-                    <Link to={to} className="text-slate-500 hover:text-[#A02021] transition-colors">
+                    <Link to={to} className="text-slate-500 hover:text-blue-600 transition-colors">
                       {formatBreadcrumb(value)}
                     </Link>
                     <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -59,16 +59,13 @@ export function AcademicsHeader() {
           <input 
             type="text" 
             placeholder="Search resources..." 
-            className="w-64 pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800/50 border-none rounded-full text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-[#A02021]/50 outline-none transition-all placeholder:text-slate-500"
+            className="w-64 pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800/50 border-none rounded-full text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500/50 outline-none transition-all placeholder:text-slate-500"
           />
         </div>
         <button className="relative p-2.5 bg-slate-100 dark:bg-slate-800/50 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
           <Bell className="w-5 h-5" />
-          <span className="absolute top-2 right-2.5 w-2 h-2 bg-[#A02021] rounded-full border-2 border-white dark:border-slate-900"></span>
+          <span className="absolute top-2 right-2.5 w-2 h-2 bg-blue-600 rounded-full border-2 border-white dark:border-slate-900"></span>
         </button>
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#A02021] to-red-800 text-white flex items-center justify-center font-bold text-sm shadow-md">
-          ST
-        </div>
       </div>
     </header>
   );

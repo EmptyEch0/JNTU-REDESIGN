@@ -19,9 +19,9 @@ export function AcademicsMobileNav() {
           <Link
             key={item.name}
             to={item.to}
-            className={`flex flex-col items-center gap-1 ${isActive ? "text-[#A02021]" : "text-slate-500 dark:text-slate-400"}`}
+            className={`flex flex-col items-center gap-1 ${isActive ? "text-blue-600 dark:text-blue-400" : "text-slate-500 dark:text-slate-400"}`}
           >
-            <div className={`p-2 rounded-xl transition-colors ${isActive ? "bg-red-50 dark:bg-red-900/20" : ""}`}>
+            <div className={`p-2 rounded-xl transition-colors ${isActive ? "bg-blue-50 dark:bg-blue-900/20" : ""}`}>
               <item.icon className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-medium">{item.name}</span>

@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/academics/ui/PageHeader";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
 import { BookOpen, Search, Download, Eye, RotateCcw, Plus, Trash2, Edit2, Save } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
@@ -26,6 +26,7 @@ function SyllabusPage() {
   const [selectedCat, setSelectedCat] = useState("All"); // UG / PG
   const [selectedProg, setSelectedProg] = useState("All"); // B.Tech / M.Tech / MBA / MCA
   const [selectedSem, setSelectedSem] = useState("All");
+  const [selectedBranch, setSelectedBranch] = useState("All");
 
   // State for Editing/Adding
   const [editSyllabusId, setEditSyllabusId] = useState<number | null>(null);
@@ -42,6 +43,12 @@ function SyllabusPage() {
     queryKey: ["academics-syllabus"],
     queryFn: getAcademicsSyllabusList,
   });
+
+  // Dynamic branch options collected from active syllabus records
+  const branchOptions = useMemo(() => {
+    const branches = syllabusData.map((item: any) => item.branch).filter(Boolean);
+    return ["All", ...Array.from(new Set(branches))];
+  }, [syllabusData]);
 
   // Mutations
   const saveSyllabusMutation = useMutation({
@@ -91,19 +98,22 @@ function SyllabusPage() {
     setSPdfUrl("");
   };
 
-  const filteredData = syllabusData.filter((item) => {
-    const matchesSearch = 
-      item.subject_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      item.branch.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.regulation.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredData = useMemo(() => {
+    return syllabusData.filter((item) => {
+      const matchesSearch = 
+        item.subject_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        item.branch.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.regulation.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesReg = selectedReg === "All" || item.regulation === selectedReg;
-    const matchesCat = selectedCat === "All" || item.level === selectedCat;
-    const matchesProg = selectedProg === "All" || item.program_name === selectedProg;
-    const matchesSem = selectedSem === "All" || item.semester === selectedSem;
+      const matchesReg = selectedReg === "All" || item.regulation === selectedReg;
+      const matchesCat = selectedCat === "All" || item.level === selectedCat;
+      const matchesProg = selectedProg === "All" || item.program_name === selectedProg;
+      const matchesSem = selectedSem === "All" || item.semester === selectedSem;
+      const matchesBranch = selectedBranch === "All" || item.branch === selectedBranch;
 
-    return matchesSearch && matchesReg && matchesCat && matchesProg && matchesSem;
-  });
+      return matchesSearch && matchesReg && matchesCat && matchesProg && matchesSem && matchesBranch;
+    });
+  }, [syllabusData, searchTerm, selectedReg, selectedCat, selectedProg, selectedSem, selectedBranch]);
 
   const resetFilters = () => {
     setSearchTerm("");
@@ -111,6 +121,7 @@ function SyllabusPage() {
     setSelectedCat("All");
     setSelectedProg("All");
     setSelectedSem("All");
+    setSelectedBranch("All");
   };
 
   return (
@@ -134,7 +145,7 @@ function SyllabusPage() {
           </p>
           <button 
             onClick={startAddSyllabus}
-            className="flex items-center gap-1 bg-[#A02021] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-800 transition-all shadow-md shadow-red-900/20"
+            className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-900/20"
           >
             <Plus size={14} /> Add Syllabus Entry
           </button>
@@ -264,11 +275,11 @@ function SyllabusPage() {
 
       {/* Filter Toolbox */}
       <GlassCard className="p-6 space-y-6">
-        <h3 className="text-sm font-extrabold uppercase tracking-widest text-[#A02021] flex items-center gap-2">
+        <h3 className="text-sm font-extrabold uppercase tracking-widest text-blue-600 flex items-center gap-2">
           <span>Filter Controls</span>
         </h3>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4">
           {/* Search bar */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -277,7 +288,7 @@ function SyllabusPage() {
               placeholder="Search syllabus..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-white/70 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-[#A02021]/50 outline-none placeholder:text-slate-400 font-sans"
+              className="w-full pl-9 pr-3 py-2 bg-white/70 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500/50 outline-none placeholder:text-slate-400 font-sans"
             />
           </div>
 
@@ -285,7 +296,7 @@ function SyllabusPage() {
           <select 
             value={selectedReg} 
             onChange={(e) => setSelectedReg(e.target.value)}
-            className="w-full px-3 py-2 bg-white/70 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-[#A02021]/50 cursor-pointer"
+            className="w-full px-3 py-2 bg-white/70 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer"
           >
             <option value="All">All Regulations</option>
             <option value="R23">R23 Regulation</option>
@@ -297,7 +308,7 @@ function SyllabusPage() {
           <select 
             value={selectedCat} 
             onChange={(e) => setSelectedCat(e.target.value)}
-            className="w-full px-3 py-2 bg-white/70 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-[#A02021]/50 cursor-pointer"
+            className="w-full px-3 py-2 bg-white/70 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer"
           >
             <option value="All">All Categories (UG/PG)</option>
             <option value="UG">Undergraduate (UG)</option>
@@ -308,7 +319,7 @@ function SyllabusPage() {
           <select 
             value={selectedProg} 
             onChange={(e) => setSelectedProg(e.target.value)}
-            className="w-full px-3 py-2 bg-white/70 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-[#A02021]/50 cursor-pointer"
+            className="w-full px-3 py-2 bg-white/70 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer"
           >
             <option value="All">All Programs</option>
             <option value="B.Tech">B.Tech</option>
@@ -317,11 +328,23 @@ function SyllabusPage() {
             <option value="MCA">MCA</option>
           </select>
 
+          {/* Branch Filter */}
+          <select 
+            value={selectedBranch} 
+            onChange={(e) => setSelectedBranch(e.target.value)}
+            className="w-full px-3 py-2 bg-white/70 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer"
+          >
+            <option value="All">All Branches</option>
+            {branchOptions.filter(b => b !== "All").map((branch) => (
+              <option key={branch} value={branch}>{branch}</option>
+            ))}
+          </select>
+
           {/* Semester */}
           <select 
             value={selectedSem} 
             onChange={(e) => setSelectedSem(e.target.value)}
-            className="w-full px-3 py-2 bg-white/70 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-[#A02021]/50 cursor-pointer"
+            className="w-full px-3 py-2 bg-white/70 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer"
           >
             <option value="All">All Semesters</option>
             <option value="Semester 1">Semester 1</option>
@@ -338,7 +361,7 @@ function SyllabusPage() {
         <div className="flex justify-end pt-2 font-sans">
           <button 
             onClick={resetFilters}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[#A02021]/10 text-[#A02021] dark:bg-red-950/20 dark:text-red-400 hover:bg-[#A02021]/20 transition-all duration-300"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 hover:bg-blue-100 transition-all duration-300"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset Filters
@@ -391,13 +414,13 @@ function SyllabusPage() {
                           </span>
                         </td>
                         <td className="py-4 px-4 text-xs font-bold">
-                          <span className="bg-red-50 dark:bg-red-950/20 text-[#A02021] dark:text-red-400 px-2.5 py-0.5 rounded border border-red-100 dark:border-red-950 text-[10px]">
+                          <span className="bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 px-2.5 py-0.5 rounded border border-blue-100 dark:border-blue-950/50 text-[10px]">
                             {item.regulation}
                           </span>
                         </td>
                         <td className="py-4 px-4 text-xs text-slate-600 dark:text-slate-400 font-medium">{item.academic_year}</td>
                         <td className="py-4 px-4 text-xs text-slate-650 dark:text-slate-400 font-semibold">{item.semester}</td>
-                        <td className="py-4 px-4 text-sm font-extrabold text-slate-900 dark:text-white group-hover:text-[#A02021] transition-colors">{item.subject_name}</td>
+                        <td className="py-4 px-4 text-sm font-extrabold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">{item.subject_name}</td>
                         <td className="py-4 px-4">
                           <div className="flex items-center justify-center gap-2 relative z-20">
                             {item.pdf_url ? (
@@ -411,7 +434,7 @@ function SyllabusPage() {
                                 </button>
                                 <button 
                                   onClick={() => window.open(item.pdf_url, "_blank")}
-                                  className="p-1.5 rounded-lg bg-[#A02021]/10 hover:bg-[#A02021]/20 text-[#A02021] transition-colors"
+                                  className="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors"
                                   title="Download Syllabus PDF"
                                 >
                                   <Download className="w-3.5 h-3.5" />

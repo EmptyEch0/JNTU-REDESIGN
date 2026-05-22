@@ -3,7 +3,15 @@
 // Exam events come from examination.tsx mock data and fee deadlines.
 // NOTE: "daysUntil" is illustrative — in production these would be computed from real dates.
 
-export type TickerSource = "calendar" | "results" | "hall-ticket" | "fee";
+export type TickerSource =
+  | "calendar"
+  | "holiday"
+  | "exam-sched"
+  | "exam-notif"
+  | "hall-ticket"
+  | "results"
+  | "timetable"
+  | "fee";
 
 export interface TickerNotification {
   id: string;

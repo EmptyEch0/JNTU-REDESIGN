@@ -148,7 +148,7 @@ function CACPage() {
             )}
             <button 
               onClick={startAddMember}
-              className="flex items-center gap-1 bg-[#A02021] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-800 transition-all shadow-md shadow-red-900/20"
+              className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-900/20"
             >
               <Plus size={14} /> Add Committee Member
             </button>
@@ -210,7 +210,7 @@ function CACPage() {
                 role: memberRole,
                 designation: memberDesignation
               })}
-              className="flex items-center gap-1.5 px-4 py-2 bg-[#A02021] text-white rounded-xl text-xs font-bold hover:bg-red-800 transition-colors shadow"
+              className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-colors shadow shadow-blue-900/10"
             >
               <Save size={14} /> Save Changes
             </button>
@@ -222,7 +222,7 @@ function CACPage() {
       <section className="py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <div className="text-[#A02021] font-bold text-xs uppercase tracking-widest">Composition</div>
+            <div className="text-blue-600 font-extrabold text-xs uppercase tracking-widest">Composition</div>
             <h2 className="text-2xl md:text-3xl font-extrabold mt-1 text-slate-900 dark:text-white">Academic Committee Members</h2>
           </div>
           {cacMembers.length === 0 && (
@@ -247,18 +247,18 @@ function CACPage() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.25, delay: i * 0.04 }}
                 >
-                  <GlassCard className="p-6 relative group hover:border-[#A02021]/30 transition-all duration-300 overflow-hidden flex flex-col justify-between h-full bg-white/70 dark:bg-slate-900/40">
-                    <div className="absolute right-0 top-0 w-24 h-24 bg-red-500/5 rounded-full blur-xl group-hover:bg-[#A02021]/10 transition-all duration-500 pointer-events-none"></div>
+                  <GlassCard className="p-6 relative group hover:border-blue-500/30 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 overflow-hidden flex flex-col justify-between h-full bg-white/80 dark:bg-slate-900/40">
+                    <div className="absolute right-0 top-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl group-hover:bg-blue-600/10 transition-all duration-500 pointer-events-none"></div>
                     
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-950/20 text-[#A02021] dark:text-red-400 flex items-center justify-center flex-shrink-0 group-hover:bg-[#A02021] group-hover:text-white transition-colors duration-300">
+                      <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
                         <Users className="w-6 h-6" />
                       </div>
                       <div className="space-y-1 min-w-0">
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400">
                           {m.role}
                         </span>
-                        <h3 className="text-base font-extrabold text-slate-900 dark:text-white mt-1 group-hover:text-[#A02021] transition-colors line-clamp-1">{m.name}</h3>
+                        <h3 className="text-base font-extrabold text-slate-900 dark:text-white mt-1 group-hover:text-blue-600 transition-colors line-clamp-1">{m.name}</h3>
                         <p className="text-xs text-slate-500 dark:text-slate-400 leading-snug line-clamp-2">{m.designation || "Committee Panelist"}</p>
                       </div>
                     </div>

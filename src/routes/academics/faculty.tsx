@@ -367,7 +367,7 @@ function FacultyPage() {
           onClick={() => setActiveTab("leadership")}
           className={`flex items-center gap-2 py-3 px-6 text-sm font-bold border-b-2 transition-all shrink-0 ${
             activeTab === "leadership"
-              ? "border-[#A02021] text-[#A02021]"
+              ? "border-blue-600 text-blue-600"
               : "border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
@@ -377,7 +377,7 @@ function FacultyPage() {
           onClick={() => setActiveTab("hods")}
           className={`flex items-center gap-2 py-3 px-6 text-sm font-bold border-b-2 transition-all shrink-0 ${
             activeTab === "hods"
-              ? "border-[#A02021] text-[#A02021]"
+              ? "border-blue-600 text-blue-600"
               : "border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
@@ -387,7 +387,7 @@ function FacultyPage() {
           onClick={() => setActiveTab("faculty")}
           className={`flex items-center gap-2 py-3 px-6 text-sm font-bold border-b-2 transition-all shrink-0 ${
             activeTab === "faculty"
-              ? "border-[#A02021] text-[#A02021]"
+              ? "border-blue-600 text-blue-600"
               : "border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
@@ -413,7 +413,7 @@ function FacultyPage() {
                 </button>
                 <button 
                   onClick={startAddPrincipal}
-                  className="bg-[#A02021] hover:bg-red-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow"
                 >
                   + Add Principal
                 </button>
@@ -422,7 +422,7 @@ function FacultyPage() {
             {activeTab === "hods" && (
               <button 
                 onClick={startAddHod}
-                className="bg-[#A02021] hover:bg-red-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow"
               >
                 + Add HOD message
               </button>
@@ -430,7 +430,7 @@ function FacultyPage() {
             {activeTab === "faculty" && (
               <button 
                 onClick={startAddFac}
-                className="bg-[#A02021] hover:bg-red-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow"
               >
                 + Add Faculty member
               </button>
@@ -583,8 +583,8 @@ function FacultyPage() {
             {/* University Vice Chancellor Section */}
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <span className="w-8 h-0.5 bg-[#A02021]" />
-                <h2 className="text-xs font-extrabold uppercase tracking-widest text-[#A02021]">
+                <span className="w-8 h-0.5 bg-blue-600" />
+                <h2 className="text-xs font-extrabold uppercase tracking-widest text-blue-600">
                   Office of the Vice Chancellor
                 </h2>
               </div>
@@ -626,7 +626,7 @@ function FacultyPage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                           <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                             <h3 className="text-xl font-extrabold leading-tight">{vc.name}</h3>
-                            <p className="text-xs font-bold text-red-400 uppercase tracking-widest mt-1">
+                            <p className="text-xs font-bold text-sky-400 uppercase tracking-widest mt-1">
                               {vc.designation}
                             </p>
                           </div>
@@ -654,8 +654,8 @@ function FacultyPage() {
             {/* University Principal Board Section */}
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <span className="w-8 h-0.5 bg-[#A02021]" />
-                <h2 className="text-xs font-extrabold uppercase tracking-widest text-[#A02021]">
+                <span className="w-8 h-0.5 bg-blue-600" />
+                <h2 className="text-xs font-extrabold uppercase tracking-widest text-blue-600">
                   College Administration & Principals
                 </h2>
               </div>
@@ -697,7 +697,7 @@ function FacultyPage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                           <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                             <h3 className="text-lg font-extrabold leading-tight">{pr.name}</h3>
-                            <p className="text-xs font-bold text-red-400 uppercase tracking-widest mt-1">
+                            <p className="text-xs font-bold text-sky-400 uppercase tracking-widest mt-1">
                               {pr.designation}
                             </p>
                           </div>
@@ -829,7 +829,7 @@ function FacultyPage() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4, delay: idx * 0.05 }}
                   >
-                    <GlassCard className="p-6 h-full flex flex-col justify-between relative group hover:border-[#A02021]/30 transition-all duration-300">
+                    <GlassCard className="p-6 h-full flex flex-col justify-between relative group hover:border-blue-500/30 transition-all duration-300">
                       <div>
                         
                         {/* HOD Action controls */}
@@ -860,7 +860,7 @@ function FacultyPage() {
                             <h3 className="font-extrabold text-slate-900 dark:text-white leading-tight text-base">
                               {hod.name}
                             </h3>
-                            <p className="text-xs font-semibold text-[#A02021] mt-0.5">
+                            <p className="text-xs font-semibold text-blue-600 mt-0.5">
                               {hod.designation}
                             </p>
                             <span className="inline-flex items-center gap-1 mt-2 text-[9px] font-extrabold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded uppercase">
@@ -869,7 +869,7 @@ function FacultyPage() {
                           </div>
                         </div>
 
-                        <blockquote className="border-l-2 border-[#A02021]/30 pl-4 mb-5">
+                        <blockquote className="border-l-2 border-blue-500/30 pl-4 mb-5">
                           <p className="text-xs text-slate-650 dark:text-slate-405 italic leading-relaxed font-serif">
                             "{hod.message}"
                           </p>
@@ -891,13 +891,13 @@ function FacultyPage() {
                         <div className="flex gap-4 text-[10px] font-bold text-slate-400">
                           <a
                             href="mailto:hod@jntugv.edu.in"
-                            className="flex items-center gap-1 hover:text-[#A02021] transition-colors"
+                            className="flex items-center gap-1 hover:text-blue-600 transition-colors"
                           >
                             <Mail className="w-3.5 h-3.5 text-blue-500" /> HOD Email
                           </a>
                           <a
                             href="tel:+918922277388"
-                            className="flex items-center gap-1 hover:text-[#A02021] transition-colors"
+                            className="flex items-center gap-1 hover:text-blue-600 transition-colors"
                           >
                             <Phone className="w-3.5 h-3.5 text-emerald-500" /> +91 89222 77388
                           </a>
@@ -1009,7 +1009,7 @@ function FacultyPage() {
                       email: facEmail,
                       photo_url: facPhotoUrl
                     })}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-[#A02021] text-white rounded-xl text-xs font-bold hover:bg-red-800 transition-colors shadow"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-colors shadow"
                   >
                     <Save size={14} /> Save Directory Member
                   </button>
@@ -1026,7 +1026,7 @@ function FacultyPage() {
                   placeholder="Search by name, designation, specialization..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800/50 border-none rounded-xl text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-[#A02021]/50 outline-none placeholder:text-slate-500 font-sans"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800/50 border-none rounded-xl text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-550/50 outline-none placeholder:text-slate-500 font-sans"
                 />
               </div>
               
@@ -1037,7 +1037,7 @@ function FacultyPage() {
                     onClick={() => setActiveDept(dept)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
                       activeDept === dept 
-                        ? "bg-[#A02021] text-white shadow-sm" 
+                        ? "bg-blue-600 text-white shadow-sm" 
                         : "bg-slate-100 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                     }`}
                   >
@@ -1071,7 +1071,7 @@ function FacultyPage() {
                       transition={{ duration: 0.3, delay: idx * 0.03 }}
                       className="h-full flex"
                     >
-                      <GlassCard className="p-6 relative overflow-hidden group hover:border-[#A02021]/30 transition-all duration-300 w-full flex flex-col justify-between">
+                      <GlassCard className="p-6 relative overflow-hidden group hover:border-blue-500/30 transition-all duration-300 w-full flex flex-col justify-between">
                         <div>
                           
                           {/* Top Badge & Admin Controls */}
@@ -1109,7 +1109,7 @@ function FacultyPage() {
                                 className="w-14 h-14 rounded-2xl object-cover shadow-md border border-slate-200/50 dark:border-slate-800 shrink-0"
                               />
                             ) : (
-                              <div className="w-14 h-14 bg-gradient-to-tr from-[#A02021] to-red-500 text-white rounded-2xl flex items-center justify-center font-extrabold text-base shadow-md shrink-0">
+                              <div className="w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-650 text-white rounded-2xl flex items-center justify-center font-extrabold text-base shadow-md shrink-0">
                                 {nameInitials}
                               </div>
                             )}
@@ -1125,7 +1125,7 @@ function FacultyPage() {
                           {/* Contact & Credentials info list */}
                           <div className="space-y-2.5 pt-4 border-t border-slate-105 dark:border-slate-800 text-xs">
                             <div className="flex items-start gap-2 text-slate-650 dark:text-slate-400">
-                              <BookOpen className="w-3.5 h-3.5 text-[#A02021] shrink-0 mt-0.5" />
+                              <BookOpen className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
                               <span className="leading-snug"><strong>Qual:</strong> {member.qualification}</span>
                             </div>
                             <div className="flex items-start gap-2 text-slate-650 dark:text-slate-400">
@@ -1134,7 +1134,7 @@ function FacultyPage() {
                             </div>
                             <div className="flex items-start gap-2 text-slate-650 dark:text-slate-400">
                               <Mail className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
-                              <a href={`mailto:${member.email}`} className="hover:text-[#A02021] transition-colors truncate">{member.email}</a>
+                              <a href={`mailto:${member.email}`} className="hover:text-blue-600 transition-colors truncate">{member.email}</a>
                             </div>
                           </div>
 

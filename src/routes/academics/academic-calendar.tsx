@@ -134,7 +134,7 @@ function AcademicCalendarPage() {
         {latestCalendar && (
           <button 
             onClick={() => handleDownloadPDF(latestCalendar.pdf_url)}
-            className="flex-shrink-0 flex items-center gap-2 bg-[#A02021] text-white hover:bg-red-850 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-lg hover:shadow-red-900/20 mt-2"
+            className="flex-shrink-0 flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-lg hover:shadow-blue-500/20 mt-2"
           >
             <Download className="w-4 h-4" />
             Download Latest PDF ({latestCalendar.program_name})
@@ -150,7 +150,7 @@ function AcademicCalendarPage() {
           </p>
           <button 
             onClick={startAddEvent}
-            className="flex items-center gap-1 bg-[#A02021] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-800 transition-all shadow-md shadow-red-900/20"
+            className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-500/20"
           >
             <Plus size={14} /> Add Calendar PDF
           </button>
@@ -276,8 +276,8 @@ function AcademicCalendarPage() {
             onClick={() => { setActiveCategory(cat); setActiveSection("All"); }}
             className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
               activeCategory === cat 
-                ? "bg-white dark:bg-slate-700 text-[#A02021] dark:text-white shadow-sm" 
-                : "text-slate-650 dark:text-slate-400 hover:text-[#A02021]"
+                ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm" 
+                : "text-slate-650 dark:text-slate-400 hover:text-blue-600"
             }`}
           >
             {cat === "UG" ? "UG Programs" : cat === "PG" ? "PG Programs" : "PhD Research"}
@@ -299,7 +299,7 @@ function AcademicCalendarPage() {
                 placeholder="Search by program, regulation..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800/50 border-none rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-[#A02021]/50 outline-none transition-all placeholder:text-slate-500"
+                className="w-full pl-9 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800/50 border-none rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-550/50 outline-none transition-all placeholder:text-slate-500"
               />
             </div>
             
@@ -311,7 +311,7 @@ function AcademicCalendarPage() {
                   onClick={() => setActiveSection(tag as any)}
                   className={`px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                     activeSection === tag 
-                      ? "bg-[#A02021] text-white shadow-md shadow-red-900/10" 
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-500/10" 
                       : "bg-slate-100 dark:bg-slate-800/50 text-slate-650 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                   }`}
                 >
@@ -338,12 +338,12 @@ function AcademicCalendarPage() {
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ delay: idx * 0.04 }}
                       >
-                        <GlassCard className="p-5 group hover:border-[#A02021]/30 transition-all duration-300 relative h-full flex flex-col justify-between">
+                        <GlassCard className="p-5 group hover:border-blue-500/30 transition-all duration-300 relative h-full flex flex-col justify-between">
                           <div>
                             <div className="flex items-start justify-between gap-2 mb-3">
                               {/* Dynamic Icon */}
                               <div className={`p-2.5 rounded-xl ${
-                                dbType === "Examinations" ? "bg-red-50 text-[#A02021] dark:bg-red-950/40" 
+                                dbType === "Examinations" ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40" 
                                 : dbType === "Holidays" ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40" 
                                 : "bg-blue-50 text-blue-600 dark:bg-blue-950/40"
                               }`}>
@@ -353,7 +353,7 @@ function AcademicCalendarPage() {
                               </div>
 
                               <span className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full ${
-                                 dbType === 'Examinations' ? 'bg-red-100 text-red-700 dark:bg-red-900/30' 
+                                 dbType === 'Examinations' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30' 
                                  : dbType === 'Holidays' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30' 
                                  : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30'
                               }`}>
@@ -361,7 +361,7 @@ function AcademicCalendarPage() {
                               </span>
                             </div>
 
-                            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1 group-hover:text-[#A02021] transition-colors">
+                            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1 group-hover:text-blue-600 transition-colors">
                               {event.program_name} ({event.level})
                             </h3>
                             
@@ -374,7 +374,7 @@ function AcademicCalendarPage() {
                           <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
                             <button
                               onClick={() => handleDownloadPDF(event.pdf_url)}
-                              className="flex-1 flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-[#A02021] hover:text-white dark:hover:bg-[#A02021] text-[#A02021] dark:text-slate-200 py-2 rounded-lg text-xs font-bold transition-all"
+                              className="flex-1 flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 text-blue-600 dark:text-slate-200 py-2 rounded-lg text-xs font-bold transition-all"
                             >
                               <Download size={14} /> Download PDF
                             </button>
@@ -421,14 +421,14 @@ function AcademicCalendarPage() {
           <GlassCard className="p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white border-none relative overflow-hidden shadow-xl">
             <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-red-400" /> Active Reference Calendar
+              <Clock className="w-4 h-4 text-blue-400" /> Active Reference Calendar
             </h3>
             {latestCalendar ? (
               <div>
                 <p className="text-lg font-bold mb-1 line-clamp-2">{latestCalendar.program_name} ({latestCalendar.regulation})</p>
-                <p className="text-red-400 text-sm font-semibold mb-4">Academic Year: {latestCalendar.academic_year}</p>
+                <p className="text-blue-400 text-sm font-semibold mb-4">Academic Year: {latestCalendar.academic_year}</p>
                 <div className="w-full h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                  <div className="h-full bg-red-500 w-3/4 rounded-full"></div>
+                  <div className="h-full bg-blue-600 w-3/4 rounded-full"></div>
                 </div>
                 <p className="text-[10px] text-slate-400 mt-2 text-right">Latest addition for {activeCategory} level</p>
               </div>

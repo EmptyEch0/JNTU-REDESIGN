@@ -48,7 +48,7 @@ function MissionVisionPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 flex justify-center items-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -62,11 +62,11 @@ function MissionVisionPage() {
       <div className="container mx-auto px-4 max-w-6xl space-y-8">
         <div className="text-center mb-12">
           <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
+             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4 tracking-tight"
           >
-            Mission & <span className="text-[#A02021]">Vision</span>
+            Mission & <span className="text-blue-600">Vision</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -92,7 +92,7 @@ function MissionVisionPage() {
                   setCoreValues(coreValuesDesc);
                   setIsEditing(true);
                 }}
-                className="flex items-center gap-1.5 bg-[#A02021] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-800 transition-all shadow"
+                className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow"
               >
                 <Edit size={13} /> Edit Mission & Vision
               </button>

@@ -200,28 +200,24 @@ function TimetablesPage() {
       return true;
     });
   }, [timetables, activeTab, searchTerm, selectedDept, selectedSemester, selectedYear, selectedSection]);
-
   return (
-    <div className="relative min-h-screen text-slate-100 p-4 md:p-8 font-sans">
-      {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center z-0 scale-105 transition-all duration-700 filter blur-sm brightness-[0.2]"
-        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=1920')` }}
-      />
+    <div className="relative min-h-screen text-slate-800 p-4 md:p-8 font-sans bg-gradient-to-b from-[#F8FAFC] via-white to-[#F0F4F8]">
+      {/* Background Elegant Overlay Pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_0.5px,transparent_0.5px)] [background-size:16px_16px] opacity-[0.03] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto space-y-6">
         
         {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400 bg-slate-900/60 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/5 w-fit">
-          <Link to="/" className="hover:text-[#A02021] flex items-center gap-1 transition-colors">
+        <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 bg-white/80 backdrop-blur-md px-4 py-2.5 rounded-full border border-slate-200/80 shadow-sm w-fit">
+          <Link to="/" className="hover:text-blue-600 flex items-center gap-1 transition-colors">
             <Home className="w-3.5 h-3.5" /> Home
           </Link>
-          <ChevronRight className="w-3 h-3 text-slate-650" />
-          <Link to="/academics" className="hover:text-[#A02021] transition-colors">
+          <ChevronRight className="w-3 h-3 text-slate-400" />
+          <Link to="/academics" className="hover:text-blue-600 transition-colors">
             Academics
           </Link>
-          <ChevronRight className="w-3 h-3 text-slate-650" />
-          <span className="text-white font-bold">Academic Time Tables</span>
+          <ChevronRight className="w-3 h-3 text-slate-400" />
+          <span className="text-slate-905 font-bold text-slate-900">Academic Time Tables</span>
         </nav>
 
         {/* Hero Section Banner */}
@@ -229,26 +225,26 @@ function TimetablesPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-red-950/80 via-slate-950/90 to-[#A02021]/30 p-6 md:p-10 border border-[#A02021]/20 shadow-2xl shadow-red-950/30"
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-950 to-blue-800 p-6 md:p-10 border border-blue-800/30 shadow-xl shadow-blue-950/10"
         >
-          <div className="absolute right-0 top-0 w-80 h-80 bg-[#A02021]/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute left-1/4 bottom-0 w-60 h-60 bg-[#A02021]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute right-0 top-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute left-1/3 bottom-0 w-60 h-60 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
           
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
             <div className="space-y-3">
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest bg-red-500/10 border border-red-500/20 text-red-400 rounded-full px-3 py-1">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest bg-blue-500/15 border border-blue-500/30 text-blue-300 rounded-full px-3 py-1">
                 <Clock className="w-3 h-3" /> Class & Exam Schedules
               </span>
               <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-none">
                 Academic Time Tables
               </h1>
-              <p className="text-slate-350 text-xs md:text-sm max-w-2xl leading-relaxed font-medium">
+              <p className="text-slate-300 text-xs md:text-sm max-w-2xl leading-relaxed font-medium">
                 View, preview, and download the latest class-wise, semester-wise, and branch-wise timetables, examination schedules, and academic calendars.
               </p>
             </div>
             
             {/* Elegant calendar icon container */}
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#A02021] to-red-900/80 border border-red-500/30 flex items-center justify-center text-white shadow-xl shadow-red-950/40 shrink-0">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-650 border border-blue-400/30 flex items-center justify-center text-white shadow-xl shadow-blue-950/20 shrink-0">
               <CalendarRange className="w-8 h-8 text-white stroke-[1.8]" />
             </div>
           </div>
@@ -256,18 +252,18 @@ function TimetablesPage() {
 
         {/* Admin Mode Controls */}
         {isEditMode && (
-          <GlassCard className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row gap-4 items-center justify-between text-white backdrop-blur-md">
+          <GlassCard className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row gap-4 items-center justify-between text-slate-800 backdrop-blur-md shadow-sm" hoverEffect={false}>
             <div className="space-y-0.5">
-              <p className="text-amber-400 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" /> Admin Control Desk
+              <p className="text-amber-700 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" /> Admin Control Desk
               </p>
-              <p className="text-slate-355 text-[11px] font-medium">
+              <p className="text-slate-600 text-[11px] font-medium">
                 Add, edit, or delete batch schedules, weekly calendars, and exam timetables in real-time.
               </p>
             </div>
             <button 
               onClick={startAddTimetable}
-              className="flex items-center gap-1.5 bg-[#A02021] hover:bg-red-800 text-white px-5 py-2.5 rounded-xl text-xs font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-red-900/30 whitespace-nowrap"
+              className="flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-5 py-2.5 rounded-xl text-xs font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md shadow-blue-500/10 whitespace-nowrap"
             >
               <Plus className="w-4 h-4" /> Add Timetable Schedule
             </button>
@@ -283,37 +279,37 @@ function TimetablesPage() {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <GlassCard className="p-6 border border-amber-500/30 space-y-4 bg-slate-950/90 backdrop-blur-xl">
+              <GlassCard className="p-6 border border-amber-400 bg-white/95 backdrop-blur-xl shadow-lg space-y-4" hoverEffect={false}>
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                  <h3 className="text-xs font-black uppercase tracking-wider text-amber-655 flex items-center gap-1.5 text-amber-700 font-extrabold">
                     <Edit2 className="w-3.5 h-3.5" />
                     {editTimetableId === -1 ? "Add Timetable Record" : "Edit Timetable Record"}
                   </h3>
                   <button 
                     onClick={() => setEditTimetableId(null)}
-                    className="p-1 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors"
+                    className="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-slate-850">
                   <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Level Category</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Level Category</label>
                     <select 
                       value={tLevel} 
                       onChange={(e) => setTLevel(e.target.value as any)}
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 cursor-pointer outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-amber-500" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 cursor-pointer outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     >
                       <option value="UG">UG Program</option>
                       <option value="PG">PG Program</option>
                     </select>
                   </div>
                   <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Specific Program</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Specific Program</label>
                     <select 
                       value={tProgramName} 
                       onChange={(e) => setTProgramName(e.target.value as any)}
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 cursor-pointer outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-amber-500" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 cursor-pointer outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     >
                       <option value="B.Tech">B.Tech</option>
                       <option value="M.Tech">M.Tech</option>
@@ -322,41 +318,41 @@ function TimetablesPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Regulation Code</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Regulation Code</label>
                     <input 
                       type="text" 
                       placeholder="e.g. R23, R20"
                       value={tRegulation} 
                       onChange={(e) => setTRegulation(e.target.value)} 
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-amber-500" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Academic Year</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Academic Year</label>
                     <input 
                       type="text" 
                       placeholder="e.g. 2025-2026"
                       value={tAcademicYear} 
                       onChange={(e) => setTAcademicYear(e.target.value)} 
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-amber-500" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Branch / Department</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Branch / Department</label>
                     <input 
                       type="text" 
                       placeholder="e.g. CSE, ECE, EEE"
                       value={tBranch} 
                       onChange={(e) => setTBranch(e.target.value)} 
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-amber-500" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Semester Cycle</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Semester Cycle</label>
                     <select 
                       value={tSemester} 
                       onChange={(e) => setTSemester(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 cursor-pointer outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-amber-500" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 cursor-pointer outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     >
                       {Array.from({ length: 8 }).map((_, i) => (
                         <option key={i} value={`Semester ${i+1}`}>Semester {i+1}</option>
@@ -364,30 +360,30 @@ function TimetablesPage() {
                     </select>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Timetable File PDF URL</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Timetable File PDF URL</label>
                     <input 
                       type="text" 
                       placeholder="https://..."
                       value={tPdfUrl} 
                       onChange={(e) => setTPdfUrl(e.target.value)} 
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-amber-500" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                   <div className="md:col-span-4">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Timetable Title / Batch Description</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Timetable Title / Batch Description</label>
                     <input 
                       type="text" 
                       placeholder="e.g. B.Tech CSE III Year I Semester Sec-A Regular Timetable"
                       value={tSubjectName} 
                       onChange={(e) => setTSubjectName(e.target.value)} 
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-amber-500" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
                   <button 
                     onClick={() => setEditTimetableId(null)}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-colors"
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all"
                   >
                     Cancel
                   </button>
@@ -409,7 +405,7 @@ function TimetablesPage() {
                         pdf_url: tPdfUrl
                       });
                     }}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition-colors shadow-md"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md"
                   >
                     <Save className="w-3.5 h-3.5" /> Save Changes
                   </button>
@@ -420,10 +416,10 @@ function TimetablesPage() {
         </AnimatePresence>
 
         {/* Dashboard Filter Hub */}
-        <GlassCard className="p-5 bg-slate-950/75 border border-white/15 shadow-xl space-y-4">
-          <div className="flex items-center justify-between pb-2.5 border-b border-white/5">
-            <h3 className="text-xs font-black uppercase tracking-widest text-slate-350 flex items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4 text-[#A02021]" /> Academic Filter Hub
+        <GlassCard className="p-5 bg-white border border-slate-200/80 shadow-lg space-y-4" hoverEffect={false}>
+          <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+            <h3 className="text-xs font-black uppercase tracking-widest text-slate-700 flex items-center gap-2">
+              <SlidersHorizontal className="w-4 h-4 text-blue-600" /> Academic Filter Hub
             </h3>
             <button 
               onClick={() => {
@@ -433,20 +429,20 @@ function TimetablesPage() {
                 setSelectedSection("All");
                 setSearchTerm("");
               }}
-              className="text-[10px] font-black text-red-400 hover:text-red-300 transition-colors uppercase tracking-widest"
+              className="text-[10px] font-black text-blue-600 hover:text-blue-800 transition-colors uppercase tracking-widest"
             >
               Clear All Filters
             </button>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs font-medium">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs font-medium text-slate-800">
             {/* Department Filter */}
             <div>
               <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Department</label>
               <select 
                 value={selectedDept}
                 onChange={(e) => setSelectedDept(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 outline-none focus:ring-1 focus:ring-[#A02021] text-slate-200 cursor-pointer"
+                className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-700 cursor-pointer transition-all"
               >
                 <option value="All">All Departments</option>
                 {uniqueDepts.map((d) => (
@@ -461,7 +457,7 @@ function TimetablesPage() {
               <select 
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 outline-none focus:ring-1 focus:ring-[#A02021] text-slate-200 cursor-pointer"
+                className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-700 cursor-pointer transition-all"
               >
                 <option value="All">All Years</option>
                 <option value="I Year">I Year (1st Year)</option>
@@ -477,7 +473,7 @@ function TimetablesPage() {
               <select 
                 value={selectedSemester}
                 onChange={(e) => setSelectedSemester(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 outline-none focus:ring-1 focus:ring-[#A02021] text-slate-200 cursor-pointer"
+                className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-700 cursor-pointer transition-all"
               >
                 <option value="All">All Semesters</option>
                 {Array.from({ length: 8 }).map((_, i) => (
@@ -492,7 +488,7 @@ function TimetablesPage() {
               <select 
                 value={selectedSection}
                 onChange={(e) => setSelectedSection(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 outline-none focus:ring-1 focus:ring-[#A02021] text-slate-200 cursor-pointer"
+                className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-700 cursor-pointer transition-all"
               >
                 <option value="All">All Sections</option>
                 <option value="A">Section A</option>
@@ -507,14 +503,14 @@ function TimetablesPage() {
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           
           {/* Animated Tabs: UG | PG | Exams | Circulars */}
-          <div className="flex items-center gap-1.5 p-1.5 bg-slate-950/70 border border-white/10 rounded-2xl w-full md:w-auto overflow-x-auto shadow-md">
+          <div className="flex items-center gap-1.5 p-1.5 bg-slate-100 border border-slate-200 rounded-2xl w-full md:w-auto overflow-x-auto shadow-sm">
             {(["UG", "PG", "Exams", "Circulars"] as const).map((tab) => {
               const isSelected = activeTab === tab;
               const displayLabel = {
                 UG: "UG Class Timetables",
                 PG: "PG Class Timetables",
-                Exams: "Exam schedules",
-                Circulars: "Academic circulars"
+                Exams: "Exam Schedules",
+                Circulars: "Academic Circulars"
               }[tab];
 
               return (
@@ -529,8 +525,8 @@ function TimetablesPage() {
                   }}
                   className={`px-5 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all duration-300 whitespace-nowrap flex items-center gap-1.5 ${
                     isSelected 
-                      ? "bg-gradient-to-r from-[#A02021] to-red-800 text-white shadow-lg shadow-red-950/40" 
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-650 text-white shadow-md shadow-blue-500/10" 
+                      : "text-slate-655 text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"
                   }`}
                 >
                   {tab === "UG" && <GraduationCap className="w-3.5 h-3.5" />}
@@ -545,13 +541,13 @@ function TimetablesPage() {
 
           {/* Search bar inside timetables */}
           <div className="relative w-full md:max-w-xs shrink-0">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-455" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input 
               type="text" 
               placeholder="Search schedules/circulars..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700/50 rounded-xl text-xs text-white focus:ring-1 focus:ring-[#A02021] outline-none transition-all placeholder:text-slate-500 font-sans"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 font-sans shadow-sm"
             />
           </div>
         </div>
@@ -560,18 +556,18 @@ function TimetablesPage() {
         {isLoading ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, idx) => (
-              <GlassCard key={idx} className="p-6 h-[200px] animate-pulse bg-slate-900/40 border-white/5 flex flex-col justify-between" hoverEffect={false}>
+              <GlassCard key={idx} className="p-6 h-[200px] animate-pulse bg-white border-slate-200 flex flex-col justify-between" hoverEffect={false}>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <div className="h-4 bg-slate-800 rounded w-1/3" />
-                    <div className="h-4 bg-slate-800 rounded w-1/6" />
+                    <div className="h-4 bg-slate-100 rounded w-1/3" />
+                    <div className="h-4 bg-slate-100 rounded w-1/6" />
                   </div>
-                  <div className="h-5 bg-slate-800 rounded w-5/6" />
-                  <div className="h-4 bg-slate-800 rounded w-1/2" />
+                  <div className="h-5 bg-slate-100 rounded w-5/6" />
+                  <div className="h-4 bg-slate-100 rounded w-1/2" />
                 </div>
-                <div className="flex justify-between items-center pt-3 border-t border-white/5">
-                  <div className="h-3 bg-slate-800 rounded w-1/4" />
-                  <div className="h-8 bg-slate-800 rounded w-1/4" />
+                <div className="flex justify-between items-center pt-3 border-t border-slate-100">
+                  <div className="h-3 bg-slate-100 rounded w-1/4" />
+                  <div className="h-8 bg-slate-100 rounded w-1/4" />
                 </div>
               </GlassCard>
             ))}
@@ -591,44 +587,44 @@ function TimetablesPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: idx * 0.03 }}
                 >
-                  <GlassCard className="p-6 h-full flex flex-col justify-between relative overflow-hidden group hover:border-[#A02021]/50 bg-slate-950/60 border border-white/10 hover:shadow-2xl hover:shadow-red-950/10 transition-all duration-300">
-                    <div className="absolute right-0 top-0 w-24 h-24 bg-[#A02021]/3 rounded-full blur-2xl group-hover:bg-[#A02021]/5 transition-all duration-300 pointer-events-none" />
+                  <GlassCard className="p-6 h-full flex flex-col justify-between relative overflow-hidden group hover:border-blue-300 hover:shadow-xl hover:shadow-blue-900/5 bg-white border border-slate-200/80 transition-all duration-300">
+                    <div className="absolute right-0 top-0 w-24 h-24 bg-blue-500/3 rounded-full blur-2xl group-hover:bg-blue-500/5 transition-all duration-300 pointer-events-none" />
                     
                     <div className="space-y-4">
                       {/* Top badging */}
-                      <div className="flex items-center justify-between gap-3 pb-2 border-b border-white/5">
-                        <span className="text-[9px] font-black uppercase tracking-wider text-[#A02021] bg-red-500/10 px-2.5 py-1 rounded-md border border-red-500/10">
+                      <div className="flex items-center justify-between gap-3 pb-2 border-b border-slate-100">
+                        <span className="text-[9px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100/80">
                           {item.program_name} · {branchName}
                         </span>
                         
-                        <span className="text-[9px] font-black uppercase tracking-wider text-slate-400 bg-slate-800 px-2 py-0.5 rounded border border-white/5">
+                        <span className="text-[9px] font-black uppercase tracking-wider text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/60">
                           {item.regulation}
                         </span>
                       </div>
 
                       {/* Main Title */}
-                      <h4 className="font-extrabold text-white text-xs md:text-sm leading-relaxed group-hover:text-red-400 transition-colors line-clamp-3">
+                      <h4 className="font-extrabold text-slate-800 text-xs md:text-sm leading-relaxed group-hover:text-blue-600 transition-colors line-clamp-3">
                         {item.subject_name}
                       </h4>
 
                       {/* Details specs */}
-                      <div className="grid grid-cols-2 gap-3 text-[11px] font-medium text-slate-350 bg-slate-900/40 p-2.5 rounded-xl border border-white/5">
+                      <div className="grid grid-cols-2 gap-3 text-[11px] font-medium text-slate-655 bg-slate-50 p-2.5 rounded-xl border border-slate-150">
                         <div>
-                          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-0.5">Academic Cycle</p>
-                          <p className="font-bold text-slate-200">{item.semester}</p>
+                          <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-0.5">Academic Cycle</p>
+                          <p className="font-bold text-slate-700">{item.semester}</p>
                         </div>
                         <div>
-                          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-0.5">Academic Year</p>
-                          <p className="font-bold text-slate-200">{item.academic_year}</p>
+                          <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-0.5">Academic Year</p>
+                          <p className="font-bold text-slate-700">{item.academic_year}</p>
                         </div>
                       </div>
                     </div>
 
                     {/* Footer Actions */}
-                    <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-5">
-                      <span className="text-[9px] text-slate-450 font-bold uppercase tracking-widest flex flex-col justify-start">
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 mt-5">
+                      <span className="text-[9px] text-slate-400 font-bold uppercase tracking-widest flex flex-col justify-start">
                         <span>Updated</span>
-                        <span className="text-slate-300 font-bold mt-0.5">{updatedDate}</span>
+                        <span className="text-slate-600 font-bold mt-0.5">{updatedDate}</span>
                       </span>
 
                       <div className="flex items-center gap-2">
@@ -637,7 +633,7 @@ function TimetablesPage() {
                           <div className="flex items-center gap-1 relative z-20">
                             <button
                               onClick={() => startEditTimetable(item)}
-                              className="p-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/25 border border-amber-500/20 text-amber-400 transition-colors"
+                              className="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-700 transition-colors"
                               title="Edit schedule"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
@@ -648,7 +644,7 @@ function TimetablesPage() {
                                   deleteTimetableMutation.mutate(item.id);
                                 }
                               }}
-                              className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/25 border border-red-500/20 text-red-400 transition-colors"
+                              className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 transition-colors"
                               title="Delete schedule"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -658,7 +654,7 @@ function TimetablesPage() {
 
                         <button 
                           onClick={() => window.open(item.pdf_url, "_blank")}
-                          className="flex items-center gap-1 bg-gradient-to-r from-[#A02021] to-red-800 hover:from-red-800 hover:to-red-900 text-white rounded-lg px-3.5 py-2 text-[10px] font-black tracking-wider uppercase transition-all shadow-md group-hover:scale-[1.02] active:scale-[0.98]"
+                          className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg px-3.5 py-2 text-[10px] font-black tracking-wider uppercase transition-all shadow-md group-hover:scale-[1.02] active:scale-[0.98]"
                         >
                           <Download className="w-3.5 h-3.5" /> View PDF
                         </button>
@@ -670,10 +666,10 @@ function TimetablesPage() {
             })}
           </div>
         ) : (
-          <GlassCard className="p-12 text-center bg-slate-950/60 border border-white/10 flex flex-col items-center justify-center h-80">
-            <CalendarRange className="w-16 h-16 text-[#A02021]/30 mb-4 stroke-[1.3]" />
-            <h4 className="text-sm font-bold text-white mb-1">No timetables found</h4>
-            <p className="text-xs text-slate-450 max-w-md mx-auto leading-relaxed">
+          <GlassCard className="p-12 text-center bg-white border border-slate-200/80 shadow-md flex flex-col items-center justify-center h-80">
+            <CalendarRange className="w-16 h-16 text-blue-500/30 mb-4 stroke-[1.3]" />
+            <h4 className="text-sm font-bold text-slate-800 mb-1">No timetables found</h4>
+            <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
               We couldn't find any timetable or schedules matching your selected filters for active departments, semesters, sections, or search terms. Try resetting filters.
             </p>
           </GlassCard>

@@ -225,33 +225,68 @@ function AcademicsDashboard() {
 
   // Compile Dynamic Notifications from DB
   const dynamicTickerNotifications = useMemo(() => {
-    const calendarAlerts = calendarList.map((c: any) => ({
-      id: `cal-${c.id}`,
-      source: "calendar" as const,
-      label: "Calendar",
-      text: `${c.title} (${c.section})`,
-      date: c.date,
-      to: "/academics/academic-calendar",
-      urgent: c.section === "Examinations"
-    }));
+    const calendarAlerts = calendarList
+      .filter((c: any) => c.pdf_url && c.pdf_url.trim() !== "")
+      .map((c: any) => {
+        let source: "calendar" | "holiday" | "exam-sched" = "calendar";
+        let label = "Academic Calendar";
+        let text = `Academic Calendar — ${c.program_name} (${c.regulation}) A.Y. ${c.academic_year}`;
+        
+        if (c.calendar_type === "Holidays") {
+          source = "holiday";
+          label = "Holiday List";
+          text = `Holiday Notification — ${c.program_name} (${c.regulation}) A.Y. ${c.academic_year}`;
+        } else if (c.calendar_type === "Examinations") {
+          source = "exam-sched";
+          label = "Exam Schedule";
+          text = `Examination Schedule Update — ${c.program_name} (${c.regulation}) A.Y. ${c.academic_year}`;
+        }
+        
+        return {
+          id: `cal-${c.id}`,
+          source,
+          label,
+          text,
+          date: c.created_at
+            ? new Date(c.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+            : c.academic_year,
+          to: c.pdf_url,
+          urgent: c.calendar_type === "Examinations",
+        };
+      });
 
-    const examAlerts = examList.map((e: any) => {
-      let source: "results" | "hall-ticket" | "fee" = "fee";
-      if (e.type === "Result") source = "results";
-      else if (e.type === "HallTicket") source = "hall-ticket";
-      return {
-        id: `exam-${e.id}`,
-        source,
-        label: e.type,
-        text: `${e.title} — ${e.description || ""}`,
-        date: e.date,
-        to: "/academics/examination",
-        urgent: e.type === "Result" || e.type === "HallTicket"
-      };
-    });
+    const examAlerts = examList
+      .filter((e: any) => e.file_url && e.file_url.trim() !== "")
+      .map((e: any) => {
+        let source: "exam-notif" | "hall-ticket" | "results" | "timetable" = "exam-notif";
+        let label = e.type;
+        
+        if (e.type === "Result") {
+          source = "results";
+          label = "Result Link";
+        } else if (e.type === "HallTicket") {
+          source = "hall-ticket";
+          label = "Hall Ticket Link";
+        } else if (e.type === "Timetable") {
+          source = "timetable";
+          label = "Timetable Link";
+        } else {
+          source = "exam-notif";
+          label = "Exam Notice";
+        }
+        
+        return {
+          id: `exam-${e.id}`,
+          source,
+          label,
+          text: `${e.title}${e.description ? ` — ${e.description}` : ""}`,
+          date: e.date,
+          to: e.file_url,
+          urgent: e.type === "Result" || e.type === "HallTicket"
+        };
+      });
 
-    const combined = [...calendarAlerts, ...examAlerts];
-    return combined.length > 0 ? combined : TICKER_NOTIFICATIONS;
+    return [...calendarAlerts, ...examAlerts];
   }, [calendarList, examList]);
 
   return (
@@ -343,7 +378,7 @@ function AcademicsDashboard() {
           </p>
           <button 
             onClick={startAddStat}
-            className="flex items-center gap-1 bg-[#A02021] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-800 transition-all shadow"
+            className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-900/10"
           >
             <Plus size={13} /> Add Stat Card
           </button>
@@ -399,11 +434,11 @@ function AcademicsDashboard() {
                 onChange={(e) => setSColor(e.target.value)}
                 className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500 cursor-pointer"
               >
-                <option value="text-blue-400">Blue Accent</option>
+                <option value="text-blue-500">Royal Blue Accent</option>
+                <option value="text-blue-400">Light Blue Accent</option>
                 <option value="text-emerald-400">Emerald Accent</option>
                 <option value="text-violet-400">Violet Accent</option>
                 <option value="text-amber-400">Amber Accent</option>
-                <option value="text-[#A02021]">Crimson Accent</option>
               </select>
             </div>
             <div>

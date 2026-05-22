@@ -273,26 +273,23 @@ function ScholarshipsPage() {
   }, [scholarships, searchTerm, activeCategory]);
 
   return (
-    <div className="relative min-h-screen text-slate-100 p-4 md:p-8 font-sans">
-      {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center z-0 scale-105 transition-all duration-700 filter blur-sm brightness-[0.2]"
-        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=1920')` }}
-      />
+    <div className="relative min-h-screen text-slate-800 p-4 md:p-8 font-sans bg-gradient-to-b from-[#F8FAFC] via-white to-[#F0F4F8]">
+      {/* Background Elegant Overlay Pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_0.5px,transparent_0.5px)] [background-size:16px_16px] opacity-[0.03] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto space-y-6">
         
         {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400 bg-slate-900/60 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/5 w-fit">
-          <Link to="/" className="hover:text-[#A02021] flex items-center gap-1 transition-colors">
+        <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 bg-white/80 backdrop-blur-md px-4 py-2.5 rounded-full border border-slate-200/80 shadow-sm w-fit">
+          <Link to="/" className="hover:text-blue-600 flex items-center gap-1 transition-colors">
             <Home className="w-3.5 h-3.5" /> Home
           </Link>
-          <ChevronRight className="w-3 h-3 text-slate-650" />
-          <Link to="/academics" className="hover:text-[#A02021] transition-colors">
+          <ChevronRight className="w-3 h-3 text-slate-400" />
+          <Link to="/academics" className="hover:text-blue-600 transition-colors">
             Academics
           </Link>
-          <ChevronRight className="w-3 h-3 text-slate-650" />
-          <span className="text-white font-bold">Scholarships</span>
+          <ChevronRight className="w-3 h-3 text-slate-400" />
+          <span className="text-slate-900 font-bold">Scholarships</span>
         </nav>
 
         {/* Hero Section Banner with premium illustration on right side */}
@@ -300,38 +297,38 @@ function ScholarshipsPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-red-950/80 via-slate-950/90 to-[#A02021]/30 p-6 md:p-10 border border-[#A02021]/20 shadow-2xl shadow-red-950/30"
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-950 to-blue-800 p-6 md:p-10 border border-blue-800/30 shadow-xl shadow-blue-950/10"
         >
-          <div className="absolute right-0 top-0 w-96 h-96 bg-[#A02021]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute right-0 top-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
           
           <div className="grid md:grid-cols-3 gap-6 items-center relative z-10">
             <div className="md:col-span-2 space-y-3">
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest bg-red-500/10 border border-red-500/20 text-red-400 rounded-full px-3 py-1">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest bg-blue-500/15 border border-blue-500/30 text-blue-300 rounded-full px-3 py-1">
                 <Award className="w-3.5 h-3.5" /> Student Financial Welfare
               </span>
               <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
                 Scholarships & Financial Assistance
               </h1>
-              <p className="text-slate-350 text-xs md:text-sm max-w-xl leading-relaxed font-medium">
+              <p className="text-slate-300 text-xs md:text-sm max-w-xl leading-relaxed font-medium">
                 Explore government portals, tuition fee reimbursement initiatives, and international fellowships structured to fund your academic aspirations at JNTU-GV.
               </p>
             </div>
             
             {/* Educational Banner Vector Illustration on Right Side */}
             <div className="hidden md:flex justify-end pr-4">
-              <div className="relative w-44 h-44 bg-slate-900/60 rounded-full border border-white/10 flex items-center justify-center shadow-2xl shadow-[#A02021]/10 group">
-                <div className="absolute inset-2 bg-gradient-to-tr from-[#A02021]/20 to-red-650/10 rounded-full blur-lg group-hover:scale-105 transition-transform" />
+              <div className="relative w-44 h-44 bg-white/10 rounded-full border border-white/20 flex items-center justify-center shadow-2xl shadow-blue-950/20 group">
+                <div className="absolute inset-2 bg-gradient-to-tr from-blue-500/20 to-indigo-650/10 rounded-full blur-lg group-hover:scale-105 transition-transform" />
                 
                 {/* SVG glowing graphic design */}
                 <svg className="w-24 h-24 text-white z-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M50 15L15 32L50 49L85 32L50 15Z" fill="url(#gradCap)" stroke="#A02021" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M22 35.5V60C22 70 50 78 50 78C50 78 78 70 78 60V35.5" stroke="#A02021" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="50" cy="40" r="8" fill="#A02021" className="animate-pulse" />
+                  <path d="M50 15L15 32L50 49L85 32L50 15Z" fill="url(#gradCap)" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M22 35.5V60C22 70 50 78 50 78C50 78 78 70 78 60V35.5" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="50" cy="40" r="8" fill="#3b82f6" className="animate-pulse" />
                   <path d="M50 36V44M46 40H54" stroke="white" strokeWidth="1.5" />
                   <defs>
                     <linearGradient id="gradCap" x1="50" y1="15" x2="50" y2="49" gradientUnits="userSpaceOnUse">
-                      <stop stopColor="#A02021" />
-                      <stop offset="1" stopColor="#E11D48" />
+                      <stop stopColor="#3b82f6" />
+                      <stop offset="1" stopColor="#6366f1" />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -339,16 +336,16 @@ function ScholarshipsPage() {
                 <motion.div 
                   animate={{ y: [0, -6, 0] }}
                   transition={{ duration: 3, repeat: Infinity }}
-                  className="absolute -top-1 right-8 bg-slate-900 border border-white/10 rounded-lg p-1.5 flex items-center text-[10px] text-yellow-400 font-bold"
+                  className="absolute -top-1 right-8 bg-blue-900/90 backdrop-blur border border-blue-500/30 rounded-lg p-1.5 flex items-center text-[10px] text-yellow-300 font-bold"
                 >
                   <DollarSign className="w-3.5 h-3.5" /> Direct Pay
                 </motion.div>
                 <motion.div 
                   animate={{ y: [0, 6, 0] }}
                   transition={{ duration: 4, repeat: Infinity }}
-                  className="absolute -bottom-1 left-4 bg-slate-900 border border-[#A02021]/30 rounded-lg p-1.5 flex items-center text-[10px] text-white font-bold"
+                  className="absolute -bottom-1 left-4 bg-blue-900/90 backdrop-blur border border-blue-500/30 rounded-lg p-1.5 flex items-center text-[10px] text-white font-bold"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-red-500 mr-1" /> Approved
+                  <Sparkles className="w-3.5 h-3.5 text-blue-400 mr-1" /> Approved
                 </motion.div>
               </div>
             </div>
@@ -357,12 +354,12 @@ function ScholarshipsPage() {
 
         {/* Admin Desk Panel */}
         {isEditMode && (
-          <GlassCard className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row gap-4 items-center justify-between text-white backdrop-blur-md">
+          <GlassCard className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row gap-4 items-center justify-between text-slate-800 backdrop-blur-md shadow-sm" hoverEffect={false}>
             <div className="space-y-0.5">
-              <p className="text-amber-400 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" /> Admin Control Desk
+              <p className="text-amber-700 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" /> Admin Control Desk
               </p>
-              <p className="text-slate-350 text-[11px] font-medium">
+              <p className="text-slate-600 text-[11px] font-medium">
                 Add new financial aid listings, edit existing grants, or seed default template cards dynamically in the database.
               </p>
             </div>
@@ -377,7 +374,7 @@ function ScholarshipsPage() {
               )}
               <button 
                 onClick={startAddSch}
-                className="flex items-center gap-1.5 bg-[#A02021] hover:bg-red-800 text-white px-5 py-2.5 rounded-xl text-xs font-black transition-all shadow shadow-red-900/30"
+                className="flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-5 py-2.5 rounded-xl text-xs font-black transition-all shadow shadow-blue-500/20"
               >
                 <Plus className="w-4 h-4" /> Add Scholarship Card
               </button>
@@ -394,96 +391,96 @@ function ScholarshipsPage() {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <GlassCard className="p-6 border border-amber-500/30 space-y-4 bg-slate-950/90 backdrop-blur-xl">
+              <GlassCard className="p-6 border border-amber-405 bg-white/95 backdrop-blur-xl shadow-lg space-y-4" hoverEffect={false}>
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                  <h3 className="text-xs font-black uppercase tracking-wider text-amber-655 flex items-center gap-1.5 text-amber-700 font-extrabold">
                     <Edit2 className="w-3.5 h-3.5" />
                     {editSchId === -1 ? "Add Scholarship Details" : "Edit Scholarship Details"}
                   </h3>
                   <button 
                     onClick={() => setEditSchId(null)}
-                    className="p-1 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors"
+                    className="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-850">
                   <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Scholarship Name</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Scholarship Name</label>
                     <input 
                       type="text" 
                       value={sTitle} 
                       onChange={(e) => setSTitle(e.target.value)} 
                       placeholder="e.g. National Scholarship Portal (NSP)"
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Grant Amount / Benefits</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Grant Amount / Benefits</label>
                     <input 
                       type="text" 
                       placeholder="e.g. ₹20,000 / year"
                       value={sAmount} 
                       onChange={(e) => setSAmount(e.target.value)} 
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Application Last Date</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Application Last Date</label>
                     <input 
                       type="text" 
                       placeholder="e.g. Dec 31, 2026"
                       value={sLastDate} 
                       onChange={(e) => setSLastDate(e.target.value)} 
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Online Application / Portal URL</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Online Application / Portal URL</label>
                     <input 
                       type="text" 
                       placeholder="https://..."
                       value={sApplyUrl} 
                       onChange={(e) => setSApplyUrl(e.target.value)} 
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Status</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Status</label>
                     <select 
                       value={sStatus} 
                       onChange={(e) => setSStatus(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 cursor-pointer outline-none focus:ring-1 focus:ring-amber-500/50" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 cursor-pointer outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     >
                       <option value="Active">Active</option>
                       <option value="Closed">Closed</option>
                     </select>
                   </div>
                   <div className="md:col-span-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Scholarship Benefits Description</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Scholarship Benefits Description</label>
                     <textarea 
                       rows={2}
                       value={sDescription} 
                       onChange={(e) => setSDescription(e.target.value)} 
                       placeholder="Benefits e.g. Full tuition fee reimbursement..."
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                   <div className="md:col-span-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Eligibility Criteria Details</label>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Eligibility Criteria Details</label>
                     <textarea 
                       rows={2}
                       value={sEligibility} 
                       onChange={(e) => setSEligibility(e.target.value)} 
                       placeholder="Eligibility e.g. Income below 2.5 Lakh, AP resident..."
-                      className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-amber-500/50" 
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
                     />
                   </div>
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
                   <button 
                     onClick={() => setEditSchId(null)}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-colors"
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all"
                   >
                     Cancel
                   </button>
@@ -504,7 +501,7 @@ function ScholarshipsPage() {
                         apply_url: sApplyUrl
                       });
                     }}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition-colors shadow-md"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md"
                   >
                     <Save className="w-3.5 h-3.5" /> Save Changes
                   </button>
@@ -519,35 +516,35 @@ function ScholarshipsPage() {
           
           {/* 1. STICKY SIDEBAR NAVIGATION */}
           <div className="lg:col-span-1 space-y-4 lg:sticky lg:top-6 z-20">
-            <GlassCard className="p-4 bg-slate-950/75 border border-white/15 shadow-xl space-y-4">
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 pb-2 border-b border-white/5">
+            <GlassCard className="p-4 bg-white border border-slate-200/80 shadow-md space-y-4" hoverEffect={false}>
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700 pb-2 border-b border-slate-100">
                 Quick Navigation
               </h3>
               <nav className="space-y-1">
                 <a 
                   href="#schemes" 
-                  className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white rounded-xl transition-all"
+                  className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-55/10 hover:bg-slate-50 hover:text-blue-600 rounded-xl transition-all"
                 >
-                  <Award className="w-4 h-4 text-[#A02021]" /> Active Schemes
+                  <Award className="w-4 h-4 text-blue-600" /> Active Schemes
                 </a>
                 <a 
                   href="#documents" 
-                  className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white rounded-xl transition-all"
+                  className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-55/10 hover:bg-slate-50 hover:text-blue-600 rounded-xl transition-all"
                 >
-                  <FileBadge className="w-4 h-4 text-[#A02021]" /> Document Checklist
+                  <FileBadge className="w-4 h-4 text-blue-600" /> Document Checklist
                 </a>
                 <a 
                   href="#faqs" 
-                  className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white rounded-xl transition-all"
+                  className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-55/10 hover:bg-slate-50 hover:text-blue-600 rounded-xl transition-all"
                 >
-                  <HelpCircle className="w-4 h-4 text-[#A02021]" /> FAQ Help Center
+                  <HelpCircle className="w-4 h-4 text-blue-600" /> FAQ Help Center
                 </a>
               </nav>
             </GlassCard>
 
             {/* Category Filters */}
-            <GlassCard className="p-4 bg-slate-950/75 border border-white/15 shadow-xl space-y-3">
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 pb-2 border-b border-white/5">
+            <GlassCard className="p-4 bg-white border border-slate-200/80 shadow-md space-y-3" hoverEffect={false}>
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700 pb-2 border-b border-slate-100">
                 Portal Categories
               </h3>
               <div className="space-y-1">
@@ -559,8 +556,8 @@ function ScholarshipsPage() {
                       onClick={() => setActiveCategory(cat)}
                       className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between ${
                         isSelected 
-                          ? "bg-[#A02021]/20 text-white font-extrabold border border-[#A02021]/30" 
-                          : "text-slate-350 hover:bg-white/5 hover:text-white"
+                          ? "bg-blue-50 text-blue-700 font-extrabold border border-blue-200" 
+                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                       }`}
                     >
                       <span>{cat === "All" ? "All Categories" : `${cat} Schemes`}</span>
@@ -572,9 +569,9 @@ function ScholarshipsPage() {
             </GlassCard>
 
             {/* Helpdesk Contacts */}
-            <GlassCard className="p-4 bg-gradient-to-br from-slate-900/60 to-red-950/10 border border-white/5 rounded-2xl shadow-xl">
-              <p className="text-[9px] font-black text-red-400 uppercase tracking-widest mb-1.5">Campus Helpdesk</p>
-              <div className="text-[11px] text-slate-350 space-y-1.5 leading-relaxed font-semibold">
+            <GlassCard className="p-4 bg-gradient-to-br from-white to-blue-50/30 border border-slate-200/85 rounded-2xl shadow-md" hoverEffect={false}>
+              <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest mb-1.5">Campus Helpdesk</p>
+              <div className="text-[11px] text-slate-600 space-y-1.5 leading-relaxed font-semibold">
                 <p>📍 Academics Desk, Administrative Block</p>
                 <p>📧 scholarships@jntugv.edu.in</p>
                 <p>🕒 Mon – Sat (10:00 AM – 5:00 PM)</p>
@@ -589,18 +586,18 @@ function ScholarshipsPage() {
             <div id="schemes" className="space-y-6">
               
               {/* Search Header */}
-              <GlassCard className="p-4 bg-slate-950/70 border border-white/15 shadow-xl flex flex-col sm:flex-row gap-4 items-center justify-between">
+              <GlassCard className="p-4 bg-white border border-slate-200/80 shadow-md flex flex-col sm:flex-row gap-4 items-center justify-between" hoverEffect={false}>
                 <div className="relative w-full sm:max-w-md">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-450" />
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input 
                     type="text" 
                     placeholder="Search scholarship name, eligibility keywords..." 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700/50 rounded-xl text-xs text-white focus:ring-1 focus:ring-[#A02021] outline-none transition-all placeholder:text-slate-500 font-sans"
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 font-sans shadow-sm"
                   />
                 </div>
-                <div className="text-[10px] font-extrabold text-slate-400 bg-slate-900 px-3.5 py-1.5 rounded-lg border border-white/5 flex items-center gap-1.5">
+                <div className="text-[10px] font-extrabold text-slate-600 bg-slate-50 px-3.5 py-1.5 rounded-lg border border-slate-200/80 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> {filteredScholarships.length} Schemes Found
                 </div>
               </GlassCard>
@@ -619,36 +616,36 @@ function ScholarshipsPage() {
                       viewport={{ once: true, margin: "-40px" }}
                       transition={{ duration: 0.3, delay: idx * 0.05 }}
                     >
-                      <GlassCard className="p-6 h-full flex flex-col justify-between relative overflow-hidden group hover:border-[#A02021]/50 bg-slate-950/60 border border-white/10 hover:shadow-2xl hover:shadow-red-950/10 transition-all duration-300">
+                      <GlassCard className="p-6 h-full flex flex-col justify-between relative overflow-hidden group hover:border-blue-300 hover:shadow-xl hover:shadow-blue-900/5 bg-white border border-slate-200/80 transition-all duration-300">
                         {/* Decorative top-right graphic */}
-                        <div className="absolute -right-4 -top-4 w-16 h-16 bg-gradient-to-br from-[#A02021]/10 to-red-650/5 rounded-full blur-xl group-hover:scale-110 transition-transform pointer-events-none" />
+                        <div className="absolute -right-4 -top-4 w-16 h-16 bg-gradient-to-br from-blue-500/5 to-indigo-500/3 rounded-full blur-xl group-hover:scale-110 transition-transform pointer-events-none" />
 
                         <div className="space-y-4">
                           {/* Top Tag & status */}
-                          <div className="flex items-center justify-between gap-3 pb-2.5 border-b border-white/5">
+                          <div className="flex items-center justify-between gap-3 pb-2.5 border-b border-slate-100">
                             <span className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${
                               isClosed 
-                                ? "bg-red-500/10 border-red-500/20 text-red-400" 
-                                : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                                ? "bg-red-50 border-red-200 text-red-650 text-red-600" 
+                                : "bg-emerald-50 border-emerald-200 text-emerald-700"
                             }`}>
                               {sch.status}
                             </span>
                             
-                            <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-widest flex items-center gap-1">
-                              <Calendar className="w-3.5 h-3.5 text-red-500/70" /> Deadline: {sch.last_date}
+                            <span className="text-[9px] text-slate-500 font-extrabold uppercase tracking-widest flex items-center gap-1">
+                              <Calendar className="w-3.5 h-3.5 text-blue-550 text-blue-500" /> Deadline: {sch.last_date}
                             </span>
                           </div>
 
                           {/* Scholarship Icon + Name */}
                           <div className="flex gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#A02021] to-red-900 border border-red-500/20 flex flex-shrink-0 items-center justify-center text-white font-bold shadow-md shadow-[#A02021]/10">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-650 border border-blue-400/20 flex flex-shrink-0 items-center justify-center text-white font-bold shadow-md shadow-blue-500/10">
                               <GraduationCap className="w-5 h-5 text-white" />
                             </div>
                             <div>
-                              <h3 className="font-extrabold text-white text-xs md:text-sm leading-snug group-hover:text-[#A02021] transition-colors">
+                              <h3 className="font-extrabold text-slate-800 text-xs md:text-sm leading-snug group-hover:text-blue-650 group-hover:text-blue-600 transition-colors">
                                 {sch.title}
                               </h3>
-                              <span className="inline-block text-[10px] font-black text-amber-400 tracking-wide mt-1 uppercase">
+                              <span className="inline-block text-[10px] font-black text-amber-700 bg-amber-50 border border-amber-100 rounded px-1.5 py-0.5 tracking-wide mt-1 uppercase">
                                 Grant: {sch.amount}
                               </span>
                             </div>
@@ -657,24 +654,24 @@ function ScholarshipsPage() {
                           {/* Key info specs */}
                           <div className="space-y-2 pt-2 text-[11px] leading-relaxed font-semibold">
                             <div>
-                              <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Benefits</p>
-                              <p className="text-slate-200">{sch.description}</p>
+                              <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Benefits</p>
+                              <p className="text-slate-600">{sch.description}</p>
                             </div>
-                            <div className="p-2.5 bg-slate-900/60 rounded-xl border border-white/5">
-                              <p className="text-[8px] font-black text-red-400 uppercase tracking-widest mb-0.5">Eligibility</p>
-                              <p className="text-slate-300 font-semibold">{sch.eligibility}</p>
+                            <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-150">
+                              <p className="text-[8px] font-black text-blue-700 uppercase tracking-widest mb-0.5">Eligibility</p>
+                              <p className="text-slate-600 font-semibold">{sch.eligibility}</p>
                             </div>
                           </div>
                         </div>
 
                         {/* Actions Desk */}
-                        <div className="flex flex-col sm:flex-row gap-2 pt-4 border-t border-white/5 mt-5">
+                        <div className="flex flex-col sm:flex-row gap-2 pt-4 border-t border-slate-100 mt-5">
                           {/* Admin actions (visible strictly inside Edit Mode) */}
                           {isEditMode && (
                             <div className="flex items-center gap-1 justify-end sm:justify-start w-full sm:w-auto relative z-20 pb-2 sm:pb-0">
                               <button
                                 onClick={() => startEditSch(sch)}
-                                className="p-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/25 border border-amber-500/20 text-amber-400 transition-colors"
+                                className="p-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-700 transition-colors"
                                 title="Edit card details"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
@@ -685,7 +682,7 @@ function ScholarshipsPage() {
                                     deleteScholarshipMutation.mutate(sch.id);
                                   }
                                 }}
-                                className="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/25 border border-red-500/20 text-red-400 transition-colors"
+                                className="p-2 rounded-lg bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 transition-colors"
                                 title="Delete card"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -696,13 +693,13 @@ function ScholarshipsPage() {
                           <div className="flex gap-2 w-full justify-end">
                             <button
                               onClick={() => window.open(officialWeb, "_blank")}
-                              className="flex-1 sm:flex-none flex items-center justify-center gap-1 px-3 py-2 bg-slate-900 border border-slate-700/50 hover:bg-slate-800 text-slate-200 rounded-lg text-[10px] font-bold uppercase transition-all shadow"
+                              className="flex-1 sm:flex-none flex items-center justify-center gap-1 px-3 py-2 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 rounded-lg text-[10px] font-bold uppercase transition-all shadow"
                             >
-                              <Globe className="w-3.5 h-3.5 text-[#A02021]" /> Official Portal
+                              <Globe className="w-3.5 h-3.5 text-blue-600" /> Official Portal
                             </button>
                             <button
                               onClick={() => window.open(sch.apply_url || "https://jnanabhumi.ap.gov.in", "_blank")}
-                              className="flex-1 sm:flex-none flex items-center justify-center gap-1 px-4 py-2 bg-gradient-to-r from-[#A02021] to-red-800 hover:from-red-800 hover:to-red-900 text-white rounded-lg text-[10px] font-black uppercase tracking-wider transition-all shadow-md"
+                              className="flex-1 sm:flex-none flex items-center justify-center gap-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-650 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-[10px] font-black uppercase tracking-wider transition-all shadow-md"
                             >
                               Apply Online <ArrowUpRight className="w-3.5 h-3.5" />
                             </button>
@@ -718,10 +715,10 @@ function ScholarshipsPage() {
             {/* Section B: Important Documents Section */}
             <div id="documents" className="space-y-6 pt-4">
               <div>
-                <h2 className="text-xl md:text-2xl font-extrabold text-white flex items-center gap-2">
-                  <FileBadge className="w-6 h-6 text-[#A02021]" /> Required Checklist Documents
+                <h2 className="text-xl md:text-2xl font-extrabold text-slate-805 text-slate-800 flex items-center gap-2">
+                  <FileBadge className="w-6 h-6 text-blue-600" /> Required Checklist Documents
                 </h2>
-                <p className="text-xs text-slate-450 mt-1 max-w-xl font-medium">
+                <p className="text-xs text-slate-500 mt-1 max-w-xl font-medium">
                   Ensure you have high-quality scanned copies of these six essential student documents ready before starting any scholarship portal applications.
                 </p>
               </div>
@@ -736,17 +733,17 @@ function ScholarshipsPage() {
                     transition={{ duration: 0.3, delay: idx * 0.05 }}
                   >
                     <GlassCard 
-                      className="p-4 h-full bg-slate-950/60 border border-white/5 hover:border-[#A02021]/30 transition-all duration-300 flex flex-col justify-between"
+                      className="p-4 h-full bg-white border border-slate-200/80 hover:border-blue-300 transition-all duration-300 flex flex-col justify-between shadow-sm"
                       hoverEffect={true}
                     >
                       <div className="space-y-2">
-                        <div className="w-7 h-7 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
-                          <CheckCircle2 className="w-4 h-4 text-[#A02021]" />
+                        <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                          <CheckCircle2 className="w-4 h-4 text-blue-600" />
                         </div>
-                        <h4 className="font-extrabold text-xs text-white uppercase tracking-wider">{doc.name}</h4>
-                        <p className="text-[11px] text-slate-350 leading-relaxed font-semibold">{doc.desc}</p>
+                        <h4 className="font-extrabold text-xs text-slate-800 uppercase tracking-wider">{doc.name}</h4>
+                        <p className="text-[11px] text-slate-655 text-slate-600 leading-relaxed font-semibold">{doc.desc}</p>
                       </div>
-                      <span className="inline-block text-[9px] font-black text-slate-450 uppercase tracking-widest mt-3">
+                      <span className="inline-block text-[9px] font-black text-slate-400 uppercase tracking-widest mt-3">
                         Status: Required
                       </span>
                     </GlassCard>
@@ -758,31 +755,31 @@ function ScholarshipsPage() {
             {/* Section C: FAQ Help Center */}
             <div id="faqs" className="space-y-6 pt-4">
               <div>
-                <h2 className="text-xl md:text-2xl font-extrabold text-white flex items-center gap-2">
-                  <HelpCircle className="w-6 h-6 text-[#A02021]" /> Frequently Asked Questions
+                <h2 className="text-xl md:text-2xl font-extrabold text-slate-805 text-slate-800 flex items-center gap-2">
+                  <HelpCircle className="w-6 h-6 text-blue-600" /> Frequently Asked Questions
                 </h2>
-                <p className="text-xs text-slate-450 mt-1 max-w-xl font-medium">
+                <p className="text-xs text-slate-500 mt-1 max-w-xl font-medium">
                   Have questions about verification schedules, deadlines, or eligibilities? Review standard institutional financial assistance resolutions below.
                 </p>
               </div>
 
-              <GlassCard className="p-4 bg-slate-950/60 border border-white/10 shadow-xl space-y-2" hoverEffect={false}>
+              <GlassCard className="p-4 bg-white border border-slate-200/80 shadow-md space-y-2" hoverEffect={false}>
                 {SCHOLARSHIP_FAQS.map((faq, idx) => {
                   const isExpanded = expandedFaq === idx;
                   return (
                     <div 
                       key={idx} 
-                      className="border-b border-white/5 last:border-none pb-3 last:pb-0 pt-2 first:pt-0"
+                      className="border-b border-slate-100 last:border-none pb-3 last:pb-0 pt-2 first:pt-0"
                     >
                       <button
                         onClick={() => setExpandedFaq(isExpanded ? null : idx)}
-                        className="w-full flex items-center justify-between text-left py-2 hover:text-[#A02021] text-xs font-black transition-colors"
+                        className="w-full flex items-center justify-between text-left py-2 hover:text-blue-650 hover:text-blue-600 text-xs font-black transition-colors"
                       >
-                        <span className="flex items-center gap-2.5 text-white pr-4">
-                          <HelpCircle className="w-4 h-4 text-red-500/70 shrink-0" />
+                        <span className="flex items-center gap-2.5 text-slate-800 pr-4">
+                          <HelpCircle className="w-4 h-4 text-blue-500 shrink-0" />
                           {faq.q}
                         </span>
-                        <ChevronDown className={`w-4 h-4 shrink-0 transition-transform ${isExpanded ? "rotate-180 text-[#A02021]" : "text-slate-400"}`} />
+                        <ChevronDown className={`w-4 h-4 shrink-0 transition-transform ${isExpanded ? "rotate-180 text-blue-600" : "text-slate-400"}`} />
                       </button>
                       
                       <AnimatePresence>
@@ -793,7 +790,7 @@ function ScholarshipsPage() {
                             exit={{ opacity: 0, height: 0 }}
                             className="overflow-hidden"
                           >
-                            <p className="text-[11px] text-slate-350 leading-relaxed font-semibold p-3 bg-slate-900/40 rounded-xl border border-white/5 mt-1">
+                            <p className="text-[11px] text-slate-600 leading-relaxed font-semibold p-3 bg-blue-50/50 rounded-xl border border-blue-100/50 mt-1">
                               {faq.a}
                             </p>
                           </motion.div>
@@ -806,11 +803,11 @@ function ScholarshipsPage() {
             </div>
 
             {/* Assistance notice */}
-            <GlassCard className="p-5 flex gap-4 border-blue-900/30 bg-blue-500/10 backdrop-blur-md">
-              <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+            <GlassCard className="p-5 flex gap-4 border border-blue-200 bg-blue-50/80 backdrop-blur-md" hoverEffect={false}>
+              <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <p className="text-xs text-white font-extrabold uppercase tracking-wider">Verification Timelines</p>
-                <p className="text-xs text-blue-300 leading-relaxed font-semibold">
+                <p className="text-xs text-blue-900 font-extrabold uppercase tracking-wider">Verification Timelines</p>
+                <p className="text-xs text-blue-700 leading-relaxed font-semibold">
                   After completing any scholarship registration online, always carry your original income certificates, caste declarations, Aadhaar records, and bonafide memos to the institutional administrative office desk for biometric finger-print validation within five business days.
                 </p>
               </div>

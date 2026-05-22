@@ -14,7 +14,7 @@ export function PageHeader({ title, subtitle, icon: Icon }: PageHeaderProps) {
           <motion.div 
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#A02021] to-red-800 flex flex-shrink-0 items-center justify-center text-white shadow-lg shadow-[#A02021]/20"
+            className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-650 flex flex-shrink-0 items-center justify-center text-white shadow-lg shadow-blue-500/20"
           >
             <Icon className="w-7 h-7" />
           </motion.div>

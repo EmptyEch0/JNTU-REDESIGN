@@ -1,9 +1,14 @@
 {
+<<<<<<< HEAD
   "id": "bb2677fe-bfc9-41b5-954f-05e4ea4655b0",
+=======
+  "id": "3b98de3b-c8c6-45ee-9169-1b2c1dc1fd19",
+>>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
   "prevId": "ce4a8f2c-9390-489e-adfa-decf5e353e7e",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+<<<<<<< HEAD
     "public.academic_calendars": {
       "name": "academic_calendars",
       "schema": "",
@@ -1652,6 +1657,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+=======
+>>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
     "public.achievements": {
       "name": "achievements",
       "schema": "",
@@ -4789,6 +4796,58 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+<<<<<<< HEAD
+=======
+    "public.site_content": {
+      "name": "site_content",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "page": {
+          "name": "page",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "section_key": {
+          "name": "section_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+>>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
     "public.sports_achievements": {
       "name": "sports_achievements",
       "schema": "",
@@ -4799,6 +4858,27 @@
           "primaryKey": true,
           "notNull": true
         },
+<<<<<<< HEAD
+=======
+        "year_label": {
+          "name": "year_label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sno": {
+          "name": "sno",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+>>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
         "student": {
           "name": "student",
           "type": "text",
@@ -4811,6 +4891,15 @@
           "primaryKey": false,
           "notNull": false
         },
+<<<<<<< HEAD
+=======
+        "medal": {
+          "name": "medal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+>>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
         "game": {
           "name": "game",
           "type": "text",
@@ -4828,9 +4917,65 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+<<<<<<< HEAD
         }
       },
       "indexes": {},
+=======
+        },
+        "tournament_date": {
+          "name": "tournament_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "remarks": {
+          "name": "remarks",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "sports_achievements_year_idx": {
+          "name": "sports_achievements_year_idx",
+          "columns": [
+            {
+              "expression": "year_label",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "sports_achievements_category_idx": {
+          "name": "sports_achievements_category_idx",
+          "columns": [
+            {
+              "expression": "category",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+>>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},

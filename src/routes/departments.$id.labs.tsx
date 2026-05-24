@@ -1,8 +1,8 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
-import { 
-  Microscope, MapPin, Monitor, Cpu, ChevronRight, Activity, 
-  Plus, Trash2, Save, Image as ImageIcon, Layout 
+import {
+  Microscope, MapPin, Monitor, Cpu, ChevronRight, Activity,
+  Plus, Trash2, Save, Image as ImageIcon, Layout
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
@@ -16,9 +16,15 @@ export const Route = createFileRoute("/departments/$id/labs")({
 
 function LaboratoriesPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id/labs" });
 
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
   const [labList, setLabList] = useState<any[]>(data?.laboratories || []);
 
   useEffect(() => {
@@ -116,7 +122,7 @@ function LaboratoriesPage() {
       <div className="grid grid-cols-1 gap-12">
         {labList.map((lab: any) => (
           <div key={lab.id} className={`group bg-white border rounded-[3rem] overflow-hidden transition-all duration-700 relative ${isEditMode ? 'border-blue-400 ring-4 ring-blue-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}>
-            
+
             {isEditMode && (
               <button onClick={() => removeLab(lab.id)} className="absolute top-6 right-6 p-3 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 z-20 transition-transform active:scale-90">
                 <Trash2 size={18} />
@@ -137,7 +143,7 @@ function LaboratoriesPage() {
                   {isEditMode && (
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-4">
                       <div className="w-full">
-                        <label className="text-[10px] text-white font-bold uppercase mb-1 block flex items-center gap-1"><ImageIcon size={12}/> Photo URL</label>
+                        <label className="text-[10px] text-white font-bold uppercase mb-1 block flex items-center gap-1"><ImageIcon size={12} /> Photo URL</label>
                         <input className="w-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[11px] p-2 rounded-lg outline-none placeholder:text-white/50" value={lab.photo_url || ""} onChange={(e) => updateLab(lab.id, "photo_url", e.target.value)} placeholder="https://..." />
                       </div>
                     </div>
@@ -201,7 +207,7 @@ function LaboratoriesPage() {
                     </div>
                   ))}
                   {(!lab.specs || lab.specs.length === 0) && !isEditMode && (
-                     <div className="col-span-full py-10 text-center text-slate-300 text-sm">Specs coming soon...</div>
+                    <div className="col-span-full py-10 text-center text-slate-300 text-sm">Specs coming soon...</div>
                   )}
                 </div>
               </div>

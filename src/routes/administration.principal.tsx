@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { getLeadershipData, getLeadershipStaff, updateLeadershipData } from "@/funcs/leadership";
+import { ProfileRenderer } from "@/components/ProfileRenderer";
 
 export const Route = createFileRoute("/administration/principal")({
   head: () => ({
@@ -267,8 +268,8 @@ function PrincipalPage() {
                 onChange={(e) => setEditedData({ ...data, profile: e.target.value })}
               />
             ) : (
-              <div className="prose prose-lg text-muted-foreground max-w-none">
-                <div className="whitespace-pre-wrap leading-relaxed">{data.profile}</div>
+              <div className="max-w-none">
+                <ProfileRenderer content={data.profile} />
               </div>
             )}
           </div>

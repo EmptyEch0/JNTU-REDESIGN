@@ -1,12 +1,26 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { ArrowRight, Eye, Target, Shield, BookOpen } from "lucide-react";
 import campusImg from "@/assets/hero-campus.jpg";
 import ugcImg from "@/assets/ugc-certificate.png";
+import { getPageContent, updatePageSection } from "@/funcs/site.server";
+import { useAdmin } from "@/context/AdminContext";
+import { toast } from "sonner";
+import {
+  AdminModeBanner,
+  AdminPanel,
+  AdminPanelHeader,
+  AdminField,
+  AdminInput,
+  AdminTextarea,
+  AdminSaveButton,
+} from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/about/vision-mission")({
+  loader: async () => await getPageContent({ data: "vision-mission" }),
   head: () => ({
     meta: [
       { title: "Vision & Mission — JNTU-GV CEV" },
@@ -25,30 +39,179 @@ export const Route = createFileRoute("/about/vision-mission")({
   component: VisionMissionPage,
 });
 
-const MISSIONS = [
-  {
-    icon: BookOpen,
-    text: "To provide high quality technical education through a creative balance of academia and industry by adopting highly effective teaching learning processes.",
-  },
-  {
-    icon: Target,
-    text: "To promote multidisciplinary research with a global perspective to attain professional excellence.",
-  },
-  {
-    icon: Shield,
-    text: "To establish standards that inculcate ethical and moral values that contribute to growth in the Career and development of society.",
-  },
-];
+const DEFAULTS = {
+  heroTitle: "Vision & Mission",
+  heroSubtitle: "Guiding principles that shape our pursuit of engineering excellence.",
+  visionTitle: "A premier institution for the future",
+  visionContent: "To emerge as a premier technical Institution in the field of engineering and research with a focus to produce professionally competent and socially sensitive engineers capable of working in a multidisciplinary global environment.",
+  m1Text: "To provide high quality technical education through a creative balance of academia and industry by adopting highly effective teaching learning processes.",
+  m2Text: "To promote multidisciplinary research with a global perspective to attain professional excellence.",
+  m3Text: "To establish standards that inculcate ethical and moral values that contribute to growth in the Career and development of society.",
+  ugcDesc: "The College is eligible to receive Central assistance in terms of the Rules framed under Section 12(B) of the UGC Act, 1956. The college has been recognized under Section 2(f) and 12(B) of the UGC Act.",
+  ugcYear: "2007",
+  ugcType: "Aided & Constituent College",
+  ugcRec: "Section 2(f) & 12(B)",
+};
 
 function VisionMissionPage() {
+  const records = Route.useLoaderData() as any[];
+  const { isEditMode } = useAdmin();
+  const router = useRouter();
+
+  const heroRec = records.find((r) => r.sectionKey === "hero");
+  const visionRec = records.find((r) => r.sectionKey === "vision");
+  const m1Rec = records.find((r) => r.sectionKey === "m1");
+  const m2Rec = records.find((r) => r.sectionKey === "m2");
+  const m3Rec = records.find((r) => r.sectionKey === "m3");
+  const ugcRecInfo = records.find((r) => r.sectionKey === "ugc");
+
+  const [editTexts, setEditTexts] = useState({
+    heroTitle: heroRec?.title || DEFAULTS.heroTitle,
+    heroSubtitle: heroRec?.content || DEFAULTS.heroSubtitle,
+    visionTitle: visionRec?.title || DEFAULTS.visionTitle,
+    visionContent: visionRec?.content || DEFAULTS.visionContent,
+    m1Text: m1Rec?.content || DEFAULTS.m1Text,
+    m2Text: m2Rec?.content || DEFAULTS.m2Text,
+    m3Text: m3Rec?.content || DEFAULTS.m3Text,
+    ugcDesc: ugcRecInfo?.content || DEFAULTS.ugcDesc,
+    ugcYear: ugcRecInfo?.title || DEFAULTS.ugcYear,
+    ugcType: records.find((r) => r.sectionKey === "ugc_type")?.content || DEFAULTS.ugcType,
+    ugcRec: records.find((r) => r.sectionKey === "ugc_rec")?.content || DEFAULTS.ugcRec,
+  });
+
+  useEffect(() => {
+    setEditTexts({
+      heroTitle: heroRec?.title || DEFAULTS.heroTitle,
+      heroSubtitle: heroRec?.content || DEFAULTS.heroSubtitle,
+      visionTitle: visionRec?.title || DEFAULTS.visionTitle,
+      visionContent: visionRec?.content || DEFAULTS.visionContent,
+      m1Text: m1Rec?.content || DEFAULTS.m1Text,
+      m2Text: m2Rec?.content || DEFAULTS.m2Text,
+      m3Text: m3Rec?.content || DEFAULTS.m3Text,
+      ugcDesc: ugcRecInfo?.content || DEFAULTS.ugcDesc,
+      ugcYear: ugcRecInfo?.title || DEFAULTS.ugcYear,
+      ugcType: records.find((r) => r.sectionKey === "ugc_type")?.content || DEFAULTS.ugcType,
+      ugcRec: records.find((r) => r.sectionKey === "ugc_rec")?.content || DEFAULTS.ugcRec,
+    });
+  }, [records]);
+
+  async function handleSaveSection(section: string) {
+    const tId = toast.loading("Saving vision & mission details...");
+    try {
+      if (section === "hero") {
+        await updatePageSection({
+          data: {
+            page: "vision-mission",
+            sectionKey: "hero",
+            title: editTexts.heroTitle,
+            content: editTexts.heroSubtitle,
+          },
+        });
+      } else if (section === "vision") {
+        await updatePageSection({
+          data: {
+            page: "vision-mission",
+            sectionKey: "vision",
+            title: editTexts.visionTitle,
+            content: editTexts.visionContent,
+          },
+        });
+      } else if (section === "m1") {
+        await updatePageSection({
+          data: {
+            page: "vision-mission",
+            sectionKey: "m1",
+            content: editTexts.m1Text,
+          },
+        });
+      } else if (section === "m2") {
+        await updatePageSection({
+          data: {
+            page: "vision-mission",
+            sectionKey: "m2",
+            content: editTexts.m2Text,
+          },
+        });
+      } else if (section === "m3") {
+        await updatePageSection({
+          data: {
+            page: "vision-mission",
+            sectionKey: "m3",
+            content: editTexts.m3Text,
+          },
+        });
+      } else if (section === "ugc") {
+        await updatePageSection({
+          data: {
+            page: "vision-mission",
+            sectionKey: "ugc",
+            title: editTexts.ugcYear,
+            content: editTexts.ugcDesc,
+          },
+        });
+        await updatePageSection({
+          data: {
+            page: "vision-mission",
+            sectionKey: "ugc_type",
+            content: editTexts.ugcType,
+          },
+        });
+        await updatePageSection({
+          data: {
+            page: "vision-mission",
+            sectionKey: "ugc_rec",
+            content: editTexts.ugcRec,
+          },
+        });
+      }
+      toast.success("Changes saved successfully!", { id: tId });
+      router.invalidate();
+    } catch {
+      toast.error("Failed to save vision & mission.", { id: tId });
+    }
+  }
+
+  const dynamicMissions = [
+    { icon: BookOpen, text: editTexts.m1Text, key: "m1", title: "Mission 1" },
+    { icon: Target, text: editTexts.m2Text, key: "m2", title: "Mission 2" },
+    { icon: Shield, text: editTexts.m3Text, key: "m3", title: "Mission 3" },
+  ];
+
   return (
     <>
+      {isEditMode && <AdminModeBanner label="Vision & Mission CMS Mode" />}
+
       <PageHero
         eyebrow="About"
-        title="Vision & Mission"
-        subtitle="Guiding principles that shape our pursuit of engineering excellence."
+        title={editTexts.heroTitle}
+        subtitle={editTexts.heroSubtitle}
         image={campusImg}
       />
+
+      {isEditMode && (
+        <section className="container-narrow py-6">
+          <AdminPanel>
+            <AdminPanelHeader title="Edit Hero Section">
+              <AdminSaveButton onClick={() => handleSaveSection("hero")} label="Save Hero" />
+            </AdminPanelHeader>
+            <div className="space-y-4">
+              <AdminField label="Hero Title">
+                <AdminInput
+                  value={editTexts.heroTitle}
+                  onChange={(e) => setEditTexts({ ...editTexts, heroTitle: e.target.value })}
+                />
+              </AdminField>
+              <AdminField label="Hero Subtitle">
+                <AdminTextarea
+                  value={editTexts.heroSubtitle}
+                  onChange={(e) => setEditTexts({ ...editTexts, heroSubtitle: e.target.value })}
+                  rows={2}
+                />
+              </AdminField>
+            </div>
+          </AdminPanel>
+        </section>
+      )}
 
       {/* Vision */}
       <section className="py-24 md:py-32 container-narrow">
@@ -57,15 +220,38 @@ function VisionMissionPage() {
             <div className="h-16 w-16 rounded-2xl bg-[var(--gradient-royal)] text-white grid place-items-center mx-auto mb-6">
               <Eye className="h-7 w-7" />
             </div>
-            <div className="text-eyebrow">Our Vision</div>
-            <h2 className="text-display text-3xl md:text-4xl mt-3 text-ink">
-              A premier institution for the future
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              To emerge as a premier technical Institution in the field of engineering and research
-              with a focus to produce professionally competent and socially sensitive engineers
-              capable of working in a multidisciplinary global environment.
-            </p>
+            {isEditMode ? (
+              <AdminPanel>
+                <AdminPanelHeader title="Edit Vision Segment">
+                  <AdminSaveButton onClick={() => handleSaveSection("vision")} label="Save Vision" />
+                </AdminPanelHeader>
+                <div className="space-y-4">
+                  <AdminField label="Vision Header Title">
+                    <AdminInput
+                      value={editTexts.visionTitle}
+                      onChange={(e) => setEditTexts({ ...editTexts, visionTitle: e.target.value })}
+                    />
+                  </AdminField>
+                  <AdminField label="Vision Core Statement">
+                    <AdminTextarea
+                      value={editTexts.visionContent}
+                      onChange={(e) => setEditTexts({ ...editTexts, visionContent: e.target.value })}
+                      rows={4}
+                    />
+                  </AdminField>
+                </div>
+              </AdminPanel>
+            ) : (
+              <>
+                <div className="text-eyebrow">Our Vision</div>
+                <h2 className="text-display text-3xl md:text-4xl mt-3 text-ink">
+                  {editTexts.visionTitle}
+                </h2>
+                <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
+                  {editTexts.visionContent}
+                </p>
+              </>
+            )}
           </div>
         </RevealOnScroll>
       </section>
@@ -81,16 +267,41 @@ function VisionMissionPage() {
             />
           </RevealOnScroll>
           <div className="mt-14 grid md:grid-cols-3 gap-6">
-            {MISSIONS.map((m, i) => (
-              <RevealOnScroll key={i} delay={i * 120}>
-                <div className="bg-card rounded-2xl p-8 border border-border hover-lift h-full group">
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary grid place-items-center mb-5 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-500">
-                    <m.icon className="h-5 w-5" />
+            {dynamicMissions.map((m, i) => (
+              <RevealOnScroll key={m.key} delay={i * 120}>
+                <div className="bg-card rounded-2xl p-8 border border-border hover-lift h-full group flex flex-col justify-between">
+                  <div>
+                    <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary grid place-items-center mb-5 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-500">
+                      <m.icon className="h-5 w-5" />
+                    </div>
+                    <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-primary mb-3">
+                      {m.title}
+                    </div>
+                    {isEditMode ? (
+                      <textarea
+                        className="w-full border border-amber-200 bg-amber-50/20 rounded p-2 text-sm outline-none"
+                        value={m.text}
+                        rows={5}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (m.key === "m1") setEditTexts(prev => ({ ...prev, m1Text: val }));
+                          if (m.key === "m2") setEditTexts(prev => ({ ...prev, m2Text: val }));
+                          if (m.key === "m3") setEditTexts(prev => ({ ...prev, m3Text: val }));
+                        }}
+                      />
+                    ) : (
+                      <p className="text-ink leading-relaxed">{m.text}</p>
+                    )}
                   </div>
-                  <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-primary mb-3">
-                    Mission {i + 1}
-                  </div>
-                  <p className="text-ink leading-relaxed">{m.text}</p>
+
+                  {isEditMode && (
+                    <button
+                      onClick={() => handleSaveSection(m.key)}
+                      className="mt-4 w-full bg-slate-900 text-white rounded py-1.5 text-xs font-bold uppercase tracking-wider hover:bg-amber-600 transition"
+                    >
+                      Save Pillar
+                    </button>
+                  )}
                 </div>
               </RevealOnScroll>
             ))}
@@ -105,41 +316,74 @@ function VisionMissionPage() {
         </RevealOnScroll>
         <RevealOnScroll delay={100}>
           <div className="mt-10 grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-5">
-              <div className="bg-card rounded-2xl p-8 border border-border hover-lift">
-                <h3 className="text-lg font-semibold text-ink flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-primary" /> UGC Recognition
-                </h3>
-                <p className="mt-3 text-muted-foreground leading-relaxed">
-                  The College is eligible to receive Central assistance in terms of the Rules framed
-                  under Section 12(B) of the UGC Act, 1956. The college has been recognized under
-                  Section 2(f) and 12(B) of the UGC Act.
-                </p>
-              </div>
-              <div className="bg-card rounded-2xl p-8 border border-border hover-lift">
-                <h3 className="text-lg font-semibold text-ink">Key Details</h3>
-                <div className="mt-4 space-y-3">
-                  <div className="flex justify-between py-2 border-b border-border">
-                    <span className="text-muted-foreground">College Name</span>
-                    <span className="text-ink font-medium text-right">
-                      JNTUK University College of Engineering, Vizianagaram
-                    </span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-border">
-                    <span className="text-muted-foreground">Year of Establishment</span>
-                    <span className="text-ink font-medium">2007</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-border">
-                    <span className="text-muted-foreground">Type</span>
-                    <span className="text-ink font-medium">Aided & Constituent College</span>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-muted-foreground">Recognition</span>
-                    <span className="text-ink font-medium">Section 2(f) & 12(B)</span>
+            {isEditMode ? (
+              <AdminPanel>
+                <AdminPanelHeader title="Edit UGC Recognition Details">
+                  <AdminSaveButton onClick={() => handleSaveSection("ugc")} label="Save UGC Data" />
+                </AdminPanelHeader>
+                <div className="space-y-4">
+                  <AdminField label="UGC Recognition Paragraph">
+                    <AdminTextarea
+                      value={editTexts.ugcDesc}
+                      onChange={(e) => setEditTexts({ ...editTexts, ugcDesc: e.target.value })}
+                      rows={4}
+                    />
+                  </AdminField>
+                  <AdminField label="Year of Establishment">
+                    <AdminInput
+                      value={editTexts.ugcYear}
+                      onChange={(e) => setEditTexts({ ...editTexts, ugcYear: e.target.value })}
+                    />
+                  </AdminField>
+                  <AdminField label="Type">
+                    <AdminInput
+                      value={editTexts.ugcType}
+                      onChange={(e) => setEditTexts({ ...editTexts, ugcType: e.target.value })}
+                    />
+                  </AdminField>
+                  <AdminField label="Recognition Status">
+                    <AdminInput
+                      value={editTexts.ugcRec}
+                      onChange={(e) => setEditTexts({ ...editTexts, ugcRec: e.target.value })}
+                    />
+                  </AdminField>
+                </div>
+              </AdminPanel>
+            ) : (
+              <div className="space-y-5">
+                <div className="bg-card rounded-2xl p-8 border border-border hover-lift">
+                  <h3 className="text-lg font-semibold text-ink flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-primary" /> UGC Recognition
+                  </h3>
+                  <p className="mt-3 text-muted-foreground leading-relaxed">
+                    {editTexts.ugcDesc}
+                  </p>
+                </div>
+                <div className="bg-card rounded-2xl p-8 border border-border hover-lift">
+                  <h3 className="text-lg font-semibold text-ink">Key Details</h3>
+                  <div className="mt-4 space-y-3">
+                    <div className="flex justify-between py-2 border-b border-border gap-4">
+                      <span className="text-muted-foreground">College Name</span>
+                      <span className="text-ink font-medium text-right">
+                        JNTUK University College of Engineering, Vizianagaram
+                      </span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-border">
+                      <span className="text-muted-foreground">Year of Establishment</span>
+                      <span className="text-ink font-medium">{editTexts.ugcYear}</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-border">
+                      <span className="text-muted-foreground">Type</span>
+                      <span className="text-ink font-medium">{editTexts.ugcType}</span>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <span className="text-muted-foreground">Recognition</span>
+                      <span className="text-ink font-medium">{editTexts.ugcRec}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
             <div>
               <img
                 src={ugcImg}
@@ -168,3 +412,4 @@ function VisionMissionPage() {
     </>
   );
 }
+

@@ -1,7 +1,8 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { Trophy, Medal, Star, Rocket, GraduationCap, Plus, Trash2, Save, Type, Calendar, BookOpen } from "lucide-react";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAdmin } from "@/context/AdminContext";
+import { type DepartmentData } from "@/functions/departments";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { syncAchievements } from "@/lib/departments";
 import { toast } from "sonner";
@@ -11,9 +12,16 @@ export const Route = createFileRoute("/departments/$id/achievements")({
 });
 
 function AchievementsPage() {
-  const data = useLoaderData({ from: "/departments/$id" }) as any;
-  const { isEditMode } = useAdmin();
+  const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id/achievements" });
+
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
 
   // Local state for all achievements (un-grouped for easy editing)
   const [list, setList] = useState<any[]>(data?.achievements || []);
@@ -32,7 +40,7 @@ function AchievementsPage() {
 
   // FIX: Use useCallback with functional update pattern to avoid stale closures
   const updateItem = useCallback((id: string, field: string, value: string) => {
-    setList(prev => prev.map(item => 
+    setList(prev => prev.map(item =>
       item.id === id ? { ...item, [field]: value } : item
     ));
   }, []);
@@ -56,7 +64,7 @@ function AchievementsPage() {
   // FIX: Memoize the updateSubcategory function to prevent unnecessary re-renders
   const updateSubcategory = useCallback((oldSubcat: string, newSubcat: string) => {
     if (oldSubcat === newSubcat) return;
-    setList(prev => prev.map(item => 
+    setList(prev => prev.map(item =>
       item.subcategory === oldSubcat ? { ...item, subcategory: newSubcat } : item
     ));
   }, []);
@@ -109,7 +117,7 @@ function AchievementsPage() {
                 {subcat.includes("Gold") ? <Medal size={18} /> : subcat.includes("Project") ? <Rocket size={18} /> : <Star size={18} />}
               </div>
               {isEditMode ? (
-                <input 
+                <input
                   className="text-xl font-bold text-slate-800 bg-amber-50 border-b border-amber-200 outline-none px-2 py-1 rounded"
                   defaultValue={subcat}
                   onBlur={(e) => updateSubcategory(subcat, e.target.value)}
@@ -127,7 +135,7 @@ function AchievementsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {items.map((item: any) => (
                 <div key={item.id} className={`group bg-white p-6 rounded-[2rem] border transition-all duration-500 relative ${isEditMode ? 'border-amber-200 ring-4 ring-amber-50/50' : 'border-slate-100 shadow-sm hover:shadow-xl hover:border-amber-200'}`}>
-                  
+
                   {isEditMode && (
                     <button onClick={() => removeItem(item.id)} className="absolute -top-2 -right-2 p-2 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors">
                       <Trash2 size={14} />
@@ -139,7 +147,7 @@ function AchievementsPage() {
                       <GraduationCap size={20} />
                     </div>
                     {isEditMode ? (
-                      <input 
+                      <input
                         className="text-[10px] font-bold px-2 py-1 bg-slate-100 rounded-full w-20 text-center outline-none focus:bg-amber-500 focus:text-white"
                         value={item.year}
                         onChange={(e) => updateItem(item.id, "year", e.target.value)}
@@ -156,23 +164,23 @@ function AchievementsPage() {
                       <>
                         <div className="flex items-center gap-2 border-b border-slate-100 pb-1">
                           <Type size={14} className="text-slate-400" />
-                          <input 
-                            className="font-bold text-slate-900 text-lg w-full outline-none" 
-                            value={item.title} 
-                            onChange={(e) => updateItem(item.id, "title", e.target.value)} 
-                            placeholder="Achievement Title" 
+                          <input
+                            className="font-bold text-slate-900 text-lg w-full outline-none"
+                            value={item.title}
+                            onChange={(e) => updateItem(item.id, "title", e.target.value)}
+                            placeholder="Achievement Title"
                           />
                         </div>
                         <div className="flex items-center gap-2 border-b border-slate-100 pb-1">
                           <BookOpen size={14} className="text-slate-400" />
-                          <input 
-                            className="text-blue-600 text-xs font-bold uppercase w-full outline-none" 
-                            value={item.course} 
-                            onChange={(e) => updateItem(item.id, "course", e.target.value)} 
-                            placeholder="Course/Program" 
+                          <input
+                            className="text-blue-600 text-xs font-bold uppercase w-full outline-none"
+                            value={item.course}
+                            onChange={(e) => updateItem(item.id, "course", e.target.value)}
+                            placeholder="Course/Program"
                           />
                         </div>
-                        <textarea 
+                        <textarea
                           className="w-full text-slate-500 text-sm italic leading-relaxed bg-slate-50 p-3 rounded-xl mt-2 outline-none focus:ring-1 focus:ring-amber-300"
                           value={item.description || ""}
                           onChange={(e) => updateItem(item.id, "description", e.target.value)}

@@ -30,7 +30,7 @@ export function LogoCarousel({ logos, speed = 60, reverse = false }: Props) {
               src={logo.url}
               alt={logo.name}
               loading="lazy"
-              className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all duration-500"
+              className="max-h-full max-w-full object-contain transition-all duration-500"
               onError={(e) => {
                 const t = e.currentTarget;
                 t.style.display = "none";

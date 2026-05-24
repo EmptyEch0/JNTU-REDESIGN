@@ -6,7 +6,8 @@ import {
   timestamp,
   index,
   pgEnum,
-  jsonb
+  jsonb,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 export const placementYears = pgTable("placement_years", {
@@ -722,21 +723,86 @@ export const sportsInfra = pgTable(
 );
 
 /* ===========================
-   🥇 ACHIEVEMENTS (KEEP)
+   🥇 SPORTS ACHIEVEMENTS
+   SINGLE TABLE ARCHITECTURE
 =========================== */
-export const sportsAchievements = pgTable("sports_achievements", {
-  id: serial("id").primaryKey(),
 
-  student: text("student").notNull(),
-  branch: text("branch"),
-  game: text("game"),
-  tournament: text("tournament"),
-  venue: text("venue"),
-});
+export const sportsAchievements =
+  pgTable(
+    "sports_achievements",
+    {
+      id: serial("id").primaryKey(),
 
-/* ===========================
-   🖼️ IMAGES (KEEP)
-=========================== */
+      /* ================= YEAR ================= */
+
+      // Example:
+      // 2013-2014
+      yearLabel: text(
+        "year_label"
+      ),
+
+      /* ================= CATEGORY ================= */
+
+      // inter_collegiate
+      // tournaments
+      // sports_stars
+      // athletics
+      // seminars
+      // coaching_camps
+      category: text(
+        "category"
+      ),
+
+      /* ================= TABLE DATA ================= */
+
+      sno: integer("sno"),
+
+      /* STUDENT / TEAM NAME */
+      student: text(
+        "student"
+      ).notNull(),
+
+      /* BRANCH */
+      branch: text("branch"),
+
+      /* MEDAL / PLACE */
+      medal: text("medal"),
+
+      /* GAME / EVENT */
+      game: text("game"),
+
+      /* TOURNAMENT */
+      tournament: text(
+        "tournament"
+      ),
+
+      /* ORGANIZING COLLEGE */
+      venue: text("venue"),
+
+      /* DATE */
+      tournamentDate: text(
+        "tournament_date"
+      ),
+
+      /* EXTRA INFO */
+      remarks: text("remarks"),
+
+      /* CREATED TIME */
+      createdAt: timestamp(
+        "created_at"
+      ).defaultNow(),
+    },
+
+    (table) => ({
+      yearIdx: index(
+        "sports_achievements_year_idx"
+      ).on(table.yearLabel),
+
+      categoryIdx: index(
+        "sports_achievements_category_idx"
+      ).on(table.category),
+    })
+  );
 export const sportsImages = pgTable("sports_images", {
   id: serial("id").primaryKey(),
   url: text("url").notNull(),
@@ -955,6 +1021,7 @@ export const departments = pgTable("departments", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   slug: text("slug").notNull(),
+  hod_password: text("hod_password").default("hod@jntu"),
   hod: text("hod"),
   description: text("description"),
   image: text("image"),
@@ -969,13 +1036,35 @@ export const departments = pgTable("departments", {
 
 export const faculty = pgTable("faculty", {
   id: serial("id").primaryKey(),
-  dept_id: uuid("dept_id").references(() => departments.id, { onDelete: 'cascade' }),
+  dept_id: uuid("dept_id").references(() => departments.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   designation: text("designation"),
   photo_url: text("photo_url"),
   profile_link: text("profile_link"),
-  specialization: text("specialization"),
-});
+  biography: text("biography").default(""),
+
+  // Section 1: Profile Details
+  qualifications: text("qualifications").array().default([]),
+  specialization: text("specialization").default(""),
+  experience_years: integer("experience_years").default(0),
+
+  // Section 2: Achievements
+  awards: text("awards").array().default([]),
+  fellowships: text("fellowships").array().default([]),
+  professional_memberships: text("professional_memberships").array().default([]),
+
+  // Section 3: Exchange & Sabbaticals
+  international_exchanges: text("international_exchanges").array().default([]),
+  sabbaticals: text("sabbaticals").array().default([]),
+
+  // Section 4: Consultancy Assignments
+  consultancy_projects: jsonb("consultancy_projects").default([]),
+
+  // Section 5: Professional Development
+  fdps_attended: text("fdps_attended").array().default([]),
+  conferences_attended: text("conferences_attended").array().default([]),
+  workshops_completed: text("workshops_completed").array().default([]),
+})
 
 export const achievements = pgTable("achievements", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -1018,305 +1107,39 @@ export const departmentGallery = pgTable("department_gallery", {
   created_at: timestamp("created_at").defaultNow(),
 });
 
-// ======================================================
-// ACADEMICS MODULE SCHEMA
-// ======================================================
-
-export const academicsPrograms = pgTable("academics_programs", {
+/* ===========================
+   🌐 SCALABLE GENERIC SITE CONTENT
+=========================== */
+export const siteContent = pgTable("site_content", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description"),
-  image_url: text("image_url"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
+  page: text("page").notNull(),
+  sectionKey: text("section_key").notNull(),
+  title: text("title"),
+  content: text("content"),
+  imageUrl: text("image_url"),
 });
 
-export const academicsSyllabus = pgTable("academics_syllabus", {
+export const notices = pgTable("notices", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description"),
-  file_url: text("file_url"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const academicsDownloads = pgTable("academics_downloads", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description"),
-  file_url: text("file_url"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const academicsExaminations = pgTable("academics_examinations", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description"),
-  file_url: text("file_url"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const academicsAnnouncements = pgTable("academics_announcements", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description"),
-  file_url: text("file_url"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const academicsTimetables = pgTable("academics_timetables", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description"),
-  file_url: text("file_url"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const academicsHodDesk = pgTable("academics_hod_desk", {
-  id: serial("id").primaryKey(),
-  department: text("department").notNull(),
-  name: text("name").notNull(),
-  designation: text("designation"),
-  message: text("message"),
-  achievements: text("achievements"),
-  image_url: text("image_url"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const academicsMissionVision = pgTable("academics_mission_vision", {
-  id: serial("id").primaryKey(),
-  mission: text("mission"),
-  vision: text("vision"),
-  core_values: text("core_values"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const academicsPrincipals = pgTable("academics_principals", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  designation: text("designation"),
-  message: text("message"),
-  image_url: text("image_url"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const academicsVcProfiles = pgTable("academics_vc_profiles", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  designation: text("designation"),
-  message: text("message"),
-  image_url: text("image_url"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const academicCoursesOffered = pgTable("academic_courses_offered", {
-  id: serial("id").primaryKey(),
-  program_name: text("program_name").notNull(),
-  duration: text("duration").notNull(),
-  year_started: integer("year_started").notNull(),
-  intake: integer("intake").notNull(),
-  program_type: text("program_type").notNull(),        // 'UG' | 'PG' | 'PhD'
-  program_subtype: text("program_subtype").notNull(),  // 'B.Tech' | 'B.Pharm' | 'M.Tech' | 'MBA' | 'MCA' | 'PhD'
-});
-
-export const academicsBrochures = pgTable("academics_brochures", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  file_url: text("file_url").notNull(),
-  type: text("type").notNull(), // 'B.Tech' | 'M.Tech' | 'PhD' | 'General'
-});
-
-export const academicsAdmissionsNew = pgTable("academics_admissions_new", {
-  id: serial("id").primaryKey(),
-  program: text("program").notNull(), // 'B.Tech' | 'M.Tech' | 'PhD'
-  procedure: text("procedure").notNull(),
-  tuition_fee: text("tuition_fee").notNull(),
-  hostel_fee: text("hostel_fee").notNull(),
-});
-
-export const academicsCalendarNew = pgTable("academics_calendar_new", {
-  id: serial("id").primaryKey(),
-  category: text("category").notNull(), // 'UG' | 'PG' | 'PhD'
-  section: text("section").notNull(),   // 'Academic Schedule' | 'Examinations' | 'Holidays'
-  title: text("title").notNull(),
   date: text("date").notNull(),
-  description: text("description"),
-});
-
-export const academicsRegulationsNew = pgTable("academics_regulations_new", {
-  id: serial("id").primaryKey(),
-  category: text("category").notNull(), // 'UG' | 'PG' | 'PhD'
-  branch: text("branch").notNull(),     // 'B.Tech' | 'M.Tech' | 'MBA' | 'MCA'
-  code: text("code").notNull(),         // 'R23' | 'R20' | 'R19'
+  tag: text("tag").notNull(),
   title: text("title").notNull(),
-  description: text("description"),
-  file_url: text("file_url").notNull(),
-});
-
-export const academicsSyllabusNew = pgTable("academics_syllabus_new", {
-  id: serial("id").primaryKey(),
-  category: text("category").notNull(), // 'UG' | 'PG'
-  program: text("program").notNull(),   // 'B.Tech' | 'M.Tech' | 'MBA' | 'MCA'
-  branch: text("branch").notNull(),
-  regulation: text("regulation").notNull(),
-  semester: text("semester").notNull(),
-  subject_code: text("subject_code").notNull(),
-  subject_name: text("subject_name").notNull(),
-  department: text("department").notNull(),
-  file_url: text("file_url").notNull(),
-});
-
-export const academicsExamCell = pgTable("academics_exam_cell", {
-  id: serial("id").primaryKey(),
-  type: text("type").notNull(), // 'Notification' | 'Announcement' | 'Result' | 'HallTicket'
-  title: text("title").notNull(),
-  description: text("description"),
-  date: text("date").notNull(),
-  file_url: text("file_url"),
-});
-
-export const academicsDownloadsNew = pgTable("academics_downloads_new", {
-  id: serial("id").primaryKey(),
-  category: text("category").notNull(), // 'Application Forms' | 'SSC Memo' | 'OD' | 'TC' | 'Bonafide'
-  program: text("program").notNull(),   // 'B.Tech' | 'B.Pharm' | 'M.Tech' | 'MCA'
-  title: text("title").notNull(),
-  file_url: text("file_url").notNull(),
-});
-
-export const academicsTimetablesNew = pgTable("academics_timetables_new", {
-  id: serial("id").primaryKey(),
-  category: text("category").notNull(), // 'UG' | 'PG'
-  program: text("program").notNull(),   // 'B.Tech' | 'B.Pharm' | 'M.Tech' | 'MCA'
-  branch: text("branch").notNull(),
-  semester: text("semester").notNull(),
-  title: text("title").notNull(),
-  file_url: text("file_url").notNull(),
-});
-
-export const academicsScholarshipsNew = pgTable("academics_scholarships_new", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  amount: text("amount").notNull(),
-  description: text("description"),
-  eligibility: text("eligibility").notNull(), // Comma-separated or JSON
-  last_date: text("last_date").notNull(),
-  status: text("status").notNull(),
-  apply_url: text("apply_url"),
-});
-
-export const academicsFacultyNew = pgTable("academics_faculty_new", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  role: text("role").notNull(),
-  department: text("department").notNull(),
-  specialization: text("specialization"),
-  email: text("email").notNull(),
-  phone: text("phone"),
-  status: text("status").notNull(), // 'Available' | 'In a meeting' | 'Offline'
-  avatar: text("avatar").notNull(),
-});
-
-export const academicsDashboardStats = pgTable("academics_dashboard_stats", {
-  id: serial("id").primaryKey(),
-  label: text("label").notNull(),
-  value: text("value").notNull(),
-  icon: text("icon").notNull(),
-  color: text("color").notNull(),
-  trend: text("trend").notNull(),
-});
-
-// REAL NEON DATABASE TABLES MAPPED DIRECTLY
-export const academicFeeStructure = pgTable("academic_fee_structure", {
-  id: serial("id").primaryKey(),
-  level: text("level").notNull(),          // 'UG' | 'PG'
-  program_name: text("program_name").notNull(),  // 'B.Tech' | 'M.Tech' | 'MBA' | 'MCA'
-  title: text("title").notNull(),
-  pdf_url: text("pdf_url").notNull(),
-  created_at: timestamp("created_at").defaultNow(),
-});
-
-export const academicCalendars = pgTable("academic_calendars", {
-  id: serial("id").primaryKey(),
-  level: text("level").notNull(),          // 'UG' | 'PG' | 'PhD'
-  program_name: text("program_name").notNull(),
-  regulation: text("regulation").notNull(),
-  academic_year: text("academic_year").notNull(),
-  calendar_type: text("calendar_type").notNull(), // 'Academic' | 'Examinations' | 'Holidays'
-  pdf_url: text("pdf_url").notNull(),
-  created_at: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const academicRegulations = pgTable("academic_regulations", {
   id: serial("id").primaryKey(),
-  level: text("level").notNull(),          // 'UG' | 'PG' | 'PhD'
-  program_name: text("program_name").notNull(),
-  regulation: text("regulation").notNull(),
   title: text("title").notNull(),
-  pdf_url: text("pdf_url").notNull(),
-  created_at: timestamp("created_at").defaultNow(),
+  category: text("category").notNull(), // 'B.Tech' or 'M.Tech'
+  size: text("size").notNull(),
+  date: text("date").notNull(),
+  link: text("link").default("#"),
 });
 
-export const academicSyllabus = pgTable("academic_syllabus", {
+export const campusGallery = pgTable("campus_gallery", {
   id: serial("id").primaryKey(),
-  level: text("level").notNull(),          // 'UG' | 'PG'
-  program_name: text("program_name").notNull(),
-  regulation: text("regulation").notNull(),
-  branch: text("branch").notNull(),
-  academic_year: text("academic_year").notNull(),
-  semester: text("semester").notNull(),
-  subject_name: text("subject_name").notNull(),
-  pdf_url: text("pdf_url").notNull(),
-  created_at: timestamp("created_at").defaultNow(),
+  src: text("src").notNull(),
+  caption: text("caption"),
+  createdAt: timestamp("created_at").defaultNow(),
 });
-
-export const academicDownloads = pgTable("academic_downloads", {
-  id: serial("id").primaryKey(),
-  document_name: text("document_name").notNull(),
-  category: text("category").notNull(), // 'Bonafide' | 'TC' | 'OD' | 'SSC Memo' etc
-  pdf_url: text("pdf_url").notNull(),
-  created_at: timestamp("created_at").defaultNow(),
-});
-
-export const academicTimetables = pgTable("academic_timetables", {
-  id: serial("id").primaryKey(),
-  level: text("level").notNull(),          // 'UG' | 'PG'
-  program_name: text("program_name").notNull(),
-  regulation: text("regulation").notNull(),
-  branch: text("branch").notNull(),
-  academic_year: text("academic_year").notNull(),
-  semester: text("semester").notNull(),
-  subject_name: text("subject_name").notNull(),
-  pdf_url: text("pdf_url").notNull(),
-  created_at: timestamp("created_at").defaultNow(),
-});
-
-export const academicFaculty = pgTable("academic_faculty", {
-  id: serial("id").primaryKey(),
-  faculty_name: text("faculty_name").notNull(),
-  designation: text("designation").notNull(),
-  department: text("department").notNull(),
-  qualification: text("qualification").notNull(),
-  experience: text("experience").notNull(),
-  email: text("email").notNull(),
-  photo_url: text("photo_url").notNull(),
-  created_at: timestamp("created_at").defaultNow(),
-});
-
-export const academicsCac = pgTable("academics_cac", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  role: text("role").notNull(),
-  designation: text("designation"),
-  created_at: timestamp("created_at").defaultNow(),
-});
-
-
 

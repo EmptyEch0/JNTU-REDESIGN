@@ -26,7 +26,6 @@ import { Route as EdcRouteImport } from './routes/edc'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CampusLifeRouteImport } from './routes/campus-life'
 import { Route as BankingRouteImport } from './routes/banking'
-import { Route as AdmissionsRouteImport } from './routes/admissions'
 import { Route as AdministrationRouteImport } from './routes/administration'
 import { Route as AcademicsRouteImport } from './routes/academics'
 import { Route as AboutRouteImport } from './routes/about'
@@ -67,7 +66,7 @@ import { Route as AdministrationPrincipalRouteImport } from './routes/administra
 import { Route as AdministrationIqacRouteImport } from './routes/administration.iqac'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
 import { Route as AdminDepartmentsRouteImport } from './routes/admin.departments'
-import { Route as AcademicsTimetablesRouteImport } from './routes/academics/timetables'
+import { Route as AcademicsTimeTablesRouteImport } from './routes/academics.time-tables'
 import { Route as AcademicsSyllabusRouteImport } from './routes/academics/syllabus'
 import { Route as AcademicsScholarshipsRouteImport } from './routes/academics/scholarships'
 import { Route as AcademicsRegulationsRouteImport } from './routes/academics/regulations'
@@ -77,10 +76,10 @@ import { Route as AcademicsFacultyRouteImport } from './routes/academics/faculty
 import { Route as AcademicsExaminationRouteImport } from './routes/academics/examination'
 import { Route as AcademicsDownloadsRouteImport } from './routes/academics/downloads'
 import { Route as AcademicsCacRouteImport } from './routes/academics.cac'
-import { Route as AcademicsAdmissionsRouteImport } from './routes/academics/admissions'
 import { Route as AcademicsAcademicCalendarRouteImport } from './routes/academics/academic-calendar'
 import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
 import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
+import { Route as AboutNormsRouteImport } from './routes/about.norms'
 import { Route as AboutJntukRouteImport } from './routes/about.jntuk'
 import { Route as AboutInstitutionRouteImport } from './routes/about.institution'
 import { Route as AboutHowToReachRouteImport } from './routes/about.how-to-reach'
@@ -89,13 +88,14 @@ import { Route as AdministrationIqacIndexRouteImport } from './routes/administra
 import { Route as DepartmentsIdLabsRouteImport } from './routes/departments.$id.labs'
 import { Route as DepartmentsIdHodRouteImport } from './routes/departments.$id.hod'
 import { Route as DepartmentsIdGalleryRouteImport } from './routes/departments.$id.gallery'
-import { Route as DepartmentsIdFacultyRouteImport } from './routes/departments.$id.faculty'
 import { Route as DepartmentsIdCoursesRouteImport } from './routes/departments.$id.courses'
 import { Route as DepartmentsIdAchievementsRouteImport } from './routes/departments.$id.achievements'
 import { Route as AdministrationIqacMousRouteImport } from './routes/administration.iqac.mous'
 import { Route as AdministrationIqacMeetingsRouteImport } from './routes/administration.iqac.meetings'
 import { Route as AdministrationIqacCompositionRouteImport } from './routes/administration.iqac.composition'
 import { Route as AdministrationIqacAqarRouteImport } from './routes/administration.iqac.aqar'
+import { Route as DepartmentsIdFacultyIndexRouteImport } from './routes/departments.$id.faculty/index'
+import { Route as DepartmentsIdFacultyFacultyIdRouteImport } from './routes/departments.$id.faculty/$facultyId'
 
 const WomenEmpowermentRoute = WomenEmpowermentRouteImport.update({
   id: '/women-empowerment',
@@ -180,11 +180,6 @@ const CampusLifeRoute = CampusLifeRouteImport.update({
 const BankingRoute = BankingRouteImport.update({
   id: '/banking',
   path: '/banking',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdmissionsRoute = AdmissionsRouteImport.update({
-  id: '/admissions',
-  path: '/admissions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdministrationRoute = AdministrationRouteImport.update({
@@ -395,6 +390,11 @@ const AdminDepartmentsRoute = AdminDepartmentsRouteImport.update({
   path: '/admin/departments',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminDepartmentsRoute = AdminDepartmentsRouteImport.update({
+  id: '/admin/departments',
+  path: '/admin/departments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AcademicsTimetablesRoute = AcademicsTimetablesRouteImport.update({
   id: '/timetables',
   path: '/timetables',
@@ -445,11 +445,6 @@ const AcademicsCacRoute = AcademicsCacRouteImport.update({
   path: '/cac',
   getParentRoute: () => AcademicsRoute,
 } as any)
-const AcademicsAdmissionsRoute = AcademicsAdmissionsRouteImport.update({
-  id: '/admissions',
-  path: '/admissions',
-  getParentRoute: () => AcademicsRoute,
-} as any)
 const AcademicsAcademicCalendarRoute =
   AcademicsAcademicCalendarRouteImport.update({
     id: '/academic-calendar',
@@ -464,6 +459,11 @@ const AboutVizianagaramRoute = AboutVizianagaramRouteImport.update({
 const AboutVisionMissionRoute = AboutVisionMissionRouteImport.update({
   id: '/vision-mission',
   path: '/vision-mission',
+  getParentRoute: () => AboutRoute,
+} as any)
+const AboutNormsRoute = AboutNormsRouteImport.update({
+  id: '/norms',
+  path: '/norms',
   getParentRoute: () => AboutRoute,
 } as any)
 const AboutJntukRoute = AboutJntukRouteImport.update({
@@ -506,11 +506,6 @@ const DepartmentsIdGalleryRoute = DepartmentsIdGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => DepartmentsIdRoute,
 } as any)
-const DepartmentsIdFacultyRoute = DepartmentsIdFacultyRouteImport.update({
-  id: '/faculty',
-  path: '/faculty',
-  getParentRoute: () => DepartmentsIdRoute,
-} as any)
 const DepartmentsIdCoursesRoute = DepartmentsIdCoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
@@ -544,13 +539,24 @@ const AdministrationIqacAqarRoute = AdministrationIqacAqarRouteImport.update({
   path: '/aqar',
   getParentRoute: () => AdministrationIqacRoute,
 } as any)
+const DepartmentsIdFacultyIndexRoute =
+  DepartmentsIdFacultyIndexRouteImport.update({
+    id: '/faculty/',
+    path: '/faculty/',
+    getParentRoute: () => DepartmentsIdRoute,
+  } as any)
+const DepartmentsIdFacultyFacultyIdRoute =
+  DepartmentsIdFacultyFacultyIdRouteImport.update({
+    id: '/faculty/$facultyId',
+    path: '/faculty/$facultyId',
+    getParentRoute: () => DepartmentsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
   '/administration': typeof AdministrationRouteWithChildren
-  '/admissions': typeof AdmissionsRoute
   '/banking': typeof BankingRoute
   '/campus-life': typeof CampusLifeRouteWithChildren
   '/contact': typeof ContactRoute
@@ -571,10 +577,10 @@ export interface FileRoutesByFullPath {
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
   '/about/jntuk': typeof AboutJntukRoute
+  '/about/norms': typeof AboutNormsRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
-  '/academics/admissions': typeof AcademicsAdmissionsRoute
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
   '/academics/examination': typeof AcademicsExaminationRoute
@@ -584,7 +590,7 @@ export interface FileRoutesByFullPath {
   '/academics/regulations': typeof AcademicsRegulationsRoute
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
-  '/academics/timetables': typeof AcademicsTimetablesRoute
+  '/academics/time-tables': typeof AcademicsTimeTablesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
@@ -627,17 +633,17 @@ export interface FileRoutesByFullPath {
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
-  '/departments/$id/faculty': typeof DepartmentsIdFacultyRoute
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
   '/administration/iqac/': typeof AdministrationIqacIndexRoute
   '/departments/$id/': typeof DepartmentsIdIndexRoute
+  '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
+  '/departments/$id/faculty/': typeof DepartmentsIdFacultyIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/administration': typeof AdministrationRouteWithChildren
-  '/admissions': typeof AdmissionsRoute
   '/banking': typeof BankingRoute
   '/contact': typeof ContactRoute
   '/edc': typeof EdcRoute
@@ -653,10 +659,10 @@ export interface FileRoutesByTo {
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
   '/about/jntuk': typeof AboutJntukRoute
+  '/about/norms': typeof AboutNormsRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
-  '/academics/admissions': typeof AcademicsAdmissionsRoute
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
   '/academics/examination': typeof AcademicsExaminationRoute
@@ -666,7 +672,7 @@ export interface FileRoutesByTo {
   '/academics/regulations': typeof AcademicsRegulationsRoute
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
-  '/academics/timetables': typeof AcademicsTimetablesRoute
+  '/academics/time-tables': typeof AcademicsTimeTablesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/administration/principal': typeof AdministrationPrincipalRoute
@@ -707,12 +713,13 @@ export interface FileRoutesByTo {
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
-  '/departments/$id/faculty': typeof DepartmentsIdFacultyRoute
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
   '/administration/iqac': typeof AdministrationIqacIndexRoute
   '/departments/$id': typeof DepartmentsIdIndexRoute
+  '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
+  '/departments/$id/faculty': typeof DepartmentsIdFacultyIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -720,7 +727,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
   '/administration': typeof AdministrationRouteWithChildren
-  '/admissions': typeof AdmissionsRoute
   '/banking': typeof BankingRoute
   '/campus-life': typeof CampusLifeRouteWithChildren
   '/contact': typeof ContactRoute
@@ -741,10 +747,10 @@ export interface FileRoutesById {
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
   '/about/jntuk': typeof AboutJntukRoute
+  '/about/norms': typeof AboutNormsRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
-  '/academics/admissions': typeof AcademicsAdmissionsRoute
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
   '/academics/examination': typeof AcademicsExaminationRoute
@@ -754,7 +760,7 @@ export interface FileRoutesById {
   '/academics/regulations': typeof AcademicsRegulationsRoute
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
-  '/academics/timetables': typeof AcademicsTimetablesRoute
+  '/academics/time-tables': typeof AcademicsTimeTablesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
@@ -797,272 +803,273 @@ export interface FileRoutesById {
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
-  '/departments/$id/faculty': typeof DepartmentsIdFacultyRoute
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
   '/administration/iqac/': typeof AdministrationIqacIndexRoute
   '/departments/$id/': typeof DepartmentsIdIndexRoute
+  '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
+  '/departments/$id/faculty/': typeof DepartmentsIdFacultyIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/about'
-    | '/academics'
-    | '/administration'
-    | '/admissions'
-    | '/banking'
-    | '/campus-life'
-    | '/contact'
-    | '/edc'
-    | '/engineering-cell'
-    | '/gallery'
-    | '/hostels'
-    | '/iipc'
-    | '/library'
-    | '/notices'
-    | '/nss'
-    | '/other-amenities'
-    | '/placements'
-    | '/professional-bodies'
-    | '/rd-cell'
-    | '/sports'
-    | '/women-empowerment'
-    | '/about/how-to-reach'
-    | '/about/institution'
-    | '/about/jntuk'
-    | '/about/vision-mission'
-    | '/about/vizianagaram'
-    | '/academics/academic-calendar'
-    | '/academics/admissions'
-    | '/academics/cac'
-    | '/academics/downloads'
-    | '/academics/examination'
-    | '/academics/faculty'
-    | '/academics/mission-vision'
-    | '/academics/programs'
-    | '/academics/regulations'
-    | '/academics/scholarships'
-    | '/academics/syllabus'
-    | '/academics/timetables'
-    | '/admin/departments'
-    | '/admin/placements'
-    | '/administration/iqac'
-    | '/administration/principal'
-    | '/administration/principals-office'
-    | '/administration/vice-principal'
-    | '/campus-life/music-club'
-    | '/campus-life/student-activity-club'
-    | '/departments/$id'
-    | '/nss/activities'
-    | '/nss/special-camp'
-    | '/other-amenities/guest-house'
-    | '/other-amenities/staff-quarters'
-    | '/placements/gallery'
-    | '/placements/recruiters'
-    | '/placements/students'
-    | '/placements/training'
-    | '/rd-cell/about'
-    | '/rd-cell/areas'
-    | '/rd-cell/mous'
-    | '/rd-cell/projects'
-    | '/rd-cell/publications'
-    | '/rd-cell/scholars'
-    | '/women-empowerment/activities'
-    | '/women-empowerment/magazine'
-    | '/women-empowerment/recreation'
-    | '/about/'
-    | '/academics/'
-    | '/admin/'
-    | '/campus-life/'
-    | '/departments/'
-    | '/dispensary/'
-    | '/nss/'
-    | '/placements/'
-    | '/rd-cell/'
-    | '/women-empowerment/'
-    | '/administration/iqac/aqar'
-    | '/administration/iqac/composition'
-    | '/administration/iqac/meetings'
-    | '/administration/iqac/mous'
-    | '/departments/$id/achievements'
-    | '/departments/$id/courses'
-    | '/departments/$id/faculty'
-    | '/departments/$id/gallery'
-    | '/departments/$id/hod'
-    | '/departments/$id/labs'
-    | '/administration/iqac/'
-    | '/departments/$id/'
+  | '/'
+  | '/about'
+  | '/academics'
+  | '/administration'
+  | '/banking'
+  | '/campus-life'
+  | '/contact'
+  | '/edc'
+  | '/engineering-cell'
+  | '/gallery'
+  | '/hostels'
+  | '/iipc'
+  | '/library'
+  | '/notices'
+  | '/nss'
+  | '/other-amenities'
+  | '/placements'
+  | '/professional-bodies'
+  | '/rd-cell'
+  | '/sports'
+  | '/women-empowerment'
+  | '/about/how-to-reach'
+  | '/about/institution'
+  | '/about/jntuk'
+  | '/about/norms'
+  | '/about/vision-mission'
+  | '/about/vizianagaram'
+  | '/academics/academic-calendar'
+  | '/academics/cac'
+  | '/academics/downloads'
+  | '/academics/examination'
+  | '/academics/faculty'
+  | '/academics/mission-vision'
+  | '/academics/programs'
+  | '/academics/regulations'
+  | '/academics/scholarships'
+  | '/academics/syllabus'
+  | '/academics/time-tables'
+  | '/admin/departments'
+  | '/admin/placements'
+  | '/administration/iqac'
+  | '/administration/principal'
+  | '/administration/principals-office'
+  | '/administration/vice-principal'
+  | '/campus-life/music-club'
+  | '/campus-life/student-activity-club'
+  | '/departments/$id'
+  | '/nss/activities'
+  | '/nss/special-camp'
+  | '/other-amenities/guest-house'
+  | '/other-amenities/staff-quarters'
+  | '/placements/gallery'
+  | '/placements/recruiters'
+  | '/placements/students'
+  | '/placements/training'
+  | '/rd-cell/about'
+  | '/rd-cell/areas'
+  | '/rd-cell/mous'
+  | '/rd-cell/projects'
+  | '/rd-cell/publications'
+  | '/rd-cell/scholars'
+  | '/women-empowerment/activities'
+  | '/women-empowerment/magazine'
+  | '/women-empowerment/recreation'
+  | '/about/'
+  | '/academics/'
+  | '/admin/'
+  | '/campus-life/'
+  | '/departments/'
+  | '/dispensary/'
+  | '/nss/'
+  | '/placements/'
+  | '/rd-cell/'
+  | '/women-empowerment/'
+  | '/administration/iqac/aqar'
+  | '/administration/iqac/composition'
+  | '/administration/iqac/meetings'
+  | '/administration/iqac/mous'
+  | '/departments/$id/achievements'
+  | '/departments/$id/courses'
+  | '/departments/$id/gallery'
+  | '/departments/$id/hod'
+  | '/departments/$id/labs'
+  | '/administration/iqac/'
+  | '/departments/$id/'
+  | '/departments/$id/faculty/$facultyId'
+  | '/departments/$id/faculty/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/administration'
-    | '/admissions'
-    | '/banking'
-    | '/contact'
-    | '/edc'
-    | '/engineering-cell'
-    | '/gallery'
-    | '/hostels'
-    | '/iipc'
-    | '/library'
-    | '/notices'
-    | '/other-amenities'
-    | '/professional-bodies'
-    | '/sports'
-    | '/about/how-to-reach'
-    | '/about/institution'
-    | '/about/jntuk'
-    | '/about/vision-mission'
-    | '/about/vizianagaram'
-    | '/academics/academic-calendar'
-    | '/academics/admissions'
-    | '/academics/cac'
-    | '/academics/downloads'
-    | '/academics/examination'
-    | '/academics/faculty'
-    | '/academics/mission-vision'
-    | '/academics/programs'
-    | '/academics/regulations'
-    | '/academics/scholarships'
-    | '/academics/syllabus'
-    | '/academics/timetables'
-    | '/admin/departments'
-    | '/admin/placements'
-    | '/administration/principal'
-    | '/administration/principals-office'
-    | '/administration/vice-principal'
-    | '/campus-life/music-club'
-    | '/campus-life/student-activity-club'
-    | '/nss/activities'
-    | '/nss/special-camp'
-    | '/other-amenities/guest-house'
-    | '/other-amenities/staff-quarters'
-    | '/placements/gallery'
-    | '/placements/recruiters'
-    | '/placements/students'
-    | '/placements/training'
-    | '/rd-cell/about'
-    | '/rd-cell/areas'
-    | '/rd-cell/mous'
-    | '/rd-cell/projects'
-    | '/rd-cell/publications'
-    | '/rd-cell/scholars'
-    | '/women-empowerment/activities'
-    | '/women-empowerment/magazine'
-    | '/women-empowerment/recreation'
-    | '/about'
-    | '/academics'
-    | '/admin'
-    | '/campus-life'
-    | '/departments'
-    | '/dispensary'
-    | '/nss'
-    | '/placements'
-    | '/rd-cell'
-    | '/women-empowerment'
-    | '/administration/iqac/aqar'
-    | '/administration/iqac/composition'
-    | '/administration/iqac/meetings'
-    | '/administration/iqac/mous'
-    | '/departments/$id/achievements'
-    | '/departments/$id/courses'
-    | '/departments/$id/faculty'
-    | '/departments/$id/gallery'
-    | '/departments/$id/hod'
-    | '/departments/$id/labs'
-    | '/administration/iqac'
-    | '/departments/$id'
+  | '/'
+  | '/administration'
+  | '/banking'
+  | '/contact'
+  | '/edc'
+  | '/engineering-cell'
+  | '/gallery'
+  | '/hostels'
+  | '/iipc'
+  | '/library'
+  | '/notices'
+  | '/other-amenities'
+  | '/professional-bodies'
+  | '/sports'
+  | '/about/how-to-reach'
+  | '/about/institution'
+  | '/about/jntuk'
+  | '/about/norms'
+  | '/about/vision-mission'
+  | '/about/vizianagaram'
+  | '/academics/academic-calendar'
+  | '/academics/cac'
+  | '/academics/downloads'
+  | '/academics/examination'
+  | '/academics/faculty'
+  | '/academics/mission-vision'
+  | '/academics/programs'
+  | '/academics/regulations'
+  | '/academics/scholarships'
+  | '/academics/syllabus'
+  | '/academics/time-tables'
+  | '/admin/departments'
+  | '/admin/placements'
+  | '/administration/principal'
+  | '/administration/principals-office'
+  | '/administration/vice-principal'
+  | '/campus-life/music-club'
+  | '/campus-life/student-activity-club'
+  | '/nss/activities'
+  | '/nss/special-camp'
+  | '/other-amenities/guest-house'
+  | '/other-amenities/staff-quarters'
+  | '/placements/gallery'
+  | '/placements/recruiters'
+  | '/placements/students'
+  | '/placements/training'
+  | '/rd-cell/about'
+  | '/rd-cell/areas'
+  | '/rd-cell/mous'
+  | '/rd-cell/projects'
+  | '/rd-cell/publications'
+  | '/rd-cell/scholars'
+  | '/women-empowerment/activities'
+  | '/women-empowerment/magazine'
+  | '/women-empowerment/recreation'
+  | '/about'
+  | '/academics'
+  | '/admin'
+  | '/campus-life'
+  | '/departments'
+  | '/dispensary'
+  | '/nss'
+  | '/placements'
+  | '/rd-cell'
+  | '/women-empowerment'
+  | '/administration/iqac/aqar'
+  | '/administration/iqac/composition'
+  | '/administration/iqac/meetings'
+  | '/administration/iqac/mous'
+  | '/departments/$id/achievements'
+  | '/departments/$id/courses'
+  | '/departments/$id/gallery'
+  | '/departments/$id/hod'
+  | '/departments/$id/labs'
+  | '/administration/iqac'
+  | '/departments/$id'
+  | '/departments/$id/faculty/$facultyId'
+  | '/departments/$id/faculty'
   id:
-    | '__root__'
-    | '/'
-    | '/about'
-    | '/academics'
-    | '/administration'
-    | '/admissions'
-    | '/banking'
-    | '/campus-life'
-    | '/contact'
-    | '/edc'
-    | '/engineering-cell'
-    | '/gallery'
-    | '/hostels'
-    | '/iipc'
-    | '/library'
-    | '/notices'
-    | '/nss'
-    | '/other-amenities'
-    | '/placements'
-    | '/professional-bodies'
-    | '/rd-cell'
-    | '/sports'
-    | '/women-empowerment'
-    | '/about/how-to-reach'
-    | '/about/institution'
-    | '/about/jntuk'
-    | '/about/vision-mission'
-    | '/about/vizianagaram'
-    | '/academics/academic-calendar'
-    | '/academics/admissions'
-    | '/academics/cac'
-    | '/academics/downloads'
-    | '/academics/examination'
-    | '/academics/faculty'
-    | '/academics/mission-vision'
-    | '/academics/programs'
-    | '/academics/regulations'
-    | '/academics/scholarships'
-    | '/academics/syllabus'
-    | '/academics/timetables'
-    | '/admin/departments'
-    | '/admin/placements'
-    | '/administration/iqac'
-    | '/administration/principal'
-    | '/administration/principals-office'
-    | '/administration/vice-principal'
-    | '/campus-life/music-club'
-    | '/campus-life/student-activity-club'
-    | '/departments/$id'
-    | '/nss/activities'
-    | '/nss/special-camp'
-    | '/other-amenities/guest-house'
-    | '/other-amenities/staff-quarters'
-    | '/placements/gallery'
-    | '/placements/recruiters'
-    | '/placements/students'
-    | '/placements/training'
-    | '/rd-cell/about'
-    | '/rd-cell/areas'
-    | '/rd-cell/mous'
-    | '/rd-cell/projects'
-    | '/rd-cell/publications'
-    | '/rd-cell/scholars'
-    | '/women-empowerment/activities'
-    | '/women-empowerment/magazine'
-    | '/women-empowerment/recreation'
-    | '/about/'
-    | '/academics/'
-    | '/admin/'
-    | '/campus-life/'
-    | '/departments/'
-    | '/dispensary/'
-    | '/nss/'
-    | '/placements/'
-    | '/rd-cell/'
-    | '/women-empowerment/'
-    | '/administration/iqac/aqar'
-    | '/administration/iqac/composition'
-    | '/administration/iqac/meetings'
-    | '/administration/iqac/mous'
-    | '/departments/$id/achievements'
-    | '/departments/$id/courses'
-    | '/departments/$id/faculty'
-    | '/departments/$id/gallery'
-    | '/departments/$id/hod'
-    | '/departments/$id/labs'
-    | '/administration/iqac/'
-    | '/departments/$id/'
+  | '__root__'
+  | '/'
+  | '/about'
+  | '/academics'
+  | '/administration'
+  | '/banking'
+  | '/campus-life'
+  | '/contact'
+  | '/edc'
+  | '/engineering-cell'
+  | '/gallery'
+  | '/hostels'
+  | '/iipc'
+  | '/library'
+  | '/notices'
+  | '/nss'
+  | '/other-amenities'
+  | '/placements'
+  | '/professional-bodies'
+  | '/rd-cell'
+  | '/sports'
+  | '/women-empowerment'
+  | '/about/how-to-reach'
+  | '/about/institution'
+  | '/about/jntuk'
+  | '/about/norms'
+  | '/about/vision-mission'
+  | '/about/vizianagaram'
+  | '/academics/academic-calendar'
+  | '/academics/cac'
+  | '/academics/downloads'
+  | '/academics/examination'
+  | '/academics/faculty'
+  | '/academics/mission-vision'
+  | '/academics/programs'
+  | '/academics/regulations'
+  | '/academics/scholarships'
+  | '/academics/syllabus'
+  | '/academics/time-tables'
+  | '/admin/departments'
+  | '/admin/placements'
+  | '/administration/iqac'
+  | '/administration/principal'
+  | '/administration/principals-office'
+  | '/administration/vice-principal'
+  | '/campus-life/music-club'
+  | '/campus-life/student-activity-club'
+  | '/departments/$id'
+  | '/nss/activities'
+  | '/nss/special-camp'
+  | '/other-amenities/guest-house'
+  | '/other-amenities/staff-quarters'
+  | '/placements/gallery'
+  | '/placements/recruiters'
+  | '/placements/students'
+  | '/placements/training'
+  | '/rd-cell/about'
+  | '/rd-cell/areas'
+  | '/rd-cell/mous'
+  | '/rd-cell/projects'
+  | '/rd-cell/publications'
+  | '/rd-cell/scholars'
+  | '/women-empowerment/activities'
+  | '/women-empowerment/magazine'
+  | '/women-empowerment/recreation'
+  | '/about/'
+  | '/academics/'
+  | '/admin/'
+  | '/campus-life/'
+  | '/departments/'
+  | '/dispensary/'
+  | '/nss/'
+  | '/placements/'
+  | '/rd-cell/'
+  | '/women-empowerment/'
+  | '/administration/iqac/aqar'
+  | '/administration/iqac/composition'
+  | '/administration/iqac/meetings'
+  | '/administration/iqac/mous'
+  | '/departments/$id/achievements'
+  | '/departments/$id/courses'
+  | '/departments/$id/gallery'
+  | '/departments/$id/hod'
+  | '/departments/$id/labs'
+  | '/administration/iqac/'
+  | '/departments/$id/'
+  | '/departments/$id/faculty/$facultyId'
+  | '/departments/$id/faculty/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1070,7 +1077,6 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRouteWithChildren
   AcademicsRoute: typeof AcademicsRouteWithChildren
   AdministrationRoute: typeof AdministrationRouteWithChildren
-  AdmissionsRoute: typeof AdmissionsRoute
   BankingRoute: typeof BankingRoute
   CampusLifeRoute: typeof CampusLifeRouteWithChildren
   ContactRoute: typeof ContactRoute
@@ -1215,13 +1221,6 @@ declare module '@tanstack/react-router' {
       path: '/banking'
       fullPath: '/banking'
       preLoaderRoute: typeof BankingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admissions': {
-      id: '/admissions'
-      path: '/admissions'
-      fullPath: '/admissions'
-      preLoaderRoute: typeof AdmissionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/administration': {
@@ -1574,13 +1573,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcademicsCacRouteImport
       parentRoute: typeof AcademicsRoute
     }
-    '/academics/admissions': {
-      id: '/academics/admissions'
-      path: '/admissions'
-      fullPath: '/academics/admissions'
-      preLoaderRoute: typeof AcademicsAdmissionsRouteImport
-      parentRoute: typeof AcademicsRoute
-    }
     '/academics/academic-calendar': {
       id: '/academics/academic-calendar'
       path: '/academic-calendar'
@@ -1600,6 +1592,13 @@ declare module '@tanstack/react-router' {
       path: '/vision-mission'
       fullPath: '/about/vision-mission'
       preLoaderRoute: typeof AboutVisionMissionRouteImport
+      parentRoute: typeof AboutRoute
+    }
+    '/about/norms': {
+      id: '/about/norms'
+      path: '/norms'
+      fullPath: '/about/norms'
+      preLoaderRoute: typeof AboutNormsRouteImport
       parentRoute: typeof AboutRoute
     }
     '/about/jntuk': {
@@ -1658,13 +1657,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsIdGalleryRouteImport
       parentRoute: typeof DepartmentsIdRoute
     }
-    '/departments/$id/faculty': {
-      id: '/departments/$id/faculty'
-      path: '/faculty'
-      fullPath: '/departments/$id/faculty'
-      preLoaderRoute: typeof DepartmentsIdFacultyRouteImport
-      parentRoute: typeof DepartmentsIdRoute
-    }
     '/departments/$id/courses': {
       id: '/departments/$id/courses'
       path: '/courses'
@@ -1707,6 +1699,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationIqacAqarRouteImport
       parentRoute: typeof AdministrationIqacRoute
     }
+    '/departments/$id/faculty/': {
+      id: '/departments/$id/faculty/'
+      path: '/faculty'
+      fullPath: '/departments/$id/faculty/'
+      preLoaderRoute: typeof DepartmentsIdFacultyIndexRouteImport
+      parentRoute: typeof DepartmentsIdRoute
+    }
+    '/departments/$id/faculty/$facultyId': {
+      id: '/departments/$id/faculty/$facultyId'
+      path: '/faculty/$facultyId'
+      fullPath: '/departments/$id/faculty/$facultyId'
+      preLoaderRoute: typeof DepartmentsIdFacultyFacultyIdRouteImport
+      parentRoute: typeof DepartmentsIdRoute
+    }
   }
 }
 
@@ -1714,6 +1720,7 @@ interface AboutRouteChildren {
   AboutHowToReachRoute: typeof AboutHowToReachRoute
   AboutInstitutionRoute: typeof AboutInstitutionRoute
   AboutJntukRoute: typeof AboutJntukRoute
+  AboutNormsRoute: typeof AboutNormsRoute
   AboutVisionMissionRoute: typeof AboutVisionMissionRoute
   AboutVizianagaramRoute: typeof AboutVizianagaramRoute
   AboutIndexRoute: typeof AboutIndexRoute
@@ -1723,6 +1730,7 @@ const AboutRouteChildren: AboutRouteChildren = {
   AboutHowToReachRoute: AboutHowToReachRoute,
   AboutInstitutionRoute: AboutInstitutionRoute,
   AboutJntukRoute: AboutJntukRoute,
+  AboutNormsRoute: AboutNormsRoute,
   AboutVisionMissionRoute: AboutVisionMissionRoute,
   AboutVizianagaramRoute: AboutVizianagaramRoute,
   AboutIndexRoute: AboutIndexRoute,
@@ -1732,7 +1740,6 @@ const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
 
 interface AcademicsRouteChildren {
   AcademicsAcademicCalendarRoute: typeof AcademicsAcademicCalendarRoute
-  AcademicsAdmissionsRoute: typeof AcademicsAdmissionsRoute
   AcademicsCacRoute: typeof AcademicsCacRoute
   AcademicsDownloadsRoute: typeof AcademicsDownloadsRoute
   AcademicsExaminationRoute: typeof AcademicsExaminationRoute
@@ -1748,7 +1755,6 @@ interface AcademicsRouteChildren {
 
 const AcademicsRouteChildren: AcademicsRouteChildren = {
   AcademicsAcademicCalendarRoute: AcademicsAcademicCalendarRoute,
-  AcademicsAdmissionsRoute: AcademicsAdmissionsRoute,
   AcademicsCacRoute: AcademicsCacRoute,
   AcademicsDownloadsRoute: AcademicsDownloadsRoute,
   AcademicsExaminationRoute: AcademicsExaminationRoute,
@@ -1910,21 +1916,23 @@ const WomenEmpowermentRouteWithChildren =
 interface DepartmentsIdRouteChildren {
   DepartmentsIdAchievementsRoute: typeof DepartmentsIdAchievementsRoute
   DepartmentsIdCoursesRoute: typeof DepartmentsIdCoursesRoute
-  DepartmentsIdFacultyRoute: typeof DepartmentsIdFacultyRoute
   DepartmentsIdGalleryRoute: typeof DepartmentsIdGalleryRoute
   DepartmentsIdHodRoute: typeof DepartmentsIdHodRoute
   DepartmentsIdLabsRoute: typeof DepartmentsIdLabsRoute
   DepartmentsIdIndexRoute: typeof DepartmentsIdIndexRoute
+  DepartmentsIdFacultyFacultyIdRoute: typeof DepartmentsIdFacultyFacultyIdRoute
+  DepartmentsIdFacultyIndexRoute: typeof DepartmentsIdFacultyIndexRoute
 }
 
 const DepartmentsIdRouteChildren: DepartmentsIdRouteChildren = {
   DepartmentsIdAchievementsRoute: DepartmentsIdAchievementsRoute,
   DepartmentsIdCoursesRoute: DepartmentsIdCoursesRoute,
-  DepartmentsIdFacultyRoute: DepartmentsIdFacultyRoute,
   DepartmentsIdGalleryRoute: DepartmentsIdGalleryRoute,
   DepartmentsIdHodRoute: DepartmentsIdHodRoute,
   DepartmentsIdLabsRoute: DepartmentsIdLabsRoute,
   DepartmentsIdIndexRoute: DepartmentsIdIndexRoute,
+  DepartmentsIdFacultyFacultyIdRoute: DepartmentsIdFacultyFacultyIdRoute,
+  DepartmentsIdFacultyIndexRoute: DepartmentsIdFacultyIndexRoute,
 }
 
 const DepartmentsIdRouteWithChildren = DepartmentsIdRoute._addFileChildren(
@@ -1936,7 +1944,6 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRouteWithChildren,
   AcademicsRoute: AcademicsRouteWithChildren,
   AdministrationRoute: AdministrationRouteWithChildren,
-  AdmissionsRoute: AdmissionsRoute,
   BankingRoute: BankingRoute,
   CampusLifeRoute: CampusLifeRouteWithChildren,
   ContactRoute: ContactRoute,

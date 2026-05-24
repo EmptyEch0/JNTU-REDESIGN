@@ -22,7 +22,6 @@ export const NAV: {
     children?: { label: string; to: string }[];
   }[];
 }[] = [
-  { label: "Home", to: "/" },
   {
     label: "About",
     groups: [
@@ -38,6 +37,11 @@ export const NAV: {
             label: "Vision & Mission",
             to: "/about/vision-mission",
             desc: "Our purpose and guiding principles",
+          },
+          {
+            label: "Norms & Recognition",
+            to: "/about/norms",
+            desc: "UGC status and establishment orders",
           },
         ],
       },
@@ -76,7 +80,6 @@ export const NAV: {
         items: [
           { label: "Overview", to: "/academics", desc: "Programs at a glance" },
           { label: "Programs Offered", to: "/academics/programs", desc: "UG, PG and Doctoral" },
-          { label: "Admissions", to: "/academics/admissions", desc: "How to apply" },
           {
             label: "Academic Regulations",
             to: "/academics/regulations",
@@ -370,7 +373,6 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
     keywords: "programs curriculum ug pg phd",
   },
   { label: "Departments", to: "/departments", group: "Pages" },
-  { label: "Admissions", to: "/admissions", group: "Pages", keywords: "apply enroll" },
   { label: "Contact", to: "/contact", group: "Pages" },
   { label: "Notices", to: "/notices", group: "Pages", keywords: "announcements circulars" },
   { label: "Gallery", to: "/gallery", group: "Pages" },
@@ -495,7 +497,6 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
 export const ACADEMICS_SUBNAV = [
   { label: "Overview", to: "/academics" },
   { label: "Programs Offered", to: "/academics/programs" },
-  { label: "Admissions", to: "/academics/admissions" },
   { label: "Regulations", to: "/academics/regulations" },
   { label: "Syllabus", to: "/academics/syllabus" },
   { label: "Scholarships", to: "/academics/scholarships" },
@@ -557,7 +558,6 @@ export const STUDENT_SUBNAV = [
   { label: "IIPC", to: "/iipc" },
   { label: "Gallery", to: "/gallery" },
   { label: "Notices", to: "/notices" },
-  { label: "Admissions", to: "/admissions" },
   { label: "Contact Us", to: "/contact" },
 ];
 

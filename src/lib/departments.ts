@@ -3,11 +3,7 @@ import { db } from "../db";
 import { departments, faculty, achievements, courses, laboratories, departmentGallery } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-<<<<<<< HEAD
-
-=======
 import bcrypt from "bcryptjs";
->>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
 // --- Department Core ---
 export const getDepartments = createServerFn({ method: "GET" }).handler(async () => {
   return await db.select().from(departments);
@@ -141,7 +137,6 @@ export const syncFaculty = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-<<<<<<< HEAD
 // --- NEW CRUD FUNCTIONS REQUIRED BY admin.departments.tsx ---
 
 export const getFacultyByDept = createServerFn({ method: "POST" })
@@ -154,27 +149,16 @@ export const getFacultyByDept = createServerFn({ method: "POST" })
 
 export const addFaculty = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
-=======
-// --- Faculty ---
-export const getFacultyByDept = createServerFn({ method: "GET" })
-  .inputValidator((deptId: string) => deptId)
-  .handler(async ({ input }) => {
-    return await db.select().from(faculty).where(eq(faculty.dept_id, input));
-  });
-
-export const addFaculty = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
->>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
   .handler(async ({ data }) => {
     await db.insert(faculty).values(data);
     return { success: true };
   });
 
 export const deleteFaculty = createServerFn({ method: "POST" })
-<<<<<<< HEAD
-  .inputValidator((d: { id: number }) => d)
+  .inputValidator((d: { id: number } | number) => d)
   .handler(async ({ data }) => {
-    await db.delete(faculty).where(eq(faculty.id, data.id));
+    const id = typeof data === "number" ? data : (data as any)?.id;
+    await db.delete(faculty).where(eq(faculty.id, id));
     return { success: true };
   });
 
@@ -188,33 +172,16 @@ export const getLabsByDept = createServerFn({ method: "POST" })
 
 export const addLaboratory = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
-=======
-  .inputValidator((id: number) => id)
-  .handler(async ({ data }) => {
-    await db.delete(faculty).where(eq(faculty.id, data));
-    return { success: true };
-  });
-
-// --- Laboratories ---
-export const getLabsByDept = createServerFn({ method: "GET" })
-  .inputValidator((deptId: string) => deptId)
-  .handler(async ({ input }) => {
-    return await db.select().from(laboratories).where(eq(laboratories.dept_id, input));
-  });
-
-export const addLaboratory = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
->>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
   .handler(async ({ data }) => {
     await db.insert(laboratories).values(data);
     return { success: true };
   });
 
 export const deleteLaboratory = createServerFn({ method: "POST" })
-<<<<<<< HEAD
-  .inputValidator((d: { id: number }) => d)
+  .inputValidator((d: { id: number } | number) => d)
   .handler(async ({ data }) => {
-    await db.delete(laboratories).where(eq(laboratories.id, data.id));
+    const id = typeof data === "number" ? data : (data as any)?.id;
+    await db.delete(laboratories).where(eq(laboratories.id, id));
     return { success: true };
   });
 
@@ -228,29 +195,11 @@ export const getAchievementsByDept = createServerFn({ method: "POST" })
 
 export const addAchievement = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
-=======
-  .inputValidator((id: number) => id)
-  .handler(async ({ data }) => {
-    await db.delete(laboratories).where(eq(laboratories.id, data));
-    return { success: true };
-  });
-
-// --- Achievements ---
-export const getAchievementsByDept = createServerFn({ method: "GET" })
-  .inputValidator((deptId: string) => deptId)
-  .handler(async ({ input }) => {
-    return await db.select().from(achievements).where(eq(achievements.dept_id, input));
-  });
-
-export const addAchievement = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
->>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
   .handler(async ({ data }) => {
     await db.insert(achievements).values(data);
     return { success: true };
   });
 
-<<<<<<< HEAD
 export const getCoursesByDept = createServerFn({ method: "POST" })
   .inputValidator((deptId: string | { data?: string }) => deptId)
   .handler(async ({ data }) => {
@@ -270,25 +219,11 @@ export const addCourse = createServerFn({ method: "POST" })
       regulation,
       syllabus_url
     });
-=======
-// --- Courses ---
-export const getCoursesByDept = createServerFn({ method: "GET" })
-  .inputValidator((deptId: string) => deptId)
-  .handler(async ({ input }) => {
-    return await db.select().from(courses).where(eq(courses.dept_id, input));
-  });
-
-export const addCourse = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
-  .handler(async ({ data }) => {
-    await db.insert(courses).values(data);
->>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
     return { success: true };
   });
 
 export const deleteCourse = createServerFn({ method: "POST" })
-<<<<<<< HEAD
-  .inputValidator((d: { id: number }) => d)
+  .inputValidator((d: { id: number } | number) => d)
   .handler(async ({ data }) => {
     const id = typeof data === "number" ? data : (data as any)?.id;
     await db.delete(courses).where(eq(courses.id, id));
@@ -314,43 +249,18 @@ export const addToGallery = createServerFn({ method: "POST" })
       category: category || "General",
       description
     });
-=======
-  .inputValidator((id: number) => id)
-  .handler(async ({ data }) => {
-    await db.delete(courses).where(eq(courses.id, data));
-    return { success: true };
-  });
-
-// --- Gallery ---
-export const getGalleryByDept = createServerFn({ method: "GET" })
-  .inputValidator((deptId: string) => deptId)
-  .handler(async ({ input }) => {
-    return await db.select().from(departmentGallery).where(eq(departmentGallery.dept_id, input));
-  });
-
-export const addToGallery = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
-  .handler(async ({ data }) => {
-    await db.insert(departmentGallery).values(data);
->>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
     return { success: true };
   });
 
 export const deleteFromGallery = createServerFn({ method: "POST" })
-<<<<<<< HEAD
-  .inputValidator((d: { id: string }) => d)
+  .inputValidator((d: { id: string } | string) => d)
   .handler(async ({ data }) => {
     const id = typeof data === "string" ? data : (data as any)?.id;
     await db.delete(departmentGallery).where(eq(departmentGallery.id, id));
     return { success: true };
-=======
-  .inputValidator((id: string) => id)
-  .handler(async ({ data }) => {
-    await db.delete(departmentGallery).where(eq(departmentGallery.id, data));
-    return { success: true };
   });
 
-  export const updateFacultyProfile = createServerFn({ method: "POST" })
+export const updateFacultyProfile = createServerFn({ method: "POST" })
   .inputValidator((d: { facultyId: string | number; profileData: any }) => d)
   .handler(async ({ data }) => {
     const { facultyId, profileData } = data;
@@ -378,7 +288,7 @@ export const deleteFromGallery = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-  export const verifyDepartmentAccess = createServerFn({ method: "POST" })
+export const verifyDepartmentAccess = createServerFn({ method: "POST" })
   .inputValidator((d: { deptId: string; password: string }) => d)
   .handler(async ({ data }) => {
     const { deptId, password } = data;
@@ -401,8 +311,6 @@ export const deleteFromGallery = createServerFn({ method: "POST" })
     }
 
     // 3. CRYPTOGRAPHIC MATCH VALIDATION
-    // Since Bcrypt hashes contain random salts, you cannot use "===" to compare strings.
-    // Instead, bcrypt.compare will securely hash the user's typed input and verify if it matches the pattern of the stored hash.
     const isPasswordMatch = await bcrypt.compare(password, dept.hod_password);
 
     if (isPasswordMatch) {
@@ -411,5 +319,4 @@ export const deleteFromGallery = createServerFn({ method: "POST" })
 
     // Fallback: Access Denied
     return { valid: false, role: null };
->>>>>>> 1902ed8b0c8c47055ed877320c0afb644b5cd083
   });

@@ -202,7 +202,7 @@ function RegulationsPage() {
                 </div>
               ))}
             </div>
-          )}
+          </section>
         </div>
 
       </div>

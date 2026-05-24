@@ -175,20 +175,20 @@ export const upsertAcademicsRegulation = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicRegulations).set({
-        level: data.level,
-        program_name: data.program_name,
-        regulation: data.regulation,
         title: data.title,
-        pdf_url: data.pdf_url
+        category: data.category,
+        size: data.size || "Unknown Size",
+        date: data.date || new Date().toLocaleDateString(),
+        link: data.link || "#"
       }).where(eq(academicRegulations.id, data.id));
       return { success: true };
     } else {
       await db.insert(academicRegulations).values({
-        level: data.level,
-        program_name: data.program_name,
-        regulation: data.regulation,
         title: data.title,
-        pdf_url: data.pdf_url
+        category: data.category,
+        size: data.size || "Unknown Size",
+        date: data.date || new Date().toLocaleDateString(),
+        link: data.link || "#"
       });
       return { success: true };
     }

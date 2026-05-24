@@ -32,7 +32,7 @@ export const Route = createFileRoute("/departments/$id")({
 function DepartmentLayout() {
   const loaderData = Route.useLoaderData() as unknown as DepartmentData;
   const location = useLocation();
-  const { hasEditPermission, isDeptEditing, setDeptEditing } = useAdmin();
+  const { isAdmin, hasEditPermission, isDeptEditing, setDeptEditing } = useAdmin();
   const queryClient = useQueryClient();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -78,19 +78,20 @@ function DepartmentLayout() {
   if (!loaderData || !loaderData.slug) return null;
 
   // CRITICAL CHECKPOINT TRIGGER: Stop layout render if permission token does not exist
-  if (!isUnlocked) {
-    return (
-      <DepartmentStrictLockModal 
-        deptId={loaderData.id} 
-        deptSlug={loaderData.slug} // FIXED: Added deptSlug prop to match context updates
-        isOpen={true} 
-        onSuccess={() => {
-          // FIXED: Success hook triggers explicit context sync utilizing the slug string
-          setDeptEditing(loaderData.slug, true);
-        }} 
-      />
-    );
-  }
+  const needsLockScreen = isAdmin && !isUnlocked;
+
+if (needsLockScreen) {
+  return (
+    <DepartmentStrictLockModal 
+      deptId={loaderData.id} 
+      deptSlug={loaderData.slug} 
+      isOpen={true} 
+      onSuccess={() => {
+        setDeptEditing(loaderData.slug, true);
+      }} 
+    />
+  );
+}
 
   const navLinks = [
     { name: "About & Vision", path: "", icon: <BookOpen size={18} /> },
@@ -151,7 +152,7 @@ function DepartmentLayout() {
 
         <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white transform transition-transform duration-300 p-6 lg:relative lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 ${isMobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"}`}>
           <div className="sticky top-28 bg-slate-50 rounded-3xl p-6 border border-slate-100 h-fit">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">Menu <span className="text-emerald-500">(Authorized HOD)</span></h3>
+            
             <nav className="space-y-2">
               {navLinks.map((link) => {
                 const fullPath = `/departments/${loaderData.slug}${link.path}`;

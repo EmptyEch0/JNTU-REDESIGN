@@ -26,7 +26,6 @@ import { Route as EdcRouteImport } from './routes/edc'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CampusLifeRouteImport } from './routes/campus-life'
 import { Route as BankingRouteImport } from './routes/banking'
-import { Route as AdmissionsRouteImport } from './routes/admissions'
 import { Route as AdministrationRouteImport } from './routes/administration'
 import { Route as AcademicsRouteImport } from './routes/academics'
 import { Route as AboutRouteImport } from './routes/about'
@@ -77,7 +76,6 @@ import { Route as AcademicsHodDeskRouteImport } from './routes/academics/hod-des
 import { Route as AcademicsExaminationRouteImport } from './routes/academics/examination'
 import { Route as AcademicsDownloadsRouteImport } from './routes/academics/downloads'
 import { Route as AcademicsCacRouteImport } from './routes/academics.cac'
-import { Route as AcademicsAdmissionsRouteImport } from './routes/academics/admissions'
 import { Route as AcademicsAcademicCalendarRouteImport } from './routes/academics/academic-calendar'
 import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
 import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
@@ -182,11 +180,6 @@ const CampusLifeRoute = CampusLifeRouteImport.update({
 const BankingRoute = BankingRouteImport.update({
   id: '/banking',
   path: '/banking',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdmissionsRoute = AdmissionsRouteImport.update({
-  id: '/admissions',
-  path: '/admissions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdministrationRoute = AdministrationRouteImport.update({
@@ -447,11 +440,6 @@ const AcademicsCacRoute = AcademicsCacRouteImport.update({
   path: '/cac',
   getParentRoute: () => AcademicsRoute,
 } as any)
-const AcademicsAdmissionsRoute = AcademicsAdmissionsRouteImport.update({
-  id: '/admissions',
-  path: '/admissions',
-  getParentRoute: () => AcademicsRoute,
-} as any)
 const AcademicsAcademicCalendarRoute =
   AcademicsAcademicCalendarRouteImport.update({
     id: '/academic-calendar',
@@ -564,7 +552,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
   '/administration': typeof AdministrationRouteWithChildren
-  '/admissions': typeof AdmissionsRoute
   '/banking': typeof BankingRoute
   '/campus-life': typeof CampusLifeRouteWithChildren
   '/contact': typeof ContactRoute
@@ -589,7 +576,6 @@ export interface FileRoutesByFullPath {
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
-  '/academics/admissions': typeof AcademicsAdmissionsRoute
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
   '/academics/examination': typeof AcademicsExaminationRoute
@@ -653,7 +639,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/administration': typeof AdministrationRouteWithChildren
-  '/admissions': typeof AdmissionsRoute
   '/banking': typeof BankingRoute
   '/contact': typeof ContactRoute
   '/edc': typeof EdcRoute
@@ -673,7 +658,6 @@ export interface FileRoutesByTo {
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
-  '/academics/admissions': typeof AcademicsAdmissionsRoute
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
   '/academics/examination': typeof AcademicsExaminationRoute
@@ -738,7 +722,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
   '/administration': typeof AdministrationRouteWithChildren
-  '/admissions': typeof AdmissionsRoute
   '/banking': typeof BankingRoute
   '/campus-life': typeof CampusLifeRouteWithChildren
   '/contact': typeof ContactRoute
@@ -763,7 +746,6 @@ export interface FileRoutesById {
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
-  '/academics/admissions': typeof AcademicsAdmissionsRoute
   '/academics/cac': typeof AcademicsCacRoute
   '/academics/downloads': typeof AcademicsDownloadsRoute
   '/academics/examination': typeof AcademicsExaminationRoute
@@ -831,7 +813,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/academics'
     | '/administration'
-    | '/admissions'
     | '/banking'
     | '/campus-life'
     | '/contact'
@@ -856,7 +837,6 @@ export interface FileRouteTypes {
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/academics/academic-calendar'
-    | '/academics/admissions'
     | '/academics/cac'
     | '/academics/downloads'
     | '/academics/examination'
@@ -920,7 +900,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/administration'
-    | '/admissions'
     | '/banking'
     | '/contact'
     | '/edc'
@@ -940,7 +919,6 @@ export interface FileRouteTypes {
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/academics/academic-calendar'
-    | '/academics/admissions'
     | '/academics/cac'
     | '/academics/downloads'
     | '/academics/examination'
@@ -1004,7 +982,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/academics'
     | '/administration'
-    | '/admissions'
     | '/banking'
     | '/campus-life'
     | '/contact'
@@ -1029,7 +1006,6 @@ export interface FileRouteTypes {
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/academics/academic-calendar'
-    | '/academics/admissions'
     | '/academics/cac'
     | '/academics/downloads'
     | '/academics/examination'
@@ -1096,7 +1072,6 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRouteWithChildren
   AcademicsRoute: typeof AcademicsRouteWithChildren
   AdministrationRoute: typeof AdministrationRouteWithChildren
-  AdmissionsRoute: typeof AdmissionsRoute
   BankingRoute: typeof BankingRoute
   CampusLifeRoute: typeof CampusLifeRouteWithChildren
   ContactRoute: typeof ContactRoute
@@ -1241,13 +1216,6 @@ declare module '@tanstack/react-router' {
       path: '/banking'
       fullPath: '/banking'
       preLoaderRoute: typeof BankingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admissions': {
-      id: '/admissions'
-      path: '/admissions'
-      fullPath: '/admissions'
-      preLoaderRoute: typeof AdmissionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/administration': {
@@ -1600,13 +1568,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcademicsCacRouteImport
       parentRoute: typeof AcademicsRoute
     }
-    '/academics/admissions': {
-      id: '/academics/admissions'
-      path: '/admissions'
-      fullPath: '/academics/admissions'
-      preLoaderRoute: typeof AcademicsAdmissionsRouteImport
-      parentRoute: typeof AcademicsRoute
-    }
     '/academics/academic-calendar': {
       id: '/academics/academic-calendar'
       path: '/academic-calendar'
@@ -1774,7 +1735,6 @@ const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
 
 interface AcademicsRouteChildren {
   AcademicsAcademicCalendarRoute: typeof AcademicsAcademicCalendarRoute
-  AcademicsAdmissionsRoute: typeof AcademicsAdmissionsRoute
   AcademicsCacRoute: typeof AcademicsCacRoute
   AcademicsDownloadsRoute: typeof AcademicsDownloadsRoute
   AcademicsExaminationRoute: typeof AcademicsExaminationRoute
@@ -1790,7 +1750,6 @@ interface AcademicsRouteChildren {
 
 const AcademicsRouteChildren: AcademicsRouteChildren = {
   AcademicsAcademicCalendarRoute: AcademicsAcademicCalendarRoute,
-  AcademicsAdmissionsRoute: AcademicsAdmissionsRoute,
   AcademicsCacRoute: AcademicsCacRoute,
   AcademicsDownloadsRoute: AcademicsDownloadsRoute,
   AcademicsExaminationRoute: AcademicsExaminationRoute,
@@ -1980,7 +1939,6 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRouteWithChildren,
   AcademicsRoute: AcademicsRouteWithChildren,
   AdministrationRoute: AdministrationRouteWithChildren,
-  AdmissionsRoute: AdmissionsRoute,
   BankingRoute: BankingRoute,
   CampusLifeRoute: CampusLifeRouteWithChildren,
   ContactRoute: ContactRoute,

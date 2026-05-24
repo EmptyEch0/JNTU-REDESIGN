@@ -1118,3 +1118,28 @@ export const siteContent = pgTable("site_content", {
   content: text("content"),
   imageUrl: text("image_url"),
 });
+
+export const notices = pgTable("notices", {
+  id: serial("id").primaryKey(),
+  date: text("date").notNull(),
+  tag: text("tag").notNull(),
+  title: text("title").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const academicRegulations = pgTable("academic_regulations", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  category: text("category").notNull(), // 'B.Tech' or 'M.Tech'
+  size: text("size").notNull(),
+  date: text("date").notNull(),
+  link: text("link").default("#"),
+});
+
+export const campusGallery = pgTable("campus_gallery", {
+  id: serial("id").primaryKey(),
+  src: text("src").notNull(),
+  caption: text("caption"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+

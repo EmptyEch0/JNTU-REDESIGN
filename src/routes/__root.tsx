@@ -11,6 +11,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import appCss from "../styles.css?url";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Footer } from "@/components/Footer";
+import { Chatbot } from "@/components/Chatbot";
 import { getQueryClient } from "@/lib/query-client";
 import { AdminProvider, useAdmin } from "@/context/AdminContext";
 
@@ -195,6 +196,7 @@ function AdminContent() {
       </main>
       
       <Footer />
+      <Chatbot />
     </div>
   );
 }

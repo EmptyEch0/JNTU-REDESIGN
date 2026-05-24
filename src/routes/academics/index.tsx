@@ -16,10 +16,10 @@ const ACADEMIC_FEATURES = [
     linkTo: "/academics/programs"
   },
   {
-    title: "Admissions",
-    description: "Learn about the admission procedure, eligibility criteria, and fee structures for various courses.",
-    icon: <Users className="w-6 h-6" />,
-    linkTo: "/academics/admissions"
+    title: "Downloads",
+    description: "Access academic application forms, certificate requests, and university documents.",
+    icon: <Download className="w-6 h-6" />,
+    linkTo: "/academics/downloads"
   },
   {
     title: "Syllabus",
@@ -50,7 +50,7 @@ const ACADEMIC_FEATURES = [
 const LATEST_ANNOUNCEMENTS = [
   { id: "1", text: "B.Tech II Semester Regular Examinations Time Table Released", isNew: true, link: "/academics/examination" },
   { id: "2", text: "Academic Calendar for 2026-27 updated.", link: "/academics/academic-calendar" },
-  { id: "3", text: "Ph.D Admission Notification 2026", link: "/academics/admissions" },
+  { id: "3", text: "Download academic models and request forms.", link: "/academics/downloads" },
 ];
 
 function AcademicsIndex() {

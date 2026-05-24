@@ -68,3 +68,10 @@ export const getDepartmentDetails = createServerFn({ method: "GET" })
 
     return completeData;
   });
+
+export const getAllDepartments = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const { sql } = await import("@/lib/db");
+    const result = await sql`SELECT * FROM departments`;
+    return result.map((row) => ({ ...row }));
+  });

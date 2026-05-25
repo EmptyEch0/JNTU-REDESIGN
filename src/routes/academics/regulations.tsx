@@ -84,14 +84,14 @@ function RegulationsPage() {
 
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="text-center mb-16">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
           >
             Academic <span className="text-red-600">Regulations</span>
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -204,6 +204,7 @@ function RegulationsPage() {
             </div>
           </section>
         </div>
+
       </div>
     </div>
   );

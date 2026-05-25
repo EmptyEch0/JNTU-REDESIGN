@@ -37,7 +37,7 @@ export const getDepartmentDetails = createServerFn({ method: "GET" })
     const dept = result[0];
 
     // 4. Fetch the other lists
-    const faculty = await sql`SELECT * FROM faculty WHERE dept_id = ${dept.id} ORDER BY ID ASC`; 
+    const faculty = await sql`SELECT * FROM faculty WHERE dept_id = ${dept.id} ORDER BY ID ASC`;
     const gallery =
       await sql`SELECT * FROM department_gallery WHERE dept_id = ${dept.id} ORDER BY created_at DESC`;
     const courses = await sql`SELECT * FROM courses WHERE dept_id = ${dept.id}`;
@@ -69,18 +69,18 @@ export const getDepartmentDetails = createServerFn({ method: "GET" })
     return completeData;
   });
 
-  // Add this server function to the bottom of src/functions/departments.ts
+// Add this server function to the bottom of src/functions/departments.ts
 
 export const getAllDepartments = createServerFn({ method: "GET" })
-.handler(async () => {
-  const { sql } = await import("@/lib/db");
-  
-  // Fetch all records sorted alphabetically by name
-  const result = await sql`
+  .handler(async () => {
+    const { sql } = await import("@/lib/db");
+
+    // Fetch all records sorted alphabetically by name
+    const result = await sql`
     SELECT id, name, slug, description, image 
     FROM departments 
     ORDER BY name ASC
   `;
-  
-  return result || [];
-});
+
+    return result || [];
+  });

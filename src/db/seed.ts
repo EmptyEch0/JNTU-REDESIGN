@@ -64,7 +64,7 @@ async function seed() {
     { src: "/assets/library-interior.jpg", caption: "Aptitude bootcamp" },
     { src: "/assets/lab.jpg", caption: "Technical interview drive" },
     { src: "/assets/sports.jpg", caption: "Group discussion round" },
-    { src: "/assets/culture.jpg", caption: "Offer day celebrations" },
+    { src: "/assets/culture.jpeg", caption: "Offer day celebrations" },
     { src: "/assets/hero-campus.jpg", caption: "Recruiter campus tour" },
   ]);
 

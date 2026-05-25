@@ -16,12 +16,12 @@ import {
   deleteClubImage,
 } from "@/funcs/studentactivity.admin.server";
 import cultureImg from "@/assets/culture.jpg";
-import { 
-  Building, 
-  Sparkles, 
-  User, 
-  Trophy, 
-  Activity, 
+import {
+  Building,
+  Sparkles,
+  User,
+  Trophy,
+  Activity,
   ArrowRight,
   Music,
   Lock,
@@ -80,12 +80,12 @@ function StudentActivityClubPage() {
     const tId = toast.loading("Synthesizing active student club registry...");
     try {
       const generatedSlug = newClubForm.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
-      await updateStudentClub({ 
-        data: { 
-          ...newClubForm, 
+      await updateStudentClub({
+        data: {
+          ...newClubForm,
           slug: generatedSlug || "new-club",
-          category: "Student Club" 
-        } 
+          category: "Student Club"
+        }
       });
       toast.success("Student Club Launched!", { id: tId });
       setNewClubForm({ name: "", title: "", description: "", badge: "", heroImage: "" });
@@ -106,16 +106,16 @@ function StudentActivityClubPage() {
         </div>
       )}
 
-      <PageHero 
+      <PageHero
         eyebrow="Student Directorate"
-        title="Activity Clubs" 
-        subtitle="Advancing leadership traits, campus tech networks, and extracurricular legacy rosters." 
+        title="Activity Clubs"
+        subtitle="Advancing leadership traits, campus tech networks, and extracurricular legacy rosters."
         image={clubs?.[0]?.heroImage || DEFAULT_IMAGE}
       />
       <SubNav items={CAMPUS_LIFE_SUBNAV} />
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
-        
+
         {/* DYNAMIC SYSTEM NAV - Premium consistent tabs */}
         <LocalSubNav
           activeTab={tab}
@@ -124,7 +124,7 @@ function StudentActivityClubPage() {
         />
 
         <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
-          
+
           <div className="relative w-full max-w-full overflow-hidden rounded-[32px] shadow-md border border-slate-200/60 bg-slate-200">
             <ImageCarousel images={getCarouselImages()} fallback={DEFAULT_IMAGE} />
           </div>
@@ -134,11 +134,11 @@ function StudentActivityClubPage() {
              ========================================== */}
           {tab === "Overview" && (
             <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
-              
+
               <Card title="Student Activity Clubs Overview" icon={Sparkles}>
                 <p className="text-[15px] text-slate-600 font-medium leading-relaxed bg-slate-50/50 border p-6 rounded-3xl shadow-inner whitespace-pre-line">
                   Welcome to the central University Student Activity Portal. Our vibrant ecosystem of active, student-led initiatives supports continuous collaboration across departments.
-                  
+
                   By staging large-scale tech meets, orchestral assemblies, and community leadership events, students establish deep professional networks and creative proficiency grids. Explore specific active rosters to find your community segment!
                 </p>
               </Card>
@@ -146,13 +146,13 @@ function StudentActivityClubPage() {
               {/* DYNAMIC CLUB ROSTER GRID */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {clubs.map((club: any) => (
-                  <div 
-                    key={club.id} 
-                    onClick={() => setTab(club.name)} 
+                  <div
+                    key={club.id}
+                    onClick={() => setTab(club.name)}
                     className="bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 shadow-sm hover:shadow-lg transition duration-500 cursor-pointer group overflow-hidden relative"
                   >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-full translate-x-8 -translate-y-8 transition duration-500 group-hover:scale-110 group-hover:bg-indigo-50/40" />
-                    
+
                     <div className="relative z-10">
                       <span className="inline-flex items-center px-3 py-1 rounded-xl text-[9.5px] font-black tracking-widest uppercase bg-indigo-50 border border-indigo-100 text-indigo-700 mb-5 shadow-sm">
                         {club.category || "Student Club"}
@@ -164,7 +164,7 @@ function StudentActivityClubPage() {
                         {club.description}
                       </p>
                       <div className="flex items-center gap-2 text-[oklch(0.42_0.18_265)] font-black text-xs uppercase tracking-wider">
-                        <span>Explore Portal</span> 
+                        <span>Explore Portal</span>
                         <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
                       </div>
                     </div>
@@ -179,27 +179,27 @@ function StudentActivityClubPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
                         <label className="text-[9px] font-black text-amber-800 uppercase">Club Badge Title</label>
-                        <input value={newClubForm.name} onChange={(e)=>setNewClubForm({...newClubForm, name:e.target.value})} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Constelle Club" />
+                        <input value={newClubForm.name} onChange={(e) => setNewClubForm({ ...newClubForm, name: e.target.value })} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Constelle Club" />
                       </div>
                       <div>
                         <label className="text-[9px] font-black text-amber-800 uppercase">Featured Display Subtitle</label>
-                        <input value={newClubForm.title} onChange={(e)=>setNewClubForm({...newClubForm, title:e.target.value})} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Astro & Science Network" />
+                        <input value={newClubForm.title} onChange={(e) => setNewClubForm({ ...newClubForm, title: e.target.value })} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Astro & Science Network" />
                       </div>
                       <div>
                         <label className="text-[9px] font-black text-amber-800 uppercase">Highlight Badge</label>
-                        <input value={newClubForm.badge} onChange={(e)=>setNewClubForm({...newClubForm, badge:e.target.value})} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Established 2024" />
+                        <input value={newClubForm.badge} onChange={(e) => setNewClubForm({ ...newClubForm, badge: e.target.value })} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Established 2024" />
                       </div>
                     </div>
                     <div>
                       <label className="text-[9px] font-black text-amber-800 uppercase">Primary Descriptive Catalog</label>
-                      <textarea value={newClubForm.description} onChange={(e)=>setNewClubForm({...newClubForm, description:e.target.value})} className="w-full border-2 border-amber-200 bg-white h-20 p-2.5 rounded-xl text-xs font-medium outline-none" placeholder="Summarize club objective goals..." />
+                      <textarea value={newClubForm.description} onChange={(e) => setNewClubForm({ ...newClubForm, description: e.target.value })} className="w-full border-2 border-amber-200 bg-white h-20 p-2.5 rounded-xl text-xs font-medium outline-none" placeholder="Summarize club objective goals..." />
                     </div>
                     <div>
                       <label className="text-[9px] font-black text-amber-800 uppercase">Primary Slide Photo URL</label>
-                      <input value={newClubForm.heroImage} onChange={(e)=>setNewClubForm({...newClubForm, heroImage:e.target.value})} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="Drop CDN URL link here..." />
+                      <input value={newClubForm.heroImage} onChange={(e) => setNewClubForm({ ...newClubForm, heroImage: e.target.value })} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="Drop CDN URL link here..." />
                     </div>
                     <div className="flex justify-end">
-                      <button onClick={handleCreateClub} className="bg-slate-950 text-white hover:bg-amber-600 font-black px-6 py-3.5 rounded-xl text-xs uppercase shadow transition active:scale-95 flex gap-2 cursor-pointer"><Plus className="w-4 h-4"/> Authorize & Synthesize</button>
+                      <button onClick={handleCreateClub} className="bg-slate-950 text-white hover:bg-amber-600 font-black px-6 py-3.5 rounded-xl text-xs uppercase shadow transition active:scale-95 flex gap-2 cursor-pointer"><Plus className="w-4 h-4" /> Authorize & Synthesize</button>
                     </div>
                   </div>
                 </Card>
@@ -207,7 +207,7 @@ function StudentActivityClubPage() {
 
               {clubs.length === 0 && !isEditMode && (
                 <div className="text-center py-16 text-slate-400 font-medium bg-white rounded-[32px] border border-dashed max-w-lg mx-auto shadow-sm flex flex-col items-center justify-center gap-3">
-                  <Activity className="w-8 h-8 animate-pulse text-slate-300"/>
+                  <Activity className="w-8 h-8 animate-pulse text-slate-300" />
                   <p className="text-sm">No operational activity rosters active in repo.</p>
                 </div>
               )}
@@ -223,11 +223,11 @@ function StudentActivityClubPage() {
 
             return (
               <div className="space-y-10 animate-[fade-in_0.5s_ease-out] w-full">
-                <ClubLayoutEditor 
-                  club={activeClub} 
-                  isEdit={isEditMode} 
-                  onRefetch={()=>router.invalidate()} 
-                  onNavigateBack={()=>setTab("Overview")} 
+                <ClubLayoutEditor
+                  club={activeClub}
+                  isEdit={isEditMode}
+                  onRefetch={() => router.invalidate()}
+                  onNavigateBack={() => setTab("Overview")}
                 />
               </div>
             );
@@ -281,7 +281,7 @@ function ImageCarousel({ images, fallback }: any) {
   }
 
   return (
-    <div 
+    <div
       className="relative aspect-[21/9] md:aspect-[16/6] min-h-[180px] md:min-h-[240px] max-h-[280px] md:max-h-[340px] w-full bg-slate-900 overflow-hidden group"
       onMouseEnter={() => setAutoplay(false)}
       onMouseLeave={() => setAutoplay(true)}
@@ -303,8 +303,8 @@ function ImageCarousel({ images, fallback }: any) {
           <button onClick={() => setCurrentIndex((p) => (p - 1 + images.length) % images.length)} className="absolute left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow cursor-pointer z-30 text-center grid place-items-center transition">‹</button>
           <button onClick={() => setCurrentIndex((p) => (p + 1) % images.length)} className="absolute right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow cursor-pointer z-30 text-center grid place-items-center transition">›</button>
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1 bg-black/10 px-3 py-1 rounded-full z-30">
-            {images.map((_: any, idx: number)=>(
-              <button key={idx} onClick={()=>setCurrentIndex(idx)} className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${currentIndex === idx ? "w-5 bg-white" : "w-1.5 bg-white/40"}`} />
+            {images.map((_: any, idx: number) => (
+              <button key={idx} onClick={() => setCurrentIndex(idx)} className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${currentIndex === idx ? "w-5 bg-white" : "w-1.5 bg-white/40"}`} />
             ))}
           </div>
         </>
@@ -403,7 +403,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
 
   return (
     <div className="space-y-10 w-full max-w-full">
-      
+
       {/* MAIN HEADER DISPLAY */}
       <Card title={club.name} subtitle={club.category} icon={Activity} className={isEdit ? "ring-4 ring-amber-500/10 bg-amber-50/10 border-amber-200" : ""}>
         {isEdit ? (
@@ -411,25 +411,25 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Badge Short Label</label>
-                <input value={cData.badge} onChange={(e)=>setCData({...cData, badge:e.target.value})} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
+                <input value={cData.badge} onChange={(e) => setCData({ ...cData, badge: e.target.value })} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
               </div>
               <div className="sm:col-span-2">
                 <label className="text-[9px] font-black text-amber-800 uppercase">Featured Banner Header</label>
-                <input value={cData.title} onChange={(e)=>setCData({...cData, title:e.target.value})} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
+                <input value={cData.title} onChange={(e) => setCData({ ...cData, title: e.target.value })} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
               </div>
             </div>
             <div>
               <label className="text-[9px] font-black text-amber-800 uppercase">Global Narrative Body</label>
-              <textarea value={cData.description} onChange={(e)=>setCData({...cData, description:e.target.value})} className="w-full h-24 border bg-white p-2.5 rounded-xl text-xs font-medium" />
+              <textarea value={cData.description} onChange={(e) => setCData({ ...cData, description: e.target.value })} className="w-full h-24 border bg-white p-2.5 rounded-xl text-xs font-medium" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Featured Right Side Img URL</label>
-                <input value={cData.heroImage} onChange={(e)=>setCData({...cData, heroImage:e.target.value})} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
+                <input value={cData.heroImage} onChange={(e) => setCData({ ...cData, heroImage: e.target.value })} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
               </div>
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Menu Display Trigger Label</label>
-                <input value={cData.name} onChange={(e)=>setCData({...cData, name:e.target.value})} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
+                <input value={cData.name} onChange={(e) => setCData({ ...cData, name: e.target.value })} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
               </div>
             </div>
             <div className="flex items-center justify-between pt-3 border-t border-amber-200/40">
@@ -454,10 +454,10 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
             </div>
             {club.heroImage && (
               <div className="w-full md:w-1/2 aspect-[16/10] rounded-[28px] overflow-hidden border-2 border-slate-100 shadow transition duration-500 hover:scale-[1.02]">
-                <img 
-                  src={club.heroImage} 
-                  className="w-full h-full object-cover" 
-                  alt={`${club.name} Frame`} 
+                <img
+                  src={club.heroImage}
+                  className="w-full h-full object-cover"
+                  alt={`${club.name} Frame`}
                   onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }}
                 />
               </div>
@@ -473,12 +473,12 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
             {(club.images || []).map((img: any) => (
               <div key={img.id} className="relative group rounded-xl overflow-hidden aspect-[4/3] border bg-slate-100">
                 <img src={img.url} className="w-full h-full object-cover" />
-                <button onClick={()=>handleDeleteImage(img.id)} className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-rose-950/80 text-white font-black text-xs uppercase tracking-wider transition flex flex-col items-center justify-center cursor-pointer"><Trash2 className="w-4 h-4 mb-1"/> Erase</button>
+                <button onClick={() => handleDeleteImage(img.id)} className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-rose-950/80 text-white font-black text-xs uppercase tracking-wider transition flex flex-col items-center justify-center cursor-pointer"><Trash2 className="w-4 h-4 mb-1" /> Erase</button>
               </div>
             ))}
           </div>
           <div className="flex gap-3 border-t pt-4 items-center">
-            <input placeholder="Drop URL here..." onKeyDown={(e:any)=>e.key==="Enter" && handleAddImage(e.target.value)} className="flex-1 border bg-white rounded-lg p-2 text-xs font-bold shadow-inner" />
+            <input placeholder="Drop URL here..." onKeyDown={(e: any) => e.key === "Enter" && handleAddImage(e.target.value)} className="flex-1 border bg-white rounded-lg p-2 text-xs font-bold shadow-inner" />
             <span className="text-[9px] font-bold bg-amber-100 text-amber-800 px-2.5 py-1.5 rounded">Hit Enter</span>
           </div>
         </Card>
@@ -497,19 +497,19 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Spotlight Header</label>
-                <input value={secForm.heading} onChange={(e)=>setSecForm({...secForm, heading:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
+                <input value={secForm.heading} onChange={(e) => setSecForm({ ...secForm, heading: e.target.value })} className="w-full border bg-white p-2 rounded text-xs font-bold" />
               </div>
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Spotlight Graphics URL (Optional)</label>
-                <input value={secForm.image} onChange={(e)=>setSecForm({...secForm, image:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
+                <input value={secForm.image} onChange={(e) => setSecForm({ ...secForm, image: e.target.value })} className="w-full border bg-white p-2 rounded text-xs font-bold" />
               </div>
             </div>
             <div>
               <label className="text-[9px] font-black text-amber-800 uppercase">Objective Content Body</label>
-              <textarea value={secForm.content} onChange={(e)=>setSecForm({...secForm, content:e.target.value})} className="w-full h-20 border bg-white p-2 rounded text-xs font-medium" />
+              <textarea value={secForm.content} onChange={(e) => setSecForm({ ...secForm, content: e.target.value })} className="w-full h-20 border bg-white p-2 rounded text-xs font-medium" />
             </div>
             <div className="flex justify-end">
-              <button onClick={handleAddSection} className="bg-slate-950 text-white hover:bg-amber-600 font-black px-5 py-2.5 rounded-xl text-xs uppercase shadow flex gap-1 items-center active:scale-95 transition cursor-pointer"><Plus className="w-4 h-4"/> Log Spotlight Track</button>
+              <button onClick={handleAddSection} className="bg-slate-950 text-white hover:bg-amber-600 font-black px-5 py-2.5 rounded-xl text-xs uppercase shadow flex gap-1 items-center active:scale-95 transition cursor-pointer"><Plus className="w-4 h-4" /> Log Spotlight Track</button>
             </div>
           </div>
         )}
@@ -517,10 +517,10 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
         <div className="space-y-10">
           {(club.sections || []).map((sec: any, idx: number) => (
             <div key={sec.id} className={`flex flex-col md:flex-row items-center gap-8 border bg-white rounded-[32px] p-6 md:p-8 shadow-sm hover:shadow-md transition duration-500 relative group ${isEdit ? "ring-2 ring-amber-300" : ""}`}>
-              
+
               {isEdit && (
-                <button 
-                  onClick={()=>handleDeleteSection(sec.id)}
+                <button
+                  onClick={() => handleDeleteSection(sec.id)}
                   className="absolute top-4 right-4 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white px-3 py-1.5 rounded-xl text-[10px] uppercase font-black transition tracking-wider shadow cursor-pointer"
                 >
                   Delete Block
@@ -530,8 +530,8 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
               <div className={`flex-1 space-y-3 ${sec.image ? "" : "w-full"} ${idx % 2 === 1 && sec.image ? "md:order-2" : ""}`}>
                 {isEdit ? (
                   <div className="space-y-3">
-                    <div className="font-display font-black text-xl text-slate-950"><InlineCellEdit val={sec.heading} onCommit={async (n)=>{ await updateClubContent({data:{...sec, heading:n}}); onRefetch(); }} /></div>
-                    <div className="text-[14px] text-slate-600 font-medium leading-relaxed"><InlineCellEdit val={sec.content} onCommit={async (n)=>{ await updateClubContent({data:{...sec, content:n}}); onRefetch(); }} /></div>
+                    <div className="font-display font-black text-xl text-slate-950"><InlineCellEdit val={sec.heading} onCommit={async (n) => { await updateClubContent({ data: { ...sec, heading: n } }); onRefetch(); }} /></div>
+                    <div className="text-[14px] text-slate-600 font-medium leading-relaxed"><InlineCellEdit val={sec.content} onCommit={async (n) => { await updateClubContent({ data: { ...sec, content: n } }); onRefetch(); }} /></div>
                   </div>
                 ) : (
                   <>
@@ -545,7 +545,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
                 <div className={`w-full md:w-1/2 aspect-[16/10] rounded-[24px] border border-slate-100 overflow-hidden shadow-sm duration-500 hover:scale-[1.01] shrink-0 relative ${idx % 2 === 1 ? "md:order-1" : ""}`}>
                   <img src={sec.image} className="w-full h-full object-cover" alt={sec.heading} onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }} />
                   {isEdit && (
-                    <input value={sec.image} onChange={async (e)=>{ await updateClubContent({data:{...sec, image:e.target.value}}); onRefetch(); }} className="absolute inset-0 opacity-0 focus:opacity-100 hover:opacity-100 bg-amber-950/90 text-white text-[10px] p-3 text-center border-none outline-none font-black cursor-pointer transition" placeholder="Update Block Img URL" />
+                    <input value={sec.image} onChange={async (e) => { await updateClubContent({ data: { ...sec, image: e.target.value } }); onRefetch(); }} className="absolute inset-0 opacity-0 focus:opacity-100 hover:opacity-100 bg-amber-950/90 text-white text-[10px] p-3 text-center border-none outline-none font-black cursor-pointer transition" placeholder="Update Block Img URL" />
                   )}
                 </div>
               )}

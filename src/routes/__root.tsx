@@ -88,7 +88,7 @@ export const Route = createRootRoute({
 });
 
 declare module "@tanstack/react-router" {
-  interface StaticDataRouteContext extends MyRootContext {}
+  interface StaticDataRouteContext extends MyRootContext { }
 }
 
 function RootShell({ children }: { children: React.ReactNode }) {
@@ -121,26 +121,26 @@ function AdminContent() {
   // 1. Safely pull the active pathname string
   const path = useRouterState({ select: (s) => s.location.pathname });
 
-  const { 
-    isAdmin, 
-    isEditMode, 
-    setGlobalEditMode, 
-    isDeptEditing, 
+  const {
+    isAdmin,
+    isEditMode,
+    setGlobalEditMode,
+    isDeptEditing,
     setDeptEditing,
-    hasEditPermission, 
-    logout 
+    hasEditPermission,
+    logout
   } = useAdmin();
 
   // 2. Identify if the user is actively viewing a department sub-route
   const pathSegments = path.split("/").filter(Boolean); // e.g., ["departments", "cse"]
   const isDepartmentPage = pathSegments[0] === "departments" && pathSegments[1];
-  
+
   // The unique identifier for our department matching lookup maps (e.g., "cse", "it")
   const activeDepartmentId = isDepartmentPage ? pathSegments[1] : undefined;
-  
+
   // 3. Compute edit permissions based on the active path parameters string
   const currentEditActive = (isDepartmentPage && activeDepartmentId)
-    ? isDeptEditing(activeDepartmentId) 
+    ? isDeptEditing(activeDepartmentId)
     : isEditMode;
 
   const handleEditToggleClick = () => {
@@ -161,26 +161,25 @@ function AdminContent() {
               <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Admin</span>
               <span className="text-xs font-medium hidden sm:inline">Dashboard</span>
             </div>
-            
-            <button 
-              onClick={handleEditToggleClick} 
-              className={`flex items-center gap-2 px-2.5 py-1 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-wider transition-all border shrink-0 ${
-                currentEditActive 
-                  ? "bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]" 
+
+            <button
+              onClick={handleEditToggleClick}
+              className={`flex items-center gap-2 px-2.5 py-1 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-wider transition-all border shrink-0 ${currentEditActive
+                  ? "bg-primary/20 border-primary text-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]"
                   : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500"
-              }`}
+                }`}
             >
               <div className={`w-1.5 h-1.5 rounded-full ${currentEditActive ? "bg-primary animate-pulse" : "bg-zinc-600"}`} />
               <span>{currentEditActive ? "Editing Active" : "Edit Mode"}</span>
             </button>
           </div>
-          
+
           <div className="flex items-center gap-4 md:gap-6 shrink-0 ml-4">
             <Link to="/admin/placements" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Placements</Link>
-            
-            <Link 
-              to="/" 
-              onClick={() => logout()} 
+
+            <Link
+              to="/"
+              onClick={() => logout()}
               className="text-[10px] md:text-[11px] font-semibold text-zinc-400 hover:text-white transition-colors shrink-0"
             >
               Logout
@@ -194,7 +193,7 @@ function AdminContent() {
       <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out] w-full max-w-full overflow-x-hidden">
         <Outlet />
       </main>
-      
+
       <Footer />
       <Chatbot />
     </div>

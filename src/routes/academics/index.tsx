@@ -57,13 +57,34 @@ const MODULES = [
     to: "/academics/programs",
     gradient: "from-transparent via-slate-900/40 to-blue-950/90",
     image:
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
+      "https://cgoe.stanford.edu/sites/default/files/styles/highlight/public/2025-04/credit-bearing-course-class-cgoe.jpg.webp?h=fbf7a813&itok=QQOXBfjC",
   },
   {
-    title: "Downloads",
-    description: "Access academic application forms, certificate requests, and university documents.",
-    icon: <Download className="w-6 h-6" />,
-    linkTo: "/academics/downloads"
+    name: "Admissions",
+    desc: "Application process, eligibility criteria, and seat matrix for 2026.",
+    icon: Users,
+    to: "/academics/admissions",
+    gradient: "from-transparent via-slate-900/40 to-teal-950/90",
+    image:
+      "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    name: "Academic Calendar",
+    desc: "Important dates, holidays, examination schedule, and semester events.",
+    icon: Calendar,
+    to: "/academics/academic-calendar",
+    gradient: "from-transparent via-slate-900/40 to-slate-900/90",
+    image:
+      "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    name: "Regulations",
+    desc: "University regulations, R23, R20, R16 and all amendment circulars.",
+    icon: FileText,
+    to: "/academics/regulations",
+    gradient: "from-transparent via-slate-900/40 to-slate-950/90",
+    image:
+      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80",
   },
   {
     name: "Syllabus",
@@ -129,26 +150,145 @@ const MODULES = [
       "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "Regulations",
-    description: "Read through the academic rules, grading systems, and university guidelines.",
-    icon: <FileText className="w-6 h-6" />,
-    linkTo: "/academics/regulations"
+    name: "HOD Message Desk",
+    desc: "Direct guidance and academic highlights from the Head of CSE.",
+    icon: UserCheck,
+    to: "/academics/faculty?tab=hods",
+    gradient: "from-transparent via-slate-900/40 to-red-950/90",
+    image:
+      "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=800&q=80",
   },
-  {
-    title: "Scholarships",
-    description: "Find information about merit-based and community scholarships available for students.",
-    icon: <Award className="w-6 h-6" />,
-    linkTo: "/academics/scholarships"
-  }
 ];
 
-const LATEST_ANNOUNCEMENTS = [
-  { id: "1", text: "B.Tech II Semester Regular Examinations Time Table Released", isNew: true, link: "/academics/examination" },
-  { id: "2", text: "Academic Calendar for 2026-27 updated.", link: "/academics/academic-calendar" },
-  { id: "3", text: "Download academic models and request forms.", link: "/academics/downloads" },
-];
+function AcademicsDashboard() {
+  const { isEditMode } = useAdmin();
+  const queryClient = useQueryClient();
 
-function AcademicsIndex() {
+  // local editing state
+  const [editStatId, setEditStatId] = useState<number | null>(null);
+  const [sLabel, setSLabel] = useState("");
+  const [sValue, setSValue] = useState("");
+  const [sIcon, setSIcon] = useState("GraduationCap");
+  const [sColor, setSColor] = useState("text-blue-400");
+  const [sTrend, setSTrend] = useState("");
+
+  const { data: dbStats = [], isLoading: isLoadingStats } = useQuery({
+    queryKey: ["academics-dashboard-stats"],
+    queryFn: getAcademicsDashboardStats,
+  });
+
+  const { data: calendarList = [] } = useQuery({
+    queryKey: ["academics-calendar"],
+    queryFn: getAcademicsCalendar,
+  });
+
+  const { data: examList = [] } = useQuery({
+    queryKey: ["academics-exams"],
+    queryFn: getAcademicsExamData,
+  });
+
+  // mutations
+  const saveStatMutation = useMutation({
+    mutationFn: (data: any) => upsertAcademicsDashboardStat({ data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["academics-dashboard-stats"] });
+      setEditStatId(null);
+      toast.success("Dashboard statistic updated!");
+    }
+  });
+
+  const deleteStatMutation = useMutation({
+    mutationFn: (id: number) => deleteAcademicsDashboardStat({ data: { id } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["academics-dashboard-stats"] });
+      toast.success("Dashboard statistic deleted!");
+    }
+  });
+
+  const startEditStat = (stat: any) => {
+    setEditStatId(stat.id);
+    setSLabel(stat.label);
+    setSValue(stat.value);
+    setSIcon(stat.icon);
+    setSColor(stat.color);
+    setSTrend(stat.trend);
+  };
+
+  const startAddStat = () => {
+    setEditStatId(-1);
+    setSLabel("");
+    setSValue("");
+    setSIcon("GraduationCap");
+    setSColor("text-blue-400");
+    setSTrend("");
+  };
+
+  // Compile Dynamic Notifications from DB
+  const dynamicTickerNotifications = useMemo(() => {
+    const calendarAlerts = calendarList
+      .filter((c: any) => c.pdf_url && c.pdf_url.trim() !== "")
+      .map((c: any) => {
+        let source: "calendar" | "holiday" | "exam-sched" = "calendar";
+        let label = "Academic Calendar";
+        let text = `Academic Calendar — ${c.program_name} (${c.regulation}) A.Y. ${c.academic_year}`;
+
+        if (c.calendar_type === "Holidays") {
+          source = "holiday";
+          label = "Holiday List";
+          text = `Holiday Notification — ${c.program_name} (${c.regulation}) A.Y. ${c.academic_year}`;
+        } else if (c.calendar_type === "Examinations") {
+          source = "exam-sched";
+          label = "Exam Schedule";
+          text = `Examination Schedule Update — ${c.program_name} (${c.regulation}) A.Y. ${c.academic_year}`;
+        }
+
+        return {
+          id: `cal-${c.id}`,
+          source,
+          label,
+          text,
+          date: c.created_at
+            ? new Date(c.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+            : c.academic_year,
+          to: c.pdf_url,
+          urgent: c.calendar_type === "Examinations",
+        };
+      });
+
+    const examAlerts = examList
+      .filter((e: any) => e.file_url && e.file_url.trim() !== "")
+      .map((e: any) => {
+        let source: "exam-notif" | "hall-ticket" | "results" | "timetable" = "exam-notif";
+        let label = e.type;
+
+        if (e.type === "Result") {
+          source = "results";
+          label = "Result Link";
+        } else if (e.type === "HallTicket") {
+          source = "hall-ticket";
+          label = "Hall Ticket Link";
+        } else if (e.type === "Timetable") {
+          source = "timetable";
+          label = "Timetable Link";
+        } else {
+          source = "exam-notif";
+          label = "Exam Notice";
+        }
+
+        return {
+          id: `exam-${e.id}`,
+          source,
+          label,
+          text: `${e.title}${e.description ? ` — ${e.description}` : ""}`,
+          date: e.date,
+          to: e.file_url,
+          urgent: e.type === "Result" || e.type === "HallTicket"
+        };
+      });
+
+    return [...calendarAlerts, ...examAlerts];
+  }, [calendarList, examList]);
+
   return (
     <div className="max-w-7xl mx-auto space-y-8 py-2">
 

@@ -1,6 +1,10 @@
 import postgres from 'postgres';
 
-const connectionString = 'postgresql://neondb_owner:npg_VumPW7fSI0JO@ep-lingering-mountain-aom9cqy0-pooler.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  console.error("Error: DATABASE_URL is not defined in the environment variables.");
+  process.exit(1);
+}
 const sql = postgres(connectionString);
 
 async function run() {

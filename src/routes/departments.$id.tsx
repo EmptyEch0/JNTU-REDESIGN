@@ -1,11 +1,11 @@
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
 import { getDepartmentDetails, type DepartmentData } from "@/functions/departments";
-import { updateDepartment } from "@/lib/departments"; 
+import { updateDepartment } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { DepartmentStrictLockModal } from "@/components/DepartmentStrictLockModal"; 
+import { DepartmentStrictLockModal } from "@/components/DepartmentStrictLockModal";
 import {
   BookOpen,
   Users,
@@ -36,7 +36,7 @@ function DepartmentLayout() {
   const queryClient = useQueryClient();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   // FIXED: Now uses loaderData.slug instead of id to prevent state de-sync with global navbar
   const isUnlocked = hasEditPermission(loaderData?.slug || "");
   const isEditMode = isDeptEditing(loaderData?.slug || "");
@@ -67,7 +67,7 @@ function DepartmentLayout() {
   }, [location.pathname]);
 
   const mutation = useMutation({
-    mutationFn: (updatedFields: any) => 
+    mutationFn: (updatedFields: any) =>
       updateDepartment({ data: { id: loaderData.id, ...updatedFields } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["department", loaderData.slug] });
@@ -80,18 +80,18 @@ function DepartmentLayout() {
   // CRITICAL CHECKPOINT TRIGGER: Stop layout render if permission token does not exist
   const needsLockScreen = isAdmin && !isUnlocked;
 
-if (needsLockScreen) {
-  return (
-    <DepartmentStrictLockModal 
-      deptId={loaderData.id} 
-      deptSlug={loaderData.slug} 
-      isOpen={true} 
-      onSuccess={() => {
-        setDeptEditing(loaderData.slug, true);
-      }} 
-    />
-  );
-}
+  if (needsLockScreen) {
+    return (
+      <DepartmentStrictLockModal
+        deptId={loaderData.id}
+        deptSlug={loaderData.slug}
+        isOpen={true}
+        onSuccess={() => {
+          setDeptEditing(loaderData.slug, true);
+        }}
+      />
+    );
+  }
 
   const navLinks = [
     { name: "About & Vision", path: "", icon: <BookOpen size={18} /> },
@@ -114,17 +114,17 @@ if (needsLockScreen) {
               <div className="space-y-4 bg-black/40 p-6 rounded-2xl backdrop-blur-md border border-white/10">
                 <div className="flex flex-col items-center gap-2">
                   <label className="text-amber-400 text-xs font-bold uppercase flex items-center gap-2"><Camera size={14} /> Background Image URL</label>
-                  <input 
+                  <input
                     className="w-full max-w-md bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white text-sm outline-none"
                     value={headerEdit.image}
-                    onChange={(e) => setHeaderEdit({...headerEdit, image: e.target.value})}
+                    onChange={(e) => setHeaderEdit({ ...headerEdit, image: e.target.value })}
                   />
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <input 
+                  <input
                     className="text-2xl md:text-4xl font-bold text-white tracking-tight uppercase bg-transparent border-b-2 border-amber-400/30 focus:border-amber-400 text-center outline-none w-full"
                     value={headerEdit.name}
-                    onChange={(e) => setHeaderEdit({...headerEdit, name: e.target.value})}
+                    onChange={(e) => setHeaderEdit({ ...headerEdit, name: e.target.value })}
                   />
                 </div>
                 <button onClick={() => mutation.mutate(headerEdit)} className="flex items-center gap-2 bg-amber-500 text-black px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider mx-auto">
@@ -152,7 +152,7 @@ if (needsLockScreen) {
 
         <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white transform transition-transform duration-300 p-6 lg:relative lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 ${isMobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"}`}>
           <div className="sticky top-28 bg-slate-50 rounded-3xl p-6 border border-slate-100 h-fit">
-            
+
             <nav className="space-y-2">
               {navLinks.map((link) => {
                 const fullPath = `/departments/${loaderData.slug}${link.path}`;
@@ -170,7 +170,7 @@ if (needsLockScreen) {
 
         <main className="flex-grow min-w-0 space-y-6">
           {/* FIXED: Passing down the structural slug matching parameters property string */}
-          
+
           <div className="mt-2"><Outlet /></div>
         </main>
       </div>

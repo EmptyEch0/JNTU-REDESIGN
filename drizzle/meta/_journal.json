@@ -36,6 +36,13 @@
       "when": 1778812272445,
       "tag": "0004_uneven_inhumans",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1779598614756,
+      "tag": "0005_lively_malice",
+      "breakpoints": true
     }
   ]
 }

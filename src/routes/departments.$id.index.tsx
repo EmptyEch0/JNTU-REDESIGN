@@ -1,5 +1,5 @@
 import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
-import {updateDepartment } from "@/lib/departments";
+import { updateDepartment } from "@/lib/departments";
 import { type DepartmentData } from "@/functions/departments";
 import { Target, Lightbulb, BookOpenText, Save } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
@@ -16,10 +16,10 @@ function AboutPage() {
   const queryClient = useQueryClient();
   // 1. Fetch the active dynamic route parameters matching this branch slug context
   const { id: routeSlug } = useParams({ from: "/departments/$id" });
-  
+
   // 2. Consume specialized department tracking state maps from Admin Context
   const { isDeptEditing } = useAdmin();
-  
+
   // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
   const isEditMode = isDeptEditing(routeSlug || "");
 
@@ -32,7 +32,7 @@ function AboutPage() {
   }, [data]);
 
   const mutation = useMutation({
-    mutationFn: (updatedFields: any) => 
+    mutationFn: (updatedFields: any) =>
       updateDepartment({ data: { id: data.id, ...updatedFields } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["department", data.slug] });
@@ -55,7 +55,7 @@ function AboutPage() {
     <div className="min-h-screen bg-white">
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-10">
-          
+
           {/* About Section */}
           <section>
             <div className="flex items-center justify-between mb-6">
@@ -66,9 +66,8 @@ function AboutPage() {
               {isEditMode && <span className="text-xs font-bold text-amber-600 uppercase tracking-widest px-2 py-1 bg-amber-100 rounded">Editing Mode</span>}
             </div>
 
-            <div className={`rounded-xl p-8 border transition-all ${
-              isEditMode ? "bg-amber-50/50 border-amber-200 shadow-inner" : "bg-gray-50 border-gray-200"
-            }`}>
+            <div className={`rounded-xl p-8 border transition-all ${isEditMode ? "bg-amber-50/50 border-amber-200 shadow-inner" : "bg-gray-50 border-gray-200"
+              }`}>
               {isEditMode ? (
                 <div className="space-y-4">
                   <textarea
@@ -76,7 +75,7 @@ function AboutPage() {
                     value={editData.about_details ?? ""}
                     onChange={(e) => setEditData({ ...editData, about_details: e.target.value })}
                   />
-                  <button 
+                  <button
                     onClick={() => handleSave("about_details", editData.about_details ?? "")}
                     className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                   >
@@ -94,7 +93,7 @@ function AboutPage() {
           {/* Vision & Mission Grid */}
           <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Vision Card */}
-            <div className={`rounded-xl p-8 transition-all ${isEditMode ? "ring-2 ring-amber-400 ring-offset-2" : "" } bg-gray-900`}>
+            <div className={`rounded-xl p-8 transition-all ${isEditMode ? "ring-2 ring-amber-400 ring-offset-2" : ""} bg-gray-900`}>
               <div className="flex items-center gap-3 mb-5">
                 <Target className="text-blue-400 h-6 w-6" />
                 <h3 className="text-xl font-semibold text-white">Our Vision</h3>
@@ -106,7 +105,7 @@ function AboutPage() {
                     value={editData.vision ?? ""}
                     onChange={(e) => setEditData({ ...editData, vision: e.target.value })}
                   />
-                  <button 
+                  <button
                     onClick={() => handleSave("vision", editData.vision ?? "")}
                     className="flex items-center gap-2 bg-blue-500 text-white px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider"
                   >
@@ -133,7 +132,7 @@ function AboutPage() {
                     value={editData.mission ?? ""}
                     onChange={(e) => setEditData({ ...editData, mission: e.target.value })}
                   />
-                  <button 
+                  <button
                     onClick={() => handleSave("mission", editData.mission ?? "")}
                     className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider"
                   >

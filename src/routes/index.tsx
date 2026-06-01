@@ -152,8 +152,8 @@ function HomePage() {
               under section 2(f) & 12(B) of UGC Act 1956 — shaping the future of engineering since 2007.
             </p>
             <div className="mt-10 flex flex-wrap gap-3 animate-[fade-up_0.9s_ease-out_1s_both]">
-              <Link to="/admissions" className="btn-primary">
-                Admissions <ArrowRight className="h-4 w-4" />
+              <Link to="/academics" className="btn-primary">
+                Academics <ArrowRight className="h-4 w-4" />
               </Link>
               <Link to="/campus-life" className="btn-ghost">
                 Explore Campus
@@ -596,7 +596,7 @@ function HomePage() {
                     <span className="text-primary-glow">We're here to help.</span>
                   </h3>
                   <p className="mt-6 text-white/50 leading-relaxed max-w-md">
-                    Reach out to our administrative office for admissions, academic inquiries, or
+                    Reach out to our administrative office for academic inquiries, examinations, or
                     general information.
                   </p>
                 </div>

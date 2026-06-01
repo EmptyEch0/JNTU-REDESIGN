@@ -6,4 +6,8 @@
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-export default defineConfig();
+export default defineConfig({
+  // Disable the Cloudflare Workers plugin so the build produces
+  // a standard Node.js SSR output compatible with Vercel.
+  cloudflare: false,
+});

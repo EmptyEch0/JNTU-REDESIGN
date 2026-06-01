@@ -137,105 +137,130 @@ export const syncFaculty = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-// --- Faculty ---
-export const getFacultyByDept = createServerFn({ method: "GET" })
-  .inputValidator((deptId: string) => deptId)
-  .handler(async ({ input }) => {
-    return await db.select().from(faculty).where(eq(faculty.dept_id, input));
+// --- NEW CRUD FUNCTIONS REQUIRED BY admin.departments.tsx ---
+
+export const getFacultyByDept = createServerFn({ method: "POST" })
+  .inputValidator((deptId: string | { data?: string }) => deptId)
+  .handler(async ({ data }) => {
+    const id = typeof data === "string" ? data : (data as any)?.data || "";
+    if (!id) return [];
+    return await db.select().from(faculty).where(eq(faculty.dept_id, id));
   });
 
 export const addFaculty = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
     await db.insert(faculty).values(data);
     return { success: true };
   });
 
 export const deleteFaculty = createServerFn({ method: "POST" })
-  .inputValidator((id: number) => id)
+  .inputValidator((d: { id: number } | number) => d)
   .handler(async ({ data }) => {
-    await db.delete(faculty).where(eq(faculty.id, data));
+    const id = typeof data === "number" ? data : (data as any)?.id;
+    await db.delete(faculty).where(eq(faculty.id, id));
     return { success: true };
   });
 
-// --- Laboratories ---
-export const getLabsByDept = createServerFn({ method: "GET" })
-  .inputValidator((deptId: string) => deptId)
-  .handler(async ({ input }) => {
-    return await db.select().from(laboratories).where(eq(laboratories.dept_id, input));
+export const getLabsByDept = createServerFn({ method: "POST" })
+  .inputValidator((deptId: string | { data?: string }) => deptId)
+  .handler(async ({ data }) => {
+    const id = typeof data === "string" ? data : (data as any)?.data || "";
+    if (!id) return [];
+    return await db.select().from(laboratories).where(eq(laboratories.dept_id, id));
   });
 
 export const addLaboratory = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
     await db.insert(laboratories).values(data);
     return { success: true };
   });
 
 export const deleteLaboratory = createServerFn({ method: "POST" })
-  .inputValidator((id: number) => id)
+  .inputValidator((d: { id: number } | number) => d)
   .handler(async ({ data }) => {
-    await db.delete(laboratories).where(eq(laboratories.id, data));
+    const id = typeof data === "number" ? data : (data as any)?.id;
+    await db.delete(laboratories).where(eq(laboratories.id, id));
     return { success: true };
   });
 
-// --- Achievements ---
-export const getAchievementsByDept = createServerFn({ method: "GET" })
-  .inputValidator((deptId: string) => deptId)
-  .handler(async ({ input }) => {
-    return await db.select().from(achievements).where(eq(achievements.dept_id, input));
+export const getAchievementsByDept = createServerFn({ method: "POST" })
+  .inputValidator((deptId: string | { data?: string }) => deptId)
+  .handler(async ({ data }) => {
+    const id = typeof data === "string" ? data : (data as any)?.data || "";
+    if (!id) return [];
+    return await db.select().from(achievements).where(eq(achievements.dept_id, id));
   });
 
 export const addAchievement = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
     await db.insert(achievements).values(data);
     return { success: true };
   });
 
-// --- Courses ---
-export const getCoursesByDept = createServerFn({ method: "GET" })
-  .inputValidator((deptId: string) => deptId)
-  .handler(async ({ input }) => {
-    return await db.select().from(courses).where(eq(courses.dept_id, input));
+export const getCoursesByDept = createServerFn({ method: "POST" })
+  .inputValidator((deptId: string | { data?: string }) => deptId)
+  .handler(async ({ data }) => {
+    const id = typeof data === "string" ? data : (data as any)?.data || "";
+    if (!id) return [];
+    return await db.select().from(courses).where(eq(courses.dept_id, id));
   });
 
 export const addCourse = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
-    await db.insert(courses).values(data);
+    const { name, level, regulation, syllabus_url, dept_id } = data;
+    await db.insert(courses).values({
+      dept_id,
+      name,
+      level: level || "UG",
+      regulation,
+      syllabus_url
+    });
     return { success: true };
   });
 
 export const deleteCourse = createServerFn({ method: "POST" })
-  .inputValidator((id: number) => id)
+  .inputValidator((d: { id: number } | number) => d)
   .handler(async ({ data }) => {
-    await db.delete(courses).where(eq(courses.id, data));
+    const id = typeof data === "number" ? data : (data as any)?.id;
+    await db.delete(courses).where(eq(courses.id, id));
     return { success: true };
   });
 
-// --- Gallery ---
-export const getGalleryByDept = createServerFn({ method: "GET" })
-  .inputValidator((deptId: string) => deptId)
-  .handler(async ({ input }) => {
-    return await db.select().from(departmentGallery).where(eq(departmentGallery.dept_id, input));
+export const getGalleryByDept = createServerFn({ method: "POST" })
+  .inputValidator((deptId: string | { data?: string }) => deptId)
+  .handler(async ({ data }) => {
+    const id = typeof data === "string" ? data : (data as any)?.data || "";
+    if (!id) return [];
+    return await db.select().from(departmentGallery).where(eq(departmentGallery.dept_id, id));
   });
 
 export const addToGallery = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
-    await db.insert(departmentGallery).values(data);
+    const { title, image_url, category, description, dept_id } = data;
+    await db.insert(departmentGallery).values({
+      dept_id,
+      title,
+      image_url,
+      category: category || "General",
+      description
+    });
     return { success: true };
   });
 
 export const deleteFromGallery = createServerFn({ method: "POST" })
-  .inputValidator((id: string) => id)
+  .inputValidator((d: { id: string } | string) => d)
   .handler(async ({ data }) => {
-    await db.delete(departmentGallery).where(eq(departmentGallery.id, data));
+    const id = typeof data === "string" ? data : (data as any)?.id;
+    await db.delete(departmentGallery).where(eq(departmentGallery.id, id));
     return { success: true };
   });
 
-  export const updateFacultyProfile = createServerFn({ method: "POST" })
+export const updateFacultyProfile = createServerFn({ method: "POST" })
   .inputValidator((d: { facultyId: string | number; profileData: any }) => d)
   .handler(async ({ data }) => {
     const { facultyId, profileData } = data;
@@ -263,7 +288,7 @@ export const deleteFromGallery = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-  export const verifyDepartmentAccess = createServerFn({ method: "POST" })
+export const verifyDepartmentAccess = createServerFn({ method: "POST" })
   .inputValidator((d: { deptId: string; password: string }) => d)
   .handler(async ({ data }) => {
     const { deptId, password } = data;
@@ -286,8 +311,6 @@ export const deleteFromGallery = createServerFn({ method: "POST" })
     }
 
     // 3. CRYPTOGRAPHIC MATCH VALIDATION
-    // Since Bcrypt hashes contain random salts, you cannot use "===" to compare strings.
-    // Instead, bcrypt.compare will securely hash the user's typed input and verify if it matches the pattern of the stored hash.
     const isPasswordMatch = await bcrypt.compare(password, dept.hod_password);
 
     if (isPasswordMatch) {

@@ -1,35 +1,97 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { DownloadCard } from "@/components/academics/DownloadCard";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { useAdmin } from "@/context/AdminContext";
+import { toast } from "sonner";
+import { Plus, Trash2 } from "lucide-react";
+import { getRegulations, addRegulation, deleteRegulation } from "@/funcs/site.server";
+import {
+  AdminModeBanner,
+  AdminPanel,
+  AdminPanelHeader,
+  AdminField,
+  AdminInput,
+} from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/academics/regulations")({
+  loader: async () => await getRegulations(),
   component: RegulationsPage,
 });
 
-const REGS_BTECH = [
-  { title: "R23 Academic Regulations (B.Tech)", category: "B.Tech", size: "1.2 MB", date: "Sep 2023" },
-  { title: "R20 Academic Regulations (B.Tech)", category: "B.Tech", size: "1.5 MB", date: "Aug 2020" },
-  { title: "R19 Academic Regulations (B.Tech)", category: "B.Tech", size: "2.1 MB", date: "Jul 2019" },
+const DEFAULT_BTECH = [
+  { title: "R23 Academic Regulations (B.Tech)", category: "B.Tech", size: "1.2 MB", date: "Sep 2023", link: "#" },
+  { title: "R20 Academic Regulations (B.Tech)", category: "B.Tech", size: "1.5 MB", date: "Aug 2020", link: "#" },
+  { title: "R19 Academic Regulations (B.Tech)", category: "B.Tech", size: "2.1 MB", date: "Jul 2019", link: "#" },
 ];
 
-const REGS_MTECH = [
-  { title: "R23 Academic Regulations (M.Tech)", category: "M.Tech", size: "900 KB", date: "Sep 2023" },
-  { title: "R20 Academic Regulations (M.Tech)", category: "M.Tech", size: "1.1 MB", date: "Aug 2020" },
+const DEFAULT_MTECH = [
+  { title: "R23 Academic Regulations (M.Tech)", category: "M.Tech", size: "900 KB", date: "Sep 2023", link: "#" },
+  { title: "R20 Academic Regulations (M.Tech)", category: "M.Tech", size: "1.1 MB", date: "Aug 2020", link: "#" },
 ];
 
 function RegulationsPage() {
+  const dbData = Route.useLoaderData() as any[];
+  const { isEditMode } = useAdmin();
+  const router = useRouter();
+
+  const [newReg, setNewReg] = useState({
+    title: "",
+    category: "B.Tech",
+    size: "",
+    date: "",
+    link: "",
+  });
+
+  const btechRegs = dbData.length > 0 ? dbData.filter((r) => r.category === "B.Tech") : DEFAULT_BTECH;
+  const mtechRegs = dbData.length > 0 ? dbData.filter((r) => r.category === "M.Tech") : DEFAULT_MTECH;
+
+  async function handleAdd() {
+    if (!newReg.title.trim()) return;
+    const tId = toast.loading("Adding new academic regulation...");
+    try {
+      await addRegulation({
+        data: {
+          title: newReg.title,
+          category: newReg.category,
+          size: newReg.size || "1.0 MB",
+          date: newReg.date || new Date().toLocaleString("en-US", { month: "short", year: "numeric" }),
+          link: newReg.link || "#",
+        },
+      });
+      toast.success("Regulation added successfully!", { id: tId });
+      setNewReg({ title: "", category: "B.Tech", size: "", date: "", link: "" });
+      router.invalidate();
+    } catch {
+      toast.error("Failed to add regulation.", { id: tId });
+    }
+  }
+
+  async function handleDelete(id: number) {
+    const tId = toast.loading("Purging regulation record...");
+    try {
+      await deleteRegulation({ data: { id } });
+      toast.success("Regulation deleted!", { id: tId });
+      router.invalidate();
+    } catch {
+      toast.error("Failed to delete regulation.", { id: tId });
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-16">
+      {isEditMode && <AdminModeBanner label="Academic Regulations CMS Mode Active" />}
+
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="text-center mb-16">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
           >
             Academic <span className="text-red-600">Regulations</span>
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -39,6 +101,64 @@ function RegulationsPage() {
           </motion.p>
         </div>
 
+        {isEditMode && (
+          <section className="mb-12">
+            <AdminPanel>
+              <AdminPanelHeader title="Log New Academic Regulation" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <AdminField label="Regulation Title">
+                  <AdminInput
+                    value={newReg.title}
+                    onChange={(e) => setNewReg({ ...newReg, title: e.target.value })}
+                    placeholder="e.g. R23 Academic Regulations (B.Tech)"
+                  />
+                </AdminField>
+                <AdminField label="Category / Level">
+                  <select
+                    className="w-full border border-amber-200 bg-white rounded-lg p-2 text-sm outline-none"
+                    value={newReg.category}
+                    onChange={(e) => setNewReg({ ...newReg, category: e.target.value })}
+                  >
+                    <option value="B.Tech">B.Tech (Undergraduate)</option>
+                    <option value="M.Tech">M.Tech / MBA (Postgraduate)</option>
+                  </select>
+                </AdminField>
+                <AdminField label="File Size">
+                  <AdminInput
+                    value={newReg.size}
+                    onChange={(e) => setNewReg({ ...newReg, size: e.target.value })}
+                    placeholder="e.g. 1.2 MB"
+                  />
+                </AdminField>
+                <AdminField label="Release Date">
+                  <AdminInput
+                    value={newReg.date}
+                    onChange={(e) => setNewReg({ ...newReg, date: e.target.value })}
+                    placeholder="e.g. Sep 2023"
+                  />
+                </AdminField>
+                <div className="sm:col-span-2">
+                  <AdminField label="PDF Link / Attachment URL">
+                    <AdminInput
+                      value={newReg.link}
+                      onChange={(e) => setNewReg({ ...newReg, link: e.target.value })}
+                      placeholder="Paste PDF link here..."
+                    />
+                  </AdminField>
+                </div>
+              </div>
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={handleAdd}
+                  className="bg-slate-900 hover:bg-amber-600 text-white font-bold px-6 py-2.5 rounded-lg flex items-center gap-2 text-sm cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" /> Add Regulation
+                </button>
+              </div>
+            </AdminPanel>
+          </section>
+        )}
+
         <div className="space-y-12">
           <section>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
@@ -46,8 +166,18 @@ function RegulationsPage() {
               B.Tech Regulations
             </h2>
             <div className="grid md:grid-cols-2 gap-4">
-              {REGS_BTECH.map((reg, idx) => (
-                <DownloadCard key={idx} {...reg} delay={idx * 0.1} />
+              {btechRegs.map((reg, idx) => (
+                <div key={idx} className="relative group">
+                  <DownloadCard {...reg} delay={idx * 0.1} />
+                  {isEditMode && reg.id && (
+                    <button
+                      onClick={() => handleDelete(reg.id)}
+                      className="absolute top-2 right-2 bg-rose-600 text-white p-2 rounded-full hover:bg-rose-700 transition cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
               ))}
             </div>
           </section>
@@ -58,13 +188,25 @@ function RegulationsPage() {
               M.Tech & MBA Regulations
             </h2>
             <div className="grid md:grid-cols-2 gap-4">
-              {REGS_MTECH.map((reg, idx) => (
-                <DownloadCard key={idx} {...reg} delay={idx * 0.1} />
+              {mtechRegs.map((reg, idx) => (
+                <div key={idx} className="relative group">
+                  <DownloadCard {...reg} delay={idx * 0.1} />
+                  {isEditMode && reg.id && (
+                    <button
+                      onClick={() => handleDelete(reg.id)}
+                      className="absolute top-2 right-2 bg-rose-600 text-white p-2 rounded-full hover:bg-rose-700 transition cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
               ))}
             </div>
           </section>
         </div>
+
       </div>
     </div>
   );
 }
+

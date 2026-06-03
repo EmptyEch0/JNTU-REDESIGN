@@ -21,7 +21,7 @@ export function HeroSection({ title, subtitle, image }: HeroSectionProps) {
             transition={{ duration: 1.5 }}
             src={image} 
             alt="Hero Background" 
-            className="w-full h-full object-cover mix-blend-overlay grayscale"
+            className="w-full h-full object-cover mix-blend-overlay"
           />
         )}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/10 blur-[120px] rounded-full mix-blend-screen pointer-events-none"></div>

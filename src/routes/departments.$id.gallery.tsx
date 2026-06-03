@@ -63,7 +63,7 @@ function GalleryPage() {
     : galleryList.filter((img: any) => img.category === activeFilter);
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 pb-20">
+    <div className="animate-in fade-in slide-in-from-bottom-6 duration-300 pb-20">
       {/* Header */}
       <div className="mb-12 border-b border-slate-100 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
@@ -108,10 +108,10 @@ function GalleryPage() {
         {filteredImages.map((image: any) => (
           <div
             key={image.id}
-            className={`relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-slate-100 border transition-all duration-500 ${isEditMode ? 'border-indigo-400 ring-4 ring-indigo-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}
+            className={`relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-slate-100 border transition-all duration-200 ${isEditMode ? 'border-indigo-400 ring-4 ring-indigo-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}
           >
             {image.image_url ? (
-              <img src={image.image_url} alt={image.title} className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <img src={image.image_url} alt={image.title} className="w-full object-cover transition-transform duration-300 group-hover:scale-110" />
             ) : (
               <div className="h-48 flex items-center justify-center bg-slate-200 text-slate-400">
                 <ImageIcon size={32} />
@@ -157,7 +157,7 @@ function GalleryPage() {
               </div>
             ) : (
               <div
-                className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8 cursor-pointer"
+                className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-8 cursor-pointer"
                 onClick={() => setSelectedImage(image)}
               >
                 <span className="text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-2">{image.category}</span>

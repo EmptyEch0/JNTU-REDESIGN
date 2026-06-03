@@ -120,7 +120,7 @@ function StaffQuartersPage() {
   }
 
   return (
-    <div className="w-full animate-[fade-in_0.5s_ease-out] pb-12">
+    <div className="w-full animate-[fade-in_0.2s_ease-out] pb-12">
       {isEditMode && (
         <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-2.5 px-6 sticky top-0 z-[50] shadow-lg flex items-center justify-center gap-2 border-b border-amber-700/20 backdrop-blur-md text-[10px] uppercase tracking-widest rounded-2xl mb-6">
           <Lock className="w-3.5 h-3.5 animate-pulse" />
@@ -138,7 +138,7 @@ function StaffQuartersPage() {
           className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
         >
           {isEditMode ? (
-            <div className="space-y-6 animate-[fade-in_0.3s]">
+            <div className="space-y-6 animate-[fade-in_0.15s]">
               <div className="space-y-2">
                 <label className="text-[9px] font-black text-amber-800 uppercase tracking-wider ml-1">Display Title</label>
                 <input
@@ -210,11 +210,11 @@ function StaffQuartersPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
           {/* BLOCK A */}
           <div className="flex flex-col gap-6">
-            <div className="relative group overflow-hidden rounded-[32px] border border-slate-200/60 shadow-md aspect-[4/3] bg-slate-200 transition-all duration-500 hover:shadow-lg">
+            <div className="relative group overflow-hidden rounded-[32px] border border-slate-200/60 shadow-md aspect-[4/3] bg-slate-200 transition-all duration-200 hover:shadow-lg">
               <img
                 src={blockARec?.imageUrl || img1}
                 alt={blockARec?.title || DEFAULTS.blockALabel}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent flex items-end p-6">
                 <span className="text-white font-black font-display text-lg sm:text-xl tracking-wide uppercase drop-shadow">
@@ -224,7 +224,7 @@ function StaffQuartersPage() {
             </div>
 
             {isEditMode && (
-              <div className="p-5 bg-amber-50/40 border-2 border-amber-200 rounded-[28px] space-y-3.5 animate-[fade-in_0.3s]">
+              <div className="p-5 bg-amber-50/40 border-2 border-amber-200 rounded-[28px] space-y-3.5 animate-[fade-in_0.15s]">
                 <div className="flex items-center justify-between border-b border-amber-200/60 pb-2">
                   <span className="text-[9px] font-black text-amber-800 uppercase flex items-center gap-1 tracking-wider">
                     <ImageIcon className="w-3.5 h-3.5" /> Visual Module A Controls
@@ -260,11 +260,11 @@ function StaffQuartersPage() {
 
           {/* BLOCK B */}
           <div className="flex flex-col gap-6">
-            <div className="relative group overflow-hidden rounded-[32px] border border-slate-200/60 shadow-md aspect-[4/3] bg-slate-200 transition-all duration-500 hover:shadow-lg">
+            <div className="relative group overflow-hidden rounded-[32px] border border-slate-200/60 shadow-md aspect-[4/3] bg-slate-200 transition-all duration-200 hover:shadow-lg">
               <img
                 src={blockBRec?.imageUrl || img2}
                 alt={blockBRec?.title || DEFAULTS.blockBLabel}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent flex items-end p-6">
                 <span className="text-white font-black font-display text-lg sm:text-xl tracking-wide uppercase drop-shadow">
@@ -274,7 +274,7 @@ function StaffQuartersPage() {
             </div>
 
             {isEditMode && (
-              <div className="p-5 bg-amber-50/40 border-2 border-amber-200 rounded-[28px] space-y-3.5 animate-[fade-in_0.3s]">
+              <div className="p-5 bg-amber-50/40 border-2 border-amber-200 rounded-[28px] space-y-3.5 animate-[fade-in_0.15s]">
                 <div className="flex items-center justify-between border-b border-amber-200/60 pb-2">
                   <span className="text-[9px] font-black text-amber-800 uppercase flex items-center gap-1 tracking-wider">
                     <ImageIcon className="w-3.5 h-3.5" /> Visual Module B Controls
@@ -318,7 +318,7 @@ function StaffQuartersPage() {
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (
-    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-500 shadow-sm overflow-hidden w-full ${className}`}>
+    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-200 shadow-sm overflow-hidden w-full ${className}`}>
       {title && (
         <div className="flex items-center gap-3.5 mb-6 md:mb-8 pb-5 border-b border-slate-100">
           <div className="w-12 h-12 rounded-[20px] bg-slate-50 border border-slate-200/60 text-[oklch(0.42_0.18_265)] grid place-items-center shrink-0 shadow-sm">

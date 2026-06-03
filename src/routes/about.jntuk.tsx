@@ -263,7 +263,7 @@ function JntukPage() {
               <RevealOnScroll key={f.key} delay={i * 100}>
                 <div className="bg-card rounded-2xl p-7 border border-border hover-lift h-full group cursor-default flex flex-col justify-between">
                   <div>
-                    <div className="h-12 w-12 rounded-xl bg-[var(--gradient-royal)] text-white grid place-items-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                    <div className="h-12 w-12 rounded-xl bg-[var(--gradient-royal)] text-white grid place-items-center mb-4 group-hover:scale-110 transition-transform duration-200">
                       <f.icon className="h-5 w-5" />
                     </div>
                     <h3 className="text-display text-xl text-ink">{f.title}</h3>

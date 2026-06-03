@@ -544,7 +544,7 @@ function ExaminationPage() {
                   setActiveTab(tab.id as any);
                   setSearchTerm("");
                 }}
-                className={`relative flex items-center gap-2 px-6 py-3 rounded-[16px] text-xs font-extrabold transition-all duration-500 cursor-pointer ${
+                className={`relative flex items-center gap-2 px-6 py-3 rounded-[16px] text-xs font-extrabold transition-all duration-200 cursor-pointer ${
                   isActive 
                     ? "text-blue-600 dark:text-blue-400" 
                     : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
@@ -954,14 +954,14 @@ function ExaminationPage() {
                       key={officer.name} 
                       className="p-6 relative overflow-hidden group hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-900/5 bg-white border border-slate-200/80 transition-all duration-300"
                     >
-                      <div className="absolute right-0 top-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+                      <div className="absolute right-0 top-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-200"></div>
                       
                       <div className="flex items-start gap-4">
                         <div className="w-20 h-20 rounded-2xl overflow-hidden border border-blue-200/50 shadow-md flex-shrink-0 relative">
                           <img 
                             src={officer.photo} 
                             alt={officer.name} 
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200" 
                           />
                           <div className="absolute bottom-1 right-1 bg-blue-600 text-white font-black text-[8px] px-1.5 py-0.5 rounded-md">
                             {officer.role}

@@ -59,7 +59,7 @@ function FacultyPage() {
   };
 
   return (
-    <div className="animate-in fade-in duration-500">
+    <div className="animate-in fade-in duration-200">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Faculty Members</h2>

@@ -590,7 +590,7 @@ function ModuleCard({
         <img
           src={mod.image}
           alt={mod.name}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.05]"
         />
 
         {/* Bottom-weighted gradient overlay */}

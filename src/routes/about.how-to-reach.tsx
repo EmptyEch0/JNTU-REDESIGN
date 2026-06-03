@@ -231,7 +231,7 @@ function HowToReachPage() {
             <RevealOnScroll key={t.key} delay={i * 120}>
               <div className="bg-card rounded-2xl p-8 border border-border hover-lift h-full group flex flex-col justify-between">
                 <div>
-                  <div className="h-12 w-12 rounded-xl bg-[var(--gradient-royal)] text-white grid place-items-center mb-5 group-hover:scale-110 transition-transform duration-500">
+                  <div className="h-12 w-12 rounded-xl bg-[var(--gradient-royal)] text-white grid place-items-center mb-5 group-hover:scale-110 transition-transform duration-200">
                     <t.icon className="h-5 w-5" />
                   </div>
                   <h3 className="text-lg font-semibold text-ink">{t.title}</h3>
@@ -319,7 +319,7 @@ function HowToReachPage() {
                   {DIRECTIONS.map((d, i) => (
                     <li key={i} className="flex gap-4 group">
                       <div className="flex flex-col items-center shrink-0">
-                        <div className="h-8 w-8 rounded-full bg-primary/10 text-primary grid place-items-center text-sm font-semibold group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-500">
+                        <div className="h-8 w-8 rounded-full bg-primary/10 text-primary grid place-items-center text-sm font-semibold group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-200">
                           {i + 1}
                         </div>
                         {i < DIRECTIONS.length - 1 && <div className="w-px flex-1 bg-border mt-1" />}
@@ -348,7 +348,7 @@ function HowToReachPage() {
               src={campusMap}
               alt="Directions map showing route from Vizianagaram to JNTUK UCEV campus"
               loading="lazy"
-              className="rounded-3xl border border-border shadow-[var(--shadow-elegant)] max-w-2xl w-full hover:scale-[1.01] transition-transform duration-700"
+              className="rounded-3xl border border-border shadow-[var(--shadow-elegant)] max-w-2xl w-full hover:scale-[1.01] transition-transform duration-300"
             />
           </div>
           <p className="mt-4 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">

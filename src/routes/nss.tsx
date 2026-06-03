@@ -129,11 +129,11 @@ function NSSLayout() {
             ) : (
               <>
                 {/* Slides */}
-                <div className="absolute inset-0 w-full h-full transition-all duration-700 ease-out">
+                <div className="absolute inset-0 w-full h-full transition-all duration-300 ease-out">
                   <img
                     src={slides[currentIndex].imageUrl}
                     alt={slides[currentIndex].title}
-                    className="w-full h-full object-cover transition-transform duration-700"
+                    className="w-full h-full object-cover transition-transform duration-300"
                   />
                   {/* Overlay Gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30 flex flex-col justify-end p-6 md:p-12" />

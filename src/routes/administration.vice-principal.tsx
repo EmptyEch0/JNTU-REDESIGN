@@ -77,12 +77,12 @@ function VicePrincipalPage() {
           <RevealOnScroll>
             <div className="space-y-8 lg:sticky lg:top-32">
               <div className="relative group">
-                <div className="absolute -inset-4 rounded-[40px] bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-colors duration-500" />
+                <div className="absolute -inset-4 rounded-[40px] bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-colors duration-200" />
                 <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white shadow-elegant bg-card">
                   <img
                     src={data.image}
                     alt={data.name}
-                    className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                    className="h-full w-full object-cover transition-all duration-300"
                   />
                   {isEditMode && (
                     <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity p-6 text-center">
@@ -162,7 +162,7 @@ function VicePrincipalPage() {
             <RevealOnScroll delay={200}>
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="p-8 rounded-3xl bg-card border border-border hover:border-primary/20 transition-all group">
-                  <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary grid place-items-center mb-5 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-500">
+                  <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary grid place-items-center mb-5 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-200">
                     <BookOpen className="h-6 w-6" />
                   </div>
                   <h3 className="text-xl font-bold text-ink mb-3">Academic Coordination</h3>
@@ -173,7 +173,7 @@ function VicePrincipalPage() {
                 </div>
 
                 <div className="p-8 rounded-3xl bg-card border border-border hover:border-primary/20 transition-all group">
-                  <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary grid place-items-center mb-5 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-500">
+                  <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary grid place-items-center mb-5 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-200">
                     <Award className="h-6 w-6" />
                   </div>
                   <h3 className="text-xl font-bold text-ink mb-3">Student Affairs</h3>

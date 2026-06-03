@@ -101,7 +101,7 @@ function GalleryPage() {
                       src={editedItems[it.id]?.src ?? it.src}
                       alt={it.caption}
                       loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
 

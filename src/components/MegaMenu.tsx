@@ -47,11 +47,7 @@ export function MegaMenu() {
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeAll();
-      // Cmd/Ctrl+K to open search
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setSearchOpen(true);
-      }
+      // Removed Cmd/Ctrl+K search
     };
     document.addEventListener("mousedown", onClick);
     document.addEventListener("keydown", onKey);
@@ -61,17 +57,7 @@ export function MegaMenu() {
     };
   }, [openIdx, mobileOpen, searchOpen]);
 
-  // Global Cmd+K (always available)
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setSearchOpen((v) => !v);
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, []);
+
 
   // Focus the input when search opens
   useEffect(() => {
@@ -114,17 +100,17 @@ export function MegaMenu() {
           onMouseLeave={() => setOpenIdx(null)}
         >
           <div
-            className={`flex items-center justify-between transition-all duration-500 ${expanded ? "px-6 sm:px-8 h-[72px]" : "px-4 h-14"}`}
+            className={`flex items-center justify-between transition-all duration-200 ${expanded ? "px-6 sm:px-8 h-[72px]" : "px-4 h-14"}`}
           >
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 group shrink-0" onClick={closeAll}>
               <div
-                className={`rounded-full bg-white grid place-items-center transition-all duration-500 overflow-hidden border border-white/20 ${expanded ? "h-11 w-11" : "h-9 w-9"}`}
+                className={`rounded-full bg-white grid place-items-center transition-all duration-200 overflow-hidden border border-white/20 ${expanded ? "h-11 w-11" : "h-9 w-9"}`}
               >
                 <img src="/logo.jpeg" alt="Logo" className="h-full w-full object-cover" />
               </div>
               <div
-                className={`leading-tight overflow-hidden transition-all duration-500 ${expanded ? "max-w-[260px] opacity-100" : "max-w-0 opacity-0 lg:max-w-[120px] lg:opacity-100"}`}
+                className={`leading-tight overflow-hidden transition-all duration-200 ${expanded ? "max-w-[260px] opacity-100" : "max-w-0 opacity-0 lg:max-w-[120px] lg:opacity-100"}`}
               >
                 <div className="text-base font-bold text-white whitespace-nowrap">
                   {SITE.name}
@@ -141,7 +127,7 @@ export function MegaMenu() {
             <div className="hidden lg:block h-6 w-px bg-white/10 mx-1" />
 
             {/* Desktop nav */}
-            <nav className={`hidden lg:flex items-center flex-1 justify-center transition-all duration-500 ${expanded ? "gap-1" : "gap-0.5"}`}>
+            <nav className={`hidden lg:flex items-center flex-1 justify-center transition-all duration-200 ${expanded ? "gap-1" : "gap-0.5"}`}>
               {NAV.map((item, i) => {
                 const active =
                   item.to === path ||
@@ -196,22 +182,7 @@ export function MegaMenu() {
                 <FileText className="h-3 w-3" />
                 {expanded && <span>UGC 2(f) & 12(B)</span>}
               </a>
-              
-              <button
-                onClick={() => setSearchOpen((v) => !v)}
-                className={`inline-flex items-center gap-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white transition-all ${
-                  expanded ? "px-4 py-2 text-sm" : "px-3 py-1.5 text-[12px]"
-                }`}
-                aria-label="Search"
-              >
-                <Search className="h-3.5 w-3.5" />
-                {expanded && <span className="hidden xl:inline">Search</span>}
-                {expanded && (
-                  <kbd className="hidden xl:inline-flex items-center gap-0.5 text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/10 text-white/60">
-                    ⌘K
-                  </kbd>
-                )}
-              </button>
+
             </div>
 
             {/* Spacer for balance */}
@@ -219,16 +190,7 @@ export function MegaMenu() {
 
             {/* Mobile actions */}
             <div className="lg:hidden ml-auto flex items-center gap-1">
-              <button
-                className="p-2 text-white rounded-full hover:bg-white/10 active:scale-95 transition-transform"
-                onClick={() => {
-                  setSearchOpen((v) => !v);
-                  setMobileOpen(false);
-                }}
-                aria-label="Search"
-              >
-                <Search className="h-5 w-5" />
-              </button>
+
               <button
                 className="p-2 text-white rounded-full hover:bg-white/10 active:scale-95 transition-transform"
                 onClick={() => {
@@ -242,103 +204,11 @@ export function MegaMenu() {
             </div>
           </div>
 
-          {/* SEARCH PANEL */}
-          {searchOpen && (
-            <div className="px-4 sm:px-5 pb-5 animate-[fade-in_0.25s_ease-out]">
-              <div className="border-t border-white/10 pt-4">
-                <div className="flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-white/5 border border-white/10 focus-within:border-primary-glow/60 focus-within:bg-white/10 transition-colors">
-                  <Search className="h-4 w-4 text-white/50 shrink-0" />
-                  <input
-                    ref={searchInputRef}
-                    value={query}
-                    onChange={(e) => {
-                      setQuery(e.target.value);
-                      setActiveResult(0);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "ArrowDown") {
-                        e.preventDefault();
-                        setActiveResult((i) => Math.min(i + 1, results.length - 1));
-                      }
-                      if (e.key === "ArrowUp") {
-                        e.preventDefault();
-                        setActiveResult((i) => Math.max(i - 1, 0));
-                      }
-                      if (e.key === "Enter" && results[activeResult]) {
-                        e.preventDefault();
-                        handleResultSelect(results[activeResult].to);
-                      }
-                    }}
-                    placeholder="Search departments, facilities, pages…"
-                    className="flex-1 bg-transparent text-sm text-white placeholder:text-white/40 outline-none"
-                  />
-                  {query && (
-                    <button
-                      onClick={() => setQuery("")}
-                      className="text-white/40 hover:text-white text-xs"
-                    >
-                      Clear
-                    </button>
-                  )}
-                </div>
 
-                {/* Results */}
-                <div className="mt-3 max-h-[55vh] overflow-y-auto">
-                  {results.length === 0 ? (
-                    <div className="text-center py-10 text-white/50 text-sm">
-                      No results for "{query}"
-                    </div>
-                  ) : (
-                    <ul className="space-y-0.5">
-                      {results.map((r, i) => (
-                        <li key={`${r.to}-${r.label}`}>
-                          <button
-                            onMouseEnter={() => setActiveResult(i)}
-                            onClick={() => handleResultSelect(r.to)}
-                            className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
-                              i === activeResult ? "bg-white/10" : "hover:bg-white/5"
-                            }`}
-                          >
-                            <div className="min-w-0">
-                              <div className="text-sm font-medium text-white truncate">
-                                {r.label}
-                              </div>
-                              <div className="text-[11px] uppercase tracking-[0.16em] text-primary-glow mt-0.5">
-                                {r.group}
-                              </div>
-                            </div>
-                            {i === activeResult && (
-                              <CornerDownLeft className="h-3.5 w-3.5 text-white/50 shrink-0" />
-                            )}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-
-                <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between text-[10px] text-white/40">
-                  <div className="flex items-center gap-3">
-                    <span>
-                      <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white/60">↑↓</kbd>{" "}
-                      navigate
-                    </span>
-                    <span>
-                      <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white/60">↵</kbd>{" "}
-                      select
-                    </span>
-                  </div>
-                  <span>
-                    <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white/60">esc</kbd> close
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Mega Menu Dropdown */}
           {openIdx !== null && NAV[openIdx]?.groups && !searchOpen && (
-            <div className="hidden lg:block px-8 pb-8 animate-[fade-in_0.3s_ease-out]">
+            <div className="hidden lg:block px-8 pb-8 animate-[fade-in_0.15s_ease-out]">
               <div className="border-t border-white/10 pt-8 w-full">
                 <div className={`grid gap-12 ${
                   NAV[openIdx].groups!.length === 1 ? "grid-cols-1 max-w-sm" : 
@@ -376,7 +246,7 @@ export function MegaMenu() {
 
           {/* Simple nested list dropdown */}
           {openIdx !== null && NAV[openIdx]?.simpleItems && !searchOpen && (
-            <div className="hidden lg:block px-8 pb-8 animate-[fade-in_0.3s_ease-out]">
+            <div className="hidden lg:block px-8 pb-8 animate-[fade-in_0.15s_ease-out]">
               <div className="border-t border-white/10 pt-8 w-full">
                 <ul className="grid grid-cols-3 gap-6">
                   {NAV[openIdx].simpleItems!.map((it) => (
@@ -394,7 +264,7 @@ export function MegaMenu() {
                             </Link>
                             <ChevronDown className="h-4 w-4 text-white/40 group-hover/item:rotate-180 transition-transform duration-300" />
                           </div>
-                          <div className="max-h-0 group-hover/item:max-h-96 overflow-hidden transition-all duration-500 ease-in-out">
+                          <div className="max-h-0 group-hover/item:max-h-96 overflow-hidden transition-all duration-200 ease-in-out">
                             <ul className="px-4 pb-3 pt-1 space-y-1">
                               {it.children.map((child) => (
                                 <li key={child.label}>
@@ -431,7 +301,7 @@ export function MegaMenu() {
 
           {/* Mobile pill drawer */}
           {mobileOpen && (
-            <div className="lg:hidden px-3 pb-3 max-h-[78vh] overflow-y-auto animate-[fade-in_0.3s_ease-out]">
+            <div className="lg:hidden px-3 pb-3 max-h-[78vh] overflow-y-auto animate-[fade-in_0.15s_ease-out]">
               <div className="border-t border-white/10 pt-3 space-y-1.5">
                 {/* UGC Link Mobile */}
                 <a

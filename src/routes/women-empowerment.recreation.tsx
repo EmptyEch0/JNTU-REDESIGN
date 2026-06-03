@@ -107,12 +107,12 @@ function WERecreationPage() {
                   >
                     {/* Image Box */}
                     <div className={`relative group ${isEven ? "" : "md:order-2"}`}>
-                      <div className="absolute -inset-3 rounded-[32px] bg-primary/5 blur-xl group-hover:bg-primary/10 transition-all duration-500" />
+                      <div className="absolute -inset-3 rounded-[32px] bg-primary/5 blur-xl group-hover:bg-primary/10 transition-all duration-200" />
                       <div className="relative aspect-[4/3] rounded-[24px] overflow-hidden border border-border shadow-elegant bg-card">
                         <img
                           src={imgUrl}
                           alt={detail.title}
-                          className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-200"
                         />
                         {isEditMode && (
                           <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity">

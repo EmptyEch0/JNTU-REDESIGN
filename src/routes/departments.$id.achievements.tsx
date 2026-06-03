@@ -80,7 +80,7 @@ function AchievementsPage() {
   }, [list]);
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000">
+    <div className="animate-in fade-in slide-in-from-bottom-6 duration-300">
       <div className="mb-12 border-b border-slate-100 pb-8 flex justify-between items-end">
         <div>
           <div className="flex items-center gap-3 text-amber-500 mb-2">
@@ -134,7 +134,7 @@ function AchievementsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {items.map((item: any) => (
-                <div key={item.id} className={`group bg-white p-6 rounded-[2rem] border transition-all duration-500 relative ${isEditMode ? 'border-amber-200 ring-4 ring-amber-50/50' : 'border-slate-100 shadow-sm hover:shadow-xl hover:border-amber-200'}`}>
+                <div key={item.id} className={`group bg-white p-6 rounded-[2rem] border transition-all duration-200 relative ${isEditMode ? 'border-amber-200 ring-4 ring-amber-50/50' : 'border-slate-100 shadow-sm hover:shadow-xl hover:border-amber-200'}`}>
 
                   {isEditMode && (
                     <button onClick={() => removeItem(item.id)} className="absolute -top-2 -right-2 p-2 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors">

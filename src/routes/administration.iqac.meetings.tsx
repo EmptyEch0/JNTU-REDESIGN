@@ -71,7 +71,7 @@ function MeetingsPage() {
             </div>
 
             <div className="bg-sand rounded-[40px] p-10 border border-border relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-8 opacity-5 transition-transform group-hover:scale-110 duration-700">
+              <div className="absolute top-0 right-0 p-8 opacity-5 transition-transform group-hover:scale-110 duration-300">
                 <CheckCircle2 className="h-48 w-48 text-primary" />
               </div>
               <div className="relative z-10 space-y-6">

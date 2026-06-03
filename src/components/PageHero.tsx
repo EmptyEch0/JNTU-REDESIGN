@@ -68,16 +68,16 @@ export function PageHero({ eyebrow, title, subtitle, children, image }: Props) {
             {eyebrow}
           </div>
         )}
-        <h1 className="text-display text-4xl md:text-6xl max-w-4xl animate-[fade-up_0.7s_ease-out_0.15s_both]">
+        <h1 className="text-display text-4xl md:text-6xl max-w-4xl animate-[fade-up_0.3s_ease-out_0.15s_both]">
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-5 text-lg md:text-xl text-white/80 max-w-2xl animate-[fade-up_0.7s_ease-out_0.25s_both]">
+          <p className="mt-5 text-lg md:text-xl text-white/80 max-w-2xl animate-[fade-up_0.3s_ease-out_0.25s_both]">
             {subtitle}
           </p>
         )}
         {children && (
-          <div className="mt-8 animate-[fade-up_0.7s_ease-out_0.35s_both]">{children}</div>
+          <div className="mt-8 animate-[fade-up_0.3s_ease-out_0.35s_both]">{children}</div>
         )}
       </div>
     </section>

@@ -54,7 +54,7 @@ function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-10">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 space-y-10">
 
           {/* About Section */}
           <section>

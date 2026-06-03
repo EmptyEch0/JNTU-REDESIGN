@@ -189,7 +189,7 @@ function MOUsPage() {
                       src={editedMous[m.id]?.img ?? m.img}
                       alt={m.title}
                       loading="lazy"
-                      className="max-h-72 object-contain group-hover:scale-[1.03] transition-transform duration-700"
+                      className="max-h-72 object-contain group-hover:scale-[1.03] transition-transform duration-300"
                     />
                     {isEditMode ? (
                       <div className="absolute bottom-4 inset-x-4">

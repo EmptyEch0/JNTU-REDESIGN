@@ -190,7 +190,7 @@ function AdminContent() {
 
       <MegaMenu />
 
-      <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out] w-full max-w-full overflow-x-hidden">
+      <main key={path} className="flex-1 animate-[fade-in_0.2s_ease-out] w-full max-w-full overflow-x-hidden">
         <Outlet />
       </main>
 

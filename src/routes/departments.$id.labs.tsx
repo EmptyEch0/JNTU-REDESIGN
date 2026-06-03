@@ -94,7 +94,7 @@ function LaboratoriesPage() {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 pb-20">
+    <div className="animate-in fade-in slide-in-from-bottom-6 duration-300 pb-20">
       {/* Header */}
       <div className="mb-12 border-b border-slate-100 pb-8 flex justify-between items-end">
         <div>
@@ -121,7 +121,7 @@ function LaboratoriesPage() {
 
       <div className="grid grid-cols-1 gap-12">
         {labList.map((lab: any) => (
-          <div key={lab.id} className={`group bg-white border rounded-[3rem] overflow-hidden transition-all duration-700 relative ${isEditMode ? 'border-blue-400 ring-4 ring-blue-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}>
+          <div key={lab.id} className={`group bg-white border rounded-[3rem] overflow-hidden transition-all duration-300 relative ${isEditMode ? 'border-blue-400 ring-4 ring-blue-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}>
 
             {isEditMode && (
               <button onClick={() => removeLab(lab.id)} className="absolute top-6 right-6 p-3 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 z-20 transition-transform active:scale-90">
@@ -134,7 +134,7 @@ function LaboratoriesPage() {
               <div className="xl:w-[400px] p-8 bg-slate-50/50 border-r border-slate-100">
                 <div className="relative h-64 w-full rounded-[2.5rem] overflow-hidden mb-6 shadow-md border-4 border-white">
                   {lab.photo_url ? (
-                    <img src={lab.photo_url} alt={lab.name} className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                    <img src={lab.photo_url} alt={lab.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center bg-white text-slate-200">
                       <Microscope size={64} strokeWidth={1} />

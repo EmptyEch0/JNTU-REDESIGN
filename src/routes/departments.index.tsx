@@ -191,7 +191,7 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
           <img
             src={dept.image}
             alt={dept.name}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.05]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 

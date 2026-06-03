@@ -168,7 +168,7 @@ function GalleryPage() {
                   src={img.src}
                   alt={img.caption || "Campus Moment"}
                   loading="lazy"
-                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
+                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
                 />
 
                 {img.caption && (

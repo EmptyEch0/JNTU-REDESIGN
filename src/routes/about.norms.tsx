@@ -344,14 +344,14 @@ function NormsPage() {
             const Icon = getDocIcon(doc.date);
             return (
               <RevealOnScroll key={doc.id} delay={i * 100}>
-                <div className="group relative flex flex-col md:flex-row items-center gap-6 p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-500">
+                <div className="group relative flex flex-col md:flex-row items-center gap-6 p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
                   <a
                     href={doc.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 flex flex-col md:flex-row items-center gap-6"
                   >
-                    <div className="h-16 w-16 shrink-0 rounded-2xl bg-primary/5 text-primary flex items-center justify-center group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                    <div className="h-16 w-16 shrink-0 rounded-2xl bg-primary/5 text-primary flex items-center justify-center group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-200">
                       <Icon className="h-8 w-8" />
                     </div>
 

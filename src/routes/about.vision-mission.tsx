@@ -271,7 +271,7 @@ function VisionMissionPage() {
               <RevealOnScroll key={m.key} delay={i * 120}>
                 <div className="bg-card rounded-2xl p-8 border border-border hover-lift h-full group flex flex-col justify-between">
                   <div>
-                    <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary grid place-items-center mb-5 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-500">
+                    <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary grid place-items-center mb-5 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-200">
                       <m.icon className="h-5 w-5" />
                     </div>
                     <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-primary mb-3">
@@ -389,7 +389,7 @@ function VisionMissionPage() {
                 src={ugcImg}
                 alt="UGC Recognition certificate under Section 2(f) and 12(B)"
                 loading="lazy"
-                className="rounded-2xl border border-border shadow-[var(--shadow-elegant)] w-full hover:scale-[1.02] transition-transform duration-700"
+                className="rounded-2xl border border-border shadow-[var(--shadow-elegant)] w-full hover:scale-[1.02] transition-transform duration-300"
               />
               <p className="mt-3 text-xs text-muted-foreground text-center">
                 UGC Recognition Letter — November 2016

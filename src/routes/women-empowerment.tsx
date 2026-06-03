@@ -2,7 +2,7 @@ import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { WE_SUBNAV } from "@/lib/site";
-import heroImg from "@/assets/hero-3.png";
+import heroImg from "@/assets/hero-.webp";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getWeGallery, addWeGalleryImage, deleteWeGalleryImage } from "@/funcs/we";
 import { useAdmin } from "@/context/AdminContext";

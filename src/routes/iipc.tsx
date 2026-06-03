@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { STUDENT_SUBNAV } from "@/lib/site";
-import heroImg from "@/assets/hero-3.png";
+import heroImg from "@/assets/hero-.webp";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getIipcData, updateIipcData } from "@/funcs/studentCorner";
 import { useAdmin } from "@/context/AdminContext";

@@ -22,9 +22,9 @@ import {
 } from "lucide-react";
 import heroImg from "@/assets/hero-campus.jpg";
 import hero2 from "@/assets/hero-2.jpg";
-import hero3 from "@/assets/hero-.webp";
-import hero4 from "@/assets/hero-.webp";
-import hero5 from "@/assets/hero-.webp";
+import hero3 from "@/assets/hero-3.webp";
+import hero4 from "@/assets/hero-4.webp";
+import hero5 from "@/assets/hero-5.webp";
 import campusLifeImg from "@/assets/campus-life.jpg";
 import labImg from "@/assets/lab.jpg";
 import hostelImg from "@/assets/hostel.jpg";

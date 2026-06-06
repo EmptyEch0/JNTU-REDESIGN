@@ -11,7 +11,10 @@ import {
   upsertAcademicsDashboardStat,
   deleteAcademicsDashboardStat,
   getAcademicsCalendar,
-  getAcademicsExamData
+  getAcademicsExamData,
+  getTickerNotifications,
+  upsertTickerNotification,
+  deleteTickerNotification
 } from "@/lib/academics";
 import {
   GraduationCap,
@@ -223,8 +226,69 @@ function AcademicsDashboard() {
     setSTrend("");
   };
 
+  const { data: tickerNotifsList = [] } = useQuery({
+    queryKey: ["academics-ticker-notifications"],
+    queryFn: getTickerNotifications,
+  });
+
+  // local notification editing state
+  const [editNotifId, setEditNotifId] = useState<number | null>(null);
+  const [nSource, setNSource] = useState<string>("calendar");
+  const [nLabel, setNLabel] = useState("Calendar");
+  const [nText, setNText] = useState("");
+  const [nDate, setNDate] = useState("");
+  const [nTo, setNTo] = useState("");
+  const [nUrgent, setNUrgent] = useState(false);
+
+  const saveNotifMutation = useMutation({
+    mutationFn: (data: any) => upsertTickerNotification({ data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["academics-ticker-notifications"] });
+      setEditNotifId(null);
+      toast.success("Ticker notification saved!");
+    }
+  });
+
+  const deleteNotifMutation = useMutation({
+    mutationFn: (id: number) => deleteTickerNotification({ data: { id } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["academics-ticker-notifications"] });
+      toast.success("Ticker notification deleted!");
+    }
+  });
+
+  const startEditNotif = (notif: any) => {
+    setEditNotifId(notif.id);
+    setNSource(notif.source);
+    setNLabel(notif.label);
+    setNText(notif.text);
+    setNDate(notif.date);
+    setNTo(notif.to);
+    setNUrgent(notif.urgent);
+  };
+
+  const startAddNotif = () => {
+    setEditNotifId(-1);
+    setNSource("calendar");
+    setNLabel("Calendar");
+    setNText("");
+    setNDate(new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }));
+    setNTo("/academics/academic-calendar");
+    setNUrgent(false);
+  };
+
   // Compile Dynamic Notifications from DB
   const dynamicTickerNotifications = useMemo(() => {
+    const customAlerts = tickerNotifsList.map((n: any) => ({
+      id: `custom-${n.id}`,
+      source: n.source as any,
+      label: n.label,
+      text: n.text,
+      date: n.date,
+      to: n.to,
+      urgent: n.urgent
+    }));
+
     const calendarAlerts = calendarList
       .filter((c: any) => c.pdf_url && c.pdf_url.trim() !== "")
       .map((c: any) => {
@@ -286,8 +350,8 @@ function AcademicsDashboard() {
         };
       });
 
-    return [...calendarAlerts, ...examAlerts];
-  }, [calendarList, examList]);
+    return [...customAlerts, ...calendarAlerts, ...examAlerts];
+  }, [tickerNotifsList, calendarList, examList]);
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 py-2">
@@ -512,6 +576,182 @@ function AcademicsDashboard() {
               </GlassCard>
             );
           })}
+        </div>
+      )}
+
+      {/* Admin Mode Ticker Notification Actions */}
+      {isEditMode && (
+        <GlassCard className="p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl flex items-center justify-between text-slate-900">
+          <p className="text-amber-800 text-xs font-semibold">
+            <strong>Admin Notifications Mode:</strong> Manage ticker scroll notifications (add custom notifications, dates, target paths).
+          </p>
+          <button
+            onClick={startAddNotif}
+            className="flex items-center gap-1 bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all shadow-md shadow-emerald-900/10 cursor-pointer"
+          >
+            <Plus size={13} /> Add Ticker Notification
+          </button>
+        </GlassCard>
+      )}
+
+      {/* Admin Editing Ticker Notification Form */}
+      {isEditMode && editNotifId !== null && (
+        <GlassCard className="p-6 border-2 border-amber-350 space-y-4">
+          <h3 className="text-xs font-extrabold uppercase tracking-wider text-amber-800">
+            {editNotifId === -1 ? "Add Custom Ticker Notification" : "Edit Ticker Notification"}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans text-xs">
+            <div>
+              <label className="text-slate-500 font-bold block mb-1">Source / Type</label>
+              <select
+                value={nSource}
+                onChange={(e) => {
+                  setNSource(e.target.value);
+                  const labelMap: Record<string, string> = {
+                    calendar: "Calendar",
+                    holiday: "Holiday",
+                    "exam-sched": "Exam Schedule",
+                    "exam-notif": "Exam Notice",
+                    "hall-ticket": "Hall Ticket",
+                    results: "Results",
+                    timetable: "Timetable",
+                    fee: "Fee"
+                  };
+                  if (labelMap[e.target.value]) {
+                    setNLabel(labelMap[e.target.value]);
+                  }
+                }}
+                className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none cursor-pointer"
+              >
+                <option value="calendar">Academic Calendar</option>
+                <option value="holiday">Holiday</option>
+                <option value="exam-sched">Exam Schedule</option>
+                <option value="exam-notif">Exam Notice</option>
+                <option value="hall-ticket">Hall Ticket</option>
+                <option value="results">Results</option>
+                <option value="timetable">Timetable</option>
+                <option value="fee">Fee Payment</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-slate-500 font-bold block mb-1">Badge Label</label>
+              <input
+                type="text"
+                placeholder="e.g. Results, Calendar"
+                value={nLabel}
+                onChange={(e) => setNLabel(e.target.value)}
+                className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-slate-500 font-bold block mb-1">Date Display</label>
+              <input
+                type="text"
+                placeholder="e.g. 15 Jun, 2026 or Available Now"
+                value={nDate}
+                onChange={(e) => setNDate(e.target.value)}
+                className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-slate-500 font-bold block mb-1">Notification Text</label>
+              <input
+                type="text"
+                placeholder="Enter ticker description headline..."
+                value={nText}
+                onChange={(e) => setNText(e.target.value)}
+                className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-slate-500 font-bold block mb-1">Target Link / Path</label>
+              <input
+                type="text"
+                placeholder="e.g. /academics/examination or PDF url"
+                value={nTo}
+                onChange={(e) => setNTo(e.target.value)}
+                className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
+              />
+            </div>
+            <div className="md:col-span-3 flex items-center gap-2 mt-2">
+              <input
+                type="checkbox"
+                id="urgent-check"
+                checked={nUrgent}
+                onChange={(e) => setNUrgent(e.target.checked)}
+                className="rounded border-amber-200 text-amber-600 focus:ring-amber-500 h-4 w-4 cursor-pointer"
+              />
+              <label htmlFor="urgent-check" className="text-slate-700 dark:text-slate-300 font-bold text-xs cursor-pointer select-none">
+                Mark as Urgent (Adds red pulsing dot in ticker scroller)
+              </label>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 font-sans">
+            <button
+              onClick={() => setEditNotifId(null)}
+              className="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-300 transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                if (!nText.trim()) {
+                  toast.error("Notification text cannot be empty!");
+                  return;
+                }
+                saveNotifMutation.mutate({
+                  id: editNotifId === -1 ? undefined : editNotifId,
+                  source: nSource,
+                  label: nLabel,
+                  text: nText,
+                  date: nDate,
+                  to: nTo,
+                  urgent: nUrgent
+                });
+              }}
+              className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors shadow cursor-pointer"
+            >
+              <Save size={13} /> Save Notification
+            </button>
+          </div>
+        </GlassCard>
+      )}
+
+      {/* Admin custom notification items editor list */}
+      {isEditMode && tickerNotifsList.length > 0 && (
+        <div className="space-y-2">
+          <h3 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Custom Notifications Repository ({tickerNotifsList.length})</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {tickerNotifsList.map((n: any) => (
+              <GlassCard key={n.id} className="p-4 border border-amber-200 bg-white/40 dark:bg-slate-900/40 flex items-center justify-between relative">
+                <div className="flex flex-col gap-1 pr-16 font-sans">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded font-bold uppercase">{n.source}</span>
+                    {n.urgent && <span className="text-[9px] bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold uppercase">Urgent</span>}
+                    <span className="text-[10px] text-slate-400 font-semibold">{n.date}</span>
+                  </div>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-snug line-clamp-1 mt-1">{n.text}</h4>
+                  <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">Link: <span className="underline">{n.to}</span></p>
+                </div>
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => startEditNotif(n)}
+                    className="p-1.5 rounded bg-amber-100 hover:bg-amber-200 text-amber-700 transition cursor-pointer"
+                    title="Edit notification"
+                  >
+                    <Edit2 size={12} />
+                  </button>
+                  <button
+                    onClick={() => { if (confirm("Delete this notification from scroller?")) deleteNotifMutation.mutate(n.id); }}
+                    className="p-1.5 rounded bg-red-100 hover:bg-red-200 text-red-700 transition cursor-pointer"
+                    title="Delete notification"
+                  >
+                    <Trash2 size={12} />
+                  </button>
+                </div>
+              </GlassCard>
+            ))}
+          </div>
         </div>
       )}
 

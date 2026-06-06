@@ -91,7 +91,7 @@ export function NotificationTicker({
       {/* Scrolling track */}
       <div className="overflow-hidden py-3.5 pl-36">
         <div
-          className="marquee-track group animate-marquee"
+          className="marquee-track group animate-marquee hover:[animation-play-state:paused]"
           style={{ animationDuration: `${speedSeconds}s` }}
         >
           {doubled.map((item, idx) => {

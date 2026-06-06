@@ -18,9 +18,10 @@ import {
   academicsPrincipals,
   academicsMissionVision,
   academicsDashboardStats,
-  academicsCac
+  academicsCac,
+  tickerNotifications
 } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 
 // ----------------------------------------------------
 // 1. Admissions & Fee Structure
@@ -696,4 +697,45 @@ export const deleteAcademicsCac = createServerFn({ method: "POST" })
     await db.delete(academicsCac).where(eq(academicsCac.id, data.id));
     return { success: true };
   });
+
+// ----------------------------------------------------
+// 17. Ticker Notifications
+// ----------------------------------------------------
+export const getTickerNotifications = createServerFn({ method: "GET" }).handler(async () => {
+  return await db.select().from(tickerNotifications).orderBy(desc(tickerNotifications.id));
+});
+
+export const upsertTickerNotification = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
+    if (data.id) {
+      await db.update(tickerNotifications).set({
+        source: data.source,
+        label: data.label,
+        text: data.text,
+        date: data.date,
+        to: data.to,
+        urgent: data.urgent
+      }).where(eq(tickerNotifications.id, data.id));
+      return { success: true };
+    } else {
+      await db.insert(tickerNotifications).values({
+        source: data.source,
+        label: data.label,
+        text: data.text,
+        date: data.date,
+        to: data.to,
+        urgent: data.urgent
+      });
+      return { success: true };
+    }
+  });
+
+export const deleteTickerNotification = createServerFn({ method: "POST" })
+  .inputValidator((d: { id: number }) => d)
+  .handler(async ({ data }) => {
+    await db.delete(tickerNotifications).where(eq(tickerNotifications.id, data.id));
+    return { success: true };
+  });
+
 

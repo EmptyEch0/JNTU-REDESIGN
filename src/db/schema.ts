@@ -1433,3 +1433,15 @@ export const academicsCac = pgTable("academics_cac", {
   created_at: timestamp("created_at").defaultNow(),
 });
 
+export const tickerNotifications = pgTable("ticker_notifications", {
+  id: serial("id").primaryKey(),
+  source: text("source").notNull(),
+  label: text("label").notNull(),
+  text: text("text").notNull(),
+  date: text("date").notNull(),
+  to: text("to").notNull(),
+  urgent: boolean("urgent").default(false).notNull(),
+  created_at: timestamp("created_at").defaultNow(),
+});
+
+

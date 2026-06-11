@@ -3,6 +3,7 @@ import {
   Outlet,
   useRouterState,
   useRouter,
+    Link,
 } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";

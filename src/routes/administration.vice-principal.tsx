@@ -1,15 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ADMINISTRATION_SUBNAV } from "@/lib/site";
 import { Quote, Mail, MapPin, Save, X, BookOpen, Award } from "lucide-react";
-import campusImg from "@/assets/hero-campus.jpg";
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
-import { getLeadershipData, updateLeadershipData } from "@/funcs/leadership";
+import { getLeadershipData, updateLeadershipData } from "../funcs/leadership";
 
 export const Route = createFileRoute("/administration/vice-principal")({
   head: () => ({
@@ -55,7 +56,7 @@ function VicePrincipalPage() {
   if (isLoading || !vicePrincipal)
     return (
       <div className="min-h-screen grid place-items-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+        <div className="spinner" />
       </div>
     );
 

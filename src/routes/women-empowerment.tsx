@@ -1,8 +1,9 @@
 import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { WE_SUBNAV } from "@/lib/site";
-import heroImg from "@/assets/hero-3.webp";
+const heroImg = imageUrl("hero-carousal/hero-3.webp");
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getWeGallery, addWeGalleryImage, deleteWeGalleryImage } from "@/funcs/we";
 import { useAdmin } from "@/context/AdminContext";
@@ -122,7 +123,7 @@ function WomenLayout() {
           >
             {isLoading ? (
               <div className="absolute inset-0 grid place-items-center bg-card/50">
-                <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+                <div className="spinner" />
               </div>
             ) : slides.length === 0 ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-muted-foreground gap-3">

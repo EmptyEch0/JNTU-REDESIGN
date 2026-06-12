@@ -239,7 +239,7 @@ function WEActivitiesPage() {
                       colSpan={isEditMode ? 4 : 3}
                       className="px-6 py-16 text-center text-muted-foreground"
                     >
-                      <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full mx-auto" />
+                      <div className="spinner mx-auto scale-75" />
                       <span className="block mt-2 text-xs">Loading activities...</span>
                     </td>
                   </tr>

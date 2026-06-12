@@ -20,12 +20,14 @@ import {
   CheckCircle2,
   Users,
 } from "lucide-react";
-import heroImg from "@/assets/hero-campus.jpg";
-import hero2 from "@/assets/hero-2.jpg";
-import hero3 from "@/assets/hero-3.webp";
-import hero4 from "@/assets/hero-4.webp";
-import hero5 from "@/assets/hero-5.webp";
-import campusLifeImg from "@/assets/campus-life.jpg";
+import { imageUrl } from "@/lib/assets";
+
+const heroImg = imageUrl("hero-carousal/hero-campus.jpg");
+const hero2 = imageUrl("hero-carousal/hero-2.jpg");
+const hero3 = imageUrl("hero-carousal/hero-3.webp");
+const hero4 = imageUrl("hero-carousal/hero-4.webp");
+const hero5 = imageUrl("hero-carousal/hero-5.webp");
+const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
 import labImg from "@/assets/lab.jpg";
 import hostelImg from "@/assets/hostel.jpg";
 import sportsImg from "@/assets/sports.jpg";
@@ -40,7 +42,7 @@ import { SectionLabel } from "@/components/SectionLabel";
 import { MarqueeLogos } from "@/components/MarqueeLogos";
 import { STATS, RECRUITERS } from "@/lib/site"; // Removed static DEPARTMENTS import
 import { useQuery } from "@tanstack/react-query";
-import { getLeadershipData } from "@/funcs/leadership";
+import { getLeadershipData } from "../funcs/leadership";
 import { getAllDepartments } from "@/functions/departments"; // Added our new query hook target
 
 export const Route = createFileRoute("/")({

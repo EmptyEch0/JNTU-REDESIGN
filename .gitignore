@@ -36,3 +36,10 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# local asset server (10GB, never commit)
+local-assets/
+
+# env files with real values
+.env.development
+.env.production

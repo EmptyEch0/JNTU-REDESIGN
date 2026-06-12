@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { STUDENT_SUBNAV } from "@/lib/site";
-import heroImg from "@/assets/hero-3.webp";
+const heroImg = imageUrl("hero-carousal/hero-3.webp");
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getIipcData, updateIipcData } from "@/funcs/studentCorner";
 import { useAdmin } from "@/context/AdminContext";
@@ -53,7 +54,7 @@ function IipcPage() {
   if (isLoading || !iipc) {
     return (
       <div className="py-20 grid place-items-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+        <div className="spinner" />
       </div>
     );
   }
@@ -208,7 +209,7 @@ function IipcPage() {
 
       {/* Persistent admin controls */}
       {isEditMode && editedData && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in slide-in-from-bottom-4">
+        <div className="fixed top-24 right-8 z-50 animate-in fade-in zoom-in slide-in-from-top-4">
           <div className="flex items-center gap-3 bg-card p-2 rounded-full border border-border shadow-2xl">
             <button
               onClick={() => setEditedData(null)}

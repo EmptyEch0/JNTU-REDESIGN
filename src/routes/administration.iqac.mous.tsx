@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { useQuery } from "@tanstack/react-query";
-import { getIqacMous } from "@/funcs/leadership";
+import { getIqacMous } from "../funcs/leadership";
 import { Handshake, ArrowUpRight, Building2, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/administration/iqac/mous")({

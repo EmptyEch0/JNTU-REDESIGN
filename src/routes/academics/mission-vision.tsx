@@ -48,7 +48,7 @@ function MissionVisionPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 flex justify-center items-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+        <div className="spinner"></div>
       </div>
     );
   }

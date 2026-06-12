@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
-import { getLeadershipData, updateLeadershipData } from "@/funcs/leadership";
+import { getLeadershipData, updateLeadershipData } from "../funcs/leadership";
 import {
   Accordion,
   AccordionContent,
@@ -47,7 +47,7 @@ function IQACAboutPage() {
   if (isLoading || !iqac)
     return (
       <div className="py-20 flex justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+        <div className="spinner" />
       </div>
     );
 
@@ -223,7 +223,7 @@ function IQACAboutPage() {
       </RevealOnScroll>
 
       {isEditMode && editedData && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in slide-in-from-bottom-4">
+        <div className="fixed top-24 right-8 z-50 animate-in fade-in zoom-in slide-in-from-top-4">
           <div className="flex items-center gap-3 bg-card p-2 rounded-full border border-border shadow-2xl">
             <button
               onClick={() => setEditedData(null)}

@@ -1,4 +1,5 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { useState } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -16,8 +17,8 @@ import {
   AdminInput,
 } from "@/components/AdminEditPanel";
 
-import campusImg from "@/assets/hero-campus.jpg";
-import campusLifeImg from "@/assets/campus-life.jpg";
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
+const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
 import labImg from "@/assets/lab.jpg";
 import hostelImg from "@/assets/hostel.jpg";
 import sportsImg from "@/assets/sports.jpg";

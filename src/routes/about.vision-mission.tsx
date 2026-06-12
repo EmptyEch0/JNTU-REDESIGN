@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { ArrowRight, Eye, Target, Shield, BookOpen } from "lucide-react";
-import campusImg from "@/assets/hero-campus.jpg";
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 import ugcImg from "@/assets/ugc-certificate.png";
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";

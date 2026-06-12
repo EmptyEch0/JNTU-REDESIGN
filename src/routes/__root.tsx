@@ -14,6 +14,7 @@ import { Footer } from "@/components/Footer";
 import { Chatbot } from "@/components/Chatbot";
 import { getQueryClient } from "@/lib/query-client";
 import { AdminProvider, useAdmin } from "@/context/AdminContext";
+import { OfflineIndicator } from "@/components/OfflineIndicator";
 
 function NotFoundComponent() {
   return (
@@ -35,8 +36,17 @@ interface MyRootContext {
   queryClient: import("@tanstack/react-query").QueryClient;
 }
 
+function GlobalSpinner() {
+  return (
+    <div className="flex items-center justify-center min-h-[50vh]">
+      <div className="spinner"></div>
+    </div>
+  );
+}
+
 // 2. The most stable way to define the route with types
 export const Route = createRootRoute({
+  pendingComponent: GlobalSpinner,
   context: () => ({}) as MyRootContext,
   head: () => ({
     meta: [
@@ -111,6 +121,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AdminProvider>
+        <OfflineIndicator />
         <AdminContent />
       </AdminProvider>
     </QueryClientProvider>

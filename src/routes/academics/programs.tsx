@@ -589,7 +589,7 @@ function ProgramsOfferedPage() {
           <div className="overflow-x-auto">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-600"></div>
+                <div className="spinner"></div>
                 <p className="text-xs font-semibold text-slate-400 tracking-wider">
                   Hydrating curriculum matrix...
                 </p>

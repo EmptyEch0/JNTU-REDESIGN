@@ -1,10 +1,11 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FileText, Download, ShieldCheck, Building2, ExternalLink, Plus, Trash2 } from "lucide-react";
-import heroImg from "@/assets/hero-campus.jpg";
+const heroImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { getPageContent, updatePageSection, getRegulations, addRegulation, deleteRegulation } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";

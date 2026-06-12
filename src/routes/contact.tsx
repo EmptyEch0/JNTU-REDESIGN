@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { SITE, STUDENT_SUBNAV } from "@/lib/site";
-import campusImg from "@/assets/hero-campus.jpg";
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { SubNav } from "@/components/SubNav";
 
 export const Route = createFileRoute("/contact")({

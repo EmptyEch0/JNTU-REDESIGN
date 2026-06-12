@@ -119,7 +119,7 @@ function NSSLayout() {
           >
             {isLoading ? (
               <div className="absolute inset-0 grid place-items-center bg-card/50">
-                <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+                <div className="spinner" />
               </div>
             ) : slides.length === 0 ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-muted-foreground gap-3">

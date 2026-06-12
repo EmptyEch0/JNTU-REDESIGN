@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -9,7 +10,7 @@ import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { toast } from "sonner";
 import { Save, Lock, Edit, Image as ImageIcon } from "lucide-react";
 
-import campusLifeImg from "@/assets/campus-life.jpg";
+const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
 import cultureImg from "@/assets/culture.jpeg";
 import sportsImg from "@/assets/Ground.jpg";
 

@@ -6,7 +6,7 @@ import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { ArrowRight, Bus, Train, Plane, Navigation, MapPin } from "lucide-react";
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
-import campusMap from "@/assets/campus-map.png";
+const campusMap = imageUrl("campus-map.png");
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";

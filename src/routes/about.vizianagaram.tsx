@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { ArrowRight, MapPin, Music, Crown, Landmark } from "lucide-react";
-import vizImg from "@/assets/vizianagaram.jpg";
+const vizImg = imageUrl("vizianagaram.jpg");
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";

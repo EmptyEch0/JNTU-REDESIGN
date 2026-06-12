@@ -2,6 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Menu, X, ChevronDown, GraduationCap, Search, CornerDownLeft, FileText, ArrowRight } from "lucide-react";
 import { NAV, SEARCH_INDEX, SITE } from "@/lib/site";
+import { uploadUrl } from "@/lib/assets";
 import { useAdmin } from "@/context/AdminContext";
 import { NoticeTicker } from "./NoticeTicker";
 
@@ -171,7 +172,7 @@ export function MegaMenu() {
             {/* UGC & Search */}
             <div className="hidden lg:flex items-center gap-1.5 shrink-0">
               <a
-                href="https://jntugvcev.edu.in/wp-content/uploads/2020/08/UGC-1-747x1024-1.pdf"
+                href={uploadUrl("2020/08/UGC-1-747x1024-1.pdf")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`inline-flex items-center gap-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white transition-all ${
@@ -305,7 +306,7 @@ export function MegaMenu() {
               <div className="border-t border-white/10 pt-3 space-y-1.5">
                 {/* UGC Link Mobile */}
                 <a
-                  href="https://jntugvcev.edu.in/wp-content/uploads/2020/08/UGC-1-747x1024-1.pdf"
+                  href={uploadUrl("2020/08/UGC-1-747x1024-1.pdf")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between py-3.5 px-4 text-[14px] font-bold text-primary-glow rounded-2xl bg-white/5 border border-white/10 active:scale-[0.98] transition-all"

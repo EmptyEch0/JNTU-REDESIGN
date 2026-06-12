@@ -6,7 +6,7 @@ import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { ArrowRight, Eye, Target, Shield, BookOpen } from "lucide-react";
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
-import ugcImg from "@/assets/ugc-certificate.png";
+const ugcImg = imageUrl("ugc-certificate.png");
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";

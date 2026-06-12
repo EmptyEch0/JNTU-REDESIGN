@@ -1,5 +1,5 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { imageUrl } from "@/lib/assets";
+import { imageUrl, uploadUrl } from "@/lib/assets";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -57,14 +57,14 @@ const DEFAULT_DOCUMENTS = [
     id: -1,
     title: "UGC 2(f) & 12(B) Recognition",
     size: "Official certificate recognizing the institution under the UGC Act, 1956.",
-    link: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/UGC-1-747x1024-1.pdf",
+    link: uploadUrl("2020/08/UGC-1-747x1024-1.pdf"),
     date: "Recognition",
   },
   {
     id: -2,
     title: "University Establishment Order (MS14)",
     size: "Government Order (GO MS. No. 14) regarding the establishment of the university.",
-    link: "https://jntugvcev.edu.in//wp-content/uploads/2021/03/13022019HE_MS14.pdf",
+    link: uploadUrl("2021/03/13022019HE_MS14.pdf"),
     date: "Government Order",
   },
 ];

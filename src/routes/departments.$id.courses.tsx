@@ -16,6 +16,7 @@ import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { syncCourses } from "@/lib/departments";
 import { toast } from "sonner";
+import { assetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/departments/$id/courses")({
   component: ProgrammesPage,
@@ -183,7 +184,7 @@ function ProgrammesPage() {
                                 <LinkIcon size={14} className="text-slate-400" />
                                 <input
                                   className="w-full bg-transparent text-xs text-blue-600 font-medium outline-none"
-                                  value={course.syllabus_url || ""}
+                                  value={assetUrl(course.syllabus_url) || ""}
                                   onChange={(e) => updateCourse(course.id, "syllabus_url", e.target.value)}
                                   placeholder="https://example.com/syllabus.pdf"
                                 />

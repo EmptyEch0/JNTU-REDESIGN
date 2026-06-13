@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getDepartments, updateDepartment } from "@/lib/departments";
+import { getAssetUrl, getDepartments, updateDepartment } from "@/lib/departments";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -189,10 +189,10 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
       >
         <article className="h-full">
           <img
-            src={dept.image}
-            alt={dept.name}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.05]"
-          />
+  src={getAssetUrl(dept.image)}
+  alt={dept.name}
+  className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.05]"
+/>
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
           {/* Admin edit button overlay - only visible in admin mode */}

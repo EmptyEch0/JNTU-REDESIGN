@@ -9,6 +9,26 @@ import {
   ArrowLeft, GraduationCap, Trophy, Globe, 
   Briefcase, BookOpen, Save, Plus, Trash2, Camera, Type, IdCard
 } from "lucide-react";
+const ASSETS_BASE_URL = import.meta.env.VITE_ASSETS_URL || ""; 
+
+const getAssetUrl = (urlPath: string | null | undefined): string => {
+  if (!urlPath) return "/fallback-banner.jpg";
+  if (urlPath.startsWith("http://") || urlPath.startsWith("https://")) {
+    return urlPath;
+  }
+  
+  let cleanPath = urlPath.startsWith("/") ? urlPath.slice(1) : urlPath;
+  
+  // Replace backslashes from database rows to forward slashes for the browser
+  cleanPath = cleanPath.replace(/\\/g, "/");
+  
+  if (!cleanPath.startsWith("local-assets/")) {
+    cleanPath = `local-assets/${cleanPath}`;
+  }
+  
+  return `${ASSETS_BASE_URL}/${cleanPath}`;
+};
+
 
 export const Route = createFileRoute("/departments/$id/faculty/$facultyId")({
   component: FacultyDetailProfilePage,
@@ -136,7 +156,7 @@ function FacultyDetailProfilePage() {
       <div className={`relative bg-gradient-to-br from-slate-900 to-blue-950 rounded-[2.5rem] p-8 text-white shadow-xl flex flex-col md:flex-row gap-8 items-center border transition-all ${isEditMode ? 'border-amber-400 ring-4 ring-amber-400/10' : 'border-transparent'}`}>
         <div className="h-32 w-32 md:h-40 md:w-40 rounded-full overflow-hidden border-4 border-white/10 shrink-0 bg-white/5 relative group">
           <img 
-            src={editState.photo_url || ""} 
+            src={getAssetUrl(editState.photo_url) || ""} 
             alt={editState.name}
             className="w-full h-full object-cover"
             onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(editState.name)}&size=150&background=0D8ABC&color=fff`; }}

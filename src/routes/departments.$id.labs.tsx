@@ -7,7 +7,7 @@ import {
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { syncLaboratories } from "@/lib/departments";
+import { getAssetUrl, syncLaboratories } from "@/lib/departments";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/departments/$id/labs")({
@@ -134,7 +134,7 @@ function LaboratoriesPage() {
               <div className="xl:w-[400px] p-8 bg-slate-50/50 border-r border-slate-100">
                 <div className="relative h-64 w-full rounded-[2.5rem] overflow-hidden mb-6 shadow-md border-4 border-white">
                   {lab.photo_url ? (
-                    <img src={lab.photo_url} alt={lab.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" />
+                    <img src={getAssetUrl(lab.photo_url)} alt={lab.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center bg-white text-slate-200">
                       <Microscope size={64} strokeWidth={1} />

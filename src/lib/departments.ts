@@ -4,6 +4,27 @@ import { departments, faculty, achievements, courses, laboratories, departmentGa
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
+const ASSETS_BASE_URL = import.meta.env.VITE_ASSETS_URL || "";
+
+export const getAssetUrl = (urlPath: string | null | undefined): string => {
+  if (!urlPath) return "/fallback-placeholder.jpg";
+  if (urlPath.startsWith("http://") || urlPath.startsWith("https://")) {
+    return urlPath;
+  }
+  
+  // Convert Windows backslashes to forward slashes
+  let cleanPath = urlPath.replace(/\\/g, "/");
+  
+  // Strip leading slash if present
+  cleanPath = cleanPath.startsWith("/") ? cleanPath.slice(1) : cleanPath;
+  
+  // Prepend local-assets/ if missing
+  if (!cleanPath.startsWith("local-assets/")) {
+    cleanPath = `local-assets/${cleanPath}`;
+  }
+  
+  return `${ASSETS_BASE_URL}/${cleanPath}`;
+};
 // --- Department Core ---
 export const getDepartments = createServerFn({ method: "GET" }).handler(async () => {
   return await db.select().from(departments);

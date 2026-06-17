@@ -92,6 +92,8 @@ import { Route as DepartmentsIdGalleryRouteImport } from './routes/departments.$
 import { Route as DepartmentsIdFacultyRouteImport } from './routes/departments.$id.faculty'
 import { Route as DepartmentsIdCoursesRouteImport } from './routes/departments.$id.courses'
 import { Route as DepartmentsIdAchievementsRouteImport } from './routes/departments.$id.achievements'
+import { Route as AuthGoogleLoginRouteImport } from './routes/auth.google.login'
+import { Route as AuthGoogleCallbackRouteImport } from './routes/auth.google.callback'
 import { Route as AdministrationIqacMousRouteImport } from './routes/administration.iqac.mous'
 import { Route as AdministrationIqacMeetingsRouteImport } from './routes/administration.iqac.meetings'
 import { Route as AdministrationIqacCompositionRouteImport } from './routes/administration.iqac.composition'
@@ -524,6 +526,16 @@ const DepartmentsIdAchievementsRoute =
     path: '/achievements',
     getParentRoute: () => DepartmentsIdRoute,
   } as any)
+const AuthGoogleLoginRoute = AuthGoogleLoginRouteImport.update({
+  id: '/auth/google/login',
+  path: '/auth/google/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthGoogleCallbackRoute = AuthGoogleCallbackRouteImport.update({
+  id: '/auth/google/callback',
+  path: '/auth/google/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdministrationIqacMousRoute = AdministrationIqacMousRouteImport.update({
   id: '/mous',
   path: '/mous',
@@ -639,6 +651,8 @@ export interface FileRoutesByFullPath {
   '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
   '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
+  '/auth/google/login': typeof AuthGoogleLoginRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
   '/departments/$id/faculty': typeof DepartmentsIdFacultyRouteWithChildren
@@ -721,6 +735,8 @@ export interface FileRoutesByTo {
   '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
   '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
+  '/auth/google/login': typeof AuthGoogleLoginRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
@@ -812,6 +828,8 @@ export interface FileRoutesById {
   '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
   '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
+  '/auth/google/login': typeof AuthGoogleLoginRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
   '/departments/$id/faculty': typeof DepartmentsIdFacultyRouteWithChildren
@@ -905,6 +923,8 @@ export interface FileRouteTypes {
     | '/administration/iqac/composition'
     | '/administration/iqac/meetings'
     | '/administration/iqac/mous'
+    | '/auth/google/callback'
+    | '/auth/google/login'
     | '/departments/$id/achievements'
     | '/departments/$id/courses'
     | '/departments/$id/faculty'
@@ -987,6 +1007,8 @@ export interface FileRouteTypes {
     | '/administration/iqac/composition'
     | '/administration/iqac/meetings'
     | '/administration/iqac/mous'
+    | '/auth/google/callback'
+    | '/auth/google/login'
     | '/departments/$id/achievements'
     | '/departments/$id/courses'
     | '/departments/$id/gallery'
@@ -1077,6 +1099,8 @@ export interface FileRouteTypes {
     | '/administration/iqac/composition'
     | '/administration/iqac/meetings'
     | '/administration/iqac/mous'
+    | '/auth/google/callback'
+    | '/auth/google/login'
     | '/departments/$id/achievements'
     | '/departments/$id/courses'
     | '/departments/$id/faculty'
@@ -1117,6 +1141,8 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
   DispensaryIndexRoute: typeof DispensaryIndexRoute
+  AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
+  AuthGoogleLoginRoute: typeof AuthGoogleLoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1702,6 +1728,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsIdAchievementsRouteImport
       parentRoute: typeof DepartmentsIdRoute
     }
+    '/auth/google/login': {
+      id: '/auth/google/login'
+      path: '/auth/google/login'
+      fullPath: '/auth/google/login'
+      preLoaderRoute: typeof AuthGoogleLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/google/callback': {
+      id: '/auth/google/callback'
+      path: '/auth/google/callback'
+      fullPath: '/auth/google/callback'
+      preLoaderRoute: typeof AuthGoogleCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/administration/iqac/mous': {
       id: '/administration/iqac/mous'
       path: '/mous'
@@ -2011,6 +2051,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,
   DispensaryIndexRoute: DispensaryIndexRoute,
+  AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
+  AuthGoogleLoginRoute: AuthGoogleLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

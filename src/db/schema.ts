@@ -1463,6 +1463,8 @@ export const adminAuditLogs = pgTable("admin_audit_logs", {
   userAgent: text("user_agent"),
   details: text("details"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const tickerNotifications = pgTable("ticker_notifications", {
   id: serial("id").primaryKey(),
   source: text("source").notNull(),

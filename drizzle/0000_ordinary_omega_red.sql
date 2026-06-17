@@ -60,12 +60,11 @@ CREATE TABLE "academic_fee_structure" (
 --> statement-breakpoint
 CREATE TABLE "academic_regulations" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"level" text NOT NULL,
-	"program_name" text NOT NULL,
-	"regulation" text NOT NULL,
 	"title" text NOT NULL,
-	"pdf_url" text NOT NULL,
-	"created_at" timestamp DEFAULT now()
+	"category" text NOT NULL,
+	"size" text NOT NULL,
+	"date" text NOT NULL,
+	"link" text DEFAULT '#'
 );
 --> statement-breakpoint
 CREATE TABLE "academic_syllabus" (
@@ -315,6 +314,13 @@ CREATE TABLE "achievements" (
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
+CREATE TABLE "campus_gallery" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"src" text NOT NULL,
+	"caption" text,
+	"created_at" timestamp DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE "courses" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"dept_id" uuid,
@@ -338,6 +344,7 @@ CREATE TABLE "departments" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	"slug" text NOT NULL,
+	"hod_password" text DEFAULT 'hod@jntu',
 	"hod" text,
 	"description" text,
 	"image" text,
@@ -442,7 +449,19 @@ CREATE TABLE "faculty" (
 	"designation" text,
 	"photo_url" text,
 	"profile_link" text,
-	"specialization" text
+	"biography" text DEFAULT '',
+	"qualifications" text[] DEFAULT '{}',
+	"specialization" text DEFAULT '',
+	"experience_years" integer DEFAULT 0,
+	"awards" text[] DEFAULT '{}',
+	"fellowships" text[] DEFAULT '{}',
+	"professional_memberships" text[] DEFAULT '{}',
+	"international_exchanges" text[] DEFAULT '{}',
+	"sabbaticals" text[] DEFAULT '{}',
+	"consultancy_projects" jsonb DEFAULT '[]'::jsonb,
+	"fdps_attended" text[] DEFAULT '{}',
+	"conferences_attended" text[] DEFAULT '{}',
+	"workshops_completed" text[] DEFAULT '{}'
 );
 --> statement-breakpoint
 CREATE TABLE "hostel_content" (
@@ -603,6 +622,11 @@ CREATE TABLE "library_team" (
 	"designation" text NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "major_recruiters" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "music_content" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" text,
@@ -644,6 +668,14 @@ CREATE TABLE "music_people" (
 	"img" text
 );
 --> statement-breakpoint
+CREATE TABLE "notices" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"date" text NOT NULL,
+	"tag" text NOT NULL,
+	"title" text NOT NULL,
+	"created_at" timestamp DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE "nss_activities" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"s_no" integer NOT NULL,
@@ -678,6 +710,33 @@ CREATE TABLE "placement_gallery" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"src" text,
 	"caption" text
+);
+--> statement-breakpoint
+CREATE TABLE "placement_goals" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"text" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "placement_highlights" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"branch" text NOT NULL,
+	"company" text NOT NULL,
+	"package" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "placement_staff" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"role" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "placement_years" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"year" text NOT NULL,
+	"offers" integer NOT NULL,
+	"top" text NOT NULL,
+	"recruiters" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "prof_chapters" (
@@ -787,13 +846,35 @@ CREATE TABLE "rd_scholars" (
 	"status" text
 );
 --> statement-breakpoint
+CREATE TABLE "recruiters" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"url" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "site_content" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"page" text NOT NULL,
+	"section_key" text NOT NULL,
+	"title" text,
+	"content" text,
+	"image_url" text
+);
+--> statement-breakpoint
 CREATE TABLE "sports_achievements" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"year_label" text,
+	"category" text,
+	"sno" integer,
 	"student" text NOT NULL,
 	"branch" text,
+	"medal" text,
 	"game" text,
 	"tournament" text,
-	"venue" text
+	"venue" text,
+	"tournament_date" text,
+	"remarks" text,
+	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "sports_content" (
@@ -852,6 +933,37 @@ CREATE TABLE "student_clubs" (
 	"description" text,
 	"badge" text,
 	"hero_image" text
+);
+--> statement-breakpoint
+CREATE TABLE "students" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"roll_no" text NOT NULL,
+	"branch" text NOT NULL,
+	"year" text NOT NULL,
+	"campus_type" text NOT NULL,
+	"company" text NOT NULL,
+	CONSTRAINT "students_roll_no_unique" UNIQUE("roll_no")
+);
+--> statement-breakpoint
+CREATE TABLE "ticker_notifications" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"source" text NOT NULL,
+	"label" text NOT NULL,
+	"text" text NOT NULL,
+	"date" text NOT NULL,
+	"to" text NOT NULL,
+	"urgent" boolean DEFAULT false NOT NULL,
+	"created_at" timestamp DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE "tpo" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"image" text NOT NULL,
+	"email" text NOT NULL,
+	"designation" text NOT NULL,
+	"message" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "we_activities" (
@@ -919,6 +1031,7 @@ CREATE INDEX "structure_category_idx" ON "hostel_structure" USING btree ("catego
 CREATE INDEX "library_meta_cat_idx" ON "library_meta" USING btree ("category");--> statement-breakpoint
 CREATE INDEX "library_stats_cat_idx" ON "library_stats" USING btree ("category");--> statement-breakpoint
 CREATE INDEX "music_people_role_idx" ON "music_people" USING btree ("role_type");--> statement-breakpoint
+CREATE INDEX "sports_achievements_year_idx" ON "sports_achievements" USING btree ("year_label");--> statement-breakpoint
+CREATE INDEX "sports_achievements_category_idx" ON "sports_achievements" USING btree ("category");--> statement-breakpoint
 CREATE INDEX "sports_infra_cat_idx" ON "sports_infra" USING btree ("category");--> statement-breakpoint
-CREATE INDEX "sports_people_role_idx" ON "sports_people" USING btree ("role_type");--> statement-breakpoint
-ALTER TABLE "students" ADD CONSTRAINT "students_roll_no_unique" UNIQUE("roll_no");
+CREATE INDEX "sports_people_role_idx" ON "sports_people" USING btree ("role_type");

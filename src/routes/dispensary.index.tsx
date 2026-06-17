@@ -141,13 +141,13 @@ function DispensaryPage() {
           ]}
         />
 
-        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
+        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.2s_ease-out]">
           
           {/* GALLERY STACK */}
           <div className="relative w-full max-w-full overflow-hidden rounded-[32px] shadow-md border border-slate-200/60 bg-slate-200">
             <ImageCarousel images={getCarouselImages()} fallback={cultureImg} />
             {isEditMode && (
-              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.4s]">
+              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.2s]">
                 <div className="flex items-center gap-2 pb-3 border-b border-amber-200/60">
                   <div className="w-9 h-9 rounded-2xl bg-amber-100 text-amber-700 grid place-items-center shrink-0 shadow-sm">
                     <Camera className="w-4.5 h-4.5" />
@@ -193,7 +193,7 @@ function DispensaryPage() {
               🩺 TAB 1: DOCTORS & OFFICERS
              ========================================== */}
           {tab === "Doctors" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               
               {/* HOD CARD */}
               <Card 
@@ -230,7 +230,7 @@ function DispensaryPage() {
                     <img
                       src={data?.info?.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                       onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
-                      className="w-28 h-28 rounded-[32px] object-cover border-2 border-slate-100 shadow shrink-0 transition duration-500 hover:scale-[1.03]"
+                      className="w-28 h-28 rounded-[32px] object-cover border-2 border-slate-100 shadow shrink-0 transition duration-200 hover:scale-[1.03]"
                       alt={data?.info?.hodName || "Medical Officer"}
                     />
                     <div>
@@ -265,7 +265,7 @@ function DispensaryPage() {
               🏥 TAB 2: FACILITIES & MEDICINES
              ========================================== */}
           {tab === "Facilities" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               
               {/* AVAILABLE FACILITIES */}
               <Card 
@@ -303,7 +303,7 @@ function DispensaryPage() {
               🚑 TAB 3: SUPPORTING STAFF
              ========================================== */}
           {tab === "Supporting Staff" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               
               {/* MEDICAL SUPPORTING STAFF */}
               <Card 
@@ -346,7 +346,7 @@ function DispensaryPage() {
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (
-    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-500 shadow-sm overflow-hidden w-full ${className}`}>
+    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-200 shadow-sm overflow-hidden w-full ${className}`}>
       {title && (
         <div className="flex items-center gap-3.5 mb-6 md:mb-8 pb-5 border-b border-slate-100">
           <div className="w-12 h-12 rounded-[20px] bg-slate-50 border border-slate-200/60 text-[oklch(0.42_0.18_265)] grid place-items-center shrink-0 shadow-sm">
@@ -395,7 +395,7 @@ function ImageCarousel({ images, fallback }: any) {
             key={i}
             src={img}
             alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
             onError={(e) => { e.currentTarget.src = fallback; }}
           />
         ))}
@@ -448,7 +448,7 @@ function PeopleRegistryEditable({ data, roleType, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] shadow-inner animate-[fade-in_0.3s] space-y-4">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] shadow-inner animate-[fade-in_0.15s] space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <label className="text-[9px] font-black uppercase text-amber-800">Officer Name</label>
@@ -561,7 +561,7 @@ function MetaRegistryEditable({ data, category, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="flex gap-2.5 max-w-lg bg-amber-50/80 border-2 border-amber-200 rounded-[20px] p-3 shadow-inner animate-[fade-in_0.3s]">
+        <div className="flex gap-2.5 max-w-lg bg-amber-50/80 border-2 border-amber-200 rounded-[20px] p-3 shadow-inner animate-[fade-in_0.15s]">
           <input type="text" value={newEntry} onChange={(e)=>setNewEntry(e.target.value)} onKeyDown={(e)=>e.key==="Enter" && handleAdd()} placeholder={category === "facility" ? "e.g. First-Aid triage unit..." : "e.g. Ibuprofen basic... "} className="flex-1 border-2 bg-white border-amber-200 px-4 py-2.5 rounded-xl outline-none text-sm font-bold focus:border-amber-500" />
           <button onClick={handleAdd} className="bg-slate-950 hover:bg-amber-600 text-white font-black px-6 py-2.5 rounded-xl text-xs uppercase cursor-pointer transition active:scale-95">Log</button>
         </div>
@@ -571,7 +571,7 @@ function MetaRegistryEditable({ data, category, isEdit, onRefetch }: any) {
           <p className="italic text-slate-400 text-sm pt-1 font-medium col-span-3">No registered dispensary specs found.</p>
         ) : (
           data.map((item: any, idx: number)=>(
-            <div key={item.id || idx} className={`flex items-center justify-between border rounded-[20px] p-4.5 transition duration-500 ${isEdit ? "bg-amber-50/40 border-amber-200 shadow-sm" : "bg-slate-50/80 border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow group"}`}>
+            <div key={item.id || idx} className={`flex items-center justify-between border rounded-[20px] p-4.5 transition duration-200 ${isEdit ? "bg-amber-50/40 border-amber-200 shadow-sm" : "bg-slate-50/80 border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow group"}`}>
               <div className="flex items-center gap-3 min-w-0 flex-1">
                 <div className={`w-9 h-9 rounded-[14px] flex items-center justify-center shadow-sm shrink-0 ${isEdit ? "bg-amber-100 text-amber-700" : category === "facility" ? "bg-white text-emerald-600 border border-slate-200/60" : "bg-white text-[oklch(0.42_0.18_265)] border border-slate-200/60"}`}>
                   {category === "facility" ? <Activity className="w-4.5 h-4.5" /> : <ShieldAlert className="w-4.5 h-4.5" />}
@@ -632,4 +632,3 @@ function InlineCellEdit({ val, onCommit }: { val: string; onCommit: (n: string) 
   );
 }
 
-export default DispensaryPage;

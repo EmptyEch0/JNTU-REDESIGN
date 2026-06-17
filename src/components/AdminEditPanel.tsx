@@ -161,7 +161,7 @@ export function AdminRemoveButton({ onClick }: { onClick: () => void }) {
 /* ─── Sticky admin mode banner (top of page) ───────────────────────────── */
 export function AdminModeBanner({ label }: { label: string }) {
   return (
-    <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-2.5 px-6 sticky top-0 z-[100] shadow-lg flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-[11px] uppercase tracking-widest">
+    <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-2.5 px-6 sticky top-0 z-[100] shadow-lg flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.15s] backdrop-blur-md text-[11px] uppercase tracking-widest">
       <span className="inline-block w-2 h-2 rounded-full bg-amber-950 animate-pulse shrink-0" />
       <span>{label}</span>
       <span className="hidden md:inline text-amber-100/70 normal-case italic font-medium text-[10px]">

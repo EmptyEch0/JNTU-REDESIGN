@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { IQAC_SUBNAV } from "@/lib/site";
-import campusImg from "@/assets/hero-campus.jpg";
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { useQuery } from "@tanstack/react-query";
-import { getIqacEvents, getIqacOutcomes } from "@/funcs/leadership";
+import { getIqacEvents, getIqacOutcomes } from "../funcs/leadership";
 import { Calendar, CheckCircle2, Presentation, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/administration/iqac/meetings")({
@@ -71,7 +72,7 @@ function MeetingsPage() {
             </div>
 
             <div className="bg-sand rounded-[40px] p-10 border border-border relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-8 opacity-5 transition-transform group-hover:scale-110 duration-700">
+              <div className="absolute top-0 right-0 p-8 opacity-5 transition-transform group-hover:scale-110 duration-300">
                 <CheckCircle2 className="h-48 w-48 text-primary" />
               </div>
               <div className="relative z-10 space-y-6">

@@ -200,7 +200,7 @@ function HostelsPage() {
           ]}
         />
 
-        <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
+        <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.2s_ease-out]">
           
           {/* BEAUTIFUL SHADOW-BORDERED CAROUSEL */}
           <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-3xl shadow-lg border border-slate-200/60 bg-slate-100 transition-all duration-300">
@@ -208,7 +208,7 @@ function HostelsPage() {
             
             {/* INLINE EDITORIAL IMAGES CONTROLLER */}
             {isEditMode && (
-              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.4s]">
+              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.2s]">
                 <div className="flex items-center gap-2 pb-3 border-b border-amber-200/60">
                   <div className="w-9 h-9 rounded-2xl bg-amber-100 text-amber-700 grid place-items-center shrink-0">
                     <Camera className="w-4.5 h-4.5" />
@@ -256,14 +256,14 @@ function HostelsPage() {
               💼 TAB 1: OFFICE VIEW
              ============================================================================ */}
           {tab === "office" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               
               {/* ABOUT SUMMARY CARD */}
               <Card 
                 title="Administration Desk" 
                 subtitle="Strategic governance & administrative definitions"
                 icon={Building}
-                className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20 shadow-xl duration-500" : "hover:-translate-y-1.5 shadow-[0_10px_35px_rgba(0,0,0,0.04)] duration-500"}
+                className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20 shadow-xl duration-200" : "hover:-translate-y-1.5 shadow-[0_10px_35px_rgba(0,0,0,0.04)] duration-200"}
               >
                 {isEditMode ? (
                 <AdminPanel>
@@ -324,7 +324,7 @@ function HostelsPage() {
                       <img
                         src={officer.image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                         onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
-                        className="w-24 h-24 rounded-[24px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-500 hover:scale-[1.03]"
+                        className="w-24 h-24 rounded-[24px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-200 hover:scale-[1.03]"
                         alt={officer.name}
                       />
                     </div>
@@ -390,7 +390,7 @@ function HostelsPage() {
               👧 TAB 2: GIRLS HOSTEL VIEW
              ============================================================================ */}
           {tab === "girls" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               <div className="border-b border-slate-200/60 pb-3 flex items-center gap-3">
                 <Home className="w-5 h-5 text-pink-600" />
                 <h3 className="text-lg font-black tracking-tight text-slate-900">Girls Inhabitation Ledger</h3>
@@ -429,7 +429,7 @@ function HostelsPage() {
               👦 TAB 3: BOYS HOSTEL VIEW
              ============================================================================ */}
           {tab === "boys" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               <div className="border-b border-slate-200/60 pb-3 flex items-center gap-3">
                 <Tent className="w-5 h-5 text-emerald-600" />
                 <h3 className="text-lg font-black tracking-tight text-slate-900">Boys Inhabitation Ledger</h3>
@@ -526,7 +526,7 @@ function ImageCarousel({ images, fallback }: any) {
             key={i}
             src={img}
             alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 transform group-hover:scale-[1.02] ${
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 transform group-hover:scale-[1.02] ${
               currentIndex === i ? "opacity-100 z-10 scale-100" : "opacity-0 z-0"
             }`}
             style={{ transitionProperty: "opacity, transform", transitionDuration: "1.2s" }}
@@ -561,7 +561,7 @@ function ImageCarousel({ images, fallback }: any) {
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`transition-all duration-500 rounded-full h-1.5 cursor-pointer ${
+                className={`transition-all duration-200 rounded-full h-1.5 cursor-pointer ${
                   currentIndex === index ? "w-7 bg-white" : "w-1.5 bg-white/40 hover:bg-white/70"
                 }`}
               />
@@ -613,7 +613,7 @@ function WardenTableEditable({ data, type, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full max-w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div className="space-y-1 flex-1">
             <label className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Warden Full Name</label>
             <input 
@@ -776,7 +776,7 @@ function StaffTableEditable({ data, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full max-w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-3 gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-3 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div className="space-y-1 flex-1">
             <label className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Staff Full Name</label>
             <input 
@@ -926,7 +926,7 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
               <Plus className="w-4.5 h-4.5" /> Construct New Spatial Block
             </button>
           ) : (
-            <div className="space-y-5 animate-[fade-in_0.3s] w-full">
+            <div className="space-y-5 animate-[fade-in_0.15s] w-full">
               <div className="flex items-center gap-2 pb-2 border-b border-amber-200/60">
                 <h4 className="text-xs font-black uppercase tracking-widest text-amber-950">Construct spatial physical block</h4>
               </div>
@@ -968,10 +968,10 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
               key={b.id} 
               title={isEdit ? undefined : b.title} 
               icon={type === "girls" ? Home : Tent}
-              className={isEdit ? "ring-4 ring-amber-500/10 border-2 border-amber-200 bg-amber-50/10 duration-500 shadow-xl scale-[1.01]" : "hover:-translate-y-1.5 duration-500 shadow-[0_10px_35px_rgba(0,0,0,0.04)]"}
+              className={isEdit ? "ring-4 ring-amber-500/10 border-2 border-amber-200 bg-amber-50/10 duration-200 shadow-xl scale-[1.01]" : "hover:-translate-y-1.5 duration-200 shadow-[0_10px_35px_rgba(0,0,0,0.04)]"}
             >
               {isEdit ? (
-                <div className="space-y-6 animate-[fade-in_0.3s_ease-out] w-full">
+                <div className="space-y-6 animate-[fade-in_0.15s_ease-out] w-full">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-amber-200/60 pb-4 gap-4">
                     <div className="flex-1 w-full sm:max-w-lg">
                       <label className="text-[10px] font-black text-amber-800 uppercase tracking-[0.15em]">Rename Block Entity (Press Enter)</label>
@@ -1086,7 +1086,7 @@ function FacilitiesManagerEditable({ facilities, type, isEdit, onRefetch }: any)
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="flex gap-2.5 max-w-md bg-amber-50/80 border-2 border-amber-200 rounded-[18px] p-3 shadow-inner animate-[fade-in_0.3s]">
+        <div className="flex gap-2.5 max-w-md bg-amber-50/80 border-2 border-amber-200 rounded-[18px] p-3 shadow-inner animate-[fade-in_0.15s]">
           <input 
             type="text" 
             placeholder="Add amenity (e.g. Wifi, Gym)..." 
@@ -1106,7 +1106,7 @@ function FacilitiesManagerEditable({ facilities, type, isEdit, onRefetch }: any)
           facilities.map((f: any, i: number) => (
             <div
               key={f.id || i}
-              className={`flex items-center justify-between gap-3 border rounded-2xl px-4 py-4 transition-all duration-500 ${
+              className={`flex items-center justify-between gap-3 border rounded-2xl px-4 py-4 transition-all duration-200 ${
                 isEdit 
                   ? "bg-amber-50/40 border-amber-200 shadow-sm" 
                   : "bg-slate-50/80 border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow-[0_10px_25px_rgba(0,0,0,0.03)] hover:-translate-y-0.5 group"
@@ -1134,7 +1134,7 @@ function FacilitiesManagerEditable({ facilities, type, isEdit, onRefetch }: any)
 
 function BlockInfo({ block }: any) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full animate-[fade-in_0.3s]">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full animate-[fade-in_0.15s]">
       <div className="flex items-center gap-4 bg-slate-50 border border-slate-200/50 hover:border-slate-200 hover:shadow-sm duration-300 px-5 py-4.5 rounded-2xl">
         <div className="w-11 h-11 rounded-[15px] bg-white border border-slate-200 flex items-center justify-center text-[oklch(0.42_0.18_265)] shadow-sm shrink-0">
           <Building className="w-5 h-5" />

@@ -89,7 +89,6 @@ import { Route as AdministrationIqacIndexRouteImport } from './routes/administra
 import { Route as DepartmentsIdLabsRouteImport } from './routes/departments.$id.labs'
 import { Route as DepartmentsIdHodRouteImport } from './routes/departments.$id.hod'
 import { Route as DepartmentsIdGalleryRouteImport } from './routes/departments.$id.gallery'
-import { Route as DepartmentsIdFacultyRouteImport } from './routes/departments.$id.faculty'
 import { Route as DepartmentsIdCoursesRouteImport } from './routes/departments.$id.courses'
 import { Route as DepartmentsIdAchievementsRouteImport } from './routes/departments.$id.achievements'
 import { Route as AuthGoogleLoginRouteImport } from './routes/auth.google.login'
@@ -510,11 +509,6 @@ const DepartmentsIdGalleryRoute = DepartmentsIdGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => DepartmentsIdRoute,
 } as any)
-const DepartmentsIdFacultyRoute = DepartmentsIdFacultyRouteImport.update({
-  id: '/faculty',
-  path: '/faculty',
-  getParentRoute: () => DepartmentsIdRoute,
-} as any)
 const DepartmentsIdCoursesRoute = DepartmentsIdCoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
@@ -560,15 +554,15 @@ const AdministrationIqacAqarRoute = AdministrationIqacAqarRouteImport.update({
 } as any)
 const DepartmentsIdFacultyIndexRoute =
   DepartmentsIdFacultyIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => DepartmentsIdFacultyRoute,
+    id: '/faculty/',
+    path: '/faculty/',
+    getParentRoute: () => DepartmentsIdRoute,
   } as any)
 const DepartmentsIdFacultyFacultyIdRoute =
   DepartmentsIdFacultyFacultyIdRouteImport.update({
-    id: '/$facultyId',
-    path: '/$facultyId',
-    getParentRoute: () => DepartmentsIdFacultyRoute,
+    id: '/faculty/$facultyId',
+    path: '/faculty/$facultyId',
+    getParentRoute: () => DepartmentsIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -655,7 +649,6 @@ export interface FileRoutesByFullPath {
   '/auth/google/login': typeof AuthGoogleLoginRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
-  '/departments/$id/faculty': typeof DepartmentsIdFacultyRouteWithChildren
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
@@ -832,7 +825,6 @@ export interface FileRoutesById {
   '/auth/google/login': typeof AuthGoogleLoginRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
-  '/departments/$id/faculty': typeof DepartmentsIdFacultyRouteWithChildren
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
@@ -927,7 +919,6 @@ export interface FileRouteTypes {
     | '/auth/google/login'
     | '/departments/$id/achievements'
     | '/departments/$id/courses'
-    | '/departments/$id/faculty'
     | '/departments/$id/gallery'
     | '/departments/$id/hod'
     | '/departments/$id/labs'
@@ -1103,7 +1094,6 @@ export interface FileRouteTypes {
     | '/auth/google/login'
     | '/departments/$id/achievements'
     | '/departments/$id/courses'
-    | '/departments/$id/faculty'
     | '/departments/$id/gallery'
     | '/departments/$id/hod'
     | '/departments/$id/labs'
@@ -1707,13 +1697,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsIdGalleryRouteImport
       parentRoute: typeof DepartmentsIdRoute
     }
-    '/departments/$id/faculty': {
-      id: '/departments/$id/faculty'
-      path: '/faculty'
-      fullPath: '/departments/$id/faculty'
-      preLoaderRoute: typeof DepartmentsIdFacultyRouteImport
-      parentRoute: typeof DepartmentsIdRoute
-    }
     '/departments/$id/courses': {
       id: '/departments/$id/courses'
       path: '/courses'
@@ -1772,17 +1755,17 @@ declare module '@tanstack/react-router' {
     }
     '/departments/$id/faculty/': {
       id: '/departments/$id/faculty/'
-      path: '/'
+      path: '/faculty'
       fullPath: '/departments/$id/faculty/'
       preLoaderRoute: typeof DepartmentsIdFacultyIndexRouteImport
-      parentRoute: typeof DepartmentsIdFacultyRoute
+      parentRoute: typeof DepartmentsIdRoute
     }
     '/departments/$id/faculty/$facultyId': {
       id: '/departments/$id/faculty/$facultyId'
-      path: '/$facultyId'
+      path: '/faculty/$facultyId'
       fullPath: '/departments/$id/faculty/$facultyId'
       preLoaderRoute: typeof DepartmentsIdFacultyFacultyIdRouteImport
-      parentRoute: typeof DepartmentsIdFacultyRoute
+      parentRoute: typeof DepartmentsIdRoute
     }
   }
 }
@@ -1986,37 +1969,26 @@ const WomenEmpowermentRouteChildren: WomenEmpowermentRouteChildren = {
 const WomenEmpowermentRouteWithChildren =
   WomenEmpowermentRoute._addFileChildren(WomenEmpowermentRouteChildren)
 
-interface DepartmentsIdFacultyRouteChildren {
-  DepartmentsIdFacultyFacultyIdRoute: typeof DepartmentsIdFacultyFacultyIdRoute
-  DepartmentsIdFacultyIndexRoute: typeof DepartmentsIdFacultyIndexRoute
-}
-
-const DepartmentsIdFacultyRouteChildren: DepartmentsIdFacultyRouteChildren = {
-  DepartmentsIdFacultyFacultyIdRoute: DepartmentsIdFacultyFacultyIdRoute,
-  DepartmentsIdFacultyIndexRoute: DepartmentsIdFacultyIndexRoute,
-}
-
-const DepartmentsIdFacultyRouteWithChildren =
-  DepartmentsIdFacultyRoute._addFileChildren(DepartmentsIdFacultyRouteChildren)
-
 interface DepartmentsIdRouteChildren {
   DepartmentsIdAchievementsRoute: typeof DepartmentsIdAchievementsRoute
   DepartmentsIdCoursesRoute: typeof DepartmentsIdCoursesRoute
-  DepartmentsIdFacultyRoute: typeof DepartmentsIdFacultyRouteWithChildren
   DepartmentsIdGalleryRoute: typeof DepartmentsIdGalleryRoute
   DepartmentsIdHodRoute: typeof DepartmentsIdHodRoute
   DepartmentsIdLabsRoute: typeof DepartmentsIdLabsRoute
   DepartmentsIdIndexRoute: typeof DepartmentsIdIndexRoute
+  DepartmentsIdFacultyFacultyIdRoute: typeof DepartmentsIdFacultyFacultyIdRoute
+  DepartmentsIdFacultyIndexRoute: typeof DepartmentsIdFacultyIndexRoute
 }
 
 const DepartmentsIdRouteChildren: DepartmentsIdRouteChildren = {
   DepartmentsIdAchievementsRoute: DepartmentsIdAchievementsRoute,
   DepartmentsIdCoursesRoute: DepartmentsIdCoursesRoute,
-  DepartmentsIdFacultyRoute: DepartmentsIdFacultyRouteWithChildren,
   DepartmentsIdGalleryRoute: DepartmentsIdGalleryRoute,
   DepartmentsIdHodRoute: DepartmentsIdHodRoute,
   DepartmentsIdLabsRoute: DepartmentsIdLabsRoute,
   DepartmentsIdIndexRoute: DepartmentsIdIndexRoute,
+  DepartmentsIdFacultyFacultyIdRoute: DepartmentsIdFacultyFacultyIdRoute,
+  DepartmentsIdFacultyIndexRoute: DepartmentsIdFacultyIndexRoute,
 }
 
 const DepartmentsIdRouteWithChildren = DepartmentsIdRoute._addFileChildren(

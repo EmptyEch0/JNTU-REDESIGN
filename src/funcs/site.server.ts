@@ -263,16 +263,24 @@ export const queryChatbot = createServerFn({
 
       // 3. Semantic / Fuzzy Search on Academic Regulations
       const allRegs = await db.select().from(academicRegulations);
-      const matchedRegs = allRegs.filter((r) => {
-        const searchableText = `${r.title} ${r.category} ${r.size} ${r.date}`.toLowerCase();
-        return terms.some((term) => searchableText.includes(term));
-      });
+      const regKeywords = ["syllabus", "regulation", "r20", "r23", "r25", "r19", "curriculum", "subject"];
+      const isRegQuery = terms.some(t => regKeywords.some(k => t.includes(k)));
+
+      const matchedRegs = isRegQuery
+        ? allRegs  // send ALL regs to AI when it's a reg/syllabus question
+        : allRegs.filter((r) => {
+            const searchableText = `${r.title} ${r.category}`.toLowerCase();
+            return terms.some((term) => searchableText.includes(term));
+          });
 
       if (matchedRegs.length > 0) {
-        context += `\n--- Academic Regulations & Compliance Documents ---\n`;
+        context += `\n--- Academic Regulations & Documents (USE THESE LINKS ONLY) ---\n`;
         for (const r of matchedRegs) {
-          context += `[Category: ${r.category}] [Label: ${r.date}] Title: ${r.title} - PDF Link: ${r.link} (Description: ${r.size})\n`;
+          context += `Category: ${r.category} | Title: ${r.title} | Download PDF: ${r.link}\n`;
         }
+      } else if (isRegQuery) {
+        // Explicitly tell AI there are no links in DB
+        context += `\n--- NO REGULATION DOCUMENTS FOUND IN DATABASE ---\nTell user to visit: https://jntugvcev.edu.in/academics/regulations\n`;
       }
 
       // 4. Semantic / Fuzzy Search on notices
@@ -334,7 +342,20 @@ Capabilities:
 UI Personality:
 - Acts like a smart campus guide
 - Friendly engineering graduate assistant vibe
-- Helpful digital campus companion`;
+- Helpful digital campus companion
+
+Syllabus & Regulations Behavior:
+- When a user asks about "syllabus", "curriculum", "subjects", or "course structure" WITHOUT specifying a regulation, ALWAYS ask: "Sure! Which regulation are you looking for? 😊 R20, R23, or R25?"
+- Once the user specifies a regulation (e.g., "R23"), look in the RETRIEVED DATABASE CONTEXT for matching regulation documents and provide the direct PDF download link.
+- When providing a download link, always format it as: "Here's the direct download link: [Document Title](URL)"
+- ALWAYS include the actual URL from the database context when available. Never say "visit the website" — give the direct link.
+- If multiple documents match (e.g., branch-wise syllabus), list all with their links.
+
+CRITICAL RULES FOR LINKS:
+- ONLY provide download links that are explicitly present in the RETRIEVED DATABASE CONTEXT below.
+- If the RETRIEVED DATABASE CONTEXT contains a PDF link for the requested regulation, provide it exactly as given.
+- If NO link is found in the context, say: "I don't have the direct download link right now, but you can find it at the Academics → Regulations section on our website: https://jntugvcev.edu.in/academics/regulations"
+- NEVER invent, guess, or fabricate any URL. Only use URLs from the database context.`;
 
       const apiKey = process.env.GROQ_API_KEY;
       if (!apiKey) {

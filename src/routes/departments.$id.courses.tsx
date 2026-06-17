@@ -16,6 +16,7 @@ import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { syncCourses } from "@/lib/departments";
 import { toast } from "sonner";
+import { assetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/departments/$id/courses")({
   component: ProgrammesPage,
@@ -77,7 +78,7 @@ function ProgrammesPage() {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 animate-in fade-in slide-in-from-bottom-6 duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
         {/* Header Section */}
@@ -137,7 +138,7 @@ function ProgrammesPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {programs.map((course: any) => (
-                    <div key={course.id} className={`group bg-white rounded-[2.5rem] border overflow-hidden transition-all duration-500 relative ${isEditMode ? 'border-blue-300 ring-4 ring-blue-50/50' : 'border-slate-100 shadow-sm hover:shadow-2xl hover:border-blue-200'}`}>
+                    <div key={course.id} className={`group bg-white rounded-[2.5rem] border overflow-hidden transition-all duration-200 relative ${isEditMode ? 'border-blue-300 ring-4 ring-blue-50/50' : 'border-slate-100 shadow-sm hover:shadow-2xl hover:border-blue-200'}`}>
 
                       {isEditMode && (
                         <button onClick={() => removeCourse(course.id)} className="absolute top-4 right-4 p-2 bg-red-50 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all z-10 shadow-sm">
@@ -183,7 +184,7 @@ function ProgrammesPage() {
                                 <LinkIcon size={14} className="text-slate-400" />
                                 <input
                                   className="w-full bg-transparent text-xs text-blue-600 font-medium outline-none"
-                                  value={course.syllabus_url || ""}
+                                  value={assetUrl(course.syllabus_url) || ""}
                                   onChange={(e) => updateCourse(course.id, "syllabus_url", e.target.value)}
                                   placeholder="https://example.com/syllabus.pdf"
                                 />

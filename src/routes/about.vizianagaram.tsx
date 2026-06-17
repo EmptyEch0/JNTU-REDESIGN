@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { ArrowRight, MapPin, Music, Crown, Landmark } from "lucide-react";
-import vizImg from "@/assets/vizianagaram.jpg";
+const vizImg = imageUrl("vizianagaram.jpg");
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
@@ -273,7 +274,7 @@ function VizPage() {
             src={vizImg}
             alt="Vizianagaram Clock Tower"
             loading="lazy"
-            className="rounded-3xl aspect-[3/4] object-cover w-full shadow-[var(--shadow-elegant)] hover:scale-[1.02] transition-transform duration-700"
+            className="rounded-3xl aspect-[3/4] object-cover w-full shadow-[var(--shadow-elegant)] hover:scale-[1.02] transition-transform duration-300"
           />
         </RevealOnScroll>
         <RevealOnScroll delay={150}>
@@ -349,7 +350,7 @@ function VizPage() {
               <RevealOnScroll key={p.key} delay={i * 80}>
                 <div className="bg-card rounded-2xl p-7 border border-border hover-lift h-full group cursor-default flex flex-col justify-between">
                   <div>
-                    <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary grid place-items-center mb-4 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-500">
+                    <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary grid place-items-center mb-4 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-200">
                       {i < 2 ? (
                         <Crown className="h-5 w-5" />
                       ) : i < 4 ? (

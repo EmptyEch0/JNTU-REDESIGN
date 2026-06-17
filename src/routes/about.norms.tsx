@@ -1,10 +1,11 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { imageUrl, uploadUrl } from "@/lib/assets";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FileText, Download, ShieldCheck, Building2, ExternalLink, Plus, Trash2 } from "lucide-react";
-import heroImg from "@/assets/hero-campus.jpg";
+const heroImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { getPageContent, updatePageSection, getRegulations, addRegulation, deleteRegulation } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
@@ -56,14 +57,14 @@ const DEFAULT_DOCUMENTS = [
     id: -1,
     title: "UGC 2(f) & 12(B) Recognition",
     size: "Official certificate recognizing the institution under the UGC Act, 1956.",
-    link: "https://jntugvcev.edu.in/wp-content/uploads/2020/08/UGC-1-747x1024-1.pdf",
+    link: uploadUrl("2020/08/UGC-1-747x1024-1.pdf"),
     date: "Recognition",
   },
   {
     id: -2,
     title: "University Establishment Order (MS14)",
     size: "Government Order (GO MS. No. 14) regarding the establishment of the university.",
-    link: "https://jntugvcev.edu.in//wp-content/uploads/2021/03/13022019HE_MS14.pdf",
+    link: uploadUrl("2021/03/13022019HE_MS14.pdf"),
     date: "Government Order",
   },
 ];
@@ -344,14 +345,14 @@ function NormsPage() {
             const Icon = getDocIcon(doc.date);
             return (
               <RevealOnScroll key={doc.id} delay={i * 100}>
-                <div className="group relative flex flex-col md:flex-row items-center gap-6 p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-500">
+                <div className="group relative flex flex-col md:flex-row items-center gap-6 p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
                   <a
                     href={doc.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 flex flex-col md:flex-row items-center gap-6"
                   >
-                    <div className="h-16 w-16 shrink-0 rounded-2xl bg-primary/5 text-primary flex items-center justify-center group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                    <div className="h-16 w-16 shrink-0 rounded-2xl bg-primary/5 text-primary flex items-center justify-center group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-200">
                       <Icon className="h-8 w-8" />
                     </div>
 

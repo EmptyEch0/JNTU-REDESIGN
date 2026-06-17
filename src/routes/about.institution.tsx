@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { ArrowRight, Users, Building, BookOpen, Award } from "lucide-react";
-import campusImg from "@/assets/hero-campus.jpg";
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
@@ -212,7 +213,7 @@ function InstitutionPage() {
             src={campusImg}
             alt="JNTU-GV Campus aerial view"
             loading="lazy"
-            className="rounded-3xl aspect-[4/3] object-cover w-full shadow-[var(--shadow-elegant)] hover:scale-[1.02] transition-transform duration-700"
+            className="rounded-3xl aspect-[4/3] object-cover w-full shadow-[var(--shadow-elegant)] hover:scale-[1.02] transition-transform duration-300"
           />
         </RevealOnScroll>
         <RevealOnScroll delay={150}>
@@ -264,7 +265,7 @@ function InstitutionPage() {
               <RevealOnScroll key={h.key} delay={i * 100}>
                 <div className="bg-card rounded-2xl p-7 border border-border hover-lift h-full group cursor-default flex flex-col justify-between">
                   <div>
-                    <div className="h-12 w-12 rounded-xl bg-[var(--gradient-royal)] text-white grid place-items-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                    <div className="h-12 w-12 rounded-xl bg-[var(--gradient-royal)] text-white grid place-items-center mb-4 group-hover:scale-110 transition-transform duration-200">
                       <h.icon className="h-5 w-5" />
                     </div>
                     <h3 className="text-display text-xl text-ink">{h.title}</h3>
@@ -319,7 +320,7 @@ function InstitutionPage() {
         <RevealOnScroll delay={100}>
           <div className="mt-10 grid md:grid-cols-2 gap-6">
             <div className="bg-card rounded-2xl p-8 border border-border hover-lift group">
-              <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary grid place-items-center mb-4 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-500">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary grid place-items-center mb-4 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-200">
                 <Users className="h-5 w-5" />
               </div>
               <h3 className="text-lg font-semibold text-ink">Executive Council</h3>
@@ -329,7 +330,7 @@ function InstitutionPage() {
               </p>
             </div>
             <div className="bg-card rounded-2xl p-8 border border-border hover-lift group">
-              <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary grid place-items-center mb-4 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-500">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary grid place-items-center mb-4 group-hover:bg-[var(--gradient-royal)] group-hover:text-white transition-all duration-200">
                 <Award className="h-5 w-5" />
               </div>
               <h3 className="text-lg font-semibold text-ink">Academic Committee</h3>

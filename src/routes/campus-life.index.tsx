@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -9,7 +10,7 @@ import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { toast } from "sonner";
 import { Save, Lock, Edit, Image as ImageIcon } from "lucide-react";
 
-import campusLifeImg from "@/assets/campus-life.jpg";
+const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
 import cultureImg from "@/assets/culture.jpeg";
 import sportsImg from "@/assets/Ground.jpg";
 
@@ -187,7 +188,7 @@ function CampusLifePage() {
   return (
     <div className="w-full">
       {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
+        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.15s] backdrop-blur-md text-xs uppercase tracking-widest">
           <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
           <span>Live Campus Editorial Enabled</span>
           <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
@@ -206,7 +207,7 @@ function CampusLifePage() {
 
       {/* EDIT HERO */}
       {isEditMode && (
-        <div className="max-w-4xl mx-auto px-4 mt-6 animate-[fade-in_0.3s]">
+        <div className="max-w-4xl mx-auto px-4 mt-6 animate-[fade-in_0.15s]">
           <div className="bg-amber-50/40 border-2 border-amber-200 rounded-3xl p-5 space-y-4 shadow-sm">
             <div className="flex items-center justify-between border-b border-amber-200/50 pb-2">
               <span className="text-[10px] font-black text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -259,7 +260,7 @@ function CampusLifePage() {
                     src={p.img}
                     alt={p.title}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                   />
                 </div>
 
@@ -289,7 +290,7 @@ function CampusLifePage() {
               {/* ADMIN EDIT BLOCK FOR PILLAR */}
               {isEditMode && (
                 <div
-                  className={`max-w-3xl w-full bg-amber-50/40 border-2 border-amber-200 rounded-3xl p-6 space-y-4 mt-2 self-center animate-[fade-in_0.3s]`}
+                  className={`max-w-3xl w-full bg-amber-50/40 border-2 border-amber-200 rounded-3xl p-6 space-y-4 mt-2 self-center animate-[fade-in_0.15s]`}
                 >
                   <div className="flex items-center justify-between border-b border-amber-200/50 pb-2.5">
                     <span className="text-[10px] font-black text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -352,4 +353,3 @@ function CampusLifePage() {
   );
 }
 
-export default CampusLifePage;

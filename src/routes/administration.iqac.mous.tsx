@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { useQuery } from "@tanstack/react-query";
-import { getIqacMous } from "@/funcs/leadership";
+import { getIqacMous } from "../funcs/leadership";
 import { Handshake, ArrowUpRight, Building2, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/administration/iqac/mous")({
@@ -48,7 +48,7 @@ function MousPage() {
               mous?.map((mou: any) => (
                 <div
                   key={mou.id}
-                  className="group bg-card rounded-[48px] border border-border overflow-hidden shadow-elegant hover:shadow-2xl transition-all duration-700"
+                  className="group bg-card rounded-[48px] border border-border overflow-hidden shadow-elegant hover:shadow-2xl transition-all duration-300"
                 >
                   {/* Landscape Image Header */}
                   <div className="relative aspect-[16/7] md:aspect-[21/9] overflow-hidden">
@@ -56,7 +56,7 @@ function MousPage() {
                     <img
                       src={mou.image}
                       alt={mou.title}
-                      className="h-full w-full object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-1000"
+                      className="h-full w-full object-cover scale-105 group-hover:scale-100 transition-all duration-300"
                     />
                     <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20">
                       <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary text-white text-[10px] font-bold mb-4 uppercase tracking-[0.2em] shadow-lg">

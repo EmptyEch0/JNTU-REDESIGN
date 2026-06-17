@@ -261,7 +261,7 @@ function AreasPage() {
             {newDepts.map((nd, ni) => (
               <div
                 key={ni}
-                className="p-6 rounded-2xl border-2 border-dashed border-primary/20 bg-primary/5 animate-in fade-in slide-in-from-bottom-4"
+                className="p-6 rounded-2xl border-2 border-dashed border-primary/20 bg-primary/5 animate-in fade-in slide-in-from-top-4"
               >
                 <div className="flex justify-between">
                   <div className="flex-1">
@@ -308,7 +308,7 @@ function AreasPage() {
           Object.keys(editedAreas).length > 0 ||
           Object.keys(newAreas).length > 0 ||
           newDepts.length > 0) && (
-          <div className="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in slide-in-from-bottom-4">
+          <div className="fixed top-24 right-8 z-50 animate-in fade-in zoom-in slide-in-from-top-4">
             <button
               onClick={saveAll}
               className="flex items-center gap-2 px-6 py-4 rounded-full bg-primary text-white shadow-2xl hover:scale-105 active:scale-95 transition-all font-semibold"

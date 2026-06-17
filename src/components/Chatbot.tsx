@@ -25,6 +25,7 @@ export function Chatbot() {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [chips, setChips] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Only render Lottie after client hydration
@@ -57,9 +58,16 @@ export function Chatbot() {
       const res = await queryChatbot({
         data: { messages: [...messages, userMessage] },
       });
+      const reply = res.reply;
+
+      const isAskingRegulation = 
+        reply.toLowerCase().includes("r20") && 
+        reply.toLowerCase().includes("r23");
+
+      setChips(isAskingRegulation ? ["R20", "R23", "R25"] : []);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: res.reply },
+        { role: "assistant", content: reply },
       ]);
     } catch {
       setMessages((prev) => [
@@ -72,6 +80,37 @@ export function Chatbot() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function renderContent(text: string) {
+    const mdLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
+    const parts: React.ReactNode[] = [];
+    let last = 0;
+    let match;
+    let key = 0;
+
+    while ((match = mdLinkRegex.exec(text)) !== null) {
+      if (match.index > last) {
+        parts.push(
+          <span key={key++}>{text.slice(last, match.index)}</span>
+        );
+      }
+      parts.push(
+        <a
+          key={key++}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 underline font-semibold text-blue-500 hover:text-blue-700"
+        >
+          📄 {match[1]}
+        </a>
+      );
+      last = match.index + match[0].length;
+    }
+
+    if (last < text.length) parts.push(<span key={key++}>{text.slice(last)}</span>);
+    return parts.length > 0 ? parts : text;
   }
 
   return (
@@ -162,7 +201,7 @@ export function Chatbot() {
                       : "bg-white border border-slate-200/70 text-slate-800 rounded-tl-none"
                   }`}
                 >
-                  {msg.content}
+                  {renderContent(msg.content)}
                 </div>
               </div>
             ))}
@@ -182,6 +221,24 @@ export function Chatbot() {
             )}
             <div ref={messagesEndRef} />
           </div>
+
+          {/* Quick reply chips */}
+          {chips.length > 0 && (
+            <div className="flex gap-2 px-4 pb-3 flex-wrap border-t border-slate-100 pt-3 bg-white">
+              {chips.map((chip) => (
+                <button
+                  key={chip}
+                  onClick={() => {
+                    setInput(chip);
+                    setChips([]);
+                  }}
+                  className="rounded-full border border-slate-300 bg-slate-50 px-4 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all cursor-pointer"
+                >
+                  {chip}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Input */}
           <form

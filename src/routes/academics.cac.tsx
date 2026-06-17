@@ -248,7 +248,7 @@ function CACPage() {
                   transition={{ duration: 0.25, delay: i * 0.04 }}
                 >
                   <GlassCard className="p-6 relative group hover:border-blue-500/30 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 overflow-hidden flex flex-col justify-between h-full bg-white/80 dark:bg-slate-900/40">
-                    <div className="absolute right-0 top-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl group-hover:bg-blue-600/10 transition-all duration-500 pointer-events-none"></div>
+                    <div className="absolute right-0 top-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl group-hover:bg-blue-600/10 transition-all duration-200 pointer-events-none"></div>
                     
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">

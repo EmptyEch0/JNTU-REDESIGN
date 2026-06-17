@@ -191,7 +191,7 @@ function LibraryPage() {
       <div className="absolute top-[25%] -left-48 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[140px] pointer-events-none -z-10 animate-pulse duration-[10s]" />
       <div className="absolute bottom-[35%] -right-48 w-[650px] h-[650px] rounded-full bg-accent/5 blur-[130px] pointer-events-none -z-10 animate-pulse duration-[8s]" />
       {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
+        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.15s] backdrop-blur-md text-xs uppercase tracking-widest">
           <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
           <span>Live Library Editorial Enabled</span>
           <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
@@ -221,7 +221,7 @@ function LibraryPage() {
           ]}
         />
 
-        <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
+        <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.2s_ease-out]">
           
           {/* HIGH-END CAROUSEL & EDIT CONTROL - Bounded container */}
           <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-3xl shadow-lg border border-slate-200/60 bg-slate-100 transition-all duration-300">
@@ -230,7 +230,7 @@ function LibraryPage() {
               fallback="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1000" 
             />
             {isEditMode && (
-              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.4s]">
+              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.2s]">
                 <div className="flex items-center gap-2 pb-3 border-b border-amber-200/60">
                   <div className="w-9 h-9 rounded-2xl bg-amber-100 text-amber-700 grid place-items-center shrink-0">
                     <Camera className="w-4.5 h-4.5" />
@@ -276,7 +276,7 @@ function LibraryPage() {
               💼 TAB 1: ABOUT LIBRARY
              ========================================== */}
           {tab === "About Library" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               
               {/* OFFICER PROFILE */}
               <Card 
@@ -285,7 +285,7 @@ function LibraryPage() {
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20" : ""}
               >
                 {isEditMode ? (
-                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.3s]">
+                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.15s]">
                     <div className="w-32 h-44 bg-slate-100 border-2 border-amber-200 rounded-[24px] overflow-hidden relative group shadow-sm">
                       <img src={editOfficer.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"} className="w-full h-full object-cover" />
                       <input 
@@ -352,7 +352,7 @@ function LibraryPage() {
                     className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20" : ""}
                   >
                     {isEditMode ? (
-                      <div className="space-y-4 animate-[fade-in_0.3s]">
+                      <div className="space-y-4 animate-[fade-in_0.15s]">
                         <textarea
                           value={editTexts.aboutText}
                           onChange={(e) => setEditTexts({ ...editTexts, aboutText: e.target.value })}
@@ -375,7 +375,7 @@ function LibraryPage() {
                     className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20" : ""}
                   >
                     {isEditMode ? (
-                      <div className="space-y-5 animate-[fade-in_0.3s]">
+                      <div className="space-y-5 animate-[fade-in_0.15s]">
                         <div>
                           <label className="text-[10px] font-black text-amber-800 uppercase">Infrastructure Narrative</label>
                           <textarea 
@@ -437,7 +437,7 @@ function LibraryPage() {
                 <div className="lg:col-span-4 h-full">
                   <Card title="Working Hours" icon={Clock} className={isEditMode ? "h-full ring-4 ring-amber-500/10 bg-amber-50/20 border-amber-200" : "h-full"}>
                     {isEditMode ? (
-                      <div className="space-y-4 animate-[fade-in_0.3s]">
+                      <div className="space-y-4 animate-[fade-in_0.15s]">
                         <div>
                           <label className="text-[9px] font-black text-amber-800 uppercase">Weekdays (e.g. Mon-Sat)</label>
                           <input value={editTexts.workingDays} onChange={(e)=>setEditTexts({...editTexts, workingDays:e.target.value})} className="w-full border bg-white text-xs p-2.5 rounded font-bold" />
@@ -494,7 +494,7 @@ function LibraryPage() {
               📚 TAB 2: TITLES & VOLUMES
              ========================================== */}
           {tab === "Titles & Volumes" && (
-            <div className="animate-[fade-in_0.5s_ease-out]">
+            <div className="animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="Branch Wise Collection Metrics" 
                 subtitle="Registered inventory mapping across curricular streams"
@@ -518,7 +518,7 @@ function LibraryPage() {
               📰 TAB 3: PERIODICALS
              ========================================== */}
           {tab === "Periodicals" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="Academic Periodical Subscription Logs" 
                 subtitle="Mapping of daily/weekly/monthly academic feeds"
@@ -572,14 +572,14 @@ function LibraryPage() {
               🖥️ TAB 4: DIGITAL LIBRARY
              ========================================== */}
           {tab === "Digital Library" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="Digital Repository Infrastructure" 
                 icon={Monitor}
                 className={isEditMode ? "ring-4 ring-amber-500/10 bg-amber-50/20 border-amber-200" : ""}
               >
                 {isEditMode ? (
-                  <div className="space-y-4 animate-[fade-in_0.3s]">
+                  <div className="space-y-4 animate-[fade-in_0.15s]">
                     <textarea 
                       value={editTexts.digitalDescription}
                       onChange={(e)=>setEditTexts({...editTexts, digitalDescription:e.target.value})}
@@ -669,7 +669,7 @@ function LibraryPage() {
               👥 TAB 5: TEAM
              ========================================== */}
           {tab === "Team" && (
-            <div className="animate-[fade-in_0.5s_ease-out]">
+            <div className="animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="Supporting Team Registry" 
                 subtitle="Active directory of registered personnel facilitating systems"
@@ -689,10 +689,10 @@ function LibraryPage() {
               🎥 TAB 6: EKEEDA
              ========================================== */}
           {tab === "Ekeeda Video Library" && (
-            <div className="animate-[fade-in_0.5s_ease-out]">
-              <Card title="Integrated Academic E-Video Desk" icon={Video} className="text-center py-16 hover:shadow-[0_25px_60px_rgba(0,0,0,0.05)] duration-500">
+            <div className="animate-[fade-in_0.2s_ease-out]">
+              <Card title="Integrated Academic E-Video Desk" icon={Video} className="text-center py-16 hover:shadow-[0_25px_60px_rgba(0,0,0,0.05)] duration-200">
                 <div className="max-w-xl mx-auto">
-                  <div className="w-20 h-20 rounded-[24px] bg-indigo-50 border-2 border-indigo-100 text-[oklch(0.42_0.18_265)] grid place-items-center mx-auto shadow-xl mb-6 transition duration-500 hover:rotate-6 hover:scale-110">
+                  <div className="w-20 h-20 rounded-[24px] bg-indigo-50 border-2 border-indigo-100 text-[oklch(0.42_0.18_265)] grid place-items-center mx-auto shadow-xl mb-6 transition duration-200 hover:rotate-6 hover:scale-110">
                     <Video className="w-9 h-9 animate-pulse" />
                   </div>
                   <h2 className="font-display text-3xl font-black text-slate-900 tracking-tight mb-4">
@@ -768,7 +768,7 @@ function ImageCarousel({ images, fallback }: any) {
             key={i}
             src={img}
             alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity transform duration-1000 ${
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity transform duration-300 ${
               currentIndex === i ? "opacity-100 z-10 scale-100" : "opacity-0 z-0"
             }`}
             style={{ transitionProperty: "opacity, transform", transitionDuration: "1.2s" }}
@@ -800,7 +800,7 @@ function ImageCarousel({ images, fallback }: any) {
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`transition-all duration-500 rounded-full h-1.5 cursor-pointer ${
+                className={`transition-all duration-200 rounded-full h-1.5 cursor-pointer ${
                   currentIndex === index ? "w-6 bg-white" : "w-1.5 bg-white/40 hover:bg-white"
                 }`}
               />
@@ -844,7 +844,7 @@ function SectionsTableEditable({ data, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full max-w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div>
             <label className="text-[10px] font-black uppercase text-amber-800 tracking-widest">Stack Section</label>
             <input type="text" value={form.section} onChange={(e)=>setForm({...form, section:e.target.value})} className="w-full border-2 bg-white border-amber-200 px-3.5 py-2 rounded-xl text-sm font-semibold" placeholder="e.g. Reading Hall"/>
@@ -935,7 +935,7 @@ function StatsTableEditable({ data, category, header1, header2, header3, isEdit,
   return (
     <div className="space-y-6 w-full max-w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div>
             <label className="text-[10px] font-black uppercase text-amber-800 tracking-widest">{header1}</label>
             <input type="text" value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} className="w-full border-2 bg-white border-amber-200 px-3 py-2 rounded-xl text-sm font-bold" />
@@ -1035,7 +1035,7 @@ function MetaListEditable({ data, category, isEdit, onRefetch }: any) {
       )}
       <div className={category === "digital" ? "grid grid-cols-1 sm:grid-cols-2 gap-4 w-full" : "grid grid-cols-1 gap-3 w-full"}>
         {data.map((m: any, i: number)=>(
-          <div key={m.id || i} className={`flex items-center justify-between px-4.5 py-4 border rounded-2xl duration-500 transition-all ${
+          <div key={m.id || i} className={`flex items-center justify-between px-4.5 py-4 border rounded-2xl duration-200 transition-all ${
             isEdit ? "bg-amber-50/40 border-amber-200 shadow-sm scale-[1.01]" : "bg-slate-50/80 border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow-md group"
           }`}>
             <div className="flex items-center gap-3 min-w-0">
@@ -1088,7 +1088,7 @@ function TeamTableEditable({ data, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full max-w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div>
             <label className="text-[10px] font-black uppercase text-amber-800 tracking-widest">Personnel Name</label>
             <input type="text" value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} className="w-full border-2 bg-white border-amber-200 px-3 py-2 rounded-xl text-sm font-bold" />
@@ -1193,4 +1193,3 @@ function InlineCellEdit({ val, onCommit }: { val: string; onCommit: (newVal: str
   );
 }
 
-export default LibraryPage;

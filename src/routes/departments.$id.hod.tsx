@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
-import { updateDepartment } from "@/lib/departments";
+import { getAssetUrl, updateDepartment } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,7 +16,6 @@ import {
   MessageSquare
 } from "lucide-react";
 import { ProfileRenderer } from "@/components/ProfileRenderer";
-
 export const Route = createFileRoute("/departments/$id/hod")({
   component: HodPage,
 });
@@ -118,7 +117,7 @@ function HodPage() {
                   <div className="relative inline-block">
                     <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white mx-auto">
                       <img
-                        src={editData.hod_photo}
+                        src={getAssetUrl(editData.hod_photo)}
                         alt={hodName}
                         className="h-full w-full object-cover"
                         onError={(e) => {

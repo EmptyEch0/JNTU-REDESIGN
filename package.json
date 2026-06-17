@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 vite dev",
     "build": "vite build",
+    "start": "node dist/server/index.js",
     "build:dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -89,9 +90,12 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
+    "http-server": "^14.1.1",
     "prettier": "^3.7.3",
+    "tsx": "^4.22.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vite-plugin-imagemin": "^0.6.1"
   }
 }

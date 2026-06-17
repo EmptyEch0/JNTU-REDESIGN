@@ -106,7 +106,7 @@ function BankingPage() {
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
         
-        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
+        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.2s_ease-out]">
 
           {/* IMAGE STACK */}
           <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-[32px] shadow-md border border-slate-200/60 bg-slate-200 transition-all duration-300">
@@ -114,7 +114,7 @@ function BankingPage() {
               <img
                 src={imgRec?.imageUrl || atmpic}
                 alt="Banking Infrastructure"
-                className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+                className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent z-10" />
             </div>
@@ -209,7 +209,7 @@ function BankingPage() {
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (
-    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-500 shadow-sm overflow-hidden w-full ${className}`}>
+    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-200 shadow-sm overflow-hidden w-full ${className}`}>
       {title && (
         <div className="flex items-center gap-3.5 mb-6 md:mb-8 pb-5 border-b border-slate-100">
           <div className="w-12 h-12 rounded-[20px] bg-slate-50 border border-slate-200/60 text-[oklch(0.42_0.18_265)] grid place-items-center shrink-0 shadow-sm">
@@ -226,4 +226,3 @@ function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   );
 }
 
-export default BankingPage;

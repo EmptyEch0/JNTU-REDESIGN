@@ -42,7 +42,7 @@ function NSSAboutPage() {
   if (isLoading || !profile) {
     return (
       <div className="py-20 grid place-items-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+        <div className="spinner" />
       </div>
     );
   }
@@ -81,12 +81,12 @@ function NSSAboutPage() {
 
               {/* Photo */}
               <div className="relative group">
-                <div className="absolute -inset-2 rounded-[24px] bg-primary/10 blur-xl group-hover:bg-primary/20 transition-colors duration-500" />
+                <div className="absolute -inset-2 rounded-[24px] bg-primary/10 blur-xl group-hover:bg-primary/20 transition-colors duration-200" />
                 <div className="relative aspect-square rounded-[20px] overflow-hidden border border-border bg-muted">
                   <img
                     src={data.imageUrl || data.officerImage}
                     alt={data.officerName}
-                    className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                    className="h-full w-full object-cover hover:scale-105 transition-transform duration-200"
                   />
                   {isEditMode && (
                     <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity p-4 text-center">
@@ -153,7 +153,7 @@ function NSSAboutPage() {
 
       {/* Persistent admin controls */}
       {isEditMode && editedData && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in slide-in-from-bottom-4">
+        <div className="fixed top-24 right-8 z-50 animate-in fade-in zoom-in slide-in-from-top-4">
           <div className="flex items-center gap-3 bg-card p-2 rounded-full border border-border shadow-2xl">
             <button
               onClick={() => setEditedData(null)}

@@ -20,11 +20,14 @@ import {
   CheckCircle2,
   Users,
 } from "lucide-react";
-import heroImg from "@/assets/hero-campus.jpg";
-import hero2 from "@/assets/hero-2.jpg";
-import hero3 from "@/assets/hero-3.jpg";
-import hero4 from "@/assets/hero-4.jpg";
-import campusLifeImg from "@/assets/campus-life.jpg";
+import { imageUrl } from "@/lib/assets";
+
+const heroImg = imageUrl("hero-carousal/hero-campus.jpg");
+const hero2 = imageUrl("hero-carousal/hero-2.jpg");
+const hero3 = imageUrl("hero-carousal/hero-3.webp");
+const hero4 = imageUrl("hero-carousal/hero-4.webp");
+const hero5 = imageUrl("hero-carousal/hero-5.webp");
+const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
 import labImg from "@/assets/lab.jpg";
 import hostelImg from "@/assets/hostel.jpg";
 import sportsImg from "@/assets/sports.jpg";
@@ -39,7 +42,7 @@ import { SectionLabel } from "@/components/SectionLabel";
 import { MarqueeLogos } from "@/components/MarqueeLogos";
 import { STATS, RECRUITERS } from "@/lib/site"; // Removed static DEPARTMENTS import
 import { useQuery } from "@tanstack/react-query";
-import { getLeadershipData } from "@/funcs/leadership";
+import { getLeadershipData } from "../funcs/leadership";
 import { getAllDepartments } from "@/functions/departments"; // Added our new query hook target
 
 export const Route = createFileRoute("/")({
@@ -124,6 +127,7 @@ function HomePage() {
       <section className="relative h-[100svh] min-h-[640px] w-full overflow-hidden">
         <HeroSlideshow
           images={[
+            { src: hero5, alt: "JNTU-GV VIZIANAGARAM main building" },
             { src: heroImg, alt: "JNTU-GV campus at golden hour" },
             { src: hero2, alt: "Aerial view of campus at sunset" },
             { src: hero3, alt: "Students walking through campus" },
@@ -134,7 +138,7 @@ function HomePage() {
           overlay="linear-gradient(180deg, oklch(0.18 0.05 260 / 0.55) 0%, oklch(0.18 0.05 260 / 0.35) 40%, oklch(0.18 0.05 260 / 0.85) 100%)"
         >
           <div className="container-narrow h-full min-h-[100svh] flex flex-col justify-end pt-32 pb-32 md:pb-36 text-white">
-            <div className="text-eyebrow !text-white/80 animate-[fade-up_0.7s_ease-out_0.3s_both] flex items-center gap-3">
+            <div className="text-eyebrow !text-white/80 animate-[fade-up_0.3s_ease-out_0.3s_both] flex items-center gap-3">
               <span className="flex items-center gap-1.5">
                 <MapPin className="h-3 w-3" />
                 Vizianagaram, AP
@@ -142,16 +146,16 @@ function HomePage() {
               <span className="h-1 w-1 rounded-full bg-white/30" />
               <span>Established in 2007</span>
             </div>
-            <h1 className="text-display text-5xl sm:text-6xl md:text-8xl mt-4 max-w-5xl animate-[fade-up_0.9s_ease-out_0.5s_both]">
+            <h1 className="text-display text-5xl sm:text-6xl md:text-8xl mt-4 max-w-5xl animate-[fade-up_0.4s_ease-out_0.5s_both]">
               Engineering tomorrow,
               <br />
               <span className="italic text-white/85">together.</span>
             </h1>
-            <p className="mt-6 text-base md:text-xl text-white/80 max-w-2xl leading-relaxed animate-[fade-up_0.9s_ease-out_0.8s_both]">
+            <p className="mt-6 text-base md:text-xl text-white/80 max-w-2xl leading-relaxed animate-[fade-up_0.4s_ease-out_0.8s_both]">
               A constituent college of JNTU-GV, approved by AICTE New Delhi, and recognized by UGC
               under section 2(f) & 12(B) of UGC Act 1956 — shaping the future of engineering since 2007.
             </p>
-            <div className="mt-10 flex flex-wrap gap-3 animate-[fade-up_0.9s_ease-out_1s_both]">
+            <div className="mt-10 flex flex-wrap gap-3 animate-[fade-up_0.4s_ease-out_1s_both]">
               <Link to="/academics" className="btn-primary">
                 Academics <ArrowRight className="h-4 w-4" />
               </Link>
@@ -198,7 +202,7 @@ function HomePage() {
 
               <div className="space-y-6">
                 <RevealOnScroll delay={100}>
-                  <div className="group p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-500">
+                  <div className="group p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
                     <div className="flex gap-6 items-start">
                       <div className="h-12 w-12 shrink-0 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Eye className="h-6 w-6" />
@@ -217,7 +221,7 @@ function HomePage() {
                 </RevealOnScroll>
 
                 <RevealOnScroll delay={200}>
-                  <div className="group p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-500">
+                  <div className="group p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
                     <div className="flex gap-6 items-start">
                       <div className="h-12 w-12 shrink-0 rounded-2xl bg-accent/10 text-accent flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Target className="h-6 w-6" />
@@ -256,13 +260,13 @@ function HomePage() {
                   <div className="absolute -top-8 -right-8 w-32 h-32 bg-primary/10 rounded-full blur-3xl animate-pulse" />
                   <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-accent/10 rounded-full blur-3xl" />
                   
-                  <div className="relative bg-card rounded-[40px] p-6 md:p-8 border border-border shadow-elegant overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
+                  <div className="relative bg-card rounded-[40px] p-6 md:p-8 border border-border shadow-elegant overflow-hidden transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
                     <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden mb-6 border border-white/50 shadow-inner group/img bg-slate-100">
                       {principal?.image ? (
                         <img 
                           src={principal.image} 
                           alt={principal.name} 
-                          className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover/img:scale-105"
+                          className="h-full w-full object-cover transition-all duration-300 group-hover/img:scale-105"
                         />
                       ) : (
                         <div className="h-full w-full grid place-items-center bg-slate-50">
@@ -314,7 +318,7 @@ function HomePage() {
               {STATS.map((s, i) => (
                 <div key={s.label} className="bg-white p-8 lg:p-10 hover:bg-slate-50 transition-colors group">
                   <StatCounter value={s.value} label={s.label} />
-                  <div className="mt-2 h-1 w-0 bg-primary group-hover:w-full transition-all duration-500 rounded-full" />
+                  <div className="mt-2 h-1 w-0 bg-primary group-hover:w-full transition-all duration-200 rounded-full" />
                 </div>
               ))}
             </div>
@@ -353,7 +357,7 @@ function HomePage() {
                       <img
                         src={d.image}
                         alt={`${d.name} representation`}
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (
                       <div
@@ -371,7 +375,7 @@ function HomePage() {
                         <span className="px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white/90">
                           VIEW DEPT
                         </span>
-                        <div className="h-9 w-9 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-slate-900 transition-all duration-500">
+                        <div className="h-9 w-9 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-slate-900 transition-all duration-200">
                           <ArrowRight className="h-4 w-4" />
                         </div>
                       </div>

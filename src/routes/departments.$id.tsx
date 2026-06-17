@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
 import { getDepartmentDetails, type DepartmentData } from "@/functions/departments";
-import { updateDepartment } from "@/lib/departments";
+import { getAssetUrl, updateDepartment } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -107,7 +107,7 @@ function DepartmentLayout() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className={`relative h-[350px] w-full overflow-hidden transition-all duration-300 ${isEditMode ? "ring-4 ring-inset ring-amber-400" : "bg-slate-900"}`}>
-        <img src={headerEdit.image} className="h-full w-full object-cover opacity-40" alt={headerEdit.name} />
+        <img src={getAssetUrl(headerEdit.image)} className="h-full w-full object-cover opacity-40" alt={headerEdit.name} />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center w-full max-w-4xl px-4">
             {isEditMode ? (
@@ -153,16 +153,29 @@ function DepartmentLayout() {
         <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white transform transition-transform duration-300 p-6 lg:relative lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 ${isMobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"}`}>
           <div className="sticky top-28 bg-slate-50 rounded-3xl p-6 border border-slate-100 h-fit">
 
-            <nav className="space-y-2">
-              {navLinks.map((link) => {
-                const fullPath = `/departments/${loaderData.slug}${link.path}`;
-                return (
-                  <Link key={link.path} to={fullPath} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${location.pathname === fullPath ? "bg-blue-600 text-white" : "text-slate-600 hover:bg-white"}`}>
-                    {link.icon} {link.name}
-                  </Link>
-                );
-              })}
-            </nav>
+          <nav className="space-y-2">
+  {navLinks.map((link) => {
+    const fullPath = `/departments/${loaderData.slug}${link.path}`;
+    
+    // Check if current path starts with this nav link's path
+    // This makes Faculty stay highlighted when viewing a faculty profile
+    const isActive = link.path === "" 
+      ? location.pathname === fullPath          // exact match for About
+      : location.pathname.startsWith(fullPath); // prefix match for all others
+    
+    return (
+      <Link
+        key={link.path}
+        to={fullPath}
+        className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
+          isActive ? "bg-blue-600 text-white" : "text-slate-600 hover:bg-white"
+        }`}
+      >
+        {link.icon} {link.name}
+      </Link>
+    );
+  })}
+</nav>
           </div>
         </aside>
 

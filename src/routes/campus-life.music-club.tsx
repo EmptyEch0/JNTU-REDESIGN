@@ -151,7 +151,7 @@ function MusicClubPage() {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-800 pb-24">
       {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
+        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.15s] backdrop-blur-md text-xs uppercase tracking-widest">
           <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
           <span>Music Club Directorate Live CMS</span>
           <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
@@ -179,13 +179,13 @@ function MusicClubPage() {
           ]}
         />
 
-        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
+        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.2s_ease-out]">
           
           {/* IMAGES LEDGER CAROUSEL */}
           <div className="relative w-full max-w-full overflow-hidden rounded-[32px] shadow-md border border-slate-200/60 bg-slate-200">
             <ImageCarousel images={getCarouselImages()} fallback={cultureImg} />
             {isEditMode && (
-              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.4s]">
+              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.2s]">
                 <div className="flex items-center gap-2 pb-3 border-b border-amber-200/60">
                   <div className="w-9 h-9 rounded-2xl bg-amber-100 text-amber-700 grid place-items-center shrink-0 shadow-sm">
                     <Camera className="w-4.5 h-4.5" />
@@ -231,7 +231,7 @@ function MusicClubPage() {
               💡 TAB 1: OVERVIEW
              ========================================== */}
           {tab === "Overview" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               
               {/* FACULTY COORDINATOR */}
               <Card 
@@ -240,7 +240,7 @@ function MusicClubPage() {
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
               >
                 {isEditMode ? (
-                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.3s]">
+                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.15s]">
                     <div className="w-28 h-28 bg-slate-100 border-2 border-amber-200 rounded-[28px] overflow-hidden relative group shadow-sm">
                       <img src={editFaculty.img || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"} className="w-full h-full object-cover" />
                       <input 
@@ -276,7 +276,7 @@ function MusicClubPage() {
                     <img
                       src={faculty?.img || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"}
                       onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"; }}
-                      className="w-24 h-24 md:w-28 md:h-28 rounded-[28px] object-cover border-2 border-slate-100 shadow shrink-0 duration-500 hover:scale-105"
+                      className="w-24 h-24 md:w-28 md:h-28 rounded-[28px] object-cover border-2 border-slate-100 shadow shrink-0 duration-200 hover:scale-105"
                       alt={faculty?.name || "Coordinator"}
                     />
                     <div>
@@ -298,7 +298,7 @@ function MusicClubPage() {
                   className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
                 >
                   {isEditMode ? (
-                    <div className="space-y-3 animate-[fade-in_0.3s]">
+                    <div className="space-y-3 animate-[fade-in_0.15s]">
                       <textarea value={editCore.objectives} onChange={(e)=>setEditCore({...editCore, objectives:e.target.value})} className="w-full h-28 border rounded-xl p-3 text-xs font-medium bg-white" />
                       <button onClick={handleSaveCore} className="w-full bg-amber-500 text-amber-950 font-black text-xs py-2.5 rounded-xl uppercase cursor-pointer transition"><Save className="w-3.5 h-3.5 inline mr-1"/> Sync Objectives</button>
                     </div>
@@ -313,7 +313,7 @@ function MusicClubPage() {
                   className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
                 >
                   {isEditMode ? (
-                    <div className="space-y-3 animate-[fade-in_0.3s]">
+                    <div className="space-y-3 animate-[fade-in_0.15s]">
                       <textarea value={editCore.process} onChange={(e)=>setEditCore({...editCore, process:e.target.value})} className="w-full h-28 border rounded-xl p-3 text-xs font-medium bg-white" />
                       <button onClick={handleSaveCore} className="w-full bg-amber-500 text-amber-950 font-black text-xs py-2.5 rounded-xl uppercase cursor-pointer transition"><Save className="w-3.5 h-3.5 inline mr-1"/> Sync Process</button>
                     </div>
@@ -343,7 +343,7 @@ function MusicClubPage() {
               🎵 TAB 2: EQUIPMENT AVAILABLE
              ========================================== */}
           {tab === "Equipment Available" && (
-            <div className="animate-[fade-in_0.5s_ease-out]">
+            <div className="animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="Instruments & Amplification Tech" 
                 subtitle="Current dynamic studio gear records"
@@ -363,7 +363,7 @@ function MusicClubPage() {
               🎤 TAB 3: ACTIVE MEMBERS
              ========================================== */}
           {tab === "Club Members" && (
-            <div className="animate-[fade-in_0.5s_ease-out]">
+            <div className="animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="Registered Musicians Registry" 
                 subtitle="Authorized instrument and vocalist line-up"
@@ -388,7 +388,7 @@ function MusicClubPage() {
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (
-    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-500 shadow-sm overflow-hidden w-full ${className}`}>
+    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-200 shadow-sm overflow-hidden w-full ${className}`}>
       {title && (
         <div className="flex items-center gap-3.5 mb-6 md:mb-8 pb-5 border-b border-slate-100">
           <div className="w-12 h-12 rounded-[20px] bg-slate-50 border border-slate-200/60 text-[oklch(0.42_0.18_265)] grid place-items-center shrink-0 shadow-sm">
@@ -437,7 +437,7 @@ function ImageCarousel({ images, fallback }: any) {
             key={i}
             src={img}
             alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
             onError={(e) => { e.currentTarget.src = fallback; }}
           />
         ))}
@@ -490,7 +490,7 @@ function StudentRosterEditable({ data, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div>
             <label className="text-[9px] font-black text-amber-800 uppercase">Lead Full Name</label>
             <input value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} className="w-full border bg-white p-2 text-xs font-bold rounded" />
@@ -512,7 +512,7 @@ function StudentRosterEditable({ data, isEdit, onRefetch }: any) {
           <p className="italic text-slate-400 text-sm col-span-2 font-medium">No registered student coordinators listed.</p>
         ) : (
           data.map((s: any, idx: number)=>(
-            <div key={s.id || idx} className={`flex items-center justify-between border rounded-[24px] p-5 transition duration-500 ${isEdit ? "bg-amber-50/40 border-amber-200 shadow-sm" : "bg-slate-50/80 border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow group"}`}>
+            <div key={s.id || idx} className={`flex items-center justify-between border rounded-[24px] p-5 transition duration-200 ${isEdit ? "bg-amber-50/40 border-amber-200 shadow-sm" : "bg-slate-50/80 border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow group"}`}>
               <div className="flex items-center gap-3.5 min-w-0">
                 <div className="w-10 h-10 rounded-[14px] bg-slate-100 border grid place-items-center font-black text-slate-500 uppercase text-xs shadow-sm group-hover:scale-105 transition duration-300 shrink-0">{s.name?.[0]}</div>
                 <div className="flex flex-col min-w-0">
@@ -563,7 +563,7 @@ function EquipmentRegistryEditable({ data, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] flex flex-col sm:flex-row gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] flex flex-col sm:flex-row gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div className="flex-1 w-full">
             <label className="text-[9px] font-black text-amber-800 uppercase">Instrument Specification</label>
             <input value={form.item} onChange={(e)=>setForm({...form, item:e.target.value})} className="w-full border bg-white p-2 text-xs font-bold rounded" placeholder="e.g. Electric Synthesizer Station..." />
@@ -651,7 +651,7 @@ function MembersRegistryEditable({ data, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] shadow-inner animate-[fade-in_0.3s] space-y-4">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] shadow-inner animate-[fade-in_0.15s] space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <label className="text-[9px] font-black text-amber-800 uppercase">Musician Name</label>
@@ -761,4 +761,3 @@ function InlineCellEdit({ val, onCommit }: { val: string; onCommit: (n: string) 
   );
 }
 
-export default MusicClubPage;

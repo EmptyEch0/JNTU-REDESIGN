@@ -91,7 +91,7 @@ export function AcademicsSidebar() {
       
       <div className="p-6 border-t border-slate-200 dark:border-slate-800">
         <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-100 dark:border-slate-700/50 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
           <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Academic Year</p>
           <p className="text-sm font-bold text-slate-900 dark:text-white mt-1">2026 - 2027</p>
           <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2">Odd Semester (R23)</p>

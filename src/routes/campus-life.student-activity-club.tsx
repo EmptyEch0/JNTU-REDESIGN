@@ -98,7 +98,7 @@ function StudentActivityClubPage() {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-800 pb-24">
       {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
+        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.15s] backdrop-blur-md text-xs uppercase tracking-widest">
           <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
           <span>Student Activity Directorate CMS Live</span>
           <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
@@ -123,7 +123,7 @@ function StudentActivityClubPage() {
           items={TABS.map((t) => ({ label: t, icon: getTabIcon(t) }))}
         />
 
-        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
+        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.2s_ease-out]">
 
           <div className="relative w-full max-w-full overflow-hidden rounded-[32px] shadow-md border border-slate-200/60 bg-slate-200">
             <ImageCarousel images={getCarouselImages()} fallback={DEFAULT_IMAGE} />
@@ -133,7 +133,7 @@ function StudentActivityClubPage() {
               💡 TAB 1: OVERVIEW
              ========================================== */}
           {tab === "Overview" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
 
               <Card title="Student Activity Clubs Overview" icon={Sparkles}>
                 <p className="text-[15px] text-slate-600 font-medium leading-relaxed bg-slate-50/50 border p-6 rounded-3xl shadow-inner whitespace-pre-line">
@@ -149,9 +149,9 @@ function StudentActivityClubPage() {
                   <div
                     key={club.id}
                     onClick={() => setTab(club.name)}
-                    className="bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 shadow-sm hover:shadow-lg transition duration-500 cursor-pointer group overflow-hidden relative"
+                    className="bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 shadow-sm hover:shadow-lg transition duration-200 cursor-pointer group overflow-hidden relative"
                   >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-full translate-x-8 -translate-y-8 transition duration-500 group-hover:scale-110 group-hover:bg-indigo-50/40" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-full translate-x-8 -translate-y-8 transition duration-200 group-hover:scale-110 group-hover:bg-indigo-50/40" />
 
                     <div className="relative z-10">
                       <span className="inline-flex items-center px-3 py-1 rounded-xl text-[9.5px] font-black tracking-widest uppercase bg-indigo-50 border border-indigo-100 text-indigo-700 mb-5 shadow-sm">
@@ -175,7 +175,7 @@ function StudentActivityClubPage() {
               {/* CMS: ADD A CLUB PORTAL */}
               {isEditMode && (
                 <Card title="Launch A New Activity Club" icon={Plus} className="ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10">
-                  <div className="space-y-4 animate-[fade-in_0.3s]">
+                  <div className="space-y-4 animate-[fade-in_0.15s]">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
                         <label className="text-[9px] font-black text-amber-800 uppercase">Club Badge Title</label>
@@ -222,7 +222,7 @@ function StudentActivityClubPage() {
             if (!activeClub) return null;
 
             return (
-              <div className="space-y-10 animate-[fade-in_0.5s_ease-out] w-full">
+              <div className="space-y-10 animate-[fade-in_0.2s_ease-out] w-full">
                 <ClubLayoutEditor
                   club={activeClub}
                   isEdit={isEditMode}
@@ -243,7 +243,7 @@ function StudentActivityClubPage() {
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (
-    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-500 shadow-sm overflow-hidden w-full ${className}`}>
+    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-200 shadow-sm overflow-hidden w-full ${className}`}>
       {title && (
         <div className="flex items-center gap-3.5 mb-6 md:mb-8 pb-5 border-b border-slate-100">
           <div className="w-12 h-12 rounded-[20px] bg-slate-50 border border-slate-200/60 text-[oklch(0.42_0.18_265)] grid place-items-center shrink-0 shadow-sm">
@@ -292,7 +292,7 @@ function ImageCarousel({ images, fallback }: any) {
             key={i}
             src={img}
             alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
             onError={(e) => { e.currentTarget.src = fallback; }}
           />
         ))}
@@ -407,7 +407,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
       {/* MAIN HEADER DISPLAY */}
       <Card title={club.name} subtitle={club.category} icon={Activity} className={isEdit ? "ring-4 ring-amber-500/10 bg-amber-50/10 border-amber-200" : ""}>
         {isEdit ? (
-          <div className="space-y-5 animate-[fade-in_0.3s]">
+          <div className="space-y-5 animate-[fade-in_0.15s]">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Badge Short Label</label>
@@ -453,7 +453,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
               </p>
             </div>
             {club.heroImage && (
-              <div className="w-full md:w-1/2 aspect-[16/10] rounded-[28px] overflow-hidden border-2 border-slate-100 shadow transition duration-500 hover:scale-[1.02]">
+              <div className="w-full md:w-1/2 aspect-[16/10] rounded-[28px] overflow-hidden border-2 border-slate-100 shadow transition duration-200 hover:scale-[1.02]">
                 <img
                   src={club.heroImage}
                   className="w-full h-full object-cover"
@@ -493,7 +493,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
 
         {/* CREATOR FOR SECTION */}
         {isEdit && (
-          <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] space-y-4 shadow-inner animate-[fade-in_0.3s]">
+          <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] space-y-4 shadow-inner animate-[fade-in_0.15s]">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Spotlight Header</label>
@@ -516,7 +516,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
 
         <div className="space-y-10">
           {(club.sections || []).map((sec: any, idx: number) => (
-            <div key={sec.id} className={`flex flex-col md:flex-row items-center gap-8 border bg-white rounded-[32px] p-6 md:p-8 shadow-sm hover:shadow-md transition duration-500 relative group ${isEdit ? "ring-2 ring-amber-300" : ""}`}>
+            <div key={sec.id} className={`flex flex-col md:flex-row items-center gap-8 border bg-white rounded-[32px] p-6 md:p-8 shadow-sm hover:shadow-md transition duration-200 relative group ${isEdit ? "ring-2 ring-amber-300" : ""}`}>
 
               {isEdit && (
                 <button
@@ -542,7 +542,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
               </div>
 
               {sec.image && (
-                <div className={`w-full md:w-1/2 aspect-[16/10] rounded-[24px] border border-slate-100 overflow-hidden shadow-sm duration-500 hover:scale-[1.01] shrink-0 relative ${idx % 2 === 1 ? "md:order-1" : ""}`}>
+                <div className={`w-full md:w-1/2 aspect-[16/10] rounded-[24px] border border-slate-100 overflow-hidden shadow-sm duration-200 hover:scale-[1.01] shrink-0 relative ${idx % 2 === 1 ? "md:order-1" : ""}`}>
                   <img src={sec.image} className="w-full h-full object-cover" alt={sec.heading} onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }} />
                   {isEdit && (
                     <input value={sec.image} onChange={async (e) => { await updateClubContent({ data: { ...sec, image: e.target.value } }); onRefetch(); }} className="absolute inset-0 opacity-0 focus:opacity-100 hover:opacity-100 bg-amber-950/90 text-white text-[10px] p-3 text-center border-none outline-none font-black cursor-pointer transition" placeholder="Update Block Img URL" />
@@ -600,4 +600,3 @@ function InlineCellEdit({ val, onCommit }: { val: string; onCommit: (n: string) 
   );
 }
 
-export default StudentActivityClubPage;

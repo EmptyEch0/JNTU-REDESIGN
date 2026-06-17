@@ -176,7 +176,7 @@ function NSSSpecialCampPage() {
 
         {isLoading ? (
           <div className="py-16 grid place-items-center">
-            <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+            <div className="spinner" />
           </div>
         ) : campDays.length === 0 ? (
           <p className="text-center text-xs font-medium text-muted-foreground py-12">

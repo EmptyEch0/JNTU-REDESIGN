@@ -14,6 +14,7 @@ import { Footer } from "@/components/Footer";
 import { Chatbot } from "@/components/Chatbot";
 import { getQueryClient } from "@/lib/query-client";
 import { AdminProvider, useAdmin } from "@/context/AdminContext";
+import { OfflineIndicator } from "@/components/OfflineIndicator";
 
 function NotFoundComponent() {
   return (
@@ -35,8 +36,17 @@ interface MyRootContext {
   queryClient: import("@tanstack/react-query").QueryClient;
 }
 
+function GlobalSpinner() {
+  return (
+    <div className="flex items-center justify-center min-h-[50vh]">
+      <div className="spinner"></div>
+    </div>
+  );
+}
+
 // 2. The most stable way to define the route with types
 export const Route = createRootRoute({
+  pendingComponent: GlobalSpinner,
   context: () => ({}) as MyRootContext,
   head: () => ({
     meta: [
@@ -79,7 +89,7 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap",
       },
-      { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+      { rel: "icon", type: "image/jpeg", href: "/logo.jpeg" },
     ],
   }),
   shellComponent: RootShell,
@@ -111,6 +121,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AdminProvider>
+        <OfflineIndicator />
         <AdminContent />
       </AdminProvider>
     </QueryClientProvider>
@@ -190,7 +201,7 @@ function AdminContent() {
 
       <MegaMenu />
 
-      <main key={path} className="flex-1 animate-[fade-in_0.5s_ease-out] w-full max-w-full overflow-x-hidden">
+      <main key={path} className="flex-1 animate-[fade-in_0.2s_ease-out] w-full max-w-full overflow-x-hidden">
         <Outlet />
       </main>
 

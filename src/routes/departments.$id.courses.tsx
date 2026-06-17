@@ -14,7 +14,7 @@ import {
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { syncCourses } from "@/lib/departments";
+import { getAssetUrl, syncCourses } from "@/lib/departments";
 import { toast } from "sonner";
 import { assetUrl } from "@/lib/assets";
 
@@ -184,7 +184,7 @@ function ProgrammesPage() {
                                 <LinkIcon size={14} className="text-slate-400" />
                                 <input
                                   className="w-full bg-transparent text-xs text-blue-600 font-medium outline-none"
-                                  value={assetUrl(course.syllabus_url) || ""}
+                                  value={getAssetUrl(course.syllabus_url) || ""}
                                   onChange={(e) => updateCourse(course.id, "syllabus_url", e.target.value)}
                                   placeholder="https://example.com/syllabus.pdf"
                                 />
@@ -199,7 +199,7 @@ function ProgrammesPage() {
                             </p>
                             <div>
                               {course.syllabus_url ? (
-                                <a href={course.syllabus_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 px-7 py-3.5 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-blue-600 transition-all hover:shadow-xl hover:shadow-blue-200 active:scale-95">
+                                <a href={assetUrl(course.syllabus_url)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 px-7 py-3.5 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-blue-600 transition-all hover:shadow-xl hover:shadow-blue-200 active:scale-95">
                                   <FileText size={18} /> View Syllabus <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </a>
                               ) : (

@@ -8,21 +8,24 @@ const ASSETS_BASE_URL = import.meta.env.VITE_ASSETS_URL || "";
 
 export const getAssetUrl = (urlPath: string | null | undefined): string => {
   if (!urlPath) return "/fallback-placeholder.jpg";
-  if (urlPath.startsWith("http://") || urlPath.startsWith("https://")) {
-    return urlPath;
+
+  // Already a full URL - replace http VPS URL with our proxy
+  if (urlPath.startsWith("http://89.116.134.182:8080/local-assets/")) {
+    const relativePath = urlPath.replace("http://89.116.134.182:8080/local-assets/", "");
+    return `${ASSETS_BASE_URL}/${relativePath}`;
   }
-  
-  // Convert Windows backslashes to forward slashes
+
+  if (urlPath.startsWith("https://")) return urlPath;
+
+  // Normalize path
   let cleanPath = urlPath.replace(/\\/g, "/");
-  
-  // Strip leading slash if present
   cleanPath = cleanPath.startsWith("/") ? cleanPath.slice(1) : cleanPath;
-  
-  // Prepend local-assets/ if missing
-  if (!cleanPath.startsWith("local-assets/")) {
-    cleanPath = `local-assets/${cleanPath}`;
+
+  // Strip "local-assets/" prefix since ASSETS_BASE_URL already includes it in prod
+  if (cleanPath.startsWith("local-assets/")) {
+    cleanPath = cleanPath.replace("local-assets/", "");
   }
-  
+
   return `${ASSETS_BASE_URL}/${cleanPath}`;
 };
 // --- Department Core ---

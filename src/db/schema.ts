@@ -1433,6 +1433,36 @@ export const academicsCac = pgTable("academics_cac", {
   created_at: timestamp("created_at").defaultNow(),
 });
 
+export const admins = pgTable("admins", {
+  adminId: uuid("admin_id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash"),
+  role: text("role").default("department_admin").notNull(),
+  authProvider: text("auth_provider").default("email").notNull(),
+  authorizedDepts: jsonb("authorized_depts").$type<string[]>().default([]).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const adminSessions = pgTable("admin_sessions", {
+  id: text("id").primaryKey(),
+  adminId: uuid("admin_id")
+    .notNull()
+    .references(() => admins.adminId, { onDelete: "cascade" }),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+});
+
+export const adminAuditLogs = pgTable("admin_audit_logs", {
+  id: serial("id").primaryKey(),
+  adminId: uuid("admin_id").references(() => admins.adminId, { onDelete: "cascade" }),
+  action: text("action").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  details: text("details"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 export const tickerNotifications = pgTable("ticker_notifications", {
   id: serial("id").primaryKey(),
   source: text("source").notNull(),

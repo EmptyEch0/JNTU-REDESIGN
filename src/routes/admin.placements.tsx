@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getPlacementYears,
@@ -8,14 +8,25 @@ import {
   addPlacementHighlight,
 } from "../lib/placements";
 import { PageHero } from "@/components/PageHero";
+import { useAdmin } from "../context/AdminContext";
 
 export const Route = createFileRoute("/admin/placements")({
   component: AdminPlacementsPage,
 });
 
 function AdminPlacementsPage() {
+  const { isAdmin } = useAdmin();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!isAdmin) navigate({ to: "/" });
+  }, [isAdmin, navigate]);
+
+  if (!isAdmin) return null;
+
   const [yearForm, setYearForm] = useState({ year: "", offers: 0, top: "", recruiters: 0 });
+
   const [highlightForm, setHighlightForm] = useState({
     name: "",
     branch: "",

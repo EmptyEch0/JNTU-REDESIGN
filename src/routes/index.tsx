@@ -44,6 +44,7 @@ import { STATS, RECRUITERS } from "@/lib/site"; // Removed static DEPARTMENTS im
 import { useQuery } from "@tanstack/react-query";
 import { getLeadershipData } from "../funcs/leadership";
 import { getAllDepartments } from "@/functions/departments"; // Added our new query hook target
+import { getAssetUrl } from "@/lib/departments";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -355,7 +356,7 @@ function HomePage() {
                     {/* Background Visual Image with full visibility and smooth dark overlay */}
                     {d.image ? (
                       <img
-                        src={d.image}
+                        src={getAssetUrl(d.image)}
                         alt={`${d.name} representation`}
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />

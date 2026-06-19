@@ -265,7 +265,7 @@ function HomePage() {
                     <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden mb-6 border border-white/50 shadow-inner group/img bg-slate-100">
                       {principal?.image ? (
                         <img 
-                          src={principal.image} 
+                          src={getAssetUrl(principal.image)} 
                           alt={principal.name} 
                           className="h-full w-full object-cover transition-all duration-300 group-hover/img:scale-105"
                         />

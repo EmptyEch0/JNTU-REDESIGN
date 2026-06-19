@@ -27,6 +27,7 @@ import {
   upsertAcademicsDownload,
   deleteAcademicsDownload
 } from "@/lib/academics";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/academics/downloads")({
   head: () => ({
@@ -508,7 +509,7 @@ function DownloadsPage() {
                             )}
 
                             <button 
-                              onClick={() => window.open(item.pdf_url, "_blank")}
+                              onClick={() => window.open(getAssetUrl(item.pdf_url), "_blank")}
                               className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-[10px] font-black tracking-wider uppercase transition-all shadow-md group-hover:scale-[1.02] active:scale-[0.98]"
                             >
                               <FileDown className="w-3.5 h-3.5" /> Download

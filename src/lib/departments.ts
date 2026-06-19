@@ -4,30 +4,8 @@ import { departments, faculty, achievements, courses, laboratories, departmentGa
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-const ASSETS_BASE_URL = import.meta.env.VITE_ASSETS_URL || "";
-
-export const getAssetUrl = (urlPath: string | null | undefined): string => {
-  if (!urlPath) return "/fallback-placeholder.jpg";
-
-  // Already a full URL - replace http VPS URL with our proxy
-  if (urlPath.startsWith("http://89.116.134.182:8080/local-assets/")) {
-    const relativePath = urlPath.replace("http://89.116.134.182:8080/local-assets/", "");
-    return `${ASSETS_BASE_URL}/${relativePath}`;
-  }
-
-  if (urlPath.startsWith("https://")) return urlPath;
-
-  // Normalize path
-  let cleanPath = urlPath.replace(/\\/g, "/");
-  cleanPath = cleanPath.startsWith("/") ? cleanPath.slice(1) : cleanPath;
-
-  // Strip "local-assets/" prefix since ASSETS_BASE_URL already includes it in prod
-  if (cleanPath.startsWith("local-assets/")) {
-    cleanPath = cleanPath.replace("local-assets/", "");
-  }
-
-  return `${ASSETS_BASE_URL}/${cleanPath}`;
-};
+import { getAssetUrl } from "./assets";
+export { getAssetUrl };
 // --- Department Core ---
 export const getDepartments = createServerFn({ method: "GET" }).handler(async () => {
   return await db.select().from(departments);

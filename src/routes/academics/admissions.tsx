@@ -35,6 +35,7 @@ import {
   upsertAcademicFeeStructure,
   deleteAcademicFeeStructure
 } from "@/lib/academics";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/academics/admissions")({
   head: () => ({
@@ -553,7 +554,7 @@ function AdmissionsPage() {
                   {brochures.map((brochure) => (
                     <div key={brochure.id} className="relative group/brochure">
                       <button
-                        onClick={() => window.open(brochure.file_url, "_blank")}
+                        onClick={() => window.open(getAssetUrl(brochure.file_url), "_blank")}
                         className="w-full py-2.5 px-4 bg-white/10 hover:bg-white/20 border border-white/15 rounded-xl font-bold text-xs flex items-center justify-between transition-all duration-300 group/btn"
                       >
                         <span className="flex items-center gap-2 text-left truncate pr-4">
@@ -888,7 +889,7 @@ function AdmissionsPage() {
                           <td className="px-4 py-3 text-center">
                             <div className="flex justify-center items-center gap-2">
                               <button
-                                onClick={() => window.open(fee.pdf_url, "_blank")}
+                                onClick={() => window.open(getAssetUrl(fee.pdf_url), "_blank")}
                                 className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-red-950/20 rounded"
                                 title="Download Official Fee Structure PDF"
                               >

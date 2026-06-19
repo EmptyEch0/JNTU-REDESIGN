@@ -12,6 +12,7 @@ import {
   upsertAcademicsCalendarEvent, 
   deleteAcademicsCalendarEvent 
 } from "@/lib/academics";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/academics/academic-calendar")({
   component: AcademicCalendarPage,
@@ -112,7 +113,7 @@ function AcademicCalendarPage() {
 
   const handleDownloadPDF = (url: string) => {
     if (url) {
-      window.open(url, "_blank");
+      window.open(getAssetUrl(url), "_blank");
     } else {
       toast.error("PDF file URL not available");
     }

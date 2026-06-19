@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Calendar, Award, FileText, Clock, Bell, Palmtree, GraduationCap, IndianRupee } from "lucide-react";
 import type { TickerNotification, TickerSource } from "@/data/academics-events";
+import { getAssetUrl } from "@/lib/assets";
 
 interface NotificationTickerProps {
   items: TickerNotification[];
@@ -135,7 +136,7 @@ export function NotificationTicker({
               return (
                 <a
                   key={`${item.id}-${idx}`}
-                  href={item.to}
+                  href={getAssetUrl(item.to)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={className}

@@ -12,6 +12,7 @@ import {
   upsertAcademicsSyllabus,
   deleteAcademicsSyllabus
 } from "@/lib/academics";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/academics/syllabus")({
   component: SyllabusPage,
@@ -426,14 +427,14 @@ function SyllabusPage() {
                             {item.pdf_url ? (
                               <>
                                 <button 
-                                  onClick={() => window.open(item.pdf_url, "_blank")}
+                                  onClick={() => window.open(getAssetUrl(item.pdf_url), "_blank")}
                                   className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"
                                   title="View Syllabus Online"
                                 >
                                   <Eye className="w-3.5 h-3.5" />
                                 </button>
                                 <button 
-                                  onClick={() => window.open(item.pdf_url, "_blank")}
+                                  onClick={() => window.open(getAssetUrl(item.pdf_url), "_blank")}
                                   className="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors"
                                   title="Download Syllabus PDF"
                                 >

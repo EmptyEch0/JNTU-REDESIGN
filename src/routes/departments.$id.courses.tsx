@@ -14,9 +14,9 @@ import {
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAssetUrl, syncCourses } from "@/lib/departments";
+import { syncCourses } from "@/lib/departments";
 import { toast } from "sonner";
-import { assetUrl } from "@/lib/assets";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/departments/$id/courses")({
   component: ProgrammesPage,
@@ -199,7 +199,7 @@ function ProgrammesPage() {
                             </p>
                             <div>
                               {course.syllabus_url ? (
-                                <a href={assetUrl(course.syllabus_url)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 px-7 py-3.5 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-blue-600 transition-all hover:shadow-xl hover:shadow-blue-200 active:scale-95">
+                                <a href={getAssetUrl(course.syllabus_url)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 px-7 py-3.5 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-blue-600 transition-all hover:shadow-xl hover:shadow-blue-200 active:scale-95">
                                   <FileText size={18} /> View Syllabus <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </a>
                               ) : (

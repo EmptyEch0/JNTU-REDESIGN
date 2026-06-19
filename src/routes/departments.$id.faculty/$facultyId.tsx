@@ -9,25 +9,7 @@ import {
   ArrowLeft, GraduationCap, Trophy, Globe, 
   Briefcase, BookOpen, Save, Plus, Trash2, Camera, Type, IdCard
 } from "lucide-react";
-const ASSETS_BASE_URL = import.meta.env.VITE_ASSETS_URL || ""; 
-
-const getAssetUrl = (urlPath: string | null | undefined): string => {
-  if (!urlPath) return "/fallback-banner.jpg";
-  if (urlPath.startsWith("http://") || urlPath.startsWith("https://")) {
-    return urlPath;
-  }
-  
-  let cleanPath = urlPath.startsWith("/") ? urlPath.slice(1) : urlPath;
-  
-  // Replace backslashes from database rows to forward slashes for the browser
-  cleanPath = cleanPath.replace(/\\/g, "/");
-  
-  if (!cleanPath.startsWith("local-assets/")) {
-    cleanPath = `local-assets/${cleanPath}`;
-  }
-  
-  return `${ASSETS_BASE_URL}/${cleanPath}`;
-};
+import { getAssetUrl } from "@/lib/assets";
 
 
 export const Route = createFileRoute("/departments/$id/faculty/$facultyId")({

@@ -37,7 +37,6 @@ function DepartmentLayout() {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // FIXED: Now uses loaderData.slug instead of id to prevent state de-sync with global navbar
   const isUnlocked = hasEditPermission(loaderData?.slug || "");
   const isEditMode = isDeptEditing(loaderData?.slug || "");
 
@@ -46,10 +45,8 @@ function DepartmentLayout() {
     image: loaderData?.image || "",
   });
 
-  // Automatically configure edit mode on initial authentication entry
   useEffect(() => {
     if (loaderData?.slug && hasEditPermission(loaderData.slug)) {
-      // FIXED: Uses slug for structural initialization matching
       if (isDeptEditing(loaderData.slug) === undefined) {
         setDeptEditing(loaderData.slug, true);
       }
@@ -77,7 +74,6 @@ function DepartmentLayout() {
 
   if (!loaderData || !loaderData.slug) return null;
 
-  // CRITICAL CHECKPOINT TRIGGER: Stop layout render if permission token does not exist
   const needsLockScreen = isAdmin && !isUnlocked;
 
   if (needsLockScreen) {
@@ -148,43 +144,68 @@ function DepartmentLayout() {
       </div>
 
       <div className="max-w-7xl mx-auto py-12 px-4 flex flex-col lg:flex-row gap-12 relative">
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden fixed bottom-6 right-6 z-50 bg-blue-600 text-white p-4 rounded-full shadow-2xl"><Menu size={24} /></button>
+        
+        {/* Floating Toggle Button for Mobile Screen - MOVED TO LEFT */}
+<button 
+  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+  className="lg:hidden fixed bottom-6 left-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-2xl transition-all duration-200 active:scale-95"
+  aria-label="Toggle Menu"
+>
+  {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+</button>
 
-        <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white transform transition-transform duration-300 p-6 lg:relative lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 ${isMobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"}`}>
-          <div className="sticky top-28 bg-slate-50 rounded-3xl p-6 border border-slate-100 h-fit">
+        {/* Sidebar Navigation */}
+        <aside className={`
+          fixed inset-y-0 left-0 z-40 w-72 bg-slate-50 p-6 shadow-2xl transition-transform duration-300 ease-in-out
+          lg:relative lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 lg:shadow-none lg:w-64 flex-shrink-0
+          ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+        `}>
+          <div className="sticky top-28 bg-white lg:bg-slate-50 rounded-3xl p-6 lg:border border-slate-100 h-fit space-y-6">
+            
+            {/* Header Title Inside Mobile Menu */}
+            <div className="flex items-center justify-between lg:hidden border-b pb-4 mb-2 border-slate-200">
+              <span className="font-bold text-slate-800 text-lg uppercase tracking-wider">Navigation</span>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="text-slate-500 hover:text-slate-800">
+                <X size={20} />
+              </button>
+            </div>
 
-          <nav className="space-y-2">
-  {navLinks.map((link) => {
-    const fullPath = `/departments/${loaderData.slug}${link.path}`;
-    
-    // Check if current path starts with this nav link's path
-    // This makes Faculty stay highlighted when viewing a faculty profile
-    const isActive = link.path === "" 
-      ? location.pathname === fullPath          // exact match for About
-      : location.pathname.startsWith(fullPath); // prefix match for all others
-    
-    return (
-      <Link
-        key={link.path}
-        to={fullPath}
-        className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-          isActive ? "bg-blue-600 text-white" : "text-slate-600 hover:bg-white"
-        }`}
-      >
-        {link.icon} {link.name}
-      </Link>
-    );
-  })}
-</nav>
+            <nav className="space-y-2">
+              {navLinks.map((link) => {
+                const fullPath = `/departments/${loaderData.slug}${link.path}`;
+                const isActive = link.path === "" 
+                  ? location.pathname === fullPath
+                  : location.pathname.startsWith(fullPath);
+                
+                return (
+                  <Link
+                    key={link.path}
+                    to={fullPath}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
+                      isActive ? "bg-blue-600 text-white shadow-md shadow-blue-600/20" : "text-slate-600 hover:bg-slate-100 lg:hover:bg-white"
+                    }`}
+                  >
+                    {link.icon} {link.name}
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
         </aside>
 
-        {isMobileMenuOpen && <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 lg:hidden" onClick={() => setIsMobileMenuOpen(false)} />}
+        {/* Transparent Backdrop Layer Overlay when Drawer is Open on Mobile */}
+        {isMobileMenuOpen && (
+          <div 
+            className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 lg:hidden transition-opacity duration-300" 
+            onClick={() => setIsMobileMenuOpen(false)} 
+          />
+        )}
 
+        {/* Main Workspace Content Stream Component wrapper */}
         <main className="flex-grow min-w-0 space-y-6">
-          {/* FIXED: Passing down the structural slug matching parameters property string */}
-
-          <div className="mt-2"><Outlet /></div>
+          <div className="mt-2">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

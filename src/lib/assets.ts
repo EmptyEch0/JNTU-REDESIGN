@@ -13,6 +13,11 @@ export const getAssetUrl = (path: string | null | undefined): string => {
     return "http://89.116.134.182:8080/local-assets/uploads/2022/03/Frame-1-1200x374.jpg";
   }
 
+  // Global override for Dr. G. Naga Raju
+  if (path.includes("Dr.-G.-J.-Naga-Raju1.png")) {
+    return "http://89.116.134.182:8080/local-assets/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg";
+  }
+
   if (path.startsWith("http://") || path.startsWith("https://")) {
     // Map old VPS IP to correct proxy config if needed, otherwise return as-is
     if (path.startsWith("http://89.116.134.182:8080/local-assets/")) {

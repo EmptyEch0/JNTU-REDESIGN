@@ -38,6 +38,12 @@ export function getAssetUrl(path?: string): string {
     cleanPath = `local-assets/${cleanPath}`;
   }
 
+  // Redirect uploads to the VPS asset host
+  if (cleanPath.startsWith("local-assets/uploads/")) {
+    const subPath = cleanPath.substring("local-assets/uploads/".length);
+    return `https://jntu-redesign.vercel.app/vps-assets/uploads/${subPath}`;
+  }
+
   // All local paths are served from the same origin at /local-assets/...
   return `/${cleanPath}`;
 }

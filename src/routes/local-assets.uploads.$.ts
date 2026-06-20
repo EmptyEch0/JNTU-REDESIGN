@@ -17,7 +17,7 @@ export const Route = createFileRoute("/local-assets/uploads/$")({
           }
 
           const relativeFilePath = pathname.substring(prefix.length);
-          const baseDir = "/local-assets/uploads";
+          const baseDir = path.join(process.cwd(), "local-assets", "uploads");
           const diskPath = path.join(baseDir, relativeFilePath);
 
           // Check if file exists and is not a directory

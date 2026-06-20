@@ -6,13 +6,9 @@ async function main() {
   const sql = postgres(connectionString);
 
   try {
-    const musicRows = await sql`SELECT * FROM music_images ORDER BY id DESC LIMIT 5`;
-    console.log("Latest music_images rows:");
-    console.log(musicRows);
-
-    const engRows = await sql`SELECT * FROM eng_meta WHERE category = 'electrical'`;
-    console.log("Electrical engineering cell info:");
-    console.log(engRows);
+    const rows = await sql`SELECT * FROM dispensary_content`;
+    console.log("dispensary_content rows:");
+    console.log(rows);
   } catch (err) {
     console.error("Error:", err);
   } finally {

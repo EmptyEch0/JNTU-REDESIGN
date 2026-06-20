@@ -12,21 +12,23 @@
  */
 export function getAssetUrl(path?: string): string {
   if (!path) return "";
+  
+  const trimmedPath = path.trim();
 
   // Pass through already-absolute or special paths
   if (
-    path.startsWith("http://") ||
-    path.startsWith("https://") ||
-    path.startsWith("data:") ||
-    path.startsWith("/src/") ||
-    path.startsWith("/assets/") ||
-    path.startsWith("/@fs/")
+    trimmedPath.startsWith("http://") ||
+    trimmedPath.startsWith("https://") ||
+    trimmedPath.startsWith("data:") ||
+    trimmedPath.startsWith("/src/") ||
+    trimmedPath.startsWith("/assets/") ||
+    trimmedPath.startsWith("/@fs/")
   ) {
-    return path;
+    return trimmedPath;
   }
 
   // Normalize slashes
-  let cleanPath = path.replace(/\\/g, "/");
+  let cleanPath = trimmedPath.replace(/\\/g, "/");
 
   // Remove any leading slash to avoid double-slash
   if (cleanPath.startsWith("/")) {
@@ -38,10 +40,13 @@ export function getAssetUrl(path?: string): string {
     cleanPath = `local-assets/${cleanPath}`;
   }
 
-  // Redirect uploads to the VPS asset host
-  if (cleanPath.startsWith("local-assets/uploads/")) {
-    const subPath = cleanPath.substring("local-assets/uploads/".length);
-    return `https://jntu-redesign.vercel.app/vps-assets/uploads/${subPath}`;
+  // Redirect uploads to the VPS asset host or configured VITE_ASSETS_URL
+  if (cleanPath.startsWith("local-assets/")) {
+    const subPath = cleanPath.substring("local-assets/".length);
+    const assetsUrl = import.meta.env.VITE_ASSETS_URL || "https://jntu-redesign.vercel.app/vps-assets";
+    const base = assetsUrl.endsWith("/") ? assetsUrl.slice(0, -1) : assetsUrl;
+    const sub = subPath.startsWith("/") ? subPath.substring(1) : subPath;
+    return `${base}/${sub}`;
   }
 
   // All local paths are served from the same origin at /local-assets/...

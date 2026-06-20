@@ -1,0 +1,826 @@
+1
+ACHANTA JAHNAVI
+16VV1A0501
+CSE
+2019-2020
+Off Campus
+Virtusa
+2
+BALARAM REVANTH NAMBURU
+16VV1A0503
+CSE
+2019-2020
+On Campus
+NCR Corporation India Pvt.Ltd.
+3
+BIJJAM SATISH KUMAR REDDY
+16VV1A0505
+CSE
+2019-2020
+On Campus
+Infosys
+4
+BORRA SURYA NAGA PRIYANKA
+16VV1A0507
+CSE
+2019-2020
+On Campus
+NCR Corporation India Pvt.Ltd.
+5
+CHAMARTHY NAGA SAI SRIRAM
+16VV1A0511
+CSE
+2019-2020
+On Campus
+Tata Consultancy Services 
+6
+DODLA INDU PRIYANKA
+16VV1A0513
+CSE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+7
+BHANU PRAKASH
+16VV1A0515
+CSE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+8
+GEDELA NAVYA SREE
+16VV1A0519
+CSE
+2019-2020
+On Campus
+Infosys
+9
+HIMANSI PANDA
+16VV1A0520
+CSE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+10
+KAMALAPATI TULASI
+16VV1A0523
+CSE
+2019-2020
+On Campus
+Wipro
+11
+KARRA GANAPATHI
+16VV1A0525
+CSE
+2019-2020
+Off Campus
+NCR Corporation India Pvt.Ltd.
+12
+K. SUSANNA
+16VV1A0526
+CSE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+13
+KONDAPALLI BHAVANA
+16VV1A0527
+CSE
+2019-2020
+On Campus
+Tata Consultancy Services 
+14
+GUMMALLA DEVIKA
+16VV1A0528
+CSE
+2019-2020
+On Campus
+Tata Consultancy Services 
+15
+LAKSHMANAN  AMRUTHA
+16VV1A0530
+CSE
+2019-2020
+On Campus
+Wipro
+16
+JENNY PRASANTHI
+16VV1A0531
+CSE
+2019-2020
+On Campus
+Tata Consultancy Services 
+17
+MADDELA HEMALATHA
+16VV1A0533
+CSE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+18
+MANDAPALLI DURGA MALLESH
+16VV1A0535
+CSE
+2019-2020
+On Campus
+Infosys
+19
+NARINA HIMAJA
+16VV1A0537
+CSE
+2019-2020
+On Campus
+Apps Associates
+20
+NIRBHAY KUMAR SINGH
+16VV1A0538
+CSE
+2019-2020
+On Campus
+NCR Corporation India Pvt.Ltd.
+21
+N. VENKATA ABHILASH
+16VV1A0539
+CSE
+2019-2020
+On Campus
+Infosys
+22
+POLINA POOJA CHOWDHARY
+16VV1A0540
+CSE
+2019-2020
+On Campus
+Tata Consultancy Services 
+23
+P. SURYA GANESH
+16VV1A0542
+CSE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+24
+PULI  AJAY
+16VV1A0543
+CSE
+2019-2020
+Off Campus
+Tilicho Labs
+25
+PAPPALA RAMESH
+16VV1A0545
+CSE
+2019-2020
+On Campus
+Tata Consultancy Services 
+26
+RAYAVARAPU GOWTHAM
+16VV1A0546
+CSE
+2019-2020
+On Campus
+Tata Consultancy Services 
+27
+REDDI DEVI
+16VV1A0547
+CSE
+2019-2020
+On Campus
+Infosys
+28
+SHAIK RIYAZ
+16VV1A0549
+CSE
+2019-2020
+On Campus
+Sails Software Solutions
+29
+SHAIK SEEMA
+16VV1A0550
+CSE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+30
+SHAIK SHAJEED SULTANA
+16VV1A0551
+CSE
+2019-2020
+On Campus
+Wipro
+31
+SIRIPURAPU RESHMA BHANU
+16VV1A0552
+CSE
+2019-2020
+On Campus
+Efftronics
+32
+SUNKARA RANJITHA
+16VV1A0553
+CSE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+33
+THOTA PURNIMA
+16VV1A0555
+CSE
+2019-2020
+On Campus
+Infosys
+34
+APPALA NAIDU
+16VV1A0557
+CSE
+2019-2020
+Off Campus
+Tilicho Labs
+35
+VEMPARALA BRAHMANI SRI  MAHA LAKSHMI
+16VV1A0558
+CSE
+2019-2020
+On Campus
+Tata Consultancy Services 
+36
+YELURI NEEHARIKA
+16VV1A0559
+CSE
+2019-2020
+On Campus
+Wipro
+37
+PADALA SITA
+17VV5A0563
+CSE
+2019-2020
+On Campus
+Sails Software Solutions
+38
+NAGA SAI
+17VV5A0565
+CSE
+2019-2020
+Off Campus
+Tilicho Labs
+39
+GONGADA SAHITHYA
+17VV5A0566
+CSE
+2019-2020
+On Campus
+Sails Software Solutions
+40
+P.VANITHA
+15VV5A0568
+CSE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+41
+CHINTAPALLI SYAM CHARAM
+16VV1A1204
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+42
+GOGADA CHANDRA VAMSI
+16VV1A1214
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+43
+YARAMALA VIVEK
+16VV1A1258
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+44
+GANDI DIVYA
+16VV1A1210
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+45
+SALINA SARITHA
+16VV1A1243
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+46
+PANNEERU VAMSEE
+16VV1A1237
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+47
+KUPIREDDY SANDHYARANI
+16VV1A1228
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+48
+ERRAMSETTY JYOTHSNA
+16VV1A1209
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+49
+PANDIRI SURESH
+16VV1A1236
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+50
+CHOPPAVARAPU PURNIMA
+16VV1A1205
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+51
+KOTHAPALLI PRIYANKA
+16VV1A1226
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+52
+ANDAVARAPU VINEELA
+16VV1A1201
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+53
+TADALA VENKATA SAI SUSHMA 
+16VV1A1257
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+54
+VAMSI SHANKAR SIMHADRI
+16VV1A1247
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+55
+NADEEM BABU SHAIK
+16VV1A1246
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+56
+SEERA SAI LIKHITH YADAV
+16VV1A1244
+IT
+2019-2020
+On Campus
+Tata Consultancy Services 
+57
+CHOPPAVARAPU PURNIMA
+16VV1A1205
+IT
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+58
+GEDELA DIVYA SRI
+16VV1A1211
+IT
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+59
+GONA BUELAH BLESSINA
+16VV1A1216
+IT
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+60
+KOTHAPALLI PRIYANKA
+16VV1A1226
+IT
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+61
+PANNEERU VAMSEE
+16VV1A1237
+IT
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+62
+SEERA SAI LIKHITH YADAV
+16VV1A1244
+IT
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+63
+ADADADI TIRUMALESWER
+16VV1A1261
+IT
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+64
+CHOPPAVARAPU PURNIMA
+16VV1A1205
+IT
+2019-2020
+On Campus
+Infosys
+65
+ERRAMSETTY JYOTHSNA
+16VV1A1209
+IT
+2019-2020
+On Campus
+Infosys
+66
+GANDI DIVYA
+16VV1A1210
+IT
+2019-2020
+On Campus
+Infosys
+67
+GONA BUELAH BLESSINA
+16VV1A1216
+IT
+2019-2020
+On Campus
+Infosys
+68
+HANUMANTU HIMA BINDU
+16VV1A1219
+IT
+2019-2020
+On Campus
+Infosys
+69
+MOTHUKURI AKHILA
+16VV1A1233
+IT
+2019-2020
+On Campus
+Infosys
+70
+NAGAPURI TEJA
+16VV1A1234
+IT
+2019-2020
+On Campus
+Infosys
+71
+REDDY SAI GEETHIKA
+16VV1A1241
+IT
+2019-2020
+On Campus
+Infosys
+72
+SEERA SAI LIKHITH YADAV
+16VV1A1244
+IT
+2019-2020
+On Campus
+Infosys
+73
+GEDELA SAI GOWTHAMI
+16VV1A1212
+IT
+2019-2020
+On Campus
+Wipro
+74
+SEERA SAI LIKHITH YADAV
+16VV1A1244
+IT
+2019-2020
+On Campus
+Wipro
+75
+GONA BUELAH BLESSINA
+16VV1A1216
+IT
+2019-2020
+On Campus
+IBM India Pvt.Ltd
+76
+JAVVADI SAI JYOTHSNA
+16VV1A1221
+IT
+2019-2020
+On Campus
+Efftronics
+77
+DUGRA RAO PINNINTI
+16VV1A1208
+IT
+2019-2020
+On Campus
+Sails Software Solutions
+78
+GULLAPALLI KAMESH
+16VV1A1217
+IT
+2019-2020
+On Campus
+Sails Software Solutions
+79
+KONDITI CHNADRA SEKHAR
+16VV1A1224
+IT
+2019-2020
+On Campus
+Sails Software Solutions
+80
+DERANGULA PAVAN KUMAR
+16VV1A1206
+IT
+2019-2020
+On Campus
+Sails Software Solutions
+81
+DURGARAO PINNINTI
+16VV1A1208
+IT
+2019-2020
+On Campus
+Sails Software Solutions
+82
+GULLAPALLI KAMESH
+16VV1A1217
+IT
+2019-2020
+On Campus
+Sails Software Solutions
+83
+KONDETI CHANDRA SEKHAR
+16VV1A1224
+IT
+2019-2020
+On Campus
+Sails Software Solutions
+84
+KOTAMSETTY MAHESH
+16VV1A1225
+IT
+2019-2020
+On Campus
+Sails Software Solutions
+85
+SIMHADRI VAMSI SHANKAR
+16VV1A1247
+IT
+2019-2020
+On Campus
+Sails Software Solutions
+86
+JYOTHSNA ERRAMSETTY
+16VV1A1209
+IT
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+87
+A .V.S.Vishnu Priya
+16VV1A0401
+ECE
+2019-2020
+On Campus
+Tata Consultancy Services 
+88
+Bandaru Pavan Kalyan
+16VV1A0404
+ECE
+2019-2020
+On Campus
+Tata Consultancy Services 
+89
+Bolem Rupa Sri Swathi
+16VV1A0405
+ECE
+2019-2020
+Off Campus
+Wipro
+90
+Seedari Chandra Mohan
+16VV1A0406
+ECE
+2019-2020
+Off Campus
+Banking
+91
+Dhavala Sudha Sarika
+16VV1A0408
+ECE
+2019-2020
+Off Campus
+NCR Corporation India Pvt.Ltd.
+92
+G.Leela saraswathi
+16VV1A0415
+ECE
+2019-2020
+Off Campus
+Panchayat Secretary(Grade-IV)
+93
+Janakiram Suhas Goli
+16VV1A0416
+ECE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+94
+Sai Kishore Kodimela
+16VV1A0421
+ECE
+2019-2020
+On Campus
+Cerium Systems
+95
+Munduru Avinash
+16VV1A0435
+ECE
+2019-2020
+On Campus
+Wipro
+96
+Padmanabhuni bhavyasri naga tulasi monisha
+16VV1A0439
+ECE
+2019-2020
+On Campus
+Cerium Systems
+97
+Palutla Bala Sai Manasa
+16VV1A0440
+ECE
+2019-2020
+On Campus
+Infosys
+98
+Shaik Rizwan
+16VV1A0447
+ECE
+2019-2020
+Off Campus
+AFCAT
+99
+Tangella Chakravarthi
+16VV1A0452
+ECE
+2019-2020
+Off Campus
+Wipro
+100
+Venkumahanti renusri
+16VV1A0454
+ECE
+2019-2020
+Off Campus
+Wipro
+101
+Y Rama Krishna
+16VV1A0459
+ECE
+2019-2020
+On Campus
+Tata Consultancy Services 
+102
+Varada Satya Lalitha Sagari
+16VV1A0461
+ECE
+2019-2020
+On Campus
+Infosys
+103
+MUNAGAVALASA SAIRAMYA
+16VV1A0232
+EEE
+2019-2020
+On Campus
+Tata Consultancy Services 
+104
+NAGURU SAI SHARMILA
+16VV1A0233
+EEE
+2019-2020
+On Campus
+Tata Consultancy Services 
+105
+SAHUKARU VINELA PADMASAI
+16VV1A0242
+EEE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+106
+SHAIK JAHANGEER BASHA
+16VV1A0246
+EEE
+2019-2020
+Off Campus
+Wipro
+107
+SRAVANI MUDARABILLI
+16VV1A0249
+EEE
+2019-2020
+Off Campus
+HCL
+108
+VINAY VENKATESH DARLA
+16VV1A0252
+EEE
+2019-2020
+On Campus
+Cognizant Technology Solutions 
+109
+K. Ganesh
+16VV1A0131
+CIVIL
+2019-2020
+Off Campus
+AP Govt Eng Asst
+110
+K.Goutham
+16VV1A0110
+CIVIL
+2019-2020
+On Campus
+Tata Consultancy Services 
+111
+N.HariVarma
+16VV1A0316
+MECH
+2019-2020
+Off Campus
+Cognizant Technology Solutions
+112
+K.Prasanth
+16VV1A0326
+MECH
+2019-2020
+On Campus
+Tata Consultancy Services 
+113
+SSS N M M SATWICK
+16VV1A0329
+MECH
+2019-2020
+Off Campus
+Infosys
+114
+Md.Parvez
+16VV1A0331
+MECH
+2019-2020
+On Campus
+Everglades
+115
+ShaikShelabanu
+16VV1A0345
+MECH
+2019-2020
+Off Campus
+Cognizant Technology Solutions
+116
+k.venkatagireesh
+17VV5A0363
+MECH
+2019-2020
+Off Campus
+Cognizant Technology Solutions 
+117
+K.Ramakrishna
+17VV5A0365
+MECH
+2019-2020
+Off Campus
+NSTL – Senior Technical Assistant
+118
+M.Sai Kumar
+17VV5A0366
+MECH
+2019-2020
+Off Campus
+NSTL – Senior Technical Assistant

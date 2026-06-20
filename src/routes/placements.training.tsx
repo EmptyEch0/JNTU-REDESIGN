@@ -15,7 +15,7 @@ import {
   addGoal,
   updateGoal,
   deleteGoal,
-  getRecruiters,
+  getMajorRecruiters,
   addRecruiter,
   deleteRecruiter,
   getStaff,
@@ -25,6 +25,7 @@ import {
 } from "../lib/placements";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/placements/training")({
   head: () => ({
@@ -56,9 +57,9 @@ function TrainingPage() {
     queryKey: ["goals"],
     queryFn: () => getGoals(),
   });
-  const { data: recruiters, isLoading: isLoadingRecruiters } = useQuery({
-    queryKey: ["recruiters"],
-    queryFn: () => getRecruiters(),
+  const { data: recruiters = [] } = useQuery({
+    queryKey: ["majorRecruiters"],
+    queryFn: () => getMajorRecruiters(),
   });
   const { data: staff, isLoading: isLoadingStaff } = useQuery({
     queryKey: ["staff"],
@@ -120,7 +121,7 @@ function TrainingPage() {
     const name = prompt("Enter company name:");
     if (name) {
       await addRecruiter({ data: { name } });
-      queryClient.invalidateQueries({ queryKey: ["recruiters"] });
+      queryClient.invalidateQueries({ queryKey: ["majorRecruiters"] });
       toast.success("Recruiter added");
     }
   };
@@ -128,7 +129,7 @@ function TrainingPage() {
   const handleDeleteRecruiter = async (id: number) => {
     if (confirm("Delete this recruiter?")) {
       await deleteRecruiter({ data: { id } });
-      queryClient.invalidateQueries({ queryKey: ["recruiters"] });
+      queryClient.invalidateQueries({ queryKey: ["majorRecruiters"] });
       toast.success("Recruiter deleted");
     }
   };
@@ -175,7 +176,7 @@ function TrainingPage() {
               <div className="flex flex-col items-center text-center">
                 <div className="relative group/img">
                   <img
-                    src={editedTPO?.image ?? tpoData?.image}
+                    src={getAssetUrl(editedTPO?.image ?? tpoData?.image)}
                     alt={tpoData?.name}
                     className="w-48 h-48 rounded-2xl object-cover shadow-lg mb-6"
                   />

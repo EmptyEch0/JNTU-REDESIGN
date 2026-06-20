@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
+import { getAssetUrl } from "@/lib/assets";
 import { Quote, Mail, MapPin, Save, X, Info, LayoutDashboard } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -64,7 +65,7 @@ function IQACAboutPage() {
               <div className="absolute -inset-4 rounded-[40px] bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-colors duration-200" />
               <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white shadow-elegant bg-card">
                 <img
-                  src={data.image}
+                  src={getAssetUrl(data.image)}
                   alt={data.name}
                   className="h-full w-full object-cover transition-all duration-300"
                 />

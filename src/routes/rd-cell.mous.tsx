@@ -11,6 +11,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
 import { getMous, addMou, updateMou, deleteMou } from "@/funcs/rd";
 import { Plus, Trash2, Save } from "lucide-react";
 
@@ -186,7 +187,7 @@ function MOUsPage() {
                   )}
                   <div className="relative bg-sand-deep/30 p-6 grid place-items-center min-h-[300px]">
                     <img
-                      src={editedMous[m.id]?.img ?? m.img}
+                      src={getAssetUrl(editedMous[m.id]?.img ?? m.img)}
                       alt={m.title}
                       loading="lazy"
                       className="max-h-72 object-contain group-hover:scale-[1.03] transition-transform duration-300"

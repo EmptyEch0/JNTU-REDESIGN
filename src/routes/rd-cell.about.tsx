@@ -11,6 +11,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
 import {
   getCommittee,
   addMember,
@@ -117,7 +118,7 @@ function AboutResearchPage() {
               />
               <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-elegant bg-card">
                 <img
-                  src={editedCoordinator?.image ?? coordinator?.image}
+                  src={getAssetUrl(editedCoordinator?.image ?? coordinator?.image)}
                   alt={coordinator?.name}
                   className="h-full w-full object-cover"
                 />

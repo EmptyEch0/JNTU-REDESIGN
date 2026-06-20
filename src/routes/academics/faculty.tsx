@@ -24,6 +24,7 @@ import {
   upsertAcademicsPrincipal,
   deleteAcademicsPrincipal
 } from "@/lib/academics";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/academics/faculty")({
   component: FacultyPage,
@@ -619,7 +620,7 @@ function FacultyPage() {
                       <div className="grid md:grid-cols-3">
                         <div className="relative md:col-span-1 min-h-[300px] overflow-hidden">
                           <img
-                            src={vc.image_url || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80"}
+                            src={getAssetUrl(vc.image_url) || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80"}
                             alt={vc.name}
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                           />
@@ -690,7 +691,7 @@ function FacultyPage() {
                       <div className="grid md:grid-cols-3">
                         <div className="relative md:col-span-1 min-h-[250px] overflow-hidden">
                           <img
-                            src={pr.image_url || "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80"}
+                            src={getAssetUrl(pr.image_url) || "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80"}
                             alt={pr.name}
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                           />
@@ -852,7 +853,7 @@ function FacultyPage() {
 
                         <div className="flex items-start gap-4 mb-5">
                           <img
-                            src={hod.image_url || "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=800&q=80"}
+                            src={getAssetUrl(hod.image_url) || "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=800&q=80"}
                             alt={hod.name}
                             className="w-16 h-16 rounded-2xl object-cover shadow-md shrink-0 border border-slate-200/50 dark:border-slate-800"
                           />
@@ -1053,7 +1054,7 @@ function FacultyPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AnimatePresence mode="popLayout">
                 {filteredFaculty.map((member: any, idx: number) => {
-                  const hasPhoto = member.photo_url && member.photo_url.startsWith("http");
+                  const hasPhoto = !!member.photo_url;
                   const nameInitials = member.faculty_name
                     .split(" ")
                     .filter((s: string) => s.length > 0)
@@ -1104,7 +1105,7 @@ function FacultyPage() {
                           <div className="flex items-center gap-4 mb-6">
                             {hasPhoto ? (
                               <img 
-                                src={member.photo_url} 
+                                src={getAssetUrl(member.photo_url)} 
                                 alt={member.faculty_name} 
                                 className="w-14 h-14 rounded-2xl object-cover shadow-md border border-slate-200/50 dark:border-slate-800 shrink-0"
                               />

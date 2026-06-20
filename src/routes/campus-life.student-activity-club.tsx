@@ -1,5 +1,6 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { getAssetUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { CAMPUS_LIFE_SUBNAV } from "@/lib/site";
@@ -63,12 +64,12 @@ function StudentActivityClubPage() {
 
   const getCarouselImages = () => {
     if (tab === "Overview") {
-      const heroImgs = clubs.map((c: any) => c.heroImage).filter(Boolean);
+      const heroImgs = clubs.map((c: any) => getAssetUrl(c.heroImage)).filter(Boolean);
       return heroImgs.length > 0 ? heroImgs : [DEFAULT_IMAGE];
     }
     const activeClub = clubs.find((c: any) => c.name === tab);
-    const clubImgs = activeClub?.images?.map((img: any) => img.url) || [];
-    return clubImgs.length > 0 ? clubImgs : (activeClub?.heroImage ? [activeClub.heroImage] : [DEFAULT_IMAGE]);
+    const clubImgs = activeClub?.images?.map((img: any) => getAssetUrl(img.url)) || [];
+    return clubImgs.length > 0 ? clubImgs : (activeClub?.heroImage ? [getAssetUrl(activeClub.heroImage)] : [DEFAULT_IMAGE]);
   };
 
   // --- ADDING A NEW CLUB TRIGGER ---
@@ -455,7 +456,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
             {club.heroImage && (
               <div className="w-full md:w-1/2 aspect-[16/10] rounded-[28px] overflow-hidden border-2 border-slate-100 shadow transition duration-200 hover:scale-[1.02]">
                 <img
-                  src={club.heroImage}
+                  src={getAssetUrl(club.heroImage)}
                   className="w-full h-full object-cover"
                   alt={`${club.name} Frame`}
                   onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }}
@@ -472,7 +473,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
             {(club.images || []).map((img: any) => (
               <div key={img.id} className="relative group rounded-xl overflow-hidden aspect-[4/3] border bg-slate-100">
-                <img src={img.url} className="w-full h-full object-cover" />
+                <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
                 <button onClick={() => handleDeleteImage(img.id)} className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-rose-950/80 text-white font-black text-xs uppercase tracking-wider transition flex flex-col items-center justify-center cursor-pointer"><Trash2 className="w-4 h-4 mb-1" /> Erase</button>
               </div>
             ))}
@@ -543,7 +544,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
 
               {sec.image && (
                 <div className={`w-full md:w-1/2 aspect-[16/10] rounded-[24px] border border-slate-100 overflow-hidden shadow-sm duration-200 hover:scale-[1.01] shrink-0 relative ${idx % 2 === 1 ? "md:order-1" : ""}`}>
-                  <img src={sec.image} className="w-full h-full object-cover" alt={sec.heading} onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }} />
+                  <img src={getAssetUrl(sec.image)} className="w-full h-full object-cover" alt={sec.heading} onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }} />
                   {isEdit && (
                     <input value={sec.image} onChange={async (e) => { await updateClubContent({ data: { ...sec, image: e.target.value } }); onRefetch(); }} className="absolute inset-0 opacity-0 focus:opacity-100 hover:opacity-100 bg-amber-950/90 text-white text-[10px] p-3 text-center border-none outline-none font-black cursor-pointer transition" placeholder="Update Block Img URL" />
                   )}

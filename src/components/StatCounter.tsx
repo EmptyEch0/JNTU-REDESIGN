@@ -10,7 +10,6 @@ interface Props {
 export function StatCounter({ value, label, suffix = "", duration = 1600 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
-  const started = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -18,8 +17,7 @@ export function StatCounter({ value, label, suffix = "", duration = 1600 }: Prop
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting && !started.current) {
-            started.current = true;
+          if (e.isIntersecting) {
             const start = performance.now();
             const tick = (now: number) => {
               const p = Math.min((now - start) / duration, 1);
@@ -28,6 +26,7 @@ export function StatCounter({ value, label, suffix = "", duration = 1600 }: Prop
               if (p < 1) requestAnimationFrame(tick);
             };
             requestAnimationFrame(tick);
+            obs.disconnect(); // stop observing after triggering animation
           }
         });
       },

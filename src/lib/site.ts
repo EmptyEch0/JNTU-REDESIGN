@@ -592,7 +592,7 @@ export const RECRUITERS_2017_18 = [
   "Sail Software Solutions",
 ];
 
-const R = "https://jntugvcev.edu.in/wp-content/gallery/our-recruiters";
+const R = "http://89.116.134.182:8080/local-assets/wp-content/gallery/our-recruiters";
 export const RECRUITER_LOGOS: { name: string; url: string }[] = [
   { name: "Agilitx", url: `${R}/Agilitx.png` },
   { name: "Airtel", url: `${R}/airtel.png` },

@@ -1,0 +1,714 @@
+Department of Computer Science and Engineering
+S.No
+Name of the Student
+Roll Number
+Research Title /  Area of Research
+Name of the Supervisor
+Status
+1
+Mr. B. Vijay Kumar
+ 
+Improvement of Digital Water Marketing Techniques Using Region and Statistical Approaches
+Prof. D. Rajya Lakshmi
+AWARDED IN 2013
+2
+Mr. Syed Raziuddin
+ 
+Improved and Robust Artificial Bee Colony Algorithms and its Applications towards Optimal Sensor Placement
+Prof. D. Rajya Lakshmi
+AWARDED IN 2013
+3
+Ms. Gondi Lakshmeeswari
+ 
+An Encoding Mechanism for Telugu Text and its secured Transmission using visual Cryptography
+Prof. D. Rajya Lakshmi
+AWARDED IN 2013
+4
+Mr. R. Venkata Ramana Chary
+ 
+Images Retrieval Based on Image Features and Similarity Measurements
+Prof. D. Rajya Lakshmi
+AWARDED IN 2014
+5
+Mr. K. Nageswarara Rao
+ 
+Improvement of Class Imbalance Learning Techniques using Unsupervised Learning and Subset Filtering Approaches
+Prof. D. Rajya Lakshmi
+AWARDED IN 2014
+6
+M.K.Nikitha
+ 
+Effective Connectivity and Coverage Issues in Wireless Sensor Networks
+Prof. D. Rajya Lakshmi
+AWARDED IN 2015
+7
+Ms.Shameem Akther
+ 
+Noval Techniques for Segmentation using Modified Algorithms for Detection of Edge & Region
+Prof. D.Rajya Lakshmi
+AWARDED IN 2016
+8
+Mr.P.R. Viswanath
+ 
+A Novel Conceptual Approach for Materialized View Selection and Maintenance of Dataware House Systems Using Association Rule Mining
+Prof. D. Rajya Lakshmi
+AWARDED IN 2016
+9
+Mr.Mohammad Sirajuddin
+ 
+Performance Enhancement of 802.1 .Ln (WLAN’s)  for Voice Transmission
+Prof. D. Rajya Lakshmi
+AWARDED IN 2017
+10
+Mr.Ch.Sureshbabu
+12022P0513
+Water Quality Prediction of Aqua Ponds using Functional Tangent and Distributed Functional Tangent Decision Tree
+Prof. D. Rajya Lakshmi
+AWARDED IN 2018
+11
+Mr.K.Kishore Raju
+ 
+Data Mining
+Prof. D. Rajya Lakshmi
+IN PROCESS
+12
+Mr.D. Bhanu Mahesh
+15022P0567
+Data Mining & Machine Learning
+Prof.D.Rajya Lakshmi
+IN PROCESS
+13
+Mrs.Singaraju Suguna Mallika
+15022P0531
+Software Engineering (Mutation Testing and its Analysis on Web Applications)
+Prof.D.Rajya Lakshmi
+AWARDED IN 2022
+14
+Mr.Nayani Sateesh
+15022P0519
+Data Mining
+Prof.D.Rajya Lakshmi
+IN PROCESS
+15
+Mr.Kishan Chand Kopila
+18022P0518
+Wireless Sensor network
+Prof.D.Rajya Lakshmi
+IN PROCESS
+16
+Mr.Eluri Ramesh
+18022P0503
+Identifying and analyzing the influence of weather in Smart Cities using IoT
+Prof.D.Rajya Lakshmi
+IN PROCESS
+17
+Ms.Shaik Salma Begum
+13022PO540
+Image Processing
+Prof.D.Rajya Lakshmi
+IN PROCESS
+18
+Mrs.P. Naga Jyothi
+13303023
+Investigating and Identifying Fraudulent Behaviors from Multiple Sources of Medical Claims Data
+Prof.D.Rajya Lakshmi
+AWARDED IN 2022
+S.No
+Name of the Student
+Roll Number
+Research Title/Area of Research
+Name of the Supervisor
+Status
+1
+Ms. B. Venkataseshu kumari
+ 
+Statistical Telugu Dependency Parsing Using Linguistic and Combinatory Categorial Grammar (CCG) Supertag Features
+Prof. R.Rajeswara Rao
+AWARDED IN 2015 (JNTU-H)
+2
+Mr. V. Subbaramaiaha
+ 
+Enhanced Methods for Speaker Diaraization using Spectral and Clustering Concepts
+Prof. R.Rajeswara Rao
+AWARDED IN 2019 (JNTU-H)
+3
+Ms. Nagapadmaja Jagini
+ 
+A Framework for automatic text-Independent emotion recognition system for telugu language
+Prof. R.Rajeswara Rao
+AWARDED IN 2020 (JNTU-H)
+4
+Ms. Sridevi Mothukuri,
+ 
+Collaborative Filtering Recommender System by Exploiting Expertise and Demographic of Users
+Prof. R.Rajeswara Rao
+AWARDED IN 2020 (JNTU-H)
+5
+Mr.  Goda Srinviasa Rao
+ 
+A Framework for handwritten character recognition for telugu script
+Prof. R.Rajeswara Rao
+AWARDED IN 2020 (JNTU-A)
+6
+Mr. S. Radha Krishna
+ 
+Exploring Robust Emotion Specific Feature for Automatic Text-Independent Emotion Recogntion for Telugu Language
+Prof. R.Rajeswara Rao
+AWARDED IN 2021 (JNTU-K)
+7
+Ms Ashlin Deepa  R  N
+1103PH0621
+An Enhanced Offline Handwritten Character Recognition Using Variable Length Feature for Tamil Language
+Prof. R.Rajeswara Rao
+AWARDED IN 2021(JNTU-H)
+8
+Ms. B. Madhavi Devi
+13022P0601
+Cloud Computing
+Prof. R.Rajeswara Rao
+In Progress (JNTU-K)
+9
+Ms. Inuganti Srilakshmi
+ 
+Pattern Recognition
+Prof. R.Rajeswara Rao
+In Progress (JNTU-K)
+10
+Ms. Mantri  Gayatri
+ 
+Web Mining
+Prof. R.Rajeswara Rao
+In Progress (JNTU-K)
+11
+Mr G Stalin Babu
+15022P0512
+Image Processing
+Prof. R.Rajeswara Rao
+In Progress (JNTU-K)
+S. No
+Name of the Student
+Research Title / Area of research
+Name of the Supervisor
+Status
+1
+Mr. Nekkanti Venkata Rao
+Qualitative and Quantitative
+Parametric Substantiation for
+Recognition of Text in Ancient Documents
+Dr.A.S.N.Chakravarthy
+AWARDED IN 2018
+2
+Mr. Akella Ramakrishna
+Hybrid Directional Channel Models for
+Secured Device to Device Communication
+Dr.A.S.N.Chakravarthy
+AWARDED IN 2018
+3
+Mr.Kameswara Rao Buragapu
+An Optimized Routing Technique for Cluster based Pollution Control Manet
+Dr.A.S.N.Chakravarthy
+AWARDED IN 2019
+4
+Mrs. R.Sailaja
+Network Security & Forensics
+Dr.A.S.N.Chakravarthy
+AWARDED IN 2020
+5
+Mr. T.Siva Rama Krishna
+Network Security & Cryptography
+Dr.A.S.N.Chakravarthy
+IN PROCESS
+6
+Mr.V. Venkateswara Rao
+Network Security & Cryptography
+Dr.A.S.N.Chakravarthy
+IN PROCESS
+7
+Mr. M.M Naresh Babu
+Network Security & Cryptography
+Dr.A.S.N.Chakravarthy
+IN PROCESS
+8
+Mr. Katari Praveen Kumar
+Network Security & Cryptography
+Dr.A.S.N.Chakravarthy
+IN PROCESS
+9
+Mr.T. Anji Kumar
+Network Security
+Dr.A.S.N.Chakravarthy
+IN PROCESS
+10
+Mr.A. Chandra
+Adhoc Networks & Security
+Dr.A.S.N.Chakravarthy
+IN PROCESS
+11
+Ms.K. Pratyusha
+Network Security & Forensics
+Dr.A.S.N.Chakravarthy
+IN PROCESS
+12
+Mr.S.Suresh Babu
+Image Processing
+Dr.A.S.N.Chakravarthy
+IN PROCESS
+13
+Mr.Immadi Murali Krishna
+Image Processing
+Dr.A.S.N.Chakravarthy
+IN PROCESS
+14
+Mr.Anil Kumar
+Image Processing
+Dr.A.S.N.Chakravarthy
+IN PROCESS
+Department of Electronics and Communication Engineering
+S. No
+Name of the Student
+Roll Number
+Research Title / Area of research
+Name of the Supervisor
+Status
+1
+Mrs. M. MADHAVI
+ 
+INVESTIGATIONS ON ICG USING NOVEL ADAPTIVE SIGNAL PROCESSING TECHNIQUES
+Dr.K.Chandra Bhushana Rao
+Awarded
+2
+Mr. M. RAVIKISHORE
+ 
+Design and implementation of Microstrip antennas for RF and Microwave communications
+Dr.K.Chandra Bhushana Rao
+IN PROCESS
+3
+Mr. B. N. Srinivasa Rao
+ 
+Low power and speed performance issues of CMOS digital circuits
+Dr.K.Chandra Bhushana Rao
+IN PROCESS
+4
+Mr. P.V. Krishna Chaitanya
+ 
+Passive tracking of multiple maneuvering targets using adaptive signal processing techniques
+Dr.K.Chandra Bhushana Rao
+IN PROCESS
+5
+Mr. R. Sunil Kumar
+ 
+Optimization of spectrum sensing in cognitive radio
+Dr.K.Chandra Bhushana Rao
+IN PROCESS
+6
+Mr. D. Ravi Nayak
+ 
+Design and implementation of compact wideband Fractal Antennas
+Dr.K.Chandra Bhushana Rao
+IN PROCESS
+7
+Mr. Ch.Srinivas
+ 
+Detection of Human behavior by analyzing EEG signals obtained for various salient features of images
+Dr.K.Chandra Bhushana Rao
+IN PROCESS
+Department of Mechanical Engineering
+S No
+Name of the Student
+Roll Number
+Research Title / Area of research
+Name of the Supervisor
+Status
+1
+P. Srinivasa Rao
+12022P0328
+ 
+Dr.G.Swami Naidu
+IN PROCESS
+2
+Brahmananda Reddy Sathi
+12022P0329
+ 
+Dr.G.Swami Naidu
+IN PROCESS
+3
+Mr. Tutaram Tejesh
+14022P0309
+ 
+Dr.G.Swami Naidu
+IN PROCESS
+4
+Mr. V.Ananda Babu
+15022P0301
+Severe plastic deformation
+Dr.G.Swami Naidu
+IN PROCESS
+5
+Mr. Ramakrishna
+15022P0320
+Friction stir welding
+Dr.G.Swami Naidu
+IN PROCESS
+6
+Ms. M.Anitha Santhoshi
+15022P0336
+Metal matrix composites
+Dr.G.Swami Naidu
+IN PROCESS
+7
+Mr. Syam Babu Nutalapati
+15022P0348
+Frps
+Dr.G.Swami Naidu
+IN PROCESS
+8
+Mr. B.Krishna Murthy
+15022P0352
+Composite materials
+Dr.G.Swami Naidu
+IN PROCESS
+9
+Mr. M.Suryanarayana Murthy
+15022PMET01
+Composite materials
+Dr.G.Swami Naidu
+IN PROCESS
+10
+Mr. Arnuri Srinivasulu
+15022PMET02
+Severe plastic deformation
+Dr.G.Swami Naidu
+IN PROCESS
+11
+Velamala Appala Raju
+ 
+Additive Manufacturing
+Dr.C.Neelima Devi
+IN PROCESS
+Department of Information Technology
+S.No
+Name of the Research Scholar
+Area of the work
+Title
+Year of Registration
+Registered
+University /Institute
+Status
+1
+R V S Lalitha
+Mobile Computing
+Vehicular Ad hoc Networks: Pile ups in Data Dissemination
+2009
+JNTUK
+Awarded
+2
+P. Aruna Kumari
+Image processing & Pattern Recognition
+Design and Development of Efficient Feature Selection Mechanisms at Feature Level Fusion in Multimodal Biometric Systems for Person Identification
+2013
+JNTUK
+Awarded
+3
+S. Surekha
+Data Mining
+A Machine Learning Framework for Early Risk Prediction of Diabetes Comorbidity in Thyroid Patients
+2013
+JNTUK
+Awarded
+4
+G. Jaya Lakshmi
+Data Mining
+An Interesting Subgraph Mining approach to design a web page recommendation system using web log data
+2013
+JNTUK
+Awarded
+5
+G. L. Aruna Kumari
+Data mining
+ENN-Ensemble based Neural Network method for Diabetes
+2013
+JNTUK
+PROGRESS
+6
+K. Naga Bhargavi
+Data Mining
+Geographic Information System (GIS) Based Data mining Model For Information Retrieval in Disaster Management Situations
+2015
+JNTUK
+PROGRESS
+7
+D. Madhu Babu
+Data Mining & Pattern Recognition
+Clustering High-Dimensional Data using Improved Artificial Bee Colony  (ABC) Algorithm
+2015
+JNTUK
+PROGRESS
+8
+Kalla Kiran
+Machine Learning
+Identification Of Lethal Weapons Of Object Detection Using Deep Learning
+2019
+JNTUK
+PROGRESS
+9
+Garapati Subbalakshmi
+Machine Learning & Deep Learning
+Learning Analytics using Machine Learning Techniques and Deep Learning
+2019
+JNTUK
+PROGRESS
+10
+Chaitanya Kumar Tati
+Data Mining
+---
+2019
+JNTUK
+PROGRESS
+Department of BS & HSS
+S. No
+Name of the Student
+Roll Number
+Research Title / Area of Research
+Name of the Supervisor
+Status
+1
+Narsipuram Kishore Kumar
+ 
+Algebra
+Dr.S.Kalesha Vali
+IN PROCESS
+2
+U. Sarat
+ 
+Algebra
+Dr.S.Kalesha Vali
+IN PROCESS
+3
+Mr. D. Appa Rao
+ 
+Mathematical Modeling
+Dr.S.Kalesha Vali
+IN PROCESS
+4
+Mr. Ravi Shankar Battina
+ 
+Algebra
+Dr.S.Kalesha Vali
+IN PROCESS
+5
+Mr. Uma Shankar
+ 
+Operations Research
+Dr.S.Kalesha Vali
+IN PROCESS
+6
+Mr. G. Kiran Kumar
+ 
+Mathematical Modeling
+Dr.S.Kalesha Vali
+IN PROCESS
+7
+Koti Babu Kornu
+ 
+Fluid Dynamics
+Dr.S.Kalesha Vali
+IN PROCESS
+8
+Satish Kumar Ravupalli
+ 
+Fluid Dynamics
+Dr.S.Kalesha Vali
+IN PROCESS
+9
+M. Bala Prabhakar
+ 
+Algebra
+Dr.S.Kalesha Vali
+IN PROCESS
+10
+V. Venkata Kumar
+ 
+Algebra
+Dr.S.Kalesha Vali
+IN PROCESS
+11
+M.V Rama Krishna
+ 
+Mathematical Modeling
+Dr.S.Kalesha Vali
+IN PROCESS
+12
+Ms.P. Devi
+15022PMG07
+HRD Practices in Corporate Hospitals in selected districts
+Dr.P.Sreedevi
+IN PROCESS
+13
+Mr. Pavan Kumar
+ 
+A study on Management Education and Engineering Education in selected areas
+Dr.P.Sreedevi
+IN PROCESS
+14
+Mr. Y. Venkateswara Rao
+ 
+Corporate Social Responsibility with special reference to TATA Trusts
+Dr.P.Sreedevi
+IN PROCESS
+15
+Mr.Murthy gamani
+ 
+stability analysis of ecological models with time delay
+Dr.A.V.Papa Rao
+IN PROCESS
+16
+Mrs.G A Laxmi
+ 
+stability analysis of some ecological models
+Dr.A.V.Papa Rao
+IN PROCESS
+17
+Mr.D Apparao(co supervisor)
+ 
+Dynamics of epidemic models with delay
+Dr.A.V.Papa Rao
+IN PROCESS
+18
+Mr. K Kranthi Kumar
+ 
+MHD models in fluid dynamics
+Dr.A.V.Papa Rao
+IN PROCESS
+19
+Mrs. G Laxmi
+ 
+fuzzy albebra
+Dr.A.V.Papa Rao
+IN PROCESS
+20
+Mr. N. V. Venugopal
+ 
+Nuclear Analytical techniques
+Dr.G.J.Naga Raju
+IN PROCESS
+21
+Mr Ch. Venkata Rao Chowdary
+15022PP/Y09
+Nano Materials
+Dr.G.J.Naga Raju
+IN PROCESS
+22
+Mr B. Srinivasa Rao
+15022PP/Y07
+Characterization of Ferrites
+Dr.G.J.Naga Raju
+IN PROCESS
+23
+Mr P. Sateesh
+15022PP/Y03
+Material Science
+Dr.G.J.Naga Raju
+IN PROCESS
+24
+Mr G. Durga Babu
+15022PP/Y02
+Crystal growth and structures
+Dr.G.J.Naga Raju
+IN PROCESS
+25
+Mr.S. Srikanth
+13022PPY04
+Accelerator based x-emission techniques
+Dr.G.J.Naga Raju
+IN PROCESS
+Department of EEE
+S.No
+Name of the Scholar
+Roll No
+Research Title/Area of research
+Name of the supervisor
+Status
+1
+Mr. M. Ravindra Babu
+12022P0202
+Design and Analysis of Firefly based Power System Stabilizer based on Pseudo Spectrum Analysis
+Prof. G. Saraswathi (Supervisor)
+Awarded in 2019
+2
+Mr. N. V. A. Ravikumar
+13022P0221
+Some Aspects on Large Scale Robust Controllers
+Prof. G. Saraswathi (Supervisor)
+Awarded in 2021
+3
+P.A. Mohanarao
+13022P0211
+Power Quality Issues in a Stand –Alone Micro-grid based on Renewable Energy
+Prof. G. Saraswathi (Co-Supervisor)
+In Process
+4
+K. Lavanya
+15022P0230
+Design and Implementation of a Suitable Controller for Multilevel Inverter Fed PMSM Drive
+Prof. G. Saraswathi (Co-Supervisor)
+In Process
+5
+V.Rangavalli
+15022P0226
+Performance Evaluation of Distribution System Planning to Improve the Efficiency of Micro-grid
+Prof. G. Saraswathi (Co-Supervisor)
+In Process
+6
+K. Koteswara Rao
+15022P0237
+Enhancement of Power System Stability in Renewable Sources of Power Generation Fed to a SG based Power System through a LCC-HVDC Link
+Prof. G. Saraswathi (Co-Supervisor)
+In Process
+7
+Ravi Teja S
+18022P0203
+Development of Low Cost-High Efficiency Multilevel Converter Topologies for High Power Applications.
+Dr.Y S Kishore Babu
+In Progress
+8
+P.Veera Nagaraju
+18022P0205
+Study of Renewable Energy Integration to Grid-Challenges & Solutions
+Dr.Y S Kishore Babu
+In Progress
+9
+Sri.T.M.Mohan
+12022P0232
+Fuzzy Logic MPPT for Grid Integrated Photovoltaic Systems though H-Bridge Inverter Under Partial Shading Conditions
+Dr.V.S.Vakula
+Awarded
+10
+Sri.G.Sandeep
+14022P0216
+Power Systems
+Dr.V.S.Vakula
+In Progress
+11
+Sri. Rajendra.T
+15022P0220
+Power Systems
+Dr.V.S.Vakula
+In Progress
+12
+Smt.V.V.Vijetha Inti
+15022P0225
+Power Electronic Applications to Power Systems
+Dr.V.S.Vakula
+In Progress
+13
+Smt.T.Naga Durga
+15022P0204
+Power Quality Improvement
+Dr.V.S.Vakula
+In Progress
+14
+Smt.K.Swetha
+15022P0216
+Control Applications to Power Systems
+Dr.V.S.Vakula
+In Progress

@@ -12,6 +12,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
 import {
   getCoordinatorMessage,
   updateCoordinatorMessage,
@@ -161,7 +162,7 @@ function RDPage() {
           <RevealOnScroll>
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-card bg-card">
               <img
-                src={editedCoordinator?.image ?? coordinator?.image}
+                src={getAssetUrl(editedCoordinator?.image ?? coordinator?.image)}
                 alt={coordinator?.name}
                 className="h-full w-full object-cover"
               />

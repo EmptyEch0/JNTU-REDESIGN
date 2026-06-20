@@ -18,7 +18,8 @@ import {
   deleteCourse,
   getGalleryByDept,
   addToGallery,
-  deleteFromGallery
+  deleteFromGallery,
+  getAssetUrl
 } from "../lib/departments";
 import { PageHero } from "@/components/PageHero";
 import { useAdmin } from "../context/AdminContext";
@@ -208,7 +209,7 @@ function AdminDepartmentsPage() {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {galleryList?.map((g: any) => (
                     <div key={g.id} className="relative aspect-video rounded-xl overflow-hidden group">
-                      <img src={g.image_url} className="object-cover w-full h-full" alt={g.title} />
+                      <img src={getAssetUrl(g.image_url)} className="object-cover w-full h-full" alt={g.title} />
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
                         <button onClick={() => deleteFromGallery({ data: { id: g.id } } as any)} className="bg-red-500 text-white p-2 rounded-lg text-xs">Delete</button>
                       </div>

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { imageUrl } from "@/lib/assets";
+import { imageUrl, getAssetUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { STUDENT_SUBNAV } from "@/lib/site";
@@ -226,7 +226,7 @@ function EdcPage() {
             <div className="space-y-4 text-center md:text-left shrink-0">
               <div className="h-40 w-40 rounded-2xl overflow-hidden border border-border bg-card mx-auto md:mx-0 shadow-sm">
                 <img
-                  src={pData.coordinatorImage}
+                  src={getAssetUrl(pData.coordinatorImage)}
                   alt={pData.coordinatorName}
                   className="h-full w-full object-cover"
                 />

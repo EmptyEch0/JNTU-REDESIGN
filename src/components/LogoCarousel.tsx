@@ -3,6 +3,8 @@ interface Logo {
   url: string;
 }
 
+import { getAssetUrl } from "@/lib/assets";
+
 interface Props {
   logos: Logo[];
   speed?: number; // seconds per loop
@@ -27,7 +29,7 @@ export function LogoCarousel({ logos, speed = 60, reverse = false }: Props) {
             className="shrink-0 w-44 h-24 rounded-2xl bg-card border border-border flex items-center justify-center p-4 hover:border-primary/40 hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-1 transition-all duration-300"
           >
             <img
-              src={logo.url}
+              src={getAssetUrl(logo.url)}
               alt={logo.name}
               loading="lazy"
               className="max-h-full max-w-full object-contain transition-all duration-200"

@@ -111,7 +111,7 @@ export const deleteGoal = createServerFn({ method: "POST" }).handler(
 );
 
 // Recruiters Functions
-export const getRecruiters = createServerFn({ method: "GET" }).handler(async () => {
+export const getMajorRecruiters = createServerFn({ method: "GET" }).handler(async () => {
   return await db.select().from(majorRecruiters).orderBy(majorRecruiters.name);
 });
 

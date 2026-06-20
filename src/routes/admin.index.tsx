@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
+import { getAssetUrl } from "@/lib/assets";
 import {
   Building2,
   GraduationCap,
@@ -126,7 +127,7 @@ function AdminLoginPage() {
           <div className="relative group mb-6">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-sky-400 to-[#0F4C81] rounded-full blur opacity-35 group-hover:opacity-55 transition duration-500"></div>
             <img
-              src="https://jntugvcev.edu.in/wp-content/uploads/2022/07/logo-min.jpeg"
+              src={getAssetUrl("https://jntugvcev.edu.in/wp-content/uploads/2022/07/logo-min.jpeg")}
               alt="JNTU-GV Logo"
               className="relative h-24 w-24 object-contain rounded-full border border-slate-200 bg-white p-1 shadow-lg transform group-hover:scale-105 transition duration-300"
             />

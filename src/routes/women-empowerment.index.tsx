@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAssetUrl } from "@/lib/assets";
 import {
   getWeProfile,
   updateWeProfile,
@@ -267,7 +268,7 @@ function WEAboutPage() {
                 <div className="absolute -inset-2 rounded-[24px] bg-primary/10 blur-xl group-hover:bg-primary/20 transition-colors duration-200" />
                 <div className="relative aspect-square rounded-[20px] overflow-hidden border border-border bg-muted">
                   <img
-                    src={pData.convenerImage}
+                    src={getAssetUrl(pData.convenerImage)}
                     alt={pData.convenerName}
                     className="h-full w-full object-cover hover:scale-105 transition-transform duration-200"
                   />

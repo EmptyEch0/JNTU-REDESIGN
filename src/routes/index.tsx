@@ -40,6 +40,7 @@ import { MarqueeLogos } from "@/components/MarqueeLogos";
 import { STATS, DEPARTMENTS, RECRUITERS } from "@/lib/site";
 import { useQuery } from "@tanstack/react-query";
 import { getLeadershipData } from "@/funcs/leadership";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -257,7 +258,7 @@ function HomePage() {
                     <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden mb-6 border border-white/50 shadow-inner group/img bg-slate-100">
                       {principal?.image ? (
                         <img 
-                          src={principal.image} 
+                          src={getAssetUrl(principal.image)} 
                           alt={principal.name} 
                           className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover/img:scale-105"
                         />

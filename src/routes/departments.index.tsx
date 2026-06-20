@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import labImg from "@/assets/lab.jpg";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/departments/")({
   head: () => ({
@@ -150,13 +152,14 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
 
           <div>
             <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-wider mb-1">
-              <ImageIcon size={12} /> Image URL
+              <ImageIcon size={12} /> Image
             </div>
-            <input 
-              className="w-full rounded border border-primary/30 p-2 text-xs" 
-              value={tempData.image} 
-              onChange={e => setTempData({...tempData, image: e.target.value})}
-              placeholder="https://example.com/image.jpg"
+            <AdminUpload
+              value={tempData.image}
+              onChange={(newUrl) => setTempData({...tempData, image: newUrl || ""})}
+              module="departments"
+              category="banners"
+              className="w-full"
             />
           </div>
 
@@ -189,7 +192,7 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
       >
         <article className="h-full">
           <img
-            src={dept.image}
+            src={getAssetUrl(dept.image)}
             alt={dept.name}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
           />

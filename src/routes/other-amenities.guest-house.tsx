@@ -2,6 +2,8 @@ import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import guestImg from "@/assets/guestoffice.jpg";
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { 
@@ -139,7 +141,7 @@ function GuestHousePage() {
         {/* TOP IMAGE BANNER / CATALOGUE */}
         <div className="relative w-full overflow-hidden rounded-[32px] border border-slate-200/60 shadow-md group bg-slate-200 aspect-[21/9] md:aspect-[16/7] min-h-[200px] max-h-[320px] transition-all duration-500 hover:shadow-lg">
           <img
-            src={imgRec?.imageUrl || guestImg}
+            src={getAssetUrl(imgRec?.imageUrl) || guestImg}
             alt="University Guest House"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
@@ -177,14 +179,15 @@ function GuestHousePage() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[9px] font-black text-amber-800 uppercase tracking-wider ml-1">Picture URL Source</label>
-                <input
+                <label className="text-[9px] font-black text-amber-800 uppercase tracking-wider ml-1">Picture</label>
+                <AdminUpload
                   value={editTexts.imageUrl}
-                  onChange={(e) =>
-                    setEditTexts({ ...editTexts, imageUrl: e.target.value })
+                  onChange={(newUrl) =>
+                    setEditTexts({ ...editTexts, imageUrl: newUrl || "" })
                   }
-                  placeholder="Paste direct URL source..."
-                  className="w-full bg-white border border-amber-200 px-3.5 py-2.5 rounded-xl text-xs font-semibold outline-none shadow-inner focus:border-amber-400"
+                  module="amenities"
+                  category="guest-house"
+                  className="w-full font-semibold"
                 />
               </div>
             </div>

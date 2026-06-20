@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { Quote, Save, X, Mail } from "lucide-react";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/nss/")({
   component: NSSAboutPage,
@@ -83,27 +85,26 @@ function NSSAboutPage() {
               <div className="relative group">
                 <div className="absolute -inset-2 rounded-[24px] bg-primary/10 blur-xl group-hover:bg-primary/20 transition-colors duration-500" />
                 <div className="relative aspect-square rounded-[20px] overflow-hidden border border-border bg-muted">
-                  <img
-                    src={data.imageUrl || data.officerImage}
-                    alt={data.officerName}
-                    className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
-                  {isEditMode && (
-                    <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity p-4 text-center">
-                      <p className="text-white text-xs font-medium">Officer Image URL</p>
-                      <input
-                        className="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-xs text-white outline-none focus:border-primary"
-                        value={data.imageUrl || data.officerImage}
-                        onChange={(e) =>
-                          setEditedData({
-                            ...data,
-                            officerImage: e.target.value,
-                            imageUrl: e.target.value,
-                          })
-                        }
-                        placeholder="https://example.com/photo.jpg"
-                      />
-                    </div>
+                  {isEditMode ? (
+                    <AdminUpload
+                      value={data.imageUrl || data.officerImage || ""}
+                      onChange={(newUrl) =>
+                        setEditedData({
+                          ...data,
+                          officerImage: newUrl,
+                          imageUrl: newUrl,
+                        })
+                      }
+                      module="clubs"
+                      category="nss"
+                      className="w-full h-full"
+                    />
+                  ) : (
+                    <img
+                      src={getAssetUrl(data.imageUrl || data.officerImage)}
+                      alt={data.officerName}
+                      className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                    />
                   )}
                 </div>
               </div>

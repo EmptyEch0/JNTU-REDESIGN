@@ -26,6 +26,9 @@ import {
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
+
 export const Route = createFileRoute("/placements/training")({
   head: () => ({
     meta: [
@@ -173,18 +176,24 @@ function TrainingPage() {
               className={`p-8 rounded-3xl border transition-all relative group ${isEditMode ? "bg-amber-50/50 border-amber-200" : "bg-card border-border shadow-[var(--shadow-elegant)]"}`}
             >
               <div className="flex flex-col items-center text-center">
-                <div className="relative group/img">
-                  <img
-                    src={editedTPO?.image ?? tpoData?.image}
-                    alt={tpoData?.name}
-                    className="w-48 h-48 rounded-2xl object-cover shadow-lg mb-6"
-                  />
-                  {isEditMode && (
-                    <input
-                      className="mt-2 text-[10px] w-full p-1 border border-amber-200 rounded bg-white"
-                      placeholder="Image URL"
+                <div className="relative group/img w-full flex flex-col items-center">
+                  {isEditMode ? (
+                    <AdminUpload
                       value={editedTPO?.image ?? tpoData?.image ?? ""}
-                      onChange={(e) => setEditedTPO({ ...editedTPO, image: e.target.value })}
+                      onChange={(newUrl) => setEditedTPO({ ...editedTPO, image: newUrl })}
+                      module="placements"
+                      category="tpo"
+                      className="mb-6 w-full max-w-[200px]"
+                    />
+                  ) : (
+                    <img
+                      src={getAssetUrl(editedTPO?.image ?? tpoData?.image)}
+                      alt={tpoData?.name}
+                      className="w-48 h-48 rounded-2xl object-cover shadow-lg mb-6"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250";
+                      }}
                     />
                   )}
                 </div>

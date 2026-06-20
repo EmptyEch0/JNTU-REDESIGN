@@ -24,6 +24,8 @@ import { PageHero } from "@/components/PageHero";
 import { useAdmin } from "../context/AdminContext";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/admin/departments")({
   component: AdminDepartmentsPage,
@@ -163,7 +165,16 @@ function AdminDepartmentsPage() {
               <section className="bg-card p-8 rounded-2xl border border-border space-y-4">
                 <h3 className="text-xl font-bold text-ink">HOD Information</h3>
                 <input className="w-full p-3 rounded-lg border border-border" placeholder="HOD Name" value={hodForm.hod} onChange={e => setHodForm({...hodForm, hod: e.target.value})} />
-                <input className="w-full p-3 rounded-lg border border-border" placeholder="Photo URL" value={hodForm.hod_photo} onChange={e => setHodForm({...hodForm, hod_photo: e.target.value})} />
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-500">HOD Photo</label>
+                  <AdminUpload
+                    value={hodForm.hod_photo}
+                    onChange={(newUrl) => setHodForm({ ...hodForm, hod_photo: newUrl })}
+                    module="departments"
+                    category="hod"
+                    placeholder="Upload HOD Photo"
+                  />
+                </div>
                 <input className="w-full p-3 rounded-lg border border-border" placeholder="Contact Info" value={hodForm.hod_contact} onChange={e => setHodForm({...hodForm, hod_contact: e.target.value})} />
                 <textarea className="w-full p-3 rounded-lg border border-border" placeholder="HOD Message" value={hodForm.hod_message} onChange={e => setHodForm({...hodForm, hod_message: e.target.value})} />
                 <button onClick={() => updateDeptMutation.mutate(hodForm)} className="w-full bg-primary text-white p-3 rounded-xl font-bold">Update HOD Details</button>
@@ -201,14 +212,20 @@ function AdminDepartmentsPage() {
                   <h3 className="text-xl font-bold text-ink mb-4">Add to Gallery</h3>
                   <form onSubmit={(e) => { e.preventDefault(); addGalleryMutation.mutate(galleryForm); }} className="space-y-4">
                     <input className="w-full p-3 border rounded-lg" placeholder="Image Title" value={galleryForm.title} onChange={e => setGalleryForm({...galleryForm, title: e.target.value})} required />
-                    <input className="w-full p-3 border rounded-lg" placeholder="Image URL" value={galleryForm.image_url} onChange={e => setGalleryForm({...galleryForm, image_url: e.target.value})} required />
+                    <AdminUpload
+                      value={galleryForm.image_url}
+                      onChange={(newUrl) => setGalleryForm({ ...galleryForm, image_url: newUrl })}
+                      module="departments"
+                      category="gallery"
+                      placeholder="Upload gallery image"
+                    />
                     <button className="w-full bg-primary text-white p-3 rounded-xl font-bold">Upload Image</button>
                   </form>
                 </section>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {galleryList?.map((g: any) => (
                     <div key={g.id} className="relative aspect-video rounded-xl overflow-hidden group">
-                      <img src={g.image_url} className="object-cover w-full h-full" alt={g.title} />
+                      <img src={getAssetUrl(g.image_url)} className="object-cover w-full h-full" alt={g.title} />
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
                         <button onClick={() => deleteFromGallery({ data: { id: g.id } } as any)} className="bg-red-500 text-white p-2 rounded-lg text-xs">Delete</button>
                       </div>

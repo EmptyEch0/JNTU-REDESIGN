@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Users, UserPlus, Trash2, Save, ImageIcon, Briefcase } from "lucide-react";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/departments/$id/faculty")({
   component: FacultyPage,
@@ -72,7 +74,7 @@ function FacultyPage() {
             )}
 
             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 border-slate-50 bg-slate-100">
-              <img src={f.photo_url || ""} alt={f.name} className="h-full w-full object-cover" onError={(e) => e.currentTarget.src = `https://ui-avatars.com/api/?name=${f.name}`} />
+              <img src={getAssetUrl(f.photo_url) || ""} alt={f.name} className="h-full w-full object-cover" onError={(e) => e.currentTarget.src = `https://ui-avatars.com/api/?name=${f.name}`} />
             </div>
 
             <div className="flex-grow space-y-2">
@@ -88,11 +90,12 @@ function FacultyPage() {
                     value={f.designation} 
                     onChange={(e) => handleUpdate(f.id, "designation", e.target.value)} 
                   />
-                  <input 
-                    className="w-full text-[10px] text-amber-600 bg-amber-50 rounded p-1" 
-                    value={f.photo_url} 
-                    placeholder="Photo URL" 
-                    onChange={(e) => handleUpdate(f.id, "photo_url", e.target.value)} 
+                  <AdminUpload
+                    value={f.photo_url}
+                    onChange={(newUrl) => handleUpdate(f.id, "photo_url", newUrl)}
+                    module="departments"
+                    category="faculty"
+                    placeholder="Upload photo..."
                   />
                 </>
               ) : (

@@ -5,6 +5,8 @@ import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { syncGallery } from "@/lib/departments";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/departments/$id/gallery")({
   component: GalleryPage,
@@ -105,7 +107,7 @@ function GalleryPage() {
             className={`relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-slate-100 border transition-all duration-500 ${isEditMode ? 'border-indigo-400 ring-4 ring-indigo-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}
           >
             {image.image_url ? (
-              <img src={image.image_url} alt={image.title} className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <img src={getAssetUrl(image.image_url)} alt={image.title} className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
             ) : (
               <div className="h-48 flex items-center justify-center bg-slate-200 text-slate-400">
                 <ImageIcon size={32} />
@@ -114,12 +116,16 @@ function GalleryPage() {
 
             {isEditMode ? (
               <div className="p-6 bg-white border-t border-slate-100 space-y-4">
-                {/* Image URL Input */}
+                {/* Image Upload */}
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><ImageIcon size={10}/> Source URL</label>
-                  <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-100">
-                    <input className="bg-transparent text-[10px] w-full outline-none font-medium" value={image.image_url} onChange={(e) => updateImage(image.id, "image_url", e.target.value)} placeholder="https://..." />
-                  </div>
+                  <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><ImageIcon size={10}/> Image Upload</label>
+                  <AdminUpload
+                    value={image.image_url}
+                    onChange={(newUrl) => updateImage(image.id, "image_url", newUrl)}
+                    module="departments"
+                    category="gallery"
+                    placeholder="Upload image"
+                  />
                 </div>
 
                 {/* Title and Category Row */}
@@ -173,7 +179,7 @@ function GalleryPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4 animate-in fade-in duration-300" onClick={() => setSelectedImage(null)}>
           <button className="absolute top-8 right-8 text-white/70 hover:text-white transition-colors"><X size={32} /></button>
           <div className="relative max-w-5xl w-full animate-in zoom-in duration-300" onClick={e => e.stopPropagation()}>
-            <img src={selectedImage.image_url} className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl" alt="" />
+            <img src={getAssetUrl(selectedImage.image_url)} className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl" alt="" />
             <div className="mt-6 text-center">
               <span className="text-indigo-400 text-[10px] font-black uppercase tracking-widest">{selectedImage.category}</span>
               <h3 className="text-white text-2xl font-bold mt-1">{selectedImage.title}</h3>

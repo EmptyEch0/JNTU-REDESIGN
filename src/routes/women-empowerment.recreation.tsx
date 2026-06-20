@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { Save, X, Sparkles, Smile, Trophy, Heart } from "lucide-react";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/women-empowerment/recreation")({
   component: WERecreationPage,
@@ -109,27 +111,24 @@ function WERecreationPage() {
                     <div className={`relative group ${isEven ? "" : "md:order-2"}`}>
                       <div className="absolute -inset-3 rounded-[32px] bg-primary/5 blur-xl group-hover:bg-primary/10 transition-all duration-500" />
                       <div className="relative aspect-[4/3] rounded-[24px] overflow-hidden border border-border shadow-elegant bg-card">
-                        <img
-                          src={imgUrl}
-                          alt={detail.title}
-                          className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        {isEditMode && (
-                          <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-white text-xs font-semibold mb-2">
-                              Image URL {idx + 1}
-                            </span>
-                            <input
-                              className="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-xs text-white outline-none focus:border-primary"
-                              value={imgUrl}
-                              onChange={(e) => {
-                                const updatedImages = [...images];
-                                updatedImages[idx] = e.target.value;
-                                setEditedData({ ...data, images: updatedImages });
-                              }}
-                              placeholder="https://example.com/image.jpg"
-                            />
-                          </div>
+                        {isEditMode ? (
+                          <AdminUpload
+                            value={imgUrl || ""}
+                            onChange={(newUrl) => {
+                              const updatedImages = [...images];
+                              updatedImages[idx] = newUrl;
+                              setEditedData({ ...data, images: updatedImages });
+                            }}
+                            module="clubs"
+                            category="we"
+                            className="w-full h-full"
+                          />
+                        ) : (
+                          <img
+                            src={getAssetUrl(imgUrl)}
+                            alt={detail.title}
+                            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
                         )}
                       </div>
                     </div>

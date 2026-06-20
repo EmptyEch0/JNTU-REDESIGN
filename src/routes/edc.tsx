@@ -19,6 +19,8 @@ import {
 import { useAdmin } from "@/context/AdminContext";
 import { useState } from "react";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 import {
   Search,
   Plus,
@@ -224,11 +226,21 @@ function EdcPage() {
           <div className="grid md:grid-cols-[240px_1fr] gap-8 items-center bg-sand p-8 rounded-[32px] border border-border">
             <div className="space-y-4 text-center md:text-left shrink-0">
               <div className="h-40 w-40 rounded-2xl overflow-hidden border border-border bg-card mx-auto md:mx-0 shadow-sm">
-                <img
-                  src={pData.coordinatorImage}
-                  alt={pData.coordinatorName}
-                  className="h-full w-full object-cover"
-                />
+                {isEditMode ? (
+                  <AdminUpload
+                    value={pData.coordinatorImage}
+                    onChange={(newUrl) => setEditedProfile({ ...pData, coordinatorImage: newUrl })}
+                    module="clubs"
+                    category="edc"
+                    className="w-full h-full"
+                  />
+                ) : (
+                  <img
+                    src={getAssetUrl(pData.coordinatorImage)}
+                    alt={pData.coordinatorName}
+                    className="h-full w-full object-cover"
+                  />
+                )}
               </div>
               <div>
                 {isEditMode ? (
@@ -245,14 +257,6 @@ function EdcPage() {
                       value={pData.coordinatorRole}
                       onChange={(e) =>
                         setEditedProfile({ ...pData, coordinatorRole: e.target.value })
-                      }
-                    />
-                    <input
-                      className="w-full bg-primary/5 border border-border p-1 rounded text-[9px] text-muted-foreground"
-                      value={pData.coordinatorImage}
-                      placeholder="Photo URL"
-                      onChange={(e) =>
-                        setEditedProfile({ ...pData, coordinatorImage: e.target.value })
                       }
                     />
                   </div>

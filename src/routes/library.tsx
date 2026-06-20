@@ -4,6 +4,8 @@ import { getLibraryData } from "@/funcs/library.server";
 import { PageHero } from "@/components/PageHero";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload, PersonAvatarUpload } from "@/components/AdminEditPanel";
 import {
   updateLibraryContent,
   createSection,
@@ -202,7 +204,7 @@ function LibraryPage() {
       <PageHero
         title="University Library"
         subtitle="State-of-the-art knowledge repositories, extensive archives, and reading supports."
-        image={images[0]?.url || "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1000"}
+        image={getAssetUrl(images[0]?.url) || "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1000"}
       />
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
@@ -244,7 +246,7 @@ function LibraryPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {images.map((img: any) => (
                     <div key={img.id} className="relative group rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border-2 border-slate-200/40 shadow-sm hover:shadow-md transition-all duration-300">
-                      <img src={img.url} className="w-full h-full object-cover" />
+                      <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
                       <button
                         onClick={() => handleDeleteImage(img.id)}
                         className="absolute inset-0 bg-rose-950/80 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1 font-black text-xs uppercase tracking-wider cursor-pointer"
@@ -255,18 +257,19 @@ function LibraryPage() {
                   ))}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mt-2">
-                  <input
-                    placeholder="Paste picture URL to inject..."
-                    className="flex-1 border border-amber-200 rounded-[16px] px-4 py-3 text-sm font-semibold bg-white outline-none shadow-inner"
-                    onKeyDown={async (e: any) => {
-                      if (e.key === "Enter" && e.target.value.trim()) {
-                        await handleAddImage(e.target.value);
-                        e.target.value = "";
+                <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mt-2 items-center">
+                  <AdminUpload
+                    value=""
+                    onChange={async (newUrl) => {
+                      if (newUrl) {
+                        await handleAddImage(newUrl);
                       }
                     }}
+                    module="facilities"
+                    category="library"
+                    placeholder="Drag & drop or click to add a new slide image..."
+                    className="flex-1 w-full"
                   />
-                  <div className="text-[10px] text-amber-700 font-bold bg-amber-100/60 px-3.5 rounded-xl flex items-center self-start py-1.5 sm:self-center">Press Enter</div>
                 </div>
               </div>
             )}
@@ -286,15 +289,13 @@ function LibraryPage() {
               >
                 {isEditMode ? (
                   <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.3s]">
-                    <div className="w-32 h-44 bg-slate-100 border-2 border-amber-200 rounded-[24px] overflow-hidden relative group shadow-sm">
-                      <img src={editOfficer.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"} className="w-full h-full object-cover" />
-                      <input 
-                        placeholder="Paste Img URL"
-                        value={editOfficer.img}
-                        onChange={(e)=>setEditOfficer({...editOfficer, img:e.target.value})}
-                        className="absolute inset-0 opacity-0 bg-amber-950/80 backdrop-blur-sm focus:opacity-100 group-hover:opacity-100 outline-none text-white text-[10px] font-bold p-2 text-center transition"
-                      />
-                    </div>
+                    <PersonAvatarUpload
+                      value={editOfficer.img}
+                      onChange={(newUrl) => setEditOfficer({ ...editOfficer, img: newUrl })}
+                      module="facilities"
+                      category="library/librarian"
+                      size={104}
+                    />
                     <div className="flex-1 space-y-4 w-full">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -320,7 +321,7 @@ function LibraryPage() {
                 ) : (
                   <div className="flex flex-col md:flex-row gap-6 items-start">
                     <img
-                      src={content?.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
+                      src={getAssetUrl(content?.img) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                       onError={(e) => {
                         e.currentTarget.onerror = null;
                         e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250";
@@ -766,7 +767,7 @@ function ImageCarousel({ images, fallback }: any) {
         {images.map((img: string, i: number) => (
           <img
             key={i}
-            src={img}
+            src={getAssetUrl(img)}
             alt={`Slide view ${i + 1}`}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity transform duration-1000 ${
               currentIndex === i ? "opacity-100 z-10 scale-100" : "opacity-0 z-0"

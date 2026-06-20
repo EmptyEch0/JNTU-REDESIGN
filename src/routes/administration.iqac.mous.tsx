@@ -3,6 +3,7 @@ import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { useQuery } from "@tanstack/react-query";
 import { getIqacMous } from "@/funcs/leadership";
 import { Handshake, ArrowUpRight, Building2, MapPin } from "lucide-react";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/administration/iqac/mous")({
   head: () => ({
@@ -54,7 +55,7 @@ function MousPage() {
                   <div className="relative aspect-[16/7] md:aspect-[21/9] overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent z-10" />
                     <img
-                      src={mou.image}
+                      src={getAssetUrl(mou.image)}
                       alt={mou.title}
                       className="h-full w-full object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-1000"
                     />

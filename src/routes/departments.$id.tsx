@@ -2,6 +2,8 @@ import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-rout
 import { getDepartmentDetails, type DepartmentData } from "@/functions/departments";
 import { updateDepartment } from "@/lib/departments"; 
 import { useAdmin } from "@/context/AdminContext";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -77,7 +79,7 @@ function DepartmentLayout() {
       {/* Hero Section */}
       <div className={`relative h-[350px] w-full overflow-hidden transition-all ${isEditMode ? "ring-4 ring-inset ring-amber-400" : "bg-slate-900"}`}>
         <img 
-          src={headerEdit.image} 
+          src={getAssetUrl(headerEdit.image)} 
           className="h-full w-full object-cover opacity-40" 
           alt={headerEdit.name} 
         />
@@ -86,14 +88,17 @@ function DepartmentLayout() {
           <div className="text-center w-full max-w-4xl px-4">
             {isEditMode ? (
               <div className="space-y-4 bg-black/20 p-6 rounded-2xl backdrop-blur-sm">
-                <div className="flex flex-col items-center gap-2">
+                <div className="flex flex-col items-center gap-2 w-full max-w-md mx-auto">
                    <label className="text-amber-400 text-xs font-bold uppercase flex items-center gap-2">
-                    <Camera size={14} /> Background Image URL
+                    <Camera size={14} /> Background Image
                   </label>
-                  <input 
-                    className="w-full max-w-md bg-white/10 border border-white/20 rounded px-3 py-1 text-white text-sm"
+                  <AdminUpload
                     value={headerEdit.image}
-                    onChange={(e) => setHeaderEdit({...headerEdit, image: e.target.value})}
+                    onChange={(newUrl) => setHeaderEdit({...headerEdit, image: newUrl})}
+                    module="departments"
+                    category="banners"
+                    placeholder="Upload banner image"
+                    className="w-full"
                   />
                 </div>
                 <input 

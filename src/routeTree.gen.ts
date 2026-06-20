@@ -61,6 +61,7 @@ import { Route as NssActivitiesRouteImport } from './routes/nss.activities'
 import { Route as DepartmentsIdRouteImport } from './routes/departments.$id'
 import { Route as CampusLifeStudentActivityClubRouteImport } from './routes/campus-life.student-activity-club'
 import { Route as CampusLifeMusicClubRouteImport } from './routes/campus-life.music-club'
+import { Route as ApiUploadRouteImport } from './routes/api.upload'
 import { Route as AdministrationVicePrincipalRouteImport } from './routes/administration.vice-principal'
 import { Route as AdministrationPrincipalsOfficeRouteImport } from './routes/administration.principals-office'
 import { Route as AdministrationPrincipalRouteImport } from './routes/administration.principal'
@@ -87,6 +88,7 @@ import { Route as AboutInstitutionRouteImport } from './routes/about.institution
 import { Route as AboutHowToReachRouteImport } from './routes/about.how-to-reach'
 import { Route as DepartmentsIdIndexRouteImport } from './routes/departments.$id.index'
 import { Route as AdministrationIqacIndexRouteImport } from './routes/administration.iqac.index'
+import { Route as LocalAssetsUploadsSplatRouteImport } from './routes/local-assets.uploads.$'
 import { Route as DepartmentsIdLabsRouteImport } from './routes/departments.$id.labs'
 import { Route as DepartmentsIdHodRouteImport } from './routes/departments.$id.hod'
 import { Route as DepartmentsIdGalleryRouteImport } from './routes/departments.$id.gallery'
@@ -364,6 +366,11 @@ const CampusLifeMusicClubRoute = CampusLifeMusicClubRouteImport.update({
   path: '/music-club',
   getParentRoute: () => CampusLifeRoute,
 } as any)
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdministrationVicePrincipalRoute =
   AdministrationVicePrincipalRouteImport.update({
     id: '/vice-principal',
@@ -497,6 +504,11 @@ const AdministrationIqacIndexRoute = AdministrationIqacIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdministrationIqacRoute,
 } as any)
+const LocalAssetsUploadsSplatRoute = LocalAssetsUploadsSplatRouteImport.update({
+  id: '/local-assets/uploads/$',
+  path: '/local-assets/uploads/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DepartmentsIdLabsRoute = DepartmentsIdLabsRouteImport.update({
   id: '/labs',
   path: '/labs',
@@ -598,6 +610,7 @@ export interface FileRoutesByFullPath {
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
   '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
+  '/api/upload': typeof ApiUploadRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
   '/departments/$id': typeof DepartmentsIdRouteWithChildren
@@ -638,6 +651,7 @@ export interface FileRoutesByFullPath {
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
+  '/local-assets/uploads/$': typeof LocalAssetsUploadsSplatRoute
   '/administration/iqac/': typeof AdministrationIqacIndexRoute
   '/departments/$id/': typeof DepartmentsIdIndexRoute
 }
@@ -680,6 +694,7 @@ export interface FileRoutesByTo {
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
   '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
+  '/api/upload': typeof ApiUploadRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
   '/nss/activities': typeof NssActivitiesRoute
@@ -719,6 +734,7 @@ export interface FileRoutesByTo {
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
+  '/local-assets/uploads/$': typeof LocalAssetsUploadsSplatRoute
   '/administration/iqac': typeof AdministrationIqacIndexRoute
   '/departments/$id': typeof DepartmentsIdIndexRoute
 }
@@ -770,6 +786,7 @@ export interface FileRoutesById {
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
   '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
+  '/api/upload': typeof ApiUploadRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
   '/departments/$id': typeof DepartmentsIdRouteWithChildren
@@ -810,6 +827,7 @@ export interface FileRoutesById {
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
+  '/local-assets/uploads/$': typeof LocalAssetsUploadsSplatRoute
   '/administration/iqac/': typeof AdministrationIqacIndexRoute
   '/departments/$id/': typeof DepartmentsIdIndexRoute
 }
@@ -862,6 +880,7 @@ export interface FileRouteTypes {
     | '/administration/principal'
     | '/administration/principals-office'
     | '/administration/vice-principal'
+    | '/api/upload'
     | '/campus-life/music-club'
     | '/campus-life/student-activity-club'
     | '/departments/$id'
@@ -902,6 +921,7 @@ export interface FileRouteTypes {
     | '/departments/$id/gallery'
     | '/departments/$id/hod'
     | '/departments/$id/labs'
+    | '/local-assets/uploads/$'
     | '/administration/iqac/'
     | '/departments/$id/'
   fileRoutesByTo: FileRoutesByTo
@@ -944,6 +964,7 @@ export interface FileRouteTypes {
     | '/administration/principal'
     | '/administration/principals-office'
     | '/administration/vice-principal'
+    | '/api/upload'
     | '/campus-life/music-club'
     | '/campus-life/student-activity-club'
     | '/nss/activities'
@@ -983,6 +1004,7 @@ export interface FileRouteTypes {
     | '/departments/$id/gallery'
     | '/departments/$id/hod'
     | '/departments/$id/labs'
+    | '/local-assets/uploads/$'
     | '/administration/iqac'
     | '/departments/$id'
   id:
@@ -1033,6 +1055,7 @@ export interface FileRouteTypes {
     | '/administration/principal'
     | '/administration/principals-office'
     | '/administration/vice-principal'
+    | '/api/upload'
     | '/campus-life/music-club'
     | '/campus-life/student-activity-club'
     | '/departments/$id'
@@ -1073,6 +1096,7 @@ export interface FileRouteTypes {
     | '/departments/$id/gallery'
     | '/departments/$id/hod'
     | '/departments/$id/labs'
+    | '/local-assets/uploads/$'
     | '/administration/iqac/'
     | '/departments/$id/'
   fileRoutesById: FileRoutesById
@@ -1102,10 +1126,12 @@ export interface RootRouteChildren {
   WomenEmpowermentRoute: typeof WomenEmpowermentRouteWithChildren
   AdminDepartmentsRoute: typeof AdminDepartmentsRoute
   AdminPlacementsRoute: typeof AdminPlacementsRoute
+  ApiUploadRoute: typeof ApiUploadRoute
   DepartmentsIdRoute: typeof DepartmentsIdRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
   DispensaryIndexRoute: typeof DispensaryIndexRoute
+  LocalAssetsUploadsSplatRoute: typeof LocalAssetsUploadsSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1474,6 +1500,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CampusLifeMusicClubRouteImport
       parentRoute: typeof CampusLifeRoute
     }
+    '/api/upload': {
+      id: '/api/upload'
+      path: '/api/upload'
+      fullPath: '/api/upload'
+      preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/administration/vice-principal': {
       id: '/administration/vice-principal'
       path: '/vice-principal'
@@ -1655,6 +1688,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/administration/iqac/'
       preLoaderRoute: typeof AdministrationIqacIndexRouteImport
       parentRoute: typeof AdministrationIqacRoute
+    }
+    '/local-assets/uploads/$': {
+      id: '/local-assets/uploads/$'
+      path: '/local-assets/uploads/$'
+      fullPath: '/local-assets/uploads/$'
+      preLoaderRoute: typeof LocalAssetsUploadsSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/departments/$id/labs': {
       id: '/departments/$id/labs'
@@ -1977,10 +2017,12 @@ const rootRouteChildren: RootRouteChildren = {
   WomenEmpowermentRoute: WomenEmpowermentRouteWithChildren,
   AdminDepartmentsRoute: AdminDepartmentsRoute,
   AdminPlacementsRoute: AdminPlacementsRoute,
+  ApiUploadRoute: ApiUploadRoute,
   DepartmentsIdRoute: DepartmentsIdRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,
   DispensaryIndexRoute: DispensaryIndexRoute,
+  LocalAssetsUploadsSplatRoute: LocalAssetsUploadsSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,21 +1,29 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Camera, Maximize2, X, Plus, Trash2, Save, Image as ImageIcon, Type, Tag, AlignLeft } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { syncGallery } from "@/lib/departments";
+import { getAssetUrl, syncGallery } from "@/lib/departments";
 import { toast } from "sonner";
-import { getAssetUrl } from "@/lib/assets";
+
 import { AdminUpload } from "@/components/AdminEditPanel";
+import { DepartmentData } from "@/functions/departments";
 
 export const Route = createFileRoute("/departments/$id/gallery")({
   component: GalleryPage,
 });
 
 function GalleryPage() {
-  const data = useLoaderData({ from: "/departments/$id" }) as any;
-  const { isEditMode } = useAdmin();
+  const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id/gallery" });
+
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
 
   const [galleryList, setGalleryList] = useState<any[]>(data?.gallery || []);
   const [activeFilter, setActiveFilter] = useState("All");
@@ -53,12 +61,12 @@ function GalleryPage() {
   };
 
   const categories = ["All", ...new Set(galleryList.map((img: any) => img.category))];
-  const filteredImages = activeFilter === "All" 
-    ? galleryList 
+  const filteredImages = activeFilter === "All"
+    ? galleryList
     : galleryList.filter((img: any) => img.category === activeFilter);
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 pb-20">
+    <div className="animate-in fade-in slide-in-from-bottom-6 duration-300 pb-20">
       {/* Header */}
       <div className="mb-12 border-b border-slate-100 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
@@ -82,15 +90,14 @@ function GalleryPage() {
               </button>
             </div>
           )}
-          
+
           <div className="flex flex-wrap gap-2">
             {categories.map((cat: any) => (
               <button
                 key={cat}
                 onClick={() => setActiveFilter(cat)}
-                className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${
-                  activeFilter === cat ? "bg-slate-900 text-white shadow-lg" : "bg-white border border-slate-200 text-slate-500 hover:border-indigo-300"
-                }`}
+                className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${activeFilter === cat ? "bg-slate-900 text-white shadow-lg" : "bg-white border border-slate-200 text-slate-500 hover:border-indigo-300"
+                  }`}
               >
                 {cat}
               </button>
@@ -104,7 +111,7 @@ function GalleryPage() {
         {filteredImages.map((image: any) => (
           <div
             key={image.id}
-            className={`relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-slate-100 border transition-all duration-500 ${isEditMode ? 'border-indigo-400 ring-4 ring-indigo-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}
+            className={`relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-slate-100 border transition-all duration-200 ${isEditMode ? 'border-indigo-400 ring-4 ring-indigo-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}
           >
             {image.image_url ? (
               <img src={getAssetUrl(image.image_url)} alt={image.title} className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -131,22 +138,22 @@ function GalleryPage() {
                 {/* Title and Category Row */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><Type size={10}/> Title</label>
+                    <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><Type size={10} /> Title</label>
                     <input className="w-full bg-slate-50 border border-slate-100 p-2 rounded-xl text-[11px] outline-none font-bold text-slate-800" value={image.title} onChange={(e) => updateImage(image.id, "title", e.target.value)} placeholder="Title" />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><Tag size={10}/> Category</label>
+                    <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><Tag size={10} /> Category</label>
                     <input className="w-full bg-slate-50 border border-slate-100 p-2 rounded-xl text-[10px] outline-none font-black uppercase text-indigo-600" value={image.category} onChange={(e) => updateImage(image.id, "category", e.target.value)} placeholder="Category" />
                   </div>
                 </div>
 
                 {/* Description Input */}
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><AlignLeft size={10}/> Description</label>
-                  <textarea 
-                    className="w-full bg-slate-50 border border-slate-100 p-2 rounded-xl text-[11px] outline-none text-slate-500 min-h-[60px] resize-none" 
-                    value={image.description} 
-                    onChange={(e) => updateImage(image.id, "description", e.target.value)} 
+                  <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><AlignLeft size={10} /> Description</label>
+                  <textarea
+                    className="w-full bg-slate-50 border border-slate-100 p-2 rounded-xl text-[11px] outline-none text-slate-500 min-h-[60px] resize-none"
+                    value={image.description}
+                    onChange={(e) => updateImage(image.id, "description", e.target.value)}
                     placeholder="Brief details about this photo..."
                   />
                 </div>
@@ -156,14 +163,14 @@ function GalleryPage() {
                 </button>
               </div>
             ) : (
-              <div 
-                className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8 cursor-pointer"
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-8 cursor-pointer"
                 onClick={() => setSelectedImage(image)}
               >
                 <span className="text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-2">{image.category}</span>
                 <h4 className="text-white font-bold text-lg leading-tight mb-1">{image.title}</h4>
                 {image.description && (
-                   <p className="text-slate-300 text-xs line-clamp-2 italic">"{image.description}"</p>
+                  <p className="text-slate-300 text-xs line-clamp-2 italic">"{image.description}"</p>
                 )}
                 <div className="mt-4 flex items-center gap-2 text-white/50 text-[10px] font-bold">
                   <Maximize2 size={12} /> Click to expand

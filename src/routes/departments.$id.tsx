@@ -1,12 +1,12 @@
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
 import { getDepartmentDetails, type DepartmentData } from "@/functions/departments";
-import { updateDepartment } from "@/lib/departments"; 
+import { getAssetUrl, updateDepartment } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
-import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { DepartmentStrictLockModal } from "@/components/DepartmentStrictLockModal";
 import {
   BookOpen,
   Users,
@@ -17,8 +17,8 @@ import {
   ChevronRight,
   Save,
   Camera,
-  Menu, // New Icon
-  X,    // New Icon
+  Menu,
+  X,
 } from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id")({
@@ -33,36 +33,62 @@ export const Route = createFileRoute("/departments/$id")({
 function DepartmentLayout() {
   const loaderData = Route.useLoaderData() as unknown as DepartmentData;
   const location = useLocation();
-  const { isEditMode } = useAdmin();
+  const { isAdmin, hasEditPermission, isDeptEditing, setDeptEditing } = useAdmin();
   const queryClient = useQueryClient();
 
-  // State for mobile menu
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const isUnlocked = hasEditPermission(loaderData?.slug || "");
+  const isEditMode = isDeptEditing(loaderData?.slug || "");
+
   const [headerEdit, setHeaderEdit] = useState({
-    name: loaderData?.name,
-    image: loaderData?.image,
+    name: loaderData?.name || "",
+    image: loaderData?.image || "",
   });
 
   useEffect(() => {
-    setHeaderEdit({ name: loaderData?.name, image: loaderData?.image });
+    if (loaderData?.slug && hasEditPermission(loaderData.slug)) {
+      if (isDeptEditing(loaderData.slug) === undefined) {
+        setDeptEditing(loaderData.slug, true);
+      }
+    }
+  }, [loaderData?.slug, hasEditPermission]);
+
+  useEffect(() => {
+    if (loaderData) {
+      setHeaderEdit({ name: loaderData.name, image: loaderData.image });
+    }
   }, [loaderData]);
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
   const mutation = useMutation({
-    mutationFn: (updatedFields: any) => 
+    mutationFn: (updatedFields: any) =>
       updateDepartment({ data: { id: loaderData.id, ...updatedFields } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["department", loaderData.slug] });
-      toast.success("Header updated!");
+      toast.success("Header updated successfully!");
     },
   });
 
   if (!loaderData || !loaderData.slug) return null;
+
+  const needsLockScreen = isAdmin && !isUnlocked;
+
+  if (needsLockScreen) {
+    return (
+      <DepartmentStrictLockModal
+        deptId={loaderData.id}
+        deptSlug={loaderData.slug}
+        isOpen={true}
+        onSuccess={() => {
+          setDeptEditing(loaderData.slug, true);
+        }}
+      />
+    );
+  }
 
   const navLinks = [
     { name: "About & Vision", path: "", icon: <BookOpen size={18} /> },
@@ -101,32 +127,28 @@ function DepartmentLayout() {
                     className="w-full"
                   />
                 </div>
-                <input 
-                  className="text-3xl md:text-5xl font-bold text-white tracking-tight uppercase bg-transparent border-b-2 border-amber-400 text-center outline-none w-full"
-                  value={headerEdit.name}
-                  onChange={(e) => setHeaderEdit({...headerEdit, name: e.target.value})}
-                />
-                <button 
-                  onClick={() => mutation.mutate(headerEdit)}
-                  className="flex items-center gap-2 bg-amber-500 text-black px-4 py-2 rounded-full font-bold text-sm mx-auto hover:bg-amber-400 transition-colors"
-                >
-                  <Save size={16} /> Save Header
+                <div className="flex flex-col items-center gap-2">
+                  <input
+                    className="text-2xl md:text-4xl font-bold text-white tracking-tight uppercase bg-transparent border-b-2 border-amber-400/30 focus:border-amber-400 text-center outline-none w-full"
+                    value={headerEdit.name}
+                    onChange={(e) => setHeaderEdit({ ...headerEdit, name: e.target.value })}
+                  />
+                </div>
+                <button onClick={() => mutation.mutate(headerEdit)} className="flex items-center gap-2 bg-amber-500 text-black px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider mx-auto">
+                  <Save size={14} /> Save Header
                 </button>
               </div>
             ) : (
-              <>
-                <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight uppercase">
-                  Department of {loaderData.name}
-                </h1>
-                {/* FIXED NAVIGATION BREADCRUMBS */}
-                <div className="mt-4 flex items-center justify-center gap-2 text-blue-300 font-medium text-sm md:text-base">
-                  <Link to="/" className="hover:text-white transition-colors">Home</Link>
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight uppercase">Department of {loaderData.name}</h1>
+                <div className="mt-4 flex items-center justify-center gap-2 text-blue-300 font-medium text-sm">
+                  <Link to="/" className="hover:text-white">Home</Link>
                   <ChevronRight size={14} />
-                  <Link to="/departments" className="hover:text-white transition-colors">Departments</Link>
+                  <Link to="/departments" className="hover:text-white">Departments</Link>
                   <ChevronRight size={14} />
-                  <span className="text-white">{loaderData.slug.toUpperCase()}</span>
+                  <span className="text-white font-semibold">{loaderData.slug.toUpperCase()}</span>
                 </div>
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -134,46 +156,47 @@ function DepartmentLayout() {
 
       <div className="max-w-7xl mx-auto py-12 px-4 flex flex-col lg:flex-row gap-12 relative">
         
-        {/* MOBILE MENU TOGGLE BUTTON */}
-        <button 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="lg:hidden fixed bottom-6 right-6 z-50 bg-blue-600 text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform active:scale-95"
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Floating Toggle Button for Mobile Screen - MOVED TO LEFT */}
+<button 
+  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+  className="lg:hidden fixed bottom-6 left-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-2xl transition-all duration-200 active:scale-95"
+  aria-label="Toggle Menu"
+>
+  {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+</button>
 
-        {/* REACTIVE SIDEBAR */}
+        {/* Sidebar Navigation */}
         <aside className={`
-          fixed inset-y-0 left-0 z-40 w-72 bg-white transform transition-transform duration-300 ease-in-out p-6 lg:relative lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 lg:flex-shrink-0
-          ${isMobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"}
+          fixed inset-y-0 left-0 z-40 w-72 bg-slate-50 p-6 shadow-2xl transition-transform duration-300 ease-in-out
+          lg:relative lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 lg:shadow-none lg:w-64 flex-shrink-0
+          ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}>
-          <div className="sticky top-28 bg-slate-50 rounded-3xl p-6 border border-slate-100 shadow-sm h-fit">
-            <div className="flex items-center justify-between mb-6 px-2">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">
-                Menu {isEditMode && <span className="text-amber-500">(Admin)</span>}
-              </h3>
-              {/* Close button inside sidebar for mobile */}
-              <button onClick={() => setIsMobileMenuOpen(false)} className="lg:hidden text-slate-400">
-                <X size={18} />
+          <div className="sticky top-28 bg-white lg:bg-slate-50 rounded-3xl p-6 lg:border border-slate-100 h-fit space-y-6">
+            
+            {/* Header Title Inside Mobile Menu */}
+            <div className="flex items-center justify-between lg:hidden border-b pb-4 mb-2 border-slate-200">
+              <span className="font-bold text-slate-800 text-lg uppercase tracking-wider">Navigation</span>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="text-slate-500 hover:text-slate-800">
+                <X size={20} />
               </button>
             </div>
+
             <nav className="space-y-2">
               {navLinks.map((link) => {
                 const fullPath = `/departments/${loaderData.slug}${link.path}`;
-                const isActive = location.pathname === fullPath;
-
+                const isActive = link.path === "" 
+                  ? location.pathname === fullPath
+                  : location.pathname.startsWith(fullPath);
+                
                 return (
                   <Link
                     key={link.path}
                     to={fullPath}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                      isActive
-                        ? "bg-blue-600 text-white shadow-md shadow-blue-200"
-                        : "text-slate-600 hover:bg-white hover:shadow-sm"
+                      isActive ? "bg-blue-600 text-white shadow-md shadow-blue-600/20" : "text-slate-600 hover:bg-slate-100 lg:hover:bg-white"
                     }`}
                   >
-                    {link.icon}
-                    {link.name}
+                    {link.icon} {link.name}
                   </Link>
                 );
               })}
@@ -181,17 +204,19 @@ function DepartmentLayout() {
           </div>
         </aside>
 
-        {/* OVERLAY FOR MOBILE (to close menu when clicking outside) */}
+        {/* Transparent Backdrop Layer Overlay when Drawer is Open on Mobile */}
         {isMobileMenuOpen && (
           <div 
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 lg:hidden"
-            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 lg:hidden transition-opacity duration-300" 
+            onClick={() => setIsMobileMenuOpen(false)} 
           />
         )}
 
-        {/* Content Outlet */}
-        <main className="flex-grow min-w-0">
-          <Outlet />
+        {/* Main Workspace Content Stream Component wrapper */}
+        <main className="flex-grow min-w-0 space-y-6">
+          <div className="mt-2">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

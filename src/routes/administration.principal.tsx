@@ -1,16 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { imageUrl, getAssetUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ADMINISTRATION_SUBNAV } from "@/lib/site";
 import { Quote, Mail, MapPin, Save, X, Users } from "lucide-react";
-import campusImg from "@/assets/hero-campus.jpg";
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { getLeadershipData, getLeadershipStaff, updateLeadershipData } from "@/funcs/leadership";
-import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 import { ProfileRenderer } from "@/components/ProfileRenderer";
 
@@ -62,7 +62,7 @@ function PrincipalPage() {
   if (isPrincipalLoading || !principal)
     return (
       <div className="min-h-screen grid place-items-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+        <div className="spinner" />
       </div>
     );
 
@@ -84,7 +84,7 @@ function PrincipalPage() {
           <RevealOnScroll>
             <div className="space-y-8 lg:sticky lg:top-32">
               <div className="relative group">
-                <div className="absolute -inset-4 rounded-[40px] bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-colors duration-500" />
+                <div className="absolute -inset-4 rounded-[40px] bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-colors duration-200" />
                 <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white shadow-elegant bg-card">
                   {isEditMode ? (
                     <AdminUpload
@@ -278,7 +278,7 @@ function PrincipalPage() {
       </section>
 
       {isEditMode && editedData && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in slide-in-from-bottom-4">
+        <div className="fixed top-24 right-8 z-50 animate-in fade-in zoom-in slide-in-from-top-4">
           <div className="flex items-center gap-3 bg-card p-2 rounded-full border border-border shadow-2xl">
             <button
               onClick={() => setEditedData(null)}

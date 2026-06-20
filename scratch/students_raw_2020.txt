@@ -1,0 +1,987 @@
+1
+KANTAMSETTI  SREENIDHI
+17VV1A0112
+CIVIL
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+2
+KOSURI SAI DEVI SUSMITHA
+17VV1A0115
+CIVIL
+2020-2021
+On Campus (Virtual)
+Infosys
+3
+MONDI TULASI VARA TEJASWINI
+17VV1A0118
+CIVIL
+2020-2021
+On Campus (Virtual)
+Infosys
+4
+ANUSURI NAGENDRA SAI
+17VV1A0201
+EEE
+2020-2021
+On Campus (Virtual)
+Infosys
+5
+BATTULA LAKSHMI PRASANNA
+17VV1A0204
+EEE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+6
+BINDU MADHAVI CHINTADA 
+17VV1A0207
+EEE
+2020-2021
+Off Campus 
+Tata Consultancy Services 
+7
+D.DIVIJA
+17VV1A0216
+EEE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+8
+MUKKAVALLI NIHARIKA
+17VV1A0235
+EEE
+2020-2021
+On Campus (Virtual)
+Accenture
+9
+Y HARSHA VARDHAN SRI SAI
+17VV1A0255
+EEE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+10
+B BHARGAVA SRI SAI KRISHNA
+18VV5A0265
+EEE
+2020-2021
+On Campus (Virtual)
+Infosys
+11
+EADI MANVITHA
+17VV1A0310
+MECH
+2020-2021
+On Campus (Virtual)
+FACE Prep
+12
+MANDA VIJAYA
+17VV1A0330
+MECH
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+13
+NEMALA PADMA
+17VV1A0339
+MECH
+2020-2021
+On Campus (Virtual)
+Infosys
+14
+PADISETTI SANGEETH
+17VV1A0340
+MECH
+2020-2021
+On Campus (Virtual)
+Infosys
+15
+SANAPALA SUPRAJA
+17VV1A0347
+MECH
+2020-2021
+On Campus (Virtual)
+FACE Prep
+16
+ABDUL RAQUEEB
+17VV1A0401
+ECE
+2020-2021
+On Campus (Virtual)
+Infosys
+17
+ARETI SREYA
+17VV1A0403
+ECE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+18
+BODDU.RAJ KUMAR
+17VV1A0406
+ECE
+2020-2021
+On Campus (Virtual)
+Infosys
+19
+BOLISETTI GURURAJA
+17VV1A0407
+ECE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+20
+SRI LAKSHMI BOMMISETTI
+17VV1A0408
+ECE
+2020-2021
+On Campus (Virtual)
+Infosys
+21
+B.LAKSHMI PRIYA
+17VV1A0409
+ECE
+2020-2021
+On Campus (Virtual)
+Broadcom
+22
+SRI RAM MAHESH CHUNDURU
+17VV1A0411
+ECE
+2020-2021
+On Campus (Virtual)
+Vayu Group
+23
+DEVARASETTI VINAY KUMAR
+17VV1A0412
+ECE
+2020-2021
+On Campus (Virtual)
+Wipro
+24
+GOLLAPALLI GAYATRI SIREESHA
+17VV1A0416
+ECE
+2020-2021
+On Campus (Virtual)
+Vayu Group
+25
+GUNDEPALLI SAI SRIRAM
+17VV1A0418
+ECE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+26
+KAMBHAMPATI ANIRUDH
+17VV1A0420
+ECE
+2020-2021
+On Campus (Virtual)
+Infosys
+27
+KATTA YESWANTH PRASANTH
+17VV1A0425
+ECE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+28
+KINTALI SAICHARAN
+17VV1A0426
+ECE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+29
+KORUPOLU VANAJA
+17VV1A0428
+ECE
+2020-2021
+On Campus (Virtual)
+Vayu Group
+30
+MANUKONADA VAMSI KRISHNA REDDY
+17VV1A0429
+ECE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+31
+PRANEETH KOUSHIK
+17VV1A0434
+ECE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+32
+NALLANA KEERTHANA
+17VV1A0435
+ECE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+33
+NERELLA MOHITH
+17VV1A0436
+ECE
+2020-2021
+On Campus (Virtual)
+Infosys
+34
+PONNAGANTI VASUDEVI
+17VV1A0440
+ECE
+2020-2021
+On Campus (Virtual)
+Infosys
+35
+SHEIK SALMA
+17VV1A0442
+ECE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+36
+MAMATHA REDDY TAMILSETTI
+17VV1A0445
+ECE
+2020-2021
+On Campus (Virtual)
+Accenture
+37
+ULLAKULA ANEESH
+17VV1A0447
+ECE
+2020-2021
+On Campus (Virtual)
+Broadcom
+38
+VALAVALA DURGA PRASAD
+17VV1A0448
+ECE
+2020-2021
+On Campus (Virtual)
+Medha Servo Pvt ltd.
+39
+VALLAMSETTI ARAVIND NAG
+17VV1A0449
+ECE
+2020-2021
+On Campus (Virtual)
+Wipro
+40
+VERICHERLA RAJU
+17VV1A0451 
+ECE
+2020-2021
+On Campus 
+Triecoders Pvt.Ltd
+41
+VYKUNTAM BHAVANA
+17VV1A0452
+ECE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+42
+YARLAGADDA NARESH
+17VV1A0453
+ECE
+2020-2021
+On Campus 
+Triecoders Pvt.Ltd
+43
+PADALA ABHIRAM
+18VV5A0463
+ECE
+2020-2021
+On Campus (Virtual)
+Medha Servo Pvt ltd.
+44
+A.ABHILASH SAI
+17VV1A0501
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+45
+BATTA SAI PRANEETHA
+17VV1A0502
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+46
+B JYOTHI SURYA SRAVANTHI
+17VV1A0503
+CSE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+47
+BHEESETTY JYOTHI SURYA SRAVANTHI
+17VV1A0503
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+48
+B.VEDASREE
+17VV1A0504
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+49
+BOGADI CHANDRIKA PRIYA
+17VV1A0505
+CSE
+2020-2021
+On Campus 
+Triecoders Pvt.Ltd
+50
+BALA MALLIKHARJUNA SAI TEJA BORRA
+17VV1A0506
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+51
+BORRA HARISH
+17VV1A0507
+CSE
+2020-2021
+On Campus 
+Sails Software Solutions
+52
+BUSAM CH B N K V GANESH
+17VV1A0509
+CSE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+53
+CHINTAPALLI MANIKUMAR
+17VV1A0510
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+54
+CHIRUVELLA VINAY BABU
+17VV1A0511
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+55
+DUVVURI VENKATA SOWJANYA SRI HARINI
+17VV1A0512
+CSE
+2020-2021
+On Campus (Virtual)
+Amazon
+56
+DUVVURI VENKATA SOWMYA SRI HARINI
+17VV1A0512
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+57
+G RAJ KUMAR
+17VV1A0513
+CSE
+2020-2021
+On Campus (Virtual)
+Vayu Group
+58
+GANTA RAJ SANKEERTH
+17VV1A0517
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+59
+ISWAHANI SAJID ALI
+17VV1A0517
+CSE
+2020-2021
+On Campus 
+Triecoders Pvt.Ltd
+60
+SARANYA JAMI
+17VV1A0518
+CSE
+2020-2021
+On Campus (Virtual)
+Accenture
+61
+KOLLABATHULA ROSHINI
+17VV1A0521
+CSE
+2020-2021
+On Campus (Virtual)
+Infosys
+62
+LUKALAPU RAGHURAM
+17VV1A0522
+CSE
+2020-2021
+On Campus (Virtual)
+Infosys
+63
+MAHANTHI AKHILA
+17VV1A0523
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+64
+MAJJI JAHNAVI
+17VV1A0524
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+65
+MAREPALLI SAI ANIRUDH
+17VV1A0525
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+66
+MEDISETTI HEMALATHA
+17VV1A0526
+CSE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+67
+MANIKRISHNA NAGULAPALLI
+17VV1A0528
+CSE
+2020-2021
+On Campus (Virtual)
+Infosys
+68
+NANDIPATI DURGA PRASAD REDDY
+17VV1A0529
+CSE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+69
+NARAVA KAVYA 
+17VV1A0530
+CSE
+2020-2021
+On Campus (Virtual)
+Paytm Techops
+70
+NASAKA AJAY
+17VV1A0531
+CSE
+2020-2021
+On Campus (Virtual)
+Hexaware Technologies 
+71
+PALAKOLLU SAHITHI JYOTHSNA
+17VV1A0532
+CSE
+2020-2021
+On Campus (Virtual)
+Amazon
+72
+PEETHANI PAVAN SAI KUMAR
+17VV1A0533
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+73
+PONDALA PRANAYADURGA
+17VV1A0534
+CSE
+2020-2021
+On Campus (Virtual)
+Infosys
+74
+RAJAMAHENDRAVARAPU ADITYA
+17VV1A0536
+CSE
+2020-2021
+On Campus (Virtual)
+Wipro
+75
+REDDY LAKSHMI TEJASWI
+17VV1A0537
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+76
+SANDEEP ANUMULA
+17VV1A0538
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+77
+SASANALA POOJA ALEKHYA
+17VV1A0539
+CSE
+2020-2021
+On Campus (Virtual)
+Hexaware Technologies 
+78
+SHAIK RIZWANA KHATUN
+17VV1A0540
+CSE
+2020-2021
+On Campus (Virtual)
+Hexaware Technologies 
+79
+SHEIK SAYYED BASHEER
+17VV1A0541
+CSE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+80
+SK HUSSAIN
+17VV1A0542
+CSE
+2020-2021
+On Campus (Virtual)
+APFCMSS
+81
+SRI HARSHA DUMALA
+17VV1A0543
+CSE
+2020-2021
+On Campus (Virtual)
+Infosys
+82
+SANDEEP ROY SUNNAPU
+17VV1A0544
+CSE
+2020-2021
+On Campus 
+GreyCampus
+83
+THADI SHYAM KUMAR
+17VV1A0546
+CSE
+2020-2023
+On Campus 
+Sails Software Solutions
+84
+THADIPARTHI SOWMYA
+17VV1A0547
+CSE
+2020-2021
+On Campus (Virtual)
+Infosys
+85
+DEEPTHI MANOJA
+17VV1A0553
+CSE
+2020-2021
+On Campus 
+Triecoders Pvt.Ltd
+86
+DEEPTHI MANOJA
+17VV1A0553 
+CSE
+2020-2021
+On Campus (Virtual)
+Accenture
+87
+VAHINI KUMAR GUTTULA
+18VV5A0561
+CSE
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+88
+KOLLI NEELIMA
+18VV5A0562
+CSE
+2020-2021
+On Campus (Virtual)
+Infosys
+89
+DADI SIRISHA
+18VV5A0563
+CSE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+90
+IMMANDI JOSEPH KISHORE
+18VV5A0564
+CSE
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+91
+KESANA SRI DEEPTHI
+18VV5A0565
+CSE
+2020-2021
+On Campus (Virtual)
+Vayu Group
+92
+GANTA RAJ SANKEERTH
+16VV1A0517
+CSE
+2020-2021
+On Campus 
+Sails Software Solutions
+93
+PONNAMALLA JAYA CHANDRA
+16VV1A0541
+CSE
+2020-2021
+On Campus (Virtual)
+Infosys
+94
+A DIVYA GNANA BHRAMARAMBIKA
+17VV1A1201
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+95
+BARATAM GNANA PRASANNA
+17VV1A1202
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+96
+BARATAM LAKSHMI PRASANNA
+17VV1A1203
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+97
+CHIKKAM V S AKSHARA SPOORTHY
+17VV1A1205
+IT
+2020-2021
+On Campus (Virtual)
+Abda Digital 
+98
+DIVI UTKALA
+17VV1A1207
+IT
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+99
+DOKULA SAI LIKHITHA
+17VV1A1208
+IT
+2020-2021
+On Campus (Virtual)
+Hexaware Technologies 
+100
+GAJULA YASWANTH
+17VV1A1209
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+101
+GANTA PRAKHYA
+17VV1A1211
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+102
+GINJALA ANUSHA
+17VV1A1212
+IT
+2020-2021
+On Campus (Virtual)
+Accenture
+103
+GOMANGI NAVEEN 
+17VV1A1213 
+IT
+2020-2021
+On Campus (Virtual)
+APFCMSS
+104
+INDUGU VENKAT SAI PRUDHVI RAJ
+17VV1A1215
+IT
+2020-2021
+On Campus (Virtual)
+Broadcom
+105
+JANUPALLI PRANAY
+17VV1A1216
+IT
+2020-2021
+On Campus 
+GreyCampus
+106
+KAMBHAPATI VIKASH 
+17VV1A1218
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+107
+K.VIKASH
+17VV1A1218
+IT
+2020-2021
+On Campus (Virtual)
+Wipro
+108
+K.VENKATA SAI KIRAN
+17VV1A1219
+IT
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+109
+PRAHARSHITHA METLA
+17VV1A1222
+IT
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+110
+NUKALA TEJASWI
+17VV1A1225
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+111
+PALLELA VENKATA MANI KRISHNA
+17VV1A1226
+IT
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+112
+PEDAPUDI KUSUMA
+17VV1A1227
+IT
+2020-2021
+On Campus (Virtual)
+Accenture
+113
+PERVELA SAI DIVYA
+17VV1A1228
+IT
+2020-2021
+On Campus 
+Sails Software Solutions
+114
+YESHWANTH RAYAVARAPU
+17VV1A1233
+IT
+2020-2021
+On Campus (Virtual)
+Vayu Group
+115
+SAGI SUMA
+17VV1A1234
+IT
+2020-2021
+On Campus (Virtual)
+Abda Digital 
+116
+SAGI SUMA
+17VV1A1234
+IT
+2020-2021
+On Campus (Virtual)
+Cognizant Technology Solutions 
+117
+SAI TEJA GARBHANI
+17VV1A1235
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+118
+SEELAMANTHULA VASU SAI SOURABH
+17VV1A1236
+IT
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+119
+SHAIK HASHMATH
+17VV1A1237
+IT
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+120
+TAMMA LOHITH REDDY
+17VV1A1239
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+121
+TANTATI KARUNYA
+17VV1A1240
+IT
+2020-2021
+On Campus 
+Sails Software Solutions
+122
+TURAKALA GEETA SRI
+17VV1A1241
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+123
+V DEEPIKA RANI
+17VV1A1242
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+124
+V.SRIKALA
+17VV1A1243
+IT
+2020-2021
+On Campus (Virtual)
+Tata Consultancy Services 
+125
+VANDANA PRANAVANANDA
+17VV1A1244
+IT
+2020-2021
+On Campus (Virtual)
+Abda Digital 
+126
+VILLURI MANIKYA VENKATA GNANESWAR
+17VV1A1246
+IT
+2020-2021
+On Campus (Virtual)
+Hexaware Technologies 
+127
+YERRA RATNASRI
+17VV1A1248
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+128
+BODDEPALLI SOWJANYA
+18VV5A1262
+IT
+2020-2021
+On Campus (Virtual)
+Accenture
+129
+SAMAYAM PRAVALLIKA 
+18VV5A1264 
+IT
+2020-2021
+On Campus (Virtual)
+Infosys
+130
+HARI PRIYA NIMMALURI
+18VV5A1271
+IT
+2020-2021
+On Campus (Virtual)
+Accenture
+131
+KAGITHA ASHOK KUMAR
+17VV1A3108
+MET
+2020-2021
+On Campus (Virtual)
+Infosys
+132
+MAMIDISETTI PRAMODH RATNA GOPAL
+17VV1A3111
+MET
+2020-2021
+On Campus (Virtual)
+Srikalahasti Pipes Ltd.Tirupathi
+133
+V.K.MALLIKA DARSHAN
+17VV5A3131
+MET
+2020-2021
+On Campus (Virtual)
+Srikalahasti Pipes Ltd.Tirupathi
+134
+SHAIK SUBHANI
+18VV5A3131
+MET
+2020-2021
+On Campus (Virtual)
+Srikalahasti Pipes Ltd.Tirupathi
+135
+URIVITI HARI PRASAD
+18VV5A3133
+MET
+2020-2021
+On Campus (Virtual)
+Srikalahasti Pipes Ltd.Tirupathi
+136
+GARA VIKAS
+18VV5A3134
+MET
+2020-2021
+On Campus (Virtual)
+Srikalahasti Pipes Ltd.Tirupathi
+137
+POTLADA VENKATESH
+18VV5A3135
+MET
+2020-2021
+On Campus (Virtual)
+Srikalahasti Pipes Ltd.Tirupathi
+138
+Kalyani
+19VV5F0042
+MCA
+2020-2021
+On Campus (Virtual)
+Prodigy Systems
+139
+Maturu Priyanka
+19VV5F0046
+MCA
+2020-2021
+On Campus (Virtual)
+Prodigy Systems
+140
+Talatam Durga srilakshmi
+19VV5F0048
+MCA
+2020-2021
+On Campus (Virtual)
+Prodigy Systems
+141
+VANAPALLI HEMALATHA 
+17VV1F0026
+MCA
+2020-2021
+On Campus (Virtual)
+Prodigy Systems

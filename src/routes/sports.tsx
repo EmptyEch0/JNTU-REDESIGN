@@ -193,7 +193,7 @@ function SportsPage() {
       <div className="absolute top-[25%] -left-48 w-[650px] h-[650px] rounded-full bg-primary/5 blur-[140px] pointer-events-none -z-10 animate-pulse duration-[9s]" />
       <div className="absolute bottom-[30%] -right-48 w-[650px] h-[650px] rounded-full bg-accent/5 blur-[140px] pointer-events-none -z-10 animate-pulse duration-[11s]" />
       {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
+        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.15s] backdrop-blur-md text-xs uppercase tracking-widest">
           <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
           <span>Sports Portal Administration Live</span>
           <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
@@ -222,13 +222,13 @@ function SportsPage() {
           ]}
         />
 
-        <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
+        <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.2s_ease-out]">
           
           {/* IMAGE LEDGER & CAROUSEL - Bounded container */}
           <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-3xl shadow-lg border border-slate-200/60 bg-slate-100 transition-all duration-300">
             <ImageCarousel images={getCarouselImages()} fallback={sportsImg} />
             {isEditMode && (
-              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.4s]">
+              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.2s]">
                 <div className="flex items-center gap-2 pb-3 border-b border-amber-200/60">
                   <div className="w-9 h-9 rounded-2xl bg-amber-100 text-amber-700 grid place-items-center shrink-0 shadow-sm">
                     <Camera className="w-4.5 h-4.5" />
@@ -275,14 +275,14 @@ function SportsPage() {
               💡 TAB 1: OVERVIEW
              ========================================== */}
           {tab === "Overview" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="Department of Physical Education" 
                 icon={Building}
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
               >
                 {isEditMode ? (
-                  <div className="space-y-5 animate-[fade-in_0.3s]">
+                  <div className="space-y-5 animate-[fade-in_0.15s]">
                     <div>
                       <label className="text-[9px] font-black text-amber-800 uppercase tracking-widest">General Intro Paragraph</label>
                       <textarea 
@@ -360,7 +360,7 @@ function SportsPage() {
               👥 TAB 2: STAFF & FACULTY
              ========================================== */}
           {tab === "Staff" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               {/* Coordinator In-charge Profile */}
               <Card 
                 title="Athletics Directorate" 
@@ -409,7 +409,7 @@ function SportsPage() {
                     <img
                       src={getAssetUrl(data?.info?.img) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                       onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
-                      className="w-32 h-40 md:w-40 md:h-52 rounded-[28px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-500 hover:scale-[1.02]"
+                      className="w-32 h-40 md:w-40 md:h-52 rounded-[28px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-200 hover:scale-[1.02]"
                       alt={data?.info?.name}
                     />
                     <div className="flex-1 w-full">
@@ -531,7 +531,7 @@ function SportsPage() {
             };
 
             return (
-              <div className="space-y-10 animate-[fade-in_0.5s_ease-out] w-full">
+              <div className="space-y-10 animate-[fade-in_0.2s_ease-out] w-full">
                 
                 {/* Add a global form if edit is active to start a new entry */}
                 {isEditMode && (
@@ -565,7 +565,7 @@ function SportsPage() {
                     {sortedGroups.map((slug) => {
                       const config = getGroupConfig(slug);
                       return (
-                        <div key={slug} className="animate-[fade-in_0.4s_ease-out]">
+                        <div key={slug} className="animate-[fade-in_0.2s_ease-out]">
                           <Card 
                             title={config.title} 
                             subtitle={config.subtitle} 
@@ -597,7 +597,7 @@ function SportsPage() {
               🗺️ TAB 4: PLAY FIELDS
              ========================================== */}
           {tab === "Play Fields" && (
-            <div className="animate-[fade-in_0.5s_ease-out]">
+            <div className="animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="Institutional Playfield Topography" 
                 subtitle="Current active outdoor surfaces catalog"
@@ -618,7 +618,7 @@ function SportsPage() {
               🏋️ TAB 5: GYMNASIUM
              ========================================== */}
           {tab === "Gymnasium" && (
-            <div className="animate-[fade-in_0.5s_ease-out]">
+            <div className="animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="Conditioning Station Roster" 
                 subtitle="Mechanical workout units available in weights wing"
@@ -693,7 +693,7 @@ function ImageCarousel({ images, fallback }: any) {
             key={i}
             src={getAssetUrl(img)}
             alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
             onError={(e) => { e.currentTarget.src = fallback; }}
           />
         ))}
@@ -746,7 +746,7 @@ function PeopleRegistryEditable({ data, category, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-3 gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-3 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div>
             <label className="text-[10px] font-black uppercase text-amber-800">Personnel Name</label>
             <input value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
@@ -891,7 +891,7 @@ function AchievementCreator({ onRefetch }: any) {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5 items-end animate-[fade-in_0.3s]">
+    <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5 items-end animate-[fade-in_0.15s]">
       <input placeholder="Year e.g 2024-2025" value={f.yearLabel} onChange={(e)=>setF({...f, yearLabel:e.target.value})} className="border rounded-lg p-2 bg-white text-xs font-bold"/>
       <input placeholder="Student Full Name" value={f.student} onChange={(e)=>setF({...f, student:e.target.value})} className="border rounded-lg p-2 bg-white text-xs font-bold"/>
       <input placeholder="Branch code e.g CSE" value={f.branch} onChange={(e)=>setF({...f, branch:e.target.value})} className="border rounded-lg p-2 bg-white text-xs font-bold"/>
@@ -939,7 +939,7 @@ function InfraRegistryEditable({ data, category, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-4.5 rounded-[24px] flex flex-col sm:flex-row gap-3 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-4.5 rounded-[24px] flex flex-col sm:flex-row gap-3 items-end shadow-inner animate-[fade-in_0.15s]">
           <div className="flex-1 w-full">
             <label className="text-[10px] font-black uppercase text-amber-800">Inventory Description Name</label>
             <input value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} className="w-full border bg-white px-4 py-3 rounded-xl text-xs font-bold outline-none focus:border-amber-400 shadow-inner" placeholder={isGym ? "e.g. 16 STATIONS MULTI GYM" : "e.g. BASKET-BALL COURT"}/>
@@ -1041,4 +1041,3 @@ function InlineCellEdit({ val, onCommit }: { val: string; onCommit: (n: string) 
   );
 }
 
-export default SportsPage;

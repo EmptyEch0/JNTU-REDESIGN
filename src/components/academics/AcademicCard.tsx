@@ -20,7 +20,7 @@ export function AcademicCard({ title, description, icon, linkTo, delay = 0 }: Ac
         whileHover={{ y: -5, scale: 1.02 }}
         className="group relative h-full rounded-2xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-8 shadow-sm hover:shadow-xl hover:shadow-red-900/10 dark:hover:shadow-red-900/20 transition-all duration-300 overflow-hidden"
       >
-        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity transform translate-x-4 -translate-y-4 group-hover:scale-110 duration-500 pointer-events-none">
+        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity transform translate-x-4 -translate-y-4 group-hover:scale-110 duration-200 pointer-events-none">
           <div className="w-24 h-24 text-red-600">
             {icon}
           </div>

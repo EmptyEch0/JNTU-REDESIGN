@@ -8,6 +8,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
 import {
   getGallery,
   addGalleryItem,
@@ -104,7 +105,7 @@ function GalleryPage() {
                       src={getAssetUrl(editedItems[it.id]?.src ?? it.src)}
                       alt={it.caption}
                       loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
 

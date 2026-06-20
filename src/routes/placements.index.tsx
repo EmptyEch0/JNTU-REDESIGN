@@ -13,6 +13,7 @@ import { getTPO, updateTPO, getGoals, getPlacementYears } from "../lib/placement
 import { useAdmin } from "@/context/AdminContext";
 import { Mail, Quote, Target, Save } from "lucide-react";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
 
 import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
@@ -43,6 +44,8 @@ function PlacementsPage() {
   });
 
   const latestStats = years?.[0] || { offers: 420, top: "42 LPA", recruiters: 85 };
+  const topPackageMatch = String(latestStats.top || "").match(/[\d.]+/);
+  const topPackageValue = topPackageMatch ? parseFloat(topPackageMatch[0]) : 42;
 
   const saveTPO = async () => {
     if (!editedTPO) return;
@@ -74,7 +77,7 @@ function PlacementsPage() {
           </div>
           <div className="bg-card p-8">
             <StatCounter
-              value={parseInt(latestStats.top as string) || 42}
+              value={topPackageValue}
               label="LPA Top Package"
               suffix="L"
             />

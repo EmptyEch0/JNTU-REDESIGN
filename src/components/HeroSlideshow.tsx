@@ -59,7 +59,7 @@ export function HeroSlideshow({
               key={i}
               onClick={() => setActive(i)}
               aria-label={`Slide ${i + 1}`}
-              className={`h-1 rounded-full transition-all duration-500 ${
+              className={`h-1 rounded-full transition-all duration-200 ${
                 i === active ? "w-10 bg-white" : "w-4 bg-white/40 hover:bg-white/70"
               }`}
             />

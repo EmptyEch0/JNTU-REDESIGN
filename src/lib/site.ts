@@ -80,7 +80,6 @@ export const NAV: {
         items: [
           { label: "Overview", to: "/academics", desc: "Programs at a glance" },
           { label: "Programs Offered", to: "/academics/programs", desc: "UG, PG and Doctoral" },
-          { label: "Admissions", to: "/academics/admissions", desc: "How to apply" },
           {
             label: "Academic Regulations",
             to: "/academics/regulations",
@@ -94,7 +93,7 @@ export const NAV: {
           { label: "Syllabus", to: "/academics/syllabus", desc: "Course-wise curriculum" },
           { label: "Scholarships", to: "/academics/scholarships", desc: "Merit & need-based" },
           { label: "CAC", to: "/academics/cac", desc: "College Academic Committee" },
-          { label: "Time Tables", to: "/academics/time-tables", desc: "Class schedules" },
+          { label: "Time Tables", to: "/academics/timetables", desc: "Class schedules" },
           { label: "Downloads", to: "/academics/downloads", desc: "Forms & documents" },
         ],
       },
@@ -374,7 +373,6 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
     keywords: "programs curriculum ug pg phd",
   },
   { label: "Departments", to: "/departments", group: "Pages" },
-  { label: "Admissions", to: "/admissions", group: "Pages", keywords: "apply enroll" },
   { label: "Contact", to: "/contact", group: "Pages" },
   { label: "Notices", to: "/notices", group: "Pages", keywords: "announcements circulars" },
   { label: "Gallery", to: "/gallery", group: "Pages" },
@@ -412,7 +410,7 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
     group: "Academics",
     keywords: "college academic committee",
   },
-  { label: "Time Tables", to: "/academics/time-tables", group: "Academics" },
+  { label: "Time Tables", to: "/academics/timetables", group: "Academics" },
   { label: "Downloads", to: "/academics/downloads", group: "Academics" },
 
   {
@@ -502,9 +500,12 @@ export const ACADEMICS_SUBNAV = [
   { label: "Admissions", to: "/academics/admissions" },
   { label: "Regulations", to: "/academics/regulations" },
   { label: "Syllabus", to: "/academics/syllabus" },
+  { label: "Calendar", to: "/academics/academic-calendar" },
+  { label: "Examinations", to: "/academics/examination" },
+  { label: "Faculty Directory", to: "/academics/faculty" },
   { label: "Scholarships", to: "/academics/scholarships" },
+  { label: "Time Tables", to: "/academics/timetables" },
   { label: "CAC", to: "/academics/cac" },
-  { label: "Time Tables", to: "/academics/time-tables" },
   { label: "Downloads", to: "/academics/downloads" },
 ];
 
@@ -561,7 +562,6 @@ export const STUDENT_SUBNAV = [
   { label: "IIPC", to: "/iipc" },
   { label: "Gallery", to: "/gallery" },
   { label: "Notices", to: "/notices" },
-  { label: "Admissions", to: "/admissions" },
   { label: "Contact Us", to: "/contact" },
 ];
 
@@ -596,7 +596,7 @@ export const RECRUITERS_2017_18 = [
   "Sail Software Solutions",
 ];
 
-const R = "https://jntugvcev.edu.in/wp-content/gallery/our-recruiters";
+const R = "http://89.116.134.182:8080/local-assets/wp-content/gallery/our-recruiters";
 export const RECRUITER_LOGOS: { name: string; url: string }[] = [
   { name: "Agilitx", url: `${R}/Agilitx.png` },
   { name: "Airtel", url: `${R}/airtel.png` },

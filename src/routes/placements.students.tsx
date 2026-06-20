@@ -170,7 +170,8 @@ function StudentsPlacedPage() {
   // Dynamic Stats
   const totalOffers = years.reduce((acc, y) => acc + (y.offers || 0), 0);
   const maxLPA = years.reduce((max, y) => {
-    const val = parseFloat(y.top as string) || 0;
+    const match = String(y.top || "").match(/[\d.]+/);
+    const val = match ? parseFloat(match[0]) : 0;
     return val > max ? val : max;
   }, 0);
   const totalRecruiters = years[0]?.recruiters || 92;

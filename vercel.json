@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+      {
+        "source": "/vps-assets/:path*",
+        "destination": "http://89.116.134.182:8080/local-assets/:path*"
+      }
+    ]
+  }

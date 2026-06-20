@@ -1,11 +1,10 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
-import { updateDepartment } from "@/lib/departments";
+import { getAssetUrl, updateDepartment } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 import { 
   Mail, 
@@ -18,15 +17,21 @@ import {
   MessageSquare
 } from "lucide-react";
 import { ProfileRenderer } from "@/components/ProfileRenderer";
-
 export const Route = createFileRoute("/departments/$id/hod")({
   component: HodPage,
 });
 
 function HodPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id/hod" });
+
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
 
   // Local state for editing HOD details
   const [editData, setEditData] = useState({
@@ -92,7 +97,7 @@ function HodPage() {
             <p className="text-amber-800 text-sm font-medium">
               <strong>Admin Mode:</strong> You are currently editing the HOD's profile and message.
             </p>
-            <button 
+            <button
               onClick={() => mutation.mutate(editData)}
               className="flex items-center gap-2 bg-amber-600 text-white px-6 py-2 rounded-xl font-bold shadow-sm hover:bg-amber-700 transition-all"
             >
@@ -141,7 +146,7 @@ function HodPage() {
                   <h2 className="text-2xl font-bold text-slate-900 mt-4">{hodName}</h2>
                   <p className="text-blue-600 font-semibold mt-1">Head of the Department</p>
                   <p className="text-slate-500 text-sm mt-2">Dept. of {data.name}</p>
-                  
+
                   {/* Contact Edit */}
                   <div className="mt-6 pt-6 border-t border-slate-100 pb-6">
                     {isEditMode ? (
@@ -149,10 +154,10 @@ function HodPage() {
                         <label className="text-[10px] font-bold text-amber-600 uppercase flex items-center gap-1 mb-1">
                           <MailIcon size={12} /> Contact Email
                         </label>
-                        <input 
+                        <input
                           className="w-full text-xs p-2 border border-amber-200 rounded bg-amber-50/50"
                           value={editData.hod_contact}
-                          onChange={(e) => setEditData({...editData, hod_contact: e.target.value})}
+                          onChange={(e) => setEditData({ ...editData, hod_contact: e.target.value })}
                           placeholder="hod@jntugvcev.edu.in"
                         />
                       </div>
@@ -164,7 +169,6 @@ function HodPage() {
                         <Mail size={18} />
                         <span className="font-medium">Email HOD</span>
                       </a>
-
                     )}
                     <p className="text-xs text-slate-400 mt-3 break-all">{data.hod_contact}</p>
                   </div>
@@ -194,10 +198,10 @@ function HodPage() {
                 {isEditMode ? (
                   <div className="space-y-4">
                     <label className="text-xs font-bold text-amber-600 uppercase">Message Content</label>
-                    <textarea 
+                    <textarea
                       className="w-full min-h-[400px] p-6 border-2 border-amber-100 rounded-2xl bg-amber-50/30 text-slate-700 leading-relaxed outline-none focus:border-amber-300 transition-all"
                       value={editData.hod_message}
-                      onChange={(e) => setEditData({...editData, hod_message: e.target.value})}
+                      onChange={(e) => setEditData({ ...editData, hod_message: e.target.value })}
                       placeholder="Write the HOD message here..."
                     />
                   </div>

@@ -1,15 +1,14 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
-import { 
-  Microscope, MapPin, Monitor, Cpu, ChevronRight, Activity, 
-  Plus, Trash2, Save, Image as ImageIcon, Layout 
+import {
+  Microscope, MapPin, Monitor, Cpu, ChevronRight, Activity,
+  Plus, Trash2, Save, Image as ImageIcon, Layout
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { syncLaboratories } from "@/lib/departments";
+import { getAssetUrl, syncLaboratories } from "@/lib/departments";
 import { toast } from "sonner";
-import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/departments/$id/labs")({
@@ -18,9 +17,15 @@ export const Route = createFileRoute("/departments/$id/labs")({
 
 function LaboratoriesPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id/labs" });
 
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
   const [labList, setLabList] = useState<any[]>(data?.laboratories || []);
 
   useEffect(() => {
@@ -90,7 +95,7 @@ function LaboratoriesPage() {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 pb-20">
+    <div className="animate-in fade-in slide-in-from-bottom-6 duration-300 pb-20">
       {/* Header */}
       <div className="mb-12 border-b border-slate-100 pb-8 flex justify-between items-end">
         <div>
@@ -117,8 +122,8 @@ function LaboratoriesPage() {
 
       <div className="grid grid-cols-1 gap-12">
         {labList.map((lab: any) => (
-          <div key={lab.id} className={`group bg-white border rounded-[3rem] overflow-hidden transition-all duration-700 relative ${isEditMode ? 'border-blue-400 ring-4 ring-blue-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}>
-            
+          <div key={lab.id} className={`group bg-white border rounded-[3rem] overflow-hidden transition-all duration-300 relative ${isEditMode ? 'border-blue-400 ring-4 ring-blue-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}>
+
             {isEditMode && (
               <button onClick={() => removeLab(lab.id)} className="absolute top-6 right-6 p-3 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 z-20 transition-transform active:scale-90">
                 <Trash2 size={18} />
@@ -204,7 +209,7 @@ function LaboratoriesPage() {
                     </div>
                   ))}
                   {(!lab.specs || lab.specs.length === 0) && !isEditMode && (
-                     <div className="col-span-full py-10 text-center text-slate-300 text-sm">Specs coming soon...</div>
+                    <div className="col-span-full py-10 text-center text-slate-300 text-sm">Specs coming soon...</div>
                   )}
                 </div>
               </div>

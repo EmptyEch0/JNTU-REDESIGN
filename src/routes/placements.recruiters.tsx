@@ -6,6 +6,7 @@ import { LogoCarousel } from "@/components/LogoCarousel";
 import { SectionLabel } from "@/components/SectionLabel";
 import { PLACEMENTS_SUBNAV } from "@/lib/site";
 import placementsImg from "@/assets/placements-bg.jpg";
+import { getAssetUrl } from "@/lib/assets";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { getRecruiters, addRecruiter, updateRecruiter, deleteRecruiter } from "@/funcs/recruiters";
@@ -163,7 +164,7 @@ function RecruitersPage() {
                         src={getAssetUrl(logo.url)}
                         alt={logo.name}
                         loading="lazy"
-                        className="max-h-full max-w-full object-contain transition-all duration-500"
+                        className="max-h-full max-w-full object-contain transition-all duration-200"
                       />
                     )}
                   </div>

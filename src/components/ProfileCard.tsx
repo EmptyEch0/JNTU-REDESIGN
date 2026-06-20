@@ -19,7 +19,7 @@ export function ProfileCard({ name, role, detail, badge }: Props) {
     <article className="group relative bg-card rounded-2xl p-6 border border-border hover-lift overflow-hidden">
       <div
         aria-hidden
-        className="absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
+        className="absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 blur-2xl"
         style={{ background: "var(--primary)" }}
       />
       <div className="relative flex items-start gap-4">

@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { SITE, STUDENT_SUBNAV } from "@/lib/site";
-import campusImg from "@/assets/hero-campus.jpg";
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { SubNav } from "@/components/SubNav";
 
 export const Route = createFileRoute("/contact")({
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/contact")({
       { title: "Contact — JNTU-GV CEV" },
       {
         name: "description",
-        content: "Reach the principal's office, admissions and departments at JNTU-GV CEV.",
+        content: "Reach the principal's office, administration and departments at JNTU-GV CEV.",
       },
       { property: "og:title", content: "Contact JNTU-GV CEV" },
       { property: "og:description", content: "Address, phone and email for the college." },
@@ -34,7 +35,7 @@ function ContactPage() {
       <PageHero
         eyebrow="Contact"
         title="Talk to us."
-        subtitle="For admissions queries, campus visits or general information — here is how to reach the office."
+        subtitle="For academic queries, campus visits or general information — here is how to reach the office."
         image={campusImg}
       />
       <SubNav items={STUDENT_SUBNAV} />

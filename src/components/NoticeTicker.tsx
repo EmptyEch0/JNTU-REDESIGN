@@ -3,16 +3,61 @@ import { Bell, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 const NOTICES = [
-  "End-semester examinations schedule released for B.Tech IV-II.",
-  "Pre-placement talks for Capgemini and Hexaware on 02 May.",
-  "Vacation guidelines for residents staying through summer.",
-  "Annual cultural fest 'Spandana 2026' opens for registrations.",
-  "Library timings extended during examination weeks.",
+  {
+    title: "Academic Calendar for II B.Tech (2026-2027)",
+    date: "June 18, 2026",
+    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/ii-b-tech-academic-calendar-june-2026.pdf"
+  },
+  {
+    title: "Timetable for I-MCA II-Semester (R25) End Examinations, June-2026",
+    date: "June 16, 2026",
+    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-mca-ii-semester-r25-end-examinations-june-2026.pdf"
+  },
+  {
+    title: "Timetable for I-MBA II-Semester (R25) End Examinations, June-2026",
+    date: "June 16, 2026",
+    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-mba-ii-semester-r25-end-examinations-june-2026.pdf"
+  },
+  {
+    title: "Timetable for I-MCA II-Semester (R20) Supply End Examinations, June-2026",
+    date: "June 16, 2026",
+    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-mca-ii-semester-r20-supply-end-examinations-june-2026.pdf"
+  },
+  {
+    title: "Notification for M.Tech II-Semester (R25/R19) Regular/Supplementary Examinations, June-2026",
+    date: "June 16, 2026",
+    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/mtech-ii-sem-r25-r19-examination-notification-june-2026.pdf"
+  },
+  {
+    title: "Timetable for I-II R23 End Examinations, June-2026",
+    date: "June 12, 2026",
+    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-ii-r23-end-time-table-june-2026.pdf"
+  },
+  {
+    title: "Timetable for I-II R20 End Examinations, June-2026",
+    date: "June 12, 2026",
+    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-ii-r20-end-time-table-june-2026.pdf"
+  },
+  {
+    title: "Academic Calendar for III B.Tech (2026-2027)",
+    date: "June 5, 2026",
+    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/iii-b-tech-academic-calendar.pdf"
+  },
+  {
+    title: "Academic Calendar for IV B.Tech (2026-2027)",
+    date: "June 5, 2026",
+    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/iv-b-tech-academic-calendar.pdf"
+  },
+  {
+    title: "Timetable for I-B.Tech II-Semester II-Mid Examinations, June-2026",
+    date: "June 5, 2026",
+    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-btech-ii-mid-time-table-june-2026.pdf"
+  }
 ];
 
 export function NoticeTicker() {
   return (
-    <div className="w-full max-w-[1500px] mx-auto mt-4 animate-in fade-in slide-in-from-top-4 duration-700 delay-500 pointer-events-auto">
+    <div className="w-full max-w-[1500px] mx-auto mt-4 animate-in fade-in slide-in-from-top-4 duration-300 delay-100 pointer-events-auto">
       <div className="relative h-9 bg-[oklch(0.16_0.04_255/0.8)] backdrop-blur-xl border border-white/10 rounded-full overflow-hidden flex items-center group shadow-2xl">
         {/* Label */}
         <div className="h-full px-4 bg-primary text-white flex items-center gap-2 shrink-0 z-10 shadow-[4px_0_12px_rgba(0,0,0,0.3)]">
@@ -24,18 +69,20 @@ export function NoticeTicker() {
         <div className="flex-1 overflow-hidden relative">
           <div className="flex items-center whitespace-nowrap gap-12 h-full">
             <div className="flex items-center gap-12 animate-marquee hover:[animation-play-state:paused]">
-              {[...NOTICES, ...NOTICES, ...NOTICES].map((text, i) => (
-                <Link
+              {[...NOTICES, ...NOTICES, ...NOTICES].map((notice, i) => (
+                <a
                   key={i}
-                  to="/notices"
+                  href={notice.url}
+                  target="_blank"
+                  rel="noreferrer"
                   className="flex items-center gap-3 shrink-0"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-primary-glow shadow-[0_0_8px_rgba(var(--primary-rgb),0.5)]" />
                   <span className="text-[12px] font-medium text-white/70 hover:text-white transition-colors">
-                    {text}
+                    {notice.title} <span className="text-white/40 text-[10px] ml-1">({notice.date})</span>
                   </span>
                   <ArrowRight className="h-3 w-3 text-primary-glow opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                </Link>
+                </a>
               ))}
             </div>
           </div>
@@ -52,7 +99,7 @@ export function NoticeTicker() {
           100% { transform: translateX(-50%); }
         }
         .animate-marquee {
-          animation: marquee 60s linear infinite;
+          animation: marquee 85s linear infinite;
         }
       `}</style>
     </div>

@@ -5,6 +5,8 @@ interface Logo {
   url: string;
 }
 
+import { getAssetUrl } from "@/lib/assets";
+
 interface Props {
   logos: Logo[];
   speed?: number; // seconds per loop
@@ -32,7 +34,7 @@ export function LogoCarousel({ logos, speed = 60, reverse = false }: Props) {
               src={getAssetUrl(logo.url)}
               alt={logo.name}
               loading="lazy"
-              className="max-h-full max-w-full object-contain transition-all duration-500"
+              className="max-h-full max-w-full object-contain transition-all duration-200"
               onError={(e) => {
                 const t = e.currentTarget;
                 t.style.display = "none";

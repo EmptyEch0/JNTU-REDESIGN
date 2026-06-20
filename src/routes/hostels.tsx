@@ -210,7 +210,7 @@ function HostelsPage() {
 
             {/* INLINE EDITORIAL IMAGES CONTROLLER */}
             {isEditMode && (
-              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.4s]">
+              <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.2s]">
                 <div className="flex items-center gap-2 pb-3 border-b border-amber-200/60">
                   <div className="w-9 h-9 rounded-2xl bg-amber-100 text-amber-700 grid place-items-center shrink-0">
                     <Camera className="w-4.5 h-4.5" />
@@ -264,7 +264,7 @@ function HostelsPage() {
                 title="Administration Desk"
                 subtitle="Strategic governance & administrative definitions"
                 icon={Building}
-                className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20 shadow-xl duration-500" : "hover:-translate-y-1.5 shadow-[0_10px_35px_rgba(0,0,0,0.04)] duration-500"}
+                className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20 shadow-xl duration-200" : "hover:-translate-y-1.5 shadow-[0_10px_35px_rgba(0,0,0,0.04)] duration-200"}
               >
                 {isEditMode ? (
                   <AdminPanel>
@@ -391,7 +391,7 @@ function HostelsPage() {
               👧 TAB 2: GIRLS HOSTEL VIEW
              ============================================================================ */}
           {tab === "girls" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               <div className="border-b border-slate-200/60 pb-3 flex items-center gap-3">
                 <Home className="w-5 h-5 text-pink-600" />
                 <h3 className="text-lg font-black tracking-tight text-slate-900">Girls Inhabitation Ledger</h3>
@@ -430,7 +430,7 @@ function HostelsPage() {
               👦 TAB 3: BOYS HOSTEL VIEW
              ============================================================================ */}
           {tab === "boys" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               <div className="border-b border-slate-200/60 pb-3 flex items-center gap-3">
                 <Tent className="w-5 h-5 text-emerald-600" />
                 <h3 className="text-lg font-black tracking-tight text-slate-900">Boys Inhabitation Ledger</h3>
@@ -612,7 +612,7 @@ function WardenTableEditable({ data, type, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full max-w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div className="space-y-1 flex-1">
             <label className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Warden Full Name</label>
             <input
@@ -775,7 +775,7 @@ function StaffTableEditable({ data, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full max-w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-3 gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-3 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div className="space-y-1 flex-1">
             <label className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Staff Full Name</label>
             <input
@@ -925,7 +925,7 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
               <Plus className="w-4.5 h-4.5" /> Construct New Spatial Block
             </button>
           ) : (
-            <div className="space-y-5 animate-[fade-in_0.3s] w-full">
+            <div className="space-y-5 animate-[fade-in_0.15s] w-full">
               <div className="flex items-center gap-2 pb-2 border-b border-amber-200/60">
                 <h4 className="text-xs font-black uppercase tracking-widest text-amber-950">Construct spatial physical block</h4>
               </div>
@@ -967,10 +967,10 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
               key={b.id}
               title={isEdit ? undefined : b.title}
               icon={type === "girls" ? Home : Tent}
-              className={isEdit ? "ring-4 ring-amber-500/10 border-2 border-amber-200 bg-amber-50/10 duration-500 shadow-xl scale-[1.01]" : "hover:-translate-y-1.5 duration-500 shadow-[0_10px_35px_rgba(0,0,0,0.04)]"}
+              className={isEdit ? "ring-4 ring-amber-500/10 border-2 border-amber-200 bg-amber-50/10 duration-200 shadow-xl scale-[1.01]" : "hover:-translate-y-1.5 duration-200 shadow-[0_10px_35px_rgba(0,0,0,0.04)]"}
             >
               {isEdit ? (
-                <div className="space-y-6 animate-[fade-in_0.3s_ease-out] w-full">
+                <div className="space-y-6 animate-[fade-in_0.15s_ease-out] w-full">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-amber-200/60 pb-4 gap-4">
                     <div className="flex-1 w-full sm:max-w-lg">
                       <label className="text-[10px] font-black text-amber-800 uppercase tracking-[0.15em]">Rename Block Entity (Press Enter)</label>
@@ -1132,7 +1132,7 @@ function FacilitiesManagerEditable({ facilities, type, isEdit, onRefetch }: any)
 
 function BlockInfo({ block }: any) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full animate-[fade-in_0.3s]">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full animate-[fade-in_0.15s]">
       <div className="flex items-center gap-4 bg-slate-50 border border-slate-200/50 hover:border-slate-200 hover:shadow-sm duration-300 px-5 py-4.5 rounded-2xl">
         <div className="w-11 h-11 rounded-[15px] bg-white border border-slate-200 flex items-center justify-center text-[oklch(0.42_0.18_265)] shadow-sm shrink-0">
           <Building className="w-5 h-5" />

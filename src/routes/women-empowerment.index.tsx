@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAssetUrl } from "@/lib/assets";
 import {
   getWeProfile,
   updateWeProfile,
@@ -133,7 +134,7 @@ function WEAboutPage() {
   if (isProfileLoading || !profile) {
     return (
       <div className="py-20 grid place-items-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+        <div className="spinner" />
       </div>
     );
   }
@@ -266,7 +267,7 @@ function WEAboutPage() {
 
               {/* Photo */}
               <div className="relative group">
-                <div className="absolute -inset-2 rounded-[24px] bg-primary/10 blur-xl group-hover:bg-primary/20 transition-colors duration-500" />
+                <div className="absolute -inset-2 rounded-[24px] bg-primary/10 blur-xl group-hover:bg-primary/20 transition-colors duration-200" />
                 <div className="relative aspect-square rounded-[20px] overflow-hidden border border-border bg-muted">
                   {isEditMode ? (
                     <AdminUpload
@@ -527,7 +528,7 @@ function WEAboutPage() {
 
       {/* Persistent Profile save action bar */}
       {isEditMode && editedProfile && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in slide-in-from-bottom-4">
+        <div className="fixed top-24 right-8 z-50 animate-in fade-in zoom-in slide-in-from-top-4">
           <div className="flex items-center gap-3 bg-card p-2 rounded-full border border-border shadow-2xl">
             <button
               onClick={() => setEditedProfile(null)}

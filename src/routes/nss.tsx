@@ -121,7 +121,7 @@ function NSSLayout() {
           >
             {isLoading ? (
               <div className="absolute inset-0 grid place-items-center bg-card/50">
-                <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+                <div className="spinner" />
               </div>
             ) : slides.length === 0 ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-muted-foreground gap-3">
@@ -131,11 +131,11 @@ function NSSLayout() {
             ) : (
               <>
                 {/* Slides */}
-                <div className="absolute inset-0 w-full h-full transition-all duration-700 ease-out">
+                <div className="absolute inset-0 w-full h-full transition-all duration-300 ease-out">
                   <img
                     src={getAssetUrl(slides[currentIndex].imageUrl)}
                     alt={slides[currentIndex].title}
-                    className="w-full h-full object-cover transition-transform duration-700"
+                    className="w-full h-full object-cover transition-transform duration-300"
                   />
                   {/* Overlay Gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30 flex flex-col justify-end p-6 md:p-12" />

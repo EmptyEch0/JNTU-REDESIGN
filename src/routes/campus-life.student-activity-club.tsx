@@ -1,5 +1,6 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { CAMPUS_LIFE_SUBNAV } from "@/lib/site";
@@ -16,12 +17,12 @@ import {
   deleteClubImage,
 } from "@/funcs/studentactivity.admin.server";
 import cultureImg from "@/assets/culture.jpg";
-import { 
-  Building, 
-  Sparkles, 
-  User, 
-  Trophy, 
-  Activity, 
+import {
+  Building,
+  Sparkles,
+  User,
+  Trophy,
+  Activity,
   ArrowRight,
   Music,
   Lock,
@@ -82,12 +83,12 @@ function StudentActivityClubPage() {
     const tId = toast.loading("Synthesizing active student club registry...");
     try {
       const generatedSlug = newClubForm.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
-      await updateStudentClub({ 
-        data: { 
-          ...newClubForm, 
+      await updateStudentClub({
+        data: {
+          ...newClubForm,
           slug: generatedSlug || "new-club",
-          category: "Student Club" 
-        } 
+          category: "Student Club"
+        }
       });
       toast.success("Student Club Launched!", { id: tId });
       setNewClubForm({ name: "", title: "", description: "", badge: "", heroImage: "" });
@@ -100,7 +101,7 @@ function StudentActivityClubPage() {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-800 pb-24">
       {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
+        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.15s] backdrop-blur-md text-xs uppercase tracking-widest">
           <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
           <span>Student Activity Directorate CMS Live</span>
           <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
@@ -108,7 +109,7 @@ function StudentActivityClubPage() {
         </div>
       )}
 
-      <PageHero 
+      <PageHero
         eyebrow="Student Directorate"
         title="Activity Clubs" 
         subtitle="Advancing leadership traits, campus tech networks, and extracurricular legacy rosters." 
@@ -117,7 +118,7 @@ function StudentActivityClubPage() {
       <SubNav items={CAMPUS_LIFE_SUBNAV} />
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
-        
+
         {/* DYNAMIC SYSTEM NAV - Premium consistent tabs */}
         <LocalSubNav
           activeTab={tab}
@@ -125,8 +126,8 @@ function StudentActivityClubPage() {
           items={TABS.map((t) => ({ label: t, icon: getTabIcon(t) }))}
         />
 
-        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
-          
+        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.2s_ease-out]">
+
           <div className="relative w-full max-w-full overflow-hidden rounded-[32px] shadow-md border border-slate-200/60 bg-slate-200">
             <ImageCarousel images={getCarouselImages()} fallback={DEFAULT_IMAGE} />
           </div>
@@ -135,12 +136,12 @@ function StudentActivityClubPage() {
               💡 TAB 1: OVERVIEW
              ========================================== */}
           {tab === "Overview" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
-              
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
+
               <Card title="Student Activity Clubs Overview" icon={Sparkles}>
                 <p className="text-[15px] text-slate-600 font-medium leading-relaxed bg-slate-50/50 border p-6 rounded-3xl shadow-inner whitespace-pre-line">
                   Welcome to the central University Student Activity Portal. Our vibrant ecosystem of active, student-led initiatives supports continuous collaboration across departments.
-                  
+
                   By staging large-scale tech meets, orchestral assemblies, and community leadership events, students establish deep professional networks and creative proficiency grids. Explore specific active rosters to find your community segment!
                 </p>
               </Card>
@@ -148,13 +149,13 @@ function StudentActivityClubPage() {
               {/* DYNAMIC CLUB ROSTER GRID */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {clubs.map((club: any) => (
-                  <div 
-                    key={club.id} 
-                    onClick={() => setTab(club.name)} 
-                    className="bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 shadow-sm hover:shadow-lg transition duration-500 cursor-pointer group overflow-hidden relative"
+                  <div
+                    key={club.id}
+                    onClick={() => setTab(club.name)}
+                    className="bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 shadow-sm hover:shadow-lg transition duration-200 cursor-pointer group overflow-hidden relative"
                   >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-full translate-x-8 -translate-y-8 transition duration-500 group-hover:scale-110 group-hover:bg-indigo-50/40" />
-                    
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-full translate-x-8 -translate-y-8 transition duration-200 group-hover:scale-110 group-hover:bg-indigo-50/40" />
+
                     <div className="relative z-10">
                       <span className="inline-flex items-center px-3 py-1 rounded-xl text-[9.5px] font-black tracking-widest uppercase bg-indigo-50 border border-indigo-100 text-indigo-700 mb-5 shadow-sm">
                         {club.category || "Student Club"}
@@ -166,7 +167,7 @@ function StudentActivityClubPage() {
                         {club.description}
                       </p>
                       <div className="flex items-center gap-2 text-[oklch(0.42_0.18_265)] font-black text-xs uppercase tracking-wider">
-                        <span>Explore Portal</span> 
+                        <span>Explore Portal</span>
                         <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
                       </div>
                     </div>
@@ -177,24 +178,24 @@ function StudentActivityClubPage() {
               {/* CMS: ADD A CLUB PORTAL */}
               {isEditMode && (
                 <Card title="Launch A New Activity Club" icon={Plus} className="ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10">
-                  <div className="space-y-4 animate-[fade-in_0.3s]">
+                  <div className="space-y-4 animate-[fade-in_0.15s]">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
                         <label className="text-[9px] font-black text-amber-800 uppercase">Club Badge Title</label>
-                        <input value={newClubForm.name} onChange={(e)=>setNewClubForm({...newClubForm, name:e.target.value})} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Constelle Club" />
+                        <input value={newClubForm.name} onChange={(e) => setNewClubForm({ ...newClubForm, name: e.target.value })} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Constelle Club" />
                       </div>
                       <div>
                         <label className="text-[9px] font-black text-amber-800 uppercase">Featured Display Subtitle</label>
-                        <input value={newClubForm.title} onChange={(e)=>setNewClubForm({...newClubForm, title:e.target.value})} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Astro & Science Network" />
+                        <input value={newClubForm.title} onChange={(e) => setNewClubForm({ ...newClubForm, title: e.target.value })} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Astro & Science Network" />
                       </div>
                       <div>
                         <label className="text-[9px] font-black text-amber-800 uppercase">Highlight Badge</label>
-                        <input value={newClubForm.badge} onChange={(e)=>setNewClubForm({...newClubForm, badge:e.target.value})} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Established 2024" />
+                        <input value={newClubForm.badge} onChange={(e) => setNewClubForm({ ...newClubForm, badge: e.target.value })} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="e.g. Established 2024" />
                       </div>
                     </div>
                     <div>
                       <label className="text-[9px] font-black text-amber-800 uppercase">Primary Descriptive Catalog</label>
-                      <textarea value={newClubForm.description} onChange={(e)=>setNewClubForm({...newClubForm, description:e.target.value})} className="w-full border-2 border-amber-200 bg-white h-20 p-2.5 rounded-xl text-xs font-medium outline-none" placeholder="Summarize club objective goals..." />
+                      <textarea value={newClubForm.description} onChange={(e) => setNewClubForm({ ...newClubForm, description: e.target.value })} className="w-full border-2 border-amber-200 bg-white h-20 p-2.5 rounded-xl text-xs font-medium outline-none" placeholder="Summarize club objective goals..." />
                     </div>
                     <div>
                       <label className="text-[9px] font-black text-amber-800 uppercase">Primary Slide Photo</label>
@@ -207,7 +208,7 @@ function StudentActivityClubPage() {
                       />
                     </div>
                     <div className="flex justify-end">
-                      <button onClick={handleCreateClub} className="bg-slate-950 text-white hover:bg-amber-600 font-black px-6 py-3.5 rounded-xl text-xs uppercase shadow transition active:scale-95 flex gap-2 cursor-pointer"><Plus className="w-4 h-4"/> Authorize & Synthesize</button>
+                      <button onClick={handleCreateClub} className="bg-slate-950 text-white hover:bg-amber-600 font-black px-6 py-3.5 rounded-xl text-xs uppercase shadow transition active:scale-95 flex gap-2 cursor-pointer"><Plus className="w-4 h-4" /> Authorize & Synthesize</button>
                     </div>
                   </div>
                 </Card>
@@ -215,7 +216,7 @@ function StudentActivityClubPage() {
 
               {clubs.length === 0 && !isEditMode && (
                 <div className="text-center py-16 text-slate-400 font-medium bg-white rounded-[32px] border border-dashed max-w-lg mx-auto shadow-sm flex flex-col items-center justify-center gap-3">
-                  <Activity className="w-8 h-8 animate-pulse text-slate-300"/>
+                  <Activity className="w-8 h-8 animate-pulse text-slate-300" />
                   <p className="text-sm">No operational activity rosters active in repo.</p>
                 </div>
               )}
@@ -230,12 +231,12 @@ function StudentActivityClubPage() {
             if (!activeClub) return null;
 
             return (
-              <div className="space-y-10 animate-[fade-in_0.5s_ease-out] w-full">
-                <ClubLayoutEditor 
-                  club={activeClub} 
-                  isEdit={isEditMode} 
-                  onRefetch={()=>router.invalidate()} 
-                  onNavigateBack={()=>setTab("Overview")} 
+              <div className="space-y-10 animate-[fade-in_0.2s_ease-out] w-full">
+                <ClubLayoutEditor
+                  club={activeClub}
+                  isEdit={isEditMode}
+                  onRefetch={() => router.invalidate()}
+                  onNavigateBack={() => setTab("Overview")}
                 />
               </div>
             );
@@ -251,7 +252,7 @@ function StudentActivityClubPage() {
 
 function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   return (
-    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-500 shadow-sm overflow-hidden w-full ${className}`}>
+    <div className={`bg-white rounded-[32px] border border-slate-200/60 p-6 md:p-8 hover:shadow-lg transition duration-200 shadow-sm overflow-hidden w-full ${className}`}>
       {title && (
         <div className="flex items-center gap-3.5 mb-6 md:mb-8 pb-5 border-b border-slate-100">
           <div className="w-12 h-12 rounded-[20px] bg-slate-50 border border-slate-200/60 text-[oklch(0.42_0.18_265)] grid place-items-center shrink-0 shadow-sm">
@@ -289,7 +290,7 @@ function ImageCarousel({ images, fallback }: any) {
   }
 
   return (
-    <div 
+    <div
       className="relative aspect-[21/9] md:aspect-[16/6] min-h-[180px] md:min-h-[240px] max-h-[280px] md:max-h-[340px] w-full bg-slate-900 overflow-hidden group"
       onMouseEnter={() => setAutoplay(false)}
       onMouseLeave={() => setAutoplay(true)}
@@ -300,7 +301,7 @@ function ImageCarousel({ images, fallback }: any) {
             key={i}
             src={getAssetUrl(img)}
             alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
             onError={(e) => { e.currentTarget.src = fallback; }}
           />
         ))}
@@ -311,8 +312,8 @@ function ImageCarousel({ images, fallback }: any) {
           <button onClick={() => setCurrentIndex((p) => (p - 1 + images.length) % images.length)} className="absolute left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow cursor-pointer z-30 text-center grid place-items-center transition">‹</button>
           <button onClick={() => setCurrentIndex((p) => (p + 1) % images.length)} className="absolute right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow cursor-pointer z-30 text-center grid place-items-center transition">›</button>
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1 bg-black/10 px-3 py-1 rounded-full z-30">
-            {images.map((_: any, idx: number)=>(
-              <button key={idx} onClick={()=>setCurrentIndex(idx)} className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${currentIndex === idx ? "w-5 bg-white" : "w-1.5 bg-white/40"}`} />
+            {images.map((_: any, idx: number) => (
+              <button key={idx} onClick={() => setCurrentIndex(idx)} className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${currentIndex === idx ? "w-5 bg-white" : "w-1.5 bg-white/40"}`} />
             ))}
           </div>
         </>
@@ -411,24 +412,24 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
 
   return (
     <div className="space-y-10 w-full max-w-full">
-      
+
       {/* MAIN HEADER DISPLAY */}
       <Card title={club.name} subtitle={club.category} icon={Activity} className={isEdit ? "ring-4 ring-amber-500/10 bg-amber-50/10 border-amber-200" : ""}>
         {isEdit ? (
-          <div className="space-y-5 animate-[fade-in_0.3s]">
+          <div className="space-y-5 animate-[fade-in_0.15s]">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Badge Short Label</label>
-                <input value={cData.badge} onChange={(e)=>setCData({...cData, badge:e.target.value})} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
+                <input value={cData.badge} onChange={(e) => setCData({ ...cData, badge: e.target.value })} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
               </div>
               <div className="sm:col-span-2">
                 <label className="text-[9px] font-black text-amber-800 uppercase">Featured Banner Header</label>
-                <input value={cData.title} onChange={(e)=>setCData({...cData, title:e.target.value})} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
+                <input value={cData.title} onChange={(e) => setCData({ ...cData, title: e.target.value })} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
               </div>
             </div>
             <div>
               <label className="text-[9px] font-black text-amber-800 uppercase">Global Narrative Body</label>
-              <textarea value={cData.description} onChange={(e)=>setCData({...cData, description:e.target.value})} className="w-full h-24 border bg-white p-2.5 rounded-xl text-xs font-medium" />
+              <textarea value={cData.description} onChange={(e) => setCData({ ...cData, description: e.target.value })} className="w-full h-24 border bg-white p-2.5 rounded-xl text-xs font-medium" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -443,7 +444,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
               </div>
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Menu Display Trigger Label</label>
-                <input value={cData.name} onChange={(e)=>setCData({...cData, name:e.target.value})} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
+                <input value={cData.name} onChange={(e) => setCData({ ...cData, name: e.target.value })} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
               </div>
             </div>
             <div className="flex items-center justify-between pt-3 border-t border-amber-200/40">
@@ -513,11 +514,11 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
 
         {/* CREATOR FOR SECTION */}
         {isEdit && (
-          <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] space-y-4 shadow-inner animate-[fade-in_0.3s]">
+          <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] space-y-4 shadow-inner animate-[fade-in_0.15s]">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Spotlight Header</label>
-                <input value={secForm.heading} onChange={(e)=>setSecForm({...secForm, heading:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
+                <input value={secForm.heading} onChange={(e) => setSecForm({ ...secForm, heading: e.target.value })} className="w-full border bg-white p-2 rounded text-xs font-bold" />
               </div>
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Spotlight Graphics (Optional)</label>
@@ -532,21 +533,21 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
             </div>
             <div>
               <label className="text-[9px] font-black text-amber-800 uppercase">Objective Content Body</label>
-              <textarea value={secForm.content} onChange={(e)=>setSecForm({...secForm, content:e.target.value})} className="w-full h-20 border bg-white p-2 rounded text-xs font-medium" />
+              <textarea value={secForm.content} onChange={(e) => setSecForm({ ...secForm, content: e.target.value })} className="w-full h-20 border bg-white p-2 rounded text-xs font-medium" />
             </div>
             <div className="flex justify-end">
-              <button onClick={handleAddSection} className="bg-slate-950 text-white hover:bg-amber-600 font-black px-5 py-2.5 rounded-xl text-xs uppercase shadow flex gap-1 items-center active:scale-95 transition cursor-pointer"><Plus className="w-4 h-4"/> Log Spotlight Track</button>
+              <button onClick={handleAddSection} className="bg-slate-950 text-white hover:bg-amber-600 font-black px-5 py-2.5 rounded-xl text-xs uppercase shadow flex gap-1 items-center active:scale-95 transition cursor-pointer"><Plus className="w-4 h-4" /> Log Spotlight Track</button>
             </div>
           </div>
         )}
 
         <div className="space-y-10">
           {(club.sections || []).map((sec: any, idx: number) => (
-            <div key={sec.id} className={`flex flex-col md:flex-row items-center gap-8 border bg-white rounded-[32px] p-6 md:p-8 shadow-sm hover:shadow-md transition duration-500 relative group ${isEdit ? "ring-2 ring-amber-300" : ""}`}>
-              
+            <div key={sec.id} className={`flex flex-col md:flex-row items-center gap-8 border bg-white rounded-[32px] p-6 md:p-8 shadow-sm hover:shadow-md transition duration-200 relative group ${isEdit ? "ring-2 ring-amber-300" : ""}`}>
+
               {isEdit && (
-                <button 
-                  onClick={()=>handleDeleteSection(sec.id)}
+                <button
+                  onClick={() => handleDeleteSection(sec.id)}
                   className="absolute top-4 right-4 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white px-3 py-1.5 rounded-xl text-[10px] uppercase font-black transition tracking-wider shadow cursor-pointer"
                 >
                   Delete Block
@@ -556,8 +557,8 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
               <div className={`flex-1 space-y-3 ${sec.image ? "" : "w-full"} ${idx % 2 === 1 && sec.image ? "md:order-2" : ""}`}>
                 {isEdit ? (
                   <div className="space-y-3">
-                    <div className="font-display font-black text-xl text-slate-950"><InlineCellEdit val={sec.heading} onCommit={async (n)=>{ await updateClubContent({data:{...sec, heading:n}}); onRefetch(); }} /></div>
-                    <div className="text-[14px] text-slate-600 font-medium leading-relaxed"><InlineCellEdit val={sec.content} onCommit={async (n)=>{ await updateClubContent({data:{...sec, content:n}}); onRefetch(); }} /></div>
+                    <div className="font-display font-black text-xl text-slate-950"><InlineCellEdit val={sec.heading} onCommit={async (n) => { await updateClubContent({ data: { ...sec, heading: n } }); onRefetch(); }} /></div>
+                    <div className="text-[14px] text-slate-600 font-medium leading-relaxed"><InlineCellEdit val={sec.content} onCommit={async (n) => { await updateClubContent({ data: { ...sec, content: n } }); onRefetch(); }} /></div>
                   </div>
                 ) : (
                   <>
@@ -636,4 +637,3 @@ function InlineCellEdit({ val, onCommit }: { val: string; onCommit: (n: string) 
   );
 }
 
-export default StudentActivityClubPage;

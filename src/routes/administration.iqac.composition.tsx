@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { IQAC_SUBNAV } from "@/lib/site";
-import campusImg from "@/assets/hero-campus.jpg";
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { useQuery } from "@tanstack/react-query";
-import { getIqacComposition } from "@/funcs/leadership";
+import { getIqacComposition } from "../funcs/leadership";
 import { Users } from "lucide-react";
 
 export const Route = createFileRoute("/administration/iqac/composition")({

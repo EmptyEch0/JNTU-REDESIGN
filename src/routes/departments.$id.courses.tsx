@@ -1,21 +1,22 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
-import { 
-  BookOpen, 
-  GraduationCap, 
-  FileText, 
-  ArrowRight, 
-  ShieldCheck, 
-  Plus, 
-  Trash2, 
-  Save, 
-  Link as LinkIcon 
+import {
+  BookOpen,
+  GraduationCap,
+  FileText,
+  ArrowRight,
+  ShieldCheck,
+  Plus,
+  Trash2,
+  Save,
+  Link as LinkIcon
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { syncCourses } from "@/lib/departments";
 import { toast } from "sonner";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/departments/$id/courses")({
   component: ProgrammesPage,
@@ -23,8 +24,15 @@ export const Route = createFileRoute("/departments/$id/courses")({
 
 function ProgrammesPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
   const queryClient = useQueryClient();
+  // 1. Fetch the active dynamic route parameters matching this branch slug context
+  const { id: routeSlug } = useParams({ from: "/departments/$id/courses" });
+
+  // 2. Consume specialized department tracking state maps from Admin Context
+  const { isDeptEditing } = useAdmin();
+
+  // 3. Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const isEditMode = isDeptEditing(routeSlug || "");
 
   const [courseList, setCourseList] = useState<any[]>(data?.courses || []);
 
@@ -70,9 +78,9 @@ function ProgrammesPage() {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 animate-in fade-in slide-in-from-bottom-6 duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        
+
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
           <div className="flex-1">
@@ -91,8 +99,8 @@ function ProgrammesPage() {
           {isEditMode && (
             <div className="flex gap-3">
               {/* Global "Add New Level" button if needed, or just Save */}
-              <button 
-                onClick={() => mutation.mutate(courseList)} 
+              <button
+                onClick={() => mutation.mutate(courseList)}
                 className="flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold text-sm hover:bg-blue-700 shadow-xl shadow-blue-100 transition-all active:scale-95"
               >
                 <Save size={18} /> Save All Changes
@@ -119,7 +127,7 @@ function ProgrammesPage() {
                   </div>
 
                   {isEditMode && (
-                    <button 
+                    <button
                       onClick={() => addCourse(level)}
                       className="flex items-center gap-2 text-xs font-bold text-blue-600 bg-blue-50 px-4 py-2 rounded-xl hover:bg-blue-600 hover:text-white transition-all"
                     >
@@ -130,8 +138,8 @@ function ProgrammesPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {programs.map((course: any) => (
-                    <div key={course.id} className={`group bg-white rounded-[2.5rem] border overflow-hidden transition-all duration-500 relative ${isEditMode ? 'border-blue-300 ring-4 ring-blue-50/50' : 'border-slate-100 shadow-sm hover:shadow-2xl hover:border-blue-200'}`}>
-                      
+                    <div key={course.id} className={`group bg-white rounded-[2.5rem] border overflow-hidden transition-all duration-200 relative ${isEditMode ? 'border-blue-300 ring-4 ring-blue-50/50' : 'border-slate-100 shadow-sm hover:shadow-2xl hover:border-blue-200'}`}>
+
                       {isEditMode && (
                         <button onClick={() => removeCourse(course.id)} className="absolute top-4 right-4 p-2 bg-red-50 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all z-10 shadow-sm">
                           <Trash2 size={16} />
@@ -143,7 +151,7 @@ function ProgrammesPage() {
                           <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-100 rounded-2xl">
                             <ShieldCheck size={14} className="text-blue-600" />
                             {isEditMode ? (
-                              <input 
+                              <input
                                 className="text-xs font-bold text-slate-700 bg-transparent outline-none w-20"
                                 value={course.regulation || ""}
                                 placeholder="Regulation"
@@ -164,7 +172,7 @@ function ProgrammesPage() {
                           <div className="space-y-5">
                             <div>
                               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 block">Course Name</label>
-                              <input 
+                              <input
                                 className="text-xl font-bold text-slate-900 w-full border-b-2 border-slate-100 focus:border-blue-500 outline-none pb-2 transition-colors"
                                 value={course.name}
                                 onChange={(e) => updateCourse(course.id, "name", e.target.value)}
@@ -174,9 +182,9 @@ function ProgrammesPage() {
                               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 block">Syllabus Link (URL)</label>
                               <div className="flex items-center gap-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
                                 <LinkIcon size={14} className="text-slate-400" />
-                                <input 
+                                <input
                                   className="w-full bg-transparent text-xs text-blue-600 font-medium outline-none"
-                                  value={course.syllabus_url || ""}
+                                  value={getAssetUrl(course.syllabus_url) || ""}
                                   onChange={(e) => updateCourse(course.id, "syllabus_url", e.target.value)}
                                   placeholder="https://example.com/syllabus.pdf"
                                 />
@@ -191,7 +199,7 @@ function ProgrammesPage() {
                             </p>
                             <div>
                               {course.syllabus_url ? (
-                                <a href={course.syllabus_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 px-7 py-3.5 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-blue-600 transition-all hover:shadow-xl hover:shadow-blue-200 active:scale-95">
+                                <a href={getAssetUrl(course.syllabus_url)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 px-7 py-3.5 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-blue-600 transition-all hover:shadow-xl hover:shadow-blue-200 active:scale-95">
                                   <FileText size={18} /> View Syllabus <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </a>
                               ) : (

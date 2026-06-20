@@ -125,7 +125,7 @@ function EngineeringCellPage() {
       <div className="absolute top-[20%] -left-48 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[130px] pointer-events-none -z-10 animate-pulse duration-[8s]" />
       <div className="absolute bottom-[25%] -right-48 w-[600px] h-[600px] rounded-full bg-accent/5 blur-[130px] pointer-events-none -z-10 animate-pulse duration-[10s]" />
       {isEditMode && (
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.3s] backdrop-blur-md text-xs uppercase tracking-widest">
+        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-3 px-6 sticky top-0 z-[100] shadow-xl flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.15s] backdrop-blur-md text-xs uppercase tracking-widest">
           <Lock className="w-3.5 h-3.5 animate-pulse text-amber-950" />
           <span>Engineering Portal CMS Live</span>
           <div className="hidden md:block h-1 w-1 rounded-full bg-amber-950" />
@@ -153,13 +153,13 @@ function EngineeringCellPage() {
           ]}
         />
 
-        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
+        <div className="space-y-10 max-w-5xl mx-auto animate-[fade-in_0.2s_ease-out]">
           
           {/* ==========================================
               🏢 TAB 1: OVERVIEW & SCOPE
              ========================================== */}
           {tab === "Overview" && (
-            <div className="animate-[fade-in_0.5s_ease-out]">
+            <div className="animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="Scope and Objectives" 
                 icon={Building}
@@ -192,7 +192,7 @@ function EngineeringCellPage() {
               🔨 TAB 2: CONSTRUCTION ACTIVITIES
              ========================================== */}
           {tab === "Construction Activities" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               
               <Card 
                 title="Construction & Works Scheduled" 
@@ -228,7 +228,7 @@ function EngineeringCellPage() {
               ⚡ TAB 3: PE ELECTRICAL SECTION
              ========================================== */}
           {tab === "PE (Elec) Section" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* Officer Card */}
                 <div className="lg:col-span-4">
@@ -260,7 +260,7 @@ function EngineeringCellPage() {
                       </div>
                     ) : (
                       <div className="flex flex-col items-center text-center pt-2">
-                        <div className="w-28 h-28 rounded-[28px] overflow-hidden bg-slate-50 border-2 border-slate-100 mb-4 shadow-md transition hover:scale-[1.02] duration-500">
+                        <div className="w-28 h-28 rounded-[28px] overflow-hidden bg-slate-50 border-2 border-slate-100 mb-4 shadow-md transition hover:scale-[1.02] duration-200">
                           <img
                             src={getAssetUrl(electrical?.img) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                             className="w-full h-full object-cover"
@@ -283,7 +283,7 @@ function EngineeringCellPage() {
                     className={isEditMode ? "h-full ring-4 ring-amber-500/10 bg-amber-50/10 border-amber-200" : "h-full"}
                   >
                     {isEditMode ? (
-                      <div className="space-y-4 animate-[fade-in_0.3s]">
+                      <div className="space-y-4 animate-[fade-in_0.15s]">
                         <div>
                           <label className="text-[9px] font-black text-amber-800 uppercase">Feature Header</label>
                           <input value={editElectrical.title} onChange={(e)=>setEditElectrical({...editElectrical, title:e.target.value})} className="w-full border-2 border-amber-200 bg-white text-sm font-bold p-3 rounded-xl" />
@@ -327,14 +327,14 @@ function EngineeringCellPage() {
               👁️ TAB 4: VISION & MISSION
              ========================================== */}
           {tab === "Vision & Mission" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-[fade-in_0.5s_ease-out]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-[fade-in_0.2s_ease-out]">
               <Card 
                 title="System Vision" 
                 icon={Eye}
                 className={isEditMode ? "ring-4 ring-amber-500/10 bg-amber-50/10 border-amber-200" : ""}
               >
                 {isEditMode ? (
-                  <div className="space-y-3 animate-[fade-in_0.3s]">
+                  <div className="space-y-3 animate-[fade-in_0.15s]">
                     <textarea value={editCore.vision} onChange={(e)=>setEditCore({...editCore, vision:e.target.value})} className="w-full h-28 border-2 border-amber-200 bg-white text-sm font-medium rounded-xl p-3" />
                     <button onClick={handleSaveCore} className="w-full bg-amber-500 text-amber-950 font-black text-xs p-3 rounded-xl uppercase cursor-pointer shadow"><Save className="w-4 h-4 inline mr-1.5" /> Save Vision</button>
                   </div>
@@ -349,7 +349,7 @@ function EngineeringCellPage() {
                 className={isEditMode ? "ring-4 ring-amber-500/10 bg-amber-50/10 border-amber-200" : ""}
               >
                 {isEditMode ? (
-                  <div className="space-y-3 animate-[fade-in_0.3s]">
+                  <div className="space-y-3 animate-[fade-in_0.15s]">
                     <textarea value={editCore.mission} onChange={(e)=>setEditCore({...editCore, mission:e.target.value})} className="w-full h-28 border-2 border-amber-200 bg-white text-sm font-medium rounded-xl p-3" />
                     <button onClick={handleSaveCore} className="w-full bg-amber-500 text-amber-950 font-black text-xs p-3 rounded-xl uppercase cursor-pointer shadow"><Save className="w-4 h-4 inline mr-1.5" /> Save Mission</button>
                   </div>
@@ -418,7 +418,7 @@ function MetaRegistryEditable({ data, category, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="flex gap-2.5 max-w-lg bg-amber-50/80 border-2 border-amber-200 rounded-[20px] p-3 shadow-inner animate-[fade-in_0.3s]">
+        <div className="flex gap-2.5 max-w-lg bg-amber-50/80 border-2 border-amber-200 rounded-[20px] p-3 shadow-inner animate-[fade-in_0.15s]">
           <input type="text" value={newEntry} onChange={(e)=>setNewEntry(e.target.value)} onKeyDown={(e)=>e.key==="Enter" && handleAdd()} placeholder="Describe work node (e.g. Block-V ceiling overhaul)..." className="flex-1 border-2 bg-white border-amber-200 px-4 py-2.5 rounded-xl outline-none text-sm font-bold focus:border-amber-500" />
           <button onClick={handleAdd} className="bg-slate-950 hover:bg-amber-600 text-white font-black px-6 py-2.5 rounded-xl text-xs uppercase cursor-pointer transition active:scale-95 shadow">Log</button>
         </div>
@@ -428,7 +428,7 @@ function MetaRegistryEditable({ data, category, isEdit, onRefetch }: any) {
           <p className="text-slate-400 italic text-sm pt-1 font-medium col-span-2">No logged scheduled operations.</p>
         ) : (
           data.map((item: any, i: number)=>(
-            <div key={item.id || i} className={`flex items-start justify-between border rounded-2xl px-5 py-4.5 transition-all duration-500 ${
+            <div key={item.id || i} className={`flex items-start justify-between border rounded-2xl px-5 py-4.5 transition-all duration-200 ${
               isEdit ? "bg-amber-50/40 border-amber-200 shadow-sm" : "bg-slate-50/80 border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow-md group"
             }`}>
               <div className="flex items-start gap-3 min-w-0 w-full">
@@ -480,7 +480,7 @@ function StaffRegistryEditable({ data, type, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full max-w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-3 gap-4 items-end shadow-inner animate-[fade-in_0.3s]">
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-3 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div>
             <label className="text-[10px] font-black uppercase text-amber-800 tracking-widest">Personnel Name</label>
             <input type="text" value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} className="w-full border-2 bg-white border-amber-200 px-3.5 py-2.5 rounded-xl text-sm font-bold" />
@@ -590,4 +590,3 @@ function XIcon({ className = "" }: { className?: string }) {
   );
 }
 
-export default EngineeringCellPage;

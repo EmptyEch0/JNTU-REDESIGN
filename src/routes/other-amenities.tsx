@@ -177,7 +177,7 @@ function OtherAmenitiesPage() {
       <SubNav items={OTHER_AMENITIES_SUBNAV} />
 
       {isOverview ? (
-        <section className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 animate-[fade-in_0.5s_ease-out] space-y-16">
+        <section className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 animate-[fade-in_0.2s_ease-out] space-y-16">
           
           {/* INTRO EXPLAINER */}
           {isEditMode ? (
@@ -230,7 +230,7 @@ function OtherAmenitiesPage() {
                   <img
                     src={getAssetUrl(staffRec?.imageUrl) || typeA}
                     alt={staffRec?.title || DEFAULTS.staffTitle}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
                   <span className="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-primary tracking-wide uppercase">
@@ -298,7 +298,7 @@ function OtherAmenitiesPage() {
                   <img
                     src={getAssetUrl(guestRec?.imageUrl) || guest}
                     alt={guestRec?.title || DEFAULTS.guestTitle}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
                   <span className="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-primary tracking-wide uppercase">
@@ -367,4 +367,3 @@ function OtherAmenitiesPage() {
   );
 }
 
-export default OtherAmenitiesPage;

@@ -15,7 +15,7 @@ import {
   addGoal,
   updateGoal,
   deleteGoal,
-  getRecruiters,
+  getMajorRecruiters,
   addRecruiter,
   deleteRecruiter,
   getStaff,
@@ -25,6 +25,7 @@ import {
 } from "../lib/placements";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
+
 
 import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
@@ -59,9 +60,9 @@ function TrainingPage() {
     queryKey: ["goals"],
     queryFn: () => getGoals(),
   });
-  const { data: recruiters, isLoading: isLoadingRecruiters } = useQuery({
-    queryKey: ["recruiters"],
-    queryFn: () => getRecruiters(),
+  const { data: recruiters = [] } = useQuery({
+    queryKey: ["majorRecruiters"],
+    queryFn: () => getMajorRecruiters(),
   });
   const { data: staff, isLoading: isLoadingStaff } = useQuery({
     queryKey: ["staff"],
@@ -123,7 +124,7 @@ function TrainingPage() {
     const name = prompt("Enter company name:");
     if (name) {
       await addRecruiter({ data: { name } });
-      queryClient.invalidateQueries({ queryKey: ["recruiters"] });
+      queryClient.invalidateQueries({ queryKey: ["majorRecruiters"] });
       toast.success("Recruiter added");
     }
   };
@@ -131,7 +132,7 @@ function TrainingPage() {
   const handleDeleteRecruiter = async (id: number) => {
     if (confirm("Delete this recruiter?")) {
       await deleteRecruiter({ data: { id } });
-      queryClient.invalidateQueries({ queryKey: ["recruiters"] });
+      queryClient.invalidateQueries({ queryKey: ["majorRecruiters"] });
       toast.success("Recruiter deleted");
     }
   };

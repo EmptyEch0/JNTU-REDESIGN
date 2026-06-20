@@ -18,7 +18,8 @@ import {
   deleteCourse,
   getGalleryByDept,
   addToGallery,
-  deleteFromGallery
+  deleteFromGallery,
+  getAssetUrl
 } from "../lib/departments";
 import { PageHero } from "@/components/PageHero";
 import { useAdmin } from "../context/AdminContext";

@@ -1,24 +1,92 @@
-/**
- * Resolves a stored relative path or external URL to a fully qualified asset URL.
- *
- * Storage convention (DB value):  "local-assets/uploads/module/category/filename.jpg"
- * Served URL (same origin):        "/local-assets/uploads/module/category/filename.jpg"
- *
- * Supports backward compatibility for:
- *  - http/https absolute URLs
- *  - data: URIs
- *  - Vite imported asset paths (/src/, /assets/, /@fs/)
- *  - Legacy "uploads/..." paths (no leading "local-assets/")
- */
-export function getAssetUrl(path?: string): string {
+const BASE = (
+  import.meta.env.VITE_ASSETS_URL ||
+  "https://jntu-redesign.vercel.app/vps-assets"
+).replace(/\/$/, "");
+
+export const getAssetUrl = (
+  path: string | null | undefined,
+): string => {
   if (!path) return "";
-  
+
   const trimmedPath = path.trim();
 
-  // Pass through already-absolute or special paths
+  // Global image overrides
+  if (trimmedPath.includes("hero-campus.jpg")) {
+    return `${BASE}/uploads/images/administration/JNTU%201.png`;
+  }
+
+  if (
+    trimmedPath.includes("hero-2.jpg") ||
+    trimmedPath.includes("hero-2.jpeg")
+  ) {
+    return `${BASE}/uploads/2022/03/Frame-1-1200x374.jpg`;
+  }
+
+  if (trimmedPath.includes("Dr.-G.-J.-Naga-Raju1.png")) {
+    return `${BASE}/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`;
+  }
+
+  // External URLs
   if (
     trimmedPath.startsWith("http://") ||
-    trimmedPath.startsWith("https://") ||
+    trimmedPath.startsWith("https://")
+  ) {
+    // Old VPS URL mapping
+    if (
+      trimmedPath.startsWith(
+        "http://89.116.134.182:8080/local-assets/",
+      )
+    ) {
+      const relativePath = trimmedPath.replace(
+        "http://89.116.134.182:8080/local-assets/",
+        "",
+      );
+
+      return `${BASE}/${relativePath
+        .replace(/\\/g, "/")
+        .replace(/^\/+/, "")}`;
+    }
+
+    // Localhost URL mapping
+    if (trimmedPath.startsWith("http://localhost:8081/")) {
+      const relativePath = trimmedPath.replace(
+        "http://localhost:8081/",
+        "",
+      );
+
+      return `${BASE}/${relativePath
+        .replace(/\\/g, "/")
+        .replace(/^\/+/, "")}`;
+    }
+
+    // WordPress media mapping
+    if (trimmedPath.includes("jntugvcev.edu.in/wp-content/")) {
+      const wpPath = trimmedPath.match(/wp-content\/(.+)/);
+
+      if (wpPath) {
+        if (
+          trimmedPath.includes(
+            "EEE-3.Dr_.V.S.VAKULA-Asst-Prof.jpg",
+          ) ||
+          trimmedPath.includes(
+            "V.-Mani-Kumar-Photo-Mech.jpg",
+          ) ||
+          trimmedPath.includes(
+            "WhatsApp-Image-2020-08-26-at-10.23.09-AM.jpeg",
+          )
+        ) {
+          return `${BASE}/${wpPath[1]}`;
+        }
+
+        return `${BASE}/wp-content/${wpPath[1]}`;
+      }
+    }
+
+    return trimmedPath;
+  }
+
+  // Pass through special paths
+  if (
     trimmedPath.startsWith("data:") ||
     trimmedPath.startsWith("/src/") ||
     trimmedPath.startsWith("/assets/") ||
@@ -27,28 +95,72 @@ export function getAssetUrl(path?: string): string {
     return trimmedPath;
   }
 
-  // Normalize slashes
   let cleanPath = trimmedPath.replace(/\\/g, "/");
 
-  // Remove any leading slash to avoid double-slash
   if (cleanPath.startsWith("/")) {
     cleanPath = cleanPath.substring(1);
   }
 
-  // Legacy paths: "uploads/..." → prepend "local-assets/"
+  // Legacy support
   if (cleanPath.startsWith("uploads/")) {
     cleanPath = `local-assets/${cleanPath}`;
   }
 
-  // Redirect uploads to the VPS asset host or configured VITE_ASSETS_URL
+  // New upload system support
   if (cleanPath.startsWith("local-assets/")) {
-    const subPath = cleanPath.substring("local-assets/".length);
-    const assetsUrl = import.meta.env.VITE_ASSETS_URL || "https://jntu-redesign.vercel.app/vps-assets";
-    const base = assetsUrl.endsWith("/") ? assetsUrl.slice(0, -1) : assetsUrl;
-    const sub = subPath.startsWith("/") ? subPath.substring(1) : subPath;
-    return `${base}/${sub}`;
+    const subPath = cleanPath.substring(
+      "local-assets/".length,
+    );
+
+    return `${BASE}/${subPath}`;
   }
 
-  // All local paths are served from the same origin at /local-assets/...
+  // Frontend assets
+  if (cleanPath.startsWith("assets/")) {
+    return `/${cleanPath}`;
+  }
+
   return `/${cleanPath}`;
-}
+};
+
+export const assetUrl = (
+  path: string | null | undefined,
+): string => {
+  return getAssetUrl(path);
+};
+
+export const uploadUrl = (path: string) =>
+  assetUrl(`uploads/${path}`);
+
+export const docUrl = (path: string) =>
+  assetUrl(`docs/${path}`);
+
+export const imageUrl = (path: string) =>
+  assetUrl(`images/${path}`);
+
+export const wpUrl = (
+  oldUrl: string | null | undefined,
+): string => {
+  if (!oldUrl) return "";
+
+  const wpMatch = oldUrl.match(/wp-content\/(.+)/);
+
+  if (wpMatch) {
+    return `${BASE}/wp-content/${wpMatch[1]}`;
+  }
+
+  const localMatch = oldUrl.match(/localhost:\d+\/(.+)/);
+
+  if (localMatch) {
+    return `${BASE}/${localMatch[1]}`;
+  }
+
+  if (
+    oldUrl.startsWith("/uploads/") ||
+    oldUrl.startsWith("/images/")
+  ) {
+    return `${BASE}${oldUrl}`;
+  }
+
+  return assetUrl(oldUrl);
+};

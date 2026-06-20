@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/academics/ui/PageHeader";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
 import { Users, Plus, Trash2, Edit2, Save, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,6 +11,12 @@ import {
   upsertAcademicsCac,
   deleteAcademicsCac
 } from "@/lib/academics";
+import { imageUrl } from "@/lib/assets";
+import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
+
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/cac")({
   head: () => ({
@@ -117,17 +122,17 @@ function CACPage() {
   }));
 
   return (
-    <div 
-      className="space-y-8 pb-16 min-h-screen bg-cover bg-center bg-no-repeat -mx-4 px-4 md:-mx-8 md:px-8"
-      style={{
-        backgroundImage: "linear-gradient(to bottom, rgba(255,255,255,0.97), rgba(248,250,252,0.98)), url('https://images.unsplash.com/photo-1541829019-259276a7f013?q=80&w=2069')"
-      }}
-    >
-      <PageHeader 
-        title="College Academic Committee" 
+    <div className="space-y-12 pb-24">
+      <PageHero
+        eyebrow="Academics"
+        title="College Academic Committee"
         subtitle="The CAC sets academic policy, monitors curriculum quality, and reviews program outcomes for JNTU-GV."
-        icon={Users}
+        image={campusImg}
       />
+      
+      <SubNav items={ACADEMICS_SUBNAV} />
+
+      <div className="container-narrow space-y-6">
 
       {/* Admin Mode Controls */}
       {isEditMode && (
@@ -300,6 +305,7 @@ function CACPage() {
           <li>Formulate strategies to encourage research activities, conferences, and student projects.</li>
         </ul>
       </GlassCard>
+      </div>
     </div>
   );
 }

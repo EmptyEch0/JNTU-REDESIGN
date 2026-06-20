@@ -33,6 +33,12 @@ import {
   upsertAcademicsScholarship,
   deleteAcademicsScholarship
 } from "@/lib/academics";
+import { getAssetUrl, imageUrl } from "@/lib/assets";
+import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
+
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/scholarships")({
   head: () => ({
@@ -273,84 +279,17 @@ function ScholarshipsPage() {
   }, [scholarships, searchTerm, activeCategory]);
 
   return (
-    <div className="relative min-h-screen text-slate-800 p-4 md:p-8 font-sans bg-gradient-to-b from-[#F8FAFC] via-white to-[#F0F4F8]">
-      {/* Background Elegant Overlay Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_0.5px,transparent_0.5px)] [background-size:16px_16px] opacity-[0.03] pointer-events-none" />
+    <div className="space-y-12 pb-24">
+      <PageHero
+        eyebrow="Academics"
+        title="Scholarships & Financial Assistance"
+        subtitle="Explore government portals, tuition fee reimbursement initiatives, and international fellowships structured to fund your academic aspirations at JNTU-GV."
+        image={campusImg}
+      />
+      
+      <SubNav items={ACADEMICS_SUBNAV} />
 
-      <div className="relative z-10 max-w-7xl mx-auto space-y-6">
-        
-        {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 bg-white/80 backdrop-blur-md px-4 py-2.5 rounded-full border border-slate-200/80 shadow-sm w-fit">
-          <Link to="/" className="hover:text-blue-600 flex items-center gap-1 transition-colors">
-            <Home className="w-3.5 h-3.5" /> Home
-          </Link>
-          <ChevronRight className="w-3 h-3 text-slate-400" />
-          <Link to="/academics" className="hover:text-blue-600 transition-colors">
-            Academics
-          </Link>
-          <ChevronRight className="w-3 h-3 text-slate-400" />
-          <span className="text-slate-900 font-bold">Scholarships</span>
-        </nav>
-
-        {/* Hero Section Banner with premium illustration on right side */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-950 to-blue-800 p-6 md:p-10 border border-blue-800/30 shadow-xl shadow-blue-950/10"
-        >
-          <div className="absolute right-0 top-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-          
-          <div className="grid md:grid-cols-3 gap-6 items-center relative z-10">
-            <div className="md:col-span-2 space-y-3">
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest bg-blue-500/15 border border-blue-500/30 text-blue-300 rounded-full px-3 py-1">
-                <Award className="w-3.5 h-3.5" /> Student Financial Welfare
-              </span>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
-                Scholarships & Financial Assistance
-              </h1>
-              <p className="text-slate-300 text-xs md:text-sm max-w-xl leading-relaxed font-medium">
-                Explore government portals, tuition fee reimbursement initiatives, and international fellowships structured to fund your academic aspirations at JNTU-GV.
-              </p>
-            </div>
-            
-            {/* Educational Banner Vector Illustration on Right Side */}
-            <div className="hidden md:flex justify-end pr-4">
-              <div className="relative w-44 h-44 bg-white/10 rounded-full border border-white/20 flex items-center justify-center shadow-2xl shadow-blue-950/20 group">
-                <div className="absolute inset-2 bg-gradient-to-tr from-blue-500/20 to-indigo-650/10 rounded-full blur-lg group-hover:scale-105 transition-transform" />
-                
-                {/* SVG glowing graphic design */}
-                <svg className="w-24 h-24 text-white z-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M50 15L15 32L50 49L85 32L50 15Z" fill="url(#gradCap)" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M22 35.5V60C22 70 50 78 50 78C50 78 78 70 78 60V35.5" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="50" cy="40" r="8" fill="#3b82f6" className="animate-pulse" />
-                  <path d="M50 36V44M46 40H54" stroke="white" strokeWidth="1.5" />
-                  <defs>
-                    <linearGradient id="gradCap" x1="50" y1="15" x2="50" y2="49" gradientUnits="userSpaceOnUse">
-                      <stop stopColor="#3b82f6" />
-                      <stop offset="1" stopColor="#6366f1" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                {/* Floating elements */}
-                <motion.div 
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="absolute -top-1 right-8 bg-blue-900/90 backdrop-blur border border-blue-500/30 rounded-lg p-1.5 flex items-center text-[10px] text-yellow-300 font-bold"
-                >
-                  <DollarSign className="w-3.5 h-3.5" /> Direct Pay
-                </motion.div>
-                <motion.div 
-                  animate={{ y: [0, 6, 0] }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                  className="absolute -bottom-1 left-4 bg-blue-900/90 backdrop-blur border border-blue-500/30 rounded-lg p-1.5 flex items-center text-[10px] text-white font-bold"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-blue-400 mr-1" /> Approved
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+      <div className="container-narrow space-y-6">
 
         {/* Admin Desk Panel */}
         {isEditMode && (

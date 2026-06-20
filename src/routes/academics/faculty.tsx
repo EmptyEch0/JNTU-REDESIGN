@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/academics/ui/PageHeader";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
 import { 
   Users2, Mail, Phone, BookOpen, Star, Sparkles, Plus, Trash2, 
@@ -24,7 +23,12 @@ import {
   upsertAcademicsPrincipal,
   deleteAcademicsPrincipal
 } from "@/lib/academics";
-import { getAssetUrl } from "@/lib/assets";
+import { getAssetUrl, imageUrl } from "@/lib/assets";
+import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
+
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/faculty")({
   component: FacultyPage,
@@ -350,17 +354,17 @@ function FacultyPage() {
   });
 
   return (
-    <div 
-      className="space-y-8 pb-16 min-h-screen bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage: "linear-gradient(to bottom, rgba(255,255,255,0.96), rgba(248,250,252,0.98)), url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1920')"
-      }}
-    >
-      <PageHeader 
-        title="Faculty & Leadership Directory" 
+    <div className="space-y-12 pb-24">
+      <PageHero
+        eyebrow="Academics"
+        title="Faculty & Leadership Directory"
         subtitle="Contact the key administrative officers, deans, heads of departments, and academic directors of JNTU-GV."
-        icon={Users2}
+        image={campusImg}
       />
+      
+      <SubNav items={ACADEMICS_SUBNAV} />
+
+      <div className="container-narrow space-y-6">
 
       {/* Tabs Switcher */}
       <div className="flex border-b border-slate-200 dark:border-slate-800 gap-1 overflow-x-auto hide-scrollbar z-25 relative">
@@ -1159,6 +1163,7 @@ function FacultyPage() {
           </div>
         )}
 
+      </div>
       </div>
     </div>
   );

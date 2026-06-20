@@ -497,11 +497,15 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
 export const ACADEMICS_SUBNAV = [
   { label: "Overview", to: "/academics" },
   { label: "Programs Offered", to: "/academics/programs" },
+  { label: "Admissions", to: "/academics/admissions" },
   { label: "Regulations", to: "/academics/regulations" },
   { label: "Syllabus", to: "/academics/syllabus" },
+  { label: "Calendar", to: "/academics/academic-calendar" },
+  { label: "Examinations", to: "/academics/examination" },
+  { label: "Faculty Directory", to: "/academics/faculty" },
   { label: "Scholarships", to: "/academics/scholarships" },
-  { label: "CAC", to: "/academics/cac" },
   { label: "Time Tables", to: "/academics/timetables" },
+  { label: "CAC", to: "/academics/cac" },
   { label: "Downloads", to: "/academics/downloads" },
 ];
 

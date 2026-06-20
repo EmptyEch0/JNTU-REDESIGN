@@ -6,6 +6,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
+import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
+import { imageUrl } from "@/lib/assets";
+import { StatCounter } from "@/components/StatCounter";
+import { SectionLabel } from "@/components/SectionLabel";
+import { RevealOnScroll } from "@/components/RevealOnScroll";
 import {
   getAcademicsDashboardStats,
   upsertAcademicsDashboardStat,
@@ -38,6 +45,8 @@ import {
   Save
 } from "lucide-react";
 import { useState, useMemo } from "react";
+
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/")({
   component: AcademicsDashboard,
@@ -354,454 +363,387 @@ function AcademicsDashboard() {
   }, [tickerNotifsList, calendarList, examList]);
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 py-2">
+    <div className="space-y-12 pb-24">
+      <PageHero
+        eyebrow="Academics"
+        title="Shape Your Future with Academic Excellence"
+        subtitle="Access every academic resource — curriculum, regulations, schedules, admissions, scholarships, and more."
+        image={campusImg}
+      />
+      
+      <SubNav items={ACADEMICS_SUBNAV} />
 
-      {/* Hero Banner */}
-      <motion.div
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1E3A8A] via-blue-800 to-blue-950 text-white shadow-2xl shadow-blue-900/30"
-      >
-        <div className="absolute -top-16 -right-16 w-72 h-72 bg-white/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 -left-10 w-56 h-56 bg-white/5 rounded-full blur-2xl pointer-events-none" />
-        <div
-          className="absolute top-0 right-0 w-1/2 h-full opacity-[0.06] pointer-events-none"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(45deg,white 0,white 1px,transparent 0,transparent 50%)",
-            backgroundSize: "24px 24px",
-          }}
-        />
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 p-8 md:p-10">
-          <div className="max-w-xl">
-            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-4">
-              <GraduationCap className="w-3.5 h-3.5" />
-              JNTU-GV Academics Portal · 2026–27
-            </span>
-            <h1 className="text-3xl md:text-4xl font-extrabold leading-tight mb-3">
-              Shape Your Future with <br />
-              <span className="text-yellow-300">Academic Excellence</span>
-            </h1>
-            <p className="text-blue-100 leading-relaxed text-sm md:text-base max-w-md">
-              Access every academic resource — curriculum, timetables, results,
-              scholarships, and more — all from one place.
-            </p>
-            <div className="flex flex-wrap gap-3 mt-6">
-              <Link
-                to="/academics/programs"
-                className="inline-flex items-center gap-2 bg-white text-blue-900 px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-yellow-50 transition-colors shadow-lg"
-              >
-                Explore Programs <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/academics/admissions"
-                className="inline-flex items-center gap-2 bg-white/10 border border-white/25 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-white/20 transition-colors"
-              >
-                Apply Now
-              </Link>
-            </div>
-          </div>
-
-          {/* Stats grid inside hero (md+) */}
-          <div className="hidden md:grid grid-cols-2 gap-3 flex-shrink-0">
-            {dbStats.map((s: any) => {
-              const Icon = iconMap[s.icon] || GraduationCap;
-              return (
-                <div
-                  key={s.id}
-                  className="bg-white/10 border border-white/15 backdrop-blur-sm rounded-2xl p-4 flex flex-col gap-1 min-w-[140px]"
-                >
-                  <Icon className={`w-5 h-5 ${s.color}`} />
-                  <p className="text-2xl font-extrabold">{s.value}</p>
-                  <p className="text-[11px] font-semibold text-blue-100">
-                    {s.label}
-                  </p>
-                  <p className="text-[10px] text-white/50">{s.trend}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </motion.div>
-
-      {/* ── Notification Ticker (Loaded directly from database and slowed down to 75s) ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.2 }}
-      >
+      {/* Notification Ticker Section */}
+      <section className="container-narrow">
         <NotificationTicker items={dynamicTickerNotifications} speedSeconds={75} />
-      </motion.div>
+      </section>
 
-      {/* Admin Mode Stat Actions */}
-      {isEditMode && (
-        <GlassCard className="p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl flex items-center justify-between text-slate-900">
-          <p className="text-amber-800 text-xs font-semibold">
-            <strong>Admin Dashboard Mode:</strong> Adjust quick statistics metrics, colors, trends, or add new stats cards.
-          </p>
-          <button
-            onClick={startAddStat}
-            className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-900/10"
-          >
-            <Plus size={13} /> Add Stat Card
-          </button>
-        </GlassCard>
-      )}
-
-      {/* Admin Editing Quick Stat Form */}
-      {isEditMode && editStatId !== null && (
-        <GlassCard className="p-6 border-2 border-amber-350 space-y-4">
-          <h3 className="text-xs font-extrabold uppercase tracking-wider text-amber-800">
-            {editStatId === -1 ? "Add Quick Stat Card" : "Edit Quick Stat Card"}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 font-sans text-xs">
-            <div>
-              <label className="text-slate-500 font-bold block mb-1">Metric Label</label>
-              <input
-                type="text"
-                placeholder="e.g. Total Departments"
-                value={sLabel}
-                onChange={(e) => setSLabel(e.target.value)}
-                className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500"
-              />
-            </div>
-            <div>
-              <label className="text-slate-500 font-bold block mb-1">Metric Value</label>
-              <input
-                type="text"
-                placeholder="e.g. 14, 45+"
-                value={sValue}
-                onChange={(e) => setSValue(e.target.value)}
-                className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500"
-              />
-            </div>
-            <div>
-              <label className="text-slate-500 font-bold block mb-1">Lucide Icon name</label>
-              <select
-                value={sIcon}
-                onChange={(e) => setSIcon(e.target.value)}
-                className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500 cursor-pointer"
-              >
-                <option value="GraduationCap">GraduationCap</option>
-                <option value="Users">Users</option>
-                <option value="BookOpen">BookOpen</option>
-                <option value="TrendingUp">TrendingUp</option>
-                <option value="Calendar">Calendar</option>
-                <option value="Award">Award</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-slate-500 font-bold block mb-1">Text Color Class</label>
-              <select
-                value={sColor}
-                onChange={(e) => setSColor(e.target.value)}
-                className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500 cursor-pointer"
-              >
-                <option value="text-blue-500">Royal Blue Accent</option>
-                <option value="text-blue-400">Light Blue Accent</option>
-                <option value="text-emerald-400">Emerald Accent</option>
-                <option value="text-violet-400">Violet Accent</option>
-                <option value="text-amber-400">Amber Accent</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-slate-500 font-bold block mb-1">Trend / Footnote</label>
-              <input
-                type="text"
-                placeholder="e.g. Accredited, +5% this semester"
-                value={sTrend}
-                onChange={(e) => setSTrend(e.target.value)}
-                className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500"
-              />
-            </div>
-          </div>
-          <div className="flex justify-end gap-2 font-sans">
-            <button
-              onClick={() => setEditStatId(null)}
-              className="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-300 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => saveStatMutation.mutate({
-                id: editStatId === -1 ? undefined : editStatId,
-                label: sLabel,
-                value: sValue,
-                icon: sIcon,
-                color: sColor,
-                trend: sTrend
-              })}
-              className="flex items-center gap-1.5 px-4 py-2 bg-amber-600 text-white rounded-xl text-xs font-bold hover:bg-amber-700 transition-colors shadow"
-            >
-              <Save size={13} /> Save Stat Card
-            </button>
-          </div>
-        </GlassCard>
-      )}
-
-      {/* Admin quick editor items list for Stats cards (visible strictly when isEditMode) */}
-      {isEditMode && dbStats.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      {/* Stats Counter Section */}
+      <section className="container-narrow">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-3xl overflow-hidden border border-border shadow-[var(--shadow-elegant)]">
           {dbStats.map((s: any) => {
-            const Icon = iconMap[s.icon] || GraduationCap;
+            const numValue = parseInt(String(s.value).replace(/\D/g, "")) || 0;
+            const suffix = String(s.value).includes("+") ? "+" : (String(s.value).match(/[a-zA-Z+%]+/) || [""])[0];
             return (
-              <GlassCard key={s.id} className="p-4 border border-amber-200 bg-white/40 dark:bg-slate-900/40 relative">
-                <div className="absolute right-2 top-2 flex gap-1 z-10">
-                  <button
-                    onClick={() => startEditStat(s)}
-                    className="p-1 rounded bg-amber-100 hover:bg-amber-200 text-amber-700"
-                    title="Edit card"
-                  >
-                    <Edit2 size={11} />
-                  </button>
-                  <button
-                    onClick={() => { if (confirm("Delete this metric card?")) deleteStatMutation.mutate(s.id); }}
-                    className="p-1 rounded bg-red-105 hover:bg-red-200 text-red-650"
-                    title="Delete card"
-                  >
-                    <Trash2 size={11} />
-                  </button>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800">
-                    <Icon className={`w-5 h-5 ${s.color}`} />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">{s.value}</h4>
-                    <p className="text-[10px] text-slate-400 font-extrabold uppercase mt-0.5">{s.label}</p>
-                    <p className="text-[9px] text-slate-400">{s.trend}</p>
-                  </div>
-                </div>
-              </GlassCard>
+              <div className="bg-card p-6 md:p-8 flex flex-col justify-between" key={s.id}>
+                <StatCounter value={numValue} label={s.label} suffix={suffix} />
+                {s.trend && <p className="text-xs text-muted-foreground mt-2 font-medium">{s.trend}</p>}
+              </div>
             );
           })}
         </div>
+      </section>
+
+      {/* Admin Mode Stat Actions */}
+      {isEditMode && (
+        <section className="container-narrow space-y-6">
+          <GlassCard className="p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl flex items-center justify-between text-slate-900">
+            <p className="text-amber-800 text-xs font-semibold">
+              <strong>Admin Dashboard Mode:</strong> Adjust quick statistics metrics, colors, trends, or add new stats cards.
+            </p>
+            <button
+              onClick={startAddStat}
+              className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-900/10"
+            >
+              <Plus size={13} /> Add Stat Card
+            </button>
+          </GlassCard>
+
+          {/* Admin Editing Quick Stat Form */}
+          {editStatId !== null && (
+            <GlassCard className="p-6 border-2 border-amber-350 space-y-4">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-amber-800">
+                {editStatId === -1 ? "Add Quick Stat Card" : "Edit Quick Stat Card"}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 font-sans text-xs">
+                <div>
+                  <label className="text-slate-500 font-bold block mb-1">Metric Label</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Total Departments"
+                    value={sLabel}
+                    onChange={(e) => setSLabel(e.target.value)}
+                    className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-500 font-bold block mb-1">Metric Value</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 14, 45+"
+                    value={sValue}
+                    onChange={(e) => setSValue(e.target.value)}
+                    className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-500 font-bold block mb-1">Lucide Icon name</label>
+                  <select
+                    value={sIcon}
+                    onChange={(e) => setSIcon(e.target.value)}
+                    className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500 cursor-pointer"
+                  >
+                    <option value="GraduationCap">GraduationCap</option>
+                    <option value="Users">Users</option>
+                    <option value="BookOpen">BookOpen</option>
+                    <option value="TrendingUp">TrendingUp</option>
+                    <option value="Calendar">Calendar</option>
+                    <option value="Award">Award</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-slate-500 font-bold block mb-1">Text Color Class</label>
+                  <select
+                    value={sColor}
+                    onChange={(e) => setSColor(e.target.value)}
+                    className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500 cursor-pointer"
+                  >
+                    <option value="text-blue-500">Royal Blue Accent</option>
+                    <option value="text-blue-400">Light Blue Accent</option>
+                    <option value="text-emerald-400">Emerald Accent</option>
+                    <option value="text-violet-400">Violet Accent</option>
+                    <option value="text-amber-400">Amber Accent</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-slate-500 font-bold block mb-1">Trend / Footnote</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Accredited, +5% this semester"
+                    value={sTrend}
+                    onChange={(e) => setSTrend(e.target.value)}
+                    className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl p-3 focus:ring-2 focus:ring-amber-500"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 font-sans">
+                <button
+                  onClick={() => setEditStatId(null)}
+                  className="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-300 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => saveStatMutation.mutate({
+                    id: editStatId === -1 ? undefined : editStatId,
+                    label: sLabel,
+                    value: sValue,
+                    icon: sIcon,
+                    color: sColor,
+                    trend: sTrend
+                  })}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-amber-600 text-white rounded-xl text-xs font-bold hover:bg-amber-700 transition-colors shadow"
+                >
+                  <Save size={13} /> Save Stat Card
+                </button>
+              </div>
+            </GlassCard>
+          )}
+
+          {/* Admin quick editor items list for Stats cards */}
+          {dbStats.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {dbStats.map((s: any) => {
+                const Icon = iconMap[s.icon] || GraduationCap;
+                return (
+                  <GlassCard key={s.id} className="p-4 border border-amber-200 bg-white/40 dark:bg-slate-900/40 relative">
+                    <div className="absolute right-2 top-2 flex gap-1 z-10">
+                      <button
+                        onClick={() => startEditStat(s)}
+                        className="p-1 rounded bg-amber-100 hover:bg-amber-200 text-amber-700"
+                        title="Edit card"
+                      >
+                        <Edit2 size={11} />
+                      </button>
+                      <button
+                        onClick={() => { if (confirm("Delete this metric card?")) deleteStatMutation.mutate(s.id); }}
+                        className="p-1 rounded bg-red-100 hover:bg-red-200 text-red-700"
+                        title="Delete card"
+                      >
+                        <Trash2 size={11} />
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800">
+                        <Icon className={`w-5 h-5 ${s.color}`} />
+                      </div>
+                      <div>
+                        <h4 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">{s.value}</h4>
+                        <p className="text-[10px] text-slate-400 font-extrabold uppercase mt-0.5">{s.label}</p>
+                        <p className="text-[9px] text-slate-400">{s.trend}</p>
+                      </div>
+                    </div>
+                  </GlassCard>
+                );
+              })}
+            </div>
+          )}
+        </section>
       )}
 
       {/* Admin Mode Ticker Notification Actions */}
       {isEditMode && (
-        <GlassCard className="p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl flex items-center justify-between text-slate-900">
-          <p className="text-amber-800 text-xs font-semibold">
-            <strong>Admin Notifications Mode:</strong> Manage ticker scroll notifications (add custom notifications, dates, target paths).
-          </p>
-          <button
-            onClick={startAddNotif}
-            className="flex items-center gap-1 bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all shadow-md shadow-emerald-900/10 cursor-pointer"
-          >
-            <Plus size={13} /> Add Ticker Notification
-          </button>
-        </GlassCard>
-      )}
-
-      {/* Admin Editing Ticker Notification Form */}
-      {isEditMode && editNotifId !== null && (
-        <GlassCard className="p-6 border-2 border-amber-350 space-y-4">
-          <h3 className="text-xs font-extrabold uppercase tracking-wider text-amber-800">
-            {editNotifId === -1 ? "Add Custom Ticker Notification" : "Edit Ticker Notification"}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans text-xs">
-            <div>
-              <label className="text-slate-500 font-bold block mb-1">Source / Type</label>
-              <select
-                value={nSource}
-                onChange={(e) => {
-                  setNSource(e.target.value);
-                  const labelMap: Record<string, string> = {
-                    calendar: "Calendar",
-                    holiday: "Holiday",
-                    "exam-sched": "Exam Schedule",
-                    "exam-notif": "Exam Notice",
-                    "hall-ticket": "Hall Ticket",
-                    results: "Results",
-                    timetable: "Timetable",
-                    fee: "Fee"
-                  };
-                  if (labelMap[e.target.value]) {
-                    setNLabel(labelMap[e.target.value]);
-                  }
-                }}
-                className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none cursor-pointer"
-              >
-                <option value="calendar">Academic Calendar</option>
-                <option value="holiday">Holiday</option>
-                <option value="exam-sched">Exam Schedule</option>
-                <option value="exam-notif">Exam Notice</option>
-                <option value="hall-ticket">Hall Ticket</option>
-                <option value="results">Results</option>
-                <option value="timetable">Timetable</option>
-                <option value="fee">Fee Payment</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-slate-500 font-bold block mb-1">Badge Label</label>
-              <input
-                type="text"
-                placeholder="e.g. Results, Calendar"
-                value={nLabel}
-                onChange={(e) => setNLabel(e.target.value)}
-                className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
-              />
-            </div>
-            <div>
-              <label className="text-slate-500 font-bold block mb-1">Date Display</label>
-              <input
-                type="text"
-                placeholder="e.g. 15 Jun, 2026 or Available Now"
-                value={nDate}
-                onChange={(e) => setNDate(e.target.value)}
-                className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="text-slate-500 font-bold block mb-1">Notification Text</label>
-              <input
-                type="text"
-                placeholder="Enter ticker description headline..."
-                value={nText}
-                onChange={(e) => setNText(e.target.value)}
-                className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
-              />
-            </div>
-            <div>
-              <label className="text-slate-500 font-bold block mb-1">Target Link / Path</label>
-              <input
-                type="text"
-                placeholder="e.g. /academics/examination or PDF url"
-                value={nTo}
-                onChange={(e) => setNTo(e.target.value)}
-                className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
-              />
-            </div>
-            <div className="md:col-span-3 flex items-center gap-2 mt-2">
-              <input
-                type="checkbox"
-                id="urgent-check"
-                checked={nUrgent}
-                onChange={(e) => setNUrgent(e.target.checked)}
-                className="rounded border-amber-200 text-amber-600 focus:ring-amber-500 h-4 w-4 cursor-pointer"
-              />
-              <label htmlFor="urgent-check" className="text-slate-700 dark:text-slate-300 font-bold text-xs cursor-pointer select-none">
-                Mark as Urgent (Adds red pulsing dot in ticker scroller)
-              </label>
-            </div>
-          </div>
-          <div className="flex justify-end gap-2 font-sans">
-            <button
-              onClick={() => setEditNotifId(null)}
-              className="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-300 transition-colors cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => {
-                if (!nText.trim()) {
-                  toast.error("Notification text cannot be empty!");
-                  return;
-                }
-                saveNotifMutation.mutate({
-                  id: editNotifId === -1 ? undefined : editNotifId,
-                  source: nSource,
-                  label: nLabel,
-                  text: nText,
-                  date: nDate,
-                  to: nTo,
-                  urgent: nUrgent
-                });
-              }}
-              className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors shadow cursor-pointer"
-            >
-              <Save size={13} /> Save Notification
-            </button>
-          </div>
-        </GlassCard>
-      )}
-
-      {/* Admin custom notification items editor list */}
-      {isEditMode && tickerNotifsList.length > 0 && (
-        <div className="space-y-2">
-          <h3 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Custom Notifications Repository ({tickerNotifsList.length})</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {tickerNotifsList.map((n: any) => (
-              <GlassCard key={n.id} className="p-4 border border-amber-200 bg-white/40 dark:bg-slate-900/40 flex items-center justify-between relative">
-                <div className="flex flex-col gap-1 pr-16 font-sans">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[9px] bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded font-bold uppercase">{n.source}</span>
-                    {n.urgent && <span className="text-[9px] bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold uppercase">Urgent</span>}
-                    <span className="text-[10px] text-slate-400 font-semibold">{n.date}</span>
-                  </div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-snug line-clamp-1 mt-1">{n.text}</h4>
-                  <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">Link: <span className="underline">{n.to}</span></p>
-                </div>
-                <div className="flex gap-1">
-                  <button
-                    onClick={() => startEditNotif(n)}
-                    className="p-1.5 rounded bg-amber-100 hover:bg-amber-200 text-amber-700 transition cursor-pointer"
-                    title="Edit notification"
-                  >
-                    <Edit2 size={12} />
-                  </button>
-                  <button
-                    onClick={() => { if (confirm("Delete this notification from scroller?")) deleteNotifMutation.mutate(n.id); }}
-                    className="p-1.5 rounded bg-red-100 hover:bg-red-200 text-red-700 transition cursor-pointer"
-                    title="Delete notification"
-                  >
-                    <Trash2 size={12} />
-                  </button>
-                </div>
-              </GlassCard>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── Mobile Stats Row ── */}
-      {!isEditMode && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:hidden">
-          {dbStats.map((stat: any, idx: number) => {
-            const Icon = iconMap[stat.icon] || GraduationCap;
-            return (
-              <GlassCard
-                key={idx}
-                delay={idx * 0.05}
-                className="p-4 flex flex-col items-center text-center gap-1.5"
-              >
-                <Icon className={`w-5 h-5 ${stat.color}`} />
-                <p className="text-xl font-extrabold text-slate-900 dark:text-white">
-                  {stat.value}
-                </p>
-                <p className="text-[10px] font-medium text-slate-500 leading-tight">
-                  {stat.label}
-                </p>
-              </GlassCard>
-            );
-          })}
-        </div>
-      )}
-
-      {/* ── Module Navigator ── */}
-      <div>
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
-              Academic Modules
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Navigate to any academic section below
+        <section className="container-narrow space-y-6">
+          <GlassCard className="p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl flex items-center justify-between text-slate-900">
+            <p className="text-amber-800 text-xs font-semibold">
+              <strong>Admin Notifications Mode:</strong> Manage ticker scroll notifications (add custom notifications, dates, target paths).
             </p>
-          </div>
-          <span className="text-xs font-semibold text-slate-400 border border-slate-200 dark:border-slate-700 rounded-full px-3 py-1">
-            {MODULES.length} modules
-          </span>
-        </div>
+            <button
+              onClick={startAddNotif}
+              className="flex items-center gap-1 bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all shadow-md shadow-emerald-900/10 cursor-pointer"
+            >
+              <Plus size={13} /> Add Ticker Notification
+            </button>
+          </GlassCard>
 
-        {/* Standardized all cards to uniform layout (height 260px, 4-column layout on desktop) without bento spanning */}
-        <div className="grid auto-rows-[260px] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {/* Admin Editing Ticker Notification Form */}
+          {editNotifId !== null && (
+            <GlassCard className="p-6 border-2 border-amber-350 space-y-4">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-amber-800">
+                {editNotifId === -1 ? "Add Custom Ticker Notification" : "Edit Ticker Notification"}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans text-xs">
+                <div>
+                  <label className="text-slate-500 font-bold block mb-1">Source / Type</label>
+                  <select
+                    value={nSource}
+                    onChange={(e) => {
+                      setNSource(e.target.value);
+                      const labelMap: Record<string, string> = {
+                        calendar: "Calendar",
+                        holiday: "Holiday",
+                        "exam-sched": "Exam Schedule",
+                        "exam-notif": "Exam Notice",
+                        "hall-ticket": "Hall Ticket",
+                        results: "Results",
+                        timetable: "Timetable",
+                        fee: "Fee"
+                      };
+                      if (labelMap[e.target.value]) {
+                        setNLabel(labelMap[e.target.value]);
+                      }
+                    }}
+                    className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none cursor-pointer"
+                  >
+                    <option value="calendar">Academic Calendar</option>
+                    <option value="holiday">Holiday</option>
+                    <option value="exam-sched">Exam Schedule</option>
+                    <option value="exam-notif">Exam Notice</option>
+                    <option value="hall-ticket">Hall Ticket</option>
+                    <option value="results">Results</option>
+                    <option value="timetable">Timetable</option>
+                    <option value="fee">Fee Payment</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-slate-500 font-bold block mb-1">Badge Label</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Results, Calendar"
+                    value={nLabel}
+                    onChange={(e) => setNLabel(e.target.value)}
+                    className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-500 font-bold block mb-1">Date Display</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 15 Jun, 2026 or Available Now"
+                    value={nDate}
+                    onChange={(e) => setNDate(e.target.value)}
+                    className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="text-slate-500 font-bold block mb-1">Notification Text</label>
+                  <input
+                    type="text"
+                    placeholder="Enter ticker description headline..."
+                    value={nText}
+                    onChange={(e) => setNText(e.target.value)}
+                    className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-500 font-bold block mb-1">Target Link / Path</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. /academics/examination or PDF url"
+                    value={nTo}
+                    onChange={(e) => setNTo(e.target.value)}
+                    className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs outline-none"
+                  />
+                </div>
+                <div className="md:col-span-3 flex items-center gap-2 mt-2">
+                  <input
+                    type="checkbox"
+                    id="urgent-check"
+                    checked={nUrgent}
+                    onChange={(e) => setNUrgent(e.target.checked)}
+                    className="rounded border-amber-200 text-amber-600 focus:ring-amber-500 h-4 w-4 cursor-pointer"
+                  />
+                  <label htmlFor="urgent-check" className="text-slate-700 dark:text-slate-300 font-bold text-xs cursor-pointer select-none">
+                    Mark as Urgent (Adds red pulsing dot in ticker scroller)
+                  </label>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 font-sans">
+                <button
+                  onClick={() => setEditNotifId(null)}
+                  className="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-300 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    if (!nText.trim()) {
+                      toast.error("Notification text cannot be empty!");
+                      return;
+                    }
+                    saveNotifMutation.mutate({
+                      id: editNotifId === -1 ? undefined : editNotifId,
+                      source: nSource,
+                      label: nLabel,
+                      text: nText,
+                      date: nDate,
+                      to: nTo,
+                      urgent: nUrgent
+                    });
+                  }}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors shadow cursor-pointer"
+                >
+                  <Save size={13} /> Save Notification
+                </button>
+              </div>
+            </GlassCard>
+          )}
+
+          {/* Admin custom notification items editor list */}
+          {tickerNotifsList.length > 0 && (
+            <div className="space-y-2">
+              <h3 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Custom Notifications Repository ({tickerNotifsList.length})</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {tickerNotifsList.map((n: any) => (
+                  <GlassCard key={n.id} className="p-4 border border-amber-200 bg-white/40 dark:bg-slate-900/40 flex items-center justify-between relative">
+                    <div className="flex flex-col gap-1 pr-16 font-sans">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[9px] bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded font-bold uppercase">{n.source}</span>
+                        {n.urgent && <span className="text-[9px] bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold uppercase">Urgent</span>}
+                        <span className="text-[10px] text-slate-400 font-semibold">{n.date}</span>
+                      </div>
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-snug line-clamp-1 mt-1">{n.text}</h4>
+                      <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">Link: <span className="underline">{n.to}</span></p>
+                    </div>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => startEditNotif(n)}
+                        className="p-1.5 rounded bg-amber-100 hover:bg-amber-200 text-amber-700 transition cursor-pointer"
+                        title="Edit notification"
+                      >
+                        <Edit2 size={12} />
+                      </button>
+                      <button
+                        onClick={() => { if (confirm("Delete this notification from scroller?")) deleteNotifMutation.mutate(n.id); }}
+                        className="p-1.5 rounded bg-red-100 hover:bg-red-200 text-red-700 transition cursor-pointer"
+                        title="Delete notification"
+                      >
+                        <Trash2 size={12} />
+                      </button>
+                    </div>
+                  </GlassCard>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Module Navigator Section */}
+      <section className="py-12 bg-slate-50/50 dark:bg-slate-900/20 border-t border-border">
+        <div className="container-narrow">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <SectionLabel>Academic Modules</SectionLabel>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2">
+                Explore JNTU Academics
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                Navigate to any academic section or resource below
+              </p>
+            </div>
+            <span className="text-xs font-semibold text-muted-foreground border border-border rounded-full px-3 py-1">
+              {MODULES.length} modules
+            </span>
+          </div>
+
+          <div className="grid auto-rows-[260px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {MODULES.map((mod, index) => (
             <ModuleCard key={mod.name} mod={mod} index={index} />
           ))}
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/academics/ui/PageHeader";
+import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
+import { imageUrl } from "@/lib/assets";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
 import { 
   Users, 
@@ -206,19 +209,16 @@ function AdmissionsPage() {
   };
 
   return (
-    <div 
-      className="space-y-8 pb-16 min-h-screen bg-cover bg-center bg-no-repeat -mx-4 px-4 md:-mx-8 md:px-8"
-      style={{
-        backgroundImage: "linear-gradient(to bottom, rgba(248,250,252,0.96), rgba(248,250,252,0.98)), url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070')"
-      }}
-    >
-      <div className="pt-4">
-        <PageHeader 
-          title="Admissions & Fee Structure" 
-          subtitle="Transparent admission procedures, eligibility rank tables, and step-by-step tuition and payment guides."
-          icon={Users}
-        />
-      </div>
+    <div className="space-y-12 pb-24">
+      <PageHero
+        eyebrow="Academics"
+        title="Admissions & Fee Structure"
+        subtitle="Transparent admission procedures, eligibility rank tables, and step-by-step tuition and payment guides."
+        image="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070"
+      />
+      <SubNav items={ACADEMICS_SUBNAV} />
+
+      <div className="container-narrow space-y-8">
 
       {/* Premium Navigation Segment Slider */}
       <div className="flex items-center justify-center p-1.5 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl w-full max-w-md mx-auto shadow-sm border border-slate-200/20">
@@ -1095,6 +1095,7 @@ function AdmissionsPage() {
 
         </div>
       )}
+      </div>
     </div>
   );
 }

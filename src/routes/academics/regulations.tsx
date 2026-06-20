@@ -1,5 +1,9 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { DownloadCard } from "@/components/academics/DownloadCard";
+import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
+import { imageUrl } from "@/lib/assets";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
@@ -13,6 +17,8 @@ import {
   AdminField,
   AdminInput,
 } from "@/components/AdminEditPanel";
+
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/regulations")({
   loader: async () => await getRegulations(),
@@ -79,27 +85,18 @@ function RegulationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-16">
+    <div className="space-y-12 pb-24">
       {isEditMode && <AdminModeBanner label="Academic Regulations CMS Mode Active" />}
 
-      <div className="container mx-auto px-4 max-w-5xl">
-        <div className="text-center mb-16">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
-          >
-            Academic <span className="text-red-600">Regulations</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-lg text-gray-600 dark:text-gray-400"
-          >
-            Rules, guidelines, and procedures governing academic programs.
-          </motion.p>
-        </div>
+      <PageHero
+        eyebrow="Academics"
+        title="Academic Regulations"
+        subtitle="Rules, guidelines, and procedures governing academic programs."
+        image={campusImg}
+      />
+      <SubNav items={ACADEMICS_SUBNAV} />
+
+      <div className="container-narrow space-y-12">
 
         {isEditMode && (
           <section className="mb-12">

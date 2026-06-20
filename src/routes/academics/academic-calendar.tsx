@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/academics/ui/PageHeader";
+import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
+import { imageUrl } from "@/lib/assets";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
 import { Calendar as CalendarIcon, Search, Download, Filter, Clock, AlertCircle, Save, Plus, Trash2, Edit2, X, FileText, Palmtree, GraduationCap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,6 +16,8 @@ import {
   deleteAcademicsCalendarEvent 
 } from "@/lib/academics";
 import { getAssetUrl } from "@/lib/assets";
+
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/academic-calendar")({
   component: AcademicCalendarPage,
@@ -120,28 +125,16 @@ function AcademicCalendarPage() {
   };
 
   return (
-    <div 
-      className="space-y-8 pb-16 min-h-screen bg-cover bg-center bg-no-repeat -mx-4 px-4 md:-mx-8 md:px-8"
-      style={{
-        backgroundImage: "linear-gradient(to bottom, rgba(255,255,255,0.96), rgba(248,250,252,0.98)), url('https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2068')"
-      }}
-    >
-      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pt-4">
-        <PageHeader 
-          title="Academic Calendar" 
-          subtitle="Explore official schedules, examinations cycles, and holiday planners for all courses."
-          icon={CalendarIcon}
-        />
-        {latestCalendar && (
-          <button 
-            onClick={() => handleDownloadPDF(latestCalendar.pdf_url)}
-            className="flex-shrink-0 flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-lg hover:shadow-blue-500/20 mt-2"
-          >
-            <Download className="w-4 h-4" />
-            Download Latest PDF ({latestCalendar.program_name})
-          </button>
-        )}
-      </div>
+    <div className="space-y-12 pb-24">
+      <PageHero
+        eyebrow="Academics"
+        title="Academic Calendar"
+        subtitle="Explore official schedules, examinations cycles, and holiday planners for all courses."
+        image="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2068"
+      />
+      <SubNav items={ACADEMICS_SUBNAV} />
+
+      <div className="container-narrow space-y-8">
 
       {/* Admin Mode Controls */}
       {isEditMode && (
@@ -269,21 +262,33 @@ function AcademicCalendarPage() {
         </GlassCard>
       )}
 
-      {/* Program Categories Tabs */}
-      <div className="flex items-center gap-2 p-1.5 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl w-fit">
-        {(["UG", "PG", "PhD"] as const).map((cat) => (
-          <button
-            key={cat}
-            onClick={() => { setActiveCategory(cat); setActiveSection("All"); }}
-            className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
-              activeCategory === cat 
-                ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm" 
-                : "text-slate-650 dark:text-slate-400 hover:text-blue-600"
-            }`}
+      {/* Program Categories Tabs & Download Latest Button */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-2 p-1.5 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl w-fit">
+          {(["UG", "PG", "PhD"] as const).map((cat) => (
+            <button
+              key={cat}
+              onClick={() => { setActiveCategory(cat); setActiveSection("All"); }}
+              className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
+                activeCategory === cat 
+                  ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm" 
+                  : "text-slate-650 dark:text-slate-400 hover:text-blue-600"
+              }`}
+            >
+              {cat === "UG" ? "UG Programs" : cat === "PG" ? "PG Programs" : "PhD Research"}
+            </button>
+          ))}
+        </div>
+
+        {latestCalendar && (
+          <button 
+            onClick={() => handleDownloadPDF(latestCalendar.pdf_url)}
+            className="flex-shrink-0 flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-lg hover:shadow-blue-500/20"
           >
-            {cat === "UG" ? "UG Programs" : cat === "PG" ? "PG Programs" : "PhD Research"}
+            <Download className="w-4 h-4" />
+            Download Latest PDF ({latestCalendar.program_name})
           </button>
-        ))}
+        )}
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8 items-start">
@@ -446,6 +451,7 @@ function AcademicCalendarPage() {
           </GlassCard>
 
         </div>
+      </div>
       </div>
     </div>
   );

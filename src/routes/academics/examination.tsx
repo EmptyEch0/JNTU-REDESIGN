@@ -15,6 +15,12 @@ import {
   upsertAcademicsExamData,
   deleteAcademicsExamData
 } from "@/lib/academics";
+import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
+import { imageUrl } from "@/lib/assets";
+
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/examination")({
   component: ExaminationPage,
@@ -395,40 +401,27 @@ function ExaminationPage() {
   ];
 
   return (
-    <div className="relative min-h-screen text-slate-800 p-4 md:p-8 font-sans bg-gradient-to-b from-[#F8FAFC] via-white to-[#F0F4F8]">
-      {/* Background radial overlay pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_0.5px,transparent_0.5px)] [background-size:16px_16px] opacity-[0.2] pointer-events-none" />
+    <div className="space-y-12 pb-24">
+      <PageHero
+        eyebrow="Academics"
+        title="Examination Cell"
+        subtitle="Access official notifications, check live results, fetch hall tickets, and meet the exam administration team."
+        image={campusImg}
+      />
+      
+      <SubNav items={ACADEMICS_SUBNAV} />
 
-      {/* Royal Blue Hero Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-950 to-blue-800 p-6 md:p-10 border border-blue-800/30 shadow-xl shadow-blue-950/10 mb-8 z-10">
-        <div className="absolute right-0 top-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -translate-y-12 translate-x-12 pointer-events-none"></div>
-        <div className="absolute left-0 bottom-0 w-80 h-80 bg-indigo-500/5 rounded-full blur-2xl translate-y-12 -translate-x-12 pointer-events-none"></div>
-        
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-blue-600/30 backdrop-blur-xl border border-blue-400/20 flex items-center justify-center text-white shadow-inner">
-              <FileSignature className="w-7 h-7 text-blue-400" />
-            </div>
-            <div>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">Examination Cell</h1>
-              <p className="text-blue-200/80 text-sm mt-1 max-w-xl">
-                Access official notifications, check live results, fetch hall tickets, and meet the exam administration team.
-              </p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <a 
-              href="https://dhondi.jntugvcev.edu.in/" 
-              target="_blank" 
-              rel="noreferrer"
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 shadow-lg backdrop-blur-md"
-            >
-              Dhondi Portal <ExternalLink size={12} />
-            </a>
-          </div>
+      <div className="container-narrow space-y-6">
+        <div className="flex justify-end">
+          <a 
+            href="https://dhondi.jntugvcev.edu.in/" 
+            target="_blank" 
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-650 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-md shadow-blue-500/20"
+          >
+            Go to Dhondi Portal <ExternalLink size={12} />
+          </a>
         </div>
-      </div>
 
       {/* Admin Mode Controls */}
       {isEditMode && (
@@ -1068,6 +1061,7 @@ function ExaminationPage() {
         </motion.div>
       </AnimatePresence>
 
+      </div>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/academics/ui/PageHeader";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
 import { BookOpen, Search, Download, Eye, RotateCcw, Plus, Trash2, Edit2, Save } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,7 +11,12 @@ import {
   upsertAcademicsSyllabus,
   deleteAcademicsSyllabus
 } from "@/lib/academics";
-import { getAssetUrl } from "@/lib/assets";
+import { getAssetUrl, imageUrl } from "@/lib/assets";
+import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
+
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/syllabus")({
   component: SyllabusPage,
@@ -126,17 +130,17 @@ function SyllabusPage() {
   };
 
   return (
-    <div 
-      className="space-y-8 pb-16 min-h-screen bg-cover bg-center bg-no-repeat -mx-4 px-4 md:-mx-8 md:px-8"
-      style={{
-        backgroundImage: "linear-gradient(to bottom, rgba(255,255,255,0.97), rgba(248,250,252,0.98)), url('https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?q=80&w=1974')"
-      }}
-    >
-      <PageHeader 
-        title="Course Syllabus" 
+    <div className="space-y-12 pb-24">
+      <PageHero
+        eyebrow="Academics"
+        title="Course Syllabus"
         subtitle="Access structured, branch-wise syllabus records for all JNTU-GV academic regulations and semesters."
-        icon={BookOpen}
+        image={campusImg}
       />
+      
+      <SubNav items={ACADEMICS_SUBNAV} />
+
+      <div className="container-narrow space-y-6">
 
       {/* Admin Mode Controls */}
       {isEditMode && (
@@ -481,6 +485,7 @@ function SyllabusPage() {
           )}
         </div>
       </GlassCard>
+      </div>
     </div>
   );
 }

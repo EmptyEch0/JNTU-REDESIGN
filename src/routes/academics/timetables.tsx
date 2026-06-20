@@ -30,7 +30,12 @@ import {
   upsertAcademicsTimetable,
   deleteAcademicsTimetable
 } from "@/lib/academics";
-import { getAssetUrl } from "@/lib/assets";
+import { getAssetUrl, imageUrl } from "@/lib/assets";
+import { PageHero } from "@/components/PageHero";
+import { SubNav } from "@/components/SubNav";
+import { ACADEMICS_SUBNAV } from "@/lib/site";
+
+const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/timetables")({
   head: () => ({
@@ -202,54 +207,17 @@ function TimetablesPage() {
     });
   }, [timetables, activeTab, searchTerm, selectedDept, selectedSemester, selectedYear, selectedSection]);
   return (
-    <div className="relative min-h-screen text-slate-800 p-4 md:p-8 font-sans bg-gradient-to-b from-[#F8FAFC] via-white to-[#F0F4F8]">
-      {/* Background Elegant Overlay Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_0.5px,transparent_0.5px)] [background-size:16px_16px] opacity-[0.03] pointer-events-none" />
+    <div className="space-y-12 pb-24">
+      <PageHero
+        eyebrow="Academics"
+        title="Academic Time Tables"
+        subtitle="View, preview, and download the latest class-wise, semester-wise, and branch-wise timetables, examination schedules, and academic calendars."
+        image={campusImg}
+      />
+      
+      <SubNav items={ACADEMICS_SUBNAV} />
 
-      <div className="relative z-10 max-w-7xl mx-auto space-y-6">
-        
-        {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 bg-white/80 backdrop-blur-md px-4 py-2.5 rounded-full border border-slate-200/80 shadow-sm w-fit">
-          <Link to="/" className="hover:text-blue-600 flex items-center gap-1 transition-colors">
-            <Home className="w-3.5 h-3.5" /> Home
-          </Link>
-          <ChevronRight className="w-3 h-3 text-slate-400" />
-          <Link to="/academics" className="hover:text-blue-600 transition-colors">
-            Academics
-          </Link>
-          <ChevronRight className="w-3 h-3 text-slate-400" />
-          <span className="text-slate-905 font-bold text-slate-900">Academic Time Tables</span>
-        </nav>
-
-        {/* Hero Section Banner */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-950 to-blue-800 p-6 md:p-10 border border-blue-800/30 shadow-xl shadow-blue-950/10"
-        >
-          <div className="absolute right-0 top-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute left-1/3 bottom-0 w-60 h-60 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
-          
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
-            <div className="space-y-3">
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest bg-blue-500/15 border border-blue-500/30 text-blue-300 rounded-full px-3 py-1">
-                <Clock className="w-3 h-3" /> Class & Exam Schedules
-              </span>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-none">
-                Academic Time Tables
-              </h1>
-              <p className="text-slate-300 text-xs md:text-sm max-w-2xl leading-relaxed font-medium">
-                View, preview, and download the latest class-wise, semester-wise, and branch-wise timetables, examination schedules, and academic calendars.
-              </p>
-            </div>
-            
-            {/* Elegant calendar icon container */}
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-650 border border-blue-400/30 flex items-center justify-center text-white shadow-xl shadow-blue-950/20 shrink-0">
-              <CalendarRange className="w-8 h-8 text-white stroke-[1.8]" />
-            </div>
-          </div>
-        </motion.div>
+      <div className="container-narrow space-y-6">
 
         {/* Admin Mode Controls */}
         {isEditMode && (

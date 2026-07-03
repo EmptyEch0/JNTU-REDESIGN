@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAssetUrl } from "@/lib/assets";
 import { getIqacMous } from "../funcs/leadership";
 import { Handshake, ArrowUpRight, Building2, MapPin } from "lucide-react";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/administration/iqac/mous")({
   head: () => ({

@@ -11,9 +11,12 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
-import { getAssetUrl } from "@/lib/assets";
+
 import { getMous, addMou, updateMou, deleteMou } from "@/funcs/rd";
 import { Plus, Trash2, Save } from "lucide-react";
+
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/rd-cell/mous")({
   head: () => ({
@@ -63,7 +66,7 @@ function MOUsPage() {
         body: "Partnership details...",
         type,
         badge: type === "certificate" ? "Partner" : "",
-        img: type === "certificate" ? "/assets/mou-supraja.png" : "",
+        img: "",
       },
     });
     queryClient.invalidateQueries({ queryKey: ["rdMous"] });
@@ -185,28 +188,23 @@ function MOUsPage() {
                       <Trash2 className="h-4 w-4" />
                     </button>
                   )}
-                  <div className="relative bg-sand-deep/30 p-6 grid place-items-center min-h-[300px]">
-                    <img
-                      src={getAssetUrl(editedMous[m.id]?.img ?? m.img)}
-                      alt={m.title}
-                      loading="lazy"
-                      className="max-h-72 object-contain group-hover:scale-[1.03] transition-transform duration-300"
-                    />
+                  <div className="relative bg-sand-deep/30 p-6 grid place-items-center min-h-[300px] w-full">
                     {isEditMode ? (
-                      <div className="absolute bottom-4 inset-x-4">
-                        <input
-                          className="w-full text-[10px] text-center bg-white p-1 rounded border border-primary/20"
+                      <div className="w-full max-w-[280px] space-y-2">
+                        <AdminUpload
                           value={editedMous[m.id]?.img ?? m.img ?? ""}
-                          onChange={(e) =>
+                          onChange={(newUrl) =>
                             setEditedMous((prev) => ({
                               ...prev,
-                              [m.id]: { ...prev[m.id], img: e.target.value },
+                              [m.id]: { ...prev[m.id], img: newUrl },
                             }))
                           }
-                          placeholder="Image URL"
+                          module="research-development"
+                          category="mous"
+                          className="w-full"
                         />
                         <input
-                          className="w-full text-[10px] text-center bg-white p-1 rounded border border-primary/20 mt-1"
+                          className="w-full text-[10px] text-center bg-white p-1 rounded border border-primary/20"
                           value={editedMous[m.id]?.badge ?? m.badge ?? ""}
                           onChange={(e) =>
                             setEditedMous((prev) => ({
@@ -218,9 +216,17 @@ function MOUsPage() {
                         />
                       </div>
                     ) : (
-                      <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-primary text-white text-xs font-semibold">
-                        {m.badge}
-                      </span>
+                      <>
+                        <img
+                          src={getAssetUrl(editedMous[m.id]?.img ?? m.img)}
+                          alt={m.title}
+                          loading="lazy"
+                          className="max-h-72 object-contain group-hover:scale-[1.03] transition-transform duration-700"
+                        />
+                        <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-primary text-white text-xs font-semibold">
+                          {m.badge}
+                        </span>
+                      </>
                     )}
                   </div>
                   <div className="p-7">

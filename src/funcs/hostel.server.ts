@@ -78,7 +78,6 @@ export const updateImage = createServerFn({
       .update(hostelImages)
       .set({
         url: data.url,
-        type: data.type,
       })
       .where(eq(hostelImages.id, data.id))
       .returning();

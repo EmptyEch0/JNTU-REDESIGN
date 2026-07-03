@@ -17,6 +17,9 @@ import {
 } from "../lib/placements";
 import { Plus, Trash2, Save, Image as ImageIcon } from "lucide-react";
 
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
+
 export const Route = createFileRoute("/placements/gallery")({
   head: () => ({
     meta: [
@@ -60,7 +63,7 @@ function GalleryPage() {
 
   const handleAddItem = async () => {
     await addGalleryItem({
-      data: { src: "/assets/campus-life.jpg", caption: "New Gallery Image" },
+      data: { src: "", caption: "New Gallery Image" },
     });
     queryClient.invalidateQueries({ queryKey: ["placementGallery"] });
   };
@@ -108,20 +111,17 @@ function GalleryPage() {
 
                   {isEditMode ? (
                     <div className="p-4 space-y-3">
-                      <div className="flex items-center gap-2 bg-white p-1.5 rounded border border-amber-100">
-                        <ImageIcon size={14} className="text-muted-foreground shrink-0" />
-                        <input
-                          className="w-full text-[10px] outline-none"
-                          value={editedItems[it.id]?.src ?? it.src}
-                          onChange={(e) =>
-                            setEditedItems((p) => ({
-                              ...p,
-                              [it.id]: { ...p[it.id], src: e.target.value },
-                            }))
-                          }
-                          placeholder="Image URL"
-                        />
-                      </div>
+                      <AdminUpload
+                        value={editedItems[it.id]?.src ?? it.src}
+                        onChange={(newUrl) =>
+                          setEditedItems((p) => ({
+                            ...p,
+                            [it.id]: { ...p[it.id], src: newUrl },
+                          }))
+                        }
+                        module="placements"
+                        category="gallery"
+                      />
                       <textarea
                         className="w-full text-xs bg-white p-2 rounded border border-amber-100 outline-none"
                         value={editedItems[it.id]?.caption ?? it.caption}

@@ -5,7 +5,10 @@ import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAssetUrl, syncGallery } from "@/lib/departments";
 import { toast } from "sonner";
-import { type DepartmentData } from "@/functions/departments";
+
+import { AdminUpload } from "@/components/AdminEditPanel";
+import { DepartmentData } from "@/functions/departments";
+
 export const Route = createFileRoute("/departments/$id/gallery")({
   component: GalleryPage,
 });
@@ -111,7 +114,7 @@ function GalleryPage() {
             className={`relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-slate-100 border transition-all duration-200 ${isEditMode ? 'border-indigo-400 ring-4 ring-indigo-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}
           >
             {image.image_url ? (
-              <img src={getAssetUrl(image.image_url)} alt={image.title} className="w-full object-cover transition-transform duration-300 group-hover:scale-110" />
+              <img src={getAssetUrl(image.image_url)} alt={image.title} className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
             ) : (
               <div className="h-48 flex items-center justify-center bg-slate-200 text-slate-400">
                 <ImageIcon size={32} />
@@ -120,12 +123,16 @@ function GalleryPage() {
 
             {isEditMode ? (
               <div className="p-6 bg-white border-t border-slate-100 space-y-4">
-                {/* Image URL Input */}
+                {/* Image Upload */}
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><ImageIcon size={10} /> Source URL</label>
-                  <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-100">
-                    <input className="bg-transparent text-[10px] w-full outline-none font-medium" value={image.image_url} onChange={(e) => updateImage(image.id, "image_url", e.target.value)} placeholder="https://..." />
-                  </div>
+                  <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><ImageIcon size={10}/> Image Upload</label>
+                  <AdminUpload
+                    value={image.image_url}
+                    onChange={(newUrl) => updateImage(image.id, "image_url", newUrl)}
+                    module="departments"
+                    category="gallery"
+                    placeholder="Upload image"
+                  />
                 </div>
 
                 {/* Title and Category Row */}

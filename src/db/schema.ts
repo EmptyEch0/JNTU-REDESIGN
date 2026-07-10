@@ -468,9 +468,13 @@ export const hostelImages = pgTable(
   "hostel_images",
   {
     id: serial("id").primaryKey(),
+    type: hostelTypeEnum("type").notNull(),
     url: text("url").notNull(),
     createdAt: timestamp("created_at").defaultNow(),
-  }
+  },
+  (table) => ({
+    typeIdx: index("images_type_idx").on(table.type),
+  })
 );
 // ======================================================
 // dispensaryContent

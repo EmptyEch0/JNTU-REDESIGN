@@ -40,8 +40,6 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { LocalSubNav } from "@/components/LocalSubNav";
-import { getAssetUrl } from "@/lib/assets";
-import { AdminUpload, PersonAvatarUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/sports")({
   loader: async () => await getSportsData(),
@@ -99,7 +97,7 @@ function SportsPage() {
   }, [availableYears, selectedYear]);
 
   const images = data?.images || [];
-  const getCarouselImages = () => images.map((i: any) => getAssetUrl(i.url));
+  const getCarouselImages = () => images.map((i: any) => i.url);
 
   const filteredAchievements = (data?.achievements || []).filter(
     (a: any) => a.yearLabel === selectedYear
@@ -204,7 +202,7 @@ function SportsPage() {
       <PageHero
         title="Sports & Athletics"
         subtitle="Advancing team discipline, campus endurance, and state-level competition legacy."
-        image={getAssetUrl(images[0]?.url) || sportsImg}
+        image={images[0]?.url || sportsImg}
       />
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
@@ -242,7 +240,7 @@ function SportsPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {images.map((img: any) => (
                     <div key={img.id} className="relative group rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border-2 border-slate-200/40 shadow-sm hover:shadow duration-300">
-                      <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
+                      <img src={img.url} className="w-full h-full object-cover" />
                       <button
                         onClick={() => handleDeleteImage(img.id)}
                         className="absolute inset-0 bg-rose-950/85 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1 font-black text-xs uppercase tracking-widest cursor-pointer"
@@ -253,19 +251,18 @@ function SportsPage() {
                   ))}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mt-2 items-center">
-                  <AdminUpload
-                    value=""
-                    onChange={async (newUrl) => {
-                      if (newUrl) {
-                        await handleAddImage(newUrl);
+                <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mt-2">
+                  <input
+                    placeholder="Drop picture URL code here..."
+                    className="flex-1 border border-amber-200 rounded-xl px-4 py-3.5 text-sm font-bold bg-white outline-none shadow-inner"
+                    onKeyDown={async (e: any) => {
+                      if (e.key === "Enter" && e.target.value.trim()) {
+                        await handleAddImage(e.target.value);
+                        e.target.value = "";
                       }
                     }}
-                    module="facilities"
-                    category="sports"
-                    placeholder="Drag & drop or click to add a new slide image..."
-                    className="flex-1 w-full"
                   />
+                  <span className="text-[10px] text-amber-700 font-bold bg-amber-100 px-3 py-2 rounded-xl self-start sm:self-center shadow-sm">Press Enter to Log</span>
                 </div>
               </div>
             )}
@@ -368,14 +365,16 @@ function SportsPage() {
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
               >
                 {isEditMode ? (
-                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.3s]">
-                    <PersonAvatarUpload
-                      value={editInfo.img}
-                      onChange={(newUrl) => setEditInfo({ ...editInfo, img: newUrl })}
-                      module="facilities"
-                      category="sports/director"
-                      size={112}
-                    />
+                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.15s]">
+                    <div className="w-32 h-44 bg-slate-100 border-2 border-amber-200 rounded-[24px] overflow-hidden relative group shadow-sm">
+                      <img src={editInfo.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"} className="w-full h-full object-cover" />
+                      <input 
+                        placeholder="URL"
+                        value={editInfo.img}
+                        onChange={(e)=>setEditInfo({...editInfo, img:e.target.value})}
+                        className="absolute inset-0 opacity-0 bg-amber-950/80 backdrop-blur focus:opacity-100 group-hover:opacity-100 outline-none text-white text-[9px] font-black p-2 text-center cursor-pointer transition"
+                      />
+                    </div>
                     <div className="flex-1 space-y-4 w-full">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -407,7 +406,7 @@ function SportsPage() {
                 ) : (
                   <div className="flex flex-col md:flex-row gap-8 items-start">
                     <img
-                      src={getAssetUrl(data?.info?.img) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
+                      src={data?.info?.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                       onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
                       className="w-32 h-40 md:w-40 md:h-52 rounded-[28px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-200 hover:scale-[1.02]"
                       alt={data?.info?.name}
@@ -691,7 +690,7 @@ function ImageCarousel({ images, fallback }: any) {
         {images.map((img: string, i: number) => (
           <img
             key={i}
-            src={getAssetUrl(img)}
+            src={img}
             alt={`Slide view ${i + 1}`}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
             onError={(e) => { e.currentTarget.src = fallback; }}

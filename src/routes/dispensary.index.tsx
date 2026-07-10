@@ -30,7 +30,6 @@ import {
   CalendarDays,
   ShieldAlert
 } from "lucide-react";
-import { getAssetUrl } from "@/lib/assets";
 import { LocalSubNav } from "@/components/LocalSubNav";
 import {
   AdminModeBanner,
@@ -40,8 +39,6 @@ import {
   AdminTextarea,
   AdminSaveButton,
   AdminAddRow,
-  AdminUpload,
-  PersonAvatarUpload,
 } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/dispensary/")({
@@ -63,7 +60,7 @@ function DispensaryPage() {
   const drivers = data?.drivers ?? [];
   const images = data?.images ?? [];
 
-  const getCarouselImages = () => images.map((i: any) => getAssetUrl(i.url));
+  const getCarouselImages = () => images.map((i: any) => i.url);
 
   // --- LOCAL CMS EDIT STATES ---
   const [editInfo, setEditInfo] = useState({
@@ -128,7 +125,7 @@ function DispensaryPage() {
       <PageHero
         title="University Dispensary"
         subtitle="Integrated physical healthcare, active emergency networks, and ambulance dispatch schedules."
-        image={getAssetUrl(images[0]?.url) || cultureImg}
+        image={images[0]?.url || cultureImg}
       />
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
@@ -164,7 +161,7 @@ function DispensaryPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {images.map((img: any) => (
                     <div key={img.id} className="relative group rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border-2 border-slate-200/40 shadow-sm hover:shadow duration-300">
-                      <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
+                      <img src={img.url} className="w-full h-full object-cover" />
                       <button
                         onClick={() => handleDeleteImage(img.id)}
                         className="absolute inset-0 bg-rose-950/85 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1 font-black text-xs uppercase tracking-widest cursor-pointer"
@@ -175,19 +172,18 @@ function DispensaryPage() {
                   ))}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mt-2 items-center">
-                  <AdminUpload
-                    value=""
-                    onChange={async (newUrl) => {
-                      if (newUrl) {
-                        await handleAddImage(newUrl);
+                <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mt-2">
+                  <input
+                    placeholder="Drop clinic URL code..."
+                    className="flex-1 border border-amber-200 rounded-xl px-4 py-3.5 text-sm font-bold bg-white outline-none shadow-inner"
+                    onKeyDown={async (e: any) => {
+                      if (e.key === "Enter" && e.target.value.trim()) {
+                        await handleAddImage(e.target.value);
+                        e.target.value = "";
                       }
                     }}
-                    module="facilities"
-                    category="dispensary"
-                    placeholder="Drag & drop or click to add a new slide image..."
-                    className="flex-1 w-full"
                   />
+                  <span className="text-[10px] text-amber-700 font-bold bg-amber-100 px-3 py-2 rounded-xl self-start sm:self-center shadow-sm">Hit Enter to Stage</span>
                 </div>
               </div>
             )}
@@ -207,13 +203,15 @@ function DispensaryPage() {
               >              {isEditMode ? (
                 <AdminPanel>
                   <div className="flex flex-col md:flex-row gap-6 items-start">
-                    <PersonAvatarUpload
-                      value={editInfo.img}
-                      onChange={(newUrl) => setEditInfo({ ...editInfo, img: newUrl })}
-                      module="facilities"
-                      category="dispensary/officer"
-                      size={96}
-                    />
+                    <div className="w-24 h-24 bg-slate-100 border-2 border-amber-200 rounded-2xl overflow-hidden relative group shadow-sm shrink-0">
+                      <img src={editInfo.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"} className="w-full h-full object-cover" />
+                      <input
+                        placeholder="Photo URL"
+                        value={editInfo.img}
+                        onChange={(e) => setEditInfo({...editInfo, img: e.target.value})}
+                        className="absolute inset-0 opacity-0 bg-amber-950/80 focus:opacity-100 group-hover:opacity-100 outline-none text-white text-[9px] font-black p-2 text-center cursor-pointer transition"
+                      />
+                    </div>
                     <div className="flex-1 space-y-3 w-full">
                       <AdminField label="Director Name">
                         <AdminInput value={editInfo.hodName} onChange={(e) => setEditInfo({...editInfo, hodName: e.target.value})} placeholder="e.g. Dr. K. Ramesh" />
@@ -230,7 +228,7 @@ function DispensaryPage() {
               ) : (
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
                     <img
-                      src={getAssetUrl(data?.info?.img) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
+                      src={data?.info?.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                       onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
                       className="w-28 h-28 rounded-[32px] object-cover border-2 border-slate-100 shadow shrink-0 transition duration-200 hover:scale-[1.03]"
                       alt={data?.info?.hodName || "Medical Officer"}
@@ -395,7 +393,7 @@ function ImageCarousel({ images, fallback }: any) {
         {images.map((img: string, i: number) => (
           <img
             key={i}
-            src={getAssetUrl(img)}
+            src={img}
             alt={`Slide view ${i + 1}`}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
             onError={(e) => { e.currentTarget.src = fallback; }}
@@ -450,34 +448,23 @@ function PeopleRegistryEditable({ data, roleType, isEdit, onRefetch }: any) {
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] shadow-inner animate-[fade-in_0.3s] space-y-4">
-          <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-            <div className="shrink-0">
-              <PersonAvatarUpload
-                value={form.img}
-                onChange={(newUrl) => setForm({ ...form, img: newUrl })}
-                module="facilities"
-                category={roleType === "doctor" ? "dispensary/officer" : `dispensary/${roleType}`}
-                size={80}
-              />
+        <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] shadow-inner animate-[fade-in_0.15s] space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <label className="text-[9px] font-black uppercase text-amber-800">Officer Name</label>
+              <input value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
             </div>
-            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full">
-              <div>
-                <label className="text-[9px] font-black uppercase text-amber-800">Officer Name</label>
-                <input value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
-              </div>
-              <div>
-                <label className="text-[9px] font-black uppercase text-amber-800">Qualification Station</label>
-                <input value={form.qualification} onChange={(e)=>setForm({...form, qualification:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
-              </div>
-              <div>
-                <label className="text-[9px] font-black uppercase text-amber-800">Active Shift Hours</label>
-                <input value={form.workingHours} onChange={(e)=>setForm({...form, workingHours:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
-              </div>
-              <div>
-                <label className="text-[9px] font-black uppercase text-amber-800">Direct Dial No.</label>
-                <input value={form.contact} onChange={(e)=>setForm({...form, contact:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
-              </div>
+            <div>
+              <label className="text-[9px] font-black uppercase text-amber-800">Qualification Station</label>
+              <input value={form.qualification} onChange={(e)=>setForm({...form, qualification:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
+            </div>
+            <div>
+              <label className="text-[9px] font-black uppercase text-amber-800">Active Shift Hours</label>
+              <input value={form.workingHours} onChange={(e)=>setForm({...form, workingHours:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
+            </div>
+            <div>
+              <label className="text-[9px] font-black uppercase text-amber-800">Direct Dial No.</label>
+              <input value={form.contact} onChange={(e)=>setForm({...form, contact:e.target.value})} className="w-full border bg-white p-2 rounded text-xs font-bold" />
             </div>
           </div>
           <div className="flex justify-end pt-2 border-t border-amber-200/50">
@@ -505,48 +492,8 @@ function PeopleRegistryEditable({ data, roleType, isEdit, onRefetch }: any) {
                 <tr key={p.id || idx} className="hover:bg-slate-50/40 transition">
                   <td className="py-3.5 px-4 font-extrabold text-slate-950">
                     <div className="flex items-center gap-2.5">
-                      <div className="relative group w-8 h-8 rounded-full bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
-                        {p.img ? (
-                          <img src={getAssetUrl(p.img)} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="text-[11px] font-black text-slate-400 uppercase">{p.name?.[0]}</div>
-                        )}
-                        {isEdit && (
-                          <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                            <Camera className="w-3.5 h-3.5 text-white" />
-                            <input
-                              type="file"
-                              accept="image/jpeg,image/jpg,image/png,image/webp"
-                              className="hidden"
-                              onChange={async (e) => {
-                                const file = e.target.files?.[0];
-                                if (!file) return;
-                                if (file.size > 5 * 1024 * 1024) {
-                                  toast.error("Max file size is 5MB");
-                                  return;
-                                }
-                                const fd = new FormData();
-                                fd.append("file", file);
-                                fd.append("module", "facilities");
-                                fd.append("category", roleType === "doctor" ? "dispensary/officer" : `dispensary/${roleType}`);
-                                const tId = toast.loading("Uploading photo...");
-                                try {
-                                  const res = await fetch("/api/upload", { method: "POST", body: fd });
-                                  const json = await res.json() as any;
-                                  if (json.success && json.path) {
-                                    await updatePerson({ data: { ...p, img: json.path } });
-                                    toast.success("Photo updated!", { id: tId });
-                                    onRefetch();
-                                  } else {
-                                    toast.error(json.error || "Upload failed", { id: tId });
-                                  }
-                                } catch (err: any) {
-                                  toast.error(err.message || "Upload failed", { id: tId });
-                                }
-                              }}
-                            />
-                          </label>
-                        )}
+                      <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
+                        {p.img ? <img src={p.img} className="w-full h-full object-cover" /> : <div className="text-[11px] font-black text-slate-400 uppercase">{p.name?.[0]}</div>}
                       </div>
                       {isEdit ? <InlineCellEdit val={p.name} onCommit={async (n)=>{ await updatePerson({data:{...p, name:n}}); onRefetch(); }} /> : <span className="truncate">{p.name}</span>}
                     </div>

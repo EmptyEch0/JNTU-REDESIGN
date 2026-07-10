@@ -4,7 +4,6 @@ import { PageHero } from "@/components/PageHero";
 import hostelImg from "@/assets/hostel.jpg";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
-import { getAssetUrl } from "@/lib/assets";
 import {
   getHostelData,
   addStructure,
@@ -52,9 +51,8 @@ import {
   AdminDeleteButton,
   AdminRemoveButton,
   AdminAddRow,
-  AdminUpload,
-  PersonAvatarUpload,
 } from "@/components/AdminEditPanel";
+
 export const Route = createFileRoute("/hostels")({
   loader: async () => await getHostelData(),
   component: HostelsPage,
@@ -75,11 +73,11 @@ function HostelsPage() {
 
   const [tab, setTab] = useState<"office" | "girls" | "boys">("office");
 
-  const getImages = () =>
-    images.map((i: any) => i.url);
+  const getImages = (type: string) =>
+    images.filter((img: any) => img.type === type).map((i: any) => i.url);
 
-  const getRawImages = () =>
-    images;
+  const getRawImages = (type: string) =>
+    images.filter((img: any) => img.type === type);
 
   const girlsBlocks = blocks.filter((b: any) => b.type === "girls");
   const boysBlocks = blocks.filter((b: any) => b.type === "boys");
@@ -156,7 +154,7 @@ function HostelsPage() {
     if (!url.trim()) return;
     const tId = toast.loading("Injecting gallery photo...");
     try {
-      await addImage({ data: { url } });
+      await addImage({ data: { type: tab, url } });
       toast.success("Photo logged!", { id: tId });
       router.invalidate();
     } catch {
@@ -186,11 +184,11 @@ function HostelsPage() {
       <PageHero
         title="Campus Hostels"
         subtitle={data?.about?.description || "Safe, modern, and comfortable community housing suites for university scholars."}
-        image={getAssetUrl(getImages()[0]) || hostelImg}
+        image={getImages("office")[0] || hostelImg}
       />
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
-
+        
         {/* TABS CONTROLLER - Sleeker, modern, clean UI */}
         <LocalSubNav
           activeTab={tab}
@@ -202,12 +200,12 @@ function HostelsPage() {
           ]}
         />
 
-        <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.5s_ease-out]">
-
+        <div className="space-y-10 md:space-y-12 max-w-5xl mx-auto animate-[fade-in_0.2s_ease-out]">
+          
           {/* BEAUTIFUL SHADOW-BORDERED CAROUSEL */}
           <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-3xl shadow-lg border border-slate-200/60 bg-slate-100 transition-all duration-300">
-            <ImageCarousel images={getImages()} fallback={hostelImg} />
-
+            <ImageCarousel images={getImages(tab)} fallback={hostelImg} />
+            
             {/* INLINE EDITORIAL IMAGES CONTROLLER */}
             {isEditMode && (
               <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.2s]">
@@ -216,15 +214,15 @@ function HostelsPage() {
                     <Camera className="w-4.5 h-4.5" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-amber-950 tracking-tight">Carousel Ledger</h4>
+                    <h4 className="text-sm font-black text-amber-950 tracking-tight">Carousel Ledger ({tab})</h4>
                     <p className="text-[10px] text-amber-600 font-medium uppercase tracking-wider">Manage visual slides live</p>
                   </div>
                 </div>
-
+                
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  {getRawImages().map((img: any) => (
+                  {getRawImages(tab).map((img: any) => (
                     <div key={img.id} className="relative group rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border-2 border-slate-200/40 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300">
-                      <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
+                      <img src={img.url} className="w-full h-full object-cover" />
                       <button
                         onClick={() => handleDeleteImage(img.id)}
                         className="absolute inset-0 bg-rose-950/80 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col gap-1 items-center justify-center font-black text-xs uppercase tracking-widest cursor-pointer"
@@ -235,19 +233,20 @@ function HostelsPage() {
                   ))}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mt-2 items-center">
-                  <AdminUpload
-                    value=""
-                    onChange={async (newUrl) => {
-                      if (newUrl) {
-                        await handleAddImage(newUrl);
+                <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mt-2">
+                  <input
+                    placeholder="Paste photo web address to add slide..."
+                    className="flex-1 border border-amber-200/80 rounded-[16px] px-4 py-3.5 text-sm font-semibold bg-white/90 placeholder:text-amber-700/40 focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 focus:bg-white outline-none transition-all shadow-inner"
+                    onKeyDown={async (e: any) => {
+                      if (e.key === "Enter" && e.target.value.trim()) {
+                        await handleAddImage(e.target.value);
+                        e.target.value = "";
                       }
                     }}
-                    module="facilities"
-                    category="hostel"
-                    placeholder="Drag & drop or click to add a new slide image..."
-                    className="flex-1 w-full"
                   />
+                  <div className="text-[11px] text-amber-700/80 font-bold flex items-center gap-1.5 shrink-0 bg-amber-100/60 px-3.5 rounded-xl self-start sm:self-center py-1">
+                    <ChevronRight className="w-3 h-3" /> Press Enter to log
+                  </div>
                 </div>
               </div>
             )}
@@ -255,132 +254,132 @@ function HostelsPage() {
 
           {/* ============================================================================
               💼 TAB 1: OFFICE VIEW
-              ============================================================================ */}
+             ============================================================================ */}
           {tab === "office" && (
-            <div className="space-y-10 animate-[fade-in_0.5s_ease-out]">
-
+            <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
+              
               {/* ABOUT SUMMARY CARD */}
-              <Card
-                title="Administration Desk"
+              <Card 
+                title="Administration Desk" 
                 subtitle="Strategic governance & administrative definitions"
                 icon={Building}
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20 shadow-xl duration-200" : "hover:-translate-y-1.5 shadow-[0_10px_35px_rgba(0,0,0,0.04)] duration-200"}
               >
                 {isEditMode ? (
-                  <AdminPanel>
-                    <AdminTextarea
-                      value={editAbout}
-                      onChange={(e) => setEditAbout(e.target.value)}
-                      rows={6}
-                      placeholder="Enter governing description…"
-                    />
-                    <div className="flex justify-end">
-                      <AdminSaveButton onClick={handleSaveAbout} label="Save Description" />
-                    </div>
-                  </AdminPanel>
-                ) : (
-                  <p className="text-slate-600 leading-relaxed text-sm md:text-[15px] whitespace-pre-line font-medium">
-                    {data?.about?.description || "Governance descriptions have yet to be detailed."}
-                  </p>
-                )}
+                <AdminPanel>
+                  <AdminTextarea
+                    value={editAbout}
+                    onChange={(e) => setEditAbout(e.target.value)}
+                    rows={6}
+                    placeholder="Enter governing description…"
+                  />
+                  <div className="flex justify-end">
+                    <AdminSaveButton onClick={handleSaveAbout} label="Save Description" />
+                  </div>
+                </AdminPanel>
+              ) : (
+                <p className="text-slate-600 leading-relaxed text-sm md:text-[15px] whitespace-pre-line font-medium">
+                  {data?.about?.description || "Governance descriptions have yet to be detailed."}
+                </p>
+              )}
               </Card>
 
               {/* GOVERNING HEAD CARD */}
-              <Card
-                title="Officer In Charge"
+              <Card 
+                title="Officer In Charge" 
                 subtitle="Active presiding campus hostel coordinator"
                 icon={User}
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/20" : "hover:-translate-y-1.5 shadow-[0_10px_35px_rgba(0,0,0,0.04)]"}
               >
                 {isEditMode ? (
-                  <AdminPanel>
-                    <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-
-                      {/* ── Avatar Upload Zone ── */}
-                      <PersonAvatarUpload
+                <AdminPanel>
+                  <div className="flex flex-col sm:flex-row gap-6 items-start">
+                    <div className="w-28 h-28 bg-slate-100 border-2 border-amber-200 rounded-2xl overflow-hidden relative group shadow-sm shrink-0">
+                      <img src={editOfficer.image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"} className="w-full h-full object-cover" />
+                      <input
+                        type="text"
                         value={editOfficer.image}
-                        onChange={(newUrl) => setEditOfficer({ ...editOfficer, image: newUrl })}
-                        module="facilities"
-                        category="hostel/officer"
-                        size={96}
+                        onChange={(e) => setEditOfficer({ ...editOfficer, image: e.target.value })}
+                        placeholder="Paste image URL"
+                        className="absolute inset-0 opacity-0 focus:opacity-100 group-hover:opacity-100 bg-amber-950/80 text-[10px] text-white font-bold p-2 text-center outline-none transition"
                       />
-
-                      <div className="flex-1 space-y-3 w-full">
-                        <AdminField label="Officer Name">
-                          <AdminInput value={editOfficer.name} onChange={(e) => setEditOfficer({ ...editOfficer, name: e.target.value })} placeholder="Full name" />
-                        </AdminField>
-                        <AdminField label="Designation">
-                          <AdminInput value={editOfficer.role} onChange={(e) => setEditOfficer({ ...editOfficer, role: e.target.value })} placeholder="e.g. Chief Hostel Officer" />
-                        </AdminField>
-                        <div className="flex justify-end pt-1">
-                          <AdminSaveButton onClick={handleSaveOfficer} label="Save Officer" />
-                        </div>
+                    </div>
+                    <div className="flex-1 space-y-3 w-full">
+                      <AdminField label="Officer Name">
+                        <AdminInput value={editOfficer.name} onChange={(e) => setEditOfficer({ ...editOfficer, name: e.target.value })} placeholder="Full name" />
+                      </AdminField>
+                      <AdminField label="Designation">
+                        <AdminInput value={editOfficer.role} onChange={(e) => setEditOfficer({ ...editOfficer, role: e.target.value })} placeholder="e.g. Chief Hostel Officer" />
+                      </AdminField>
+                      <div className="flex justify-end pt-1">
+                        <AdminSaveButton onClick={handleSaveOfficer} label="Save Officer" />
                       </div>
                     </div>
-                  </AdminPanel>
-                ) : (
-                  officer && (
-                    <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-                      <div className="relative shrink-0">
-                        <img
-                          src={getAssetUrl(officer.image) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
-                          onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
-                          className="w-24 h-24 rounded-[24px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-500 hover:scale-[1.03]"
-                          alt={officer.name}
-                        />
-                      </div>
-                      <div>
-                        <h4 className="font-display font-black text-xl text-slate-900 tracking-tight mb-1">{officer.name}</h4>
-                        <div className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] font-bold text-xs tracking-widest uppercase px-3 py-1.5 rounded-full">
-                          <Sparkles className="w-3.5 h-3.5" />
-                          {officer.role}
-                        </div>
+                  </div>
+                </AdminPanel>
+              ) : (
+                officer && (
+                  <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+                    <div className="relative shrink-0">
+                      <img
+                        src={officer.image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
+                        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
+                        className="w-24 h-24 rounded-[24px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-200 hover:scale-[1.03]"
+                        alt={officer.name}
+                      />
+                    </div>
+                    <div>
+                      <h4 className="font-display font-black text-xl text-slate-900 tracking-tight mb-1">{officer.name}</h4>
+                      <div className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] font-bold text-xs tracking-widest uppercase px-3 py-1.5 rounded-full">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        {officer.role}
                       </div>
                     </div>
-                  )
-                )}
+                  </div>
+                )
+              )}
               </Card>
 
               {/* WARDENS ACTIVE DIRECTORIES */}
               <div className="grid grid-cols-1 gap-8">
-                <Card
-                  title="Girls Dormitory Wardens"
+                <Card 
+                  title="Girls Dormitory Wardens" 
                   subtitle="Governing female security and operations rosters"
                   icon={User}
                   className={isEditMode ? "ring-2 ring-amber-300" : "shadow-[0_10px_35px_rgba(0,0,0,0.03)]"}
                 >
-                  <WardenTableEditable
-                    data={girlsWardens}
-                    type="girls"
-                    isEdit={isEditMode}
-                    onRefetch={() => router.invalidate()}
+                  <WardenTableEditable 
+                    data={girlsWardens} 
+                    type="girls" 
+                    isEdit={isEditMode} 
+                    onRefetch={() => router.invalidate()} 
                   />
                 </Card>
 
-                <Card
-                  title="Boys Dormitory Wardens"
+                <Card 
+                  title="Boys Dormitory Wardens" 
                   subtitle="Governing male security and operations rosters"
                   icon={User}
                   className={isEditMode ? "ring-2 ring-amber-300" : "shadow-[0_10px_35px_rgba(0,0,0,0.03)]"}
                 >
-                  <WardenTableEditable
-                    data={boysWardens}
-                    type="boys"
-                    isEdit={isEditMode}
-                    onRefetch={() => router.invalidate()}
+                  <WardenTableEditable 
+                    data={boysWardens} 
+                    type="boys" 
+                    isEdit={isEditMode} 
+                    onRefetch={() => router.invalidate()} 
                   />
                 </Card>
 
-                <Card
-                  title="Office Supporting Staff"
+                <Card 
+                  title="Office Supporting Staff" 
                   subtitle="Governing ledger assistance and logistical registry"
                   icon={Sparkles}
                   className={isEditMode ? "ring-2 ring-amber-300" : "shadow-[0_10px_35px_rgba(0,0,0,0.03)]"}
                 >
-                  <StaffTableEditable
-                    data={staff}
-                    isEdit={isEditMode}
-                    onRefetch={() => router.invalidate()}
+                  <StaffTableEditable 
+                    data={staff} 
+                    isEdit={isEditMode} 
+                    onRefetch={() => router.invalidate()} 
                   />
                 </Card>
               </div>
@@ -397,24 +396,24 @@ function HostelsPage() {
                 <h3 className="text-lg font-black tracking-tight text-slate-900">Girls Inhabitation Ledger</h3>
               </div>
 
-              <BlocksManagerEditable
-                blocks={girlsBlocks}
-                type="girls"
-                isEdit={isEditMode}
-                onRefetch={() => router.invalidate()}
+              <BlocksManagerEditable 
+                blocks={girlsBlocks} 
+                type="girls" 
+                isEdit={isEditMode} 
+                onRefetch={() => router.invalidate()} 
               />
 
-              <Card
-                title="Available Facilities"
+              <Card 
+                title="Available Facilities" 
                 subtitle="Active logistical amenities mapped to girls dorms"
-                icon={Sparkles}
+                icon={Sparkles} 
                 className={isEditMode ? "ring-2 ring-amber-300" : ""}
               >
-                <FacilitiesManagerEditable
-                  facilities={girlsFacilities}
-                  type="girls"
-                  isEdit={isEditMode}
-                  onRefetch={() => router.invalidate()}
+                <FacilitiesManagerEditable 
+                  facilities={girlsFacilities} 
+                  type="girls" 
+                  isEdit={isEditMode} 
+                  onRefetch={() => router.invalidate()} 
                 />
               </Card>
 
@@ -436,24 +435,24 @@ function HostelsPage() {
                 <h3 className="text-lg font-black tracking-tight text-slate-900">Boys Inhabitation Ledger</h3>
               </div>
 
-              <BlocksManagerEditable
-                blocks={boysBlocks}
-                type="boys"
-                isEdit={isEditMode}
-                onRefetch={() => router.invalidate()}
+              <BlocksManagerEditable 
+                blocks={boysBlocks} 
+                type="boys" 
+                isEdit={isEditMode} 
+                onRefetch={() => router.invalidate()} 
               />
 
-              <Card
-                title="Available Facilities"
+              <Card 
+                title="Available Facilities" 
                 subtitle="Active logistical amenities mapped to boys dorms"
-                icon={Sparkles}
+                icon={Sparkles} 
                 className={isEditMode ? "ring-2 ring-amber-300" : ""}
               >
-                <FacilitiesManagerEditable
-                  facilities={boysFacilities}
-                  type="boys"
-                  isEdit={isEditMode}
-                  onRefetch={() => router.invalidate()}
+                <FacilitiesManagerEditable 
+                  facilities={boysFacilities} 
+                  type="boys" 
+                  isEdit={isEditMode} 
+                  onRefetch={() => router.invalidate()} 
                 />
               </Card>
 
@@ -525,10 +524,11 @@ function ImageCarousel({ images, fallback }: any) {
         {images.map((img: string, i: number) => (
           <img
             key={i}
-            src={getAssetUrl(img)}
+            src={img}
             alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 transform group-hover:scale-[1.02] ${currentIndex === i ? "opacity-100 z-10 scale-100" : "opacity-0 z-0"
-              }`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 transform group-hover:scale-[1.02] ${
+              currentIndex === i ? "opacity-100 z-10 scale-100" : "opacity-0 z-0"
+            }`}
             style={{ transitionProperty: "opacity, transform", transitionDuration: "1.2s" }}
             onError={(e) => {
               e.currentTarget.onerror = null;
@@ -537,7 +537,7 @@ function ImageCarousel({ images, fallback }: any) {
           />
         ))}
       </div>
-
+      
       {/* GORGEOUS EDGE OVERLAYS */}
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent z-20" />
 
@@ -561,8 +561,9 @@ function ImageCarousel({ images, fallback }: any) {
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`transition-all duration-500 rounded-full h-1.5 cursor-pointer ${currentIndex === index ? "w-7 bg-white" : "w-1.5 bg-white/40 hover:bg-white/70"
-                  }`}
+                className={`transition-all duration-200 rounded-full h-1.5 cursor-pointer ${
+                  currentIndex === index ? "w-7 bg-white" : "w-1.5 bg-white/40 hover:bg-white/70"
+                }`}
               />
             ))}
           </div>
@@ -615,42 +616,42 @@ function WardenTableEditable({ data, type, isEdit, onRefetch }: any) {
         <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div className="space-y-1 flex-1">
             <label className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Warden Full Name</label>
-            <input
-              type="text"
-              value={newForm.name}
-              onChange={(e) => setNewForm({ ...newForm, name: e.target.value })}
+            <input 
+              type="text" 
+              value={newForm.name} 
+              onChange={(e) => setNewForm({ ...newForm, name: e.target.value })} 
               className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-4 py-2.5 outline-none font-semibold text-sm"
               placeholder="e.g. M. Vijayalaxmi"
             />
           </div>
           <div className="space-y-1 flex-1">
             <label className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Designation Rank</label>
-            <input
-              type="text"
-              value={newForm.designation}
-              onChange={(e) => setNewForm({ ...newForm, designation: e.target.value })}
+            <input 
+              type="text" 
+              value={newForm.designation} 
+              onChange={(e) => setNewForm({ ...newForm, designation: e.target.value })} 
               className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-4 py-2.5 outline-none font-semibold text-sm"
             />
           </div>
           <div className="space-y-1 flex-1">
             <label className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Hotline Contact</label>
-            <input
-              type="text"
-              value={newForm.phone}
-              onChange={(e) => setNewForm({ ...newForm, phone: e.target.value })}
+            <input 
+              type="text" 
+              value={newForm.phone} 
+              onChange={(e) => setNewForm({ ...newForm, phone: e.target.value })} 
               className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-4 py-2.5 outline-none font-bold text-sm"
               placeholder="e.g. +91..."
             />
           </div>
-          <button
-            onClick={handleAdd}
+          <button 
+            onClick={handleAdd} 
             className="bg-slate-900 hover:bg-amber-600 text-white font-black py-3.5 rounded-[14px] flex items-center gap-2 justify-center transition cursor-pointer active:scale-95 text-xs uppercase tracking-wider shadow shadow-slate-900/10"
           >
             <Plus className="w-4 h-4" /> Log Warden
           </button>
         </div>
       )}
-
+      
       {/* ZERO HORIZONTAL SCROLL SUPPRESSION CONTAINER */}
       <div className="overflow-x-auto no-scrollbar w-full border border-slate-200/60 rounded-2xl">
         <table className="w-full text-left border-collapse min-w-[680px]">
@@ -676,24 +677,24 @@ function WardenTableEditable({ data, type, isEdit, onRefetch }: any) {
                         {w.name?.[0]?.toUpperCase() || "?"}
                       </div>
                       {isEdit ? (
-                        <InlineCellEdit
-                          val={w.name}
+                        <InlineCellEdit 
+                          val={w.name} 
                           onCommit={async (newVal: string) => {
                             await updatePerson({ data: { ...w, name: newVal } });
                             onRefetch();
-                          }}
+                          }} 
                         />
                       ) : w.name}
                     </div>
                   </td>
                   <td className="py-4 px-5">
                     {isEdit ? (
-                      <InlineCellEdit
-                        val={w.designation}
+                      <InlineCellEdit 
+                        val={w.designation} 
                         onCommit={async (newVal: string) => {
                           await updatePerson({ data: { ...w, designation: newVal } });
                           onRefetch();
-                        }}
+                        }} 
                       />
                     ) : (
                       <span className="inline-flex items-center px-3 py-1 rounded-[10px] text-xs font-bold bg-slate-100/80 border border-slate-200/50 text-slate-600">
@@ -703,12 +704,12 @@ function WardenTableEditable({ data, type, isEdit, onRefetch }: any) {
                   </td>
                   <td className="py-4 px-5">
                     {isEdit ? (
-                      <InlineCellEdit
-                        val={w.phone || ""}
+                      <InlineCellEdit 
+                        val={w.phone || ""} 
                         onCommit={async (newVal: string) => {
                           await updatePerson({ data: { ...w, phone: newVal } });
                           onRefetch();
-                        }}
+                        }} 
                       />
                     ) : w.phone ? (
                       <a href={`tel:${w.phone}`} className="inline-flex items-center gap-2 text-sm font-black text-[oklch(0.42_0.18_265)] hover:underline transition-all">
@@ -778,24 +779,24 @@ function StaffTableEditable({ data, isEdit, onRefetch }: any) {
         <div className="bg-amber-50/80 border-2 border-amber-200 p-5 rounded-[24px] grid grid-cols-1 sm:grid-cols-3 gap-4 items-end shadow-inner animate-[fade-in_0.15s]">
           <div className="space-y-1 flex-1">
             <label className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Staff Full Name</label>
-            <input
-              type="text"
-              value={newForm.name}
-              onChange={(e) => setNewForm({ ...newForm, name: e.target.value })}
+            <input 
+              type="text" 
+              value={newForm.name} 
+              onChange={(e) => setNewForm({ ...newForm, name: e.target.value })} 
               className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-4 py-2.5 outline-none font-semibold text-sm"
             />
           </div>
           <div className="space-y-1 flex-1">
             <label className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Position Role</label>
-            <input
-              type="text"
-              value={newForm.role}
-              onChange={(e) => setNewForm({ ...newForm, role: e.target.value })}
+            <input 
+              type="text" 
+              value={newForm.role} 
+              onChange={(e) => setNewForm({ ...newForm, role: e.target.value })} 
               className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-4 py-2.5 outline-none font-semibold text-sm"
             />
           </div>
-          <button
-            onClick={handleAdd}
+          <button 
+            onClick={handleAdd} 
             className="bg-slate-900 hover:bg-amber-600 text-white font-black py-3.5 rounded-[14px] flex items-center gap-2 justify-center transition cursor-pointer active:scale-95 text-xs uppercase tracking-wider shadow"
           >
             <Plus className="w-4 h-4" /> Enroll Staff
@@ -826,24 +827,24 @@ function StaffTableEditable({ data, isEdit, onRefetch }: any) {
                         {s.name?.[0]?.toUpperCase() || "?"}
                       </div>
                       {isEdit ? (
-                        <InlineCellEdit
-                          val={s.name}
+                        <InlineCellEdit 
+                          val={s.name} 
                           onCommit={async (newVal: string) => {
                             await updatePerson({ data: { ...s, name: newVal } });
                             onRefetch();
-                          }}
+                          }} 
                         />
                       ) : s.name}
                     </div>
                   </td>
                   <td className="py-4 px-5">
                     {isEdit ? (
-                      <InlineCellEdit
-                        val={s.role}
+                      <InlineCellEdit 
+                        val={s.role} 
                         onCommit={async (newVal: string) => {
                           await updatePerson({ data: { ...s, role: newVal } });
                           onRefetch();
-                        }}
+                        }} 
                       />
                     ) : (
                       <span className="inline-flex items-center px-3 py-1 rounded-[10px] text-xs font-bold bg-slate-100/80 border border-slate-200/50 text-slate-600">
@@ -918,7 +919,7 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
       {isEdit && (
         <div className="bg-amber-50 border-2 border-dashed border-amber-300 rounded-[28px] p-6 flex flex-col gap-4 duration-300 shadow-inner">
           {!addingBlock ? (
-            <button
+            <button 
               onClick={() => setAddingBlock(true)}
               className="w-full py-4 flex items-center gap-2 justify-center bg-amber-500 hover:bg-amber-600 text-amber-950 font-black rounded-[18px] uppercase text-xs tracking-widest shadow cursor-pointer transition active:scale-[0.99]"
             >
@@ -932,23 +933,23 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div className="space-y-1">
                   <label className="text-[10px] font-black uppercase text-amber-800">Block Identifier</label>
-                  <input type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-3 py-2 outline-none text-sm font-bold" />
+                  <input type="text" value={form.title} onChange={(e)=>setForm({...form, title:e.target.value})} className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-3 py-2 outline-none text-sm font-bold" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] font-black uppercase text-amber-800">Total Rooms</label>
-                  <input type="number" value={form.rooms} onChange={(e) => setForm({ ...form, rooms: Number(e.target.value) })} className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-3 py-2 outline-none text-sm font-bold text-center" />
+                  <input type="number" value={form.rooms} onChange={(e)=>setForm({...form, rooms:Number(e.target.value)})} className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-3 py-2 outline-none text-sm font-bold text-center" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] font-black uppercase text-amber-800">Dining Halls</label>
-                  <input type="number" value={form.diningHall} onChange={(e) => setForm({ ...form, diningHall: Number(e.target.value) })} className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-3 py-2 outline-none text-sm font-bold text-center" />
+                  <input type="number" value={form.diningHall} onChange={(e)=>setForm({...form, diningHall:Number(e.target.value)})} className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-3 py-2 outline-none text-sm font-bold text-center" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] font-black uppercase text-amber-800">Kitchens Available</label>
-                  <input type="number" value={form.kitchen} onChange={(e) => setForm({ ...form, kitchen: Number(e.target.value) })} className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-3 py-2 outline-none text-sm font-bold text-center" />
+                  <input type="number" value={form.kitchen} onChange={(e)=>setForm({...form, kitchen:Number(e.target.value)})} className="w-full border-2 border-amber-200 bg-white rounded-[12px] px-3 py-2 outline-none text-sm font-bold text-center" />
                 </div>
               </div>
               <div className="flex justify-end gap-2.5 pt-2">
-                <button onClick={() => setAddingBlock(false)} className="text-slate-500 hover:bg-slate-200/40 font-black px-5 py-2 rounded-lg text-xs uppercase tracking-wider transition cursor-pointer">Cancel</button>
+                <button onClick={()=>setAddingBlock(false)} className="text-slate-500 hover:bg-slate-200/40 font-black px-5 py-2 rounded-lg text-xs uppercase tracking-wider transition cursor-pointer">Cancel</button>
                 <button onClick={handleCreate} className="bg-slate-900 hover:bg-amber-600 text-white font-black px-5 py-2.5 rounded-xl text-xs uppercase tracking-widest transition cursor-pointer shadow">Construct</button>
               </div>
             </div>
@@ -963,9 +964,9 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
       ) : (
         <div className="grid grid-cols-1 gap-6 md:gap-8">
           {blocks.map((b: any) => (
-            <Card
-              key={b.id}
-              title={isEdit ? undefined : b.title}
+            <Card 
+              key={b.id} 
+              title={isEdit ? undefined : b.title} 
               icon={type === "girls" ? Home : Tent}
               className={isEdit ? "ring-4 ring-amber-500/10 border-2 border-amber-200 bg-amber-50/10 duration-200 shadow-xl scale-[1.01]" : "hover:-translate-y-1.5 duration-200 shadow-[0_10px_35px_rgba(0,0,0,0.04)]"}
             >
@@ -974,8 +975,8 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-amber-200/60 pb-4 gap-4">
                     <div className="flex-1 w-full sm:max-w-lg">
                       <label className="text-[10px] font-black text-amber-800 uppercase tracking-[0.15em]">Rename Block Entity (Press Enter)</label>
-                      <input
-                        defaultValue={b.title}
+                      <input 
+                        defaultValue={b.title} 
                         className="w-full font-display font-black text-xl sm:text-2xl outline-none bg-amber-50/50 border-b-2 border-dashed border-amber-300 text-amber-950 focus:border-solid focus:border-amber-500 py-1.5 transition-all mt-1"
                         onKeyDown={async (e: any) => {
                           if (e.key === "Enter" && e.target.value.trim()) {
@@ -989,13 +990,13 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
-
+                  
                   <div className="grid grid-cols-3 gap-4 sm:gap-6">
                     <div className="bg-white border-2 border-amber-200 rounded-[20px] p-4 flex flex-col items-center shadow-sm duration-300 focus-within:border-amber-500">
                       <span className="text-[10px] font-black text-amber-800 uppercase tracking-widest flex items-center gap-1"><Building className="w-3 h-3" /> Rooms</span>
-                      <input
-                        type="number"
-                        defaultValue={b.rooms}
+                      <input 
+                        type="number" 
+                        defaultValue={b.rooms} 
                         className="font-black text-slate-800 text-center text-xl w-full outline-none mt-2"
                         onBlur={async (e) => {
                           const val = Number(e.target.value);
@@ -1007,9 +1008,9 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
                     </div>
                     <div className="bg-white border-2 border-amber-200 rounded-[20px] p-4 flex flex-col items-center shadow-sm duration-300 focus-within:border-amber-500">
                       <span className="text-[10px] font-black text-amber-800 uppercase tracking-widest flex items-center gap-1"><Utensils className="w-3 h-3" /> Dining</span>
-                      <input
-                        type="number"
-                        defaultValue={b.diningHall}
+                      <input 
+                        type="number" 
+                        defaultValue={b.diningHall} 
                         className="font-black text-slate-800 text-center text-xl w-full outline-none mt-2"
                         onBlur={async (e) => {
                           const val = Number(e.target.value);
@@ -1021,9 +1022,9 @@ function BlocksManagerEditable({ blocks, type, isEdit, onRefetch }: any) {
                     </div>
                     <div className="bg-white border-2 border-amber-200 rounded-[20px] p-4 flex flex-col items-center shadow-sm duration-300 focus-within:border-amber-500">
                       <span className="text-[10px] font-black text-amber-800 uppercase tracking-widest flex items-center gap-1"><Coffee className="w-3 h-3" /> Kitchen</span>
-                      <input
-                        type="number"
-                        defaultValue={b.kitchen}
+                      <input 
+                        type="number" 
+                        defaultValue={b.kitchen} 
                         className="font-black text-slate-800 text-center text-xl w-full outline-none mt-2"
                         onBlur={async (e) => {
                           const val = Number(e.target.value);
@@ -1085,14 +1086,14 @@ function FacilitiesManagerEditable({ facilities, type, isEdit, onRefetch }: any)
   return (
     <div className="space-y-6 w-full">
       {isEdit && (
-        <div className="flex gap-2.5 max-w-md bg-amber-50/80 border-2 border-amber-200 rounded-[18px] p-3 shadow-inner animate-[fade-in_0.3s]">
-          <input
-            type="text"
-            placeholder="Add amenity (e.g. Wifi, Gym)..."
-            value={newFac}
-            onChange={(e) => setNewFac(e.target.value)}
+        <div className="flex gap-2.5 max-w-md bg-amber-50/80 border-2 border-amber-200 rounded-[18px] p-3 shadow-inner animate-[fade-in_0.15s]">
+          <input 
+            type="text" 
+            placeholder="Add amenity (e.g. Wifi, Gym)..." 
+            value={newFac} 
+            onChange={(e)=>setNewFac(e.target.value)} 
             className="flex-1 text-sm px-4 py-2.5 border-2 border-amber-200 bg-white rounded-xl outline-none font-bold focus:border-amber-500"
-            onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+            onKeyDown={(e)=>e.key === "Enter" && handleAdd()}
           />
           <button onClick={handleAdd} className="bg-slate-900 hover:bg-amber-600 text-white font-black px-5 py-2.5 rounded-xl text-xs uppercase tracking-widest cursor-pointer transition shadow active:scale-95">Log</button>
         </div>
@@ -1105,10 +1106,11 @@ function FacilitiesManagerEditable({ facilities, type, isEdit, onRefetch }: any)
           facilities.map((f: any, i: number) => (
             <div
               key={f.id || i}
-              className={`flex items-center justify-between gap-3 border rounded-2xl px-4 py-4 transition-all duration-500 ${isEdit
-                  ? "bg-amber-50/40 border-amber-200 shadow-sm"
+              className={`flex items-center justify-between gap-3 border rounded-2xl px-4 py-4 transition-all duration-200 ${
+                isEdit 
+                  ? "bg-amber-50/40 border-amber-200 shadow-sm" 
                   : "bg-slate-50/80 border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow-[0_10px_25px_rgba(0,0,0,0.03)] hover:-translate-y-0.5 group"
-                }`}
+              }`}
             >
               <div className="flex items-center gap-3 shrink-0 min-w-0">
                 <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition shrink-0 ${isEdit ? "bg-amber-100 text-amber-700" : "bg-white border border-slate-200/60 text-[oklch(0.42_0.18_265)] group-hover:scale-110"}`}>
@@ -1116,9 +1118,9 @@ function FacilitiesManagerEditable({ facilities, type, isEdit, onRefetch }: any)
                 </div>
                 <span className="text-[15px] font-bold text-slate-700 truncate">{f.name}</span>
               </div>
-
+              
               {isEdit && (
-                <button onClick={() => handleDelete(f.id)} className="w-7 h-7 rounded-full bg-amber-100/60 hover:bg-rose-600 text-amber-800 hover:text-white flex items-center justify-center transition duration-300 cursor-pointer shrink-0 active:scale-90 shadow-sm border border-amber-200/40">
+                <button onClick={()=>handleDelete(f.id)} className="w-7 h-7 rounded-full bg-amber-100/60 hover:bg-rose-600 text-amber-800 hover:text-white flex items-center justify-center transition duration-300 cursor-pointer shrink-0 active:scale-90 shadow-sm border border-amber-200/40">
                   <X className="w-3.5 h-3.5 font-black" />
                 </button>
               )}

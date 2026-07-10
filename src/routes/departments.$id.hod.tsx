@@ -5,14 +5,13 @@ import { useAdmin } from "@/context/AdminContext";
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { AdminUpload } from "@/components/AdminEditPanel";
-import { 
-  Mail, 
-  Quote, 
-  UserCircle, 
-  GraduationCap, 
-  Save, 
-  Image as ImageIcon, 
+import {
+  Mail,
+  Quote,
+  UserCircle,
+  GraduationCap,
+  Save,
+  Image as ImageIcon,
   Mail as MailIcon,
   MessageSquare
 } from "lucide-react";
@@ -128,20 +127,19 @@ function HodPage() {
                     </div>
                   </div>
 
-                    {isEditMode && (
-                      <div className="mt-4 text-left">
-                        <label className="text-[10px] font-bold text-amber-600 uppercase flex items-center gap-1 mb-1">
-                          <ImageIcon size={12} /> HOD Photo
-                        </label>
-                        <AdminUpload
-                          value={editData.hod_photo}
-                          onChange={(newUrl) => setEditData({ ...editData, hod_photo: newUrl })}
-                          module="departments"
-                          category="hod"
-                          placeholder="Upload Photo"
-                        />
-                      </div>
-                    )}
+                  {isEditMode && (
+                    <div className="mt-4 text-left">
+                      <label className="text-[10px] font-bold text-amber-600 uppercase flex items-center gap-1 mb-1">
+                        <ImageIcon size={12} /> Photo URL
+                      </label>
+                      <input
+                        className="w-full text-xs p-2 border border-amber-200 rounded bg-amber-50/50"
+                        value={editData.hod_photo}
+                        onChange={(e) => setEditData({ ...editData, hod_photo: e.target.value })}
+                        placeholder="https://..."
+                      />
+                    </div>
+                  )}
 
                   <h2 className="text-2xl font-bold text-slate-900 mt-4">{hodName}</h2>
                   <p className="text-blue-600 font-semibold mt-1">Head of the Department</p>

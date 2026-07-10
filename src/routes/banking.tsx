@@ -10,7 +10,6 @@ import {
   Landmark,
   Sparkles
 } from "lucide-react";
-import { getAssetUrl } from "@/lib/assets";
 import {
   AdminModeBanner,
   AdminPanel,
@@ -19,7 +18,6 @@ import {
   AdminInput,
   AdminTextarea,
   AdminSaveButton,
-  AdminUpload,
 } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/banking")({
@@ -103,7 +101,7 @@ function BankingPage() {
       <PageHero
         title="Banking Facilities"
         subtitle="Comprehensive financial services and 24/7 access points active on the JNTU-GV campus."
-        image={getAssetUrl(imgRec?.imageUrl) || atmpic}
+        image={imgRec?.imageUrl || atmpic}
       />
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
@@ -114,7 +112,7 @@ function BankingPage() {
           <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-[32px] shadow-md border border-slate-200/60 bg-slate-200 transition-all duration-300">
             <div className="relative aspect-[21/9] md:aspect-[16/7] min-h-[200px] max-h-[340px] w-full overflow-hidden group bg-slate-900">
               <img
-                src={getAssetUrl(imgRec?.imageUrl) || atmpic}
+                src={imgRec?.imageUrl || atmpic}
                 alt="Banking Infrastructure"
                 className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
               />
@@ -124,13 +122,11 @@ function BankingPage() {
               <div className="border-t border-amber-200">
                 <AdminPanel className="rounded-t-none border-0">
                   <AdminPanelHeader title="Display Graphic Override" />
-                  <div className="flex flex-col sm:flex-row gap-3 w-full items-center">
-                    <AdminUpload
+                  <div className="flex flex-col sm:flex-row gap-3 w-full">
+                    <AdminInput
                       value={editTexts.imageUrl}
-                      onChange={(newUrl) => setEditTexts({ ...editTexts, imageUrl: newUrl || "" })}
-                      module="banking"
-                      category="main"
-                      className="flex-1 w-full"
+                      onChange={(e) => setEditTexts({ ...editTexts, imageUrl: e.target.value })}
+                      placeholder="Paste new image source URL..."
                     />
                     <AdminSaveButton onClick={() => handleSaveSection("image")} label="Save Graphic" className="shrink-0" />
                   </div>

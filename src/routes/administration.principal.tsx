@@ -10,8 +10,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
-import { getLeadershipData, getLeadershipStaff, updateLeadershipData } from "@/funcs/leadership";
-import { AdminUpload } from "@/components/AdminEditPanel";
+import { getLeadershipData, getLeadershipStaff, updateLeadershipData } from "../funcs/leadership";
 import { ProfileRenderer } from "@/components/ProfileRenderer";
 
 export const Route = createFileRoute("/administration/principal")({
@@ -86,20 +85,21 @@ function PrincipalPage() {
               <div className="relative group">
                 <div className="absolute -inset-4 rounded-[40px] bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-colors duration-200" />
                 <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white shadow-elegant bg-card">
-                  {isEditMode ? (
-                    <AdminUpload
-                      value={data.image}
-                      onChange={(newUrl) => setEditedData({ ...data, image: newUrl })}
-                      module="administration"
-                      category="leadership"
-                      className="w-full h-full"
-                    />
-                  ) : (
-                    <img
-                      src={getAssetUrl(data.image)}
-                      alt={data.name}
-                      className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                    />
+                  <img
+                    src={getAssetUrl(data.image)}
+                    alt={data.name}
+                    className="h-full w-full object-cover transition-all duration-300"
+                  />
+                  {isEditMode && (
+                    <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity p-6 text-center">
+                      <p className="text-white text-xs font-medium">Profile Image URL</p>
+                      <input
+                        className="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-xs text-white outline-none focus:border-primary"
+                        value={data.image}
+                        onChange={(e) => setEditedData({ ...data, image: e.target.value })}
+                        placeholder="/assets/Principal.png"
+                      />
+                    </div>
                   )}
                 </div>
               </div>

@@ -9,7 +9,6 @@ import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAssetUrl, syncLaboratories } from "@/lib/departments";
 import { toast } from "sonner";
-import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/departments/$id/labs")({
   component: LaboratoriesPage,
@@ -133,21 +132,20 @@ function LaboratoriesPage() {
             <div className="flex flex-col xl:flex-row">
               {/* Visual Section */}
               <div className="xl:w-[400px] p-8 bg-slate-50/50 border-r border-slate-100">
-                <div className="relative h-64 w-full rounded-[2.5rem] overflow-hidden mb-6 shadow-md border-4 border-white flex flex-col items-center justify-center bg-slate-100">
-                  {isEditMode ? (
-                    <AdminUpload
-                      value={lab.photo_url || ""}
-                      onChange={(newUrl) => updateLab(lab.id, "photo_url", newUrl)}
-                      module="departments"
-                      category="labs"
-                      placeholder="Drag & drop laboratory photo"
-                      className="w-full h-full"
-                    />
-                  ) : lab.photo_url ? (
-                    <img src={getAssetUrl(lab.photo_url)} alt={lab.name} className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <div className="relative h-64 w-full rounded-[2.5rem] overflow-hidden mb-6 shadow-md border-4 border-white">
+                  {lab.photo_url ? (
+                    <img src={getAssetUrl(lab.photo_url)} alt={lab.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center bg-white text-slate-200">
                       <Microscope size={64} strokeWidth={1} />
+                    </div>
+                  )}
+                  {isEditMode && (
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-4">
+                      <div className="w-full">
+                        <label className="text-[10px] text-white font-bold uppercase mb-1 block flex items-center gap-1"><ImageIcon size={12} /> Photo URL</label>
+                        <input className="w-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[11px] p-2 rounded-lg outline-none placeholder:text-white/50" value={lab.photo_url || ""} onChange={(e) => updateLab(lab.id, "photo_url", e.target.value)} placeholder="https://..." />
+                      </div>
                     </div>
                   )}
                 </div>

@@ -38,6 +38,8 @@ import {
   Coins
 } from "lucide-react";
 import { LocalSubNav } from "@/components/LocalSubNav";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload, PersonAvatarUpload, AdminMultiUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/campus-life/music-club")({
   loader: async () => await getMusicClubData(),
@@ -58,7 +60,7 @@ function MusicClubPage() {
   const members = data?.members || [];
   const images = data?.images || [];
 
-  const getCarouselImages = () => images.map((i: any) => i.url);
+  const getCarouselImages = () => images.map((i: any) => getAssetUrl(i.url));
 
   // --- CMS CORE STATE ---
   const [editCore, setEditCore] = useState({
@@ -162,7 +164,7 @@ function MusicClubPage() {
       <PageHero
         title={content?.title || "Music Club"}
         subtitle={content?.subtitle || "Developing exceptional rhythmic coordination and active orchestration legacy."}
-        image={images[0]?.url || cultureImg}
+        image={getAssetUrl(images[0]?.url) || cultureImg}
       />
       <SubNav items={CAMPUS_LIFE_SUBNAV} />
 
@@ -199,7 +201,7 @@ function MusicClubPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {images.map((img: any) => (
                     <div key={img.id} className="relative group rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border-2 border-slate-200/40 shadow-sm hover:shadow duration-300">
-                      <img src={img.url} className="w-full h-full object-cover" />
+                      <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
                       <button
                         onClick={() => handleDeleteImage(img.id)}
                         className="absolute inset-0 bg-rose-950/85 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1 font-black text-xs uppercase tracking-widest cursor-pointer"
@@ -210,18 +212,15 @@ function MusicClubPage() {
                   ))}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mt-2">
-                  <input
-                    placeholder="Drop performance picture URL..."
-                    className="flex-1 border border-amber-200 rounded-xl px-4 py-3.5 text-sm font-bold bg-white outline-none shadow-inner"
-                    onKeyDown={async (e: any) => {
-                      if (e.key === "Enter" && e.target.value.trim()) {
-                        await handleAddImage(e.target.value);
-                        e.target.value = "";
-                      }
+                <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mt-2 items-center">
+                  <AdminMultiUpload
+                    onAdd={async (newUrl) => {
+                      if (newUrl) await handleAddImage(newUrl);
                     }}
+                    module="clubs"
+                    category="music-club"
+                    className="flex-1 w-full"
                   />
-                  <span className="text-[10px] text-amber-700 font-bold bg-amber-100 px-3 py-2 rounded-xl self-start sm:self-center shadow-sm">Enter to Slide</span>
                 </div>
               </div>
             )}
@@ -240,16 +239,14 @@ function MusicClubPage() {
                 className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}
               >
                 {isEditMode ? (
-                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.15s]">
-                    <div className="w-28 h-28 bg-slate-100 border-2 border-amber-200 rounded-[28px] overflow-hidden relative group shadow-sm">
-                      <img src={editFaculty.img || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"} className="w-full h-full object-cover" />
-                      <input 
-                        placeholder="URL"
-                        value={editFaculty.img}
-                        onChange={(e)=>setEditFaculty({...editFaculty, img:e.target.value})}
-                        className="absolute inset-0 opacity-0 bg-amber-950/80 focus:opacity-100 group-hover:opacity-100 text-white text-[9px] font-black p-2 text-center cursor-pointer transition"
-                      />
-                    </div>
+                  <div className="flex flex-col sm:flex-row gap-8 items-start animate-[fade-in_0.3s]">
+                    <PersonAvatarUpload
+                      value={editFaculty.img}
+                      onChange={(newUrl) => setEditFaculty({ ...editFaculty, img: newUrl })}
+                      module="clubs"
+                      category="music-club/incharge"
+                      size={104}
+                    />
                     <div className="flex-1 space-y-4 w-full">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -274,7 +271,7 @@ function MusicClubPage() {
                 ) : (
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
                     <img
-                      src={faculty?.img || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"}
+                      src={getAssetUrl(faculty?.img) || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"}
                       onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"; }}
                       className="w-24 h-24 md:w-28 md:h-28 rounded-[28px] object-cover border-2 border-slate-100 shadow shrink-0 duration-200 hover:scale-105"
                       alt={faculty?.name || "Coordinator"}
@@ -435,7 +432,7 @@ function ImageCarousel({ images, fallback }: any) {
         {images.map((img: string, i: number) => (
           <img
             key={i}
-            src={img}
+            src={getAssetUrl(img)}
             alt={`Slide view ${i + 1}`}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
             onError={(e) => { e.currentTarget.src = fallback; }}

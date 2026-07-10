@@ -3,7 +3,7 @@ import {
   Outlet,
   useRouterState,
   useRouter,
-    Link,
+  Link,
 } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
@@ -13,6 +13,7 @@ import { useAdmin } from "@/context/AdminContext";
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { toast } from "sonner";
 import { Image as ImageIcon } from "lucide-react";
+import { getAssetUrl } from "@/lib/assets";
 import {
   AdminModeBanner,
   AdminPanel,
@@ -21,6 +22,8 @@ import {
   AdminInput,
   AdminTextarea,
   AdminSaveButton,
+  AdminUpload,
+  
 } from "@/components/AdminEditPanel";
 
 import typeA from "@/assets/faculity-quaters1.jpg";
@@ -225,7 +228,7 @@ function OtherAmenitiesPage() {
               >
                 <div className="relative overflow-hidden h-64">
                   <img
-                    src={staffRec?.imageUrl || typeA}
+                    src={getAssetUrl(staffRec?.imageUrl) || typeA}
                     alt={staffRec?.title || DEFAULTS.staffTitle}
                     className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                   />
@@ -271,11 +274,12 @@ function OtherAmenitiesPage() {
                           placeholder="Quarters summary..."
                         />
                       </AdminField>
-                      <AdminField label="Image Override URL">
-                        <AdminInput
+                      <AdminField label="Cover Image">
+                        <AdminUpload
                           value={editTexts.staffImg}
-                          onChange={(e) => setEditTexts({ ...editTexts, staffImg: e.target.value })}
-                          placeholder="Paste URL (optional)"
+                          onChange={(newUrl) => setEditTexts({ ...editTexts, staffImg: newUrl || "" })}
+                          module="amenities"
+                          category="staff"
                         />
                       </AdminField>
                     </div>
@@ -292,7 +296,7 @@ function OtherAmenitiesPage() {
               >
                 <div className="relative overflow-hidden h-64">
                   <img
-                    src={guestRec?.imageUrl || guest}
+                    src={getAssetUrl(guestRec?.imageUrl) || guest}
                     alt={guestRec?.title || DEFAULTS.guestTitle}
                     className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                   />
@@ -338,11 +342,12 @@ function OtherAmenitiesPage() {
                           placeholder="Guest summary..."
                         />
                       </AdminField>
-                      <AdminField label="Image Override URL">
-                        <AdminInput
+                      <AdminField label="Cover Image">
+                        <AdminUpload
                           value={editTexts.guestImg}
-                          onChange={(e) => setEditTexts({ ...editTexts, guestImg: e.target.value })}
-                          placeholder="Paste URL (optional)"
+                          onChange={(newUrl) => setEditTexts({ ...editTexts, guestImg: newUrl || "" })}
+                          module="amenities"
+                          category="guest"
                         />
                       </AdminField>
                     </div>

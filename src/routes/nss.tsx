@@ -10,6 +10,8 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { ChevronLeft, ChevronRight, Plus, Trash2, Image as ImageIcon } from "lucide-react";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/nss")({
   head: () => ({
@@ -131,7 +133,7 @@ function NSSLayout() {
                 {/* Slides */}
                 <div className="absolute inset-0 w-full h-full transition-all duration-300 ease-out">
                   <img
-                    src={slides[currentIndex].imageUrl}
+                    src={getAssetUrl(slides[currentIndex].imageUrl)}
                     alt={slides[currentIndex].title}
                     className="w-full h-full object-cover transition-transform duration-300"
                   />
@@ -231,15 +233,14 @@ function NSSLayout() {
               </div>
               <div>
                 <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">
-                  Image URL
+                  Image Upload
                 </label>
-                <input
-                  type="url"
-                  required
-                  className="w-full bg-muted/50 border border-border rounded-xl p-3 text-sm text-ink outline-none focus:border-primary"
+                <AdminUpload
                   value={newSlideUrl}
-                  onChange={(e) => setNewSlideUrl(e.target.value)}
-                  placeholder="https://example.com/image.jpg"
+                  onChange={(newUrl) => setNewSlideUrl(newUrl)}
+                  module="clubs"
+                  category="nss"
+                  placeholder="Upload slide image"
                 />
               </div>
               <div className="flex justify-end gap-3 pt-2">

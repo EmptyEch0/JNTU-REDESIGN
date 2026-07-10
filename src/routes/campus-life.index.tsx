@@ -9,6 +9,8 @@ import { useAdmin } from "@/context/AdminContext";
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
 import { toast } from "sonner";
 import { Save, Lock, Edit, Image as ImageIcon } from "lucide-react";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
 import cultureImg from "@/assets/culture.jpeg";
@@ -157,7 +159,8 @@ function CampusLifePage() {
       key: "cultural" as const,
       title: culturalRec?.title || DEFAULTS.culturalTitle,
       desc: culturalRec?.content || DEFAULTS.culturalDesc,
-      img: culturalRec?.imageUrl || cultureImg,
+      img: getAssetUrl(culturalRec?.imageUrl) || cultureImg,
+      fallback: cultureImg,
       link: "/campus-life/music-club",
       editTitle: editTexts.culturalTitle,
       editText: editTexts.culturalDesc,
@@ -167,7 +170,8 @@ function CampusLifePage() {
       key: "technical" as const,
       title: technicalRec?.title || DEFAULTS.technicalTitle,
       desc: technicalRec?.content || DEFAULTS.technicalDesc,
-      img: technicalRec?.imageUrl || campusLifeImg,
+      img: getAssetUrl(technicalRec?.imageUrl) || campusLifeImg,
+      fallback: campusLifeImg,
       link: "/campus-life/student-activity-club",
       editTitle: editTexts.technicalTitle,
       editText: editTexts.technicalDesc,
@@ -177,7 +181,8 @@ function CampusLifePage() {
       key: "sports" as const,
       title: sportsRec?.title || DEFAULTS.sportsTitle,
       desc: sportsRec?.content || DEFAULTS.sportsDesc,
-      img: sportsRec?.imageUrl || sportsImg,
+      img: getAssetUrl(sportsRec?.imageUrl) || sportsImg,
+      fallback: sportsImg,
       link: "/sports",
       editTitle: editTexts.sportsTitle,
       editText: editTexts.sportsDesc,
@@ -260,7 +265,11 @@ function CampusLifePage() {
                     src={p.img}
                     alt={p.title}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = p.fallback;
+                    }}
                   />
                 </div>
 
@@ -329,18 +338,19 @@ function CampusLifePage() {
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[9px] font-black text-amber-800 uppercase flex items-center gap-1 tracking-wide">
-                      <ImageIcon className="w-2.5 h-2.5" /> Pillar Cover URL
+                      <ImageIcon className="w-2.5 h-2.5" /> Pillar Cover
                     </label>
-                    <input
+                    <AdminUpload
                       value={p.editImg}
-                      onChange={(e) =>
+                      onChange={(newUrl) =>
                         setEditTexts({
                           ...editTexts,
-                          [`${p.key}Img`]: e.target.value,
+                          [`${p.key}Img`]: newUrl || "",
                         })
                       }
-                      placeholder="Paste direct URL override (optional)"
-                      className="w-full border-2 border-amber-200/60 bg-white px-3.5 py-2.5 text-xs font-semibold rounded-xl outline-none focus:border-amber-400"
+                      module="campus-life"
+                      category={p.key}
+                      className="w-full font-semibold"
                     />
                   </div>
                 </div>

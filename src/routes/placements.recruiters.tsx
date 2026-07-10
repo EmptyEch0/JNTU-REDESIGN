@@ -13,6 +13,8 @@ import { getRecruiters, addRecruiter, updateRecruiter, deleteRecruiter } from "@
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Save } from "lucide-react";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/placements/recruiters")({
   head: () => ({
@@ -63,11 +65,10 @@ function RecruitersPage() {
 
   const handleAddRecruiter = async () => {
     const name = prompt("Enter company name:");
-    const url = prompt("Enter logo image URL:");
-    if (name && url) {
-      await addRecruiter({ data: { name, url } });
+    if (name) {
+      await addRecruiter({ data: { name, url: "" } });
       queryClient.invalidateQueries({ queryKey: ["recruiters"] });
-      toast.success("Recruiter added");
+      toast.success("Recruiter added. Upload their logo below.");
     }
   };
 
@@ -140,14 +141,16 @@ function RecruitersPage() {
                     {isEditMode ? (
                       <div className="w-full space-y-2">
                         <input
-                          className="w-full text-[10px] p-1 border border-amber-100 rounded bg-white text-center"
+                          className="w-full text-[10px] p-1 border border-amber-100 rounded bg-white text-center font-bold"
                           value={editedRecruiters[logo.id]?.name ?? logo.name}
                           onChange={(e) => handleRecruiterChange(logo.id, "name", e.target.value)}
                         />
-                        <input
-                          className="w-full text-[8px] p-1 border border-amber-100 rounded bg-white text-center text-muted-foreground truncate"
+                        <AdminUpload
                           value={editedRecruiters[logo.id]?.url ?? logo.url}
-                          onChange={(e) => handleRecruiterChange(logo.id, "url", e.target.value)}
+                          onChange={(newUrl) => handleRecruiterChange(logo.id, "url", newUrl)}
+                          module="placements"
+                          category="recruiters"
+                          className="text-[10px]"
                         />
                         <button
                           onClick={() => handleDelete(logo.id)}

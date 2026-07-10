@@ -28,6 +28,8 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { LocalSubNav } from "@/components/LocalSubNav";
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload, PersonAvatarUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/engineering-cell")({
   loader: async () => await getEngineeringData(),
@@ -134,7 +136,7 @@ function EngineeringCellPage() {
       <PageHero
         title={content?.title || "Engineering Cell"}
         subtitle="Strategic technical development, campus construction schedules, and reliable utility maintenance."
-        image={electrical?.img || "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000"}
+        image={getAssetUrl(electrical?.img) || "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000"}
       />
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
@@ -236,10 +238,15 @@ function EngineeringCellPage() {
                     className={isEditMode ? "h-full ring-4 ring-amber-500/10 bg-amber-50/10 border-amber-200" : "h-full"}
                   >
                     {isEditMode ? (
-                      <div className="space-y-4 animate-[fade-in_0.15s]">
-                        <div className="w-28 h-28 rounded-[28px] overflow-hidden bg-slate-100 border-2 border-amber-200 relative group shadow mx-auto">
-                          <img src={editElectrical.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"} className="w-full h-full object-cover" />
-                          <input value={editElectrical.img} placeholder="Img URL" onChange={(e)=>setEditElectrical({...editElectrical, img:e.target.value})} className="absolute inset-0 opacity-0 bg-amber-950/80 text-white text-[9px] text-center focus:opacity-100 group-hover:opacity-100 outline-none p-1.5 cursor-pointer" />
+                      <div className="space-y-4 animate-[fade-in_0.3s]">
+                        <div className="flex justify-center">
+                          <PersonAvatarUpload
+                            value={editElectrical.img}
+                            onChange={(newUrl) => setEditElectrical({ ...editElectrical, img: newUrl })}
+                            module="engineering"
+                            category="electrical"
+                            size={112}
+                          />
                         </div>
                         <div>
                           <label className="text-[9px] font-black text-amber-800 uppercase">Controller Name</label>
@@ -255,7 +262,7 @@ function EngineeringCellPage() {
                       <div className="flex flex-col items-center text-center pt-2">
                         <div className="w-28 h-28 rounded-[28px] overflow-hidden bg-slate-50 border-2 border-slate-100 mb-4 shadow-md transition hover:scale-[1.02] duration-200">
                           <img
-                            src={electrical?.img || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
+                            src={getAssetUrl(electrical?.img) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                             className="w-full h-full object-cover"
                             onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
                             alt={electrical?.engineer || "Engineer"}

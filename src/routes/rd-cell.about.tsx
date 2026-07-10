@@ -11,7 +11,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
-import { getAssetUrl } from "@/lib/assets";
 import {
   getCommittee,
   addMember,
@@ -22,6 +21,9 @@ import {
   getMottos,
   updateMotto,
 } from "@/funcs/rd";
+
+import { getAssetUrl } from "@/lib/assets";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/rd-cell/about")({
   head: () => ({
@@ -116,12 +118,24 @@ function AboutResearchPage() {
                 className="absolute -inset-3 rounded-3xl opacity-40 blur-2xl transition-opacity group-hover:opacity-70"
                 style={{ background: "var(--gradient-royal)" }}
               />
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-elegant bg-card">
-                <img
-                  src={getAssetUrl(editedCoordinator?.image ?? coordinator?.image)}
-                  alt={coordinator?.name}
-                  className="h-full w-full object-cover"
-                />
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-elegant bg-card flex flex-col items-center justify-center">
+                {isEditMode ? (
+                  <AdminUpload
+                    value={editedCoordinator?.image ?? coordinator?.image ?? ""}
+                    onChange={(newUrl) =>
+                      setEditedCoordinator((prev: any) => ({ ...prev, image: newUrl }))
+                    }
+                    module="research-development"
+                    category="coordinator"
+                    className="w-full h-full"
+                  />
+                ) : (
+                  <img
+                    src={getAssetUrl(editedCoordinator?.image ?? coordinator?.image)}
+                    alt={coordinator?.name}
+                    className="h-full w-full object-cover"
+                  />
+                )}
               </div>
               <div className="mt-4">
                 {isEditMode ? (
@@ -138,14 +152,6 @@ function AboutResearchPage() {
                       value={editedCoordinator?.role ?? coordinator?.role ?? ""}
                       onChange={(e) =>
                         setEditedCoordinator({ ...editedCoordinator, role: e.target.value })
-                      }
-                    />
-                    <input
-                      className="w-full text-center text-[10px] text-muted-foreground bg-primary/5 p-1 rounded"
-                      placeholder="Image URL"
-                      value={editedCoordinator?.image ?? coordinator?.image ?? ""}
-                      onChange={(e) =>
-                        setEditedCoordinator({ ...editedCoordinator, image: e.target.value })
                       }
                     />
                   </div>

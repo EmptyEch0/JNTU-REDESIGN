@@ -1,0 +1,10 @@
+[33m275908f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfacility[m[33m, [m[1;31morigin/facility[m[33m)[m Resolve merge conflicts with main
+[33mdfd4009[m Implement image upload system updates
+[33m01ba6a6[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m content: update homepage scrolling notice ticker with latest academic events and timetables
+[33ma5b08b0[m style(academics): align Academics section and sub-pages to standard PageHero and SubNav layouts
+[33ma53522f[m fix: resolve global overrides with dynamic BASE url to fix HTTPS mixed content blocking
+[33m2e18a47[m fix: update Dr. G. Naga Raju image in R&D section
+[33m848911f[m feat: global asset URL mapping, research scholars data import, gallery and leadership updates, and various UI fixes
+[33me3dfb64[m add that redirection
+[33m58361a6[m check the photo upload
+[33m96bf449[m modified responsivness of nav bar in departments

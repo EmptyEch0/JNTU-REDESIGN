@@ -1,6 +1,6 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-
+import { getAssetUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { CAMPUS_LIFE_SUBNAV } from "@/lib/site";
@@ -35,8 +35,6 @@ import {
   Settings
 } from "lucide-react";
 import { LocalSubNav } from "@/components/LocalSubNav";
-import { getAssetUrl } from "@/lib/assets";
-import { AdminUpload, AdminMultiUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/campus-life/student-activity-club")({
   loader: async () => await getStudentActivityData(),
@@ -111,9 +109,9 @@ function StudentActivityClubPage() {
 
       <PageHero
         eyebrow="Student Directorate"
-        title="Activity Clubs" 
-        subtitle="Advancing leadership traits, campus tech networks, and extracurricular legacy rosters." 
-        image={getAssetUrl(clubs?.[0]?.heroImage) || DEFAULT_IMAGE}
+        title="Activity Clubs"
+        subtitle="Advancing leadership traits, campus tech networks, and extracurricular legacy rosters."
+        image={clubs?.[0]?.heroImage || DEFAULT_IMAGE}
       />
       <SubNav items={CAMPUS_LIFE_SUBNAV} />
 
@@ -198,14 +196,8 @@ function StudentActivityClubPage() {
                       <textarea value={newClubForm.description} onChange={(e) => setNewClubForm({ ...newClubForm, description: e.target.value })} className="w-full border-2 border-amber-200 bg-white h-20 p-2.5 rounded-xl text-xs font-medium outline-none" placeholder="Summarize club objective goals..." />
                     </div>
                     <div>
-                      <label className="text-[9px] font-black text-amber-800 uppercase">Primary Slide Photo</label>
-                      <AdminUpload
-                        value={newClubForm.heroImage}
-                        onChange={(newUrl) => setNewClubForm({ ...newClubForm, heroImage: newUrl })}
-                        module="clubs"
-                        category="student-activities"
-                        placeholder="Upload slide image"
-                      />
+                      <label className="text-[9px] font-black text-amber-800 uppercase">Primary Slide Photo URL</label>
+                      <input value={newClubForm.heroImage} onChange={(e) => setNewClubForm({ ...newClubForm, heroImage: e.target.value })} className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold" placeholder="Drop CDN URL link here..." />
                     </div>
                     <div className="flex justify-end">
                       <button onClick={handleCreateClub} className="bg-slate-950 text-white hover:bg-amber-600 font-black px-6 py-3.5 rounded-xl text-xs uppercase shadow transition active:scale-95 flex gap-2 cursor-pointer"><Plus className="w-4 h-4" /> Authorize & Synthesize</button>
@@ -299,7 +291,7 @@ function ImageCarousel({ images, fallback }: any) {
         {images.map((img: string, i: number) => (
           <img
             key={i}
-            src={getAssetUrl(img)}
+            src={img}
             alt={`Slide view ${i + 1}`}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
             onError={(e) => { e.currentTarget.src = fallback; }}
@@ -433,14 +425,8 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-[9px] font-black text-amber-800 uppercase">Featured Right Side Image</label>
-                <AdminUpload
-                  value={cData.heroImage}
-                  onChange={(newUrl) => setCData({ ...cData, heroImage: newUrl })}
-                  module="clubs"
-                  category="student-activities"
-                  placeholder="Upload Right Side Image"
-                />
+                <label className="text-[9px] font-black text-amber-800 uppercase">Featured Right Side Img URL</label>
+                <input value={cData.heroImage} onChange={(e) => setCData({ ...cData, heroImage: e.target.value })} className="w-full border bg-white p-2.5 rounded-xl text-xs font-bold" />
               </div>
               <div>
                 <label className="text-[9px] font-black text-amber-800 uppercase">Menu Display Trigger Label</label>
@@ -468,11 +454,11 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
               </p>
             </div>
             {club.heroImage && (
-              <div className="w-full md:w-1/2 aspect-[16/10] rounded-[28px] overflow-hidden border-2 border-slate-100 shadow transition duration-500 hover:scale-[1.02]">
-                <img 
-                  src={getAssetUrl(club.heroImage)} 
-                  className="w-full h-full object-cover" 
-                  alt={`${club.name} Frame`} 
+              <div className="w-full md:w-1/2 aspect-[16/10] rounded-[28px] overflow-hidden border-2 border-slate-100 shadow transition duration-200 hover:scale-[1.02]">
+                <img
+                  src={getAssetUrl(club.heroImage)}
+                  className="w-full h-full object-cover"
+                  alt={`${club.name} Frame`}
                   onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }}
                 />
               </div>
@@ -488,19 +474,13 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
             {(club.images || []).map((img: any) => (
               <div key={img.id} className="relative group rounded-xl overflow-hidden aspect-[4/3] border bg-slate-100">
                 <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
-                <button onClick={()=>handleDeleteImage(img.id)} className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-rose-950/80 text-white font-black text-xs uppercase tracking-wider transition flex flex-col items-center justify-center cursor-pointer"><Trash2 className="w-4 h-4 mb-1"/> Erase</button>
+                <button onClick={() => handleDeleteImage(img.id)} className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-rose-950/80 text-white font-black text-xs uppercase tracking-wider transition flex flex-col items-center justify-center cursor-pointer"><Trash2 className="w-4 h-4 mb-1" /> Erase</button>
               </div>
             ))}
           </div>
           <div className="flex gap-3 border-t pt-4 items-center">
-            <AdminMultiUpload
-              onAdd={async (newUrl) => {
-                if (newUrl) await handleAddImage(newUrl);
-              }}
-              module="clubs"
-              category="student-activities"
-              className="flex-1 w-full"
-            />
+            <input placeholder="Drop URL here..." onKeyDown={(e: any) => e.key === "Enter" && handleAddImage(e.target.value)} className="flex-1 border bg-white rounded-lg p-2 text-xs font-bold shadow-inner" />
+            <span className="text-[9px] font-bold bg-amber-100 text-amber-800 px-2.5 py-1.5 rounded">Hit Enter</span>
           </div>
         </Card>
       )}
@@ -521,14 +501,8 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
                 <input value={secForm.heading} onChange={(e) => setSecForm({ ...secForm, heading: e.target.value })} className="w-full border bg-white p-2 rounded text-xs font-bold" />
               </div>
               <div>
-                <label className="text-[9px] font-black text-amber-800 uppercase">Spotlight Graphics (Optional)</label>
-                <AdminUpload
-                  value={secForm.image}
-                  onChange={(newUrl) => setSecForm({ ...secForm, image: newUrl })}
-                  module="clubs"
-                  category="student-activities"
-                  placeholder="Upload Spotlight Graphics"
-                />
+                <label className="text-[9px] font-black text-amber-800 uppercase">Spotlight Graphics URL (Optional)</label>
+                <input value={secForm.image} onChange={(e) => setSecForm({ ...secForm, image: e.target.value })} className="w-full border bg-white p-2 rounded text-xs font-bold" />
               </div>
             </div>
             <div>
@@ -569,20 +543,10 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
               </div>
 
               {sec.image && (
-                <div className={`w-full md:w-1/2 aspect-[16/10] rounded-[24px] border border-slate-100 overflow-hidden shadow-sm duration-500 hover:scale-[1.01] shrink-0 relative ${idx % 2 === 1 ? "md:order-1" : ""}`}>
-                  {isEdit ? (
-                    <AdminUpload
-                      value={sec.image}
-                      onChange={async (newUrl) => {
-                        await updateClubContent({ data: { ...sec, image: newUrl } });
-                        onRefetch();
-                      }}
-                      module="clubs"
-                      category="student-activities"
-                      className="w-full h-full"
-                    />
-                  ) : (
-                    <img src={getAssetUrl(sec.image)} className="w-full h-full object-cover" alt={sec.heading} onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }} />
+                <div className={`w-full md:w-1/2 aspect-[16/10] rounded-[24px] border border-slate-100 overflow-hidden shadow-sm duration-200 hover:scale-[1.01] shrink-0 relative ${idx % 2 === 1 ? "md:order-1" : ""}`}>
+                  <img src={getAssetUrl(sec.image)} className="w-full h-full object-cover" alt={sec.heading} onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }} />
+                  {isEdit && (
+                    <input value={sec.image} onChange={async (e) => { await updateClubContent({ data: { ...sec, image: e.target.value } }); onRefetch(); }} className="absolute inset-0 opacity-0 focus:opacity-100 hover:opacity-100 bg-amber-950/90 text-white text-[10px] p-3 text-center border-none outline-none font-black cursor-pointer transition" placeholder="Update Block Img URL" />
                   )}
                 </div>
               )}

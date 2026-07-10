@@ -14,14 +14,12 @@ dist-ssr
 .vinxi
 .tanstack/**
 .nitro
+.vercel
 *.local
 
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
-
-# Uploaded local assets (stored at project root, NOT committed to git)
-local-assets
 
 # Editor directories and files
 .vscode/*
@@ -34,4 +32,14 @@ local-assets
 *.sln
 *.sw?
 
+# Environment variables (keep API keys off git)
 .env
+.env.*
+!.env.example
+
+# local asset server (10GB, never commit)
+local-assets/
+
+# env files with real values
+.env.development
+.env.production

@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import img1 from "@/assets/faculity-quaters1.jpg";
 import img2 from "@/assets/faculity-quaters2.jpg";
 import { getPageContent, updatePageSection } from "@/funcs/site.server";
-import { getAssetUrl } from "@/lib/assets";
-import { AdminUpload } from "@/components/AdminEditPanel";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { 
@@ -214,7 +212,7 @@ function StaffQuartersPage() {
           <div className="flex flex-col gap-6">
             <div className="relative group overflow-hidden rounded-[32px] border border-slate-200/60 shadow-md aspect-[4/3] bg-slate-200 transition-all duration-200 hover:shadow-lg">
               <img
-                src={getAssetUrl(blockARec?.imageUrl) || img1}
+                src={blockARec?.imageUrl || img1}
                 alt={blockARec?.title || DEFAULTS.blockALabel}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
@@ -247,14 +245,13 @@ function StaffQuartersPage() {
                     placeholder="Label Text (e.g. Block A)"
                     className="w-full bg-white border border-amber-200 px-3 py-2 rounded-xl text-xs font-bold outline-none focus:border-amber-400 shadow-inner"
                   />
-                  <AdminUpload
+                  <input
                     value={editTexts.blockAImage}
-                    onChange={(newUrl) =>
-                      setEditTexts({ ...editTexts, blockAImage: newUrl || "" })
+                    onChange={(e) =>
+                      setEditTexts({ ...editTexts, blockAImage: e.target.value })
                     }
-                    module="amenities"
-                    category="staff-quarters"
-                    className="w-full font-semibold"
+                    placeholder="Paste image URL source..."
+                    className="w-full bg-white border border-amber-200 px-3 py-2 rounded-xl text-xs font-semibold outline-none focus:border-amber-400 shadow-inner"
                   />
                 </div>
               </div>
@@ -265,7 +262,7 @@ function StaffQuartersPage() {
           <div className="flex flex-col gap-6">
             <div className="relative group overflow-hidden rounded-[32px] border border-slate-200/60 shadow-md aspect-[4/3] bg-slate-200 transition-all duration-200 hover:shadow-lg">
               <img
-                src={getAssetUrl(blockBRec?.imageUrl) || img2}
+                src={blockBRec?.imageUrl || img2}
                 alt={blockBRec?.title || DEFAULTS.blockBLabel}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
@@ -298,14 +295,13 @@ function StaffQuartersPage() {
                     placeholder="Label Text (e.g. Block B)"
                     className="w-full bg-white border border-amber-200 px-3 py-2 rounded-xl text-xs font-bold outline-none focus:border-amber-400 shadow-inner"
                   />
-                  <AdminUpload
+                  <input
                     value={editTexts.blockBImage}
-                    onChange={(newUrl) =>
-                      setEditTexts({ ...editTexts, blockBImage: newUrl || "" })
+                    onChange={(e) =>
+                      setEditTexts({ ...editTexts, blockBImage: e.target.value })
                     }
-                    module="amenities"
-                    category="staff-quarters"
-                    className="w-full font-semibold"
+                    placeholder="Paste image URL source..."
+                    className="w-full bg-white border border-amber-200 px-3 py-2 rounded-xl text-xs font-semibold outline-none focus:border-amber-400 shadow-inner"
                   />
                 </div>
               </div>

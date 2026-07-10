@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {  getDepartments, updateDepartment } from "@/lib/departments";
+import { getAssetUrl, getDepartments, updateDepartment } from "@/lib/departments";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -18,8 +18,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import labImg from "@/assets/lab.jpg";
-import { getAssetUrl } from "@/lib/assets";
-import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/departments/")({
   head: () => ({
@@ -152,14 +150,13 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
 
           <div>
             <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-wider mb-1">
-              <ImageIcon size={12} /> Image
+              <ImageIcon size={12} /> Image URL
             </div>
-            <AdminUpload
-              value={tempData.image}
-              onChange={(newUrl) => setTempData({...tempData, image: newUrl || ""})}
-              module="departments"
-              category="banners"
-              className="w-full"
+            <input 
+              className="w-full rounded border border-primary/30 p-2 text-xs" 
+              value={tempData.image} 
+              onChange={e => setTempData({...tempData, image: e.target.value})}
+              placeholder="https://example.com/image.jpg"
             />
           </div>
 
@@ -192,10 +189,10 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
       >
         <article className="h-full">
           <img
-            src={getAssetUrl(dept.image)}
-            alt={dept.name}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-          />
+  src={getAssetUrl(dept.image)}
+  alt={dept.name}
+  className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.05]"
+/>
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
           {/* Admin edit button overlay - only visible in admin mode */}

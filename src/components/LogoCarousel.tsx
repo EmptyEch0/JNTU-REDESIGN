@@ -1,5 +1,3 @@
-import { getAssetUrl } from "../lib/assets";
-
 interface Logo {
   name: string;
   url: string;

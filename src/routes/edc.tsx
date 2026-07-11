@@ -20,7 +20,6 @@ import {
 import { useAdmin } from "@/context/AdminContext";
 import { useState } from "react";
 import { toast } from "sonner";
-import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 import {
   Search,

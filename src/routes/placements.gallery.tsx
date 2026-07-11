@@ -16,8 +16,6 @@ import {
   deleteGalleryItem,
 } from "../lib/placements";
 import { Plus, Trash2, Save, Image as ImageIcon } from "lucide-react";
-
-import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/placements/gallery")({

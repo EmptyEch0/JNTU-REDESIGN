@@ -15,7 +15,6 @@ import { Mail, Quote, Target, Save } from "lucide-react";
 import { toast } from "sonner";
 import { getAssetUrl } from "@/lib/assets";
 
-import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/placements/")({

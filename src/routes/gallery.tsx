@@ -1,5 +1,5 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { imageUrl } from "@/lib/assets";
+import { imageUrl, getAssetUrl } from "@/lib/assets";
 import { useState } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -54,6 +54,19 @@ const DEFAULT_IMAGES = [
   { id: -8, src: placementsImg, caption: "Placements event" },
 ];
 
+// Strips any old absolute VPS host (with or without :8080) down to a
+// relative "uploads/..." path before it's ever saved to the DB. Anything
+// that's already relative, or a genuinely external URL (e.g. Unsplash),
+// passes through untouched.
+function normalizeSrcForStorage(src: string): string {
+  const trimmed = src.trim();
+  const legacyHostPattern = /^https?:\/\/89\.116\.134\.182(:\d+)?\/local-assets\//;
+  if (legacyHostPattern.test(trimmed)) {
+    return trimmed.replace(legacyHostPattern, "");
+  }
+  return trimmed;
+}
+
 function GalleryPage() {
   const records = Route.useLoaderData() as any[];
   const { isEditMode } = useAdmin();
@@ -71,7 +84,7 @@ function GalleryPage() {
     const tId = toast.loading("Adding photo to gallery...");
     try {
       await addCampusGalleryItem({
-        src: newImage.src,
+        src: normalizeSrcForStorage(newImage.src),
         caption: newImage.caption || "Campus Moment",
       });
       toast.success("Photo added successfully!", { id: tId });
@@ -118,7 +131,7 @@ function GalleryPage() {
               <div className="grid md:grid-cols-2 gap-4">
                 <AdminField label="Image Asset URL">
                   <AdminInput
-                    placeholder="https://images.unsplash.com/... or relative path"
+                    placeholder="uploads/photo-gallery/img.jpg or full https:// URL"
                     value={newImage.src}
                     onChange={(e) => setNewImage({ ...newImage, src: e.target.value })}
                   />
@@ -136,7 +149,7 @@ function GalleryPage() {
                 <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl max-w-sm">
                   <span className="block text-[10px] uppercase font-bold text-slate-400 mb-2">Live Preview</span>
                   <img
-                    src={newImage.src}
+                    src={getAssetUrl(normalizeSrcForStorage(newImage.src))}
                     alt="Preview"
                     className="w-full h-40 object-cover rounded-xl"
                     onError={(e) => {
@@ -166,7 +179,7 @@ function GalleryPage() {
                 className="break-inside-avoid mb-5 overflow-hidden rounded-2xl hover-lift relative group"
               >
                 <img
-                  src={img.src}
+                  src={getAssetUrl(img.src)}
                   alt={img.caption || "Campus Moment"}
                   loading="lazy"
                   className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
@@ -196,4 +209,3 @@ function GalleryPage() {
     </>
   );
 }
-

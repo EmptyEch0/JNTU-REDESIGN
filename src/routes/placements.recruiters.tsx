@@ -13,7 +13,6 @@ import { getRecruiters, addRecruiter, updateRecruiter, deleteRecruiter } from "@
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Save } from "lucide-react";
-import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/placements/recruiters")({

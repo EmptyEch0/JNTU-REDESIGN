@@ -35,3 +35,5 @@ local-assets
 *.sw?
 
 .env
+.vercel
+src/routeTree.gen.ts

@@ -37,3 +37,4 @@ local-assets
 .env
 .vercel
 src/routeTree.gen.ts
+package-lock.json

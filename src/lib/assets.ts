@@ -106,6 +106,11 @@ export const getAssetUrl = (
     cleanPath = `local-assets/${cleanPath}`;
   }
 
+  // Map facilities to uploads
+  if (cleanPath.startsWith("facilities/")) {
+    cleanPath = `local-assets/uploads/${cleanPath}`;
+  }
+
   // New upload system support
   if (cleanPath.startsWith("local-assets/")) {
     const subPath = cleanPath.substring("local-assets/".length);

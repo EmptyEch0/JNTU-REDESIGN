@@ -59,28 +59,7 @@ export const getAssetUrl = (
         .replace(/^\/+/, "")}`;
     }
 
-    // WordPress media mapping
-    if (trimmedPath.includes("jntugvcev.edu.in/wp-content/")) {
-      const wpPath = trimmedPath.match(/wp-content\/(.+)/);
 
-      if (wpPath) {
-        if (
-          trimmedPath.includes(
-            "EEE-3.Dr_.V.S.VAKULA-Asst-Prof.jpg",
-          ) ||
-          trimmedPath.includes(
-            "V.-Mani-Kumar-Photo-Mech.jpg",
-          ) ||
-          trimmedPath.includes(
-            "WhatsApp-Image-2020-08-26-at-10.23.09-AM.jpeg",
-          )
-        ) {
-          return `${BASE}/${wpPath[1]}`;
-        }
-
-        return `${BASE}/wp-content/${wpPath[1]}`;
-      }
-    }
 
     return trimmedPath;
   }
@@ -104,6 +83,11 @@ export const getAssetUrl = (
   // Legacy support
   if (cleanPath.startsWith("uploads/")) {
     cleanPath = `local-assets/${cleanPath}`;
+  }
+
+  // Map facilities to uploads
+  if (cleanPath.startsWith("facilities/")) {
+    cleanPath = `local-assets/uploads/${cleanPath}`;
   }
 
   // New upload system support

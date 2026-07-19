@@ -24,7 +24,6 @@ import { PageHero } from "@/components/PageHero";
 import { useAdmin } from "../context/AdminContext";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/admin/departments")({
@@ -68,15 +67,15 @@ function AdminDepartmentsPage() {
   useEffect(() => {
     if (currentDept) {
       setDeptGeneralForm({
-        about_details: currentDept.aboutDetails || "",
+        about_details: currentDept.about_details || "",
         vision: currentDept.vision || "",
         mission: currentDept.mission || ""
       });
       setHodForm({
         hod: currentDept.hod || "",
-        hod_photo: currentDept.hodPhoto || "",
-        hod_message: currentDept.hodMessage || "",
-        hod_contact: currentDept.hodContact || ""
+        hod_photo: currentDept.hod_photo || "",
+        hod_message: currentDept.hod_message || "",
+        hod_contact: currentDept.hod_contact || ""
       });
     }
   }, [currentDept]);

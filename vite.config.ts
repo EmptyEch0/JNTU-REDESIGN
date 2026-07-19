@@ -10,39 +10,23 @@ function serveLocalAssets(): Plugin {
     configureServer(server) {
       server.middlewares.use(
         "/local-assets",
-        (
-          req: import("http").IncomingMessage,
-          res: import("http").ServerResponse,
-          next: () => void,
-        ) => {
+        (req, res, next) => {
           const safePath = (req.url || "").split("?")[0];
-          const filePath = path.join(
-            process.cwd(),
-            "local-assets",
-            safePath,
-          );
-
+          const filePath = path.join(process.cwd(), "local-assets", safePath);
           const resolved = path.resolve(filePath);
-          const allowed = path.resolve(
-            path.join(process.cwd(), "local-assets"),
-          );
+          const allowed = path.resolve(path.join(process.cwd(), "local-assets"));
 
           if (!resolved.startsWith(allowed)) {
             res.statusCode = 403;
             res.end("Forbidden");
             return;
           }
-
-          if (
-            !fs.existsSync(resolved) ||
-            !fs.statSync(resolved).isFile()
-          ) {
+          if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
             next();
             return;
           }
 
           const ext = path.extname(resolved).toLowerCase();
-
           const mimeMap: Record<string, string> = {
             ".jpg": "image/jpeg",
             ".jpeg": "image/jpeg",
@@ -53,16 +37,8 @@ function serveLocalAssets(): Plugin {
             ".pdf": "application/pdf",
           };
 
-          res.setHeader(
-            "Content-Type",
-            mimeMap[ext] || "application/octet-stream",
-          );
-
-          res.setHeader(
-            "Cache-Control",
-            "public, max-age=31536000, immutable",
-          );
-
+          res.setHeader("Content-Type", mimeMap[ext] || "application/octet-stream");
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
           fs.createReadStream(resolved).pipe(res);
         },
       );
@@ -71,28 +47,35 @@ function serveLocalAssets(): Plugin {
 }
 
 export default defineConfig({
+  nitro: {
+    preset: "vercel",
+    output: {
+      dir: ".vercel/output",
+      serverDir: ".vercel/output/functions/__server.func",
+      publicDir: ".vercel/output/static",
+    },
+  },
   vite: {
     plugins: [
       serveLocalAssets(),
       viteImagemin({
-        webp: {
-          quality: 80,
-        },
-        pngquant: {
-          quality: [0.65, 0.9],
-        },
-        mozjpeg: {
-          quality: 80,
-        },
+        webp: { quality: 80 },
+        pngquant: { quality: [0.65, 0.9] },
+        mozjpeg: { quality: 80 },
       }),
     ],
-
     build: {
       rollupOptions: {
         output: {
-          manualChunks: {
-            vendor: ["react", "react-dom"],
-            router: ["@tanstack/react-router"],
+          manualChunks(id) {
+            if (id.includes("node_modules")) {
+              if (id.includes("react-dom") || /[\\/]react[\\/]/.test(id)) {
+                return "vendor";
+              }
+              if (id.includes("@tanstack/react-router")) {
+                return "router";
+              }
+            }
           },
         },
       },

@@ -51,7 +51,7 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const admin = await loginWithEmail({ email, password });
+      const admin = await loginWithEmail({data: { email, password }});
       if (admin) {
         setIsAdmin(true);
         setAuthorizedDepts(admin.authorizedDepts || []);
@@ -139,4 +139,4 @@ export const useAdmin = () => {
     throw new Error("useAdmin must be used within an AdminProvider wrapper.");
   }
   return context;
-};
+};

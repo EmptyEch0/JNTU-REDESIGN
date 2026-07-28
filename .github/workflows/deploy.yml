@@ -1,0 +1,26 @@
+name: VPS Auto Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH and Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          script: |
+            export PATH=$PATH:/root/.bun/bin:/usr/local/bin
+            cd /var/www/jntu
+            git pull origin main
+            bun install
+            bun run build
+            pm2 reload jntu-redesign || pm2 start "node dist/server/index.js" --name jntu-redesign
+            pm2 save

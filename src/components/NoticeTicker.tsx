@@ -58,31 +58,32 @@ const NOTICES = [
 export function NoticeTicker() {
   return (
     <div className="w-full max-w-[1500px] mx-auto mt-4 animate-in fade-in slide-in-from-top-4 duration-300 delay-100 pointer-events-auto">
-      <div className="relative h-9 bg-[oklch(0.16_0.04_255/0.8)] backdrop-blur-xl border border-white/10 rounded-full overflow-hidden flex items-center group shadow-2xl">
+      <div className="relative h-9 bg-[oklch(0.16_0.04_255/0.8)] backdrop-blur-xl border border-white/10 rounded-full overflow-hidden flex items-center group shadow-2xl marquee-container">
         {/* Label */}
-        <div className="h-full px-4 bg-primary text-white flex items-center gap-2 shrink-0 z-10 shadow-[4px_0_12px_rgba(0,0,0,0.3)]">
+        <Link
+          to="/notices"
+          className="h-full px-4 bg-primary hover:bg-primary/90 text-white flex items-center gap-2 shrink-0 z-10 shadow-[4px_0_12px_rgba(0,0,0,0.3)] transition-colors cursor-pointer"
+        >
           <Bell className="h-3.5 w-3.5 animate-bounce" />
           <span className="text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Updates</span>
-        </div>
+        </Link>
 
         {/* Marquee */}
         <div className="flex-1 overflow-hidden relative">
           <div className="flex items-center whitespace-nowrap gap-12 h-full">
-            <div className="flex items-center gap-12 animate-marquee hover:[animation-play-state:paused]">
+            <div className="flex items-center gap-12 animate-marquee">
               {[...NOTICES, ...NOTICES, ...NOTICES].map((notice, i) => (
-                <a
+                <Link
                   key={i}
-                  href={notice.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-3 shrink-0"
+                  to="/notices"
+                  className="flex items-center gap-3 shrink-0 group/item cursor-pointer"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-primary-glow shadow-[0_0_8px_rgba(var(--primary-rgb),0.5)]" />
-                  <span className="text-[12px] font-medium text-white/70 hover:text-white transition-colors">
+                  <span className="text-[12px] font-medium text-white/70 group-hover/item:text-white group-hover/item:underline transition-colors">
                     {notice.title} <span className="text-white/40 text-[10px] ml-1">({notice.date})</span>
                   </span>
-                  <ArrowRight className="h-3 w-3 text-primary-glow opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                </a>
+                  <ArrowRight className="h-3 w-3 text-primary-glow opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
+                </Link>
               ))}
             </div>
           </div>
@@ -100,6 +101,10 @@ export function NoticeTicker() {
         }
         .animate-marquee {
           animation: marquee 85s linear infinite;
+        }
+        .marquee-container:hover .animate-marquee,
+        .animate-marquee:hover {
+          animation-play-state: paused !important;
         }
       `}</style>
     </div>

@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { db } from "../db";
 import { departments, faculty, achievements, courses, laboratories, departmentGallery } from "../db/schema";
 import { eq } from "drizzle-orm";
+import { ingestSingleChunk } from "./ingest";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { getAssetUrl } from "./assets";
@@ -21,6 +22,22 @@ export const updateDepartment = createServerFn({ method: "POST" })
       .update(departments)
       .set(updateData)
       .where(eq(departments.id, id));
+
+    // Fetch updated department details for RAG ingestion trigger
+    const [updatedDept] = await db
+      .select()
+      .from(departments)
+      .where(eq(departments.id, id))
+      .limit(1);
+
+    if (updatedDept && updatedDept.hod) {
+      await ingestSingleChunk(
+        `Head of Department (HOD) of ${updatedDept.name}: ${updatedDept.hod}. Department: ${updatedDept.name}.`,
+        `dept_hod:${updatedDept.id}`,
+        "hod",
+        { department: updatedDept.name }
+      );
+    }
 
     return { success: true };
   });

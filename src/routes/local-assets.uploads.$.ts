@@ -38,6 +38,8 @@ export const Route = createFileRoute("/local-assets/uploads/$")({
             contentType = "image/png";
           } else if (extension === ".webp") {
             contentType = "image/webp";
+          } else if (extension === ".pdf") {
+            contentType = "application/pdf";
           }
 
           return new Response(fileBuffer, {

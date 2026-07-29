@@ -6,52 +6,52 @@ const NOTICES = [
   {
     title: "Academic Calendar for II B.Tech (2026-2027)",
     date: "June 18, 2026",
-    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/ii-b-tech-academic-calendar-june-2026.pdf"
+    url: "http://89.116.134.182/local-assets/uploads/2026/06/ii-b-tech-academic-calendar-june-2026.pdf"
   },
   {
     title: "Timetable for I-MCA II-Semester (R25) End Examinations, June-2026",
     date: "June 16, 2026",
-    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-mca-ii-semester-r25-end-examinations-june-2026.pdf"
+    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-mca-ii-semester-r25-end-examinations-june-2026.pdf"
   },
   {
     title: "Timetable for I-MBA II-Semester (R25) End Examinations, June-2026",
     date: "June 16, 2026",
-    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-mba-ii-semester-r25-end-examinations-june-2026.pdf"
+    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-mba-ii-semester-r25-end-examinations-june-2026.pdf"
   },
   {
     title: "Timetable for I-MCA II-Semester (R20) Supply End Examinations, June-2026",
     date: "June 16, 2026",
-    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-mca-ii-semester-r20-supply-end-examinations-june-2026.pdf"
+    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-mca-ii-semester-r20-supply-end-examinations-june-2026.pdf"
   },
   {
     title: "Notification for M.Tech II-Semester (R25/R19) Regular/Supplementary Examinations, June-2026",
     date: "June 16, 2026",
-    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/mtech-ii-sem-r25-r19-examination-notification-june-2026.pdf"
+    url: "http://89.116.134.182/local-assets/uploads/2026/06/mtech-ii-sem-r25-r19-examination-notification-june-2026.pdf"
   },
   {
     title: "Timetable for I-II R23 End Examinations, June-2026",
     date: "June 12, 2026",
-    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-ii-r23-end-time-table-june-2026.pdf"
+    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-ii-r23-end-time-table-june-2026.pdf"
   },
   {
     title: "Timetable for I-II R20 End Examinations, June-2026",
     date: "June 12, 2026",
-    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-ii-r20-end-time-table-june-2026.pdf"
+    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-ii-r20-end-time-table-june-2026.pdf"
   },
   {
     title: "Academic Calendar for III B.Tech (2026-2027)",
     date: "June 5, 2026",
-    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/iii-b-tech-academic-calendar.pdf"
+    url: "http://89.116.134.182/local-assets/uploads/2026/06/iii-b-tech-academic-calendar.pdf"
   },
   {
     title: "Academic Calendar for IV B.Tech (2026-2027)",
     date: "June 5, 2026",
-    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/iv-b-tech-academic-calendar.pdf"
+    url: "http://89.116.134.182/local-assets/uploads/2026/06/iv-b-tech-academic-calendar.pdf"
   },
   {
     title: "Timetable for I-B.Tech II-Semester II-Mid Examinations, June-2026",
     date: "June 5, 2026",
-    url: "http://89.116.134.182:8080/local-assets/uploads/2026/06/i-btech-ii-mid-time-table-june-2026.pdf"
+    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-btech-ii-mid-time-table-june-2026.pdf"
   }
 ];
 

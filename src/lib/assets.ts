@@ -1,7 +1,10 @@
-const BASE = (
-  import.meta.env.VITE_ASSETS_URL ||
-  "https://jntu-redesign.vercel.app/vps-assets"
+const rawBase = (
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_ASSETS_URL) ||
+  (typeof process !== "undefined" && process.env?.VITE_ASSETS_URL) ||
+  "http://89.116.134.182/local-assets"
 ).replace(/\/$/, "");
+
+const BASE = rawBase.replace("89.116.134.182:8080", "89.116.134.182");
 
 export const getAssetUrl = (
   path: string | null | undefined,
@@ -45,20 +48,18 @@ export const getAssetUrl = (
     trimmedPath.startsWith("http://") ||
     trimmedPath.startsWith("https://")
   ) {
-    // Old VPS URL mapping
-    if (
-      trimmedPath.startsWith(
-        "http://89.116.134.182:8080/local-assets/",
-      )
-    ) {
-      const relativePath = trimmedPath.replace(
-        "http://89.116.134.182:8080/local-assets/",
-        "",
-      );
+    // Robust VPS Host URL mapping (handles :8080, double slashes, local-assets prefix)
+    const vpsMatch = trimmedPath.match(
+      /^https?:\/\/89\.116\.134\.182(?::\d+)?\/*(?:local-assets\/*)?(.*)$/,
+    );
+    if (vpsMatch) {
+      const relativePath = vpsMatch[1].replace(/\\/g, "/").replace(/^\/+/, "");
+      return `${BASE}/${relativePath}`;
+    }
 
-      return `${BASE}/${relativePath
-        .replace(/\\/g, "/")
-        .replace(/^\/+/, "")}`;
+    // Fallback: If URL contains 89.116.134.182:8080 anywhere, strip the :8080 port
+    if (trimmedPath.includes("89.116.134.182:8080")) {
+      return trimmedPath.replace("89.116.134.182:8080", "89.116.134.182");
     }
 
     // Localhost URL mapping

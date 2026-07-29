@@ -90,7 +90,7 @@ function PublicationsPage() {
       
       <div className="container-narrow py-8 text-center border-b border-border">
         <img 
-          src="http://89.116.134.182:8080/local-assets/uploads/2020/08/image.png" 
+          src="http://89.116.134.182/local-assets/uploads/2020/08/image.png" 
           alt="Publications Chart" 
           className="mx-auto rounded-xl shadow-lg border border-border w-full max-w-4xl" 
         />

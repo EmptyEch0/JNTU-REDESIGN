@@ -36,71 +36,92 @@ export const Route = createFileRoute("/notices")({
   component: NoticesPage,
 });
 
+import { getAssetUrl } from "@/lib/assets";
+
 const DEFAULT_NOTICES = [
   {
     date: "June 18, 2026",
     tag: "Academic",
     title: "Academic Calendar for II B.Tech (2026-2027)",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/ii-b-tech-academic-calendar-june-2026.pdf",
+    url: getAssetUrl("uploads/2026/06/ii-b-tech-academic-calendar-june-2026.pdf"),
   },
   {
     date: "June 16, 2026",
     tag: "Exams",
     title: "Timetable for I-MCA II-Semester (R25) End Examinations, June-2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-mca-ii-semester-r25-end-examinations-june-2026.pdf",
+    url: getAssetUrl("uploads/2026/06/i-mca-ii-semester-r25-end-examinations-june-2026.pdf"),
   },
   {
     date: "June 16, 2026",
     tag: "Exams",
     title: "Timetable for I-MBA II-Semester (R25) End Examinations, June-2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-mba-ii-semester-r25-end-examinations-june-2026.pdf",
+    url: getAssetUrl("uploads/2026/06/i-mba-ii-semester-r25-end-examinations-june-2026.pdf"),
   },
   {
     date: "June 16, 2026",
     tag: "Exams",
     title: "Timetable for I-MCA II-Semester (R20) Supply End Examinations, June-2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-mca-ii-semester-r20-supply-end-examinations-june-2026.pdf",
+    url: getAssetUrl("uploads/2026/06/i-mca-ii-semester-r20-supply-end-examinations-june-2026.pdf"),
   },
   {
     date: "June 16, 2026",
     tag: "Exams",
     title: "Notification for M.Tech II-Semester (R25/R19) Regular/Supplementary Examinations, June-2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/mtech-ii-sem-r25-r19-examination-notification-june-2026.pdf",
+    url: getAssetUrl("uploads/2026/06/mtech-ii-sem-r25-r19-examination-notification-june-2026.pdf"),
   },
   {
     date: "June 12, 2026",
     tag: "Exams",
     title: "Timetable for I-II R23 End Examinations, June-2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-ii-r23-end-time-table-june-2026.pdf",
+    url: getAssetUrl("uploads/2026/06/i-ii-r23-end-time-table-june-2026.pdf"),
   },
   {
     date: "June 12, 2026",
     tag: "Exams",
     title: "Timetable for I-II R20 End Examinations, June-2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-ii-r20-end-time-table-june-2026.pdf",
+    url: getAssetUrl("uploads/2026/06/i-ii-r20-end-time-table-june-2026.pdf"),
   },
   {
     date: "June 5, 2026",
     tag: "Academic",
     title: "Academic Calendar for III B.Tech (2026-2027)",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/iii-b-tech-academic-calendar.pdf",
+    url: getAssetUrl("uploads/2026/06/iii-b-tech-academic-calendar.pdf"),
   },
   {
     date: "June 5, 2026",
     tag: "Academic",
     title: "Academic Calendar for IV B.Tech (2026-2027)",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/iv-b-tech-academic-calendar.pdf",
+    url: getAssetUrl("uploads/2026/06/iv-b-tech-academic-calendar.pdf"),
   },
   {
     date: "June 5, 2026",
     tag: "Exams",
     title: "Timetable for I-B.Tech II-Semester II-Mid Examinations, June-2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-btech-ii-mid-time-table-june-2026.pdf",
+    url: getAssetUrl("uploads/2026/06/i-btech-ii-mid-time-table-june-2026.pdf"),
   },
   {
-    date: "29 Apr 2026",
-    tag: "Academic",
-    title: "End-semester examinations schedule released for B.Tech IV-II.",
+    date: "May 18, 2026",
+    tag: "Exams",
+    title: "I-II II Mid Postponement Circular, June-2026",
+    url: getAssetUrl("uploads/2026/05/i-ii-ii-mid-postponement-circular-june-2026.pdf"),
+  },
+  {
+    date: "May 18, 2026",
+    tag: "Exams",
+    title: "Notification for I-II (R23) Regular & Supplementary Examinations, June-2026",
+    url: getAssetUrl("uploads/2026/05/i-ii-r23-regular-supplementary-notification-june-2026.pdf"),
+  },
+  {
+    date: "May 17, 2026",
+    tag: "Exams",
+    title: "Notification for MCA & MBA II-Semester Regular & Supply Examinations, May-2026",
+    url: getAssetUrl("uploads/2026/05/mca-mba-ii-semester-regular-supply-notification-may-2026.pdf"),
+  },
+  {
+    date: "April 25, 2026",
+    tag: "Exams",
+    title: "Timetable for I-M.Tech II-Semester (R25) I-Mid Examinations, April-2026",
+    url: getAssetUrl("uploads/2026/04/I-M.TECH-II-SEM-R25-I-MID-TIME-TABLE-APRIL-2026.pdf"),
   },
   {
     date: "24 Apr 2026",
@@ -351,7 +372,7 @@ function NoticesPage() {
 
                   {n.url ? (
                     <a
-                      href={n.url}
+                      href={getAssetUrl(n.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white border border-emerald-200 text-xs font-bold transition-all shadow-sm cursor-pointer"
@@ -416,7 +437,7 @@ function NoticesPage() {
                   <div className="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
                     <span>PDF Document Preview</span>
                     <a
-                      href={previewNotice.url}
+                      href={getAssetUrl(previewNotice.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[#0F4C81] hover:underline flex items-center gap-1"
@@ -426,7 +447,7 @@ function NoticesPage() {
                   </div>
                   <div className="w-full h-[520px] rounded-2xl overflow-hidden border border-slate-200 shadow-inner bg-slate-100 relative">
                     <iframe
-                      src={previewNotice.url}
+                      src={getAssetUrl(previewNotice.url)}
                       className="w-full h-full border-0"
                       title="Document Preview"
                     />
@@ -451,7 +472,7 @@ function NoticesPage() {
             <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-end gap-3">
               {previewNotice.url && (
                 <a
-                  href={previewNotice.url}
+                  href={getAssetUrl(previewNotice.url)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-emerald-600/20 transition cursor-pointer"

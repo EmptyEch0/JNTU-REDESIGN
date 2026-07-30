@@ -2,57 +2,69 @@ import { motion } from "framer-motion";
 import { Bell, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
+import { getAssetUrl } from "@/lib/assets";
+
 const NOTICES = [
   {
     title: "Academic Calendar for II B.Tech (2026-2027)",
     date: "June 18, 2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/ii-b-tech-academic-calendar-june-2026.pdf"
+    url: getAssetUrl("uploads/2026/06/ii-b-tech-academic-calendar-june-2026.pdf"),
   },
   {
     title: "Timetable for I-MCA II-Semester (R25) End Examinations, June-2026",
     date: "June 16, 2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-mca-ii-semester-r25-end-examinations-june-2026.pdf"
-  },
-  {
-    title: "Timetable for I-MBA II-Semester (R25) End Examinations, June-2026",
-    date: "June 16, 2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-mba-ii-semester-r25-end-examinations-june-2026.pdf"
-  },
-  {
-    title: "Timetable for I-MCA II-Semester (R20) Supply End Examinations, June-2026",
-    date: "June 16, 2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-mca-ii-semester-r20-supply-end-examinations-june-2026.pdf"
+    url: getAssetUrl("uploads/2026/06/i-mca-ii-semester-r25-end-examinations-june-2026.pdf"),
   },
   {
     title: "Notification for M.Tech II-Semester (R25/R19) Regular/Supplementary Examinations, June-2026",
     date: "June 16, 2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/mtech-ii-sem-r25-r19-examination-notification-june-2026.pdf"
+    url: getAssetUrl("uploads/2026/06/mtech-ii-sem-r25-r19-examination-notification-june-2026.pdf"),
   },
   {
     title: "Timetable for I-II R23 End Examinations, June-2026",
     date: "June 12, 2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-ii-r23-end-time-table-june-2026.pdf"
+    url: getAssetUrl("uploads/2026/06/i-ii-r23-end-time-table-june-2026.pdf"),
   },
   {
     title: "Timetable for I-II R20 End Examinations, June-2026",
     date: "June 12, 2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-ii-r20-end-time-table-june-2026.pdf"
+    url: getAssetUrl("uploads/2026/06/i-ii-r20-end-time-table-june-2026.pdf"),
   },
   {
     title: "Academic Calendar for III B.Tech (2026-2027)",
     date: "June 5, 2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/iii-b-tech-academic-calendar.pdf"
+    url: getAssetUrl("uploads/2026/06/iii-b-tech-academic-calendar.pdf"),
   },
   {
     title: "Academic Calendar for IV B.Tech (2026-2027)",
     date: "June 5, 2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/iv-b-tech-academic-calendar.pdf"
+    url: getAssetUrl("uploads/2026/06/iv-b-tech-academic-calendar.pdf"),
   },
   {
     title: "Timetable for I-B.Tech II-Semester II-Mid Examinations, June-2026",
     date: "June 5, 2026",
-    url: "http://89.116.134.182/local-assets/uploads/2026/06/i-btech-ii-mid-time-table-june-2026.pdf"
-  }
+    url: getAssetUrl("uploads/2026/06/i-btech-ii-mid-time-table-june-2026.pdf"),
+  },
+  {
+    title: "I-II II Mid Postponement Circular, June-2026",
+    date: "May 18, 2026",
+    url: getAssetUrl("uploads/2026/05/i-ii-ii-mid-postponement-circular-june-2026.pdf"),
+  },
+  {
+    title: "Notification for I-II (R23) Regular & Supplementary Examinations, June-2026",
+    date: "May 18, 2026",
+    url: getAssetUrl("uploads/2026/05/i-ii-r23-regular-supplementary-notification-june-2026.pdf"),
+  },
+  {
+    title: "Notification for MCA & MBA II-Semester Regular & Supply Examinations, May-2026",
+    date: "May 17, 2026",
+    url: getAssetUrl("uploads/2026/05/mca-mba-ii-semester-regular-supply-notification-may-2026.pdf"),
+  },
+  {
+    title: "Timetable for I-M.Tech II-Semester (R25) I-Mid Examinations, April-2026",
+    date: "April 25, 2026",
+    url: getAssetUrl("uploads/2026/04/I-M.TECH-II-SEM-R25-I-MID-TIME-TABLE-APRIL-2026.pdf"),
+  },
 ];
 
 export function NoticeTicker() {

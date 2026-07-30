@@ -3,6 +3,42 @@ import postgres from "postgres";
 
 const NOTICES = [
   {
+    date: "July 20, 2026",
+    tag: "Exams",
+    title: "Timetable for M.Tech II-Semester (R19) Supplementary End Examinations, July/August-2026",
+    url: "http://89.116.134.182/local-assets/uploads/2026/07/m-tech-ii-sem-r19-supplementary-end-time-table-july-august-2026.pdf",
+  },
+  {
+    date: "July 20, 2026",
+    tag: "Exams",
+    title: "Timetable for M.Tech II-Semester (R25) End Examinations, July/August-2026",
+    url: "http://89.116.134.182/local-assets/uploads/2026/07/m-tech-ii-sem-r25-end-time-table-july-august-2026.pdf",
+  },
+  {
+    date: "July 20, 2026",
+    tag: "Exams",
+    title: "Revised Timetable for M.Tech II-Semester (R25) II-Mid Examinations, July-2026",
+    url: "http://89.116.134.182/local-assets/uploads/2026/07/revised-m-tech-ii-sem-r25-ii-mid-time-table-july-2026.pdf",
+  },
+  {
+    date: "July 20, 2026",
+    tag: "Exams",
+    title: "Timetable for M.Tech II-Semester (R23) II-Mid Examinations, July-2026",
+    url: "http://89.116.134.182/local-assets/uploads/2026/07/m-tech-ii-sem-r23-ii-mid-time-table-july-2026.pdf",
+  },
+  {
+    date: "July 7, 2026",
+    tag: "Academic",
+    title: "Academic Calendar for II MCA (2026-2027)",
+    url: "http://89.116.134.182/local-assets/uploads/2026/07/ii-mca-academic-calendar-2026-2027.pdf",
+  },
+  {
+    date: "July 7, 2026",
+    tag: "Academic",
+    title: "Academic Calendar for II MBA (2026-2027)",
+    url: "http://89.116.134.182/local-assets/uploads/2026/07/ii-mba-academic-calendar-2026-2027.pdf",
+  },
+  {
     date: "June 18, 2026",
     tag: "Academic",
     title: "Academic Calendar for II B.Tech (2026-2027)",
@@ -133,15 +169,17 @@ async function seed() {
     console.log("🧹 Clearing old entries from notices table...");
     await sql`DELETE FROM "notices";`;
 
-    console.log("🌱 Inserting 2026 notices into PostgreSQL database...");
-    for (const n of NOTICES) {
+    console.log("🌱 Inserting 2026 notices (July 2026 -> March 2026) into PostgreSQL...");
+    // Insert in reverse order so newer items have higher auto-increment IDs
+    const reversed = [...NOTICES].reverse();
+    for (const n of reversed) {
       await sql`
         INSERT INTO "notices" ("date", "tag", "title", "url")
         VALUES (${n.date}, ${n.tag}, ${n.title}, ${n.url})
       `;
     }
 
-    console.log("✅ Successfully seeded 2026 notices into PostgreSQL database!");
+    console.log("✅ Successfully seeded July 2026 notices into PostgreSQL!");
   } catch (err) {
     console.error("❌ Error seeding notices:", err);
   } finally {

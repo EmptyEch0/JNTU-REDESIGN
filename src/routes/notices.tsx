@@ -40,6 +40,42 @@ import { getAssetUrl } from "@/lib/assets";
 
 const DEFAULT_NOTICES = [
   {
+    date: "July 20, 2026",
+    tag: "Exams",
+    title: "Timetable for M.Tech II-Semester (R19) Supplementary End Examinations, July/August-2026",
+    url: getAssetUrl("uploads/2026/07/m-tech-ii-sem-r19-supplementary-end-time-table-july-august-2026.pdf"),
+  },
+  {
+    date: "July 20, 2026",
+    tag: "Exams",
+    title: "Timetable for M.Tech II-Semester (R25) End Examinations, July/August-2026",
+    url: getAssetUrl("uploads/2026/07/m-tech-ii-sem-r25-end-time-table-july-august-2026.pdf"),
+  },
+  {
+    date: "July 20, 2026",
+    tag: "Exams",
+    title: "Revised Timetable for M.Tech II-Semester (R25) II-Mid Examinations, July-2026",
+    url: getAssetUrl("uploads/2026/07/revised-m-tech-ii-sem-r25-ii-mid-time-table-july-2026.pdf"),
+  },
+  {
+    date: "July 20, 2026",
+    tag: "Exams",
+    title: "Timetable for M.Tech II-Semester (R23) II-Mid Examinations, July-2026",
+    url: getAssetUrl("uploads/2026/07/m-tech-ii-sem-r23-ii-mid-time-table-july-2026.pdf"),
+  },
+  {
+    date: "July 7, 2026",
+    tag: "Academic",
+    title: "Academic Calendar for II MCA (2026-2027)",
+    url: getAssetUrl("uploads/2026/07/ii-mca-academic-calendar-2026-2027.pdf"),
+  },
+  {
+    date: "July 7, 2026",
+    tag: "Academic",
+    title: "Academic Calendar for II MBA (2026-2027)",
+    url: getAssetUrl("uploads/2026/07/ii-mba-academic-calendar-2026-2027.pdf"),
+  },
+  {
     date: "June 18, 2026",
     tag: "Academic",
     title: "Academic Calendar for II B.Tech (2026-2027)",
@@ -164,7 +200,22 @@ function NoticesPage() {
     url: "",
   });
 
-  const activeNotices = dbNotices.length > 0 ? dbNotices : DEFAULT_NOTICES;
+  const rawNotices = dbNotices.length > 0 ? dbNotices : DEFAULT_NOTICES;
+
+  const parseDate = (dStr: string) => {
+    if (!dStr) return 0;
+    const t = Date.parse(dStr);
+    return isNaN(t) ? 0 : t;
+  };
+
+  const activeNotices = [...rawNotices].sort((a, b) => {
+    const timeA = parseDate(a.date);
+    const timeB = parseDate(b.date);
+    if (timeA && timeB && timeA !== timeB) {
+      return timeB - timeA;
+    }
+    return (b.id || 0) - (a.id || 0);
+  });
 
   const filteredNotices = activeTab === "All"
     ? activeNotices

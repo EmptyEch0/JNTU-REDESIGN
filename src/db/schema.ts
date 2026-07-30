@@ -1120,6 +1120,7 @@ export const notices = pgTable("notices", {
   date: text("date").notNull(),
   tag: text("tag").notNull(),
   title: text("title").notNull(),
+  url: text("url"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

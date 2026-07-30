@@ -94,13 +94,14 @@ export const getNotices = createServerFn({
 export const addNotice = createServerFn({
   method: "POST",
 })
-  .inputValidator((data: { date: string; tag: string; title: string }) => data)
+  .inputValidator((data: { date: string; tag: string; title: string; url?: string | null }) => data)
   .handler(async ({ data }) => {
     try {
       const [inserted] = await db.insert(notices).values({
         date: data.date,
         tag: data.tag,
         title: data.title,
+        url: data.url || null,
       }).returning();
 
       await ingestSingleChunk(

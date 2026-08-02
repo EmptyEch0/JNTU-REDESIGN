@@ -134,7 +134,7 @@ export function Footer() {
               href="https://www.linkedin.com/in/likhithmankala/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-accent font-medium underline underline-offset-2 transition-colors"
+              className="text-white hover:text-accent font-medium transition-colors"
             >
               Likhith
             </a>
@@ -143,7 +143,7 @@ export function Footer() {
               href="https://www.linkedin.com/in/sairupini-chitikesi/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-accent font-medium underline underline-offset-2 transition-colors"
+              className="text-white hover:text-accent font-medium transition-colors"
             >
               Sai Rupini
             </a>
@@ -152,7 +152,7 @@ export function Footer() {
               href="https://www.linkedin.com/in/anitha-palavalasa/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-accent font-medium underline underline-offset-2 transition-colors"
+              className="text-white hover:text-accent font-medium transition-colors"
             >
               Anitha
             </a>

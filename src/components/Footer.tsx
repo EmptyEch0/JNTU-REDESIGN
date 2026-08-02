@@ -1,8 +1,30 @@
+import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { GraduationCap, MapPin, Phone, Mail } from "lucide-react";
 import { SITE } from "@/lib/site";
 
 export function Footer() {
+  useEffect(() => {
+    if (typeof window !== "undefined" && !(window as any).__DEV_CREDITS_LOGGED__) {
+      (window as any).__DEV_CREDITS_LOGGED__ = true;
+      console.log(
+        "%c 🎓 JNTUGV %c Developed by ",
+        "background: #0284c7; color: #ffffff; font-weight: bold; padding: 4px 8px; border-radius: 4px 0 0 4px; font-family: system-ui, sans-serif;",
+        "background: #0f172a; color: #38bdf8; font-weight: 600; padding: 4px 8px; border-radius: 0 4px 4px 0; font-family: system-ui, sans-serif;"
+      );
+      console.log(
+        "%c👨‍💻 Likhith    %c https://www.linkedin.com/in/likhithmankala/\n" +
+        "%c👩‍💻 Sai Rupini %c https://www.linkedin.com/in/sairupini-chitikesi/\n" +
+        "%c👩‍💻 Anitha     %c https://www.linkedin.com/in/anitha-palavalasa/\n" +
+        "%c👨‍💻 Sai Vamsi  %c Developer",
+        "color: #38bdf8; font-weight: bold; font-family: monospace;", "color: #94a3b8; text-decoration: underline; font-family: monospace;",
+        "color: #38bdf8; font-weight: bold; font-family: monospace;", "color: #94a3b8; text-decoration: underline; font-family: monospace;",
+        "color: #38bdf8; font-weight: bold; font-family: monospace;", "color: #94a3b8; text-decoration: underline; font-family: monospace;",
+        "color: #38bdf8; font-weight: bold; font-family: monospace;", "color: #94a3b8; font-family: monospace;"
+      );
+    }
+  }, []);
+
   return (
     <footer className="bg-ink text-white/85 mt-32">
       <div className="container-narrow py-16 md:py-20 grid gap-12 md:grid-cols-12">
@@ -100,11 +122,41 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="container-narrow py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/45">
+        <div className="container-narrow py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/45">
           <div>
             © {new Date().getFullYear()} {SITE.fullName}. All rights reserved.
           </div>
-          <div>Crafted with care for tomorrow's engineers.</div>
+          <div className="flex flex-wrap items-center gap-1 text-center sm:text-right">
+            <span>Developed by</span>
+            <a
+              href="https://www.linkedin.com/in/likhithmankala/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:text-white underline underline-offset-2 transition-colors font-medium"
+            >
+              Likhith
+            </a>
+            <span>,</span>
+            <a
+              href="https://www.linkedin.com/in/sairupini-chitikesi/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:text-white underline underline-offset-2 transition-colors font-medium"
+            >
+              Sai Rupini
+            </a>
+            <span>,</span>
+            <a
+              href="https://www.linkedin.com/in/anitha-palavalasa/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:text-white underline underline-offset-2 transition-colors font-medium"
+            >
+              Anitha
+            </a>
+            <span>, and</span>
+            <span className="text-white/70 font-medium">Sai Vamsi</span>
+          </div>
         </div>
       </div>
     </footer>

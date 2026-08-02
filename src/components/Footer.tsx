@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { GraduationCap, MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail, Linkedin } from "lucide-react";
 import { SITE } from "@/lib/site";
 
 export function Footer() {
@@ -121,41 +121,50 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="container-narrow py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/45">
-          <div>
-            © {new Date().getFullYear()} {SITE.fullName}. All rights reserved.
-          </div>
-          <div className="flex flex-wrap items-center gap-1 text-center sm:text-right">
-            <span>Developed by</span>
+
+      <div className="border-t border-white/10 py-6">
+        <div className="container-narrow flex flex-col items-center justify-center gap-4 text-xs text-white/50 text-center">
+          {/* Centered Developer Badge Pill Container */}
+          <div className="inline-flex flex-wrap items-center justify-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10 shadow-lg backdrop-blur-md">
+            <span className="text-white/70 font-medium mr-1">Developed by</span>
+
             <a
               href="https://www.linkedin.com/in/likhithmankala/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:text-white underline underline-offset-2 transition-colors font-medium"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-500/15 text-sky-300 hover:bg-sky-500/30 hover:text-sky-100 border border-sky-400/30 transition-all font-medium group shadow-sm hover:scale-105"
             >
-              Likhith
+              <span>Likhith</span>
+              <Linkedin className="h-3 w-3 text-sky-400 group-hover:text-sky-200 transition-colors" />
             </a>
-            <span>,</span>
+
             <a
               href="https://www.linkedin.com/in/sairupini-chitikesi/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:text-white underline underline-offset-2 transition-colors font-medium"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-500/15 text-purple-300 hover:bg-purple-500/30 hover:text-purple-100 border border-purple-400/30 transition-all font-medium group shadow-sm hover:scale-105"
             >
-              Sai Rupini
+              <span>Sai Rupini</span>
+              <Linkedin className="h-3 w-3 text-purple-400 group-hover:text-purple-200 transition-colors" />
             </a>
-            <span>,</span>
+
             <a
               href="https://www.linkedin.com/in/anitha-palavalasa/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:text-white underline underline-offset-2 transition-colors font-medium"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/30 hover:text-emerald-100 border border-emerald-400/30 transition-all font-medium group shadow-sm hover:scale-105"
             >
-              Anitha
+              <span>Anitha</span>
+              <Linkedin className="h-3 w-3 text-emerald-400 group-hover:text-emerald-200 transition-colors" />
             </a>
-            <span>, and</span>
-            <span className="text-white/70 font-medium">Sai Vamsi</span>
+
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-400/30 font-medium">
+              Sai Vamsi
+            </span>
+          </div>
+
+          <div className="text-white/40 text-[11px]">
+            © {new Date().getFullYear()} {SITE.fullName}. All rights reserved.
           </div>
         </div>
       </div>

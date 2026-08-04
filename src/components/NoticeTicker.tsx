@@ -59,7 +59,7 @@ const NOTICES = [
 
 export function NoticeTicker() {
   return (
-    <div className="w-full max-w-[1500px] mx-auto mt-4 animate-in fade-in slide-in-from-top-4 duration-300 delay-100 pointer-events-auto">
+    <div className="w-full max-w-[1500px] mx-auto animate-in fade-in slide-in-from-top-4 duration-300 delay-100 pointer-events-auto relative z-0">
       <div className="relative h-9 bg-[oklch(0.16_0.04_255/0.8)] backdrop-blur-xl border border-white/10 rounded-full overflow-hidden flex items-center group shadow-2xl marquee-container">
         {/* Label */}
         <Link

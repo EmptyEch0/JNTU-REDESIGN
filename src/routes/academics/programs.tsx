@@ -11,7 +11,7 @@ import {
 } from "@/lib/academics";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
 import { PageHero } from "@/components/PageHero";
-import { SubNav } from "@/components/SubNav";
+import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
 import { imageUrl } from "@/lib/assets";
 import { StatCounter } from "@/components/StatCounter";
@@ -225,10 +225,9 @@ function ProgramsOfferedPage() {
         subtitle="Discover academic excellence through our rigorously structured JNTU-GV curriculum. Explore B.Tech, B.Pharm, M.Tech, MBA, MCA, and research programs."
         image={campusImg}
       />
-      
-      <SubNav items={ACADEMICS_SUBNAV} />
-
-      <div className="container-narrow space-y-6">
+      <div className="container-narrow py-12 flex flex-col md:flex-row gap-8 items-start">
+        <VerticalSubNav items={ACADEMICS_SUBNAV} />
+        <div className="flex-1 min-w-0 space-y-6">
 
         {/* Admin Desk Panel */}
         {isEditMode && (
@@ -672,6 +671,7 @@ function ProgramsOfferedPage() {
             )}
           </div>
         </GlassCard>
+        </div>
       </div>
     </div>
   );

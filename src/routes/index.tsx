@@ -45,7 +45,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getLeadershipData } from "../funcs/leadership";
 import { getAllDepartments } from "@/functions/departments"; // Added our new query hook target
 import { getAssetUrl } from "@/lib/departments";
-
+import { NoticeTicker } from "@/components/NoticeTicker";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -169,6 +169,11 @@ function HomePage() {
             </div>
           </div>
         </HeroSlideshow>
+
+        <div className="absolute bottom-20 left-0 right-0 z-30 px-4 sm:px-8 pointer-events-none">
+          <NoticeTicker />
+        </div>
+
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-xs uppercase tracking-[0.3em] flex flex-col items-center gap-2 animate-[float_3s_ease-in-out_infinite] z-20 pointer-events-none">
           <span>Scroll</span>
           <ArrowDown className="h-4 w-4" />

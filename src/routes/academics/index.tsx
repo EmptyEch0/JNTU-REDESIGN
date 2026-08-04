@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { NotificationTicker } from "@/components/academics/ui/NotificationTicker";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
-import { TICKER_NOTIFICATIONS } from "@/data/academics-events";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { PageHero } from "@/components/PageHero";
-import { SubNav } from "@/components/SubNav";
+import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
 import { imageUrl } from "@/lib/assets";
 import { StatCounter } from "@/components/StatCounter";
@@ -18,10 +16,7 @@ import {
   upsertAcademicsDashboardStat,
   deleteAcademicsDashboardStat,
   getAcademicsCalendar,
-  getAcademicsExamData,
-  getTickerNotifications,
-  upsertTickerNotification,
-  deleteTickerNotification
+  getAcademicsExamData
 } from "@/lib/academics";
 import {
   GraduationCap,
@@ -235,133 +230,6 @@ function AcademicsDashboard() {
     setSTrend("");
   };
 
-  const { data: tickerNotifsList = [] } = useQuery({
-    queryKey: ["academics-ticker-notifications"],
-    queryFn: getTickerNotifications,
-  });
-
-  // local notification editing state
-  const [editNotifId, setEditNotifId] = useState<number | null>(null);
-  const [nSource, setNSource] = useState<string>("calendar");
-  const [nLabel, setNLabel] = useState("Calendar");
-  const [nText, setNText] = useState("");
-  const [nDate, setNDate] = useState("");
-  const [nTo, setNTo] = useState("");
-  const [nUrgent, setNUrgent] = useState(false);
-
-  const saveNotifMutation = useMutation({
-    mutationFn: (data: any) => upsertTickerNotification({ data }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["academics-ticker-notifications"] });
-      setEditNotifId(null);
-      toast.success("Ticker notification saved!");
-    }
-  });
-
-  const deleteNotifMutation = useMutation({
-    mutationFn: (id: number) => deleteTickerNotification({ data: { id } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["academics-ticker-notifications"] });
-      toast.success("Ticker notification deleted!");
-    }
-  });
-
-  const startEditNotif = (notif: any) => {
-    setEditNotifId(notif.id);
-    setNSource(notif.source);
-    setNLabel(notif.label);
-    setNText(notif.text);
-    setNDate(notif.date);
-    setNTo(notif.to);
-    setNUrgent(notif.urgent);
-  };
-
-  const startAddNotif = () => {
-    setEditNotifId(-1);
-    setNSource("calendar");
-    setNLabel("Calendar");
-    setNText("");
-    setNDate(new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }));
-    setNTo("/academics/academic-calendar");
-    setNUrgent(false);
-  };
-
-  // Compile Dynamic Notifications from DB
-  const dynamicTickerNotifications = useMemo(() => {
-    const customAlerts = tickerNotifsList.map((n: any) => ({
-      id: `custom-${n.id}`,
-      source: n.source as any,
-      label: n.label,
-      text: n.text,
-      date: n.date,
-      to: n.to,
-      urgent: n.urgent
-    }));
-
-    const calendarAlerts = calendarList
-      .filter((c: any) => c.pdf_url && c.pdf_url.trim() !== "")
-      .map((c: any) => {
-        let source: "calendar" | "holiday" | "exam-sched" = "calendar";
-        let label = "Academic Calendar";
-        let text = `Academic Calendar — ${c.program_name} (${c.regulation}) A.Y. ${c.academic_year}`;
-
-        if (c.calendar_type === "Holidays") {
-          source = "holiday";
-          label = "Holiday List";
-          text = `Holiday Notification — ${c.program_name} (${c.regulation}) A.Y. ${c.academic_year}`;
-        } else if (c.calendar_type === "Examinations") {
-          source = "exam-sched";
-          label = "Exam Schedule";
-          text = `Examination Schedule Update — ${c.program_name} (${c.regulation}) A.Y. ${c.academic_year}`;
-        }
-
-        return {
-          id: `cal-${c.id}`,
-          source,
-          label,
-          text,
-          date: c.created_at
-            ? new Date(c.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-            : c.academic_year,
-          to: c.pdf_url,
-          urgent: c.calendar_type === "Examinations",
-        };
-      });
-
-    const examAlerts = examList
-      .filter((e: any) => e.file_url && e.file_url.trim() !== "")
-      .map((e: any) => {
-        let source: "exam-notif" | "hall-ticket" | "results" | "timetable" = "exam-notif";
-        let label = e.type;
-
-        if (e.type === "Result") {
-          source = "results";
-          label = "Result Link";
-        } else if (e.type === "HallTicket") {
-          source = "hall-ticket";
-          label = "Hall Ticket Link";
-        } else if (e.type === "Timetable") {
-          source = "timetable";
-          label = "Timetable Link";
-        } else {
-          source = "exam-notif";
-          label = "Exam Notice";
-        }
-
-        return {
-          id: `exam-${e.id}`,
-          source,
-          label,
-          text: `${e.title}${e.description ? ` — ${e.description}` : ""}`,
-          date: e.date,
-          to: e.file_url,
-          urgent: e.type === "Result" || e.type === "HallTicket"
-        };
-      });
-
-    return [...customAlerts, ...calendarAlerts, ...examAlerts];
-  }, [tickerNotifsList, calendarList, examList]);
-
   return (
     <div className="space-y-12 pb-24">
       <PageHero
@@ -370,13 +238,10 @@ function AcademicsDashboard() {
         subtitle="Access every academic resource — curriculum, regulations, schedules, admissions, scholarships, and more."
         image={campusImg}
       />
-      
-      <SubNav items={ACADEMICS_SUBNAV} />
+      <div className="py-12 max-w-[1280px] mx-auto px-5 md:px-8 flex flex-col md:flex-row gap-8 items-start">
+        <VerticalSubNav items={ACADEMICS_SUBNAV} />
+        <div className="flex-1 min-w-0 space-y-12 overflow-hidden">
 
-      {/* Notification Ticker Section */}
-      <section className="container-narrow">
-        <NotificationTicker items={dynamicTickerNotifications} speedSeconds={75} />
-      </section>
 
       {/* Stats Counter Section */}
       <section className="container-narrow">
@@ -744,6 +609,8 @@ function AcademicsDashboard() {
           </div>
         </div>
       </section>
+        </div>
+      </div>
     </div>
   );
 }

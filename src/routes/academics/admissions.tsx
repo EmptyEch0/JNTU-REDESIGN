@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
-import { SubNav } from "@/components/SubNav";
+import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
 import { imageUrl } from "@/lib/assets";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
@@ -216,9 +216,9 @@ function AdmissionsPage() {
         subtitle="Transparent admission procedures, eligibility rank tables, and step-by-step tuition and payment guides."
         image="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070"
       />
-      <SubNav items={ACADEMICS_SUBNAV} />
-
-      <div className="container-narrow space-y-8">
+      <div className="container-narrow py-12 flex flex-col md:flex-row gap-8 items-start">
+        <VerticalSubNav items={ACADEMICS_SUBNAV} />
+        <div className="flex-1 min-w-0 space-y-8">
 
       {/* Premium Navigation Segment Slider */}
       <div className="flex items-center justify-center p-1.5 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl w-full max-w-md mx-auto shadow-sm border border-slate-200/20">
@@ -1095,6 +1095,7 @@ function AdmissionsPage() {
 
         </div>
       )}
+        </div>
       </div>
     </div>
   );

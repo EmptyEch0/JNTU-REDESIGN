@@ -24,9 +24,12 @@ interface ConsultancyProject {
 
 function FacultyDetailProfilePage() {
   const { id: deptId, facultyId } = Route.useParams();
-  const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
-  const queryClient = useQueryClient();
+const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
+const queryClient = useQueryClient();
+
+// Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+const { isDeptEditing } = useAdmin();
+const isEditMode = isDeptEditing(deptId || "");
 
   const facultyRaw = data?.faculty?.find((f: any) => String(f.id) === String(facultyId));
   const [activeTab, setActiveTab] = useState<string>("profile");

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { getDepartmentDetails, type DepartmentData } from "@/functions/departments";
 import { getAssetUrl, updateDepartment } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
@@ -19,6 +19,7 @@ import {
   Camera,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id")({
@@ -33,10 +34,18 @@ export const Route = createFileRoute("/departments/$id")({
 function DepartmentLayout() {
   const loaderData = Route.useLoaderData() as unknown as DepartmentData;
   const location = useLocation();
-  const { isAdmin, hasEditPermission, isDeptEditing, setDeptEditing } = useAdmin();
+  const navigate = useNavigate();
+  const { isAdmin, role, hodDeptId, hasEditPermission, isDeptEditing, setDeptEditing, logout } = useAdmin();
   const queryClient = useQueryClient();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Redirect guard for HOD sessions trying to roam to other departments
+  useEffect(() => {
+    if (hodDeptId && loaderData?.slug && hodDeptId !== loaderData.slug && role !== "super_admin") {
+      navigate({ to: "/" });
+    }
+  }, [hodDeptId, loaderData?.slug, role, navigate]);
 
   const isUnlocked = hasEditPermission(loaderData?.slug || "");
   const isEditMode = isDeptEditing(loaderData?.slug || "");
@@ -52,7 +61,7 @@ function DepartmentLayout() {
         setDeptEditing(loaderData.slug, true);
       }
     }
-  }, [loaderData?.slug, hasEditPermission]);
+  }, [loaderData?.slug, hasEditPermission, isDeptEditing, setDeptEditing]);
 
   useEffect(() => {
     if (loaderData) {
@@ -75,7 +84,8 @@ function DepartmentLayout() {
 
   if (!loaderData || !loaderData.slug) return null;
 
-  const needsLockScreen = isAdmin && !isUnlocked;
+  // Update lock-screen condition so it only applies to the legacy super-admin-without-authorizedDepts case
+  const needsLockScreen = isAdmin && role !== "super_admin" && !isUnlocked;
 
   if (needsLockScreen) {
     return (
@@ -201,6 +211,17 @@ function DepartmentLayout() {
                 );
               })}
             </nav>
+            {hodDeptId && (
+  <button
+    onClick={async () => {
+      await logout();
+      navigate({ to: "/" });
+    }}
+    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-all mt-4 border-t border-slate-200 pt-4"
+  >
+    <LogOut size={18} /> Logout (HOD)
+  </button>
+)}
           </div>
         </aside>
 

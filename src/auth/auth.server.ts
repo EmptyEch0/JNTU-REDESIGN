@@ -3,7 +3,7 @@ import { redirect } from "@tanstack/react-router";
 import { getCookie, setCookie, deleteCookie, getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
 import { authService } from "./auth.service";
 import { authRepository } from "./auth.repository";
-
+import { verifyDepartmentAccess } from "../lib/departments";
 // Helper to extract request context for audit logs using framework-safe utilities
 function getRequestContext() {
   const userAgent = getRequestHeader("user-agent") || null;
@@ -154,6 +154,40 @@ export const logoutAdmin = createServerFn({
 
   // Clear cookie
   deleteCookie("admin_session_token", { path: "/" });
+  return { success: true };
+});
+
+export const loginHod = createServerFn({ method: "POST" })
+  .inputValidator((data: any) => data as { deptId: string; deptSlug: string; password: string })
+  .handler(async ({ data }) => {
+    const { deptId, deptSlug, password } = data;
+    const { userAgent, ipAddress } = getRequestContext();
+
+    const result = await verifyDepartmentAccess({ data: { deptId, password } } as any);
+
+    if (!result.valid || result.role !== "hod") {
+      throw new Error("Invalid HOD credentials");
+    }
+
+    // Store the SLUG in the cookie, not the UUID — this is what DepartmentLayout compares against
+    setCookie("hod_session_dept", deptSlug, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 8,
+    });
+
+    return { success: true, deptSlug };
+  });
+  
+export const getCurrentHodDept = createServerFn({ method: "GET" }).handler(async () => {
+  const deptId = getCookie("hod_session_dept");
+  return deptId || null;
+});
+
+export const logoutHod = createServerFn({ method: "POST" }).handler(async () => {
+  deleteCookie("hod_session_dept", { path: "/" });
   return { success: true };
 });
 

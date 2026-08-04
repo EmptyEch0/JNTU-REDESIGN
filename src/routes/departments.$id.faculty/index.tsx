@@ -102,11 +102,14 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
 
 function FacultyPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
-  const queryClient = useQueryClient();
-  
-  // Extract the parent route parameter ($id) cleanly
-  const { id: deptId } = useParams({ from: "/departments/$id/faculty/" });
+const queryClient = useQueryClient();
+
+// Extract the parent route parameter ($id) cleanly
+const { id: deptId } = useParams({ from: "/departments/$id/faculty/" });
+
+// Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+const { isDeptEditing } = useAdmin();
+const isEditMode = isDeptEditing(deptId || "");
 
   const [facultyList, setFacultyList] = useState(data?.faculty || []);
 

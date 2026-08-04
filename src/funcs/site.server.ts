@@ -3,6 +3,23 @@ import { db } from "../db";
 import { siteContent, notices, academicRegulations, campusGallery, leadership, academicSyllabus, academicDownloads, academicTimetables, academicsExamCell, academicFeeStructure, academicCalendars } from "../db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { ingestSingleChunk, deleteSingleChunk } from "../lib/ingest";
+import { runChatbotEngine } from "../lib/chatbot-engine";
+
+// ── Singleton embedder cache (avoids reloading the WASM model on every request) ──
+let _embedder: any = null;
+async function getCachedEmbedder() {
+  if (!_embedder) {
+    const { pipeline } = await import("@xenova/transformers");
+    _embedder = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+  }
+  return _embedder;
+}
+async function embedQuery(text: string): Promise<number[]> {
+  const pipe = await getCachedEmbedder();
+  const result = await pipe(text, { pooling: "mean", normalize: true });
+  return Array.from(result.data as number[]);
+}
+
 
 export const getPageContent = createServerFn({
   method: "GET",
@@ -231,183 +248,28 @@ export const queryChatbot = createServerFn({ method: "POST" })
     messages: Array<{ role: "system" | "user" | "assistant"; content: string }>;
   }) => data)
   .handler(async ({ data }) => {
-    const query = data.messages[data.messages.length - 1]?.content || "";
+    const query = data.messages[data.messages.length - 1]?.content?.trim() || "";
+    if (!query) return { reply: "Please ask me something! 😊" };
 
-    // 1. Embed the user query
-    const { pipeline } = await import("@xenova/transformers");
-    const embedder = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
-    const result = await embedder(query, { pooling: "mean", normalize: true });
-    const vector = Array.from(result.data as number[]);
+    // 1. Embed query using the cached singleton embedder (fast after first load)
+    const vector = await embedQuery(query);
     const vectorStr = `[${vector.join(",")}]`;
 
-    // 2. Semantic search — lowered threshold to 0.1
+    // 2. Broad hybrid search — lower threshold for better recall, fetch more chunks
     const chunks = await db.execute(sql`
       SELECT content, source_type, metadata,
              1 - (embedding <=> ${vectorStr}::vector) AS similarity
       FROM rag_chunks
-      WHERE 1 - (embedding <=> ${vectorStr}::vector) > 0.1
+      WHERE 1 - (embedding <=> ${vectorStr}::vector) > 0.05
       ORDER BY embedding <=> ${vectorStr}::vector
-      LIMIT 12
+      LIMIT 20
     `);
 
-    const rows = chunks as any[];
+    // 3. Run the local intelligent engine — intent detection + BM25 rerank + template answer
+    //    Zero network calls. Answers in < 50ms after embedder warmup.
+    const reply = runChatbotEngine({ query, chunks: chunks as any[] });
+    return { reply };
 
-    const q = query.toLowerCase();
-
-    // 1. Force inject critical structural facts
-    const isLeadershipQuery = /principal|vice.?principal|who leads|head of college/.test(q);
-    const isDeptQuery = /branch|department|program|stream|course|cse|ece|eee|mba|mechanical|metallurg|civil/.test(q);
-
-    let extraContext = "";
-
-    if (isDeptQuery) {
-      const deptChunks = await db.execute(sql`
-        SELECT content FROM rag_chunks 
-        WHERE source_type = 'department'
-        ORDER BY source
-      `);
-      extraContext += "\n\n--- Departments & Branches ---\n" + 
-        (deptChunks as any[]).map((r: any) => r.content).join("\n");
-    }
-
-    if (isLeadershipQuery) {
-      const leaderChunks = await db.execute(sql`
-        SELECT content FROM rag_chunks WHERE source_type = 'leadership' ORDER BY source
-      `);
-      extraContext += "\n\n--- Leadership ---\n" + 
-        (leaderChunks as any[]).map((r: any) => r.content).join("\n");
-    }
-
-    // 2. Apply comprehensive sorting / boosting to the vector results
-    const boost = (types: string[]) => [
-      ...rows.filter((r: any) => types.includes(r.source_type)),
-      ...rows.filter((r: any) => !types.includes(r.source_type)),
-    ];
-
-    const sorted =
-      isLeadershipQuery ? boost(["leadership", "leadership_staff"]) :
-      isDeptQuery ? boost(["department", "course"]) :
-      /hod|head of department/.test(q) ? boost(["hod", "department"]) :
-      /hostel|accommodation|warden|mess|room/.test(q) ? boost(["hostel", "hostel_staff"]) :
-      /library|book|journal|librarian/.test(q) ? boost(["library", "library_staff"]) :
-      /placement|recruit|package|salary|tpo|campus drive/.test(q) ? boost(["placement", "recruiter", "placement_staff"]) :
-      /syllabus|r20|r23|r25|subject|curriculum/.test(q) ? boost(["syllabus", "regulation"]) :
-      /timetable|schedule|class time/.test(q) ? boost(["timetable"]) :
-      /exam|result|revaluation|hall ticket/.test(q) ? boost(["exam_cell"]) :
-      /fee|tuition|payment|scholarship/.test(q) ? boost(["fee"]) :
-      /lab|laboratory/.test(q) ? boost(["laboratory"]) :
-      /nss|national service/.test(q) ? boost(["nss"]) :
-      /sports|gym|ground|tournament/.test(q) ? boost(["sports"]) :
-      /dispensary|medical|doctor|ambulance/.test(q) ? boost(["dispensary"]) :
-      /women|wec|empowerment|harassment/.test(q) ? boost(["wec"]) :
-      /edc|entrepreneur|startup|incubat/.test(q) ? boost(["edc"]) :
-      /research|rd|phd|scholar|publication|journal/.test(q) ? boost(["rd_project", "rd_publication", "rd_scholar"]) :
-      /iqac|naac|accreditat|aqar/.test(q) ? boost(["iqac"]) :
-      /ieee|iste|csi|professional body|chapter/.test(q) ? boost(["prof_body"]) :
-      /club|music|activity|cultural/.test(q) ? boost(["student_club"]) :
-      /notice|circular|announcement/.test(q) ? boost(["notice", "notification"]) :
-      rows;
-
-    const context = sorted.map((r: any) => r.content).join("\n\n") + extraContext;
-
-    const SYSTEM_PROMPT = `You are "JNTU AI", a smart, friendly, engaging, and professional AI assistant for the JNTU-GV CEV college website. Your role is to help students, faculty, parents, and visitors with accurate information about the college.
-
-Multilingual Capabilities (English & Telugu):
-- You are fluent in both English and Telugu (తెలుగు).
-- Automatically detect the user's preferred language. If a user asks in Telugu script or Telgish (Telugu written in Roman script, e.g., "Hostel fee ఎంత?"), reply in natural, polite Telugu script (తెలుగు) or Telgish.
-- If a parent or student asks in Telugu, feel free to respond in clear, easy-to-understand Telugu with English numbers/technical terms.
-- Default to English if the user writes in English, but always be ready to translate or explain in Telugu if requested!
-
-Personality & Tone:
-- Friendly and welcoming
-- Professional but not robotic
-- Helpful and conversational
-- Student-friendly and engaging
-- Encouraging and positive
-- Clear and concise responses
-- Modern AI assistant personality
-- Use natural human-like conversation
-- Occasionally use light emojis where appropriate 😊
-- Never sound rude, cold, or overly formal
-
-Behavior Rules:
-- Always greet users warmly
-- Understand the user’s intent carefully
-- Use the RETRIEVED DATABASE CONTEXT (if provided) as your primary source. If it contains relevant data, use it to answer accurately.
-- If the database context does not have specific information, use your general knowledge about Indian engineering colleges, JNTUK affiliations, academic systems, and standard college practices to give a helpful, confident answer.
-- NEVER say things like "I don't have this information in my database" or "this is not in my records". Just answer naturally.
-- NEVER reveal that you searched a database or that data is missing. You are a knowledgeable campus guide.
-- Guide users step-by-step when needed.
-- Keep answers short unless detailed explanation is requested.
-- Be supportive and interactive.
-- If the user says “thank you”, respond warmly.
-
-Capabilities:
-- Answer questions about departments, faculty, principal, admissions, syllabus, fees, placements, hostel, events, notices, exam schedules, transport, campus facilities, and student services.
-
-Definitive Counts & Lists:
-- When answering factual questions like counts, always give the exact number found in the context. Do not guess or approximate.
-
-Branches & Departments Behavior:
-- JNTU-GV CEV has exactly 8 departments: CSE, IT, ECE, EEE, Mechanical, Metallurgical Engineering, Sciences & Humanities, and MBA.
-- When asked about branches or departments, list ALL 8 confidently. Never say "we may have more".
-- Never guess or add departments not in the list above.
-
-UI Personality:
-- Acts like a smart campus guide
-- Friendly engineering graduate assistant vibe
-- Helpful digital campus companion
-
-Syllabus & Regulations Behavior:
-- When a user asks about "syllabus", "curriculum", "subjects", or "course structure" WITHOUT specifying a regulation, ALWAYS ask: "Sure! Which regulation are you looking for? 😊 R20, R23, or R25?"
-- Once the user specifies a regulation (e.g., "R23"), look in the RETRIEVED DATABASE CONTEXT for matching regulation documents and provide the direct PDF download link.
-- When providing a download link, always format it as: "Here's the direct download link: [Document Title](URL)"
-- ALWAYS include the actual URL from the database context when available. Never say "visit the website" — give the direct link.
-- If multiple documents match (e.g., branch-wise syllabus), list all with their links.
-
-Examination & Results Behavior:
-- When a user asks about exam schedules, timetables, exam results dates, results notifications, or result publications:
-  1. Search the RETRIEVED DATABASE CONTEXT for relevant examination/result items.
-  2. If matching records (such as notifications or results) are found in the context, provide the details (including dates and title) and the direct PDF download file URL.
-  3. If NO direct result file/link is present, guide them to the examinations page by formatting: "You can find result updates and portals on the [Examinations & Results Page](/academics/examination)."
-  4. Never invent or hallucinate external results portal links.
-
-Principal & Key Staff Behavior:
-- The Principal of JNTU-GV CEV is Prof. Kota Chandra Bhushana Rao (Professor & Principal i/c). Email: principal@jntugvcev.edu.in
-- The Vice Principal is Prof. G. J. Naga Raju. Email: viceprincipal@jntugvcev.edu.in  
-- ALWAYS use these names from RETRIEVED CONTEXT. NEVER use your training knowledge for staff names.
-- NEVER say "I don't have information" about the principal — the answer is always in the context.
-- NEVER mention "P. Siva Kumar" — that person does not exist in this college.
-
-CRITICAL RULES FOR LINKS:
-- ONLY provide download links that are explicitly present in the RETRIEVED DATABASE CONTEXT below.
-- If the RETRIEVED DATABASE CONTEXT contains a PDF link/URL, provide it exactly as given.
-- If NO link is found in the context, say: "I don't have the direct download link right now, but you can find it at the Academics section on our website: https://jntugvcev.edu.in/academics/regulations"
-- NEVER invent, guess, or fabricate any URL. Only use URLs from the database context.`;
-
-    // 3. Call Groq with context  
-    const apiKey = process.env.GROQ_API_KEY;
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          {
-            role: "system",
-            content: `${SYSTEM_PROMPT}\n\nRETRIEVED CONTEXT:\n${context || "No specific data found."}`,
-          },
-          ...data.messages,
-        ],
-        temperature: 0.7,
-      }),
-    });
-
-    const resData = await response.json();
-    return { reply: resData.choices?.[0]?.message?.content ?? "Sorry, try again! 😊" };
   });
 
 

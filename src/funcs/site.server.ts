@@ -21,20 +21,24 @@ async function embedQuery(text: string): Promise<number[]> {
 }
 
 
+import { memoryCache } from "../lib/cache";
+
 export const getPageContent = createServerFn({
   method: "GET",
 })
   .inputValidator((page: string) => page)
   .handler(async ({ data: page }) => {
-    try {
-      const records = await db
-        .select()
-        .from(siteContent)
-        .where(eq(siteContent.page, page));
-      return records;
-    } catch {
-      return [];
-    }
+    return memoryCache.getOrSet(`siteContent:${page}`, 10 * 60 * 1000, async () => {
+      try {
+        const records = await db
+          .select()
+          .from(siteContent)
+          .where(eq(siteContent.page, page));
+        return records;
+      } catch {
+        return [];
+      }
+    });
   });
 
 export const updatePageSection = createServerFn({
@@ -85,6 +89,7 @@ export const updatePageSection = createServerFn({
       }
 
       if (updated) {
+        memoryCache.invalidate(`siteContent:${updated.page}`);
         await ingestSingleChunk(
           `Page: ${updated.page}. ${updated.title}. ${updated.content}`,
           `sitecontent:${updated.id}`,

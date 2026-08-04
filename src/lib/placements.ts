@@ -11,18 +11,25 @@ import {
   placementGallery,
 } from "../db/schema";
 import { desc, eq } from "drizzle-orm";
+import { memoryCache } from "./cache";
 
 export const getPlacementYears = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(placementYears).orderBy(desc(placementYears.year));
+  return memoryCache.getOrSet("placements:years", 10 * 60 * 1000, async () => {
+    return await db.select().from(placementYears).orderBy(desc(placementYears.year));
+  });
 });
 
 export const getPlacementHighlights = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(placementHighlights);
+  return memoryCache.getOrSet("placements:highlights", 10 * 60 * 1000, async () => {
+    return await db.select().from(placementHighlights);
+  });
 });
 
 export const addPlacementYear = createServerFn({ method: "POST" }).handler(
   async ({ data }: { data: any }) => {
-    return await db.insert(placementYears).values(data).returning();
+    const res = await db.insert(placementYears).values(data).returning();
+    memoryCache.invalidatePrefix("placements:");
+    return res;
   },
 );
 

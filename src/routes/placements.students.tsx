@@ -23,6 +23,8 @@ import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Save, ChevronDown, ChevronRight, User } from "lucide-react";
 
+import { Pagination } from "@/components/Pagination";
+
 export const Route = createFileRoute("/placements/students")({
   head: () => ({
     meta: [
@@ -45,6 +47,7 @@ function StudentsPlacedPage() {
   const [editedHighlights, setEditedHighlights] = useState<Record<number, any>>({});
   const [editedStudents, setEditedStudents] = useState<Record<number, any>>({});
   const [expandedYears, setExpandedYears] = useState<Record<string, boolean>>({});
+  const [pages, setPages] = useState<Record<string, number>>({});
 
   const { data: years = [] } = useQuery({
     queryKey: ["placementYears"],
@@ -476,115 +479,136 @@ function StudentsPlacedPage() {
                     )}
                   </button>
 
-                  {(expandedYears[year] || isEditMode) && (
-                    <div className="overflow-x-auto border-t border-border">
-                      <table className="min-w-full text-left">
-                        <thead className="bg-sand/10 text-eyebrow text-[9px]">
-                          <tr>
-                            <th className="px-6 py-3">Student Name</th>
-                            <th className="px-6 py-3">Roll No</th>
-                            <th className="px-6 py-3">Branch</th>
-                            <th className="px-6 py-3">Campus</th>
-                            <th className="px-6 py-3">Company</th>
-                            {isEditMode && <th className="px-6 py-3 text-right">Action</th>}
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border">
-                          {groupedStudents[year].map((s) => (
-                            <tr
-                              key={s.id}
-                              className={`transition-colors ${isEditMode ? "bg-amber-50/20" : "hover:bg-sand/5"}`}
-                            >
-                              <td className="px-6 py-4">
-                                {isEditMode ? (
-                                  <input
-                                    className="bg-white border border-amber-100 rounded p-1 text-xs w-full"
-                                    value={editedStudents[s.id]?.name ?? s.name}
-                                    onChange={(e) =>
-                                      handleStudentChange(s.id, "name", e.target.value)
-                                    }
-                                  />
-                                ) : (
-                                  <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-sand flex items-center justify-center text-muted-foreground">
-                                      <User size={14} />
-                                    </div>
-                                    <span className="font-medium text-ink text-sm">{s.name}</span>
-                                  </div>
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-xs font-mono text-muted-foreground">
-                                {isEditMode ? (
-                                  <input
-                                    className="bg-white border border-amber-100 rounded p-1 text-xs w-full"
-                                    value={editedStudents[s.id]?.rollNo ?? s.rollNo}
-                                    onChange={(e) =>
-                                      handleStudentChange(s.id, "rollNo", e.target.value)
-                                    }
-                                  />
-                                ) : (
-                                  s.rollNo
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-xs">
-                                {isEditMode ? (
-                                  <input
-                                    className="bg-white border border-amber-100 rounded p-1 text-xs w-full"
-                                    value={editedStudents[s.id]?.branch ?? s.branch}
-                                    onChange={(e) =>
-                                      handleStudentChange(s.id, "branch", e.target.value)
-                                    }
-                                  />
-                                ) : (
-                                  s.branch
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-[10px]">
-                                {isEditMode ? (
-                                  <select
-                                    className="bg-white border border-amber-100 rounded p-1 text-xs w-full"
-                                    value={editedStudents[s.id]?.campusType ?? s.campusType}
-                                    onChange={(e) =>
-                                      handleStudentChange(s.id, "campusType", e.target.value)
-                                    }
-                                  >
-                                    <option value="On Campus">On Campus</option>
-                                    <option value="Off Campus">Off Campus</option>
-                                    <option value="On Campus (Virtual)">On Campus (Virtual)</option>
-                                  </select>
-                                ) : (
-                                  s.campusType
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-primary font-bold text-xs">
-                                {isEditMode ? (
-                                  <input
-                                    className="bg-white border border-amber-100 rounded p-1 text-xs w-full"
-                                    value={editedStudents[s.id]?.company ?? s.company}
-                                    onChange={(e) =>
-                                      handleStudentChange(s.id, "company", e.target.value)
-                                    }
-                                  />
-                                ) : (
-                                  s.company
-                                )}
-                              </td>
-                              {isEditMode && (
-                                <td className="px-6 py-4 text-right">
-                                  <button
-                                    onClick={() => handleDeleteStudent(s.id)}
-                                    className="text-red-300 hover:text-red-500"
-                                  >
-                                    <Trash2 size={14} />
-                                  </button>
-                                </td>
-                              )}
+                  {(expandedYears[year] || isEditMode) && (() => {
+                    const yearStudents = groupedStudents[year] || [];
+                    const currentPage = pages[year] || 1;
+                    const pageSize = 15;
+                    const totalPages = Math.ceil(yearStudents.length / pageSize);
+                    const paginatedStudents = isEditMode
+                      ? yearStudents
+                      : yearStudents.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+                    return (
+                      <div className="overflow-x-auto border-t border-border">
+                        <table className="min-w-full text-left">
+                          <thead className="bg-sand/10 text-eyebrow text-[9px]">
+                            <tr>
+                              <th className="px-6 py-3">Student Name</th>
+                              <th className="px-6 py-3">Roll No</th>
+                              <th className="px-6 py-3">Branch</th>
+                              <th className="px-6 py-3">Campus</th>
+                              <th className="px-6 py-3">Company</th>
+                              {isEditMode && <th className="px-6 py-3 text-right">Action</th>}
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
+                          </thead>
+                          <tbody className="divide-y divide-border">
+                            {paginatedStudents.map((s) => (
+                              <tr
+                                key={s.id}
+                                className={`transition-colors ${isEditMode ? "bg-amber-50/20" : "hover:bg-sand/5"}`}
+                              >
+                                <td className="px-6 py-4">
+                                  {isEditMode ? (
+                                    <input
+                                      className="bg-white border border-amber-100 rounded p-1 text-xs w-full"
+                                      value={editedStudents[s.id]?.name ?? s.name}
+                                      onChange={(e) =>
+                                        handleStudentChange(s.id, "name", e.target.value)
+                                      }
+                                    />
+                                  ) : (
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-8 h-8 rounded-full bg-sand flex items-center justify-center text-muted-foreground">
+                                        <User size={14} />
+                                      </div>
+                                      <span className="font-medium text-ink text-sm">{s.name}</span>
+                                    </div>
+                                  )}
+                                </td>
+                                <td className="px-6 py-4 text-xs font-mono text-muted-foreground">
+                                  {isEditMode ? (
+                                    <input
+                                      className="bg-white border border-amber-100 rounded p-1 text-xs w-full"
+                                      value={editedStudents[s.id]?.rollNo ?? s.rollNo}
+                                      onChange={(e) =>
+                                        handleStudentChange(s.id, "rollNo", e.target.value)
+                                      }
+                                    />
+                                  ) : (
+                                    s.rollNo
+                                  )}
+                                </td>
+                                <td className="px-6 py-4 text-xs">
+                                  {isEditMode ? (
+                                    <input
+                                      className="bg-white border border-amber-100 rounded p-1 text-xs w-full"
+                                      value={editedStudents[s.id]?.branch ?? s.branch}
+                                      onChange={(e) =>
+                                        handleStudentChange(s.id, "branch", e.target.value)
+                                      }
+                                    />
+                                  ) : (
+                                    s.branch
+                                  )}
+                                </td>
+                                <td className="px-6 py-4 text-[10px]">
+                                  {isEditMode ? (
+                                    <select
+                                      className="bg-white border border-amber-100 rounded p-1 text-xs w-full"
+                                      value={editedStudents[s.id]?.campusType ?? s.campusType}
+                                      onChange={(e) =>
+                                        handleStudentChange(s.id, "campusType", e.target.value)
+                                      }
+                                    >
+                                      <option value="On Campus">On Campus</option>
+                                      <option value="Off Campus">Off Campus</option>
+                                      <option value="On Campus (Virtual)">On Campus (Virtual)</option>
+                                    </select>
+                                  ) : (
+                                    s.campusType
+                                  )}
+                                </td>
+                                <td className="px-6 py-4 text-primary font-bold text-xs">
+                                  {isEditMode ? (
+                                    <input
+                                      className="bg-white border border-amber-100 rounded p-1 text-xs w-full"
+                                      value={editedStudents[s.id]?.company ?? s.company}
+                                      onChange={(e) =>
+                                        handleStudentChange(s.id, "company", e.target.value)
+                                      }
+                                    />
+                                  ) : (
+                                    s.company
+                                  )}
+                                </td>
+                                {isEditMode && (
+                                  <td className="px-6 py-4 text-right">
+                                    <button
+                                      onClick={() => handleDeleteStudent(s.id)}
+                                      className="text-red-300 hover:text-red-500"
+                                    >
+                                      <Trash2 size={14} />
+                                    </button>
+                                  </td>
+                                )}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                        {!isEditMode && yearStudents.length > 15 && (
+                          <div className="border-t border-border px-4 py-2 bg-sand/5">
+                            <Pagination
+                              currentPage={currentPage}
+                              totalPages={totalPages}
+                              totalItems={yearStudents.length}
+                              pageSize={pageSize}
+                              onPageChange={(p) => setPages((prev) => ({ ...prev, [year]: p }))}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               ))}
           </div>

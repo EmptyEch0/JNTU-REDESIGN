@@ -168,10 +168,10 @@ function DepartmentLayout() {
         {/* Sidebar Navigation */}
         <aside className={`
           fixed inset-y-0 left-0 z-40 w-72 bg-slate-50 p-6 shadow-2xl transition-transform duration-300 ease-in-out
-          lg:relative lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 lg:shadow-none lg:w-64 flex-shrink-0
+          lg:sticky lg:top-28 lg:self-start lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 lg:shadow-none lg:w-64 flex-shrink-0
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}>
-          <div className="sticky top-28 bg-white lg:bg-slate-50 rounded-3xl p-6 lg:border border-slate-100 h-fit space-y-6">
+          <div className="bg-white lg:bg-slate-50 rounded-3xl p-6 lg:border border-slate-100 h-fit space-y-6">
             
             {/* Header Title Inside Mobile Menu */}
             <div className="flex items-center justify-between lg:hidden border-b pb-4 mb-2 border-slate-200">

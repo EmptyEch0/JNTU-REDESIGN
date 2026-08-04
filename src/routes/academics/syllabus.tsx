@@ -13,7 +13,7 @@ import {
 } from "@/lib/academics";
 import { getAssetUrl, imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
-import { SubNav } from "@/components/SubNav";
+import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
 
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
@@ -27,7 +27,7 @@ function SyllabusPage() {
   const queryClient = useQueryClient();
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedReg, setSelectedReg] = useState("All");
+  const [selectedReg, setSelectedReg] = useState("R23");
   const [selectedCat, setSelectedCat] = useState("All"); // UG / PG
   const [selectedProg, setSelectedProg] = useState("All"); // B.Tech / M.Tech / MBA / MCA
   const [selectedSem, setSelectedSem] = useState("All");
@@ -122,7 +122,7 @@ function SyllabusPage() {
 
   const resetFilters = () => {
     setSearchTerm("");
-    setSelectedReg("All");
+    setSelectedReg("R23");
     setSelectedCat("All");
     setSelectedProg("All");
     setSelectedSem("All");
@@ -137,10 +137,9 @@ function SyllabusPage() {
         subtitle="Access structured, branch-wise syllabus records for all JNTU-GV academic regulations and semesters."
         image={campusImg}
       />
-      
-      <SubNav items={ACADEMICS_SUBNAV} />
-
-      <div className="container-narrow space-y-6">
+      <div className="container-narrow py-12 flex flex-col md:flex-row gap-8 items-start">
+        <VerticalSubNav items={ACADEMICS_SUBNAV} />
+        <div className="flex-1 min-w-0 space-y-6">
 
       {/* Admin Mode Controls */}
       {isEditMode && (
@@ -284,7 +283,7 @@ function SyllabusPage() {
           <span>Filter Controls</span>
         </h3>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
           {/* Search bar */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -297,17 +296,6 @@ function SyllabusPage() {
             />
           </div>
 
-          {/* Regulation */}
-          <select 
-            value={selectedReg} 
-            onChange={(e) => setSelectedReg(e.target.value)}
-            className="w-full px-3 py-2 bg-white/70 dark:bg-slate-800/50 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer"
-          >
-            <option value="All">All Regulations</option>
-            <option value="R23">R23 Regulation</option>
-            <option value="R20">R20 Regulation</option>
-            <option value="R19">R19 Regulation</option>
-          </select>
 
           {/* Category (UG / PG) */}
           <select 
@@ -376,6 +364,36 @@ function SyllabusPage() {
 
       {/* Structured Table Layout */}
       <GlassCard className="p-6 overflow-hidden">
+        {/* Regulation Tabs */}
+        <div className="flex border-b border-slate-200 dark:border-slate-800 mb-6 overflow-x-auto no-scrollbar">
+          {[
+            { label: "R25(PG)", value: "R25" },
+            { label: "R23", value: "R23" },
+            { label: "R20", value: "R20" },
+            { label: "R19", value: "R19" },
+            { label: "R16", value: "R16" },
+            { label: "R13", value: "R13" }
+          ].map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => setSelectedReg(tab.value)}
+              className={`px-6 py-3 text-sm font-bold whitespace-nowrap transition-colors relative ${
+                selectedReg === tab.value 
+                  ? "text-blue-600 dark:text-blue-400" 
+                  : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+              }`}
+            >
+              {tab.label}
+              {selectedReg === tab.value && (
+                <motion.div 
+                  layoutId="activeRegTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400"
+                />
+              )}
+            </button>
+          ))}
+        </div>
+
         <div className="overflow-x-auto w-full custom-scrollbar">
           {isLoading ? (
             <div className="py-12 text-center text-xs text-slate-500 font-medium">
@@ -388,7 +406,6 @@ function SyllabusPage() {
                   <th className="py-4 px-4">Level</th>
                   <th className="py-4 px-4">Program</th>
                   <th className="py-4 px-4">Branch</th>
-                  <th className="py-4 px-4">Regulation</th>
                   <th className="py-4 px-4">Academic Year</th>
                   <th className="py-4 px-4">Semester</th>
                   <th className="py-4 px-4">Subject Name</th>
@@ -416,11 +433,6 @@ function SyllabusPage() {
                         <td className="py-4 px-4 text-xs font-bold text-slate-700 dark:text-slate-300">
                           <span className="bg-blue-50 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded font-bold uppercase text-[10px]">
                             {item.branch}
-                          </span>
-                        </td>
-                        <td className="py-4 px-4 text-xs font-bold">
-                          <span className="bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 px-2.5 py-0.5 rounded border border-blue-100 dark:border-blue-950/50 text-[10px]">
-                            {item.regulation}
                           </span>
                         </td>
                         <td className="py-4 px-4 text-xs text-slate-600 dark:text-slate-400 font-medium">{item.academic_year}</td>
@@ -485,6 +497,7 @@ function SyllabusPage() {
           )}
         </div>
       </GlassCard>
+        </div>
       </div>
     </div>
   );

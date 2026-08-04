@@ -32,7 +32,7 @@ import {
 } from "@/lib/academics";
 import { getAssetUrl, imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
-import { SubNav } from "@/components/SubNav";
+import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
 
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
@@ -215,9 +215,9 @@ function TimetablesPage() {
         image={campusImg}
       />
       
-      <SubNav items={ACADEMICS_SUBNAV} />
-
-      <div className="container-narrow space-y-6">
+      <div className="container-narrow py-12 flex flex-col md:flex-row gap-8 items-start">
+        <VerticalSubNav items={ACADEMICS_SUBNAV} />
+        <div className="flex-1 min-w-0 space-y-6">
 
         {/* Admin Mode Controls */}
         {isEditMode && (
@@ -643,6 +643,7 @@ function TimetablesPage() {
             </p>
           </GlassCard>
         )}
+        </div>
       </div>
     </div>
   );

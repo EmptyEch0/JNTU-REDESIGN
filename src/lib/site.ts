@@ -114,7 +114,7 @@ export const NAV: {
       {
         title: "Allied",
         items: [
-          { label: "Civil", to: "/departments/civil" },
+          { label: "Metallurgical Engineering", to: "/departments/met" },
           { label: "Information Technology", to: "/departments/it" },
           { label: "MBA", to: "/departments/mba" },
           { label: "Sciences & Humanities", to: "/departments" },

@@ -1038,6 +1038,8 @@ export const faculty = pgTable("faculty", {
   photo_url: text("photo_url"),
   profile_link: text("profile_link"),
   biography: text("biography").default(""),
+  faculty_email: text("faculty_email").unique(),
+  faculty_password_hash: text("faculty_password_hash"),
 
   // Section 1: Profile Details
   qualifications: text("qualifications").array().default([]),

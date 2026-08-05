@@ -14,6 +14,7 @@ import { Footer } from "@/components/Footer";
 import { Chatbot } from "@/components/Chatbot";
 import { getQueryClient } from "@/lib/query-client";
 import { AdminProvider, useAdmin } from "@/context/AdminContext";
+import { FacultyProvider } from "@/context/FacultyContext";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 
 function NotFoundComponent() {
@@ -121,8 +122,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AdminProvider>
+        <FacultyProvider>
         <OfflineIndicator />
         <AdminContent />
+      </FacultyProvider>
       </AdminProvider>
     </QueryClientProvider>
   );

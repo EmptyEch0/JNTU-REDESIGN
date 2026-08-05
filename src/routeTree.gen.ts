@@ -22,6 +22,7 @@ import { Route as IipcRouteImport } from './routes/iipc'
 import { Route as HostelsRouteImport } from './routes/hostels'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as FacultyLoginRouteImport } from './routes/faculty-login'
+import { Route as FacultyAccountSettingsRouteImport } from './routes/faculty-account-settings'
 import { Route as EngineeringCellRouteImport } from './routes/engineering-cell'
 import { Route as EdcRouteImport } from './routes/edc'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -167,6 +168,11 @@ const GalleryRoute = GalleryRouteImport.update({
 const FacultyLoginRoute = FacultyLoginRouteImport.update({
   id: '/faculty-login',
   path: '/faculty-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FacultyAccountSettingsRoute = FacultyAccountSettingsRouteImport.update({
+  id: '/faculty-account-settings',
+  path: '/faculty-account-settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EngineeringCellRoute = EngineeringCellRouteImport.update({
@@ -599,6 +605,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/edc': typeof EdcRoute
   '/engineering-cell': typeof EngineeringCellRoute
+  '/faculty-account-settings': typeof FacultyAccountSettingsRoute
   '/faculty-login': typeof FacultyLoginRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
@@ -692,6 +699,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/edc': typeof EdcRoute
   '/engineering-cell': typeof EngineeringCellRoute
+  '/faculty-account-settings': typeof FacultyAccountSettingsRoute
   '/faculty-login': typeof FacultyLoginRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
@@ -783,6 +791,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/edc': typeof EdcRoute
   '/engineering-cell': typeof EngineeringCellRoute
+  '/faculty-account-settings': typeof FacultyAccountSettingsRoute
   '/faculty-login': typeof FacultyLoginRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
@@ -881,6 +890,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/edc'
     | '/engineering-cell'
+    | '/faculty-account-settings'
     | '/faculty-login'
     | '/gallery'
     | '/hostels'
@@ -974,6 +984,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/edc'
     | '/engineering-cell'
+    | '/faculty-account-settings'
     | '/faculty-login'
     | '/gallery'
     | '/hostels'
@@ -1064,6 +1075,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/edc'
     | '/engineering-cell'
+    | '/faculty-account-settings'
     | '/faculty-login'
     | '/gallery'
     | '/hostels'
@@ -1161,6 +1173,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   EdcRoute: typeof EdcRoute
   EngineeringCellRoute: typeof EngineeringCellRoute
+  FacultyAccountSettingsRoute: typeof FacultyAccountSettingsRoute
   FacultyLoginRoute: typeof FacultyLoginRoute
   GalleryRoute: typeof GalleryRoute
   HostelsRoute: typeof HostelsRoute
@@ -1278,6 +1291,13 @@ declare module '@tanstack/react-router' {
       path: '/faculty-login'
       fullPath: '/faculty-login'
       preLoaderRoute: typeof FacultyLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faculty-account-settings': {
+      id: '/faculty-account-settings'
+      path: '/faculty-account-settings'
+      fullPath: '/faculty-account-settings'
+      preLoaderRoute: typeof FacultyAccountSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/engineering-cell': {
@@ -2085,6 +2105,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   EdcRoute: EdcRoute,
   EngineeringCellRoute: EngineeringCellRoute,
+  FacultyAccountSettingsRoute: FacultyAccountSettingsRoute,
   FacultyLoginRoute: FacultyLoginRoute,
   GalleryRoute: GalleryRoute,
   HostelsRoute: HostelsRoute,

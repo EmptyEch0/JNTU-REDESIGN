@@ -145,6 +145,14 @@ const isEditMode = isDeptLevelEdit || isFacultySelfEdit;
     Logout
   </button>
 )}
+{isFacultySelfEdit && (
+  <Link
+    to="/faculty-account-settings"
+    className="text-xs font-bold text-slate-600 hover:underline"
+  >
+    Account Settings
+  </Link>
+)}
 
         {isEditMode && (
           <button 

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { loginFaculty, logoutFaculty, getCurrentFacultyId } from "@/lib/facultyAuth";
+import { loginFaculty, logoutFaculty, getCurrentFacultyId, changeFacultyCredentials } from "@/lib/facultyAuth";
 
 interface FacultyContextType {
   facultyId: number | null;
@@ -7,11 +7,16 @@ interface FacultyContextType {
   login: (email: string, password: string) => Promise<{ success: boolean; deptSlug?: string; facultyId?: number }>;
   logout: () => Promise<void>;
   isOwnProfile: (targetFacultyId: string | number) => boolean;
+  changeCredentials: (currentPassword: string, newEmail?: string, newPassword?: string) => Promise<{ success: boolean }>;
 }
 const FacultyContext = createContext<FacultyContextType | null>(null);
 
 export const FacultyProvider = ({ children }: { children: React.ReactNode }) => {
   const [facultyId, setFacultyId] = useState<number | null>(null);
+  const changeCredentials = async (currentPassword: string, newEmail?: string, newPassword?: string) => {
+    const res = await changeFacultyCredentials({ data: { currentPassword, newEmail, newPassword } });
+    return res;
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -55,8 +60,8 @@ export const FacultyProvider = ({ children }: { children: React.ReactNode }) => 
 
   return (
     <FacultyContext.Provider
-      value={{ facultyId, isFacultyLoggedIn: facultyId !== null, login, logout, isOwnProfile }}
-    >
+  value={{ facultyId, isFacultyLoggedIn: facultyId !== null, login, logout, isOwnProfile, changeCredentials }}
+>
       {children}
     </FacultyContext.Provider>
   );

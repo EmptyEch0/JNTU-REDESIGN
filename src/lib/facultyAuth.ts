@@ -58,6 +58,50 @@ export const loginFaculty = createServerFn({ method: "POST" })
     return { success: true, facultyId: record.id, deptId: record.dept_id, deptSlug: record.deptSlug };
   });
 
+  export const changeFacultyCredentials = createServerFn({ method: "POST" })
+  .inputValidator((d: { currentPassword: string; newEmail?: string; newPassword?: string }) => d)
+  .handler(async ({ data }) => {
+    const { currentPassword, newEmail, newPassword } = data;
+
+    const sessionFacultyId = getCookie(COOKIE_NAME);
+    if (!sessionFacultyId) {
+      throw new Error("Not authenticated");
+    }
+    const facultyId = Number(sessionFacultyId);
+
+    if (!currentPassword) {
+      throw new Error("Current password is required");
+    }
+    if (!newEmail && !newPassword) {
+      throw new Error("Provide a new email or new password to update");
+    }
+
+    const [record] = await db
+      .select({ id: faculty.id, faculty_password_hash: faculty.faculty_password_hash })
+      .from(faculty)
+      .where(eq(faculty.id, facultyId))
+      .limit(1);
+
+    if (!record || !record.faculty_password_hash) {
+      throw new Error("Faculty record not found");
+    }
+
+    const isValid = await bcrypt.compare(currentPassword, record.faculty_password_hash);
+    if (!isValid) {
+      throw new Error("Current password is incorrect");
+    }
+
+    const updateData: { faculty_email?: string; faculty_password_hash?: string } = {};
+    if (newEmail) updateData.faculty_email = newEmail.toLowerCase().trim();
+    if (newPassword) {
+      if (newPassword.length < 8) throw new Error("New password must be at least 8 characters");
+      updateData.faculty_password_hash = await bcrypt.hash(newPassword, 10);
+    }
+
+    await db.update(faculty).set(updateData).where(eq(faculty.id, facultyId));
+    return { success: true };
+  });
+
 
 /**
  * Returns the currently logged-in faculty's id (or null).

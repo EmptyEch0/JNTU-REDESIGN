@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
 import { getDepartmentDetails, type DepartmentData } from "@/functions/departments";
+import { SafeImage } from "@/components/SafeImage";
 import { getAssetUrl, updateDepartment } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
 import { AdminUpload } from "@/components/AdminEditPanel";
@@ -104,10 +105,11 @@ function DepartmentLayout() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className={`relative h-[350px] w-full overflow-hidden transition-all ${isEditMode ? "ring-4 ring-inset ring-amber-400" : "bg-slate-900"}`}>
-        <img 
-          src={getAssetUrl(headerEdit.image)} 
+        <SafeImage 
+          src={headerEdit.image} 
           className="h-full w-full object-cover opacity-40" 
           alt={headerEdit.name} 
+          fallbackSrc="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1500&q=80"
         />
         
         <div className="absolute inset-0 flex items-center justify-center">

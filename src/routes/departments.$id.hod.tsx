@@ -1,6 +1,7 @@
 import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
 import { getAssetUrl, updateDepartment } from "@/lib/departments";
+import { SafeImage } from "@/components/SafeImage";
 import { useAdmin } from "@/context/AdminContext";
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -117,13 +118,11 @@ function HodPage() {
                 <div className="relative -mt-16 px-6 text-center">
                   <div className="relative inline-block">
                     <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white mx-auto">
-                      <img
-                        src={getAssetUrl(editData.hod_photo)}
+                      <SafeImage
+                        src={editData.hod_photo}
                         alt={hodName}
+                        fallbackName={hodName}
                         className="h-full w-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = `https://ui-avatars.com/api/?name=${hodName}&background=2563EB&color=fff&bold=true&size=128`;
-                        }}
                       />
                     </div>
                   </div>

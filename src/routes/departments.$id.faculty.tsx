@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Users, UserPlus, Trash2, Save, ImageIcon, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 import { getAssetUrl } from "@/lib/assets";
+import { SafeImage } from "@/components/SafeImage";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/departments/$id/faculty")({
@@ -74,7 +75,7 @@ function FacultyPage() {
             )}
 
             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 border-slate-50 bg-slate-100">
-              <img src={getAssetUrl(f.photo_url) || ""} alt={f.name} className="h-full w-full object-cover" onError={(e) => e.currentTarget.src = `https://ui-avatars.com/api/?name=${f.name}`} />
+              <SafeImage src={f.photo_url} alt={f.name} fallbackName={f.name} className="h-full w-full object-cover" />
             </div>
 
             <div className="flex-grow space-y-2">

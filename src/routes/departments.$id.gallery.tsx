@@ -4,6 +4,7 @@ import { Camera, Maximize2, X, Plus, Trash2, Save, Image as ImageIcon, Type, Tag
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAssetUrl, syncGallery } from "@/lib/departments";
+import { SafeImage } from "@/components/SafeImage";
 import { toast } from "sonner";
 
 import { AdminUpload } from "@/components/AdminEditPanel";
@@ -114,7 +115,7 @@ function GalleryPage() {
             className={`relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-slate-100 border transition-all duration-200 ${isEditMode ? 'border-indigo-400 ring-4 ring-indigo-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}
           >
             {image.image_url ? (
-              <img src={getAssetUrl(image.image_url)} alt={image.title} className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <SafeImage src={image.image_url} alt={image.title || "Gallery image"} className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
             ) : (
               <div className="h-48 flex items-center justify-center bg-slate-200 text-slate-400">
                 <ImageIcon size={32} />
@@ -186,7 +187,7 @@ function GalleryPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4 animate-in fade-in duration-300" onClick={() => setSelectedImage(null)}>
           <button className="absolute top-8 right-8 text-white/70 hover:text-white transition-colors"><X size={32} /></button>
           <div className="relative max-w-5xl w-full animate-in zoom-in duration-300" onClick={e => e.stopPropagation()}>
-            <img src={getAssetUrl(selectedImage.image_url)} className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl" alt="" />
+            <SafeImage src={selectedImage.image_url} className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl" alt="Gallery preview" />
             <div className="mt-6 text-center">
               <span className="text-indigo-400 text-[10px] font-black uppercase tracking-widest">{selectedImage.category}</span>
               <h3 className="text-white text-2xl font-bold mt-1">{selectedImage.title}</h3>

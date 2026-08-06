@@ -1,6 +1,6 @@
 import { createAPIFileRoute } from "@tanstack/react-start/api";
 import { db } from "../../db";
-import { 
+import {
   notices, leadership, siteContent, academicRegulations,
   academicSyllabus, academicTimetables, academicCalendars,
   academicDownloads, academicFeeStructure, faculty,

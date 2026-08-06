@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown, GraduationCap, Search, CornerDownLeft, FileText, 
 import { NAV, SEARCH_INDEX, SITE } from "@/lib/site";
 import { uploadUrl } from "@/lib/assets";
 import { useAdmin } from "@/context/AdminContext";
+import { NoticeTicker } from "@/components/NoticeTicker";
 export function MegaMenu() {
   const { isAdmin } = useAdmin() || {};
   const [scrolled, setScrolled] = useState(false);
@@ -88,10 +89,15 @@ export function MegaMenu() {
 
   return (
     <header className={`fixed inset-x-0 z-50 pointer-events-none transition-all duration-300 ${isAdmin ? "top-12" : "top-0"}`}>
+      {path === "/" && (
+        <div className="w-full flex justify-center px-4 sm:px-8 pt-4 sm:pt-6 pointer-events-auto">
+          <NoticeTicker />
+        </div>
+      )}
       <div className="flex justify-center px-3 sm:px-4">
         <div
           ref={islandRef}
-          className={`pointer-events-auto mt-6 sm:mt-8 transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+          className={`pointer-events-auto ${path === "/" ? "mt-3 sm:mt-4" : "mt-6 sm:mt-8"} transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
             expanded
               ? "w-full max-w-[1400px] rounded-[32px] bg-[oklch(0.18_0.04_255/0.85)] backdrop-blur-2xl shadow-[0_20px_60px_-20px_oklch(0.20_0.10_255/0.55),inset_0_1px_0_oklch(1_0_0/0.08)] border border-white/10"
               : "w-auto rounded-full bg-[oklch(0.16_0.04_255/0.88)] backdrop-blur-2xl shadow-[0_12px_40px_-12px_oklch(0.20_0.10_255/0.6),inset_0_1px_0_oklch(1_0_0/0.1)] border border-white/10"

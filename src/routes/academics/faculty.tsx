@@ -24,6 +24,7 @@ import {
   deleteAcademicsPrincipal
 } from "@/lib/academics";
 import { getAssetUrl, imageUrl } from "@/lib/assets";
+import { SafeImage } from "@/components/SafeImage";
 import { PageHero } from "@/components/PageHero";
 import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
@@ -623,9 +624,10 @@ function FacultyPage() {
 
                       <div className="grid md:grid-cols-3">
                         <div className="relative md:col-span-1 min-h-[300px] overflow-hidden">
-                          <img
-                            src={getAssetUrl(vc.image_url) || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80"}
+                          <SafeImage
+                            src={vc.image_url}
                             alt={vc.name}
+                            fallbackSrc="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80"
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -694,9 +696,10 @@ function FacultyPage() {
 
                       <div className="grid md:grid-cols-3">
                         <div className="relative md:col-span-1 min-h-[250px] overflow-hidden">
-                          <img
-                            src={getAssetUrl(pr.image_url) || "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80"}
+                          <SafeImage
+                            src={pr.image_url}
                             alt={pr.name}
+                            fallbackSrc="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80"
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -856,9 +859,10 @@ function FacultyPage() {
                         )}
 
                         <div className="flex items-start gap-4 mb-5">
-                          <img
-                            src={getAssetUrl(hod.image_url) || "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=800&q=80"}
+                          <SafeImage
+                            src={hod.image_url}
                             alt={hod.name}
+                            fallbackSrc="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=800&q=80"
                             className="w-16 h-16 rounded-2xl object-cover shadow-md shrink-0 border border-slate-200/50 dark:border-slate-800"
                           />
                           <div className="flex-1 min-w-0">
@@ -1108,9 +1112,10 @@ function FacultyPage() {
                           {/* Profile info */}
                           <div className="flex items-center gap-4 mb-6">
                             {hasPhoto ? (
-                              <img 
-                                src={getAssetUrl(member.photo_url)} 
+                              <SafeImage 
+                                src={member.photo_url} 
                                 alt={member.faculty_name} 
+                                fallbackName={member.faculty_name}
                                 className="w-14 h-14 rounded-2xl object-cover shadow-md border border-slate-200/50 dark:border-slate-800 shrink-0"
                               />
                             ) : (

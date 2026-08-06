@@ -21,6 +21,8 @@ import { Route as LibraryRouteImport } from './routes/library'
 import { Route as IipcRouteImport } from './routes/iipc'
 import { Route as HostelsRouteImport } from './routes/hostels'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as FacultyLoginRouteImport } from './routes/faculty-login'
+import { Route as FacultyAccountSettingsRouteImport } from './routes/faculty-account-settings'
 import { Route as EngineeringCellRouteImport } from './routes/engineering-cell'
 import { Route as EdcRouteImport } from './routes/edc'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -91,7 +93,6 @@ import { Route as LocalAssetsUploadsSplatRouteImport } from './routes/local-asse
 import { Route as DepartmentsIdLabsRouteImport } from './routes/departments.$id.labs'
 import { Route as DepartmentsIdHodRouteImport } from './routes/departments.$id.hod'
 import { Route as DepartmentsIdGalleryRouteImport } from './routes/departments.$id.gallery'
-import { Route as DepartmentsIdFacultyRouteImport } from './routes/departments.$id.faculty'
 import { Route as DepartmentsIdCoursesRouteImport } from './routes/departments.$id.courses'
 import { Route as DepartmentsIdAchievementsRouteImport } from './routes/departments.$id.achievements'
 import { Route as AuthGoogleLoginRouteImport } from './routes/auth.google.login'
@@ -100,6 +101,7 @@ import { Route as AdministrationIqacMousRouteImport } from './routes/administrat
 import { Route as AdministrationIqacMeetingsRouteImport } from './routes/administration.iqac.meetings'
 import { Route as AdministrationIqacCompositionRouteImport } from './routes/administration.iqac.composition'
 import { Route as AdministrationIqacAqarRouteImport } from './routes/administration.iqac.aqar'
+import { Route as AdminHodDeptSlugRouteImport } from './routes/admin.hod.$deptSlug'
 import { Route as DepartmentsIdFacultyIndexRouteImport } from './routes/departments.$id.faculty/index'
 import { Route as DepartmentsIdFacultyFacultyIdRouteImport } from './routes/departments.$id.faculty/$facultyId'
 
@@ -161,6 +163,16 @@ const HostelsRoute = HostelsRouteImport.update({
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FacultyLoginRoute = FacultyLoginRouteImport.update({
+  id: '/faculty-login',
+  path: '/faculty-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FacultyAccountSettingsRoute = FacultyAccountSettingsRouteImport.update({
+  id: '/faculty-account-settings',
+  path: '/faculty-account-settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EngineeringCellRoute = EngineeringCellRouteImport.update({
@@ -522,11 +534,6 @@ const DepartmentsIdGalleryRoute = DepartmentsIdGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => DepartmentsIdRoute,
 } as any)
-const DepartmentsIdFacultyRoute = DepartmentsIdFacultyRouteImport.update({
-  id: '/faculty',
-  path: '/faculty',
-  getParentRoute: () => DepartmentsIdRoute,
-} as any)
 const DepartmentsIdCoursesRoute = DepartmentsIdCoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
@@ -570,17 +577,22 @@ const AdministrationIqacAqarRoute = AdministrationIqacAqarRouteImport.update({
   path: '/aqar',
   getParentRoute: () => AdministrationIqacRoute,
 } as any)
+const AdminHodDeptSlugRoute = AdminHodDeptSlugRouteImport.update({
+  id: '/admin/hod/$deptSlug',
+  path: '/admin/hod/$deptSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DepartmentsIdFacultyIndexRoute =
   DepartmentsIdFacultyIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => DepartmentsIdFacultyRoute,
+    id: '/faculty/',
+    path: '/faculty/',
+    getParentRoute: () => DepartmentsIdRoute,
   } as any)
 const DepartmentsIdFacultyFacultyIdRoute =
   DepartmentsIdFacultyFacultyIdRouteImport.update({
-    id: '/$facultyId',
-    path: '/$facultyId',
-    getParentRoute: () => DepartmentsIdFacultyRoute,
+    id: '/faculty/$facultyId',
+    path: '/faculty/$facultyId',
+    getParentRoute: () => DepartmentsIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -593,6 +605,8 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/edc': typeof EdcRoute
   '/engineering-cell': typeof EngineeringCellRoute
+  '/faculty-account-settings': typeof FacultyAccountSettingsRoute
+  '/faculty-login': typeof FacultyLoginRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
   '/iipc': typeof IipcRoute
@@ -660,6 +674,7 @@ export interface FileRoutesByFullPath {
   '/placements/': typeof PlacementsIndexRoute
   '/rd-cell/': typeof RdCellIndexRoute
   '/women-empowerment/': typeof WomenEmpowermentIndexRoute
+  '/admin/hod/$deptSlug': typeof AdminHodDeptSlugRoute
   '/administration/iqac/aqar': typeof AdministrationIqacAqarRoute
   '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
   '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
@@ -668,7 +683,6 @@ export interface FileRoutesByFullPath {
   '/auth/google/login': typeof AuthGoogleLoginRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
-  '/departments/$id/faculty': typeof DepartmentsIdFacultyRouteWithChildren
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
@@ -685,6 +699,8 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/edc': typeof EdcRoute
   '/engineering-cell': typeof EngineeringCellRoute
+  '/faculty-account-settings': typeof FacultyAccountSettingsRoute
+  '/faculty-login': typeof FacultyLoginRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
   '/iipc': typeof IipcRoute
@@ -746,6 +762,7 @@ export interface FileRoutesByTo {
   '/placements': typeof PlacementsIndexRoute
   '/rd-cell': typeof RdCellIndexRoute
   '/women-empowerment': typeof WomenEmpowermentIndexRoute
+  '/admin/hod/$deptSlug': typeof AdminHodDeptSlugRoute
   '/administration/iqac/aqar': typeof AdministrationIqacAqarRoute
   '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
   '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
@@ -774,6 +791,8 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/edc': typeof EdcRoute
   '/engineering-cell': typeof EngineeringCellRoute
+  '/faculty-account-settings': typeof FacultyAccountSettingsRoute
+  '/faculty-login': typeof FacultyLoginRoute
   '/gallery': typeof GalleryRoute
   '/hostels': typeof HostelsRoute
   '/iipc': typeof IipcRoute
@@ -841,6 +860,7 @@ export interface FileRoutesById {
   '/placements/': typeof PlacementsIndexRoute
   '/rd-cell/': typeof RdCellIndexRoute
   '/women-empowerment/': typeof WomenEmpowermentIndexRoute
+  '/admin/hod/$deptSlug': typeof AdminHodDeptSlugRoute
   '/administration/iqac/aqar': typeof AdministrationIqacAqarRoute
   '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
   '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
@@ -849,7 +869,6 @@ export interface FileRoutesById {
   '/auth/google/login': typeof AuthGoogleLoginRoute
   '/departments/$id/achievements': typeof DepartmentsIdAchievementsRoute
   '/departments/$id/courses': typeof DepartmentsIdCoursesRoute
-  '/departments/$id/faculty': typeof DepartmentsIdFacultyRouteWithChildren
   '/departments/$id/gallery': typeof DepartmentsIdGalleryRoute
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
@@ -871,6 +890,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/edc'
     | '/engineering-cell'
+    | '/faculty-account-settings'
+    | '/faculty-login'
     | '/gallery'
     | '/hostels'
     | '/iipc'
@@ -938,6 +959,7 @@ export interface FileRouteTypes {
     | '/placements/'
     | '/rd-cell/'
     | '/women-empowerment/'
+    | '/admin/hod/$deptSlug'
     | '/administration/iqac/aqar'
     | '/administration/iqac/composition'
     | '/administration/iqac/meetings'
@@ -946,7 +968,6 @@ export interface FileRouteTypes {
     | '/auth/google/login'
     | '/departments/$id/achievements'
     | '/departments/$id/courses'
-    | '/departments/$id/faculty'
     | '/departments/$id/gallery'
     | '/departments/$id/hod'
     | '/departments/$id/labs'
@@ -963,6 +984,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/edc'
     | '/engineering-cell'
+    | '/faculty-account-settings'
+    | '/faculty-login'
     | '/gallery'
     | '/hostels'
     | '/iipc'
@@ -1024,6 +1047,7 @@ export interface FileRouteTypes {
     | '/placements'
     | '/rd-cell'
     | '/women-empowerment'
+    | '/admin/hod/$deptSlug'
     | '/administration/iqac/aqar'
     | '/administration/iqac/composition'
     | '/administration/iqac/meetings'
@@ -1051,6 +1075,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/edc'
     | '/engineering-cell'
+    | '/faculty-account-settings'
+    | '/faculty-login'
     | '/gallery'
     | '/hostels'
     | '/iipc'
@@ -1118,6 +1144,7 @@ export interface FileRouteTypes {
     | '/placements/'
     | '/rd-cell/'
     | '/women-empowerment/'
+    | '/admin/hod/$deptSlug'
     | '/administration/iqac/aqar'
     | '/administration/iqac/composition'
     | '/administration/iqac/meetings'
@@ -1126,7 +1153,6 @@ export interface FileRouteTypes {
     | '/auth/google/login'
     | '/departments/$id/achievements'
     | '/departments/$id/courses'
-    | '/departments/$id/faculty'
     | '/departments/$id/gallery'
     | '/departments/$id/hod'
     | '/departments/$id/labs'
@@ -1147,6 +1173,8 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   EdcRoute: typeof EdcRoute
   EngineeringCellRoute: typeof EngineeringCellRoute
+  FacultyAccountSettingsRoute: typeof FacultyAccountSettingsRoute
+  FacultyLoginRoute: typeof FacultyLoginRoute
   GalleryRoute: typeof GalleryRoute
   HostelsRoute: typeof HostelsRoute
   IipcRoute: typeof IipcRoute
@@ -1166,6 +1194,7 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
   DispensaryIndexRoute: typeof DispensaryIndexRoute
+  AdminHodDeptSlugRoute: typeof AdminHodDeptSlugRoute
   AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
   AuthGoogleLoginRoute: typeof AuthGoogleLoginRoute
   LocalAssetsUploadsSplatRoute: typeof LocalAssetsUploadsSplatRoute
@@ -1255,6 +1284,20 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faculty-login': {
+      id: '/faculty-login'
+      path: '/faculty-login'
+      fullPath: '/faculty-login'
+      preLoaderRoute: typeof FacultyLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faculty-account-settings': {
+      id: '/faculty-account-settings'
+      path: '/faculty-account-settings'
+      fullPath: '/faculty-account-settings'
+      preLoaderRoute: typeof FacultyAccountSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/engineering-cell': {
@@ -1747,13 +1790,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsIdGalleryRouteImport
       parentRoute: typeof DepartmentsIdRoute
     }
-    '/departments/$id/faculty': {
-      id: '/departments/$id/faculty'
-      path: '/faculty'
-      fullPath: '/departments/$id/faculty'
-      preLoaderRoute: typeof DepartmentsIdFacultyRouteImport
-      parentRoute: typeof DepartmentsIdRoute
-    }
     '/departments/$id/courses': {
       id: '/departments/$id/courses'
       path: '/courses'
@@ -1810,19 +1846,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationIqacAqarRouteImport
       parentRoute: typeof AdministrationIqacRoute
     }
+    '/admin/hod/$deptSlug': {
+      id: '/admin/hod/$deptSlug'
+      path: '/admin/hod/$deptSlug'
+      fullPath: '/admin/hod/$deptSlug'
+      preLoaderRoute: typeof AdminHodDeptSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/departments/$id/faculty/': {
       id: '/departments/$id/faculty/'
-      path: '/'
+      path: '/faculty'
       fullPath: '/departments/$id/faculty/'
       preLoaderRoute: typeof DepartmentsIdFacultyIndexRouteImport
-      parentRoute: typeof DepartmentsIdFacultyRoute
+      parentRoute: typeof DepartmentsIdRoute
     }
     '/departments/$id/faculty/$facultyId': {
       id: '/departments/$id/faculty/$facultyId'
-      path: '/$facultyId'
+      path: '/faculty/$facultyId'
       fullPath: '/departments/$id/faculty/$facultyId'
       preLoaderRoute: typeof DepartmentsIdFacultyFacultyIdRouteImport
-      parentRoute: typeof DepartmentsIdFacultyRoute
+      parentRoute: typeof DepartmentsIdRoute
     }
   }
 }
@@ -2026,37 +2069,26 @@ const WomenEmpowermentRouteChildren: WomenEmpowermentRouteChildren = {
 const WomenEmpowermentRouteWithChildren =
   WomenEmpowermentRoute._addFileChildren(WomenEmpowermentRouteChildren)
 
-interface DepartmentsIdFacultyRouteChildren {
-  DepartmentsIdFacultyFacultyIdRoute: typeof DepartmentsIdFacultyFacultyIdRoute
-  DepartmentsIdFacultyIndexRoute: typeof DepartmentsIdFacultyIndexRoute
-}
-
-const DepartmentsIdFacultyRouteChildren: DepartmentsIdFacultyRouteChildren = {
-  DepartmentsIdFacultyFacultyIdRoute: DepartmentsIdFacultyFacultyIdRoute,
-  DepartmentsIdFacultyIndexRoute: DepartmentsIdFacultyIndexRoute,
-}
-
-const DepartmentsIdFacultyRouteWithChildren =
-  DepartmentsIdFacultyRoute._addFileChildren(DepartmentsIdFacultyRouteChildren)
-
 interface DepartmentsIdRouteChildren {
   DepartmentsIdAchievementsRoute: typeof DepartmentsIdAchievementsRoute
   DepartmentsIdCoursesRoute: typeof DepartmentsIdCoursesRoute
-  DepartmentsIdFacultyRoute: typeof DepartmentsIdFacultyRouteWithChildren
   DepartmentsIdGalleryRoute: typeof DepartmentsIdGalleryRoute
   DepartmentsIdHodRoute: typeof DepartmentsIdHodRoute
   DepartmentsIdLabsRoute: typeof DepartmentsIdLabsRoute
   DepartmentsIdIndexRoute: typeof DepartmentsIdIndexRoute
+  DepartmentsIdFacultyFacultyIdRoute: typeof DepartmentsIdFacultyFacultyIdRoute
+  DepartmentsIdFacultyIndexRoute: typeof DepartmentsIdFacultyIndexRoute
 }
 
 const DepartmentsIdRouteChildren: DepartmentsIdRouteChildren = {
   DepartmentsIdAchievementsRoute: DepartmentsIdAchievementsRoute,
   DepartmentsIdCoursesRoute: DepartmentsIdCoursesRoute,
-  DepartmentsIdFacultyRoute: DepartmentsIdFacultyRouteWithChildren,
   DepartmentsIdGalleryRoute: DepartmentsIdGalleryRoute,
   DepartmentsIdHodRoute: DepartmentsIdHodRoute,
   DepartmentsIdLabsRoute: DepartmentsIdLabsRoute,
   DepartmentsIdIndexRoute: DepartmentsIdIndexRoute,
+  DepartmentsIdFacultyFacultyIdRoute: DepartmentsIdFacultyFacultyIdRoute,
+  DepartmentsIdFacultyIndexRoute: DepartmentsIdFacultyIndexRoute,
 }
 
 const DepartmentsIdRouteWithChildren = DepartmentsIdRoute._addFileChildren(
@@ -2073,6 +2105,8 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   EdcRoute: EdcRoute,
   EngineeringCellRoute: EngineeringCellRoute,
+  FacultyAccountSettingsRoute: FacultyAccountSettingsRoute,
+  FacultyLoginRoute: FacultyLoginRoute,
   GalleryRoute: GalleryRoute,
   HostelsRoute: HostelsRoute,
   IipcRoute: IipcRoute,
@@ -2092,6 +2126,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,
   DispensaryIndexRoute: DispensaryIndexRoute,
+  AdminHodDeptSlugRoute: AdminHodDeptSlugRoute,
   AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
   AuthGoogleLoginRoute: AuthGoogleLoginRoute,
   LocalAssetsUploadsSplatRoute: LocalAssetsUploadsSplatRoute,

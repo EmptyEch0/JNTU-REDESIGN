@@ -85,21 +85,31 @@ export const updatePageSection = createServerFn({
           content: data.content || "",
           imageUrl: data.imageUrl || "",
         }).returning();
-        updated = rows[0];
+        const inserted = await db
+          .insert(siteContent)
+          .values({
+            page: data.page,
+            sectionKey: data.sectionKey,
+            title: data.title,
+            content: data.content,
+          })
+          .returning({ id: siteContent.id });
+        recordId = inserted[0].id;
       }
 
-      if (updated) {
-        memoryCache.invalidate(`siteContent:${updated.page}`);
-        await ingestSingleChunk(
-          `Page: ${updated.page}. ${updated.title}. ${updated.content}`,
-          `sitecontent:${updated.id}`,
-          "site_content"
-        );
-      }
+      memoryCache.invalidate(`siteContent:${data.page}`);
+
+      // Auto-ingest chunk for RAG chatbot!
+      const chunkSource = `sitecontent:${recordId}`;
+      const chunkText = `Page: ${data.page}, Section: ${data.sectionKey}. ${data.title}. ${data.content}`;
+      ingestSingleChunk(chunkText, chunkSource, "site_content", { page: data.page }).catch(
+        (err) => console.error("RAG auto-ingest error:", err)
+      );
+
       return { success: true };
     } catch (err) {
-      console.error("Update site content failed:", err);
-      throw new Error("Failed to save content");
+      console.error("Update page section failed:", err);
+      throw new Error("Failed to update section");
     }
   });
 
@@ -116,21 +126,28 @@ export const getNotices = createServerFn({
 export const addNotice = createServerFn({
   method: "POST",
 })
-  .inputValidator((data: { date: string; tag: string; title: string; url?: string | null }) => data)
+  .inputValidator(
+    (data: { title: string; date: string; tag: string; link?: string }) => data
+  )
   .handler(async ({ data }) => {
     try {
-      const [inserted] = await db.insert(notices).values({
-        date: data.date,
-        tag: data.tag,
-        title: data.title,
-        url: data.url || null,
-      }).returning();
+      const inserted = await db
+        .insert(notices)
+        .values({
+          title: data.title,
+          date: data.date,
+          tag: data.tag,
+          link: data.link || null,
+        })
+        .returning({ id: notices.id });
 
-      await ingestSingleChunk(
-        `Notice: ${inserted.title}. Category: ${inserted.tag}. Date: ${inserted.date}`,
-        `notice:${inserted.id}`,
-        "notice"
+      const noticeId = inserted[0].id;
+      const chunkSource = `notice:${noticeId}`;
+      const chunkText = `Notice: ${data.title}. Category: ${data.tag}. Date: ${data.date}`;
+      ingestSingleChunk(chunkText, chunkSource, "notice", { date: data.date, tag: data.tag }).catch(
+        (err) => console.error("RAG auto-ingest notice error:", err)
       );
+
       return { success: true };
     } catch (err) {
       console.error("Add notice failed:", err);
@@ -153,7 +170,7 @@ export const deleteNotice = createServerFn({
     }
   });
 
-export const getRegulations = createServerFn({
+export const getAcademicRegulations = createServerFn({
   method: "GET",
 }).handler(async () => {
   try {
@@ -163,28 +180,30 @@ export const getRegulations = createServerFn({
   }
 });
 
-export const addRegulation = createServerFn({
+export const addAcademicRegulation = createServerFn({
   method: "POST",
 })
   .inputValidator(
-    (data: { title: string; category: string; size: string; date: string; link?: string }) => data
+    (data: { title: string; category: string; link: string }) => data
   )
   .handler(async ({ data }) => {
     try {
-      const [inserted] = await db.insert(academicRegulations).values({
-        title: data.title,
-        category: data.category,
-        size: data.size,
-        date: data.date,
-        link: data.link || "#",
-      }).returning();
+      const inserted = await db
+        .insert(academicRegulations)
+        .values({
+          title: data.title,
+          category: data.category,
+          link: data.link,
+        })
+        .returning({ id: academicRegulations.id });
 
-      await ingestSingleChunk(
-        `Regulation: ${inserted.title}. Category: ${inserted.category}. Link: ${inserted.link}`,
-        `regulation:${inserted.id}`,
-        "regulation",
-        { link: inserted.link }
+      const regId = inserted[0].id;
+      const chunkSource = `regulation:${regId}`;
+      const chunkText = `Academic Regulation: ${data.title}. Category: ${data.category}. Download: ${data.link}`;
+      ingestSingleChunk(chunkText, chunkSource, "regulation", { link: data.link, category: data.category }).catch(
+        (err) => console.error("RAG auto-ingest regulation error:", err)
       );
+
       return { success: true };
     } catch (err) {
       console.error("Add regulation failed:", err);
@@ -192,7 +211,7 @@ export const addRegulation = createServerFn({
     }
   });
 
-export const deleteRegulation = createServerFn({
+export const deleteAcademicRegulation = createServerFn({
   method: "POST",
 })
   .inputValidator((data: { id: number }) => data)
@@ -256,25 +275,41 @@ export const queryChatbot = createServerFn({ method: "POST" })
     const query = data.messages[data.messages.length - 1]?.content?.trim() || "";
     if (!query) return { reply: "Please ask me something! 😊" };
 
-    // 1. Embed query using the cached singleton embedder (fast after first load)
+    // 1. Embed query using cached singleton embedder + query vector cache (0ms for repeat queries)
     const vector = await embedQuery(query);
     const vectorStr = `[${vector.join(",")}]`;
 
-    // 2. Broad hybrid search — lower threshold for better recall, fetch more chunks
-    const chunks = await db.execute(sql`
-      SELECT content, source_type, metadata,
-             1 - (embedding <=> ${vectorStr}::vector) AS similarity
-      FROM rag_chunks
-      WHERE 1 - (embedding <=> ${vectorStr}::vector) > 0.05
-      ORDER BY embedding <=> ${vectorStr}::vector
-      LIMIT 20
-    `);
+    // 2. Elastic Hybrid Search: Postgres Vector Cosine Distance + WebSearch Text Search Rank
+    const cleanQuery = query.replace(/[^a-zA-Z0-9\s]/g, " ").trim();
+    let chunks: any[] = [];
+    try {
+      const queryResult = await db.execute(sql`
+        SELECT content, source_type, metadata,
+               (1 - (embedding <=> ${vectorStr}::vector)) AS similarity,
+               ts_rank_cd(to_tsvector('english', content), websearch_to_tsquery('english', ${cleanQuery})) AS text_rank,
+               (0.65 * (1 - (embedding <=> ${vectorStr}::vector)) +
+                0.35 * COALESCE(ts_rank_cd(to_tsvector('english', content), websearch_to_tsquery('english', ${cleanQuery})), 0)) AS combined_score
+        FROM rag_chunks
+        WHERE (1 - (embedding <=> ${vectorStr}::vector)) > 0.05
+           OR (to_tsvector('english', content) @@ websearch_to_tsquery('english', ${cleanQuery}))
+        ORDER BY combined_score DESC, similarity DESC
+        LIMIT 25
+      `);
+      chunks = Array.from(queryResult);
+    } catch (err) {
+      // Fallback to pure vector search if fulltext query syntax throws
+      const fallbackResult = await db.execute(sql`
+        SELECT content, source_type, metadata,
+               1 - (embedding <=> ${vectorStr}::vector) AS similarity
+        FROM rag_chunks
+        WHERE 1 - (embedding <=> ${vectorStr}::vector) > 0.05
+        ORDER BY embedding <=> ${vectorStr}::vector
+        LIMIT 25
+      `);
+      chunks = Array.from(fallbackResult);
+    }
 
-    // 3. Run the local intelligent engine — intent detection + BM25 rerank + template answer
-    //    Zero network calls. Answers in < 50ms after embedder warmup.
-    const reply = runChatbotEngine({ query, chunks: chunks as any[] });
+    // 3. Local Intelligent Engine: Intent detection + BM25 Rerank + Template Summarizer
+    const reply = runChatbotEngine({ query, chunks });
     return { reply };
-
   });
-
-

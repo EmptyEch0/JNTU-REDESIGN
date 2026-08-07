@@ -253,7 +253,36 @@ async function main() {
   for (const t of await db.select().from(tickerNotifications))
     await upsertChunk(`Notification: ${(t as any).text ?? ""} Link: ${(t as any).link ?? ""}`, `ticker:${(t as any).id}`, "notification", {});
 
+  // STATIC JSON KNOWLEDGE BASE (Stories, Projects, Experience, FAQs, Facilities)
+  try {
+    const kbData = JSON.parse(require("fs").readFileSync(require("path").join(__dirname, "../src/data/college_kb.json"), "utf8"));
+    if (kbData.stories_and_experiences) {
+      for (const s of kbData.stories_and_experiences) {
+        await upsertChunk(`Story / Experience (${s.category}): ${s.title}. ${s.content}`, `kb_story:${s.id}`, "kb_story", { title: s.title, category: s.category });
+      }
+    }
+    if (kbData.departments_detailed) {
+      for (const d of kbData.departments_detailed) {
+        await upsertChunk(`Department Detail: ${d.name} (${d.code}). HOD: ${d.hod}. Intake: ${d.intake || "N/A"}. Highlights: ${d.highlights}`, `kb_dept:${d.code}`, "department", { code: d.code });
+      }
+    }
+    if (kbData.faqs) {
+      for (let i = 0; i < kbData.faqs.length; i++) {
+        const faq = kbData.faqs[i];
+        await upsertChunk(`FAQ Question: ${faq.question} Answer: ${faq.answer}`, `kb_faq:${i}`, "kb_faq", {});
+      }
+    }
+    if (kbData.facilities) {
+      for (const [key, val] of Object.entries(kbData.facilities)) {
+        await upsertChunk(`Campus Facility (${key}): ${val}`, `kb_facility:${key}`, "kb_facility", {});
+      }
+    }
+  } catch (err) {
+    console.warn("Notice: Could not load college_kb.json for ingestion:", err);
+  }
+
   console.log("✅ Full ingestion complete.");
 }
 
 main().catch(console.error);
+

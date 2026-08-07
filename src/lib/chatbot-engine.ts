@@ -63,12 +63,16 @@ export type Intent =
   | "lab"
   | "mou"
   | "transport"
+  | "stories"
+  | "projects"
   | "unknown";
 
 const INTENT_PATTERNS: Array<{ intent: Intent; pattern: RegExp }> = [
   { intent: "greeting",      pattern: /^\s*(hi|hello|hey|namaste|namaskar|good\s*(morning|evening|afternoon)|howdy|sup|hii+|helo)\b/i },
   { intent: "farewell",      pattern: /\b(bye|goodbye|see you|take care|quit|exit|cya)\b/i },
   { intent: "thanks",        pattern: /\b(thank(s| you)|thanks\s*a\s*(lot|ton|bunch)|dhanyavaadalu|dhanyavadalu|ty\b|thx)\b/i },
+  { intent: "stories",       pattern: /\b(story|stories|experience|campus life|student life|culture|life at|lifestyle|memories)\b/i },
+  { intent: "projects",      pattern: /\b(project|projects|innovation|innovations|prototype|research project|student project|achievement)\b/i },
   { intent: "principal",     pattern: /\b(principal|head of college|college head|who leads|who is in charge|college chief)\b/i },
   { intent: "vice_principal",pattern: /\b(vice.?principal|vp\b|vice principal)\b/i },
   { intent: "leadership",    pattern: /\b(leadership|management|governing body|administration|officials)\b/i },
@@ -348,6 +352,19 @@ function buildAnswer(
     if (isTe) return `JNTU-GV CEV లో **${KB.departments.length} విభాగాలు** ఉన్నాయి 🎓\n\n${list}${extra ? `\n\n${extra}` : ""}`;
     if (isTenglish) return `JNTU-GV CEV lo **${KB.departments.length} departments** unnaayi 🎓\n\n${list}${extra ? `\n\n${extra}` : ""}`;
     return `JNTU-GV CEV offers **${KB.departments.length} departments** 🎓\n\n${list}${extra ? `\n\n${extra}` : ""}`;
+  }
+
+  // ── STORIES & CAMPUS EXPERIENCE ──
+  if (intents.includes("stories")) {
+    const storyInfo = rel(["story", "campus", "life", "experience", "fest", "culture", "student", "hackathon", "nss"], 8);
+    if (isTe) return `**క్యాంపస్ జీవితం మరియు అనుభవాలు** 🌟\n\n${storyInfo || "JNTU-GV CEV లో 100 ఎకరాల హరిత కాంపస్ లో నిరంతరం టెక్ ఫెస్ట్‌లు, హ్యాకథాన్‌లు, క్రీడా పోటీలు మరియు సాంస్కృతిక వేడుకలు జరుగుతుంటాయి."}`;
+    return `**Campus Stories & Student Life** 🌟\n\n${storyInfo || "Life at JNTU-GV CEV combines rigorous technical education with a 100-acre lush green campus, annual fests, coding hackathons, sports tournaments, and NSS community activities."}`;
+  }
+
+  // ── INNOVATIONS & PROJECTS ──
+  if (intents.includes("projects")) {
+    const projInfo = rel(["project", "innovation", "research", "r&d", "prototype", "solar", "ai", "iot", "drone"], 8);
+    return `**Student Projects & Innovations** 💡\n\n${projInfo || "Students at JNTU-GV CEV develop innovative engineering projects including AI smart agriculture tools, solar microgrids, robotics, and IoT smart grid controllers under faculty guidance."}`;
   }
 
   // ── SYLLABUS ──

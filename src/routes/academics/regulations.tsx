@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { Plus, Trash2 } from "lucide-react";
-import { getRegulations, addRegulation, deleteRegulation } from "@/funcs/site.server";
+import { getAcademicRegulations, addAcademicRegulation, deleteAcademicRegulation } from "@/funcs/site.server";
 import {
   AdminModeBanner,
   AdminPanel,
@@ -21,7 +21,7 @@ import {
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/regulations")({
-  loader: async () => await getRegulations(),
+  loader: async () => await getAcademicRegulations(),
   component: RegulationsPage,
 });
 
@@ -56,12 +56,10 @@ function RegulationsPage() {
     if (!newReg.title.trim()) return;
     const tId = toast.loading("Adding new academic regulation...");
     try {
-      await addRegulation({
+      await addAcademicRegulation({
         data: {
           title: newReg.title,
           category: newReg.category,
-          size: newReg.size || "1.0 MB",
-          date: newReg.date || new Date().toLocaleString("en-US", { month: "short", year: "numeric" }),
           link: newReg.link || "#",
         },
       });
@@ -76,7 +74,7 @@ function RegulationsPage() {
   async function handleDelete(id: number) {
     const tId = toast.loading("Purging regulation record...");
     try {
-      await deleteRegulation({ data: { id } });
+      await deleteAcademicRegulation({ data: { id } });
       toast.success("Regulation deleted!", { id: tId });
       router.invalidate();
     } catch {

@@ -6,7 +6,7 @@ import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FileText, Download, ShieldCheck, Building2, ExternalLink, Plus, Trash2 } from "lucide-react";
 const heroImg = imageUrl("hero-carousal/hero-campus.jpg");
-import { getPageContent, updatePageSection, getRegulations, addRegulation, deleteRegulation } from "@/funcs/site.server";
+import { getPageContent, updatePageSection, getAcademicRegulations, addAcademicRegulation, deleteAcademicRegulation } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import {
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/about/norms")({
   loader: async () => {
     const [pageContent, regulations] = await Promise.all([
       getPageContent({ data: "norms" }),
-      getRegulations(),
+      getAcademicRegulations(),
     ]);
     return { pageContent, regulations };
   },
@@ -170,12 +170,12 @@ function NormsPage() {
     }
     const tId = toast.loading("Adding document...");
     try {
-      await addRegulation({
-        title: newDoc.title,
-        category: "Norms",
-        size: newDoc.desc || "Document",
-        date: newDoc.category,
-        link: newDoc.link,
+      await addAcademicRegulation({
+        data: {
+          title: newDoc.title,
+          category: "Norms",
+          link: newDoc.link,
+        },
       });
       toast.success("Document added successfully!", { id: tId });
       setNewDoc({ title: "", category: "Recognition", desc: "", link: "" });
@@ -193,7 +193,7 @@ function NormsPage() {
     if (!confirm("Are you sure you want to delete this document?")) return;
     const tId = toast.loading("Deleting document...");
     try {
-      await deleteRegulation({ id });
+      await deleteAcademicRegulation({ data: { id } });
       toast.success("Document deleted successfully!", { id: tId });
       router.invalidate();
     } catch {

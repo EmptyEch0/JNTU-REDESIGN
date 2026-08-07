@@ -45,7 +45,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getLeadershipData } from "../funcs/leadership";
 import { getAllDepartments } from "@/functions/departments"; // Added our new query hook target
 import { getAssetUrl } from "@/lib/departments";
-import { getAssetUrl } from "@/lib/departments";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [

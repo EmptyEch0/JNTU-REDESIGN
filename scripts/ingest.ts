@@ -1,6 +1,8 @@
 import { db } from "../src/db";
 import { sql } from "drizzle-orm";
 import { createHash } from "crypto";
+import fs from "fs";
+import path from "path";
 import {
   notices, leadership, leadershipStaff, siteContent,
   academicRegulations, academicSyllabus, academicTimetables,
@@ -255,7 +257,8 @@ async function main() {
 
   // STATIC JSON KNOWLEDGE BASE (Stories, Projects, Experience, FAQs, Facilities)
   try {
-    const kbData = JSON.parse(require("fs").readFileSync(require("path").join(__dirname, "../src/data/college_kb.json"), "utf8"));
+    const kbPath = path.resolve(process.cwd(), "src/data/college_kb.json");
+    const kbData = JSON.parse(fs.readFileSync(kbPath, "utf8"));
     if (kbData.stories_and_experiences) {
       for (const s of kbData.stories_and_experiences) {
         await upsertChunk(`Story / Experience (${s.category}): ${s.title}. ${s.content}`, `kb_story:${s.id}`, "kb_story", { title: s.title, category: s.category });

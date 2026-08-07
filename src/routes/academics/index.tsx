@@ -154,7 +154,7 @@ const MODULES = [
     to: "/academics/faculty",
     gradient: "from-transparent via-slate-900/40 to-slate-950/90",
     image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
+      "http://89.116.134.182/local-assets/uploads/images/administration/principal.jpeg",
   },
   {
     name: "HOD Message Desk",

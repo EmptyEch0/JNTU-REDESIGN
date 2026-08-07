@@ -37,10 +37,12 @@ export function VerticalSubNav({ items }: { items: Item[] }) {
     setIsOpen(false);
   }, [path]);
 
-  const isActive = (to: string) =>
-    path === to || (to !== "/" && path.startsWith(to + "/"));
+  // Find the most specific (longest) matching path
+  const activeItem = [...items]
+    .sort((a, b) => b.to.length - a.to.length)
+    .find((it) => path === it.to || (it.to !== "/" && path.startsWith(it.to + "/")));
 
-  const activeItem = items.find((it) => isActive(it.to));
+  const isActive = (to: string) => activeItem?.to === to;
 
   return (
     <>

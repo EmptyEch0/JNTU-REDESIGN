@@ -11,6 +11,7 @@ import {
   Briefcase, BookOpen, Save, Plus, Trash2, Camera, Type, IdCard, LogOut
 } from "lucide-react";
 import { getAssetUrl } from "@/lib/assets";
+import { SafeImage } from "@/components/SafeImage";
 
 
 export const Route = createFileRoute("/departments/$id/faculty/$facultyId")({
@@ -167,11 +168,11 @@ const isEditMode = isDeptLevelEdit || isFacultySelfEdit;
       {/* Profile Header Block */}
       <div className={`relative bg-gradient-to-br from-slate-900 to-blue-950 rounded-[2.5rem] p-8 text-white shadow-xl flex flex-col md:flex-row gap-8 items-center border transition-all ${isEditMode ? 'border-amber-400 ring-4 ring-amber-400/10' : 'border-transparent'}`}>
         <div className="h-32 w-32 md:h-40 md:w-40 rounded-full overflow-hidden border-4 border-white/10 shrink-0 bg-white/5 relative group">
-          <img 
-            src={getAssetUrl(editState.photo_url) || ""} 
+          <SafeImage 
+            src={editState.photo_url} 
             alt={editState.name}
+            fallbackName={editState.name}
             className="w-full h-full object-cover"
-            onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(editState.name)}&size=150&background=0D8ABC&color=fff`; }}
           />
         </div>
 

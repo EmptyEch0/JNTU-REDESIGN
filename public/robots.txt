@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jntugvcev.edu.in/sitemap.xml

@@ -10,6 +10,23 @@ import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/departments/$id/faculty")({
+  head: ({ matches }) => {
+    const parentMatch = matches.find((m) => m.routeId === "/departments/$id");
+    const parentData = parentMatch?.loaderData as DepartmentData | undefined;
+    const name = parentData?.name || "Department";
+    return {
+      meta: [
+        { title: `Faculty — ${name} — JNTU-GV CEV` },
+        {
+          name: "description",
+          content: `Meet the expert faculty members of the ${name} Department at JNTU-GV College of Engineering Vizianagaram.`,
+        },
+      ],
+      links: [
+        { rel: "canonical", href: `https://jntugvcev.edu.in/departments/${parentData?.slug || ""}/faculty` }
+      ],
+    };
+  },
   component: FacultyPage,
 });
 

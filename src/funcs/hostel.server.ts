@@ -7,6 +7,14 @@ import {
   hostelImages,
 } from "../db/schema";
 import { eq } from "drizzle-orm";
+import { serverCache } from "../lib/server-cache";
+
+// Helper wrapper to invalidate cache on modification
+async function hostelMutate<T>(action: () => Promise<T>): Promise<T> {
+  const result = await action();
+  serverCache.invalidate("hostel_data");
+  return result;
+}
 
 // =======================================
 // ✅ GET HOSTEL DATA (NEW STRUCTURE)
@@ -14,6 +22,9 @@ import { eq } from "drizzle-orm";
 export const getHostelData = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const cached = serverCache.get<any>("hostel_data");
+      if (cached) return cached;
+
       const [
         content,
         structure,
@@ -28,7 +39,7 @@ export const getHostelData = createServerFn({ method: "GET" })
 
       const c = content[0];
 
-      return {
+      const data = {
         officer: {
           name: c?.officerName,
           role: c?.officerRole,
@@ -54,6 +65,9 @@ export const getHostelData = createServerFn({ method: "GET" })
         images,
       };
 
+      serverCache.set("hostel_data", data);
+      return data;
+
     } catch (err) {
       console.error("HOSTEL DB ERROR:", err);
 
@@ -69,18 +83,19 @@ export const getHostelData = createServerFn({ method: "GET" })
       };
     }
   });
+
 export const updateImage = createServerFn({
   method: "POST",
 })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
-    return db
+    return hostelMutate(() => db
       .update(hostelImages)
       .set({
         url: data.url,
       })
       .where(eq(hostelImages.id, data.id))
-      .returning();
+      .returning());
   });
 
 // =======================================
@@ -91,11 +106,11 @@ export const updateContent = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { id, ...rest } = data;
 
-    return db
+    return hostelMutate(() => db
       .update(hostelContent)
       .set(rest)
       .where(eq(hostelContent.id, id))
-      .returning();
+      .returning());
   });
 
 
@@ -105,25 +120,25 @@ export const updateContent = createServerFn({ method: "POST" })
 export const addStructure = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
-    return db.insert(hostelStructure).values(data).returning();
+    return hostelMutate(() => db.insert(hostelStructure).values(data).returning());
   });
 
 export const updateStructure = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
-    return db
+    return hostelMutate(() => db
       .update(hostelStructure)
       .set(data)
       .where(eq(hostelStructure.id, data.id))
-      .returning();
+      .returning());
   });
 
 export const deleteStructure = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
-    return db
+    return hostelMutate(() => db
       .delete(hostelStructure)
-      .where(eq(hostelStructure.id, data.id));
+      .where(eq(hostelStructure.id, data.id)));
   });
 
 
@@ -133,25 +148,25 @@ export const deleteStructure = createServerFn({ method: "POST" })
 export const addPerson = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
-    return db.insert(hostelPeople).values(data).returning();
+    return hostelMutate(() => db.insert(hostelPeople).values(data).returning());
   });
 
 export const updatePerson = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
-    return db
+    return hostelMutate(() => db
       .update(hostelPeople)
       .set(data)
       .where(eq(hostelPeople.id, data.id))
-      .returning();
+      .returning());
   });
 
 export const deletePerson = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
-    return db
+    return hostelMutate(() => db
       .delete(hostelPeople)
-      .where(eq(hostelPeople.id, data.id));
+      .where(eq(hostelPeople.id, data.id)));
   });
 
 
@@ -161,14 +176,14 @@ export const deletePerson = createServerFn({ method: "POST" })
 export const addImage = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
-    return db.insert(hostelImages).values(data).returning();
+    return hostelMutate(() => db.insert(hostelImages).values(data).returning());
   });
 
 export const deleteImage = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
-    return db
+    return hostelMutate(() => db
       .delete(hostelImages)
       .where(eq(hostelImages.id, data.id))
-      .returning();
+      .returning());
   });

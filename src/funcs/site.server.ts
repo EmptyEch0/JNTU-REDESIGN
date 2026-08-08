@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { db } from "../db";
 import { siteContent, notices, academicRegulations, campusGallery, leadership } from "../db/schema";
 import { eq, and, desc } from "drizzle-orm";
+import { serverCache } from "../lib/server-cache";
 
 export const getPageContent = createServerFn({
   method: "GET",
@@ -9,10 +10,16 @@ export const getPageContent = createServerFn({
   .inputValidator((page: string) => page)
   .handler(async ({ data: page }) => {
     try {
+      const cacheKey = `page_content_${page}`;
+      const cached = serverCache.get<any[]>(cacheKey);
+      if (cached) return cached;
+
       const records = await db
         .select()
         .from(siteContent)
         .where(eq(siteContent.page, page));
+      
+      serverCache.set(cacheKey, records);
       return records;
     } catch {
       return [];
@@ -61,6 +68,7 @@ export const updatePageSection = createServerFn({
           imageUrl: data.imageUrl || "",
         });
       }
+      serverCache.invalidate(`page_content_${data.page}`);
       return { success: true };
     } catch (err) {
       console.error("Update site content failed:", err);
@@ -72,7 +80,12 @@ export const getNotices = createServerFn({
   method: "GET",
 }).handler(async () => {
   try {
-    return await db.select().from(notices).orderBy(desc(notices.id));
+    const cached = serverCache.get<any[]>("notices");
+    if (cached) return cached;
+
+    const records = await db.select().from(notices).orderBy(desc(notices.id));
+    serverCache.set("notices", records);
+    return records;
   } catch {
     return [];
   }
@@ -89,6 +102,7 @@ export const addNotice = createServerFn({
         tag: data.tag,
         title: data.title,
       });
+      serverCache.invalidate("notices");
       return { success: true };
     } catch (err) {
       console.error("Add notice failed:", err);
@@ -103,6 +117,7 @@ export const deleteNotice = createServerFn({
   .handler(async ({ data }) => {
     try {
       await db.delete(notices).where(eq(notices.id, data.id));
+      serverCache.invalidate("notices");
       return { success: true };
     } catch (err) {
       console.error("Delete notice failed:", err);
@@ -114,7 +129,12 @@ export const getRegulations = createServerFn({
   method: "GET",
 }).handler(async () => {
   try {
-    return await db.select().from(academicRegulations).orderBy(desc(academicRegulations.id));
+    const cached = serverCache.get<any[]>("regulations");
+    if (cached) return cached;
+
+    const records = await db.select().from(academicRegulations).orderBy(desc(academicRegulations.id));
+    serverCache.set("regulations", records);
+    return records;
   } catch {
     return [];
   }
@@ -135,6 +155,7 @@ export const addRegulation = createServerFn({
         date: data.date,
         link: data.link || "#",
       });
+      serverCache.invalidate("regulations");
       return { success: true };
     } catch (err) {
       console.error("Add regulation failed:", err);
@@ -149,6 +170,7 @@ export const deleteRegulation = createServerFn({
   .handler(async ({ data }) => {
     try {
       await db.delete(academicRegulations).where(eq(academicRegulations.id, data.id));
+      serverCache.invalidate("regulations");
       return { success: true };
     } catch (err) {
       console.error("Delete regulation failed:", err);
@@ -160,7 +182,12 @@ export const getCampusGallery = createServerFn({
   method: "GET",
 }).handler(async () => {
   try {
-    return await db.select().from(campusGallery).orderBy(desc(campusGallery.id));
+    const cached = serverCache.get<any[]>("campus_gallery");
+    if (cached) return cached;
+
+    const records = await db.select().from(campusGallery).orderBy(desc(campusGallery.id));
+    serverCache.set("campus_gallery", records);
+    return records;
   } catch {
     return [];
   }
@@ -176,6 +203,7 @@ export const addCampusGalleryItem = createServerFn({
         src: data.src,
         caption: data.caption || "",
       });
+      serverCache.invalidate("campus_gallery");
       return { success: true };
     } catch (err) {
       console.error("Add campus gallery item failed:", err);
@@ -190,6 +218,7 @@ export const deleteCampusGalleryItem = createServerFn({
   .handler(async ({ data }) => {
     try {
       await db.delete(campusGallery).where(eq(campusGallery.id, data.id));
+      serverCache.invalidate("campus_gallery");
       return { success: true };
     } catch (err) {
       console.error("Delete campus gallery item failed:", err);

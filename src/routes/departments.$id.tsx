@@ -27,6 +27,39 @@ export const Route = createFileRoute("/departments/$id")({
     if (!data) throw new Error("Department not found");
     return data;
   },
+  head: ({ loaderData }) => {
+    const data = loaderData as DepartmentData | undefined;
+    const name = data?.name || "Department";
+    const desc = data?.description || `Department details, syllabus, courses, faculty and laboratories at JNTU-GV College of Engineering Vizianagaram.`;
+    return {
+      meta: [
+        { title: `${name} — JNTU-GV CEV` },
+        { name: "description", content: desc },
+        { property: "og:title", content: `${name} — JNTU-GV CEV` },
+        { property: "og:description", content: desc },
+      ],
+      links: [
+        { rel: "canonical", href: `https://jntugvcev.edu.in/departments/${data?.slug || ""}` }
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "EducationalOrganization",
+            "name": `${name} - JNTU-GV CEV`,
+            "description": desc,
+            "url": `https://jntugvcev.edu.in/departments/${data?.slug || ""}`,
+            "parentOrganization": {
+              "@type": "EducationalOrganization",
+              "name": "JNTU-GV College of Engineering Vizianagaram",
+              "url": "https://jntugvcev.edu.in/"
+            }
+          })
+        }
+      ]
+    };
+  },
   component: DepartmentLayout,
 });
 

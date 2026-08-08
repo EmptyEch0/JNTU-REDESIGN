@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-
 import { db } from "@/db";
+import { serverCache } from "@/lib/server-cache";
 
 import {
   libraryContent,
@@ -15,6 +15,9 @@ export const getLibraryData = createServerFn({
   method: "GET",
 }).handler(async () => {
   try {
+    const cached = serverCache.get<any>("library_data");
+    if (cached) return cached;
+
     const [content] = await db
       .select()
       .from(libraryContent)
@@ -40,7 +43,7 @@ export const getLibraryData = createServerFn({
       .select()
       .from(libraryTeam);
 
-    return {
+    const data = {
       content,
       images,
       sections,
@@ -48,6 +51,9 @@ export const getLibraryData = createServerFn({
       meta,
       team,
     };
+
+    serverCache.set("library_data", data);
+    return data;
   } catch (error) {
     console.error(
       "LIBRARY SERVER ERROR:",

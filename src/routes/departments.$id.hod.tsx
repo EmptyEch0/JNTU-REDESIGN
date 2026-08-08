@@ -18,6 +18,24 @@ import {
 } from "lucide-react";
 import { ProfileRenderer } from "@/components/ProfileRenderer";
 export const Route = createFileRoute("/departments/$id/hod")({
+  head: ({ matches }) => {
+    const parentMatch = matches.find((m) => m.routeId === "/departments/$id");
+    const parentData = parentMatch?.loaderData as DepartmentData | undefined;
+    const name = parentData?.name || "Department";
+    const hod = parentData?.hod || "Head of Department";
+    return {
+      meta: [
+        { title: `HOD Message — ${name} — JNTU-GV CEV` },
+        {
+          name: "description",
+          content: `Read the message from ${hod}, the Head of the ${name} Department at JNTU-GV College of Engineering Vizianagaram.`,
+        },
+      ],
+      links: [
+        { rel: "canonical", href: `https://jntugvcev.edu.in/departments/${parentData?.slug || ""}/hod` }
+      ],
+    };
+  },
   component: HodPage,
 });
 

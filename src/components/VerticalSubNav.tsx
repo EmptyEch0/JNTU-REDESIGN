@@ -47,7 +47,7 @@ export function VerticalSubNav({ items }: { items: Item[] }) {
   return (
     <>
       {/* ── Desktop: sticky vertical sidebar ── */}
-      <aside className="hidden md:block w-56 flex-shrink-0 self-start lg:sticky lg:top-28">
+      <aside className="hidden md:block w-56 flex-shrink-0 self-start sticky top-28 z-20">
         <div className="bg-white lg:bg-slate-50 rounded-3xl p-6 lg:border border-slate-100 max-h-[calc(100vh-8rem)] overflow-y-auto no-scrollbar space-y-2">
           <h3 className="text-xs font-extrabold uppercase tracking-widest text-blue-600 px-4 mb-4">
             Navigation
@@ -74,11 +74,11 @@ export function VerticalSubNav({ items }: { items: Item[] }) {
       {/* ── Mobile: collapsible dropdown pill ── */}
       <div
         ref={menuRef}
-        className="md:hidden relative w-full max-w-sm mx-auto mb-6 pointer-events-auto"
+        className="md:hidden sticky top-24 z-30 w-full max-w-sm mx-auto mb-6 pointer-events-auto"
       >
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-between px-5 py-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm text-slate-800 active:scale-[0.98] transition-transform"
+          className="w-full flex items-center justify-between px-5 py-3.5 rounded-2xl bg-white border border-slate-200 shadow-md text-slate-800 active:scale-[0.98] transition-transform"
         >
           <span className="text-sm font-bold">
             {activeItem?.label || "Navigation"}

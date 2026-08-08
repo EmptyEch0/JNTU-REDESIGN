@@ -167,7 +167,7 @@ function AdminContent() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col ${isAdmin ? "pt-12" : ""} w-full max-w-full overflow-x-hidden`}>
+    <div className={`min-h-screen flex flex-col ${isAdmin ? "pt-12" : ""} w-full max-w-full`}>
       {isAdmin && (
         <div className="fixed top-0 left-0 right-0 h-12 bg-black text-white px-4 md:px-6 flex items-center justify-between z-[100] shadow-lg overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-3 md:gap-6 shrink-0">
@@ -204,7 +204,7 @@ function AdminContent() {
 
       <MegaMenu />
 
-      <main key={path} className="flex-1 animate-[fade-in_0.2s_ease-out] w-full max-w-full overflow-x-hidden">
+      <main key={path} className="flex-1 animate-[fade-in_0.2s_ease-out] w-full max-w-full">
         <Outlet />
       </main>
 

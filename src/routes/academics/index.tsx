@@ -163,7 +163,7 @@ const MODULES = [
     to: "/academics/faculty?tab=hods",
     gradient: "from-transparent via-slate-900/40 to-red-950/90",
     image:
-      "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=800&q=80",
+      "http://89.116.134.182/local-assets/uploads/departments/hod_photos/it-hod.jpg",
   },
 ];
 
@@ -244,7 +244,7 @@ function AcademicsDashboard() {
 
 
       {/* Stats Counter Section */}
-      <section className="container-narrow">
+      <section className="w-full">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-3xl overflow-hidden border border-border shadow-[var(--shadow-elegant)]">
           {dbStats.map((s: any) => {
             const numValue = parseInt(String(s.value).replace(/\D/g, "")) || 0;
@@ -261,7 +261,7 @@ function AcademicsDashboard() {
 
       {/* Admin Mode Stat Actions */}
       {isEditMode && (
-        <section className="container-narrow space-y-6">
+        <section className="w-full space-y-6">
           <GlassCard className="p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl flex items-center justify-between text-slate-900">
             <p className="text-amber-800 text-xs font-semibold">
               <strong>Admin Dashboard Mode:</strong> Adjust quick statistics metrics, colors, trends, or add new stats cards.
@@ -408,7 +408,7 @@ function AcademicsDashboard() {
 
       {/* Admin Mode Ticker Notification Actions */}
       {isEditMode && (
-        <section className="container-narrow space-y-6">
+        <section className="w-full space-y-6">
           <GlassCard className="p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl flex items-center justify-between text-slate-900">
             <p className="text-amber-800 text-xs font-semibold">
               <strong>Admin Notifications Mode:</strong> Manage ticker scroll notifications (add custom notifications, dates, target paths).
@@ -585,8 +585,8 @@ function AcademicsDashboard() {
       )}
 
       {/* Module Navigator Section */}
-      <section className="py-12 bg-slate-50/50 dark:bg-slate-900/20 border-t border-border">
-        <div className="container-narrow">
+      <section className="py-12 bg-slate-50/50 dark:bg-slate-900/20 border-t border-border rounded-3xl">
+        <div className="w-full px-6">
           <div className="flex items-center justify-between mb-8">
             <div>
               <SectionLabel>Academic Modules</SectionLabel>

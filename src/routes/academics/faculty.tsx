@@ -23,6 +23,7 @@ import {
   upsertAcademicsPrincipal,
   deleteAcademicsPrincipal
 } from "@/lib/academics";
+import { getDepartments } from "@/lib/departments";
 import { getAssetUrl, imageUrl } from "@/lib/assets";
 import { SafeImage } from "@/components/SafeImage";
 import { PageHero } from "@/components/PageHero";
@@ -182,10 +183,26 @@ function FacultyPage() {
     queryFn: getAcademicsHodDesk,
   });
 
+  const { data: departmentsData = [] } = useQuery({
+    queryKey: ["departments"],
+    queryFn: getDepartments,
+  });
+
   // Compiled lists with database records or fallbacks
   const vcs = vcList.length > 0 ? vcList : FALLBACK_VCS;
   const principals = principalList.length > 0 ? principalList : FALLBACK_PRINCIPALS;
-  const hods = hodData.length > 0 ? hodData : FALLBACK_HODS;
+  
+  const deptHods = departmentsData.map((dept: any, idx: number) => ({
+    id: dept.id || idx + 1000,
+    department: dept.name,
+    name: dept.hod || `Head of Department`,
+    designation: `Head of Department, ${dept.slug ? dept.slug.toUpperCase() : ""}`,
+    message: dept.hod_message || `The Department of ${dept.name} is committed to excellence in academics and research.`,
+    image_url: dept.hod_photo || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+    achievements: "",
+  }));
+
+  const hods = deptHods.length > 0 ? deptHods : (hodData.length > 0 ? hodData : FALLBACK_HODS);
   const directoryList = faculty.length > 0 ? faculty : FALLBACK_FACULTY;
 
   // Faculty Directory Departments List

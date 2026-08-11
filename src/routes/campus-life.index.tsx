@@ -261,7 +261,7 @@ function CampusLifePage() {
               >
                 {/* IMAGE */}
                 <div className="overflow-hidden rounded-3xl shadow-[var(--shadow-elegant)] aspect-[4/3]">
-                  <img
+                  <img decoding="async"
                     src={p.img}
                     alt={p.title}
                     loading="lazy"

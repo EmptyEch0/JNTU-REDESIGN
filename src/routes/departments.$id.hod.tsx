@@ -98,9 +98,9 @@ function HodPage() {
               <GraduationCap className="w-4 h-4 text-blue-300" />
               <span>Department Leadership</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
               From the HOD's Desk
-            </h1>
+            </h2>
             <p className="text-lg md:text-xl text-blue-100 max-w-2xl">
               A message from our department head, sharing vision, achievements, and future directions.
             </p>
@@ -135,7 +135,7 @@ function HodPage() {
                 <div className="relative -mt-16 px-6 text-center">
                   <div className="relative inline-block">
                     <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white mx-auto">
-                      <img
+                      <img decoding="async" loading="lazy"
                         src={getAssetUrl(editData.hod_photo)}
                         alt={hodName}
                         className="h-full w-full object-cover"

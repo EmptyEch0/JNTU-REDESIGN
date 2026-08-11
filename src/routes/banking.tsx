@@ -113,7 +113,7 @@ function BankingPage() {
           {/* IMAGE STACK */}
           <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-[32px] shadow-md border border-slate-200/60 bg-slate-200 transition-all duration-300">
             <div className="relative aspect-[21/9] md:aspect-[16/7] min-h-[200px] max-h-[340px] w-full overflow-hidden group bg-slate-900">
-              <img
+              <img decoding="async" loading="lazy"
                 src={getAssetUrl(imgRec?.imageUrl) || atmpic}
                 alt="Banking Infrastructure"
                 className="w-full h-full object-cover group-hover:scale-105 transition duration-300"

@@ -45,6 +45,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getLeadershipData } from "../funcs/leadership";
 import { getAllDepartments } from "@/functions/departments"; // Added our new query hook target
 import { getAssetUrl } from "@/lib/departments";
+import { getHostelData } from "@/funcs/hostel.server";
+import { getLibraryData } from "@/funcs/library.server";
+import { getDispensaryData } from "@/funcs/dispensary.server";
+import { getSportsData } from "@/funcs/sports.server";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -166,6 +170,42 @@ function HomePage() {
     queryKey: ["departments", "all"],
     queryFn: () => getAllDepartments(),
   });
+
+  const { data: hostelData } = useQuery({
+    queryKey: ["hostel", "data"],
+    queryFn: () => getHostelData(),
+  });
+
+  const { data: libraryData } = useQuery({
+    queryKey: ["library", "data"],
+    queryFn: () => getLibraryData(),
+  });
+
+  const { data: dispensaryData } = useQuery({
+    queryKey: ["dispensary", "data"],
+    queryFn: () => getDispensaryData(),
+  });
+
+  const { data: sportsData } = useQuery({
+    queryKey: ["sports", "data"],
+    queryFn: () => getSportsData(),
+  });
+
+  const getFacilityImage = (title: string, staticImg: string) => {
+    if (title === "Hostels" && hostelData?.images?.[0]?.url) {
+      return getAssetUrl(hostelData.images[0].url);
+    }
+    if (title === "Library" && libraryData?.images?.[0]?.url) {
+      return getAssetUrl(libraryData.images[0].url);
+    }
+    if (title === "Dispensary" && dispensaryData?.images?.[0]?.url) {
+      return getAssetUrl(dispensaryData.images[0].url);
+    }
+    if (title === "Sports" && sportsData?.images?.[0]?.url) {
+      return getAssetUrl(sportsData.images[0].url);
+    }
+    return staticImg;
+  };
 
   return (
     <>
@@ -404,7 +444,7 @@ function HomePage() {
                   >
                     {/* Background Visual Image with full visibility and smooth dark overlay */}
                     {d.image ? (
-                      <img
+                      <img decoding="async" loading="lazy"
                         src={getAssetUrl(d.image)}
                         alt={`${d.name} representation`}
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -476,8 +516,8 @@ function HomePage() {
                     to={f.to}
                     className="group relative flex flex-col rounded-3xl overflow-hidden h-[260px] sm:h-[300px] lg:h-[320px] hover-lift"
                   >
-                    <img
-                      src={f.img}
+                    <img decoding="async"
+                      src={getFacilityImage(f.title, f.img)}
                       alt={f.title}
                       loading="lazy"
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] lg:group-hover:scale-110"

@@ -40,7 +40,7 @@ export function HeroSlideshow({
         {images.map((img, i) => {
           if (!visited[i]) return null;
           return (
-            <img
+            <img decoding="async"
               key={img.src}
               src={img.src}
               alt={img.alt}

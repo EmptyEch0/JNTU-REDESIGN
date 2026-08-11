@@ -769,7 +769,7 @@ function ModuleCard({
         className="group relative block h-full overflow-hidden rounded-3xl shadow-lg ring-1 ring-black/10 hover:ring-2 hover:ring-white/40 transition-all duration-300"
       >
         {/* Background image — primary visual */}
-        <img
+        <img decoding="async" loading="lazy"
           src={mod.image}
           alt={mod.name}
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.05]"

@@ -419,7 +419,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
             </div>
             {club.heroImage && (
               <div className="w-full md:w-1/2 aspect-[16/10] rounded-[28px] overflow-hidden border-2 border-slate-100 shadow transition duration-500 hover:scale-[1.02]">
-                <img 
+                <img decoding="async" loading="lazy" 
                   src={getAssetUrl(club.heroImage)} 
                   className="w-full h-full object-cover" 
                   alt={`${club.name} Frame`} 
@@ -437,7 +437,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
             {(club.images || []).map((img: any) => (
               <div key={img.id} className="relative group rounded-xl overflow-hidden aspect-[4/3] border bg-slate-100">
-                <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
+                <img alt="" decoding="async" loading="lazy" src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
                 <button onClick={()=>handleDeleteImage(img.id)} className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-rose-950/80 text-white font-black text-xs uppercase tracking-wider transition flex flex-col items-center justify-center cursor-pointer"><Trash2 className="w-4 h-4 mb-1"/> Erase</button>
               </div>
             ))}
@@ -532,7 +532,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
                       className="w-full h-full"
                     />
                   ) : (
-                    <img src={getAssetUrl(sec.image)} className="w-full h-full object-cover" alt={sec.heading} onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }} />
+                    <img decoding="async" loading="lazy" src={getAssetUrl(sec.image)} className="w-full h-full object-cover" alt={sec.heading} onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }} />
                   )}
                 </div>
               )}

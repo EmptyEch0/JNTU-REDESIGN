@@ -37,7 +37,7 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
       )}
 
       <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 border-slate-50 bg-slate-100">
-        <img 
+        <img decoding="async" loading="lazy" 
           src={getAssetUrl(f.photo_url) || ""} 
           alt={f.name} 
           className="h-full w-full object-cover" 

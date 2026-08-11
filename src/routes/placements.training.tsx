@@ -187,7 +187,7 @@ function TrainingPage() {
                       className="mb-6 w-full max-w-[200px]"
                     />
                   ) : (
-                    <img
+                    <img decoding="async" loading="lazy"
                       src={getAssetUrl(editedTPO?.image ?? tpoData?.image)}
                       alt={tpoData?.name}
                       className="w-48 h-48 rounded-2xl object-cover shadow-lg mb-6"

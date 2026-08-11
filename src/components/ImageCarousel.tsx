@@ -29,7 +29,7 @@ export function ImageCarousel({ images, fallback }: Props) {
   if (!images || images.length === 0) {
     return (
       <div className="relative aspect-[21/9] md:aspect-[16/6] min-h-[180px] md:min-h-[240px] max-h-[280px] md:max-h-[340px] w-full bg-slate-200 flex items-center justify-center overflow-hidden">
-        <img src={fallback} className="w-full h-full object-cover opacity-90" alt="Fallback" />
+        <img src={fallback} className="w-full h-full object-cover opacity-90" alt="Fallback" loading="lazy" decoding="async" />
       </div>
     );
   }
@@ -50,6 +50,8 @@ export function ImageCarousel({ images, fallback }: Props) {
               alt={`Slide view ${i + 1}`}
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
               onError={(e) => { e.currentTarget.src = fallback; }}
+              loading={i === 0 ? "eager" : "lazy"}
+              decoding="async"
             />
           );
         })}

@@ -132,7 +132,7 @@ function NSSLayout() {
               <>
                 {/* Slides */}
                 <div className="absolute inset-0 w-full h-full transition-all duration-300 ease-out">
-                  <img
+                  <img decoding="async" loading="lazy"
                     src={getAssetUrl(slides[currentIndex].imageUrl)}
                     alt={slides[currentIndex].title}
                     className="w-full h-full object-cover transition-transform duration-300"

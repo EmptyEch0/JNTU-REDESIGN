@@ -1,4 +1,3 @@
-import { getAssetUrl } from "../lib/assets";
 
 interface Logo {
   name: string;
@@ -30,7 +29,7 @@ export function LogoCarousel({ logos, speed = 60, reverse = false }: Props) {
             title={logo.name}
             className="shrink-0 w-44 h-24 rounded-2xl bg-card border border-border flex items-center justify-center p-4 hover:border-primary/40 hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-1 transition-all duration-300"
           >
-            <img
+            <img decoding="async"
               src={getAssetUrl(logo.url)}
               alt={logo.name}
               loading="lazy"

@@ -202,7 +202,7 @@ function MusicClubPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {images.map((img: any) => (
                     <div key={img.id} className="relative group rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border-2 border-slate-200/40 shadow-sm hover:shadow duration-300">
-                      <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
+                      <img alt="" decoding="async" loading="lazy" src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
                       <button
                         onClick={() => handleDeleteImage(img.id)}
                         className="absolute inset-0 bg-rose-950/85 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1 font-black text-xs uppercase tracking-widest cursor-pointer"
@@ -271,7 +271,7 @@ function MusicClubPage() {
                   </div>
                 ) : (
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
-                    <img
+                    <img decoding="async" loading="lazy"
                       src={getAssetUrl(faculty?.img) || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"}
                       onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"; }}
                       className="w-24 h-24 md:w-28 md:h-28 rounded-[28px] object-cover border-2 border-slate-100 shadow shrink-0 duration-200 hover:scale-105"

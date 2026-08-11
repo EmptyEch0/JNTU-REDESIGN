@@ -144,7 +144,7 @@ function LaboratoriesPage() {
                       className="w-full h-full"
                     />
                   ) : lab.photo_url ? (
-                    <img src={getAssetUrl(lab.photo_url)} alt={lab.name} className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                    <img decoding="async" loading="lazy" src={getAssetUrl(lab.photo_url)} alt={lab.name} className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center bg-white text-slate-200">
                       <Microscope size={64} strokeWidth={1} />

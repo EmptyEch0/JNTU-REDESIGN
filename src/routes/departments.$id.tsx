@@ -137,7 +137,7 @@ function DepartmentLayout() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className={`relative h-[350px] w-full overflow-hidden transition-all ${isEditMode ? "ring-4 ring-inset ring-amber-400" : "bg-slate-900"}`}>
-        <img 
+        <img decoding="async" loading="lazy" 
           src={getAssetUrl(headerEdit.image)} 
           className="h-full w-full object-cover opacity-40" 
           alt={headerEdit.name} 

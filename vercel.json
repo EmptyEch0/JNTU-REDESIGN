@@ -1,8 +1,28 @@
 {
-    "rewrites": [
-      {
-        "source": "/vps-assets/:path*",
-        "destination": "http://89.116.134.182/local-assets/:path*"
-      }
-    ]
-  }
+  "headers": [
+    {
+      "source": "/vps-assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/logo.jpeg",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/vps-assets/:path*",
+      "destination": "http://89.116.134.182/local-assets/:path*"
+    }
+  ]
+}

@@ -277,7 +277,7 @@ function WEAboutPage() {
                       className="w-full h-full"
                     />
                   ) : (
-                    <img
+                    <img decoding="async" loading="lazy"
                       src={getAssetUrl(pData.convenerImage)}
                       alt={pData.convenerName}
                       className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"

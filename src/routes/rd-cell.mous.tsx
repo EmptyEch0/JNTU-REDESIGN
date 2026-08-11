@@ -217,7 +217,7 @@ function MOUsPage() {
                       </div>
                     ) : (
                       <>
-                        <img
+                        <img decoding="async"
                           src={getAssetUrl(editedMous[m.id]?.img ?? m.img)}
                           alt={m.title}
                           loading="lazy"

@@ -951,7 +951,7 @@ function ExaminationPage() {
                       
                       <div className="flex items-start gap-4">
                         <div className="w-20 h-20 rounded-2xl overflow-hidden border border-blue-200/50 shadow-md flex-shrink-0 relative">
-                          <img 
+                          <img decoding="async" loading="lazy" 
                             src={officer.photo} 
                             alt={officer.name} 
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200" 

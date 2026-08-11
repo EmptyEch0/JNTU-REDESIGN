@@ -313,7 +313,7 @@ export function AdminUpload({
     <div className={`space-y-2 ${className}`}>
       {previewUrl ? (
         <div className="relative group rounded-xl overflow-hidden border-2 border-amber-200 aspect-[16/9] max-h-48 bg-slate-50 flex items-center justify-center shadow-inner">
-          <img src={previewUrl} className="w-full h-full object-cover" alt="Preview" />
+          <img decoding="async" loading="lazy" src={previewUrl} className="w-full h-full object-cover" alt="Preview" />
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
             <button
               type="button"
@@ -448,7 +448,7 @@ export function PersonAvatarUpload({
       >
         {previewUrl ? (
           <>
-            <img src={previewUrl} className="w-full h-full object-cover" alt="Portrait" />
+            <img decoding="async" loading="lazy" src={previewUrl} className="w-full h-full object-cover" alt="Portrait" />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1">
               <Camera className="w-5 h-5 text-white" />
               <span className="text-[9px] text-white font-black tracking-wider uppercase">Change</span>

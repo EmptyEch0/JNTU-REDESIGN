@@ -99,7 +99,7 @@ function GalleryPage() {
               >
                 <figure className="relative h-full">
                   <div className="aspect-[4/3] overflow-hidden bg-sand-deep/20">
-                    <img
+                    <img decoding="async"
                       src={getAssetUrl(editedItems[it.id]?.src ?? it.src)}
                       alt={it.caption}
                       loading="lazy"

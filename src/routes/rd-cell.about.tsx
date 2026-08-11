@@ -130,7 +130,7 @@ function AboutResearchPage() {
                     className="w-full h-full"
                   />
                 ) : (
-                  <img
+                  <img decoding="async" loading="lazy"
                     src={getAssetUrl(editedCoordinator?.image ?? coordinator?.image)}
                     alt={coordinator?.name}
                     className="h-full w-full object-cover"

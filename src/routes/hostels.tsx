@@ -225,7 +225,7 @@ function HostelsPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {getRawImages().map((img: any) => (
                     <div key={img.id} className="relative group rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border-2 border-slate-200/40 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300">
-                      <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
+                      <img alt="" decoding="async" loading="lazy" src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
                       <button
                         onClick={() => handleDeleteImage(img.id)}
                         className="absolute inset-0 bg-rose-950/80 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col gap-1 items-center justify-center font-black text-xs uppercase tracking-widest cursor-pointer"
@@ -323,7 +323,7 @@ function HostelsPage() {
                   officer && (
                     <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                       <div className="relative shrink-0">
-                        <img
+                        <img decoding="async" loading="lazy"
                           src={getAssetUrl(officer.image) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                           onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
                           className="w-24 h-24 rounded-[24px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-500 hover:scale-[1.03]"

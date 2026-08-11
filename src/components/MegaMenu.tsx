@@ -108,7 +108,7 @@ export function MegaMenu() {
               <div
                 className={`rounded-full bg-white grid place-items-center transition-all duration-200 overflow-hidden border border-white/20 ${expanded ? "h-11 w-11" : "h-9 w-9"}`}
               >
-                <img src="/logo.jpeg" alt="Logo" className="h-full w-full object-cover" />
+                <img src="/logo.jpeg" alt="Logo" className="h-full w-full object-cover" loading="eager" decoding="async" />
               </div>
               <div
                 className={`leading-tight overflow-hidden transition-all duration-200 ${expanded ? "max-w-[260px] opacity-100" : "max-w-0 opacity-0 lg:max-w-[120px] lg:opacity-100"}`}
@@ -142,6 +142,7 @@ export function MegaMenu() {
                     {item.to ? (
                       <Link
                         to={item.to}
+                        onClick={closeAll}
                         className={`px-3 py-2 text-[14px] font-semibold rounded-full transition-all ${
                           active
                             ? "bg-white/10 text-white"
@@ -226,6 +227,7 @@ export function MegaMenu() {
                           <li key={it.label}>
                             <Link
                               to={it.to}
+                              onClick={closeAll}
                               className="block rounded-xl p-2.5 hover:bg-white/5 transition-colors group"
                             >
                               <div className="text-sm font-medium text-white group-hover:text-primary-glow transition-colors">
@@ -255,7 +257,7 @@ export function MegaMenu() {
                       {it.children ? (
                         <div className="bg-white/5 rounded-2xl p-1">
                           <div className="flex items-center justify-between rounded-xl p-3 hover:bg-white/5 transition-colors cursor-pointer group/trigger">
-                            <Link to={it.to} className="flex-1 min-w-0">
+                            <Link to={it.to} onClick={closeAll} className="flex-1 min-w-0">
                               <div className="text-sm font-semibold text-white group-hover/trigger:text-primary-glow transition-colors">
                                 {it.label}
                               </div>
@@ -271,6 +273,7 @@ export function MegaMenu() {
                                 <li key={child.label}>
                                   <Link
                                     to={child.to}
+                                    onClick={closeAll}
                                     className="block px-3 py-2 rounded-lg text-[13px] text-white/60 hover:text-white hover:bg-white/10 transition-colors border-l border-white/10"
                                   >
                                     {child.label}
@@ -283,6 +286,7 @@ export function MegaMenu() {
                       ) : (
                         <Link
                           to={it.to}
+                          onClick={closeAll}
                           className="block rounded-2xl p-4 bg-white/5 hover:bg-white/10 transition-all border border-white/5 hover:border-white/10 h-full"
                         >
                           <div className="text-sm font-semibold text-white group-hover:text-primary-glow transition-colors">
@@ -323,6 +327,7 @@ export function MegaMenu() {
                     {item.to ? (
                       <Link
                         to={item.to}
+                        onClick={closeAll}
                         className="flex items-center justify-between py-3.5 px-4 text-[15px] font-medium text-white rounded-2xl bg-white/5 hover:bg-white/10 active:scale-[0.98] transition-all"
                       >
                         {item.label}
@@ -340,6 +345,7 @@ export function MegaMenu() {
                               <Link
                                 key={it.label}
                                 to={it.to}
+                                onClick={closeAll}
                                 className="block py-3 px-4 text-[14px] text-white/80 hover:text-white hover:bg-white/5 active:scale-[0.98] transition-all"
                               >
                                 {it.label}
@@ -352,6 +358,7 @@ export function MegaMenu() {
                             <Link
                               key={sub.label + sub.to}
                               to={sub.to}
+                              onClick={closeAll}
                               className={`block py-2.5 px-5 text-[13px] transition-all hover:bg-white/5 ${
                                 sub.label.startsWith('└') ? 'text-white/50 pl-8' : 'text-white/80 mt-1 font-medium border-t border-white/5 pt-3'
                               }`}

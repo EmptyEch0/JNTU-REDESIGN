@@ -227,7 +227,7 @@ function OtherAmenitiesPage() {
                 className="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col hover:-translate-y-1 h-full"
               >
                 <div className="relative overflow-hidden h-64">
-                  <img
+                  <img decoding="async" loading="lazy"
                     src={getAssetUrl(staffRec?.imageUrl) || typeA}
                     alt={staffRec?.title || DEFAULTS.staffTitle}
                     className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
@@ -295,7 +295,7 @@ function OtherAmenitiesPage() {
                 className="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col hover:-translate-y-1 h-full"
               >
                 <div className="relative overflow-hidden h-64">
-                  <img
+                  <img decoding="async" loading="lazy"
                     src={getAssetUrl(guestRec?.imageUrl) || guest}
                     alt={guestRec?.title || DEFAULTS.guestTitle}
                     className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"

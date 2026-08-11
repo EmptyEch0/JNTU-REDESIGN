@@ -261,7 +261,7 @@ function EngineeringCellPage() {
                     ) : (
                       <div className="flex flex-col items-center text-center pt-2">
                         <div className="w-28 h-28 rounded-[28px] overflow-hidden bg-slate-50 border-2 border-slate-100 mb-4 shadow-md transition hover:scale-[1.02] duration-200">
-                          <img
+                          <img decoding="async" loading="lazy"
                             src={getAssetUrl(electrical?.img) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                             className="w-full h-full object-cover"
                             onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}

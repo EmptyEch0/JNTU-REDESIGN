@@ -137,7 +137,7 @@ function FacultyDetailProfilePage() {
       {/* Profile Header Block */}
       <div className={`relative bg-gradient-to-br from-slate-900 to-blue-950 rounded-[2.5rem] p-8 text-white shadow-xl flex flex-col md:flex-row gap-8 items-center border transition-all ${isEditMode ? 'border-amber-400 ring-4 ring-amber-400/10' : 'border-transparent'}`}>
         <div className="h-32 w-32 md:h-40 md:w-40 rounded-full overflow-hidden border-4 border-white/10 shrink-0 bg-white/5 relative group">
-          <img 
+          <img decoding="async" loading="lazy" 
             src={getAssetUrl(editState.photo_url) || ""} 
             alt={editState.name}
             className="w-full h-full object-cover"
@@ -151,7 +151,7 @@ function FacultyDetailProfilePage() {
               <span className="px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-blue-500/20 border border-blue-400/20 text-blue-300">
                 Faculty Profile Record
               </span>
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight pt-1">{editState.name}</h1>
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight pt-1">{editState.name}</h2>
               <p className="text-lg text-slate-300 font-medium">{editState.designation}</p>
             </div>
           ) : (

@@ -209,7 +209,7 @@ function InstitutionPage() {
       {/* Main content */}
       <section className="py-24 md:py-32 container-narrow grid lg:grid-cols-2 gap-16 items-start">
         <RevealOnScroll>
-          <img
+          <img decoding="async"
             src={campusImg}
             alt="JNTU-GV Campus aerial view"
             loading="lazy"

@@ -5,10 +5,12 @@ import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SubNav } from "@/components/SubNav";
 import { STUDENT_SUBNAV } from "@/lib/site";
-import { getCampusGallery, addCampusGalleryItem, deleteCampusGalleryItem } from "@/funcs/site.server";
+import { getCampusGallery, addCampusGalleryItem, deleteCampusGalleryItem, getJntugvGalleryImages } from "@/funcs/site.server";
+import { useQuery } from "@tanstack/react-query";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Image as ImageIcon } from "lucide-react";
+import { ImageWithLoader } from "@/components/ImageWithLoader";
 import {
   AdminModeBanner,
   AdminPanel,
@@ -73,7 +75,25 @@ function GalleryPage() {
   const router = useRouter();
 
   const [newImage, setNewImage] = useState({ src: "", caption: "" });
-  const images = records.length > 0 ? records : DEFAULT_IMAGES;
+
+  // Fetch live images from the JNTU-GV external API
+  const { data: apiImages = [] } = useQuery({
+    queryKey: ["jntugv-gallery"],
+    queryFn: () => getJntugvGalleryImages(),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // Convert API images to the same shape as local records
+  const apiGalleryItems = apiImages.map((img) => ({
+    id: -(img.id + 1000), // negative IDs to avoid collision
+    src: img.imglink,
+    caption: img.title || img.description,
+    isExternal: true,
+  }));
+
+  // Merge: API images first, then local DB records, then defaults
+  const localImages = records.length > 0 ? records : [];
+  const images = [...apiGalleryItems, ...localImages, ...(apiGalleryItems.length === 0 && localImages.length === 0 ? DEFAULT_IMAGES : [])];
 
   async function handleAddImage(e: React.FormEvent) {
     e.preventDefault();
@@ -178,15 +198,15 @@ function GalleryPage() {
                 key={img.id || i}
                 className="break-inside-avoid mb-5 overflow-hidden rounded-2xl hover-lift relative group"
               >
-                <img decoding="async"
-                  src={getAssetUrl(img.src)}
+                <ImageWithLoader
+                  src={img.src.startsWith("http") ? img.src : getAssetUrl(img.src)}
                   alt={img.caption || "Campus Moment"}
-                  loading="lazy"
-                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
+                  smartFit={true}
+                  wrapperClassName="w-full min-h-[220px] max-h-[480px] rounded-2xl border border-border/40 shadow-sm"
                 />
 
                 {img.caption && (
-                  <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
                     <p className="text-xs font-semibold tracking-wide uppercase text-primary-glow">Moment</p>
                     <p className="text-sm font-medium mt-1">{img.caption}</p>
                   </div>
@@ -195,7 +215,7 @@ function GalleryPage() {
                 {isEditMode && img.id > 0 && (
                   <button
                     onClick={() => handleDeleteImage(img.id)}
-                    className="absolute top-4 right-4 p-2.5 bg-rose-600/90 text-white rounded-full hover:bg-rose-700 hover:scale-110 shadow-lg transition-all"
+                    className="absolute top-4 right-4 p-2.5 bg-rose-600/90 text-white rounded-full hover:bg-rose-700 hover:scale-110 shadow-lg transition-all z-30"
                     title="Delete Image"
                   >
                     <Trash2 className="h-4 w-4" />

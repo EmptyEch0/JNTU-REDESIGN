@@ -317,3 +317,50 @@ export const queryChatbot = createServerFn({ method: "POST" })
     const reply = runChatbotEngine({ query, chunks });
     return { reply };
   });
+
+// ── JNTU-GV External Gallery API & Local Dataset ──
+import jntugvGalleryData from "../data/jntugv-gallery.json";
+
+export interface JntugvGalleryItem {
+  id: number;
+  date: string;
+  title: string;
+  file_path: string;
+  description: string;
+  submitted: string;
+  admin_approval: string;
+  carousel_scrolling: string;
+  gallery_scrolling: string;
+  imglink: string;
+}
+
+export const getJntugvGalleryImages = createServerFn({
+  method: "GET",
+}).handler(async (): Promise<JntugvGalleryItem[]> => {
+  try {
+    const res = await fetch(
+      "https://api.jntugv.edu.in/api/webadmin/dmc/getgallery",
+      { next: { revalidate: 300 } } as any,
+    );
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        return data.filter(
+          (img: JntugvGalleryItem) =>
+            img.admin_approval === "accepted" &&
+            img.carousel_scrolling === "yes",
+        );
+      }
+    }
+  } catch (err) {
+    console.warn("Using local fallback gallery data due to API fetch error");
+  }
+
+  // Fallback to local dataset provided by university admin
+  const fallback = jntugvGalleryData as JntugvGalleryItem[];
+  return fallback.filter(
+    (img) =>
+      img.admin_approval === "accepted" &&
+      (img.carousel_scrolling === "yes" || img.gallery_scrolling === "yes"),
+  );
+});

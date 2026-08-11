@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo } from "react";
 import {
   ArrowRight,
   ArrowDown,
@@ -49,6 +50,8 @@ import { getHostelData } from "@/funcs/hostel.server";
 import { getLibraryData } from "@/funcs/library.server";
 import { getDispensaryData } from "@/funcs/dispensary.server";
 import { getSportsData } from "@/funcs/sports.server";
+import { getJntugvGalleryImages } from "@/funcs/site.server";
+import { ImageWithLoader } from "@/components/ImageWithLoader";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -190,6 +193,37 @@ function HomePage() {
     queryKey: ["sports", "data"],
     queryFn: () => getSportsData(),
   });
+
+  const { data: galleryImages = [] } = useQuery({
+    queryKey: ["jntugv-gallery"],
+    queryFn: () => getJntugvGalleryImages(),
+    staleTime: 5 * 60 * 1000, // cache for 5 minutes
+  });
+
+  // Select a diverse mix of recent + randomized items across unique campus events
+  const homepageSelectedImages = useMemo(() => {
+    if (!galleryImages || galleryImages.length === 0) return [];
+
+    // Group items by event title to avoid showing photos from identical events
+    const uniqueByTitleMap = new Map<string, (typeof galleryImages)[0]>();
+    const topRecent = galleryImages.slice(0, 2);
+
+    for (const item of galleryImages) {
+      if (!uniqueByTitleMap.has(item.title)) {
+        uniqueByTitleMap.set(item.title, item);
+      }
+    }
+
+    const uniqueItems = Array.from(uniqueByTitleMap.values()).filter(
+      (item) => !topRecent.some((r) => r.id === item.id),
+    );
+
+    // Shuffle the rest of the pool for random visual variety on each load
+    const shuffled = [...uniqueItems].sort(() => 0.5 - Math.random());
+
+    // 2 top recent + 5 diverse random items = 7 items (8th card is CTA)
+    return [...topRecent, ...shuffled.slice(0, 5)].slice(0, 7);
+  }, [galleryImages]);
 
   const getFacilityImage = (title: string, staticImg: string) => {
     if (title === "Hostels" && hostelData?.images?.[0]?.url) {
@@ -615,7 +649,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* GALLERY TEASER */}
+      {/* GALLERY TEASER — live images from JNTU-GV API */}
       <section className="py-20 md:py-28">
         <div className="container-narrow">
           <RevealOnScroll>
@@ -631,53 +665,130 @@ function HomePage() {
           </RevealOnScroll>
 
           <RevealOnScroll className="mt-10" delay={120}>
-            <div className="grid grid-cols-12 gap-3 md:gap-4">
-              <img
-                src={cultureImg}
-                alt="Cultural fest"
-                width="800"
-                height="500"
-                loading="lazy"
-                decoding="async"
-                className="col-span-12 md:col-span-7 aspect-[16/10] w-full object-cover rounded-3xl hover-lift"
-              />
-              <img
-                src={labImg}
-                alt="Lab"
-                width="600"
-                height="375"
-                loading="lazy"
-                decoding="async"
-                className="col-span-12 md:col-span-5 aspect-[16/10] w-full object-cover rounded-3xl hover-lift"
-              />
-              <img
-                src={sportsImg}
-                alt="Sports"
-                width="400"
-                height="400"
-                loading="lazy"
-                decoding="async"
-                className="col-span-6 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
-              />
-              <img
-                src={libraryImg}
-                alt="Library"
-                width="400"
-                height="400"
-                loading="lazy"
-                decoding="async"
-                className="col-span-6 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
-              />
-              <img
-                src={hostelImg}
-                alt="Hostel"
-                width="400"
-                height="400"
-                loading="lazy"
-                decoding="async"
-                className="col-span-12 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
-              />
-            </div>
+            {homepageSelectedImages.length > 0 ? (
+              <div className="grid grid-cols-12 gap-3 md:gap-4">
+                {homepageSelectedImages.map((img, i) => {
+                  const colClass =
+                    i === 0
+                      ? "col-span-12 md:col-span-7 aspect-[16/10]"
+                      : i === 1
+                        ? "col-span-12 md:col-span-5 aspect-[16/10]"
+                        : "col-span-12 sm:col-span-6 md:col-span-4 aspect-[4/3]";
+                  return (
+                    <Link
+                      key={img.id}
+                      to="/gallery"
+                      className={`${colClass} w-full rounded-3xl hover-lift overflow-hidden relative group bg-slate-900 shadow-md border border-border/30`}
+                    >
+                      <ImageWithLoader
+                        src={img.imglink}
+                        alt={img.title || "Campus moment"}
+                        wrapperClassName="h-full w-full rounded-3xl"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      {/* Top Glassmorphic Date Badge */}
+                      <div className="absolute top-4 left-4 z-20 pointer-events-none">
+                        <span className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white/90 font-extrabold text-[10px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
+                          <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                          {img.date}
+                        </span>
+                      </div>
+                      {/* Bottom Gradient & High-Contrast White Title */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-300 pointer-events-none z-10" />
+                      <div className="absolute bottom-0 inset-x-0 p-5 md:p-6 text-white z-20 pointer-events-none">
+                        <p className="text-sm md:text-base font-extrabold text-white leading-snug line-clamp-2 drop-shadow-md group-hover:text-amber-300 transition-colors">
+                          {img.title}
+                        </p>
+                        {img.description && img.description !== img.title && (
+                          <p className="text-xs text-white/70 line-clamp-1 mt-1 font-medium">
+                            {img.description}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  );
+                })}
+
+                {/* 8th Card: Bento Interactive Gallery CTA Card */}
+                <Link
+                  to="/gallery"
+                  className="col-span-12 sm:col-span-6 md:col-span-4 aspect-[4/3] w-full rounded-3xl p-6 md:p-8 bg-gradient-to-br from-primary via-indigo-950 to-slate-950 text-white flex flex-col justify-between hover-lift shadow-xl border border-white/10 group relative overflow-hidden"
+                >
+                  <div className="absolute -top-12 -right-12 h-40 w-40 rounded-full bg-amber-400/10 blur-2xl group-hover:bg-amber-400/20 transition-colors" />
+                  
+                  <div className="flex items-center justify-between z-10">
+                    <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-widest text-amber-300">
+                      Campus Archive
+                    </span>
+                    <div className="h-10 w-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 z-10">
+                    <div className="text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight">
+                      110+ Campus Moments
+                    </div>
+                    <p className="text-xs md:text-sm text-white/75 line-clamp-2">
+                      Browse convocation ceremonies, sports meets, MoU signings, hackathons and cultural drives.
+                    </p>
+                  </div>
+
+                  <div className="z-10 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-amber-300 group-hover:text-white transition-colors">
+                    Explore full gallery <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </Link>
+              </div>
+            ) : (
+              /* Fallback to static images when API isn't available */
+              <div className="grid grid-cols-12 gap-3 md:gap-4">
+                <img
+                  src={cultureImg}
+                  alt="Cultural fest"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                  decoding="async"
+                  className="col-span-12 md:col-span-7 aspect-[16/10] w-full object-cover rounded-3xl hover-lift"
+                />
+                <img
+                  src={labImg}
+                  alt="Lab"
+                  width="600"
+                  height="375"
+                  loading="lazy"
+                  decoding="async"
+                  className="col-span-12 md:col-span-5 aspect-[16/10] w-full object-cover rounded-3xl hover-lift"
+                />
+                <img
+                  src={sportsImg}
+                  alt="Sports"
+                  width="400"
+                  height="400"
+                  loading="lazy"
+                  decoding="async"
+                  className="col-span-6 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
+                />
+                <img
+                  src={libraryImg}
+                  alt="Library"
+                  width="400"
+                  height="400"
+                  loading="lazy"
+                  decoding="async"
+                  className="col-span-6 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
+                />
+                <img
+                  src={hostelImg}
+                  alt="Hostel"
+                  width="400"
+                  height="400"
+                  loading="lazy"
+                  decoding="async"
+                  className="col-span-12 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
+                />
+              </div>
+            )}
           </RevealOnScroll>
         </div>
       </section>

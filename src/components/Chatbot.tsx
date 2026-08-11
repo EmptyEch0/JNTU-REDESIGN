@@ -132,41 +132,41 @@ export function Chatbot() {
       {isOpen && (
         <div
           style={{
-            width: "480px",
-            height: "620px",
-            maxHeight: "85vh",
+            width: "370px",
+            height: "490px",
+            maxHeight: "68vh",
             animation: "chatSlideUp 0.35s cubic-bezier(0.34,1.56,0.64,1)",
           }}
-          className="mb-2 flex flex-col overflow-hidden rounded-3xl border border-slate-200/80 shadow-[0_24px_60px_rgba(0,0,0,0.18)] bg-white/97 backdrop-blur-md"
+          className="mb-2 flex flex-col overflow-hidden rounded-3xl border border-slate-200/80 shadow-[0_20px_50px_rgba(0,0,0,0.22)] bg-white/97 backdrop-blur-md max-w-[calc(100vw-2rem)]"
         >
           {/* Header */}
-          <div className="relative shrink-0 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-5 shadow-md">
-            <div className="pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full bg-blue-500/10 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-4 left-10 h-24 w-24 rounded-full bg-indigo-500/10 blur-2xl" />
+          <div className="relative shrink-0 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-3.5 shadow-md">
+            <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-blue-500/10 blur-2xl" />
+            <div className="pointer-events-none absolute -bottom-4 left-10 h-20 w-20 rounded-full bg-indigo-500/10 blur-xl" />
 
             <div className="relative z-10 flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 {/* Avatar in header — client only */}
-                <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-white/10 ring-2 ring-white/20">
+                <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-white/10 ring-2 ring-white/20">
                   {mounted && (
-                    <Suspense fallback={<div className="h-12 w-12 rounded-full bg-white/10" />}>
+                    <Suspense fallback={<div className="h-9 w-9 rounded-full bg-white/10" />}>
                       <DotLottieReact
                         src="/CHATBOT.lottie"
                         autoplay
                         loop
-                        style={{ width: "48px", height: "48px" }}
+                        style={{ width: "36px", height: "36px" }}
                       />
                     </Suspense>
                   )}
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-base font-bold tracking-wide text-white leading-none">
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="text-sm font-bold tracking-wide text-white leading-none">
                       JNTU AI
                     </h3>
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   </div>
-                  <span className="mt-1 block text-[10px] font-semibold uppercase tracking-widest text-white/50">
+                  <span className="mt-0.5 block text-[9px] font-semibold uppercase tracking-widest text-white/50">
                     Campus Guide
                   </span>
                 </div>
@@ -174,40 +174,40 @@ export function Chatbot() {
 
               <button
                 onClick={() => setIsOpen(false)}
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white/10 transition hover:bg-white/25"
+                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-white/10 transition hover:bg-white/25"
               >
-                <X className="h-4 w-4 text-white" />
+                <X className="h-3.5 w-3.5 text-white" />
               </button>
             </div>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto bg-slate-50/60 p-5 space-y-4 no-scrollbar">
+          <div className="flex-1 overflow-y-auto bg-slate-50/60 p-3.5 space-y-3 no-scrollbar">
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex gap-3 ${
+                className={`flex gap-2.5 ${
                   msg.role === "user"
                     ? "ml-auto flex-row-reverse max-w-[88%]"
                     : "mr-auto max-w-[88%]"
                 }`}
               >
                 <div
-                  className={`h-8 w-8 shrink-0 rounded-full flex items-center justify-center ${
+                  className={`h-7 w-7 shrink-0 rounded-full flex items-center justify-center ${
                     msg.role === "user"
                       ? "bg-slate-900 text-white"
                       : "bg-blue-50 text-blue-600 border border-blue-100"
                   }`}
                 >
                   {msg.role === "user" ? (
-                    <User className="h-4 w-4" />
+                    <User className="h-3.5 w-3.5" />
                   ) : (
-                    <Bot className="h-4 w-4" />
+                    <Bot className="h-3.5 w-3.5" />
                   )}
                 </div>
 
                 <div
-                  className={`rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-line shadow-sm ${
+                  className={`rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line shadow-sm ${
                     msg.role === "user"
                       ? "bg-slate-900 text-white rounded-tr-none"
                       : "bg-white border border-slate-200/70 text-slate-800 rounded-tl-none"
@@ -220,14 +220,14 @@ export function Chatbot() {
 
             {/* Typing indicator */}
             {isLoading && (
-              <div className="flex gap-3 mr-auto max-w-[88%]">
-                <div className="h-8 w-8 shrink-0 rounded-full flex items-center justify-center bg-blue-50 text-blue-600 border border-blue-100">
-                  <Bot className="h-4 w-4" />
+              <div className="flex gap-2.5 mr-auto max-w-[88%]">
+                <div className="h-7 w-7 shrink-0 rounded-full flex items-center justify-center bg-blue-50 text-blue-600 border border-blue-100">
+                  <Bot className="h-3.5 w-3.5" />
                 </div>
-                <div className="flex h-10 items-center gap-1.5 rounded-2xl rounded-tl-none border border-slate-200/70 bg-white px-4 shadow-sm">
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-blue-500 [animation-delay:-0.3s]" />
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-blue-500 [animation-delay:-0.15s]" />
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-blue-500" />
+                <div className="flex h-9 items-center gap-1.5 rounded-2xl rounded-tl-none border border-slate-200/70 bg-white px-3.5 shadow-sm">
+                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blue-500 [animation-delay:-0.3s]" />
+                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blue-500 [animation-delay:-0.15s]" />
+                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blue-500" />
                 </div>
               </div>
             )}
@@ -235,13 +235,13 @@ export function Chatbot() {
           </div>
 
           {/* Quick suggestion pills */}
-          <div className="flex items-center gap-2 overflow-x-auto px-4 py-2.5 border-t border-slate-100 bg-slate-50/90 [scrollbar-width:none]">
+          <div className="flex items-center gap-1.5 overflow-x-auto px-3 py-2 border-t border-slate-100 bg-slate-50/90 [scrollbar-width:none]">
             {(chips.length > 0 ? chips : DEFAULT_SUGGESTIONS).map((sug) => (
               <button
                 key={sug}
                 type="button"
                 onClick={() => submitQuery(sug)}
-                className="shrink-0 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all cursor-pointer flex items-center gap-1"
+                className="shrink-0 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 shadow-sm hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all cursor-pointer flex items-center gap-1"
               >
                 {sug}
               </button>
@@ -251,21 +251,21 @@ export function Chatbot() {
           {/* Input */}
           <form
             onSubmit={handleSendMessage}
-            className="flex shrink-0 items-center gap-2 border-t border-slate-200/80 bg-white p-4"
+            className="flex shrink-0 items-center gap-2 border-t border-slate-200/80 bg-white p-3"
           >
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask me anything about the college…"
-              className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none transition-all duration-200 hover:bg-white focus:bg-white focus:border-slate-700"
+              className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs outline-none transition-all duration-200 hover:bg-white focus:bg-white focus:border-slate-700"
             />
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
-              className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-slate-900 text-white transition-all duration-200 hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-8.5 w-8.5 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-slate-900 text-white transition-all duration-200 hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <SendHorizontal className="h-4 w-4" />
+              <SendHorizontal className="h-3.5 w-3.5" />
             </button>
           </form>
         </div>
@@ -277,10 +277,10 @@ export function Chatbot() {
         {showGreeting && !isOpen && (
           <div
             style={{ animation: "greetPop 0.4s cubic-bezier(0.34,1.56,0.64,1)" }}
-            className="mb-2 mr-3 flex items-center gap-2 rounded-2xl rounded-br-none bg-white px-4 py-2.5 shadow-[0_4px_20px_rgba(0,0,0,0.12)] border border-slate-100 whitespace-nowrap"
+            className="mb-2 mr-3 flex items-center gap-2 rounded-2xl rounded-br-none bg-white px-3.5 py-2 shadow-[0_4px_20px_rgba(0,0,0,0.12)] border border-slate-100 whitespace-nowrap"
           >
-            <span className="text-sm font-semibold text-slate-800">Hi there! 👋</span>
-            <span className="text-xs text-slate-500">Need help?</span>
+            <span className="text-xs font-semibold text-slate-800">Hi there! 👋</span>
+            <span className="text-[11px] text-slate-500">Need help?</span>
             <button
               onClick={() => setShowGreeting(false)}
               className="ml-1 text-slate-300 hover:text-slate-500 transition-colors text-xs leading-none cursor-pointer"
@@ -294,13 +294,13 @@ export function Chatbot() {
           onClick={() => { setIsOpen((o) => !o); setShowGreeting(false); }}
           title="Chat with JNTU AI"
           style={{ background: "none", border: "none", padding: 0 }}
-          className="cursor-pointer transition-transform duration-300 hover:scale-110 active:scale-95 drop-shadow-[0_8px_28px_rgba(0,0,0,0.38)]"
+          className="cursor-pointer transition-transform duration-300 hover:scale-110 active:scale-95 drop-shadow-[0_8px_24px_rgba(0,0,0,0.32)]"
         >
           {mounted ? (
             <Suspense
               fallback={
                 <div
-                  style={{ width: "150px", height: "150px" }}
+                  style={{ width: "110px", height: "110px" }}
                   className="rounded-full bg-slate-800/40 animate-pulse"
                 />
               }
@@ -309,11 +309,11 @@ export function Chatbot() {
                 src="/CHATBOT.lottie"
                 autoplay
                 loop
-                style={{ width: "150px", height: "150px", display: "block" }}
+                style={{ width: "110px", height: "110px", display: "block" }}
               />
             </Suspense>
           ) : (
-            <div style={{ width: "150px", height: "150px" }} />
+            <div style={{ width: "110px", height: "110px" }} />
           )}
         </button>
       </div>

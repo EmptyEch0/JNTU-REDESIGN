@@ -1,10 +1,53 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Menu, X, ChevronDown, GraduationCap, Search, CornerDownLeft, FileText, ArrowRight } from "lucide-react";
+import {
+  Menu, X, ChevronDown, ChevronRight, GraduationCap, Search, CornerDownLeft, FileText, ArrowRight,
+  Users, ShieldCheck, BookOpen, Building2, Landmark, Award, Globe, Compass,
+  Sparkles, Clock, Download, Home, HeartPulse, Library, Trophy, Briefcase,
+  Microscope, Heart, Info, MapPin, Layers, Scale, Lightbulb, Users2, FileCode, Activity
+} from "lucide-react";
 import { NAV, SEARCH_INDEX, SITE } from "@/lib/site";
 import { uploadUrl } from "@/lib/assets";
 import { useAdmin } from "@/context/AdminContext";
 import { NoticeTicker } from "@/components/NoticeTicker";
+
+function getItemIcon(label: string) {
+  const l = label.toLowerCase();
+  if (l.includes("principal") && !l.includes("vice")) return Landmark;
+  if (l.includes("vice principal")) return Users;
+  if (l.includes("iqac")) return ShieldCheck;
+  if (l.includes("institution") || l.includes("about")) return Info;
+  if (l.includes("vision")) return Compass;
+  if (l.includes("norms") || l.includes("recognition")) return Award;
+  if (l.includes("jntuk")) return Globe;
+  if (l.includes("vizianagaram")) return MapPin;
+  if (l.includes("reach")) return Compass;
+  if (l.includes("program")) return GraduationCap;
+  if (l.includes("regulation")) return Scale;
+  if (l.includes("syllabus")) return FileText;
+  if (l.includes("scholarship")) return Sparkles;
+  if (l.includes("cac") || l.includes("board") || l.includes("governing")) return Users2;
+  if (l.includes("time") || l.includes("table")) return Clock;
+  if (l.includes("download")) return Download;
+  if (l.includes("computer") || l.includes("cse")) return FileCode;
+  if (l.includes("electronic") || l.includes("ece")) return Activity;
+  if (l.includes("electrical") || l.includes("eee")) return Lightbulb;
+  if (l.includes("mechanical")) return Building2;
+  if (l.includes("metallurg")) return Layers;
+  if (l.includes("information") || l.includes("it")) return Globe;
+  if (l.includes("mba")) return Briefcase;
+  if (l.includes("sciences") || l.includes("humanities")) return Microscope;
+  if (l.includes("hostel")) return Home;
+  if (l.includes("dispensary")) return HeartPulse;
+  if (l.includes("bank")) return Landmark;
+  if (l.includes("library")) return Library;
+  if (l.includes("sport")) return Trophy;
+  if (l.includes("music") || l.includes("club")) return Sparkles;
+  if (l.includes("nss") || l.includes("women")) return Heart;
+  if (l.includes("edc") || l.includes("placement")) return Briefcase;
+  return BookOpen;
+}
+
 export function MegaMenu() {
   const { isAdmin } = useAdmin() || {};
   const [scrolled, setScrolled] = useState(false);
@@ -47,7 +90,6 @@ export function MegaMenu() {
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeAll();
-      // Removed Cmd/Ctrl+K search
     };
     document.addEventListener("mousedown", onClick);
     document.addEventListener("keydown", onKey);
@@ -56,8 +98,6 @@ export function MegaMenu() {
       document.removeEventListener("keydown", onKey);
     };
   }, [openIdx, mobileOpen, searchOpen]);
-
-
 
   // Focus the input when search opens
   useEffect(() => {
@@ -112,7 +152,7 @@ export function MegaMenu() {
               <div
                 className={`rounded-full bg-white grid place-items-center transition-all duration-200 overflow-hidden border border-white/20 ${expanded ? "h-11 w-11" : "h-9 w-9"}`}
               >
-                <img src="/logo.jpeg" alt="Logo" className="h-full w-full object-cover" loading="eager" decoding="async" />
+                <img src="/logo-circle.png" alt="JNTU-GV Logo" className="h-full w-full object-cover" />
               </div>
               <div
                 className={`leading-tight overflow-hidden transition-all duration-200 ${expanded ? "max-w-[260px] opacity-100" : "max-w-0 opacity-0 lg:max-w-[120px] lg:opacity-100"}`}
@@ -146,28 +186,194 @@ export function MegaMenu() {
                     {item.to ? (
                       <Link
                         to={item.to}
-                        onClick={closeAll}
-                        className={`px-3 py-2 text-[14px] font-semibold rounded-full transition-all ${
+                        className={`px-3.5 py-2 text-[14px] font-semibold rounded-full transition-all ${
                           active
-                            ? "bg-white/10 text-white"
-                            : "text-white/75 hover:text-white hover:bg-white/5"
+                            ? "bg-white/15 text-white shadow-sm"
+                            : "text-white/80 hover:text-white hover:bg-white/10"
                         }`}
                       >
                         {item.label}
                       </Link>
                     ) : (
                       <button
-                        className={`flex items-center gap-1.5 px-3 py-2 text-[14px] font-semibold rounded-full transition-all ${
+                        className={`flex items-center gap-1.5 px-3.5 py-2 text-[14px] font-semibold rounded-full transition-all ${
                           active || openIdx === i
-                            ? "bg-white/10 text-white"
-                            : "text-white/75 hover:text-white hover:bg-white/5"
+                            ? "bg-white/15 text-white shadow-sm"
+                            : "text-white/80 hover:text-white hover:bg-white/10"
                         }`}
                       >
                         {item.label}
                         <ChevronDown
-                          className={`h-3 w-3 transition-transform duration-300 ${openIdx === i ? "rotate-180" : ""}`}
+                          className={`h-3.5 w-3.5 transition-transform duration-300 ${openIdx === i ? "rotate-180 text-blue-300" : "text-white/50"}`}
                         />
                       </button>
+                    )}
+                    {/* Groups dropdown — glassmorphic popover */}
+                    {openIdx === i && item.groups && !searchOpen && (
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 z-50 animate-[fade-in_0.2s_ease-out]">
+                        {/* Top Caret Arrow Notch */}
+                        <div
+                          className="absolute top-[4px] left-1/2 -translate-x-1/2 w-3.5 h-3.5 rotate-45 z-10 pointer-events-none"
+                          style={{
+                            background: "rgba(15, 30, 55, 0.75)",
+                            borderTop: "1px solid rgba(255, 255, 255, 0.18)",
+                            borderLeft: "1px solid rgba(255, 255, 255, 0.18)",
+                          }}
+                        />
+
+                        <div
+                          className={`relative p-3.5 w-max ${
+                            item.groups.length === 1 ? "min-w-[270px] max-w-[310px]" :
+                            item.groups.length === 2 ? "min-w-[480px]" :
+                            item.groups.length === 3 ? "min-w-[700px]" :
+                            "min-w-[860px]"
+                          }`}
+                          style={{
+                            background: "rgba(15, 30, 55, 0.55)",
+                            backdropFilter: "blur(24px) saturate(150%)",
+                            WebkitBackdropFilter: "blur(24px) saturate(150%)",
+                            border: "1px solid rgba(255, 255, 255, 0.18)",
+                            borderRadius: "24px",
+                            boxShadow: "0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12)",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <div className={`grid gap-3.5 ${
+                            item.groups.length === 1 ? "grid-cols-1" :
+                            item.groups.length === 2 ? "grid-cols-2" :
+                            item.groups.length === 3 ? "grid-cols-3" :
+                            "grid-cols-4"
+                          }`}>
+                            {item.groups.map((g) => (
+                              <div key={g.title}>
+                                <div className="text-[10px] uppercase tracking-[0.2em] font-extrabold text-blue-300 px-2 mb-1.5">
+                                  {g.title}
+                                </div>
+                                <ul className="space-y-1">
+                                  {g.items.map((it) => {
+                                    const ItemIcon = getItemIcon(it.label);
+                                    return (
+                                      <li key={it.label}>
+                                        <Link
+                                          to={it.to}
+                                          className="group flex items-center gap-2.5 p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.14] border border-white/10 hover:border-white/25 transition-all duration-200 cursor-pointer"
+                                        >
+                                          <div className="w-8.5 h-8.5 shrink-0 rounded-xl bg-white/10 border border-white/20 text-blue-200 flex items-center justify-center group-hover:bg-blue-600/40 group-hover:text-white transition-all shadow-inner">
+                                            <ItemIcon className="w-4 h-4" />
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                            <div className="text-xs font-semibold text-white group-hover:text-cyan-200 transition-colors leading-tight">
+                                              {it.label}
+                                            </div>
+                                            {it.desc && (
+                                              <div className="text-[10px] text-white/60 group-hover:text-white/85 transition-colors leading-tight mt-0.5 line-clamp-1">
+                                                {it.desc}
+                                              </div>
+                                            )}
+                                          </div>
+                                          <ChevronRight className="w-3.5 h-3.5 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all ml-auto shrink-0" />
+                                        </Link>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Simple nested list dropdown — glassmorphic popover */}
+                    {openIdx === i && item.simpleItems && !searchOpen && (
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 z-50 animate-[fade-in_0.2s_ease-out]">
+                        {/* Top Caret Arrow Notch */}
+                        <div
+                          className="absolute top-[4px] left-1/2 -translate-x-1/2 w-3.5 h-3.5 rotate-45 z-10 pointer-events-none"
+                          style={{
+                            background: "rgba(15, 30, 55, 0.75)",
+                            borderTop: "1px solid rgba(255, 255, 255, 0.18)",
+                            borderLeft: "1px solid rgba(255, 255, 255, 0.18)",
+                          }}
+                        />
+
+                        <div
+                          className="relative p-3.5 w-max min-w-[440px] max-w-[580px]"
+                          style={{
+                            background: "rgba(15, 30, 55, 0.55)",
+                            backdropFilter: "blur(24px) saturate(150%)",
+                            WebkitBackdropFilter: "blur(24px) saturate(150%)",
+                            border: "1px solid rgba(255, 255, 255, 0.18)",
+                            borderRadius: "24px",
+                            boxShadow: "0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12)",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <ul className="grid grid-cols-2 gap-2.5">
+                            {item.simpleItems.map((it) => {
+                              const ItemIcon = getItemIcon(it.label);
+                              return (
+                                <li key={it.label} className="group/item relative">
+                                  {it.children ? (
+                                    <div className="bg-white/[0.04] border border-white/10 hover:border-white/20 rounded-xl p-1 transition-all">
+                                      <div className="flex items-center justify-between rounded-lg p-2 hover:bg-white/[0.1] transition-colors cursor-pointer group/trigger">
+                                        <Link to={it.to} className="flex items-center gap-2.5 flex-1 min-w-0">
+                                          <div className="w-8 h-8 shrink-0 rounded-lg bg-white/10 border border-white/20 text-blue-200 flex items-center justify-center">
+                                            <ItemIcon className="w-4 h-4" />
+                                          </div>
+                                          <div className="min-w-0">
+                                            <div className="text-xs font-semibold text-white group-hover/trigger:text-cyan-200 transition-colors">
+                                              {it.label}
+                                            </div>
+                                            {it.desc && (
+                                              <div className="text-[10px] text-white/60 line-clamp-1">{it.desc}</div>
+                                            )}
+                                          </div>
+                                        </Link>
+                                        <ChevronDown className="h-3.5 w-3.5 text-white/40 group-hover/item:rotate-180 transition-transform duration-300" />
+                                      </div>
+                                      <div className="max-h-0 group-hover/item:max-h-96 overflow-hidden transition-all duration-200 ease-in-out">
+                                        <ul className="px-2 pb-1.5 pt-1 space-y-0.5">
+                                          {it.children.map((child) => (
+                                            <li key={child.label}>
+                                              <Link
+                                                to={child.to}
+                                                className="block px-2.5 py-1 rounded-md text-[11px] text-white/70 hover:text-white hover:bg-white/10 transition-colors border-l border-white/15"
+                                              >
+                                                {child.label}
+                                              </Link>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <Link
+                                      to={it.to}
+                                      className="group flex items-center gap-2.5 p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.14] border border-white/10 hover:border-white/25 transition-all duration-200 cursor-pointer h-full"
+                                    >
+                                      <div className="w-8.5 h-8.5 shrink-0 rounded-xl bg-white/10 border border-white/20 text-blue-200 flex items-center justify-center group-hover:bg-blue-600/40 group-hover:text-white transition-all shadow-inner">
+                                        <ItemIcon className="w-4 h-4" />
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <div className="text-xs font-semibold text-white group-hover:text-cyan-200 transition-colors leading-tight">
+                                          {it.label}
+                                        </div>
+                                        {it.desc && (
+                                          <div className="text-[10px] text-white/60 group-hover:text-white/85 transition-colors leading-tight mt-0.5 line-clamp-1">
+                                            {it.desc}
+                                          </div>
+                                        )}
+                                      </div>
+                                      <ChevronRight className="w-3.5 h-3.5 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all ml-auto shrink-0" />
+                                    </Link>
+                                  )}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      </div>
                     )}
                   </div>
                 );
@@ -210,107 +416,6 @@ export function MegaMenu() {
             </div>
           </div>
 
-
-
-
-
-          {/* Mega Menu Dropdown */}
-          {openIdx !== null && NAV[openIdx]?.groups && !searchOpen && (
-            <div className="hidden lg:block px-8 pb-8 animate-[fade-in_0.15s_ease-out]">
-              <div className="border-t border-white/10 pt-8 w-full">
-                <div className={`grid gap-12 ${
-                  NAV[openIdx].groups!.length === 1 ? "grid-cols-1 max-w-sm" : 
-                  NAV[openIdx].groups!.length === 2 ? "grid-cols-2 max-w-4xl" : 
-                  "grid-cols-3 w-full"
-                }`}>
-                  {NAV[openIdx].groups!.map((g) => (
-                    <div key={g.title}>
-                      <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-primary-glow mb-3">
-                        {g.title}
-                      </div>
-                      <ul className="space-y-1">
-                        {g.items.map((it) => (
-                          <li key={it.label}>
-                            <Link
-                              to={it.to}
-                              onClick={closeAll}
-                              className="block rounded-xl p-2.5 hover:bg-white/5 transition-colors group"
-                            >
-                              <div className="text-sm font-medium text-white group-hover:text-primary-glow transition-colors">
-                                {it.label}
-                              </div>
-                              {it.desc && (
-                                <div className="text-xs text-white/50 mt-0.5">{it.desc}</div>
-                              )}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Simple nested list dropdown */}
-          {openIdx !== null && NAV[openIdx]?.simpleItems && !searchOpen && (
-            <div className="hidden lg:block px-8 pb-8 animate-[fade-in_0.15s_ease-out]">
-              <div className="border-t border-white/10 pt-8 w-full">
-                <ul className="grid grid-cols-3 gap-6">
-                  {NAV[openIdx].simpleItems!.map((it) => (
-                    <li key={it.label} className="group/item relative">
-                      {it.children ? (
-                        <div className="bg-white/5 rounded-2xl p-1">
-                          <div className="flex items-center justify-between rounded-xl p-3 hover:bg-white/5 transition-colors cursor-pointer group/trigger">
-                            <Link to={it.to} onClick={closeAll} className="flex-1 min-w-0">
-                              <div className="text-sm font-semibold text-white group-hover/trigger:text-primary-glow transition-colors">
-                                {it.label}
-                              </div>
-                              {it.desc && (
-                                <div className="text-[11px] text-white/50 mt-1 line-clamp-1">{it.desc}</div>
-                              )}
-                            </Link>
-                            <ChevronDown className="h-4 w-4 text-white/40 group-hover/item:rotate-180 transition-transform duration-300" />
-                          </div>
-                          <div className="max-h-0 group-hover/item:max-h-96 overflow-hidden transition-all duration-200 ease-in-out">
-                            <ul className="px-4 pb-3 pt-1 space-y-1">
-                              {it.children.map((child) => (
-                                <li key={child.label}>
-                                  <Link
-                                    to={child.to}
-                                    onClick={closeAll}
-                                    className="block px-3 py-2 rounded-lg text-[13px] text-white/60 hover:text-white hover:bg-white/10 transition-colors border-l border-white/10"
-                                  >
-                                    {child.label}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      ) : (
-                        <Link
-                          to={it.to}
-                          onClick={closeAll}
-                          className="block rounded-2xl p-4 bg-white/5 hover:bg-white/10 transition-all border border-white/5 hover:border-white/10 h-full"
-                        >
-                          <div className="text-sm font-semibold text-white group-hover:text-primary-glow transition-colors">
-                            {it.label}
-                          </div>
-                          {it.desc && (
-                            <div className="text-[11px] text-white/50 mt-1.5 leading-relaxed">{it.desc}</div>
-                          )}
-                        </Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
-
-
           {/* Mobile pill drawer */}
           {mobileOpen && (
             <div className="lg:hidden px-3 pb-3 max-h-[78vh] overflow-y-auto animate-[fade-in_0.15s_ease-out]">
@@ -334,7 +439,6 @@ export function MegaMenu() {
                     {item.to ? (
                       <Link
                         to={item.to}
-                        onClick={closeAll}
                         className="flex items-center justify-between py-3.5 px-4 text-[15px] font-medium text-white rounded-2xl bg-white/5 hover:bg-white/10 active:scale-[0.98] transition-all"
                       >
                         {item.label}
@@ -352,7 +456,6 @@ export function MegaMenu() {
                               <Link
                                 key={it.label}
                                 to={it.to}
-                                onClick={closeAll}
                                 className="block py-3 px-4 text-[14px] text-white/80 hover:text-white hover:bg-white/5 active:scale-[0.98] transition-all"
                               >
                                 {it.label}
@@ -365,7 +468,6 @@ export function MegaMenu() {
                             <Link
                               key={sub.label + sub.to}
                               to={sub.to}
-                              onClick={closeAll}
                               className={`block py-2.5 px-5 text-[13px] transition-all hover:bg-white/5 ${
                                 sub.label.startsWith('└') ? 'text-white/50 pl-8' : 'text-white/80 mt-1 font-medium border-t border-white/5 pt-3'
                               }`}

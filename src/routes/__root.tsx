@@ -60,30 +60,33 @@ export const Route = createRootRoute({
       { title: "JNTU-GV College of Engineering Vizianagaram" },
       {
         name: "description",
-        content: "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV.",
+        content:
+          "JNTU-GV College of Engineering Vizianagaram - Academics, departments, facilities, admissions, placements, research and campus information.",
       },
       { name: "author", content: "JNTU-GV CEV" },
       { property: "og:title", content: "JNTU-GV College of Engineering Vizianagaram" },
       {
         property: "og:description",
-        content: "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV.",
+        content:
+          "JNTU-GV College of Engineering Vizianagaram - Academics, departments, facilities, admissions, placements, research and campus information.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://jntugvcev.edu.in/" },
+      { property: "og:site_name", content: "JNTU-GV CEV" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "JNTU-GV College of Engineering Vizianagaram" },
       {
         name: "twitter:description",
-        content: "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV.",
+        content:
+          "JNTU-GV College of Engineering Vizianagaram - Academics, departments, facilities, admissions, placements, research and campus information.",
       },
       {
         property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/456b7283-b8f9-4b85-ab44-c95de54f717f/id-preview-dd487b58--97bf9169-b7f5-4566-9e17-2db61f222788.lovable.app-1777518152701.png",
+        content: "https://jntugvcev.edu.in/logo-circle.png",
       },
       {
         name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/456b7283-b8f9-4b85-ab44-c95de54f717f/id-preview-dd487b58--97bf9169-b7f5-4566-9e17-2db61f222788.lovable.app-1777518152701.png",
+        content: "https://jntugvcev.edu.in/logo-circle.png",
       },
     ],
     links: [
@@ -100,7 +103,11 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap",
       },
-      { rel: "icon", type: "image/jpeg", href: "/logo.jpeg" },
+      { rel: "canonical", href: "https://jntugvcev.edu.in/" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/favicon.png" },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "shortcut icon", href: "/favicon.ico" },
     ],
   }),
   shellComponent: RootShell,

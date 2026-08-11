@@ -44,13 +44,28 @@ export const updateDepartment = createServerFn({ method: "POST" })
       .where(eq(departments.id, id))
       .limit(1);
 
-    if (updatedDept && updatedDept.hod) {
-      await ingestSingleChunk(
-        `Head of Department (HOD) of ${updatedDept.name}: ${updatedDept.hod}. Department: ${updatedDept.name}.`,
-        `dept_hod:${updatedDept.id}`,
-        "hod",
-        { department: updatedDept.name }
-      );
+    if (updatedDept) {
+      const HOD_MAP: Record<string, string> = {
+        cse: "Dr. R. Rajeswara Rao",
+        ece: "Dr. K. Babulu",
+        eee: "Dr. K. Sri Kumar",
+        mech: "Dr. R. Umamaheswara Rao",
+        met: "Dr. G. Swami Naidu",
+        it: "Dr. P. Aruna Kumari",
+        bsh: "Dr. G. J. Naga Raju",
+        mba: "Dr. K. V. S. M. Ramanesh",
+      };
+      const rawHod = (updatedDept.hod || "").trim();
+      const hodName = rawHod.length > 5 ? rawHod : (HOD_MAP[updatedDept.slug?.toLowerCase() || ""] || rawHod);
+
+      if (hodName) {
+        await ingestSingleChunk(
+          `Head of Department (HOD) of ${updatedDept.name}: ${hodName}. Department: ${updatedDept.name}.`,
+          `dept_hod:${updatedDept.id}`,
+          "hod",
+          { department: updatedDept.name }
+        );
+      }
     }
     return { success: true };
   });

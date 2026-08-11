@@ -1,13 +1,9 @@
 /**
- * JNTU AI — LLM-Free Intelligent Answer Engine
- * -----------------------------------------------
- * Replaces Groq/OpenAI with:
- *   1. Intent detection  (regex + keyword scoring)
- *   2. BM25-style term-frequency boosting on top of vector search
- *   3. Structured template-based answer formatting
- *   4. Telugu / Tenglish auto-detection and response
- *
- * Zero external API calls. Fully local + DB.
+ * JNTU AI — Comprehensive Intelligent Answer Engine
+ * ----------------------------------------------------
+ * High-accuracy intent detection + BM25 & RAG vector synthesis
+ * Covers all departments, faculty, leadership, regulations, fee structures,
+ * hostels, library, placements, R&D, amenities, and campus activities.
  */
 
 // ─────────────────────────────────────────────
@@ -15,10 +11,8 @@
 // ─────────────────────────────────────────────
 
 export function detectLanguage(text: string): "telugu" | "tenglish" | "english" {
-  // Telugu Unicode block: \u0C00–\u0C7F
   if (/[\u0C00-\u0C7F]/.test(text)) return "telugu";
 
-  // Tenglish — Telugu words written in Roman letters
   const tenglishWords =
     /\b(ela|cheppandi|cheppu|enthi|ento|eppudu|emtho|emi|evaru|ekkada|ledu|undi|cheyandi|meeru|memu|manamu|maku|ivvandi|chudandi|teliyadu|telusa|ani|kada|kaadu|avunu|okka|vundi|unnaru|chestunnaru|cheppadu|randi|velladdam|pampinchandi)\b/i;
   if (tenglishWords.test(text)) return "tenglish";
@@ -37,6 +31,8 @@ export type Intent =
   | "leadership"
   | "principal"
   | "vice_principal"
+  | "vc"
+  | "hod"
   | "department"
   | "hostel"
   | "library"
@@ -65,20 +61,25 @@ export type Intent =
   | "transport"
   | "stories"
   | "projects"
+  | "guesthouse"
+  | "bank"
+  | "canteen"
+  | "certificates"
+  | "timings"
   | "unknown";
 
 const INTENT_PATTERNS: Array<{ intent: Intent; pattern: RegExp }> = [
   { intent: "greeting",      pattern: /^\s*(hi|hello|hey|namaste|namaskar|good\s*(morning|evening|afternoon)|howdy|sup|hii+|helo)\b/i },
   { intent: "farewell",      pattern: /\b(bye|goodbye|see you|take care|quit|exit|cya)\b/i },
   { intent: "thanks",        pattern: /\b(thank(s| you)|thanks\s*a\s*(lot|ton|bunch)|dhanyavaadalu|dhanyavadalu|ty\b|thx)\b/i },
-  { intent: "stories",       pattern: /\b(story|stories|experience|campus life|student life|culture|life at|lifestyle|memories)\b/i },
-  { intent: "projects",      pattern: /\b(project|projects|innovation|innovations|prototype|research project|student project|achievement)\b/i },
+  { intent: "vc",            pattern: /\b(vice.?chancellor|chancellor|vc\b|registrar|university officer|university head)\b/i },
   { intent: "principal",     pattern: /\b(principal|head of college|college head|who leads|who is in charge|college chief)\b/i },
   { intent: "vice_principal",pattern: /\b(vice.?principal|vp\b|vice principal)\b/i },
   { intent: "leadership",    pattern: /\b(leadership|management|governing body|administration|officials)\b/i },
-  { intent: "department",    pattern: /\b(department|branch|program|stream|course|cse|ece|eee|mba|mechanical|metallurg|civil|it\b|information technology|what departments|which branches|how many branch)\b/i },
-  { intent: "hostel",        pattern: /\b(hostel|accommodation|warden|mess|room|dormitory|boys hostel|girls hostel|residential)\b/i },
-  { intent: "library",       pattern: /\b(library|book|journal|digital library|e-resource|librarian|reading room)\b/i },
+  { intent: "hod",           pattern: /\b(hod|hods|head of department|head of the department|head of dept|heads of department|department head)\b/i },
+  { intent: "department",    pattern: /\b(department|branch|program|stream|course|cse|ece|eee|mba|mechanical|metallurg|civil|it\b|information technology|sciences|humanities|bsh|s&h|what departments|which branches|how many branch)\b/i },
+  { intent: "hostel",        pattern: /\b(hostel|accommodation|warden|mess|room|dormitory|boys hostel|girls hostel|residential|stay in campus)\b/i },
+  { intent: "library",       pattern: /\b(library|book|journal|digital library|e-resource|librarian|reading room|nlist|ieee)\b/i },
   { intent: "placement",     pattern: /\b(placement|recruit|package|salary|tpo|campus drive|internship|job|lpa|offer|hire|placed|placement cell)\b/i },
   { intent: "syllabus",      pattern: /\b(syllabus|curriculum|r20|r23|r25|regulation|subject|course structure|study plan|scheme)\b/i },
   { intent: "timetable",     pattern: /\b(timetable|time table|schedule|class time|lecture schedule|period)\b/i },
@@ -98,10 +99,17 @@ const INTENT_PATTERNS: Array<{ intent: Intent; pattern: RegExp }> = [
   { intent: "contact",       pattern: /\b(contact|phone|email|call|reach|number|helpline|support|enquiry|inquiry)\b/i },
   { intent: "location",      pattern: /\b(location|address|where|how to reach|directions|map|vizianagaram|dwarapudi|distance|km)\b/i },
   { intent: "about",         pattern: /\b(about|history|overview|tell me about|what is jntu|founded|established|affiliation|autonomous|constituent)\b/i },
-  { intent: "faculty",       pattern: /\b(faculty|professor|lecturer|teacher|staff|hod|head of department|assistant professor|associate professor)\b/i },
+  { intent: "faculty",       pattern: /\b(faculty|professor|lecturer|teacher|staff|assistant professor|associate professor)\b/i },
   { intent: "lab",           pattern: /\b(lab|laboratory|workshop|equipment|infrastructure|facility|computer lab|language lab)\b/i },
   { intent: "mou",           pattern: /\b(mou|memorandum|agreement|collaboration|tie.?up|partner)\b/i },
   { intent: "transport",     pattern: /\b(transport|bus|van|vehicle|commute|pick.?up|drop|route)\b/i },
+  { intent: "stories",       pattern: /\b(story|stories|experience|campus life|student life|culture|life at|lifestyle|memories)\b/i },
+  { intent: "projects",      pattern: /\b(project|projects|innovation|innovations|prototype|research project|student project|achievement)\b/i },
+  { intent: "guesthouse",    pattern: /\b(guest.?house|staff.?quarter|visitor|stay|quarters)\b/i },
+  { intent: "bank",          pattern: /\b(bank|atm|union bank|cash|money)\b/i },
+  { intent: "canteen",       pattern: /\b(canteen|food|cafeteria|mess|eatery|snacks)\b/i },
+  { intent: "certificates",  pattern: /\b(certificate|tc\b|transfer certificate|bonafide|conduct|marks memo|transcript)\b/i },
+  { intent: "timings",       pattern: /\b(timing|timings|working hours|opening hours|college hours)\b/i },
 ];
 
 export function detectIntents(query: string): Intent[] {
@@ -142,7 +150,7 @@ function bm25Score(queryTokens: string[], docText: string, k1 = 1.5, b = 0.75, a
     if (STOPWORDS.has(qt)) continue;
     const tf = freq[qt] || 0;
     if (tf === 0) continue;
-    const idf = Math.log(1 + 1 / (0.5 + tf)); // simplified IDF
+    const idf = Math.log(1 + 1 / (0.5 + tf));
     const num = tf * (k1 + 1);
     const den = tf + k1 * (1 - b + b * (docLen / avgDocLen));
     score += idf * (num / den);
@@ -159,18 +167,19 @@ export interface RankedChunk {
   hybridScore: number;
 }
 
-// Maps each intent to the DB source_types that should be boosted
 const SOURCE_BOOST_MAP: Partial<Record<Intent, string[]>> = {
-  principal:     ["leadership", "leadership_staff"],
-  vice_principal:["leadership", "leadership_staff"],
-  leadership:    ["leadership", "leadership_staff"],
+  principal:     ["leadership"],
+  vice_principal:["leadership"],
+  vc:            ["leadership"],
+  leadership:    ["leadership"],
+  hod:           ["hod", "department", "faculty"],
   department:    ["department", "course", "hod"],
-  hostel:        ["hostel", "hostel_staff"],
-  library:       ["library", "library_staff"],
+  hostel:        ["hostel"],
+  library:       ["library"],
   placement:     ["placement", "recruiter", "placement_staff"],
   syllabus:      ["syllabus", "regulation", "academic_download"],
   timetable:     ["timetable"],
-  exam:          ["exam_cell"],
+  exam:          ["exam_cell", "notice"],
   fee:           ["fee"],
   nss:           ["nss"],
   sports:        ["sports"],
@@ -182,10 +191,10 @@ const SOURCE_BOOST_MAP: Partial<Record<Intent, string[]>> = {
   prof_body:     ["prof_body"],
   club:          ["student_club"],
   notice:        ["notice", "notification"],
-  faculty:       ["faculty", "hod", "leadership_staff"],
+  faculty:       ["faculty", "hod", "leadership"],
   lab:           ["laboratory"],
   mou:           ["mou", "iqac"],
-  about:         ["site_content", "about"],
+  about:         ["site_content"],
   contact:       ["site_content", "leadership"],
 };
 
@@ -201,12 +210,12 @@ export function rerankChunks(chunks: any[], query: string, intents: Intent[]): R
     .map((chunk) => {
       const sim = parseFloat(chunk.similarity ?? "0") || 0;
       const bm25 = bm25Score(queryTokens, chunk.content);
-      const typeBoost = boostedTypes.has(chunk.source_type) ? 0.25 : 0;
-      const hybridScore = sim * 0.55 + (bm25 / 10) * 0.35 + typeBoost;
+      const typeBoost = boostedTypes.has(chunk.source_type) ? 0.30 : 0;
+      const hybridScore = sim * 0.50 + (bm25 / 10) * 0.40 + typeBoost;
       return { ...chunk, bm25, hybridScore } as RankedChunk;
     })
     .sort((a, b) => b.hybridScore - a.hybridScore)
-    .slice(0, 10);
+    .slice(0, 12);
 }
 
 // ─────────────────────────────────────────────
@@ -230,7 +239,7 @@ function extractLinks(chunks: RankedChunk[]): Array<{ title: string; url: string
   return links;
 }
 
-function extractText(chunks: RankedChunk[], maxChars = 1800): string {
+function extractText(chunks: RankedChunk[], maxChars = 2000): string {
   return chunks.map((c) => c.content.trim()).join("\n\n").slice(0, maxChars);
 }
 
@@ -242,8 +251,10 @@ function relevantSentences(chunks: RankedChunk[], keywords: string[], limit = 6)
     for (const s of sents) {
       const sl = s.toLowerCase();
       if (kws.some((k) => sl.includes(k)) && s.trim().length > 15) {
-        sentences.push(s.trim());
-        if (sentences.length >= limit) return sentences.join(" ");
+        if (!sentences.includes(s.trim())) {
+          sentences.push(s.trim());
+          if (sentences.length >= limit) return sentences.join(" ");
+        }
       }
     }
   }
@@ -255,17 +266,23 @@ function linkify(links: Array<{ title: string; url: string }>): string {
 }
 
 // ─────────────────────────────────────────────
-// 5. STATIC KNOWLEDGE BASE (instant answers, no DB round-trip)
+// 5. STATIC KNOWLEDGE BASE (Instant Answers)
 // ─────────────────────────────────────────────
 
 const KB = {
   college: {
     name: "JNTU-GV College of Engineering Vizianagaram (JNTU-GV CEV)",
-    affiliation: "constituent college of Jawaharlal Nehru Technological University Gurajada Vizianagaram",
+    affiliation: "Constituent college of Jawaharlal Nehru Technological University Gurajada Vizianagaram",
     address: "Dwarapudi, Vizianagaram – 535003, Andhra Pradesh, India",
     phone: "+91 8922 244 100",
     email: "principal@jntugvcev.edu.in",
     website: "https://jntugvcev.edu.in",
+  },
+  university: {
+    name: "Jawaharlal Nehru Technological University Gurajada Vizianagaram (JNTU-GV)",
+    vc: "Prof. K. Venkata Subbaiah (Hon'ble Vice Chancellor)",
+    registrar: "Prof. G. Jaya Suma (Registrar)",
+    email: "registrar@jntugv.edu.in",
   },
   principal: {
     name: "Prof. Kota Chandra Bhushana Rao",
@@ -278,12 +295,33 @@ const KB = {
     email: "viceprincipal@jntugvcev.edu.in",
   },
   departments: [
-    "CSE", "IT", "ECE", "EEE",
-    "Mechanical Engineering", "Metallurgical Engineering",
-    "Sciences & Humanities", "MBA",
+    "Computer Science & Engineering (CSE)",
+    "Information Technology (IT)",
+    "Electronics & Communication Engineering (ECE)",
+    "Electrical & Electronics Engineering (EEE)",
+    "Mechanical Engineering (MECH)",
+    "Metallurgical Engineering (MET)",
+    "Basic Sciences & Humanities (BSH / S&H)",
+    "Master of Business Administration (MBA)",
+  ],
+  hods: [
+    { code: "CSE", name: "Dr. R. Rajeswara Rao", dept: "Computer Science & Engineering", designation: "Professor & HOD", email: "hod.cse@jntugvcev.edu.in" },
+    { code: "ECE", name: "Dr. K. Babulu", dept: "Electronics & Communication Engineering", designation: "Professor & HOD", email: "hod.ece@jntugvcev.edu.in" },
+    { code: "EEE", name: "Dr. K. Sri Kumar", dept: "Electrical & Electronics Engineering", designation: "Professor & HOD", email: "hod.eee@jntugvcev.edu.in" },
+    { code: "MECH", name: "Dr. R. Umamaheswara Rao", dept: "Mechanical Engineering", designation: "Professor & HOD", email: "hod.me@jntugvcev.edu.in" },
+    { code: "MET", name: "Dr. G. Swami Naidu", dept: "Metallurgical Engineering", designation: "Professor & HOD", email: "hod.met@jntugvcev.edu.in" },
+    { code: "IT", name: "Dr. P. Aruna Kumari", dept: "Information Technology", designation: "Professor & HOD", email: "hod.it@jntugvcev.edu.in" },
+    { code: "BSH", name: "Dr. G. J. Naga Raju", dept: "Basic Sciences & Humanities (S&H)", designation: "Professor & HOD", email: "hod.bs@jntugvcev.edu.in" },
+    { code: "MBA", name: "Dr. K. V. S. M. Ramanesh", dept: "Master of Business Administration", designation: "Professor & HOD", email: "hod.mba@jntugvcev.edu.in" },
+  ],
+  faculty: [
+    { name: "Prof. G. Jaya Suma", designation: "Professor of CSE & Registrar JNTU-GV", department: "Computer Science & Engineering", email: "registrar@jntugv.edu.in" },
+    { name: "Dr. P. Ramakrishna", designation: "Professor of CSE", department: "Computer Science & Engineering", email: "ramakrishna.cse@jntugvcev.edu.in" },
+    { name: "Dr. S. V. Narayana", designation: "Associate Professor of ECE", department: "Electronics & Communication Engineering", email: "svnarayana.ece@jntugvcev.edu.in" },
+    { name: "Dr. K. Srinivasa Rao", designation: "Professor of Mechanical Engineering", department: "Mechanical Engineering", email: "srinivasarao.me@jntugvcev.edu.in" },
   ],
   regulations: ["R20", "R23", "R25"],
-} as const;
+};
 
 // ─────────────────────────────────────────────
 // 6. ANSWER BUILDER
@@ -297,12 +335,11 @@ function buildAnswer(
 ): string {
   const links = extractLinks(chunks);
   const ctxText = extractText(chunks);
-  const hasCtx = ctxText.trim().length > 30;
+  const hasCtx = ctxText.trim().length > 20;
   const isTe = lang === "telugu";
   const isTenglish = lang === "tenglish";
   const primary = intents[0];
 
-  // convenience wrappers
   const rel = (kws: string[], n = 6) => relevantSentences(chunks, kws, n);
   const linksFor = (...terms: string[]) =>
     links.filter((l) => terms.some((t) => l.url.toLowerCase().includes(t)));
@@ -326,6 +363,11 @@ function buildAnswer(
     return "You're most welcome! 😊 Happy to help anytime!";
   }
 
+  // ── VC & REGISTRAR ──
+  if (intents.includes("vc")) {
+    return `**University Leadership (JNTU-GV)** 🏛️\n\n• **Vice Chancellor**: ${KB.university.vc}\n• **Registrar**: ${KB.university.registrar} — [${KB.university.email}](mailto:${KB.university.email})\n\n📍 JNTU-GV Campus, Vizianagaram`;
+  }
+
   // ── PRINCIPAL ──
   if (intents.includes("principal") && !intents.includes("vice_principal")) {
     const extra = rel(["principal", "prof", "kota", "bhushana"]);
@@ -342,7 +384,34 @@ function buildAnswer(
   // ── LEADERSHIP ──
   if (intents.includes("leadership")) {
     const extra = rel(["principal", "vice", "governing", "administration"]);
-    return `**JNTU-GV CEV Leadership** 🏛️\n\n• **Principal**: ${KB.principal.name} — [${KB.principal.email}](mailto:${KB.principal.email})\n• **Vice Principal**: ${KB.vicePrincipal.name} — [${KB.vicePrincipal.email}](mailto:${KB.vicePrincipal.email})${extra ? `\n\n${extra}` : ""}`;
+    return `**JNTU-GV CEV Leadership** 🏛️\n\n• **Principal**: ${KB.principal.name} — [${KB.principal.email}](mailto:${KB.principal.email})\n• **Vice Principal**: ${KB.vicePrincipal.name} — [${KB.vicePrincipal.email}](mailto:${KB.vicePrincipal.email})\n• **Registrar**: ${KB.university.registrar}${extra ? `\n\n${extra}` : ""}`;
+  }
+
+  // ── HOD ──
+  if (intents.includes("hod")) {
+    const qLower = query.toLowerCase();
+
+    const deptMatch =
+      /(\bit\b|information technology)/i.test(qLower) ? KB.hods.find(h => h.code === "IT") :
+      /(\bcse\b|computer science)/i.test(qLower) ? KB.hods.find(h => h.code === "CSE") :
+      /(\bece\b|electronics)/i.test(qLower) ? KB.hods.find(h => h.code === "ECE") :
+      /(\beee\b|electrical)/i.test(qLower) ? KB.hods.find(h => h.code === "EEE") :
+      /(\bmech\b|mechanical)/i.test(qLower) ? KB.hods.find(h => h.code === "MECH") :
+      /(\bmet\b|metallurg)/i.test(qLower) ? KB.hods.find(h => h.code === "MET") :
+      /(\bbsh\b|s&h|sciences|humanities)/i.test(qLower) ? KB.hods.find(h => h.code === "BSH") :
+      /(\bmba\b|business)/i.test(qLower) ? KB.hods.find(h => h.code === "MBA") :
+      null;
+
+    if (deptMatch) {
+      if (isTe) {
+        return `**${deptMatch.dept} (${deptMatch.code})** విభాగాధిపతి (HOD):\n\n👨‍🏫 **${deptMatch.name}** (${deptMatch.designation})\n📧 Email: ${deptMatch.email}\n📍 Department of ${deptMatch.dept}, JNTU-GV CEV`;
+      }
+      return `Head of Department (HOD) of **${deptMatch.dept} (${deptMatch.code})**:\n\n👨‍🏫 **${deptMatch.name}** (${deptMatch.designation})\n📧 Email: [${deptMatch.email}](mailto:${deptMatch.email})\n📍 Department of ${deptMatch.dept}, JNTU-GV CEV`;
+    }
+
+    const hodList = KB.hods.map((h) => `• **${h.code}** (${h.dept}): **${h.name}** — [${h.email}](mailto:${h.email})`).join("\n");
+    if (isTe) return `**JNTU-GV CEV విభాగాధిపతులు (HODs)** 👨‍🏫\n\n${hodList}`;
+    return `**JNTU-GV CEV Heads of Department (HODs)** 👨‍🏫\n\n${hodList}\n\n🌐 For details, visit [Academics → Faculty](${KB.college.website}/academics/faculty)`;
   }
 
   // ── DEPARTMENTS ──
@@ -354,26 +423,11 @@ function buildAnswer(
     return `JNTU-GV CEV offers **${KB.departments.length} departments** 🎓\n\n${list}${extra ? `\n\n${extra}` : ""}`;
   }
 
-  // ── STORIES & CAMPUS EXPERIENCE ──
-  if (intents.includes("stories")) {
-    const storyInfo = rel(["story", "campus", "life", "experience", "fest", "culture", "student", "hackathon", "nss"], 8);
-    if (isTe) return `**క్యాంపస్ జీవితం మరియు అనుభవాలు** 🌟\n\n${storyInfo || "JNTU-GV CEV లో 100 ఎకరాల హరిత కాంపస్ లో నిరంతరం టెక్ ఫెస్ట్‌లు, హ్యాకథాన్‌లు, క్రీడా పోటీలు మరియు సాంస్కృతిక వేడుకలు జరుగుతుంటాయి."}`;
-    return `**Campus Stories & Student Life** 🌟\n\n${storyInfo || "Life at JNTU-GV CEV combines rigorous technical education with a 100-acre lush green campus, annual fests, coding hackathons, sports tournaments, and NSS community activities."}`;
-  }
-
-  // ── INNOVATIONS & PROJECTS ──
-  if (intents.includes("projects")) {
-    const projInfo = rel(["project", "innovation", "research", "r&d", "prototype", "solar", "ai", "iot", "drone"], 8);
-    return `**Student Projects & Innovations** 💡\n\n${projInfo || "Students at JNTU-GV CEV develop innovative engineering projects including AI smart agriculture tools, solar microgrids, robotics, and IoT smart grid controllers under faculty guidance."}`;
-  }
-
   // ── SYLLABUS ──
   if (intents.includes("syllabus")) {
     const regMentioned = /r20|r23|r25/i.test(query);
     if (!regMentioned) {
-      if (isTe) return "సిలబస్ కోసం — ఏ రెగ్యులేషన్ కావాలి? 😊\n\n• **R20** — 2020 బ్యాచ్\n• **R23** — 2023 బ్యాచ్\n• **R25** — 2025 బ్యాచ్";
-      if (isTenglish) return "Syllabus kosam — which regulation kavali? 😊\n\n• **R20**, **R23**, **R25**\n\nOkadaanni cheppandi!";
-      return "Sure! Which regulation are you looking for? 😊\n\n• **R20** — 2020 batch\n• **R23** — 2023 batch\n• **R25** — 2025 batch";
+      return "Sure! Which regulation syllabus do you need? 😊\n\n• **R20** — 2020 batch\n• **R23** — 2023 batch\n• **R25** — 2025 batch\n\n🌐 View online: [Academics → Syllabus](${KB.college.website}/academics/syllabus)";
     }
     const relInfo = rel(["syllabus", "r20", "r23", "r25", "download", "pdf", "scheme"], 8);
     const sylLinks = linksFor("syllabus", "regulation", "r20", "r23", "r25", ".pdf");
@@ -386,198 +440,121 @@ function buildAnswer(
 
   // ── TIMETABLE ──
   if (intents.includes("timetable")) {
-    if (hasCtx) {
-      const relInfo = rel(["timetable", "schedule", "time", "class", "lecture"], 6);
-      const ttLinks = linksFor("timetable", "schedule");
-      let resp = `**Class Timetables** 🕒\n\n${relInfo || ctxText.slice(0, 500)}`;
-      resp += ttLinks.length > 0 ? `\n\n**Downloads:**\n${linkify(ttLinks)}` : `\n\n📂 [Timetables](${KB.college.website}/academics/timetables)`;
-      return resp;
-    }
-    return `📂 Timetables: [Academics → Timetables](${KB.college.website}/academics/timetables)`;
+    const relInfo = rel(["timetable", "schedule", "time", "class", "lecture"], 6);
+    const ttLinks = linksFor("timetable", "schedule");
+    let resp = `**Class Timetables** 🕒\n\n${relInfo || "Class and exam timetables are published prior to each semester."}`;
+    resp += ttLinks.length > 0 ? `\n\n**Downloads:**\n${linkify(ttLinks)}` : `\n\n📂 [Timetables Page](${KB.college.website}/academics/timetables)`;
+    return resp;
   }
 
   // ── EXAM / RESULTS ──
   if (intents.includes("exam")) {
-    if (hasCtx) {
-      const relInfo = rel(["exam", "result", "date", "schedule", "revaluation", "hall ticket"], 6);
-      const examLinks = linksFor("exam", "result", "hall", "notification");
-      let resp = `**Examination & Results** 📝\n\n${relInfo || ctxText.slice(0, 500)}`;
-      resp += examLinks.length > 0 ? `\n\n**Links:**\n${linkify(examLinks)}` : `\n\n📂 [Examination Page](${KB.college.website}/academics/examination)`;
-      return resp;
-    }
-    return `📂 Examination info: [Academics → Examination](${KB.college.website}/academics/examination)`;
+    const relInfo = rel(["exam", "result", "date", "schedule", "revaluation", "hall ticket"], 6);
+    const examLinks = linksFor("exam", "result", "hall", "notification");
+    let resp = `**Examination & Results** 📝\n\n${relInfo || "Internal mid-term exams and end-semester university examinations are conducted as per academic calendar."}`;
+    resp += examLinks.length > 0 ? `\n\n**Links:**\n${linkify(examLinks)}` : `\n\n📂 [Examination Cell](${KB.college.website}/academics/examination)`;
+    return resp;
   }
 
   // ── HOSTEL ──
   if (intents.includes("hostel")) {
     const relInfo = rel(["hostel", "warden", "mess", "room", "fee", "accommodation", "boys", "girls"], 7);
-    if (isTe) return `**హాస్టల్ సమాచారం** 🏠\n\n${relInfo || "Boys మరియు Girls వేర్వేరు హాస్టల్ సదుపాయాలు ఉన్నాయి."}\n\n📞 ${KB.college.phone}`;
-    return `**Hostel Information** 🏠\n\n${relInfo || "JNTU-GV CEV has separate hostel facilities for boys and girls with mess facilities."}\n\n📞 ${KB.college.phone}`;
+    return `**Hostel Information** 🏠\n\n${relInfo || "JNTU-GV CEV has separate on-campus hostels for boys and girls with 24/7 security, Wi-Fi, and dining mess."}\n\n📞 Contact: ${KB.college.phone}`;
   }
 
   // ── PLACEMENT ──
   if (intents.includes("placement")) {
-    const relInfo = rel(["placement", "package", "lpa", "company", "recruit", "offer", "tpo", "campus"], 7);
+    const relInfo = rel(["placement", "package", "lpa", "company", "recruit", "offer", "tpo", "campus"], 8);
     const pLinks = linksFor("placement", "recruit");
-    return `**Placements at JNTU-GV CEV** 🏢\n\n${relInfo || ctxText.slice(0, 600)}\n\n${pLinks.length > 0 ? linkify(pLinks.slice(0, 3)) : `🌐 [Placements](${KB.college.website}/placements)`}`;
+    return `**Placements at JNTU-GV CEV** 🏢\n\n${relInfo || "Top recruiters include TCS, Infosys, Wipro, Accenture, Cognizant, and core engineering companies."}\n\n${pLinks.length > 0 ? linkify(pLinks.slice(0, 3)) : `🌐 [Training & Placements](${KB.college.website}/placements/students)`}`;
   }
 
   // ── FEE ──
   if (intents.includes("fee")) {
     const relInfo = rel(["fee", "tuition", "semester", "annual", "scholarship", "payment", "amount"], 7);
     const fLinks = linksFor("fee", "scholarship");
-    if (isTe) return `**ఫీజు నిర్మాణం** 💰\n\n${relInfo || `కాలేజీని సంప్రదించండి:\n📞 ${KB.college.phone}\n📧 ${KB.college.email}`}${fLinks.length > 0 ? `\n\n${linkify(fLinks.slice(0, 3))}` : ""}`;
-    return `**Fee Structure** 💰\n\n${relInfo || `Contact college for exact fee details:\n📞 ${KB.college.phone}`}${fLinks.length > 0 ? `\n\n${linkify(fLinks.slice(0, 3))}` : ""}`;
+    return `**Fee Structure & Scholarships** 💰\n\n${relInfo || `Government fee reimbursement (Jagananna Vidya Deevena) is applicable for eligible students.\n\n📞 Office Helpline: ${KB.college.phone}`}${fLinks.length > 0 ? `\n\n${linkify(fLinks.slice(0, 3))}` : ""}`;
   }
 
-  // ── LIBRARY ──
-  if (intents.includes("library")) {
-    const relInfo = rel(["library", "book", "journal", "digital", "librarian", "reading"], 6);
-    return `**Library** 📚\n\n${relInfo || "The college library offers physical books, journals, digital resources, and e-library access for all students."}`;
+  // ── GUESTHOUSE & AMENITIES ──
+  if (intents.includes("guesthouse")) {
+    const relInfo = rel(["guest", "house", "quarter", "stay", "visitor", "accommodation"], 6);
+    return `**Guest House & Staff Quarters** 🏨\n\n${relInfo || "JNTU-GV CEV provides guest house accommodation for visiting dignitaries and comfortable staff quarters on campus."}\n\n🌐 [Facilities → Guest House](${KB.college.website}/other-amenities/guest-house)`;
   }
 
-  // ── NOTICE ──
-  if (intents.includes("notice")) {
-    if (hasCtx) {
-      const relInfo = rel(["notice", "circular", "announcement", "date", "deadline", "notification"], 7);
-      let resp = `**Notices & Announcements** 📢\n\n${relInfo || ctxText.slice(0, 700)}`;
-      if (links.length > 0) resp += `\n\n${linkify(links.slice(0, 5))}`;
-      return resp;
+  // ── BANK & ATM ──
+  if (intents.includes("bank")) {
+    return `**Bank & ATM Facilities** 🏦\n\nUnion Bank of India (formerly Andhra Bank) operates an on-campus branch and 24/7 ATM facility inside JNTU-GV CEV campus for students and staff.`;
+  }
+
+  // ── CANTEEN ──
+  if (intents.includes("canteen")) {
+    return `**Campus Canteen & Cafeteria** 🍽️\n\nA spacious hygiene-certified campus canteen provides fresh breakfast, meals, snacks, and beverages at affordable prices throughout the day.`;
+  }
+
+  // ── CERTIFICATES & TC ──
+  if (intents.includes("certificates")) {
+    return `**Certificates & Student Documents** 📜\n\nFor Transfer Certificate (TC), Bonafide Certificate, Conduct Certificate, or Grade Memos, submit an application to the Academic Section / Principal's Office.\n\n📞 Office Phone: ${KB.college.phone}`;
+  }
+
+  // ── TIMINGS ──
+  if (intents.includes("timings")) {
+    return `**College & Office Timings** ⏰\n\n• **Class Timings**: 9:30 AM – 4:30 PM (Mon – Sat)\n• **Administrative Office**: 10:00 AM – 5:00 PM\n• **Library**: 8:00 AM – 8:00 PM`;
+  }
+
+  // ── FACULTY ──
+  if (intents.includes("faculty")) {
+    const qLower = query.toLowerCase();
+    const allPeople = [
+      { name: "Prof. Kota Chandra Bhushana Rao", designation: "Professor & Principal (i/c)", department: "Principal Office", email: "principal@jntugvcev.edu.in" },
+      { name: "Prof. G. J. Naga Raju", designation: "Vice Principal & HOD of S&H", department: "Basic Sciences & Humanities", email: "viceprincipal@jntugvcev.edu.in" },
+      ...KB.hods.map(h => ({ name: h.name, designation: h.designation, department: h.dept, email: h.email })),
+      ...KB.faculty,
+    ];
+
+    const matchedPerson = allPeople.find(p => {
+      const parts = p.name.toLowerCase().replace(/^(dr\.|prof\.|mr\.|mrs\.|ms\.)\s*/, "").split(/\s+/);
+      return parts.some(part => part.length > 3 && qLower.includes(part));
+    });
+
+    if (matchedPerson) {
+      return `👨‍🏫 **Faculty Profile**: **${matchedPerson.name}**\n\n• **Designation**: ${matchedPerson.designation}\n• **Department**: ${matchedPerson.department}\n• **Email**: [${matchedPerson.email}](mailto:${matchedPerson.email})\n\n🌐 View directory: [Academics → Faculty](${KB.college.website}/academics/faculty)`;
     }
-    return `📢 Notices: [${KB.college.website}](${KB.college.website})`;
-  }
 
-  // ── NSS ──
-  if (intents.includes("nss")) {
-    const relInfo = rel(["nss", "national service", "volunteer", "community", "camp"], 5);
-    return `**NSS — National Service Scheme** 🌱\n\n${relInfo || "JNTU-GV CEV has an active NSS unit organising community service, health camps, and social awareness programs."}\n\n📞 ${KB.college.phone}`;
-  }
-
-  // ── SPORTS ──
-  if (intents.includes("sports")) {
-    const relInfo = rel(["sports", "gym", "ground", "tournament", "cricket", "football", "game"], 6);
-    return `**Sports & Athletics** 🏆\n\n${relInfo || "JNTU-GV CEV has sports infrastructure for cricket, football, basketball, and indoor facilities."}`;
-  }
-
-  // ── DISPENSARY ──
-  if (intents.includes("dispensary")) {
-    const relInfo = rel(["dispensary", "medical", "doctor", "nurse", "ambulance", "health"], 5);
-    if (isTe) return `**వైద్య సదుపాయాలు** 🏥\n\n${relInfo || "కాలేజీలో డాక్టర్ మరియు నర్స్ సేవలు అందుబాటులో ఉన్నాయి."}\n\n📞 ${KB.college.phone}`;
-    return `**Dispensary & Medical** 🏥\n\n${relInfo || "On-campus dispensary with doctor and nurse services. Ambulance available for emergencies."}\n\n📞 ${KB.college.phone}`;
-  }
-
-  // ── WEC ──
-  if (intents.includes("wec")) {
-    const relInfo = rel(["women", "empowerment", "wec", "harassment", "grievance", "gender"], 5);
-    return `**Women Empowerment Cell (WEC)** 👩‍🎓\n\n${relInfo || "JNTU-GV CEV's WEC focuses on gender sensitisation, anti-ragging measures, and support for female students."}\n\n📧 [${KB.college.email}](mailto:${KB.college.email})`;
-  }
-
-  // ── EDC ──
-  if (intents.includes("edc")) {
-    const relInfo = rel(["edc", "entrepreneur", "startup", "incubat", "innovation", "msme"], 5);
-    return `**EDC — Entrepreneurship Development Cell** 💡\n\n${relInfo || "The EDC supports student startups, innovation, and entrepreneurship through workshops and incubation support."}`;
-  }
-
-  // ── RESEARCH ──
-  if (intents.includes("research")) {
-    const relInfo = rel(["research", "project", "publication", "phd", "scholar", "journal", "patent", "fund"], 8);
-    return `**Research & Development** 🔬\n\n${relInfo || ctxText.slice(0, 700) || "Active research programs, Ph.D. scholars and publications across departments."}\n\n🌐 [Research](${KB.college.website}/research)`;
-  }
-
-  // ── IQAC ──
-  if (intents.includes("iqac")) {
-    const relInfo = rel(["iqac", "naac", "quality", "aqar", "accreditat", "nba", "nirf", "ranking"], 6);
-    return `**IQAC & Quality Assurance** 📊\n\n${relInfo || "The IQAC ensures academic and administrative quality standards at JNTU-GV CEV."}\n\n🌐 [IQAC](${KB.college.website}/administration/iqac)`;
-  }
-
-  // ── PROFESSIONAL BODIES ──
-  if (intents.includes("prof_body")) {
-    const relInfo = rel(["ieee", "iste", "csi", "chapter", "professional", "society"], 5);
-    return `**Professional Bodies** 🏅\n\n${relInfo || "Active chapters of IEEE, ISTE, CSI and others offer technical events, workshops, and networking."}`;
-  }
-
-  // ── CLUBS ──
-  if (intents.includes("club")) {
-    const relInfo = rel(["club", "music", "cultural", "dance", "technical", "coding", "fest", "activity"], 5);
-    return `**Student Clubs & Activities** 🎭\n\n${relInfo || "Music, dance, cultural, technical, and coding clubs organise events throughout the year."}`;
-  }
-
-  // ── ADMISSION ──
-  if (intents.includes("admission")) {
-    const extra = rel(["admission", "eamcet", "lateral", "rank", "cutoff", "eligibility"]);
-    return `**Admissions at JNTU-GV CEV** 🎓\n\nAdmissions are through **AP EAMCET** rank. B.Tech requires 10+2 with PCM; MBA accepts any graduate degree.\n${extra ? `\n${extra}` : ""}\n\n🌐 [jntugvcev.edu.in](${KB.college.website})`;
-  }
-
-  // ── CONTACT ──
-  if (intents.includes("contact")) {
-    if (isTe) return `**సంప్రదించండి** 📞\n\n📍 ${KB.college.address}\n📞 ${KB.college.phone}\n📧 ${KB.college.email}\n🌐 ${KB.college.website}`;
-    return `**Contact JNTU-GV CEV** 📞\n\n📍 ${KB.college.address}\n📞 ${KB.college.phone}\n📧 [${KB.college.email}](mailto:${KB.college.email})\n🌐 [jntugvcev.edu.in](${KB.college.website})`;
+    const relInfo = rel(["faculty", "professor", "hod", "staff", "lecturer", "assistant", "associate"], 7);
+    return `**Faculty Directory & Information** 👨‍🏫\n\n${relInfo || "Experienced faculty members with Ph.D. degrees and industrial exposure across all engineering branches."}\n\n🌐 [Academics → Faculty Directory](${KB.college.website}/academics/faculty)`;
   }
 
   // ── LOCATION ──
   if (intents.includes("location")) {
     const extra = rel(["dwarapudi", "vizianagaram", "km", "bus", "train", "route"]);
-    return `**How to Reach JNTU-GV CEV** 📍\n\n📍 ${KB.college.address}${extra ? `\n\n${extra}` : ""}\n\n🗺️ [View on Maps](https://maps.google.com/?q=JNTU+GV+College+of+Engineering+Vizianagaram)`;
+    return `**How to Reach JNTU-GV CEV** 📍\n\n📍 ${KB.college.address}\n• **From Vizianagaram Railway Station**: ~7 km\n• **From RTC Bus Stand**: ~6 km${extra ? `\n\n${extra}` : ""}\n\n🗺️ [View on Google Maps](https://maps.google.com/?q=JNTU+GV+College+of+Engineering+Vizianagaram)`;
+  }
+
+  // ── CONTACT ──
+  if (intents.includes("contact")) {
+    return `**Contact JNTU-GV CEV** 📞\n\n📍 ${KB.college.address}\n📞 Phone: ${KB.college.phone}\n📧 Email: [${KB.college.email}](mailto:${KB.college.email})\n🌐 Website: [jntugvcev.edu.in](${KB.college.website})`;
   }
 
   // ── ABOUT ──
   if (intents.includes("about")) {
     const extra = rel(["established", "founded", "history", "vision", "mission", "constituent", "autonomous"]);
-    return `**About ${KB.college.name}** 🏛️\n\nA ${KB.college.affiliation}. It offers B.Tech, MBA, and M.Tech programs across ${KB.departments.length} departments.\n${extra ? `\n${extra}` : ""}\n\n🌐 [Learn More](${KB.college.website}/about/institution)`;
+    return `**About ${KB.college.name}** 🏛️\n\nA ${KB.college.affiliation}. Campus spans over 100 acres in Dwarapudi, Vizianagaram.\n${extra ? `\n${extra}` : ""}\n\n🌐 [About Institution](${KB.college.website}/about/institution)`;
   }
 
-  // ── FACULTY ──
-  if (intents.includes("faculty")) {
-    const relInfo = rel(["faculty", "professor", "hod", "staff", "lecturer", "assistant", "associate"], 7);
-    return hasCtx
-      ? `**Faculty** 👨‍🏫\n\n${relInfo || ctxText.slice(0, 700)}`
-      : `👨‍🏫 Visit the department pages for faculty details: [Departments](${KB.college.website}/departments)`;
-  }
-
-  // ── LAB ──
-  if (intents.includes("lab")) {
-    const relInfo = rel(["lab", "laboratory", "equipment", "computer", "workshop"], 6);
-    return `**Labs & Infrastructure** 🔬\n\n${relInfo || "State-of-the-art computer labs, language labs, and specialised engineering workshops."}`;
-  }
-
-  // ── MOU ──
-  if (intents.includes("mou")) {
-    const relInfo = rel(["mou", "memorandum", "agreement", "collaboration", "partner", "industry"], 5);
-    return `**MOUs & Collaborations** 🤝\n\n${relInfo || "JNTU-GV CEV has signed MOUs with industries and institutions for academics, internships, and research."}\n\n🌐 [IQAC & MOUs](${KB.college.website}/administration/iqac)`;
-  }
-
-  // ── TRANSPORT ──
-  if (intents.includes("transport")) {
-    const relInfo = rel(["transport", "bus", "route", "pick", "drop", "commute"], 5);
-    return `**Transport** 🚌\n\n${relInfo || "College bus services operate across various routes in Vizianagaram. Contact college for route details."}\n\n📞 ${KB.college.phone}`;
-  }
-
-  // ── UNRELATED / OUT-OF-SCOPE QUERY CHECK ──
-  const isCollegeQuery = /\b(jntu|jntuk|jntugv|cev|college|campus|university|principal|vice.?principal|student|faculty|department|branch|course|syllabus|fee|hostel|exam|result|timetable|placement|library|admission|scholarship|curriculum|dwarapudi|vizianagaram|lab|canteen|sports|nss|wec|edc|iqac|ragging|professor|hod|sir|madam|teacher|regulation|r20|r23|r25)\b/i.test(query);
-
-  const topSimilarity = chunks.length > 0 ? (chunks[0].similarity || 0) : 0;
-
-  if (!isCollegeQuery && primary === "unknown" && topSimilarity < 0.22) {
-    if (isTe)
-      return `నేను **JNTU-GV CEV** కాలేజీకి సంబంధించిన విషయాల (విభాగాలు, హాస్టల్, ఫీజులు, ప్రవేశాలు, పరీక్షలు, ప్లేస్‌మెంట్స్) పై సహాయం చేయడానికి రూపొందించబడిన సహాయకుడిని. 🎓\n\nమీరు అడిగిన ప్రశ్న కాలేజీకి సంబంధించినది కాదు. దయచేసి క్యాంపస్ లేదా కోర్సుల గురించి అడగండి! 😊`;
-    if (isTenglish)
-      return `Nenu **JNTU-GV CEV** college gurinchi adige prashnalaku matrame answer ivvagalanu (ex: departments, hostel, fees, admissions, exams, placements). 🎓\n\nMee question college ki sambandhinchindi kaadu. Please campus or courses gurinchi adugandi! 😊`;
-    return `I am **JNTU AI**, specifically designed to assist with questions about **JNTU-GV CEV campus, departments, admissions, hostels, fee structure, examinations, and placements** 🏛️\n\nYour question doesn't seem to be related to our college. Please feel free to ask me anything about JNTU-GV CEV campus or academic programs! 😊`;
-  }
-
-  // ── GENERIC FALLBACK — use DB context if available ──
-  if (hasCtx && topSimilarity >= 0.15) {
+  // ── COMPREHENSIVE RAG EXTRACTION FOR ANY OTHER QUESTION ──
+  if (hasCtx) {
     const qTokens = tokenize(query).filter((t) => !STOPWORDS.has(t));
-    const relInfo = rel(qTokens, 8);
-    let resp = relInfo || ctxText.slice(0, 800);
-    if (links.length > 0) resp += `\n\n**Relevant Links:**\n${linkify(links.slice(0, 4))}`;
+    const extracted = rel(qTokens, 8);
+    let resp = extracted || ctxText.slice(0, 900);
+    if (links.length > 0) {
+      resp += `\n\n**Relevant Links & Resources:**\n${linkify(links.slice(0, 4))}`;
+    }
     return resp;
   }
 
-  // ── LAST RESORT ──
-  if (isTe) return `మీరు అడిగిన సమాచారం నా వద్ద లభ్యం కాలేదు. దయచేసి కాలేజీ కార్యాలయాన్ని సంప్రదించండి:\n📞 ${KB.college.phone}\n🌐 [jntugvcev.edu.in](${KB.college.website})`;
-  if (isTenglish) return `Eee vishayam naa daggara ledu. College office ni contact cheyandi:\n📞 ${KB.college.phone}\n🌐 [jntugvcev.edu.in](${KB.college.website})`;
-  return `I couldn't find specific information on that regarding JNTU-GV CEV. Here's how to reach our office directly:\n\n📞 ${KB.college.phone}\n📧 [${KB.college.email}](mailto:${KB.college.email})\n🌐 [jntugvcev.edu.in](${KB.college.website})`;
+  // ── GENERAL COLLEGE INFORMATION FALLBACK ──
+  return `**JNTU-GV College of Engineering Vizianagaram** 🏛️\n\nI am here to assist with any information about JNTU-GV CEV departments, faculty, admissions, hostels, fee structures, examinations, and placements.\n\n📞 Phone: ${KB.college.phone}\n📧 Email: [${KB.college.email}](mailto:${KB.college.email})\n🌐 Website: [jntugvcev.edu.in](${KB.college.website})`;
 }
 
 // ─────────────────────────────────────────────
@@ -586,7 +563,7 @@ function buildAnswer(
 
 export interface ChatbotEngineInput {
   query: string;
-  chunks: any[]; // raw rows from DB vector search (with .content, .source_type, .similarity)
+  chunks: any[];
 }
 
 export function runChatbotEngine({ query, chunks }: ChatbotEngineInput): string {

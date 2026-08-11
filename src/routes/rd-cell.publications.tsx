@@ -92,6 +92,8 @@ function PublicationsPage() {
         <img 
           src="http://89.116.134.182/local-assets/uploads/2020/08/image.png" 
           alt="Publications Chart" 
+          decoding="async"
+loading="lazy"
           className="mx-auto rounded-xl shadow-lg border border-border w-full max-w-4xl" 
         />
       </div>

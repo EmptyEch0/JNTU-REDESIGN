@@ -45,6 +45,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getLeadershipData } from "../funcs/leadership";
 import { getAllDepartments } from "@/functions/departments"; // Added our new query hook target
 import { getAssetUrl } from "@/lib/departments";
+import { getHostelData } from "@/funcs/hostel.server";
+import { getLibraryData } from "@/funcs/library.server";
+import { getDispensaryData } from "@/funcs/dispensary.server";
+import { getSportsData } from "@/funcs/sports.server";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -59,6 +64,51 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "1450 students. 7 disciplines. One ambition — engineering tomorrow.",
       },
+    ],
+    links: [
+      { rel: "canonical", href: "https://jntugvcev.edu.in/" },
+      {
+        rel: "preload",
+        as: "image",
+        href: hero5,
+        fetchPriority: "high",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
+          "name": "JNTU-GV College of Engineering Vizianagaram",
+          "url": "https://jntugvcev.edu.in/",
+          "logo": "https://jntugvcev.edu.in/logo.jpeg",
+          "description": "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV.",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Dwarapudi",
+            "addressLocality": "Vizianagaram",
+            "addressRegion": "Andhra Pradesh",
+            "postalCode": "535003",
+            "addressCountry": "IN"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+91-8922-244100",
+            "contactType": "customer service",
+            "email": "principal@jntugv.edu.in"
+          }
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "JNTU-GV CEV",
+          "url": "https://jntugvcev.edu.in/"
+        }),
+      }
     ],
   }),
   component: HomePage,
@@ -120,6 +170,42 @@ function HomePage() {
     queryKey: ["departments", "all"],
     queryFn: () => getAllDepartments(),
   });
+
+  const { data: hostelData } = useQuery({
+    queryKey: ["hostel", "data"],
+    queryFn: () => getHostelData(),
+  });
+
+  const { data: libraryData } = useQuery({
+    queryKey: ["library", "data"],
+    queryFn: () => getLibraryData(),
+  });
+
+  const { data: dispensaryData } = useQuery({
+    queryKey: ["dispensary", "data"],
+    queryFn: () => getDispensaryData(),
+  });
+
+  const { data: sportsData } = useQuery({
+    queryKey: ["sports", "data"],
+    queryFn: () => getSportsData(),
+  });
+
+  const getFacilityImage = (title: string, staticImg: string) => {
+    if (title === "Hostels" && hostelData?.images?.[0]?.url) {
+      return getAssetUrl(hostelData.images[0].url);
+    }
+    if (title === "Library" && libraryData?.images?.[0]?.url) {
+      return getAssetUrl(libraryData.images[0].url);
+    }
+    if (title === "Dispensary" && dispensaryData?.images?.[0]?.url) {
+      return getAssetUrl(dispensaryData.images[0].url);
+    }
+    if (title === "Sports" && sportsData?.images?.[0]?.url) {
+      return getAssetUrl(sportsData.images[0].url);
+    }
+    return staticImg;
+  };
 
   return (
     <>
@@ -267,6 +353,10 @@ function HomePage() {
                         <img 
                           src={getAssetUrl(principal.image)} 
                           alt={principal.name} 
+                          width="380"
+                          height="475"
+                          loading="lazy"
+                          decoding="async"
                           className="h-full w-full object-cover transition-all duration-300 group-hover/img:scale-105"
                         />
                       ) : (
@@ -355,7 +445,7 @@ function HomePage() {
                   >
                     {/* Background Visual Image with full visibility and smooth dark overlay */}
                     {d.image ? (
-                      <img
+                      <img decoding="async" loading="lazy"
                         src={getAssetUrl(d.image)}
                         alt={`${d.name} representation`}
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -427,8 +517,8 @@ function HomePage() {
                     to={f.to}
                     className="group relative flex flex-col rounded-3xl overflow-hidden h-[260px] sm:h-[300px] lg:h-[320px] hover-lift"
                   >
-                    <img
-                      src={f.img}
+                    <img decoding="async"
+                      src={getFacilityImage(f.title, f.img)}
                       alt={f.title}
                       loading="lazy"
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] lg:group-hover:scale-110"
@@ -545,31 +635,46 @@ function HomePage() {
               <img
                 src={cultureImg}
                 alt="Cultural fest"
+                width="800"
+                height="500"
                 loading="lazy"
+                decoding="async"
                 className="col-span-12 md:col-span-7 aspect-[16/10] w-full object-cover rounded-3xl hover-lift"
               />
               <img
                 src={labImg}
                 alt="Lab"
+                width="600"
+                height="375"
                 loading="lazy"
+                decoding="async"
                 className="col-span-12 md:col-span-5 aspect-[16/10] w-full object-cover rounded-3xl hover-lift"
               />
               <img
                 src={sportsImg}
                 alt="Sports"
+                width="400"
+                height="400"
                 loading="lazy"
+                decoding="async"
                 className="col-span-6 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
               />
               <img
                 src={libraryImg}
                 alt="Library"
+                width="400"
+                height="400"
                 loading="lazy"
+                decoding="async"
                 className="col-span-6 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
               />
               <img
                 src={hostelImg}
                 alt="Hostel"
+                width="400"
+                height="400"
                 loading="lazy"
+                decoding="async"
                 className="col-span-12 md:col-span-4 aspect-square w-full object-cover rounded-3xl hover-lift"
               />
             </div>

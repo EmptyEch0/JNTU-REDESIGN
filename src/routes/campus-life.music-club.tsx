@@ -1,6 +1,7 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
+import { ImageCarousel } from "@/components/ImageCarousel";
 import { SubNav } from "@/components/SubNav";
 import { CAMPUS_LIFE_SUBNAV } from "@/lib/site";
 import { getMusicClubData } from "@/funcs/music.server";
@@ -201,7 +202,7 @@ function MusicClubPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {images.map((img: any) => (
                     <div key={img.id} className="relative group rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border-2 border-slate-200/40 shadow-sm hover:shadow duration-300">
-                      <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
+                      <img alt="" decoding="async" loading="lazy" src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
                       <button
                         onClick={() => handleDeleteImage(img.id)}
                         className="absolute inset-0 bg-rose-950/85 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1 font-black text-xs uppercase tracking-widest cursor-pointer"
@@ -270,7 +271,7 @@ function MusicClubPage() {
                   </div>
                 ) : (
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
-                    <img
+                    <img decoding="async" loading="lazy"
                       src={getAssetUrl(faculty?.img) || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"}
                       onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"; }}
                       className="w-24 h-24 md:w-28 md:h-28 rounded-[28px] object-cover border-2 border-slate-100 shadow shrink-0 duration-200 hover:scale-105"
@@ -402,58 +403,7 @@ function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   );
 }
 
-function ImageCarousel({ images, fallback }: any) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [autoplay, setAutoplay] = useState(true);
 
-  useEffect(() => {
-    if (!autoplay || !images || images.length <= 1) return;
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [autoplay, images]);
-
-  if (!images || images.length === 0) {
-    return (
-      <div className="relative aspect-[21/9] md:aspect-[16/6] min-h-[180px] md:min-h-[240px] max-h-[280px] md:max-h-[340px] w-full bg-slate-200 flex items-center justify-center overflow-hidden">
-        <img src={fallback} className="w-full h-full object-cover opacity-90" alt="Fallback" />
-      </div>
-    );
-  }
-
-  return (
-    <div 
-      className="relative aspect-[21/9] md:aspect-[16/6] min-h-[180px] md:min-h-[240px] max-h-[280px] md:max-h-[340px] w-full bg-slate-900 overflow-hidden group"
-      onMouseEnter={() => setAutoplay(false)}
-      onMouseLeave={() => setAutoplay(true)}
-    >
-      <div className="w-full h-full relative">
-        {images.map((img: string, i: number) => (
-          <img
-            key={i}
-            src={getAssetUrl(img)}
-            alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
-            onError={(e) => { e.currentTarget.src = fallback; }}
-          />
-        ))}
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent z-20" />
-      {images.length > 1 && (
-        <>
-          <button onClick={() => setCurrentIndex((p) => (p - 1 + images.length) % images.length)} className="absolute left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow cursor-pointer z-30 text-center grid place-items-center transition">‹</button>
-          <button onClick={() => setCurrentIndex((p) => (p + 1) % images.length)} className="absolute right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow cursor-pointer z-30 text-center grid place-items-center transition">›</button>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1 bg-black/10 px-3 py-1 rounded-full z-30">
-            {images.map((_: any, idx: number)=>(
-              <button key={idx} onClick={()=>setCurrentIndex(idx)} className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${currentIndex === idx ? "w-5 bg-white" : "w-1.5 bg-white/40"}`} />
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
 
 /* ---------- EDITABLE DATABOUND VIEWS ---------- */
 

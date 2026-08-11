@@ -345,7 +345,7 @@ function HowToReachPage() {
         </RevealOnScroll>
         <RevealOnScroll delay={100}>
           <div className="mt-10 flex justify-center">
-            <img
+            <img decoding="async"
               src={campusMap}
               alt="Directions map showing route from Vizianagaram to JNTUK UCEV campus"
               loading="lazy"

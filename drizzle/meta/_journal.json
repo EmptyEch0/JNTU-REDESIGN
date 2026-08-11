@@ -15,6 +15,13 @@
       "when": 1781930782312,
       "tag": "0005_ambiguous_starfox",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786379550284,
+      "tag": "0006_useful_dark_beast",
+      "breakpoints": true
     }
   ]
 }

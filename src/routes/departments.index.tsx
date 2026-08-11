@@ -22,12 +22,44 @@ import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/departments/")({
-  head: () => ({
-    meta: [
-      { title: "Departments — JNTU-GV CEV" },
-      { name: "description", content: "Engineering and management departments at JNTU-GV CEV." },
-    ],
-  }),
+  loader: async ({ context }) => {
+    const depts = await context.queryClient.ensureQueryData({
+      queryKey: ["departments"],
+      queryFn: () => getDepartments(),
+    });
+    return { depts };
+  },
+  head: ({ loaderData }) => {
+    const depts = (loaderData as any)?.depts || [];
+    return {
+      meta: [
+        { title: "Departments — JNTU-GV CEV" },
+        { name: "description", content: "Engineering and management departments at JNTU-GV CEV. Explore our programs, curriculum, faculty and infrastructure." },
+        { property: "og:title", content: "Departments — JNTU-GV CEV" },
+        { property: "og:description", content: "Explore the different engineering and management departments at JNTU-GV CEV." },
+      ],
+      links: [
+        { rel: "canonical", href: "https://jntugvcev.edu.in/departments" }
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Departments at JNTU-GV CEV",
+            "numberOfItems": depts.length,
+            "itemListElement": depts.map((d: any, i: number) => ({
+              "@type": "ListItem",
+              "position": i + 1,
+              "name": d.name,
+              "url": `https://jntugvcev.edu.in/departments/${d.slug}`
+            }))
+          })
+        }
+      ]
+    };
+  },
   component: DepartmentsPage,
 });
 
@@ -194,6 +226,10 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
           <img
             src={getAssetUrl(dept.image)}
             alt={dept.name}
+            width="400"
+            height="280"
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />

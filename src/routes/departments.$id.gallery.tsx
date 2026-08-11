@@ -115,7 +115,12 @@ function GalleryPage() {
             className={`relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-slate-100 border transition-all duration-200 ${isEditMode ? 'border-indigo-400 ring-4 ring-indigo-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}
           >
             {image.image_url ? (
-              <SafeImage src={image.image_url} alt={image.title || "Gallery image"} className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <SafeImage src={image.image_url} alt={image.title || "Gallery image"}
+          
+              loading="lazy"
+    decoding="async"
+              
+              className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
             ) : (
               <div className="h-48 flex items-center justify-center bg-slate-200 text-slate-400">
                 <ImageIcon size={32} />
@@ -183,21 +188,49 @@ function GalleryPage() {
       </div>
 
       {/* Lightbox Modal */}
-      {selectedImage && !isEditMode && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4 animate-in fade-in duration-300" onClick={() => setSelectedImage(null)}>
-          <button className="absolute top-8 right-8 text-white/70 hover:text-white transition-colors"><X size={32} /></button>
-          <div className="relative max-w-5xl w-full animate-in zoom-in duration-300" onClick={e => e.stopPropagation()}>
-            <SafeImage src={selectedImage.image_url} className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl" alt="Gallery preview" />
-            <div className="mt-6 text-center">
-              <span className="text-indigo-400 text-[10px] font-black uppercase tracking-widest">{selectedImage.category}</span>
-              <h3 className="text-white text-2xl font-bold mt-1">{selectedImage.title}</h3>
-              {selectedImage.description && (
-                <p className="text-slate-400 mt-2 max-w-2xl mx-auto text-sm leading-relaxed italic">"{selectedImage.description}"</p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+{selectedImage && !isEditMode && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4 animate-in fade-in duration-300"
+    onClick={() => setSelectedImage(null)}
+  >
+    <button
+      className="absolute top-8 right-8 text-white/70 hover:text-white transition-colors"
+      onClick={() => setSelectedImage(null)}
+      aria-label="Close image preview"
+    >
+      <X size={32} />
+    </button>
+
+    <div
+      className="relative max-w-5xl w-full animate-in zoom-in duration-300"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <SafeImage
+        src={selectedImage.image_url}
+        className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl"
+        alt="Gallery preview"
+        loading="lazy"
+        decoding="async"
+      />
+
+      <div className="mt-6 text-center">
+        <span className="text-indigo-400 text-[10px] font-black uppercase tracking-widest">
+          {selectedImage.category}
+        </span>
+
+        <h3 className="text-white text-2xl font-bold mt-1">
+          {selectedImage.title}
+        </h3>
+
+        {selectedImage.description && (
+          <p className="text-slate-400 mt-2 max-w-2xl mx-auto text-sm leading-relaxed italic">
+            "{selectedImage.description}"
+          </p>
+        )}
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

@@ -2,47 +2,78 @@ import { createServerFn } from "@tanstack/react-start";
 import { db } from "../db";
 import { students } from "../db/schema";
 import { eq } from "drizzle-orm";
-import { memoryCache } from "../lib/cache";
+import { serverCache } from "../lib/server-cache";
 
-export const getStudents = createServerFn({ method: "GET" }).handler(async () => {
-  return memoryCache.getOrSet("students:all", 10 * 60 * 1000, async () => {
-    return await db.select().from(students).orderBy(students.year, students.name);
-  });
+async function studentMutate<T>(action: () => Promise<T>): Promise<T> {
+  const result = await action();
+  serverCache.invalidate("placements_", true);
+  return result;
+}
+
+export const getStudents = createServerFn({
+  method: "GET",
+}).handler(async () => {
+  const cached = serverCache.get<any[]>("placements_students");
+
+  if (cached) {
+    return cached;
+  }
+
+  const records = await db
+    .select()
+    .from(students)
+    .orderBy(students.year, students.name);
+
+  serverCache.set("placements_students", records);
+
+  return records;
 });
-
 export const addStudent = createServerFn({ method: "POST" }).handler(
   async ({ data }: { data: any }) => {
-    const res = await db.insert(students).values(data).returning();
-    memoryCache.invalidatePrefix("students:");
-    return res;
+    return studentMutate(() => db.insert(students).values(data).returning());
   },
 );
 
 export const updateStudent = createServerFn({ method: "POST" }).handler(
   async ({ data }: { data: any }) => {
     const { id, ...updateData } = data;
-    const res = await db.update(students).set(updateData).where(eq(students.id, id)).returning();
-    memoryCache.invalidatePrefix("students:");
-    return res;
+
+    return studentMutate(() =>
+      db
+        .update(students)
+        .set(updateData)
+        .where(eq(students.id, id))
+        .returning()
+    );
   },
 );
-
 export const deleteStudent = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: { id: number } }) => {
-    const res = await db.delete(students).where(eq(students.id, data.id)).returning();
-    memoryCache.invalidatePrefix("students:");
-    return res;
+  async ({ data: { id } }: { data: { id: number } }) => {
+    return studentMutate(() =>
+      db
+        .delete(students)
+        .where(eq(students.id, id))
+        .returning()
+    );
   },
 );
-
 export const getStudentsByYear = createServerFn({ method: "GET" }).handler(
   async ({ data }: { data: { year: string } }) => {
-    return memoryCache.getOrSet(`students:year:${data.year}`, 10 * 60 * 1000, async () => {
-      return await db
-        .select()
-        .from(students)
-        .where(eq(students.year, data.year))
-        .orderBy(students.name);
-    });
+    const cacheKey = `placements_students_year_${data.year}`;
+    const cached = serverCache.get<any[]>(cacheKey);
+
+    if (cached) {
+      return cached;
+    }
+
+    const records = await db
+      .select()
+      .from(students)
+      .where(eq(students.year, data.year))
+      .orderBy(students.name);
+
+    serverCache.set(cacheKey, records);
+
+    return records;
   },
 );

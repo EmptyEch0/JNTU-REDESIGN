@@ -19,6 +19,24 @@ import {
 } from "lucide-react";
 import { ProfileRenderer } from "@/components/ProfileRenderer";
 export const Route = createFileRoute("/departments/$id/hod")({
+  head: ({ matches }) => {
+    const parentMatch = matches.find((m) => m.routeId === "/departments/$id");
+    const parentData = parentMatch?.loaderData as DepartmentData | undefined;
+    const name = parentData?.name || "Department";
+    const hod = parentData?.hod || "Head of Department";
+    return {
+      meta: [
+        { title: `HOD Message — ${name} — JNTU-GV CEV` },
+        {
+          name: "description",
+          content: `Read the message from ${hod}, the Head of the ${name} Department at JNTU-GV College of Engineering Vizianagaram.`,
+        },
+      ],
+      links: [
+        { rel: "canonical", href: `https://jntugvcev.edu.in/departments/${parentData?.slug || ""}/hod` }
+      ],
+    };
+  },
   component: HodPage,
 });
 
@@ -81,9 +99,9 @@ function HodPage() {
               <GraduationCap className="w-4 h-4 text-blue-300" />
               <span>Department Leadership</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
               From the HOD's Desk
-            </h1>
+            </h2>
             <p className="text-lg md:text-xl text-blue-100 max-w-2xl">
               A message from our department head, sharing vision, achievements, and future directions.
             </p>
@@ -122,6 +140,8 @@ function HodPage() {
                         src={editData.hod_photo}
                         alt={hodName}
                         fallbackName={hodName}
+                        loading="lazy"
+    decoding="async"
                         className="h-full w-full object-cover"
                       />
                     </div>

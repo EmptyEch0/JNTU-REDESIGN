@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "../db";
+import { serverCache } from "@/lib/server-cache";
 import {
   dispensaryContent,
   dispensaryPeople,
@@ -10,6 +11,9 @@ import {
 export const getDispensaryData = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const cached = serverCache.get<any>("dispensary_data");
+      if (cached) return cached;
+
       const [content, people, meta, images] = await Promise.all([
         db.select().from(dispensaryContent),
         db.select().from(dispensaryPeople),
@@ -19,7 +23,7 @@ export const getDispensaryData = createServerFn({ method: "GET" })
 
       const c = content[0];
 
-      return {
+      const data = {
         info: {
           hodName: c?.hodName,
           message: c?.message,
@@ -37,6 +41,9 @@ export const getDispensaryData = createServerFn({ method: "GET" })
 
         images,
       };
+
+      serverCache.set("dispensary_data", data);
+      return data;
     } catch (err) {
       console.error("Dispensary DB error:", err);
 

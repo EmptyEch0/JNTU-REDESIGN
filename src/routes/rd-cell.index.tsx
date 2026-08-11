@@ -161,7 +161,7 @@ function RDPage() {
         <div className="mt-12 grid md:grid-cols-[280px_1fr] gap-10 items-center max-w-4xl mx-auto">
           <RevealOnScroll>
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-card bg-card">
-              <img
+              <img decoding="async" loading="lazy"
                 src={getAssetUrl(editedCoordinator?.image ?? coordinator?.image)}
                 alt={coordinator?.name}
                 className="h-full w-full object-cover"

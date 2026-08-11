@@ -100,7 +100,7 @@ function NSSAboutPage() {
                       className="w-full h-full"
                     />
                   ) : (
-                    <img
+                    <img decoding="async" loading="lazy"
                       src={getAssetUrl(data.imageUrl || data.officerImage)}
                       alt={data.officerName}
                       className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"

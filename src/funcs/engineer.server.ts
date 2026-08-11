@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
+import { serverCache } from "@/lib/server-cache";
 import {
   engContent,
   engMeta,
@@ -9,13 +10,16 @@ import {
 export const getEngineeringData = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const cached = serverCache.get<any>("engineering_data");
+      if (cached) return cached;
+
       const [content, meta, staff] = await Promise.all([
         db.select().from(engContent),
         db.select().from(engMeta),
         db.select().from(engStaff),
       ]);
 
-      return {
+      const data = {
         /* ================= CONTENT ================= */
         content: content[0] || null,
 
@@ -41,6 +45,9 @@ export const getEngineeringData = createServerFn({ method: "GET" })
           (s) => s.type === "electrical"
         ),
       };
+
+      serverCache.set("engineering_data", data);
+      return data;
 
     } catch (err) {
       console.error("Engineering DB Error:", err);

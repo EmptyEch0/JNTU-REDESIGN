@@ -148,7 +148,7 @@ function GalleryPage() {
               {newImage.src && (
                 <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl max-w-sm">
                   <span className="block text-[10px] uppercase font-bold text-slate-400 mb-2">Live Preview</span>
-                  <img
+                  <img decoding="async" loading="lazy"
                     src={getAssetUrl(normalizeSrcForStorage(newImage.src))}
                     alt="Preview"
                     className="w-full h-40 object-cover rounded-xl"
@@ -178,7 +178,7 @@ function GalleryPage() {
                 key={img.id || i}
                 className="break-inside-avoid mb-5 overflow-hidden rounded-2xl hover-lift relative group"
               >
-                <img
+                <img decoding="async"
                   src={getAssetUrl(img.src)}
                   alt={img.caption || "Campus Moment"}
                   loading="lazy"

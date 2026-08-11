@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
+import { serverCache } from "@/lib/server-cache";
 
 import {
   studentClubs,
@@ -12,6 +13,9 @@ export const getStudentActivityData =
     method: "GET",
   }).handler(async () => {
     try {
+      const cached = serverCache.get<any>("student_activity_data");
+      if (cached) return cached;
+
       const [
         clubs,
         content,
@@ -24,7 +28,7 @@ export const getStudentActivityData =
         db.select().from(studentClubImages),
       ]);
 
-      return {
+      const data = {
         clubs: clubs.map((club) => ({
           ...club,
 
@@ -37,6 +41,9 @@ export const getStudentActivityData =
           ),
         })),
       };
+
+      serverCache.set("student_activity_data", data);
+      return data;
 
     } catch (err) {
       console.error(

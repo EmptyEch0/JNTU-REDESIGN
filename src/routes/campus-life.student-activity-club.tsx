@@ -2,6 +2,7 @@ import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
 import { PageHero } from "@/components/PageHero";
+import { ImageCarousel } from "@/components/ImageCarousel";
 import { SubNav } from "@/components/SubNav";
 import { CAMPUS_LIFE_SUBNAV } from "@/lib/site";
 import { getStudentActivityData } from "@/funcs/studentactivity.server";
@@ -269,58 +270,7 @@ function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   );
 }
 
-function ImageCarousel({ images, fallback }: any) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [autoplay, setAutoplay] = useState(true);
 
-  useEffect(() => {
-    if (!autoplay || !images || images.length <= 1) return;
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [autoplay, images]);
-
-  if (!images || images.length === 0) {
-    return (
-      <div className="relative aspect-[21/9] md:aspect-[16/6] min-h-[180px] md:min-h-[240px] max-h-[280px] md:max-h-[340px] w-full bg-slate-200 flex items-center justify-center overflow-hidden">
-        <img src={fallback} className="w-full h-full object-cover opacity-90" alt="Fallback" />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className="relative aspect-[21/9] md:aspect-[16/6] min-h-[180px] md:min-h-[240px] max-h-[280px] md:max-h-[340px] w-full bg-slate-900 overflow-hidden group"
-      onMouseEnter={() => setAutoplay(false)}
-      onMouseLeave={() => setAutoplay(true)}
-    >
-      <div className="w-full h-full relative">
-        {images.map((img: string, i: number) => (
-          <img
-            key={i}
-            src={getAssetUrl(img)}
-            alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentIndex === i ? "opacity-100 z-10" : "opacity-0 z-0"}`}
-            onError={(e) => { e.currentTarget.src = fallback; }}
-          />
-        ))}
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent z-20" />
-      {images.length > 1 && (
-        <>
-          <button onClick={() => setCurrentIndex((p) => (p - 1 + images.length) % images.length)} className="absolute left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow cursor-pointer z-30 text-center grid place-items-center transition">‹</button>
-          <button onClick={() => setCurrentIndex((p) => (p + 1) % images.length)} className="absolute right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100 backdrop-blur-sm shadow cursor-pointer z-30 text-center grid place-items-center transition">›</button>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1 bg-black/10 px-3 py-1 rounded-full z-30">
-            {images.map((_: any, idx: number) => (
-              <button key={idx} onClick={() => setCurrentIndex(idx)} className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${currentIndex === idx ? "w-5 bg-white" : "w-1.5 bg-white/40"}`} />
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
 
 /* ---------- CLUB VIEW / EDIT SUB-COMPONENT ---------- */
 
@@ -469,7 +419,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
             </div>
             {club.heroImage && (
               <div className="w-full md:w-1/2 aspect-[16/10] rounded-[28px] overflow-hidden border-2 border-slate-100 shadow transition duration-500 hover:scale-[1.02]">
-                <img 
+                <img decoding="async" loading="lazy" 
                   src={getAssetUrl(club.heroImage)} 
                   className="w-full h-full object-cover" 
                   alt={`${club.name} Frame`} 
@@ -487,7 +437,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
             {(club.images || []).map((img: any) => (
               <div key={img.id} className="relative group rounded-xl overflow-hidden aspect-[4/3] border bg-slate-100">
-                <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
+                <img alt="" decoding="async" loading="lazy" src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
                 <button onClick={()=>handleDeleteImage(img.id)} className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-rose-950/80 text-white font-black text-xs uppercase tracking-wider transition flex flex-col items-center justify-center cursor-pointer"><Trash2 className="w-4 h-4 mb-1"/> Erase</button>
               </div>
             ))}
@@ -582,7 +532,7 @@ function ClubLayoutEditor({ club, isEdit, onRefetch, onNavigateBack }: any) {
                       className="w-full h-full"
                     />
                   ) : (
-                    <img src={getAssetUrl(sec.image)} className="w-full h-full object-cover" alt={sec.heading} onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }} />
+                    <img decoding="async" loading="lazy" src={getAssetUrl(sec.image)} className="w-full h-full object-cover" alt={sec.heading} onError={(e) => { e.currentTarget.src = DEFAULT_IMAGE; }} />
                   )}
                 </div>
               )}

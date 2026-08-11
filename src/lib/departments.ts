@@ -6,10 +6,22 @@ import { ingestSingleChunk } from "./ingest";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { getAssetUrl } from "./assets";
+import { serverCache } from "./server-cache";
 export { getAssetUrl };
+
+const invalidateDeptCache = () => {
+  serverCache.invalidate("dept_details_", true);
+  serverCache.invalidate("dept_all");
+  serverCache.invalidate("departments_list");
+};
+
 // --- Department Core ---
 export const getDepartments = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(departments);
+  const cached = serverCache.get<any[]>("departments_list");
+  if (cached) return cached;
+  const records = await db.select().from(departments);
+  serverCache.set("departments_list", records);
+  return records;
 });
 
 export const updateDepartment = createServerFn({ method: "POST" })
@@ -22,6 +34,8 @@ export const updateDepartment = createServerFn({ method: "POST" })
       .update(departments)
       .set(updateData)
       .where(eq(departments.id, id));
+
+    invalidateDeptCache();
 
     // Fetch updated department details for RAG ingestion trigger
     const [updatedDept] = await db
@@ -38,7 +52,6 @@ export const updateDepartment = createServerFn({ method: "POST" })
         { department: updatedDept.name }
       );
     }
-
     return { success: true };
   });
 
@@ -62,6 +75,7 @@ export const syncFaculty = createServerFn({ method: "POST" })
         }))
       );
     }
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -86,6 +100,7 @@ export const syncFaculty = createServerFn({ method: "POST" })
         }))
       );
     }
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -108,6 +123,7 @@ export const syncFaculty = createServerFn({ method: "POST" })
         }))
       );
     }
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -131,6 +147,7 @@ export const syncFaculty = createServerFn({ method: "POST" })
         }))
       );
     }
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -153,6 +170,7 @@ export const syncFaculty = createServerFn({ method: "POST" })
         }))
       );
     }
+    invalidateDeptCache();
     return { success: true };
   });
 

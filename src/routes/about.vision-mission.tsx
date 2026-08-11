@@ -386,7 +386,7 @@ function VisionMissionPage() {
               </div>
             )}
             <div>
-              <img
+              <img decoding="async"
                 src={ugcImg}
                 alt="UGC Recognition certificate under Section 2(f) and 12(B)"
                 loading="lazy"

@@ -213,7 +213,7 @@ function StaffQuartersPage() {
           {/* BLOCK A */}
           <div className="flex flex-col gap-6">
             <div className="relative group overflow-hidden rounded-[32px] border border-slate-200/60 shadow-md aspect-[4/3] bg-slate-200 transition-all duration-200 hover:shadow-lg">
-              <img
+              <img decoding="async" loading="lazy"
                 src={getAssetUrl(blockARec?.imageUrl) || img1}
                 alt={blockARec?.title || DEFAULTS.blockALabel}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -264,7 +264,7 @@ function StaffQuartersPage() {
           {/* BLOCK B */}
           <div className="flex flex-col gap-6">
             <div className="relative group overflow-hidden rounded-[32px] border border-slate-200/60 shadow-md aspect-[4/3] bg-slate-200 transition-all duration-200 hover:shadow-lg">
-              <img
+              <img decoding="async" loading="lazy"
                 src={getAssetUrl(blockBRec?.imageUrl) || img2}
                 alt={blockBRec?.title || DEFAULTS.blockBLabel}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"

@@ -171,6 +171,8 @@ const isEditMode = isDeptLevelEdit || isFacultySelfEdit;
           <SafeImage 
             src={editState.photo_url} 
             alt={editState.name}
+            decoding="async"
+loading="lazy"
             fallbackName={editState.name}
             className="w-full h-full object-cover"
           />
@@ -182,7 +184,7 @@ const isEditMode = isDeptLevelEdit || isFacultySelfEdit;
               <span className="px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-blue-500/20 border border-blue-400/20 text-blue-300">
                 Faculty Profile Record
               </span>
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight pt-1">{editState.name}</h1>
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight pt-1">{editState.name}</h2>
               <p className="text-lg text-slate-300 font-medium">{editState.designation}</p>
             </div>
           ) : (

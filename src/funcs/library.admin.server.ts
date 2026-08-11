@@ -9,6 +9,13 @@ import {
   libraryImages,
 } from "../db/schema";
 import { eq } from "drizzle-orm";
+import { serverCache } from "../lib/server-cache";
+
+async function libraryMutate<T>(action: () => Promise<T>): Promise<T> {
+  const result = await action();
+  serverCache.invalidate("library_data");
+  return result;
+}
 
 /* ===========================
    🔐 ADMIN GUARD
@@ -32,7 +39,7 @@ export const updateLibraryContent = createServerFn({ method: "POST" })
 
     await db.delete(libraryContent);
 
-    return db.insert(libraryContent).values({
+    return libraryMutate(() => db.insert(libraryContent).values({
       officerName: data.officerName,
       designation: data.designation,
       message: data.message,
@@ -44,7 +51,7 @@ export const updateLibraryContent = createServerFn({ method: "POST" })
       workingDays: data.workingDays,
       workingTime: data.workingTime,
       transactionTime: data.transactionTime,
-    }).returning();
+    }).returning());
   });
 
 /* ===========================
@@ -55,7 +62,7 @@ export const createSection = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.insert(librarySections).values(data).returning();
+    return libraryMutate(() => db.insert(librarySections).values(data).returning());
   });
 
 export const deleteSection = createServerFn({ method: "POST" })
@@ -63,7 +70,7 @@ export const deleteSection = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.delete(librarySections).where(eq(librarySections.id, data.id));
+    return libraryMutate(() => db.delete(librarySections).where(eq(librarySections.id, data.id)));
   });
 
 export const updateSection = createServerFn({ method: "POST" })
@@ -71,7 +78,7 @@ export const updateSection = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.update(librarySections).set(data).where(eq(librarySections.id, data.id)).returning();
+    return libraryMutate(() => db.update(librarySections).set(data).where(eq(librarySections.id, data.id)).returning());
   });
 
 /* ===========================
@@ -82,7 +89,7 @@ export const createStat = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.insert(libraryStats).values(data).returning();
+    return libraryMutate(() => db.insert(libraryStats).values(data).returning());
   });
 
 export const deleteStat = createServerFn({ method: "POST" })
@@ -90,7 +97,7 @@ export const deleteStat = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.delete(libraryStats).where(eq(libraryStats.id, data.id));
+    return libraryMutate(() => db.delete(libraryStats).where(eq(libraryStats.id, data.id)));
   });
 
 export const updateStat = createServerFn({ method: "POST" })
@@ -98,7 +105,7 @@ export const updateStat = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.update(libraryStats).set(data).where(eq(libraryStats.id, data.id)).returning();
+    return libraryMutate(() => db.update(libraryStats).set(data).where(eq(libraryStats.id, data.id)).returning());
   });
 
 /* ===========================
@@ -109,7 +116,7 @@ export const createMeta = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.insert(libraryMeta).values(data).returning();
+    return libraryMutate(() => db.insert(libraryMeta).values(data).returning());
   });
 
 export const deleteMeta = createServerFn({ method: "POST" })
@@ -117,7 +124,7 @@ export const deleteMeta = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.delete(libraryMeta).where(eq(libraryMeta.id, data.id));
+    return libraryMutate(() => db.delete(libraryMeta).where(eq(libraryMeta.id, data.id)));
   });
 
 export const updateMeta = createServerFn({ method: "POST" })
@@ -125,7 +132,7 @@ export const updateMeta = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.update(libraryMeta).set(data).where(eq(libraryMeta.id, data.id)).returning();
+    return libraryMutate(() => db.update(libraryMeta).set(data).where(eq(libraryMeta.id, data.id)).returning());
   });
 
 /* ===========================
@@ -136,7 +143,7 @@ export const createTeam = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.insert(libraryTeam).values(data).returning();
+    return libraryMutate(() => db.insert(libraryTeam).values(data).returning());
   });
 
 export const deleteTeam = createServerFn({ method: "POST" })
@@ -144,7 +151,7 @@ export const deleteTeam = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.delete(libraryTeam).where(eq(libraryTeam.id, data.id));
+    return libraryMutate(() => db.delete(libraryTeam).where(eq(libraryTeam.id, data.id)));
   });
 
 export const updateTeam = createServerFn({ method: "POST" })
@@ -152,7 +159,7 @@ export const updateTeam = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.update(libraryTeam).set(data).where(eq(libraryTeam.id, data.id)).returning();
+    return libraryMutate(() => db.update(libraryTeam).set(data).where(eq(libraryTeam.id, data.id)).returning());
   });
 
 /* ===========================
@@ -163,7 +170,7 @@ export const createImage = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.insert(libraryImages).values(data).returning();
+    return libraryMutate(() => db.insert(libraryImages).values(data).returning());
   });
 
 export const deleteImage = createServerFn({ method: "POST" })
@@ -171,5 +178,5 @@ export const deleteImage = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.delete(libraryImages).where(eq(libraryImages.id, data.id));
+    return libraryMutate(() => db.delete(libraryImages).where(eq(libraryImages.id, data.id)));
   });

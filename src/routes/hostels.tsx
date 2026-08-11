@@ -5,6 +5,7 @@ import hostelImg from "@/assets/hostel.jpg";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { getAssetUrl } from "@/lib/assets";
+import { ImageCarousel } from "@/components/ImageCarousel";
 import {
   getHostelData,
   addStructure,
@@ -224,7 +225,7 @@ function HostelsPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {getRawImages().map((img: any) => (
                     <div key={img.id} className="relative group rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 border-2 border-slate-200/40 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300">
-                      <img src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
+                      <img alt="" decoding="async" loading="lazy" src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
                       <button
                         onClick={() => handleDeleteImage(img.id)}
                         className="absolute inset-0 bg-rose-950/80 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col gap-1 items-center justify-center font-black text-xs uppercase tracking-widest cursor-pointer"
@@ -322,7 +323,7 @@ function HostelsPage() {
                   officer && (
                     <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                       <div className="relative shrink-0">
-                        <img
+                        <img decoding="async" loading="lazy"
                           src={getAssetUrl(officer.image) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
                           onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
                           className="w-24 h-24 rounded-[24px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-500 hover:scale-[1.03]"
@@ -495,82 +496,7 @@ function Card({ title, subtitle, icon: Icon, children, className = "" }: any) {
   );
 }
 
-function ImageCarousel({ images, fallback }: any) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [autoplay, setAutoplay] = useState(true);
 
-  useEffect(() => {
-    if (!autoplay || !images || images.length <= 1) return;
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [autoplay, images]);
-
-  if (!images || images.length === 0) {
-    return (
-      <div className="relative aspect-[21/9] md:aspect-[16/6] min-h-[180px] md:min-h-[240px] max-h-[280px] md:max-h-[340px] w-full bg-slate-200 flex items-center justify-center overflow-hidden">
-        <img src={fallback} className="w-full h-full object-cover opacity-90" alt="Hostel fallback" />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className="relative aspect-[16/9] sm:aspect-[16/7] md:aspect-[21/9] max-h-[260px] md:max-h-[320px] w-full bg-slate-950 overflow-hidden group"
-      onMouseEnter={() => setAutoplay(false)}
-      onMouseLeave={() => setAutoplay(true)}
-    >
-      <div className="w-full h-full relative">
-        {images.map((img: string, i: number) => (
-          <img
-            key={i}
-            src={getAssetUrl(img)}
-            alt={`Slide view ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 transform group-hover:scale-[1.02] ${currentIndex === i ? "opacity-100 z-10 scale-100" : "opacity-0 z-0"
-              }`}
-            style={{ transitionProperty: "opacity, transform", transitionDuration: "1.2s" }}
-            onError={(e) => {
-              e.currentTarget.onerror = null;
-              e.currentTarget.src = fallback;
-            }}
-          />
-        ))}
-      </div>
-
-      {/* GORGEOUS EDGE OVERLAYS */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent z-20" />
-
-      {images.length > 1 && (
-        <>
-          <button
-            onClick={() => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)}
-            className="absolute left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/15 backdrop-blur-md border border-white/20 hover:bg-white/90 hover:border-transparent hover:scale-110 text-white hover:text-slate-950 grid place-items-center shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer z-30 text-xl font-light"
-          >
-            ‹
-          </button>
-          <button
-            onClick={() => setCurrentIndex((prev) => (prev + 1) % images.length)}
-            className="absolute right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/15 backdrop-blur-md border border-white/20 hover:bg-white/90 hover:border-transparent hover:scale-110 text-white hover:text-slate-950 grid place-items-center shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer z-30 text-xl font-light"
-          >
-            ›
-          </button>
-
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30 bg-slate-950/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10">
-            {images.map((_: any, index: number) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`transition-all duration-500 rounded-full h-1.5 cursor-pointer ${currentIndex === index ? "w-7 bg-white" : "w-1.5 bg-white/40 hover:bg-white/70"
-                  }`}
-              />
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
 
 /* ---------- EDITABLE DATA PRESENTATIONS ---------- */
 

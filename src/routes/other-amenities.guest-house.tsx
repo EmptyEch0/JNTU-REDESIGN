@@ -140,7 +140,7 @@ function GuestHousePage() {
         
         {/* TOP IMAGE BANNER / CATALOGUE */}
         <div className="relative w-full overflow-hidden rounded-[32px] border border-slate-200/60 shadow-md group bg-slate-200 aspect-[21/9] md:aspect-[16/7] min-h-[200px] max-h-[320px] transition-all duration-200 hover:shadow-lg">
-          <img
+          <img decoding="async" loading="lazy"
             src={getAssetUrl(imgRec?.imageUrl) || guestImg}
             alt="University Guest House"
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"

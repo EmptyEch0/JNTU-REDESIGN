@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
+import { serverCache } from "@/lib/server-cache";
 
 import {
   sportsContent,
@@ -14,6 +15,9 @@ export const getSportsData =
     method: "GET",
   }).handler(async () => {
     try {
+      const cached = serverCache.get<any>("sports_data");
+      if (cached) return cached;
+
       const [
         content,
         people,
@@ -42,7 +46,7 @@ export const getSportsData =
 
       const c = content[0];
 
-      return {
+      const data = {
         /* ================= INFO ================= */
 
         info: c || null,
@@ -104,6 +108,9 @@ export const getSportsData =
 
         images,
       };
+
+      serverCache.set("sports_data", data);
+      return data;
     } catch (err) {
       console.error(
         "Sports DB Error:",

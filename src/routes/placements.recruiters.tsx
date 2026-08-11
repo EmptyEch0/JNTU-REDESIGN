@@ -159,7 +159,7 @@ function RecruitersPage() {
                         </button>
                       </div>
                     ) : (
-                      <img
+                      <img decoding="async"
                         src={getAssetUrl(logo.url)}
                         alt={logo.name}
                         loading="lazy"

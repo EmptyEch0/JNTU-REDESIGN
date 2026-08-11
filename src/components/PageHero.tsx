@@ -14,7 +14,7 @@ export function PageHero({ eyebrow, title, subtitle, children, image }: Props) {
     <section className="relative pt-40 pb-20 md:pt-48 md:pb-28 overflow-hidden">
       {/* Base image (when provided) */}
       {image && (
-        <img
+        <img decoding="async"
           src={image}
           alt=""
           aria-hidden

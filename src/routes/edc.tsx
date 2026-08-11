@@ -235,7 +235,7 @@ function EdcPage() {
                     className="w-full h-full"
                   />
                 ) : (
-                  <img
+                  <img decoding="async" loading="lazy"
                     src={getAssetUrl(pData.coordinatorImage)}
                     alt={pData.coordinatorName}
                     className="h-full w-full object-cover"

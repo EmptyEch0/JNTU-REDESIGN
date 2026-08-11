@@ -124,7 +124,7 @@ function WERecreationPage() {
                             className="w-full h-full"
                           />
                         ) : (
-                          <img
+                          <img decoding="async" loading="lazy"
                             src={getAssetUrl(imgUrl)}
                             alt={detail.title}
                             className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"

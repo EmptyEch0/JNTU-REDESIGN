@@ -8,10 +8,14 @@ import {
   musicMembers,
   musicImages,
 } from "@/db/schema";
+import { serverCache } from "../lib/server-cache";
 
-/* ===========================
-   🔐 ADMIN GUARD
-=========================== */
+async function musicMutate<T>(action: () => Promise<T>): Promise<T> {
+  const result = await action();
+  serverCache.invalidate("music_club_data");
+  return result;
+}
+
 function assertAdmin(ctx: any) {
   // Open for CMS dynamic syncing
   /*
@@ -29,14 +33,15 @@ export const updateMusicContent = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    if (data.id) {
-      return db
-        .update(musicContent)
-        .set(data)
-        .where(eq(musicContent.id, data.id));
-    }
-
-    return db.insert(musicContent).values(data);
+    return musicMutate(async () => {
+      if (data.id) {
+        return db
+          .update(musicContent)
+          .set(data)
+          .where(eq(musicContent.id, data.id));
+      }
+      return db.insert(musicContent).values(data);
+    });
   });
 
 /* ===========================
@@ -47,7 +52,7 @@ export const createMusicPerson = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.insert(musicPeople).values(data).returning();
+    return musicMutate(() => db.insert(musicPeople).values(data).returning());
   });
 
 export const updateMusicPerson = createServerFn({ method: "POST" })
@@ -55,11 +60,11 @@ export const updateMusicPerson = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db
+    return musicMutate(() => db
       .update(musicPeople)
       .set(data)
       .where(eq(musicPeople.id, data.id))
-      .returning();
+      .returning());
   });
 
 export const deleteMusicPerson = createServerFn({ method: "POST" })
@@ -67,9 +72,9 @@ export const deleteMusicPerson = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db
+    return musicMutate(() => db
       .delete(musicPeople)
-      .where(eq(musicPeople.id, data.id));
+      .where(eq(musicPeople.id, data.id)));
   });
 
 /* ===========================
@@ -80,7 +85,7 @@ export const createMusicEquipment = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.insert(musicEquipment).values(data);
+    return musicMutate(() => db.insert(musicEquipment).values(data));
   });
 
 export const updateMusicEquipment = createServerFn({ method: "POST" })
@@ -88,10 +93,10 @@ export const updateMusicEquipment = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db
+    return musicMutate(() => db
       .update(musicEquipment)
       .set(data)
-      .where(eq(musicEquipment.id, data.id));
+      .where(eq(musicEquipment.id, data.id)));
   });
 
 export const deleteMusicEquipment = createServerFn({ method: "POST" })
@@ -99,9 +104,9 @@ export const deleteMusicEquipment = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db
+    return musicMutate(() => db
       .delete(musicEquipment)
-      .where(eq(musicEquipment.id, data.id));
+      .where(eq(musicEquipment.id, data.id)));
   });
 
 /* ===========================
@@ -112,7 +117,7 @@ export const createMusicMember = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.insert(musicMembers).values(data);
+    return musicMutate(() => db.insert(musicMembers).values(data));
   });
 
 export const updateMusicMember = createServerFn({ method: "POST" })
@@ -120,10 +125,10 @@ export const updateMusicMember = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db
+    return musicMutate(() => db
       .update(musicMembers)
       .set(data)
-      .where(eq(musicMembers.id, data.id));
+      .where(eq(musicMembers.id, data.id)));
   });
 
 export const deleteMusicMember = createServerFn({ method: "POST" })
@@ -131,9 +136,9 @@ export const deleteMusicMember = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db
+    return musicMutate(() => db
       .delete(musicMembers)
-      .where(eq(musicMembers.id, data.id));
+      .where(eq(musicMembers.id, data.id)));
   });
 
 /* ===========================
@@ -144,7 +149,7 @@ export const createMusicImage = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db.insert(musicImages).values(data);
+    return musicMutate(() => db.insert(musicImages).values(data));
   });
 
 export const deleteMusicImage = createServerFn({ method: "POST" })
@@ -152,7 +157,7 @@ export const deleteMusicImage = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
-    return db
+    return musicMutate(() => db
       .delete(musicImages)
-      .where(eq(musicImages.id, data.id));
+      .where(eq(musicImages.id, data.id)));
   });

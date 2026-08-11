@@ -520,7 +520,6 @@ function ExaminationPage() {
               </div>
             </GlassCard>
           )}
-
           {/* Submodule Premium Tab Switcher */}
           <div className="flex justify-center mb-8 relative z-10">
             <div className="inline-flex p-1.5 bg-slate-100 dark:bg-slate-900 rounded-[22px] border border-slate-250/30 shadow-inner">
@@ -779,6 +778,8 @@ function ExaminationPage() {
                               <img
                                 src={officer.photo}
                                 alt={officer.name}
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200"
                               />
                               <div className="absolute bottom-1 right-1 bg-blue-600 text-white font-black text-[8px] px-1.5 py-0.5 rounded-md">

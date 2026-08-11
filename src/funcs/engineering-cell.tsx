@@ -217,7 +217,7 @@ function EngineeringCellPage() {
 
       {/* IMAGE */}
       <div className="aspect-[4/5] rounded-xl overflow-hidden bg-gray-100">
-        <img
+        <img decoding="async" loading="lazy"
           src={electrical?.img || ""}
           className="w-full h-full object-cover"
           onError={(e) => {

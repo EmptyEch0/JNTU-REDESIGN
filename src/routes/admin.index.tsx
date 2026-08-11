@@ -126,7 +126,7 @@ function AdminLoginPage() {
         <div className="text-center max-w-2xl mx-auto mb-10 flex flex-col items-center animate-fade-in">
           <div className="relative group mb-6">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-sky-400 to-[#0F4C81] rounded-full blur opacity-35 group-hover:opacity-55 transition duration-500"></div>
-            <img
+            <img decoding="async" loading="lazy"
               src={getAssetUrl("https://jntugvcev.edu.in/wp-content/uploads/2022/07/logo-min.jpeg")}
               alt="JNTU-GV Logo"
               className="relative h-24 w-24 object-contain rounded-full border border-slate-200 bg-white p-1 shadow-lg transform group-hover:scale-105 transition duration-300"

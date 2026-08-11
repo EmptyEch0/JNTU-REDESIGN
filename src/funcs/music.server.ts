@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
+import { serverCache } from "@/lib/server-cache";
 
 import {
   musicContent,
@@ -13,6 +14,9 @@ export const getMusicClubData = createServerFn({
   method: "GET",
 }).handler(async () => {
   try {
+    const cached = serverCache.get<any>("music_club_data");
+    if (cached) return cached;
+
     const [
       content,
       people,
@@ -31,7 +35,7 @@ export const getMusicClubData = createServerFn({
       db.select().from(musicImages),
     ]);
 
-    return {
+    const data = {
       /* ================= CONTENT ================= */
       content: content[0] || null,
 
@@ -56,6 +60,9 @@ export const getMusicClubData = createServerFn({
       /* ================= IMAGES ================= */
       images,
     };
+
+    serverCache.set("music_club_data", data);
+    return data;
 
   } catch (err) {
     console.error(

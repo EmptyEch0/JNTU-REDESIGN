@@ -444,7 +444,7 @@ function FacultyPage() {
                     onClick={startAddHod}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow"
                   >
-                    + Add HOD message
+                    + Add HOD
                   </button>
                 )}
                 {activeTab === "faculty" && (
@@ -452,12 +452,14 @@ function FacultyPage() {
                     onClick={startAddFac}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow"
                   >
-                    + Add Faculty member
+                    + Add Faculty
                   </button>
                 )}
               </div>
             </GlassCard>
           )}
+
+
 
           {/* Tab Contents */}
           <div className="space-y-10">

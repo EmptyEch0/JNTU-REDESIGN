@@ -108,7 +108,7 @@ function PlacementsPage() {
                       className="mb-6 w-full"
                     />
                   ) : (
-                    <img
+                    <img decoding="async" loading="lazy"
                       src={getAssetUrl(editedTPO?.image ?? tpoData?.image)}
                       alt={tpoData?.name}
                       className="w-40 h-40 rounded-2xl object-cover shadow-lg mb-6"

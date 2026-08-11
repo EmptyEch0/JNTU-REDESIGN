@@ -270,7 +270,7 @@ function VizPage() {
 
       <section className="py-24 md:py-32 container-narrow grid lg:grid-cols-2 gap-16 items-start">
         <RevealOnScroll>
-          <img
+          <img decoding="async"
             src={vizImg}
             alt="Vizianagaram Clock Tower"
             loading="lazy"

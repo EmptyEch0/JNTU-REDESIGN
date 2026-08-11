@@ -41,6 +41,8 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
         <SafeImage 
           src={f.photo_url} 
           alt={f.name}
+          decoding="async"
+loading="lazy"
           fallbackName={f.name}
           className="h-full w-full object-cover" 
         />

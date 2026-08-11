@@ -11,11 +11,15 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import appCss from "../styles.css?url";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Footer } from "@/components/Footer";
-import { Chatbot } from "@/components/Chatbot";
 import { getQueryClient } from "@/lib/query-client";
 import { AdminProvider, useAdmin } from "@/context/AdminContext";
 import { FacultyProvider } from "@/context/FacultyContext";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
+import { lazy, Suspense } from "react";
+
+const Chatbot = lazy(() =>
+  import("@/components/Chatbot").then((m) => ({ default: m.Chatbot }))
+);
 
 function NotFoundComponent() {
   return (
@@ -86,6 +90,12 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev" },
+      { rel: "preconnect", href: "https://ui-avatars.com" },
+      { rel: "dns-prefetch", href: "https://fonts.googleapis.com" },
+      { rel: "dns-prefetch", href: "https://fonts.gstatic.com" },
+      { rel: "dns-prefetch", href: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev" },
+      { rel: "dns-prefetch", href: "https://ui-avatars.com" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap",
@@ -209,7 +219,9 @@ function AdminContent() {
       </main>
 
       <Footer />
-      <Chatbot />
+      <Suspense fallback={null}>
+        <Chatbot />
+      </Suspense>
     </div>
   );
 }

@@ -229,7 +229,7 @@ export function MegaMenu() {
                             "min-w-[860px]"
                           }`}
                           style={{
-                            background: "rgba(15, 30, 55, 0.55)",
+                            background: "rgba(15, 30, 55, 0.95)",
                             backdropFilter: "blur(24px) saturate(150%)",
                             WebkitBackdropFilter: "blur(24px) saturate(150%)",
                             border: "1px solid rgba(255, 255, 255, 0.18)",
@@ -300,7 +300,7 @@ export function MegaMenu() {
                         <div
                           className="relative p-3.5 w-max min-w-[440px] max-w-[580px]"
                           style={{
-                            background: "rgba(15, 30, 55, 0.55)",
+                            background: "rgba(15, 30, 55, 0.95)",
                             backdropFilter: "blur(24px) saturate(150%)",
                             WebkitBackdropFilter: "blur(24px) saturate(150%)",
                             border: "1px solid rgba(255, 255, 255, 0.18)",

@@ -1,10 +1,11 @@
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+﻿import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Menu, X, ChevronDown, GraduationCap, Search, CornerDownLeft, FileText, ArrowRight } from "lucide-react";
 import { NAV, SEARCH_INDEX, SITE } from "@/lib/site";
 import { uploadUrl } from "@/lib/assets";
 import { useAdmin } from "@/context/AdminContext";
-import { NoticeTicker } from "@/components/NoticeTicker";
+import { NoticeTicker } from "./NoticeTicker";
+
 export function MegaMenu() {
   const { isAdmin } = useAdmin() || {};
   const [scrolled, setScrolled] = useState(false);
@@ -89,15 +90,10 @@ export function MegaMenu() {
 
   return (
     <header className={`fixed inset-x-0 z-50 pointer-events-none transition-all duration-300 ${isAdmin ? "top-12" : "top-0"}`}>
-      {path === "/" && (
-        <div className="w-full flex justify-center px-4 sm:px-8 pt-4 sm:pt-6 pointer-events-auto">
-          <NoticeTicker />
-        </div>
-      )}
       <div className="flex justify-center px-3 sm:px-4">
         <div
           ref={islandRef}
-          className={`pointer-events-auto ${path === "/" ? "mt-3 sm:mt-4" : "mt-6 sm:mt-8"} transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+          className={`pointer-events-auto mt-6 sm:mt-8 transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
             expanded
               ? "w-full max-w-[1400px] rounded-[32px] bg-[oklch(0.18_0.04_255/0.85)] backdrop-blur-2xl shadow-[0_20px_60px_-20px_oklch(0.20_0.10_255/0.55),inset_0_1px_0_oklch(1_0_0/0.08)] border border-white/10"
               : "w-auto rounded-full bg-[oklch(0.16_0.04_255/0.88)] backdrop-blur-2xl shadow-[0_12px_40px_-12px_oklch(0.20_0.10_255/0.6),inset_0_1px_0_oklch(1_0_0/0.1)] border border-white/10"
@@ -122,7 +118,7 @@ export function MegaMenu() {
                 </div>
                 {expanded && (
                   <div className="text-[9px] uppercase tracking-[0.18em] text-white/50 hidden sm:block whitespace-nowrap">
-                    College of Engineering · Vizianagaram
+                    College of Engineering ┬╖ Vizianagaram
                   </div>
                 )}
               </div>
@@ -209,8 +205,6 @@ export function MegaMenu() {
               </button>
             </div>
           </div>
-
-
 
 
 
@@ -310,7 +304,6 @@ export function MegaMenu() {
             </div>
           )}
 
-
           {/* Mobile pill drawer */}
           {mobileOpen && (
             <div className="lg:hidden px-3 pb-3 max-h-[78vh] overflow-y-auto animate-[fade-in_0.15s_ease-out]">
@@ -360,14 +353,14 @@ export function MegaMenu() {
                             ))}
                           {item.simpleItems?.flatMap((it) => [
                             it,
-                            ...(it.children?.map(c => ({ ...c, label: `└ ${c.label}` })) || [])
+                            ...(it.children?.map(c => ({ ...c, label: `Γöö ${c.label}` })) || [])
                           ]).map((sub) => (
                             <Link
                               key={sub.label + sub.to}
                               to={sub.to}
                               onClick={closeAll}
                               className={`block py-2.5 px-5 text-[13px] transition-all hover:bg-white/5 ${
-                                sub.label.startsWith('└') ? 'text-white/50 pl-8' : 'text-white/80 mt-1 font-medium border-t border-white/5 pt-3'
+                                sub.label.startsWith('Γöö') ? 'text-white/50 pl-8' : 'text-white/80 mt-1 font-medium border-t border-white/5 pt-3'
                               }`}
                             >
                               {sub.label}
@@ -383,6 +376,7 @@ export function MegaMenu() {
           )}
         </div>
       </div>
+      {!searchOpen && path === "/" && <NoticeTicker />}
     </header>
   );
 }

@@ -35,9 +35,8 @@ export const updateDepartment = createServerFn({ method: "POST" })
       .set(updateData)
       .where(eq(departments.id, id));
 
-<<<<<<< HEAD
     invalidateDeptCache();
-=======
+
     // Fetch updated department details for RAG ingestion trigger
     const [updatedDept] = await db
       .select()
@@ -53,8 +52,6 @@ export const updateDepartment = createServerFn({ method: "POST" })
         { department: updatedDept.name }
       );
     }
-
->>>>>>> origin/main
     return { success: true };
   });
 

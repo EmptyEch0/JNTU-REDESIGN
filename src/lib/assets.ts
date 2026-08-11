@@ -9,7 +9,7 @@ const BASE = rawBase.replace("89.116.134.182:8080", "89.116.134.182");
 export const getAssetUrl = (
   path: string | null | undefined,
 ): string => {
-  if (!path) return "";
+  if (!path) return undefined as unknown as string;
 
   const trimmedPath = path.trim();
 
@@ -145,7 +145,7 @@ export const imageUrl = (path: string) =>
 export const wpUrl = (
   oldUrl: string | null | undefined,
 ): string => {
-  if (!oldUrl) return "";
+  if (!oldUrl) return undefined as unknown as string;
 
   const wpMatch = oldUrl.match(/wp-content\/(.+)/);
 

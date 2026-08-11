@@ -520,27 +520,6 @@ function ExaminationPage() {
               </div>
             </GlassCard>
           )}
-
-<<<<<<< HEAD
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {EXAMINATION_OFFICERS.map((officer) => (
-                    <GlassCard 
-                      key={officer.name} 
-                      className="p-6 relative overflow-hidden group hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-900/5 bg-white border border-slate-200/80 transition-all duration-300"
-                    >
-                      <div className="absolute right-0 top-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-200"></div>
-                      
-                      <div className="flex items-start gap-4">
-                        <div className="w-20 h-20 rounded-2xl overflow-hidden border border-blue-200/50 shadow-md flex-shrink-0 relative">
-                          <img decoding="async" loading="lazy" 
-                            src={officer.photo} 
-                            alt={officer.name} 
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200" 
-                          />
-                          <div className="absolute bottom-1 right-1 bg-blue-600 text-white font-black text-[8px] px-1.5 py-0.5 rounded-md">
-                            {officer.role}
-                          </div>
-=======
           {/* Submodule Premium Tab Switcher */}
           <div className="flex justify-center mb-8 relative z-10">
             <div className="inline-flex p-1.5 bg-slate-100 dark:bg-slate-900 rounded-[22px] border border-slate-250/30 shadow-inner">
@@ -603,7 +582,6 @@ function ExaminationPage() {
                           <span className="text-xs text-slate-400 font-semibold bg-slate-50 px-3 py-1 rounded-full border border-slate-200/50">
                             {allNotifications.filter(x => x.title.toLowerCase().includes(searchTerm.toLowerCase())).length} items
                           </span>
->>>>>>> origin/main
                         </div>
 
                         <div className="space-y-4">
@@ -800,6 +778,8 @@ function ExaminationPage() {
                               <img
                                 src={officer.photo}
                                 alt={officer.name}
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200"
                               />
                               <div className="absolute bottom-1 right-1 bg-blue-600 text-white font-black text-[8px] px-1.5 py-0.5 rounded-md">

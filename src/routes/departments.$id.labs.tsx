@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAssetUrl, syncLaboratories } from "@/lib/departments";
+import { SafeImage } from "@/components/SafeImage";
 import { toast } from "sonner";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
@@ -144,7 +145,10 @@ function LaboratoriesPage() {
                       className="w-full h-full"
                     />
                   ) : lab.photo_url ? (
-                    <img decoding="async" loading="lazy" src={getAssetUrl(lab.photo_url)} alt={lab.name} className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                    <SafeImage src={lab.photo_url} alt={lab.name} fallbackName={lab.name} 
+                    loading="lazy"
+    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center bg-white text-slate-200">
                       <Microscope size={64} strokeWidth={1} />

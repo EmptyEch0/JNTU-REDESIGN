@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Users, UserPlus, Trash2, Save, ImageIcon, Briefcase, Eye, UserCheck } from "lucide-react";
 import { toast } from "sonner";
 import { getAssetUrl } from "@/lib/assets";
+import { SafeImage } from "@/components/SafeImage";
 
 export const Route = createFileRoute("/departments/$id/faculty/")({
   component: FacultyPage,
@@ -37,11 +38,13 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
       )}
 
       <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 border-slate-50 bg-slate-100">
-        <img decoding="async" loading="lazy" 
-          src={getAssetUrl(f.photo_url) || ""} 
-          alt={f.name} 
+        <SafeImage 
+          src={f.photo_url} 
+          alt={f.name}
+          decoding="async"
+loading="lazy"
+          fallbackName={f.name}
           className="h-full w-full object-cover" 
-          onError={(e) => e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(f.name)}&background=0D8ABC&color=fff`} 
         />
       </div>
 
@@ -102,11 +105,14 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
 
 function FacultyPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
-  const queryClient = useQueryClient();
-  
-  // Extract the parent route parameter ($id) cleanly
-  const { id: deptId } = useParams({ from: "/departments/$id/faculty/" });
+const queryClient = useQueryClient();
+
+// Extract the parent route parameter ($id) cleanly
+const { id: deptId } = useParams({ from: "/departments/$id/faculty/" });
+
+// Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+const { isDeptEditing } = useAdmin();
+const isEditMode = isDeptEditing(deptId || "");
 
   const [facultyList, setFacultyList] = useState(data?.faculty || []);
 

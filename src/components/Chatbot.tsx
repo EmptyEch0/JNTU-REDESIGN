@@ -45,11 +45,18 @@ export function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
-  async function handleSendMessage(e: React.FormEvent) {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
+  const DEFAULT_SUGGESTIONS = [
+    "📄 Show R23 Syllabus",
+    "🕒 Exam Timetables",
+    "🏠 Hostel Fee Structure",
+    "📞 Principal Office Contact",
+    "🌐 తెలుగులో వివరించండి",
+  ];
 
-    const userMessage: Message = { role: "user", content: input.trim() };
+  async function submitQuery(queryText: string) {
+    if (!queryText.trim() || isLoading) return;
+
+    const userMessage: Message = { role: "user", content: queryText.trim() };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
@@ -80,6 +87,11 @@ export function Chatbot() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function handleSendMessage(e: React.FormEvent) {
+    e.preventDefault();
+    submitQuery(input);
   }
 
   function renderContent(text: string) {
@@ -222,23 +234,19 @@ export function Chatbot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick reply chips */}
-          {chips.length > 0 && (
-            <div className="flex gap-2 px-4 pb-3 flex-wrap border-t border-slate-100 pt-3 bg-white">
-              {chips.map((chip) => (
-                <button
-                  key={chip}
-                  onClick={() => {
-                    setInput(chip);
-                    setChips([]);
-                  }}
-                  className="rounded-full border border-slate-300 bg-slate-50 px-4 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all cursor-pointer"
-                >
-                  {chip}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Quick suggestion pills */}
+          <div className="flex items-center gap-2 overflow-x-auto px-4 py-2.5 border-t border-slate-100 bg-slate-50/90 [scrollbar-width:none]">
+            {(chips.length > 0 ? chips : DEFAULT_SUGGESTIONS).map((sug) => (
+              <button
+                key={sug}
+                type="button"
+                onClick={() => submitQuery(sug)}
+                className="shrink-0 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all cursor-pointer flex items-center gap-1"
+              >
+                {sug}
+              </button>
+            ))}
+          </div>
 
           {/* Input */}
           <form

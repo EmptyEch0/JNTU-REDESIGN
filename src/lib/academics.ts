@@ -21,13 +21,15 @@ import {
   academicsCac,
   tickerNotifications
 } from "../db/schema";
-import { eq, desc } from "drizzle-orm";
+import { memoryCache } from "./cache";
 
 // ----------------------------------------------------
 // 1. Admissions & Fee Structure
 // ----------------------------------------------------
 export const getAcademicsBrochures = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(academicsBrochures);
+  return memoryCache.getOrSet("academics:brochures", 10 * 60 * 1000, async () => {
+    return await db.select().from(academicsBrochures);
+  });
 });
 
 export const upsertAcademicsBrochure = createServerFn({ method: "POST" })
@@ -168,12 +170,15 @@ export const deleteAcademicsCalendarEvent = createServerFn({ method: "POST" })
 // 3. Regulations (REAL TABLE: academic_regulations)
 // ----------------------------------------------------
 export const getAcademicsRegulations = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(academicRegulations);
+  return memoryCache.getOrSet("academics:regulations", 10 * 60 * 1000, async () => {
+    return await db.select().from(academicRegulations);
+  });
 });
 
 export const upsertAcademicsRegulation = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
+    memoryCache.invalidatePrefix("academics:");
     if (data.id) {
       await db.update(academicRegulations).set({
         title: data.title,
@@ -198,6 +203,7 @@ export const upsertAcademicsRegulation = createServerFn({ method: "POST" })
 export const deleteAcademicsRegulation = createServerFn({ method: "POST" })
   .inputValidator((d: { id: number }) => d)
   .handler(async ({ data }) => {
+    memoryCache.invalidatePrefix("academics:");
     await db.delete(academicRegulations).where(eq(academicRegulations.id, data.id));
     return { success: true };
   });
@@ -206,12 +212,15 @@ export const deleteAcademicsRegulation = createServerFn({ method: "POST" })
 // 4. Syllabus Module (REAL TABLE: academic_syllabus)
 // ----------------------------------------------------
 export const getAcademicsSyllabusList = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(academicSyllabus);
+  return memoryCache.getOrSet("academics:syllabus", 10 * 60 * 1000, async () => {
+    return await db.select().from(academicSyllabus);
+  });
 });
 
 export const upsertAcademicsSyllabus = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
+    memoryCache.invalidatePrefix("academics:");
     if (data.id) {
       await db.update(academicSyllabus).set({
         level: data.level,
@@ -242,6 +251,7 @@ export const upsertAcademicsSyllabus = createServerFn({ method: "POST" })
 export const deleteAcademicsSyllabus = createServerFn({ method: "POST" })
   .inputValidator((d: { id: number }) => d)
   .handler(async ({ data }) => {
+    memoryCache.invalidatePrefix("academics:");
     await db.delete(academicSyllabus).where(eq(academicSyllabus.id, data.id));
     return { success: true };
   });
@@ -250,12 +260,15 @@ export const deleteAcademicsSyllabus = createServerFn({ method: "POST" })
 // 5. Examination Cell
 // ----------------------------------------------------
 export const getAcademicsExamData = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(academicsExamCell);
+  return memoryCache.getOrSet("academics:exam", 10 * 60 * 1000, async () => {
+    return await db.select().from(academicsExamCell);
+  });
 });
 
 export const upsertAcademicsExamData = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
+    memoryCache.invalidatePrefix("academics:");
     if (data.id) {
       await db.update(academicsExamCell).set({
         type: data.type,
@@ -280,6 +293,7 @@ export const upsertAcademicsExamData = createServerFn({ method: "POST" })
 export const deleteAcademicsExamData = createServerFn({ method: "POST" })
   .inputValidator((d: { id: number }) => d)
   .handler(async ({ data }) => {
+    memoryCache.invalidatePrefix("academics:");
     await db.delete(academicsExamCell).where(eq(academicsExamCell.id, data.id));
     return { success: true };
   });
@@ -288,12 +302,15 @@ export const deleteAcademicsExamData = createServerFn({ method: "POST" })
 // 6. Downloads Section (REAL TABLE: academic_downloads)
 // ----------------------------------------------------
 export const getAcademicsDownloadsList = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(academicDownloads);
+  return memoryCache.getOrSet("academics:downloads", 10 * 60 * 1000, async () => {
+    return await db.select().from(academicDownloads);
+  });
 });
 
 export const upsertAcademicsDownload = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
+    memoryCache.invalidatePrefix("academics:");
     if (data.id) {
       await db.update(academicDownloads).set({
         document_name: data.document_name,
@@ -314,6 +331,7 @@ export const upsertAcademicsDownload = createServerFn({ method: "POST" })
 export const deleteAcademicsDownload = createServerFn({ method: "POST" })
   .inputValidator((d: { id: number }) => d)
   .handler(async ({ data }) => {
+    memoryCache.invalidatePrefix("academics:");
     await db.delete(academicDownloads).where(eq(academicDownloads.id, data.id));
     return { success: true };
   });
@@ -322,7 +340,9 @@ export const deleteAcademicsDownload = createServerFn({ method: "POST" })
 // 7. Timetables (REAL TABLE: academic_timetables)
 // ----------------------------------------------------
 export const getAcademicsTimetablesList = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(academicTimetables);
+  return memoryCache.getOrSet("academics:timetables", 10 * 60 * 1000, async () => {
+    return await db.select().from(academicTimetables);
+  });
 });
 
 export const upsertAcademicsTimetable = createServerFn({ method: "POST" })

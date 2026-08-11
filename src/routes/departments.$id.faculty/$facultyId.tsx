@@ -1,15 +1,17 @@
-import { createFileRoute, useLoaderData, Link } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, Link, useNavigate } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateFacultyProfile } from "@/lib/departments";
 import { toast } from "sonner";
+import { useFaculty } from "@/context/FacultyContext";
 import { 
   ArrowLeft, GraduationCap, Trophy, Globe, 
-  Briefcase, BookOpen, Save, Plus, Trash2, Camera, Type, IdCard
+  Briefcase, BookOpen, Save, Plus, Trash2, Camera, Type, IdCard, LogOut
 } from "lucide-react";
 import { getAssetUrl } from "@/lib/assets";
+import { SafeImage } from "@/components/SafeImage";
 
 
 export const Route = createFileRoute("/departments/$id/faculty/$facultyId")({
@@ -23,12 +25,22 @@ interface ConsultancyProject {
 }
 
 function FacultyDetailProfilePage() {
+  const navigate = useNavigate();
+  const { logout } = useFaculty();
   const { id: deptId, facultyId } = Route.useParams();
-  const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-  const { isEditMode } = useAdmin();
-  const queryClient = useQueryClient();
+const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
+const queryClient = useQueryClient();
+
+// Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+const { isDeptEditing } = useAdmin();
+const { isOwnProfile } = useFaculty();
+
 
   const facultyRaw = data?.faculty?.find((f: any) => String(f.id) === String(facultyId));
+  const isDeptLevelEdit = isDeptEditing(deptId || ""); // admin/HOD
+const isFacultySelfEdit = isOwnProfile(facultyId);    // the faculty member themself
+
+const isEditMode = isDeptLevelEdit || isFacultySelfEdit;
   const [activeTab, setActiveTab] = useState<string>("profile");
   
   // Local reactive edit state mapping
@@ -123,6 +135,25 @@ function FacultyDetailProfilePage() {
         >
           <ArrowLeft size={16} /> Back to Faculty List
         </Link>
+        {isFacultySelfEdit && (
+  <button
+  onClick={async () => {
+    await logout();
+    navigate({ to: "/faculty-login" });
+  }}
+    className="text-xs font-bold text-rose-600 hover:underline"
+  >
+    Logout
+  </button>
+)}
+{isFacultySelfEdit && (
+  <Link
+    to="/faculty-account-settings"
+    className="text-xs font-bold text-slate-600 hover:underline"
+  >
+    Account Settings
+  </Link>
+)}
 
         {isEditMode && (
           <button 
@@ -137,11 +168,13 @@ function FacultyDetailProfilePage() {
       {/* Profile Header Block */}
       <div className={`relative bg-gradient-to-br from-slate-900 to-blue-950 rounded-[2.5rem] p-8 text-white shadow-xl flex flex-col md:flex-row gap-8 items-center border transition-all ${isEditMode ? 'border-amber-400 ring-4 ring-amber-400/10' : 'border-transparent'}`}>
         <div className="h-32 w-32 md:h-40 md:w-40 rounded-full overflow-hidden border-4 border-white/10 shrink-0 bg-white/5 relative group">
-          <img decoding="async" loading="lazy" 
-            src={getAssetUrl(editState.photo_url) || ""} 
+          <SafeImage 
+            src={editState.photo_url} 
             alt={editState.name}
+            decoding="async"
+loading="lazy"
+            fallbackName={editState.name}
             className="w-full h-full object-cover"
-            onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(editState.name)}&size=150&background=0D8ABC&color=fff`; }}
           />
         </div>
 

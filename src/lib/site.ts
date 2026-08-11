@@ -105,18 +105,18 @@ export const NAV: {
       {
         title: "Engineering",
         items: [
-          { label: "Computer Science (CSE)", to: "/departments" },
-          { label: "Electronics (ECE)", to: "/departments" },
-          { label: "Electrical (EEE)", to: "/departments" },
-          { label: "Mechanical", to: "/departments" },
+          { label: "Computer Science (CSE)", to: "/departments/cse" },
+          { label: "Electronics (ECE)", to: "/departments/ece" },
+          { label: "Electrical (EEE)", to: "/departments/eee" },
+          { label: "Mechanical", to: "/departments/mech" },
         ],
       },
       {
         title: "Allied",
         items: [
-          { label: "Civil", to: "/departments" },
-          { label: "Information Technology", to: "/departments" },
-          { label: "MBA", to: "/departments" },
+          { label: "Metallurgical Engineering", to: "/departments/met" },
+          { label: "Information Technology", to: "/departments/it" },
+          { label: "MBA", to: "/departments/mba" },
           { label: "Sciences & Humanities", to: "/departments" },
         ],
       },
@@ -415,26 +415,26 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
 
   {
     label: "Computer Science (CSE)",
-    to: "/departments",
+    to: "/departments/cse",
     group: "Departments",
     keywords: "cse software ai",
   },
   {
     label: "Electronics (ECE)",
-    to: "/departments",
+    to: "/departments/ece",
     group: "Departments",
     keywords: "vlsi signals",
   },
-  { label: "Electrical (EEE)", to: "/departments", group: "Departments", keywords: "power energy" },
-  { label: "Mechanical", to: "/departments", group: "Departments", keywords: "design thermal" },
-  { label: "Civil", to: "/departments", group: "Departments", keywords: "structures geotech" },
+  { label: "Electrical (EEE)", to: "/departments/eee", group: "Departments", keywords: "power energy" },
+  { label: "Mechanical", to: "/departments/mech", group: "Departments", keywords: "design thermal" },
+  { label: "Civil", to: "/departments/civil", group: "Departments", keywords: "structures geotech" },
   {
     label: "Information Technology",
-    to: "/departments",
+    to: "/departments/it",
     group: "Departments",
     keywords: "it networks cloud",
   },
-  { label: "MBA", to: "/departments", group: "Departments", keywords: "management business" },
+  { label: "MBA", to: "/departments/mba", group: "Departments", keywords: "management business" },
 
   { label: "Hostels", to: "/hostels", group: "Facilities", keywords: "rooms accommodation" },
   { label: "Library", to: "/library", group: "Facilities", keywords: "books reading" },
@@ -596,7 +596,7 @@ export const RECRUITERS_2017_18 = [
   "Sail Software Solutions",
 ];
 
-const R = "http://89.116.134.182:8080/local-assets/wp-content/gallery/our-recruiters";
+const R = "http://89.116.134.182/local-assets/wp-content/gallery/our-recruiters";
 export const RECRUITER_LOGOS: { name: string; url: string }[] = [
   { name: "Agilitx", url: `${R}/Agilitx.png` },
   { name: "Airtel", url: `${R}/airtel.png` },

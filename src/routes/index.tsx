@@ -254,6 +254,7 @@ function HomePage() {
             </div>
           </div>
         </HeroSlideshow>
+
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-xs uppercase tracking-[0.3em] flex flex-col items-center gap-2 animate-[float_3s_ease-in-out_infinite] z-20 pointer-events-none">
           <span>Scroll</span>
           <ArrowDown className="h-4 w-4" />

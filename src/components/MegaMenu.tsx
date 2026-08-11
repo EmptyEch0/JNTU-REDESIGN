@@ -4,8 +4,7 @@ import { Menu, X, ChevronDown, GraduationCap, Search, CornerDownLeft, FileText, 
 import { NAV, SEARCH_INDEX, SITE } from "@/lib/site";
 import { uploadUrl } from "@/lib/assets";
 import { useAdmin } from "@/context/AdminContext";
-import { NoticeTicker } from "./NoticeTicker";
-
+import { NoticeTicker } from "@/components/NoticeTicker";
 export function MegaMenu() {
   const { isAdmin } = useAdmin() || {};
   const [scrolled, setScrolled] = useState(false);
@@ -90,10 +89,15 @@ export function MegaMenu() {
 
   return (
     <header className={`fixed inset-x-0 z-50 pointer-events-none transition-all duration-300 ${isAdmin ? "top-12" : "top-0"}`}>
+      {path === "/" && (
+        <div className="w-full flex justify-center px-4 sm:px-8 pt-4 sm:pt-6 pointer-events-auto">
+          <NoticeTicker />
+        </div>
+      )}
       <div className="flex justify-center px-3 sm:px-4">
         <div
           ref={islandRef}
-          className={`pointer-events-auto mt-6 sm:mt-8 transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+          className={`pointer-events-auto ${path === "/" ? "mt-3 sm:mt-4" : "mt-6 sm:mt-8"} transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
             expanded
               ? "w-full max-w-[1400px] rounded-[32px] bg-[oklch(0.18_0.04_255/0.85)] backdrop-blur-2xl shadow-[0_20px_60px_-20px_oklch(0.20_0.10_255/0.55),inset_0_1px_0_oklch(1_0_0/0.08)] border border-white/10"
               : "w-auto rounded-full bg-[oklch(0.16_0.04_255/0.88)] backdrop-blur-2xl shadow-[0_12px_40px_-12px_oklch(0.20_0.10_255/0.6),inset_0_1px_0_oklch(1_0_0/0.1)] border border-white/10"
@@ -164,6 +168,103 @@ export function MegaMenu() {
                           className={`h-3 w-3 transition-transform duration-300 ${openIdx === i ? "rotate-180" : ""}`}
                         />
                       </button>
+                    )}
+
+                    {/* Groups dropdown — content-width, absolute below trigger */}
+                    {openIdx === i && item.groups && !searchOpen && (
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-[10px] z-50 animate-[fade-in_0.15s_ease-out]">
+                        <div className={`rounded-2xl bg-[oklch(0.18_0.04_255/0.95)] backdrop-blur-2xl shadow-[0_20px_60px_-20px_oklch(0.20_0.10_255/0.55),inset_0_1px_0_oklch(1_0_0/0.08)] border border-white/10 p-6 w-max ${
+                          item.groups.length === 1 ? "min-w-[220px]" :
+                          item.groups.length === 2 ? "min-w-[380px]" :
+                          "min-w-[520px]"
+                        }`}>
+                          <div className={`grid gap-8 ${
+                            item.groups.length === 1 ? "grid-cols-1" :
+                            item.groups.length === 2 ? "grid-cols-2" :
+                            "grid-cols-3"
+                          }`}>
+                            {item.groups.map((g) => (
+                              <div key={g.title}>
+                                <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-primary-glow mb-3">
+                                  {g.title}
+                                </div>
+                                <ul className="space-y-1">
+                                  {g.items.map((it) => (
+                                    <li key={it.label}>
+                                      <Link
+                                        to={it.to}
+                                        className="block rounded-xl p-2.5 hover:bg-white/5 transition-colors group"
+                                      >
+                                        <div className="text-sm font-medium text-white group-hover:text-primary-glow transition-colors whitespace-nowrap">
+                                          {it.label}
+                                        </div>
+                                        {it.desc && (
+                                          <div className="text-xs text-white/50 mt-0.5">{it.desc}</div>
+                                        )}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Simple nested list dropdown — content-width, absolute below trigger */}
+                    {openIdx === i && item.simpleItems && !searchOpen && (
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-[10px] z-50 animate-[fade-in_0.15s_ease-out]">
+                        <div className="rounded-2xl bg-[oklch(0.18_0.04_255/0.95)] backdrop-blur-2xl shadow-[0_20px_60px_-20px_oklch(0.20_0.10_255/0.55),inset_0_1px_0_oklch(1_0_0/0.08)] border border-white/10 p-6 w-max min-w-[480px] max-w-[640px]">
+                          <ul className="grid grid-cols-2 gap-4">
+                            {item.simpleItems.map((it) => (
+                              <li key={it.label} className="group/item relative">
+                                {it.children ? (
+                                  <div className="bg-white/5 rounded-2xl p-1">
+                                    <div className="flex items-center justify-between rounded-xl p-3 hover:bg-white/5 transition-colors cursor-pointer group/trigger">
+                                      <Link to={it.to} className="flex-1 min-w-0">
+                                        <div className="text-sm font-semibold text-white group-hover/trigger:text-primary-glow transition-colors">
+                                          {it.label}
+                                        </div>
+                                        {it.desc && (
+                                          <div className="text-[11px] text-white/50 mt-1 line-clamp-1">{it.desc}</div>
+                                        )}
+                                      </Link>
+                                      <ChevronDown className="h-4 w-4 text-white/40 group-hover/item:rotate-180 transition-transform duration-300" />
+                                    </div>
+                                    <div className="max-h-0 group-hover/item:max-h-96 overflow-hidden transition-all duration-200 ease-in-out">
+                                      <ul className="px-4 pb-3 pt-1 space-y-1">
+                                        {it.children.map((child) => (
+                                          <li key={child.label}>
+                                            <Link
+                                              to={child.to}
+                                              className="block px-3 py-2 rounded-lg text-[13px] text-white/60 hover:text-white hover:bg-white/10 transition-colors border-l border-white/10"
+                                            >
+                                              {child.label}
+                                            </Link>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <Link
+                                    to={it.to}
+                                    className="block rounded-2xl p-4 bg-white/5 hover:bg-white/10 transition-all border border-white/5 hover:border-white/10 h-full"
+                                  >
+                                    <div className="text-sm font-semibold text-white group-hover:text-primary-glow transition-colors">
+                                      {it.label}
+                                    </div>
+                                    {it.desc && (
+                                      <div className="text-[11px] text-white/50 mt-1.5 leading-relaxed">{it.desc}</div>
+                                    )}
+                                  </Link>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     )}
                   </div>
                 );
@@ -376,7 +477,6 @@ export function MegaMenu() {
           )}
         </div>
       </div>
-      {!searchOpen && path === "/" && <NoticeTicker />}
     </header>
   );
 }

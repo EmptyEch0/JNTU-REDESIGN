@@ -29,8 +29,10 @@ import {
 } from "@/lib/academics";
 import { getAssetUrl, imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
-import { SubNav } from "@/components/SubNav";
+import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
+
+import { Pagination } from "@/components/Pagination";
 
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
@@ -78,6 +80,7 @@ function DownloadsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState<"All" | "Bonafide" | "TC" | "OD" | "SSC Memo">("All");
   const [selectedFileType, setSelectedFileType] = useState<"All" | "PDF" | "DOC" | "XLS">("All");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // State for Editing
   const [editDownloadId, setEditDownloadId] = useState<number | null>(null);
@@ -150,10 +153,9 @@ function DownloadsPage() {
         subtitle="Access official university application formats, certificate forms, original degree verification applications, and essential files directly."
         image={campusImg}
       />
-      
-      <SubNav items={ACADEMICS_SUBNAV} />
-
-      <div className="container-narrow space-y-6">
+      <div className="container-narrow py-12 flex flex-col md:flex-row gap-8 items-start">
+        <VerticalSubNav items={ACADEMICS_SUBNAV} />
+        <div className="flex-1 min-w-0 space-y-6">
 
         {/* Admin Mode Controls */}
         {isEditMode && (
@@ -388,106 +390,118 @@ function DownloadsPage() {
                 ))}
               </div>
             ) : filteredDownloads.length > 0 ? (
-              <div className="grid sm:grid-cols-2 gap-4">
-                {filteredDownloads.map((item, idx) => {
-                  const { type, fileSize, uploadDate } = getFileMeta(item.document_name, item.id);
-                  
-                  // Color based on type
-                  const typeColors = {
-                    PDF: "text-red-600 bg-red-50 border-red-100",
-                    DOC: "text-blue-600 bg-blue-50 border-blue-100",
-                    XLS: "text-emerald-600 bg-emerald-50 border-emerald-100"
-                  };
+              <div className="space-y-6">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {filteredDownloads.slice((currentPage - 1) * 15, currentPage * 15).map((item, idx) => {
+                    const { type, fileSize, uploadDate } = getFileMeta(item.document_name, item.id);
+                    
+                    // Color based on type
+                    const typeColors = {
+                      PDF: "text-red-600 bg-red-50 border-red-100",
+                      DOC: "text-blue-600 bg-blue-50 border-blue-100",
+                      XLS: "text-emerald-600 bg-emerald-50 border-emerald-100"
+                    };
 
-                  return (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: idx * 0.04 }}
-                    >
-                      <GlassCard className="p-5 h-full flex flex-col justify-between relative overflow-hidden group hover:border-blue-300 bg-white border border-slate-200/80 hover:shadow-xl transition-all duration-300 shadow-sm">
-                        {/* Decorative background hover glow */}
-                        <div className="absolute right-0 top-0 w-20 h-20 bg-blue-500/2 rounded-full blur-2xl group-hover:bg-blue-500/5 transition-all duration-300 pointer-events-none" />
+                    return (
+                      <motion.div
+                        key={item.id}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: idx * 0.04 }}
+                      >
+                        <GlassCard className="p-5 h-full flex flex-col justify-between relative overflow-hidden group hover:border-blue-300 bg-white border border-slate-200/80 hover:shadow-xl transition-all duration-300 shadow-sm">
+                          {/* Decorative background hover glow */}
+                          <div className="absolute right-0 top-0 w-20 h-20 bg-blue-500/2 rounded-full blur-2xl group-hover:bg-blue-500/5 transition-all duration-300 pointer-events-none" />
 
-                        <div>
-                          {/* Card Header badges */}
-                          <div className="flex items-center justify-between gap-3 mb-3">
-                            <span className="text-[9px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100">
-                              {item.category}
-                            </span>
+                          <div>
+                            {/* Card Header badges */}
+                            <div className="flex items-center justify-between gap-3 mb-3">
+                              <span className="text-[9px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100">
+                                {item.category}
+                              </span>
+                              
+                              <span className={`text-[9px] font-black px-2 py-0.5 rounded border uppercase tracking-widest ${typeColors[type]}`}>
+                                {type}
+                              </span>
+                            </div>
+
+                            <h4 className="font-bold text-slate-800 text-xs md:text-sm mb-4 leading-relaxed group-hover:text-blue-600 transition-colors line-clamp-2">
+                              {item.document_name}
+                            </h4>
                             
-                            <span className={`text-[9px] font-black px-2 py-0.5 rounded border uppercase tracking-widest ${typeColors[type]}`}>
-                              {type}
+                            {/* File detailed sizes and uploads */}
+                            <div className="grid grid-cols-2 gap-2 mb-4 pt-3 border-t border-slate-100">
+                              <div className="flex items-center gap-1.5 text-slate-550">
+                                <HardDrive className="w-3.5 h-3.5 text-blue-500/70" />
+                                <div className="leading-none">
+                                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Size</p>
+                                  <p className="text-[10px] font-bold text-slate-700">{fileSize}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1.5 text-slate-550">
+                                <Calendar className="w-3.5 h-3.5 text-blue-500/70" />
+                                <div className="leading-none">
+                                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Updated</p>
+                                  <p className="text-[10px] font-bold text-slate-700">{uploadDate}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Action footer */}
+                          <div className="flex items-center justify-between pt-3.5 border-t border-slate-100 mt-auto">
+                            <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Verified Form
                             </span>
-                          </div>
 
-                          <h4 className="font-bold text-slate-800 text-xs md:text-sm mb-4 leading-relaxed group-hover:text-blue-600 transition-colors line-clamp-2">
-                            {item.document_name}
-                          </h4>
-                          
-                          {/* File detailed sizes and uploads */}
-                          <div className="grid grid-cols-2 gap-2 mb-4 pt-3 border-t border-slate-100">
-                            <div className="flex items-center gap-1.5 text-slate-550">
-                              <HardDrive className="w-3.5 h-3.5 text-blue-500/70" />
-                              <div className="leading-none">
-                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Size</p>
-                                <p className="text-[10px] font-bold text-slate-700">{fileSize}</p>
-                              </div>
+                            <div className="flex items-center gap-2">
+                              {/* Admin actions */}
+                              {isEditMode && (
+                                <div className="flex items-center gap-1 relative z-20">
+                                  <button
+                                    onClick={() => startEditDownload(item)}
+                                    className="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-600 transition-colors"
+                                    title="Edit entry"
+                                  >
+                                    <Edit2 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      if(confirm(`Are you sure you want to delete "${item.document_name}"?`)) {
+                                        deleteDownloadMutation.mutate(item.id);
+                                      }
+                                    }}
+                                    className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 transition-colors"
+                                    title="Delete entry"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              )}
+
+                              <button 
+                                onClick={() => window.open(getAssetUrl(item.pdf_url), "_blank")}
+                                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-[10px] font-black tracking-wider uppercase transition-all shadow-md group-hover:scale-[1.02] active:scale-[0.98]"
+                              >
+                                <FileDown className="w-3.5 h-3.5" /> Download
+                              </button>
                             </div>
-                            <div className="flex items-center gap-1.5 text-slate-550">
-                              <Calendar className="w-3.5 h-3.5 text-blue-500/70" />
-                              <div className="leading-none">
-                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Updated</p>
-                                <p className="text-[10px] font-bold text-slate-700">{uploadDate}</p>
-                              </div>
-                            </div>
                           </div>
-                        </div>
+                        </GlassCard>
+                      </motion.div>
+                    );
+                  })}
+                </div>
 
-                        {/* Action footer */}
-                        <div className="flex items-center justify-between pt-3.5 border-t border-slate-100 mt-auto">
-                          <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Verified Form
-                          </span>
-
-                          <div className="flex items-center gap-2">
-                            {/* Admin actions */}
-                            {isEditMode && (
-                              <div className="flex items-center gap-1 relative z-20">
-                                <button
-                                  onClick={() => startEditDownload(item)}
-                                  className="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-600 transition-colors"
-                                  title="Edit entry"
-                                >
-                                  <Edit2 className="w-3.5 h-3.5" />
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    if(confirm(`Are you sure you want to delete "${item.document_name}"?`)) {
-                                      deleteDownloadMutation.mutate(item.id);
-                                    }
-                                  }}
-                                  className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 transition-colors"
-                                  title="Delete entry"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            )}
-
-                            <button 
-                              onClick={() => window.open(getAssetUrl(item.pdf_url), "_blank")}
-                              className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-[10px] font-black tracking-wider uppercase transition-all shadow-md group-hover:scale-[1.02] active:scale-[0.98]"
-                            >
-                              <FileDown className="w-3.5 h-3.5" /> Download
-                            </button>
-                          </div>
-                        </div>
-                      </GlassCard>
-                    </motion.div>
-                  );
-                })}
+                {filteredDownloads.length > 15 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(filteredDownloads.length / 15)}
+                    totalItems={filteredDownloads.length}
+                    pageSize={15}
+                    onPageChange={(p) => setCurrentPage(p)}
+                  />
+                )}
               </div>
             ) : (
               <GlassCard className="p-8 text-center bg-white border border-slate-200/80 flex flex-col items-center justify-center h-72">
@@ -500,6 +514,7 @@ function DownloadsPage() {
             )}
           </div>
 
+        </div>
         </div>
       </div>
     </div>

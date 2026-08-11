@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
-import { SubNav } from "@/components/SubNav";
+import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
 import { imageUrl } from "@/lib/assets";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
@@ -132,9 +132,9 @@ function AcademicCalendarPage() {
         subtitle="Explore official schedules, examinations cycles, and holiday planners for all courses."
         image="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2068"
       />
-      <SubNav items={ACADEMICS_SUBNAV} />
-
-      <div className="container-narrow space-y-8">
+      <div className="container-narrow py-12 flex flex-col md:flex-row gap-8 items-start">
+        <VerticalSubNav items={ACADEMICS_SUBNAV} />
+        <div className="flex-1 min-w-0 space-y-8">
 
       {/* Admin Mode Controls */}
       {isEditMode && (
@@ -452,6 +452,7 @@ function AcademicCalendarPage() {
 
         </div>
       </div>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
-import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { getDepartmentDetails, type DepartmentData } from "@/functions/departments";
+import { SafeImage } from "@/components/SafeImage";
 import { getAssetUrl, updateDepartment } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
 import { AdminUpload } from "@/components/AdminEditPanel";
@@ -19,6 +20,7 @@ import {
   Camera,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id")({
@@ -66,10 +68,18 @@ export const Route = createFileRoute("/departments/$id")({
 function DepartmentLayout() {
   const loaderData = Route.useLoaderData() as unknown as DepartmentData;
   const location = useLocation();
-  const { isAdmin, hasEditPermission, isDeptEditing, setDeptEditing } = useAdmin();
+  const navigate = useNavigate();
+  const { isAdmin, role, hodDeptId, hasEditPermission, isDeptEditing, setDeptEditing, logout } = useAdmin();
   const queryClient = useQueryClient();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Redirect guard for HOD sessions trying to roam to other departments
+  useEffect(() => {
+    if (hodDeptId && loaderData?.slug && hodDeptId !== loaderData.slug && role !== "super_admin") {
+      navigate({ to: "/" });
+    }
+  }, [hodDeptId, loaderData?.slug, role, navigate]);
 
   const isUnlocked = hasEditPermission(loaderData?.slug || "");
   const isEditMode = isDeptEditing(loaderData?.slug || "");
@@ -85,7 +95,7 @@ function DepartmentLayout() {
         setDeptEditing(loaderData.slug, true);
       }
     }
-  }, [loaderData?.slug, hasEditPermission]);
+  }, [loaderData?.slug, hasEditPermission, isDeptEditing, setDeptEditing]);
 
   useEffect(() => {
     if (loaderData) {
@@ -108,7 +118,8 @@ function DepartmentLayout() {
 
   if (!loaderData || !loaderData.slug) return null;
 
-  const needsLockScreen = isAdmin && !isUnlocked;
+  // Update lock-screen condition so it only applies to the legacy super-admin-without-authorizedDepts case
+  const needsLockScreen = isAdmin && role !== "super_admin" && !isUnlocked;
 
   if (needsLockScreen) {
     return (
@@ -137,10 +148,14 @@ function DepartmentLayout() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className={`relative h-[350px] w-full overflow-hidden transition-all ${isEditMode ? "ring-4 ring-inset ring-amber-400" : "bg-slate-900"}`}>
-        <img decoding="async" loading="lazy" 
-          src={getAssetUrl(headerEdit.image)} 
+        <SafeImage 
+          src={headerEdit.image} 
           className="h-full w-full object-cover opacity-40" 
           alt={headerEdit.name} 
+loading="lazy"
+    decoding="async"
+
+          fallbackSrc="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1500&q=80"
         />
         
         <div className="absolute inset-0 flex items-center justify-center">
@@ -201,10 +216,10 @@ function DepartmentLayout() {
         {/* Sidebar Navigation */}
         <aside className={`
           fixed inset-y-0 left-0 z-40 w-72 bg-slate-50 p-6 shadow-2xl transition-transform duration-300 ease-in-out
-          lg:relative lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 lg:shadow-none lg:w-64 flex-shrink-0
+          lg:sticky lg:top-28 lg:self-start lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 lg:shadow-none lg:w-64 flex-shrink-0
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}>
-          <div className="sticky top-28 bg-white lg:bg-slate-50 rounded-3xl p-6 lg:border border-slate-100 h-fit space-y-6">
+          <div className="bg-white lg:bg-slate-50 rounded-3xl p-6 lg:border border-slate-100 h-fit space-y-6">
             
             {/* Header Title Inside Mobile Menu */}
             <div className="flex items-center justify-between lg:hidden border-b pb-4 mb-2 border-slate-200">
@@ -234,6 +249,17 @@ function DepartmentLayout() {
                 );
               })}
             </nav>
+            {hodDeptId && (
+  <button
+    onClick={async () => {
+      await logout();
+      navigate({ to: "/" });
+    }}
+    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-all mt-4 border-t border-slate-200 pt-4"
+  >
+    <LogOut size={18} /> Logout (HOD)
+  </button>
+)}
           </div>
         </aside>
 

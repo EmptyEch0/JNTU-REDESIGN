@@ -24,5 +24,11 @@
       "source": "/vps-assets/:path*",
       "destination": "http://89.116.134.182/local-assets/:path*"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/ingest",
+      "schedule": "0 */6 * * *"
+    }
   ]
 }

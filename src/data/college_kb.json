@@ -1,0 +1,121 @@
+{
+  "college": {
+    "name": "JNTU-GV College of Engineering Vizianagaram (JNTU-GV CEV)",
+    "shortName": "JNTU-GV CEV",
+    "established": 2007,
+    "location": "Dwarapudi, Vizianagaram – 535003, Andhra Pradesh, India",
+    "type": "Constituent University College of JNTU Gurajada Vizianagaram",
+    "campusArea": "100+ Acres green campus",
+    "website": "https://jntugvcev.edu.in",
+    "email": "principal@jntugvcev.edu.in",
+    "phone": "+91 8922 244 100",
+    "overview": "JNTU-GV College of Engineering Vizianagaram is a premier autonomous university engineering college in North Coastal Andhra Pradesh. Known for technical excellence, state-of-the-art research laboratories, vibrant student culture, and strong placement records."
+  },
+  "stories_and_experiences": [
+    {
+      "id": "story_campus_life",
+      "title": "Life at JNTU-GV Vizianagaram Campus",
+      "category": "Campus Experience",
+      "content": "Life at JNTU-GV CEV combines rigorous technical education with an energetic student community. Spread across a sprawling 100-acre green campus in Dwarapudi, Vizianagaram, students participate in annual technical fests, inter-college sports tournaments, coding hackathons, cultural nights, and community outreach programs through NSS."
+    },
+    {
+      "id": "story_innovations_projects",
+      "title": "Student Innovations and R&D Projects",
+      "category": "Projects & Research",
+      "content": "Undergraduate and postgraduate students at JNTU-GV CEV regularly work on cutting-edge research projects sponsored by DST, AICTE, and MSME. Recent achievements include AI-based smart agriculture monitoring systems, autonomous solar-powered water purification units, IoT smart grid controllers, and deep-learning medical diagnostic tools."
+    },
+    {
+      "id": "story_placement_success",
+      "title": "Placement Success Stories",
+      "category": "Placements",
+      "content": "JNTU-GV CEV boasts a high placement record with packages reaching up to 42 LPA. Top recruiters include TCS, Wipro, Infosys, Accenture, Cognizant, L&T, Hexaware, and Tech Mahindra. The dedicated Training & Placement Officer (TPO) conducts mock interviews, aptitude training, soft skills workshops, and coding bootcamps starting from 3rd year."
+    }
+  ],
+  "departments_detailed": [
+    {
+      "code": "CSE",
+      "name": "Computer Science & Engineering",
+      "hod": "Dr. R. Rajeswara Rao",
+      "intake": "60 (UG B.Tech) + PG M.Tech",
+      "highlights": "Advanced AI/ML labs, High-performance computing center, active IEEE and CSI chapters, competitive programming clubs."
+    },
+    {
+      "code": "ECE",
+      "name": "Electronics & Communication Engineering",
+      "hod": "Dr. K. Babulu",
+      "intake": "60 (UG B.Tech) + PG M.Tech",
+      "highlights": "VLSI design lab, Embedded Systems & IoT center, Signal Processing unit, antenna wave propagation labs."
+    },
+    {
+      "code": "EEE",
+      "name": "Electrical & Electronics Engineering",
+      "hod": "Dr. K. Sri Kumar",
+      "intake": "60 (UG B.Tech)",
+      "highlights": "High Voltage Lab, Power Systems Simulator, Renewable Energy Research Center (Solar & Wind Energy)."
+    },
+    {
+      "code": "ME",
+      "name": "Mechanical Engineering",
+      "hod": "Dr. R. Umamaheswara Rao",
+      "intake": "60 (UG B.Tech)",
+      "highlights": "CAD/CAM Simulation Center, Thermal Engineering Lab, Robotics & Automation Lab, Workshop & CNC Machining."
+    },
+    {
+      "code": "MET",
+      "name": "Metallurgical Engineering",
+      "hod": "Dr. G. Swami Naidu",
+      "intake": "60 (UG B.Tech)",
+      "highlights": "Materials Characterisation Lab, Scanning Electron Microscopy (SEM) facilities, Foundry & Heat Treatment workshops."
+    },
+    {
+      "code": "IT",
+      "name": "Information Technology",
+      "hod": "Dr. P. Aruna Kumari",
+      "intake": "60 (UG B.Tech)",
+      "highlights": "Cloud Computing Lab, Cybersecurity & Digital Forensics, Data Science & Analytics Research Lab."
+    },
+    {
+      "code": "SH",
+      "name": "Basic Sciences & Humanities",
+      "hod": "Dr. G. J. Naga Raju",
+      "highlights": "Phonics & Language Communication Skills Lab, Physics & Chemistry Research Labs, Engineering Mathematics unit."
+    },
+    {
+      "code": "MBA",
+      "name": "Master of Business Administration",
+      "hod": "Dr. K. V. S. M. Ramanesh",
+      "intake": "60 (PG MBA)",
+      "highlights": "Finance, HR, Marketing, Operations specialisations, Management Fests, Entrepreneurship Cell integration."
+    }
+  ],
+  "facilities": {
+    "hostels": "Separate modern hostels for Boys and Girls on campus with 24/7 security, Wi-Fi connectivity, RO drinking water, hygienic mess dining hall, indoor games, and reading rooms.",
+    "library": "Central Library housing over 45,000+ volumes, IEEE/ASME digital journals, DELNET e-resources, spacious reading halls, and quiet study zones.",
+    "sports": "Full-size cricket ground, football field, basketball court, volleyball courts, badminton courts, indoor games hall (table tennis, chess), and modern fitness gymnasium.",
+    "dispensary": "On-campus health center with qualified resident doctor, staff nurse, essential medicine dispensary, and emergency ambulance service available 24x7.",
+    "transport": "College bus fleet providing daily commute services across Vizianagaram town, railway station, and nearby routes."
+  },
+  "regulations_summary": {
+    "R20": "Regulation 2020: Choice Based Credit System (CBCS), 160 credits total for B.Tech, 4-year duration, mandatory 10-week summer internships, minor & honors degree options.",
+    "R23": "Regulation 2023: Outcome Based Education (OBE) aligned with NEP 2020, skill-oriented courses, community service projects in 1st/2nd year, industry internships in final year.",
+    "R25": "Regulation 2025: Latest revised curriculum with AI & Data Science integration across all branches, multidisciplinary electives, project-based learning."
+  },
+  "faqs": [
+    {
+      "question": "How to get admission into JNTU-GV CEV B.Tech?",
+      "answer": "Admissions for B.Tech are conducted through AP EAMCET / EAPCET counselling based on rank. Lateral entry for Diploma holders is through AP ECET."
+    },
+    {
+      "question": "Who is the Principal of JNTU-GV CEV?",
+      "answer": "Prof. Kota Chandra Bhushana Rao is the Principal (i/c) of JNTU-GV College of Engineering Vizianagaram."
+    },
+    {
+      "question": "Where is JNTU-GV College located and how to reach?",
+      "answer": "The college is located at Dwarapudi, Vizianagaram (535003). It is about 7 km from Vizianagaram Railway Station and Complex Bus Stand. Auto rickshaws and college buses are readily available."
+    },
+    {
+      "question": "What is the highest placement package at JNTU-GV CEV?",
+      "answer": "The highest package recorded is 42 LPA, with average packages ranging between 4.5 to 7 LPA across CSE, ECE, IT, EEE, Mechanical, and Metallurgy."
+    }
+  ]
+}

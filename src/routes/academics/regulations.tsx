@@ -1,7 +1,7 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { DownloadCard } from "@/components/academics/DownloadCard";
 import { PageHero } from "@/components/PageHero";
-import { SubNav } from "@/components/SubNav";
+import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
 import { imageUrl } from "@/lib/assets";
 import { motion } from "framer-motion";
@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { Plus, Trash2 } from "lucide-react";
-import { getRegulations, addRegulation, deleteRegulation } from "@/funcs/site.server";
+import { getAcademicRegulations, addAcademicRegulation, deleteAcademicRegulation } from "@/funcs/site.server";
 import {
   AdminModeBanner,
   AdminPanel,
@@ -21,7 +21,7 @@ import {
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/regulations")({
-  loader: async () => await getRegulations(),
+  loader: async () => await getAcademicRegulations(),
   component: RegulationsPage,
 });
 
@@ -56,12 +56,10 @@ function RegulationsPage() {
     if (!newReg.title.trim()) return;
     const tId = toast.loading("Adding new academic regulation...");
     try {
-      await addRegulation({
+      await addAcademicRegulation({
         data: {
           title: newReg.title,
           category: newReg.category,
-          size: newReg.size || "1.0 MB",
-          date: newReg.date || new Date().toLocaleString("en-US", { month: "short", year: "numeric" }),
           link: newReg.link || "#",
         },
       });
@@ -76,7 +74,7 @@ function RegulationsPage() {
   async function handleDelete(id: number) {
     const tId = toast.loading("Purging regulation record...");
     try {
-      await deleteRegulation({ data: { id } });
+      await deleteAcademicRegulation({ data: { id } });
       toast.success("Regulation deleted!", { id: tId });
       router.invalidate();
     } catch {
@@ -94,9 +92,9 @@ function RegulationsPage() {
         subtitle="Rules, guidelines, and procedures governing academic programs."
         image={campusImg}
       />
-      <SubNav items={ACADEMICS_SUBNAV} />
-
-      <div className="container-narrow space-y-12">
+      <div className="container-narrow py-12 flex flex-col md:flex-row gap-8 items-start">
+        <VerticalSubNav items={ACADEMICS_SUBNAV} />
+        <div className="flex-1 min-w-0 space-y-12">
 
         {isEditMode && (
           <section className="mb-12">
@@ -202,6 +200,7 @@ function RegulationsPage() {
           </section>
         </div>
 
+        </div>
       </div>
     </div>
   );

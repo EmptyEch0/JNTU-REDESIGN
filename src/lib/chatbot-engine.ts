@@ -276,7 +276,7 @@ const KB = {
     address: "Dwarapudi, Vizianagaram – 535003, Andhra Pradesh, India",
     phone: "+91 8922 244 100",
     email: "principal@jntugvcev.edu.in",
-    website: "https://jntugvcev.edu.in",
+    website: "",
   },
   university: {
     name: "Jawaharlal Nehru Technological University Gurajada Vizianagaram (JNTU-GV)",
@@ -425,17 +425,107 @@ function buildAnswer(
 
   // ── SYLLABUS ──
   if (intents.includes("syllabus")) {
-    const regMentioned = /r20|r23|r25/i.test(query);
-    if (!regMentioned) {
-      return "Sure! Which regulation syllabus do you need? 😊\n\n• **R20** — 2020 batch\n• **R23** — 2023 batch\n• **R25** — 2025 batch\n\n🌐 View online: [Academics → Syllabus](${KB.college.website}/academics/syllabus)";
+    const qLower = query.toLowerCase();
+
+    // Extract regulation
+    const regMatch = qLower.match(/r(25|23|20|19|16|13)/i);
+    const reg = regMatch ? regMatch[0].toUpperCase() : null;
+
+    // Extract department
+    const deptMatch =
+      /\b(cse|computer science)\b/i.test(qLower) ? "CSE" :
+      /\b(ece|electronics)\b/i.test(qLower) ? "ECE" :
+      /\b(eee|electrical)\b/i.test(qLower) ? "EEE" :
+      /\b(mech|mechanical)\b/i.test(qLower) ? "MECH" :
+      /\b(met|metallurg|metallurgical)\b/i.test(qLower) ? "MET" :
+      /\b(it|information technology)\b/i.test(qLower) ? "IT" :
+      /\b(civil)\b/i.test(qLower) ? "CIVIL" :
+      /\b(mba|business)\b/i.test(qLower) ? "MBA" :
+      /\b(mca|computer applications)\b/i.test(qLower) ? "MCA" :
+      null;
+
+    // Master list of syllabus records
+    const syllabusItems: Array<{ subject: string; reg: string; branch: string; year: string; pdf: string }> = [
+      { subject: "CSE R23 B.Tech Syllabus", reg: "R23", branch: "CSE", year: "1st to 4th Year", pdf: "/uploads/2023/10/CSE-finalR23.pdf" },
+      { subject: "ECE R23 1st Year Syllabus", reg: "R23", branch: "ECE", year: "1st Year", pdf: "/uploads/2023/10/ECE-finalR23.pdf" },
+      { subject: "ECE R23 2nd Year Syllabus", reg: "R23", branch: "ECE", year: "2nd Year", pdf: "/uploads/2024/07/Approved-R23-JNTUGV-CEV-ECE-Course-Structure-total-Second-Year-Syllabus.-.pdf" },
+      { subject: "ECE R23 3rd & 4th Year Syllabus", reg: "R23", branch: "ECE", year: "3rd & 4th Year", pdf: "/uploads/2025/07/R23-III-IV-Course-structure-and-syllabus-with-honors-and-Minors.pdf" },
+      { subject: "EEE R23 Syllabus", reg: "R23", branch: "EEE", year: "1st to 4th Year", pdf: "/uploads/2025/08/JNTUGV-CEV-A-R23-EEE-IV-Years-SYLLABUS-combined-1.pdf" },
+      { subject: "IT R23 Course Structure & Syllabus", reg: "R23", branch: "IT", year: "1st to 4th Year", pdf: "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf" },
+      { subject: "Civil Engineering R23 Syllabus", reg: "R23", branch: "CIVIL", year: "1st to 4th Year", pdf: "/uploads/2023/10/civilfinalR23-1.pdf" },
+      { subject: "Metallurgy R23 Syllabus", reg: "R23", branch: "MET", year: "1st to 4th Year", pdf: "/uploads/2025/08/R23-ME-B.Tech-4-years-CS-SYLLABUS-1.pdf" },
+      { subject: "Mechanical Engineering R23 Syllabus", reg: "R23", branch: "MECH", year: "1st to 4th Year", pdf: "/uploads/2023/10/ME-finalR23.pdf" },
+      
+      { subject: "CSE R20 B.Tech Syllabus", reg: "R20", branch: "CSE", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-CSE-SYLLABUS.pdf" },
+      { subject: "ECE R20 B.Tech Syllabus", reg: "R20", branch: "ECE", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-ECE-SYLLABUS.pdf" },
+      { subject: "EEE R20 B.Tech Syllabus", reg: "R20", branch: "EEE", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-EEE-SYLLABUS.pdf" },
+      { subject: "MECH R20 B.Tech Syllabus", reg: "R20", branch: "MECH", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-ME-SYLLABUS.pdf" },
+      { subject: "MET R20 B.Tech Syllabus", reg: "R20", branch: "MET", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-MET-SYLLABUS.pdf" },
+      { subject: "IT R20 B.Tech Syllabus", reg: "R20", branch: "IT", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-IT-SYLLABUS.pdf" },
+
+      { subject: "M.Tech IT R25 Syllabus", reg: "R25", branch: "IT", year: "1st & 2nd Year", pdf: "/uploads/2025/12/R25_M.Tech_ITDS.pdf" },
+      { subject: "MCA R25 Syllabus", reg: "R25", branch: "MCA", year: "1st & 2nd Year", pdf: "/uploads/2025/11/JNTUGV_R25_MCA_Syllabus-Course-structure.pdf" },
+      { subject: "MBA R25 Syllabus", reg: "R25", branch: "MBA", year: "1st & 2nd Year", pdf: "/uploads/2025/12/MBA-R25-Syllabus.pdf" },
+    ];
+
+    // Supplement items from incoming RAG chunks if available
+    for (const chunk of chunks) {
+      if (chunk.source_type === "syllabus" && chunk.metadata?.pdf_url) {
+        const p = chunk.metadata.pdf_url;
+        if (!syllabusItems.some(i => i.pdf === p)) {
+          syllabusItems.push({
+            subject: chunk.content.split(".")[0].replace(/^Syllabus:\s*/i, ""),
+            reg: chunk.metadata.regulation || "R23",
+            branch: (chunk.metadata.branch || "CSE").toUpperCase(),
+            year: chunk.metadata.academic_year || "All Years",
+            pdf: p
+          });
+        }
+      }
     }
-    const relInfo = rel(["syllabus", "r20", "r23", "r25", "download", "pdf", "scheme"], 8);
-    const sylLinks = linksFor("syllabus", "regulation", "r20", "r23", "r25", ".pdf");
-    let resp = `**Syllabus Information** 📄\n\n${relInfo || ctxText.slice(0, 600)}`;
-    resp += sylLinks.length > 0
-      ? `\n\n**Download Links:**\n${linkify(sylLinks)}`
-      : `\n\n📁 [Academics → Regulations](${KB.college.website}/academics/regulations)`;
-    return resp;
+
+    // SCENARIO 1: Neither Regulation NOR Department specified
+    if (!reg && !deptMatch) {
+      return `**Course Syllabus Assistant** 📄\n\nWhich regulation and department syllabus would you like to view?\n\n• **Regulations**: R23, R20, R19, R16, R25 (PG)\n• **Departments**: CSE, ECE, EEE, MECH, MET, IT, Civil, MBA, MCA\n\nClick one of the suggestion chips below, or filter online at [Academics → Syllabus](/academics/syllabus).`;
+    }
+
+    // SCENARIO 2: Regulation specified, but NO Department specified
+    if (reg && !deptMatch) {
+      const regItems = syllabusItems.filter(item => item.reg.toUpperCase() === reg);
+      let resp = `**${reg} Academic Syllabus** 📄\n\nHere are the available syllabus courses for **${reg} Regulation**:\n\n`;
+      if (regItems.length > 0) {
+        resp += regItems.map(item => `• **${item.branch}** (${item.year}): [Download PDF](${item.pdf})`).join("\n");
+      } else {
+        resp += `No specific ${reg} syllabus files are currently uploaded. You can view all regulations on [Academics → Regulations](/academics/regulations).`;
+      }
+      resp += `\n\nWhich department do you need? Select a department chip below or view all at [Academics → Syllabus](/academics/syllabus).`;
+      return resp;
+    }
+
+    // SCENARIO 3: Department specified, but NO Regulation specified
+    if (!reg && deptMatch) {
+      const deptItems = syllabusItems.filter(item => item.branch.toUpperCase() === deptMatch);
+      let resp = `**${deptMatch} Department Syllabus** 📄\n\nHere are the available syllabus records for **${deptMatch}** department:\n\n`;
+      if (deptItems.length > 0) {
+        resp += deptItems.map(item => `• **${item.reg} Regulation** (${item.year}): [Download PDF](${item.pdf})`).join("\n");
+      } else {
+        resp += `Visit the main [Academics → Syllabus](/academics/syllabus) page to view all available syllabus documents for ${deptMatch}.`;
+      }
+      resp += `\n\nWhich regulation do you need? Select a regulation chip below.`;
+      return resp;
+    }
+
+    // SCENARIO 4: BOTH Regulation AND Department specified
+    if (reg && deptMatch) {
+      const exactMatches = syllabusItems.filter(item => item.reg.toUpperCase() === reg && item.branch.toUpperCase() === deptMatch);
+      if (exactMatches.length > 0) {
+        let resp = `**${deptMatch} ${reg} Syllabus Information** 📄\n\n`;
+        resp += exactMatches.map(item => `• **${item.subject}** (${item.year}):\n  👉 [Download PDF](${item.pdf})`).join("\n\n");
+        resp += `\n\n🌐 View full interactive syllabus list: [Academics → Syllabus](/academics/syllabus)`;
+        return resp;
+      }
+      return `**${deptMatch} ${reg} Syllabus** 📄\n\nWe don't have a specific PDF uploaded for ${deptMatch} under ${reg} regulation yet.\n\n🌐 Check all available syllabus documents on [Academics → Syllabus](/academics/syllabus) or regulations on [Academics → Regulations](/academics/regulations).`;
+    }
   }
 
   // ── TIMETABLE ──

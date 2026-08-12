@@ -5,21 +5,13 @@ const sql = postgres(connectionString);
 
 async function run() {
   try {
-    const tables = [
-      'academic_fee_structure',
-      'academic_calendars',
-      'academic_regulations',
-      'academic_syllabus',
-      'academic_downloads',
-      'academic_timetables',
-      'academic_faculty'
-    ];
+    const syllabus = await sql`SELECT * FROM academic_syllabus`;
+    console.log("=== ALL ACADEMIC SYLLABUS RECORDS ===");
+    console.log(JSON.stringify(syllabus, null, 2));
 
-    for (const t of tables) {
-      console.log(`\n--- Records for ${t} ---`);
-      const rows = await sql`SELECT * FROM ${sql(t)} LIMIT 5`;
-      console.log(JSON.stringify(rows, null, 2));
-    }
+    const regs = await sql`SELECT * FROM academic_regulations`;
+    console.log("=== ALL ACADEMIC REGULATIONS RECORDS ===");
+    console.log(JSON.stringify(regs, null, 2));
   } catch (err) {
     console.error(err);
   } finally {

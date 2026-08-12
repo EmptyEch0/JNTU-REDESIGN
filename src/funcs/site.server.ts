@@ -313,7 +313,29 @@ export const queryChatbot = createServerFn({ method: "POST" })
       }
     }
 
-    // 3. Local Intelligent Engine: Intent detection + BM25 Rerank + Multi-chunk synthesis
+    // 3. If query mentions syllabus, pull live syllabus entries directly from DB
+    if (/syllabus|curriculum|r23|r20|r25/i.test(query)) {
+      try {
+        const sylRows = await db.select().from(academicSyllabus);
+        for (const s of sylRows) {
+          chunks.push({
+            content: `Syllabus: ${s.subject_name}. Regulation: ${s.regulation}. Branch: ${s.branch}. Semester: ${s.semester}. Program: ${s.program_name}. PDF: ${s.pdf_url}`,
+            source_type: "syllabus",
+            metadata: {
+              regulation: s.regulation,
+              branch: s.branch,
+              pdf_url: s.pdf_url,
+              academic_year: s.academic_year,
+            },
+            similarity: 1.0,
+          });
+        }
+      } catch (err) {
+        console.error("Error pulling live syllabus records:", err);
+      }
+    }
+
+    // 4. Local Intelligent Engine: Intent detection + BM25 Rerank + Multi-chunk synthesis
     const reply = runChatbotEngine({ query, chunks });
     return { reply };
   });

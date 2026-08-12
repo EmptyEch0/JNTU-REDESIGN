@@ -67,11 +67,32 @@ export function Chatbot() {
       });
       const reply = res.reply;
 
-      const isAskingRegulation = 
-        reply.toLowerCase().includes("r20") && 
-        reply.toLowerCase().includes("r23");
+      const qLower = queryText.toLowerCase();
+      const isSyllabusQuery = qLower.includes("syllabus") || qLower.includes("r23") || qLower.includes("r20") || qLower.includes("r25");
 
-      setChips(isAskingRegulation ? ["R20", "R23", "R25"] : []);
+      if (isSyllabusQuery) {
+        const hasReg = /r(23|20|25|19|16)/i.test(qLower);
+        const hasDept = /\b(cse|ece|eee|mech|met|it|civil|mba|mca)\b/i.test(qLower);
+
+        if (!hasReg && !hasDept) {
+          setChips(["Show R23 Syllabus", "R20 Syllabus", "CSE Syllabus", "ECE Syllabus", "IT Syllabus"]);
+        } else if (hasReg && !hasDept) {
+          const regMatch = qLower.match(/r(23|20|25|19|16)/i)?.[0]?.toUpperCase() || "R23";
+          setChips([`${regMatch} CSE`, `${regMatch} ECE`, `${regMatch} EEE`, `${regMatch} MECH`, `${regMatch} IT`, `${regMatch} Civil`]);
+        } else if (!hasReg && hasDept) {
+          const deptMatch = qLower.match(/\b(cse|ece|eee|mech|met|it|civil|mba|mca)\b/i)?.[0]?.toUpperCase() || "CSE";
+          setChips([`R23 ${deptMatch}`, `R20 ${deptMatch}`, `R25 ${deptMatch}`]);
+        } else {
+          setChips(["📄 Show R23 Syllabus", "🕒 Exam Timetables", "🏠 Hostel Fee Structure"]);
+        }
+      } else {
+        const isAskingRegulation = 
+          reply.toLowerCase().includes("r20") && 
+          reply.toLowerCase().includes("r23");
+
+        setChips(isAskingRegulation ? ["R20", "R23", "R25"] : []);
+      }
+
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: reply },
@@ -95,7 +116,7 @@ export function Chatbot() {
   }
 
   function renderContent(text: string) {
-    const mdLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
+    const mdLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
     const parts: React.ReactNode[] = [];
     let last = 0;
     let match;
@@ -107,17 +128,54 @@ export function Chatbot() {
           <span key={key++}>{text.slice(last, match.index)}</span>
         );
       }
-      parts.push(
-        <a
-          key={key++}
-          href={match[2]}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 underline font-semibold text-blue-500 hover:text-blue-700"
-        >
-          📄 {match[1]}
-        </a>
-      );
+
+      const label = match[1];
+      const url = match[2];
+
+      const isPdf = url.toLowerCase().endsWith(".pdf") || url.startsWith("/uploads/");
+      const isInternalRoute = url.startsWith("/") && !isPdf;
+
+      if (isPdf) {
+        parts.push(
+          <a
+            key={key++}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            download
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 my-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold border border-blue-200/80 transition-all text-[11px] shadow-xs"
+          >
+            📥 {label.includes("Download") ? label : `Download PDF (${label})`}
+          </a>
+        );
+      } else if (isInternalRoute) {
+        parts.push(
+          <a
+            key={key++}
+            href={url}
+            onClick={(evt) => {
+              evt.preventDefault();
+              window.location.href = url;
+            }}
+            className="inline-flex items-center gap-1 px-2.5 py-1 my-1 rounded-lg bg-slate-900 hover:bg-blue-600 text-white font-bold transition-all text-[11px] cursor-pointer shadow-xs"
+          >
+            📂 {label}
+          </a>
+        );
+      } else {
+        parts.push(
+          <a
+            key={key++}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 underline font-semibold text-blue-600 hover:text-blue-800"
+          >
+            🔗 {label}
+          </a>
+        );
+      }
+
       last = match.index + match[0].length;
     }
 

@@ -128,51 +128,30 @@ export function MegaMenu() {
   };
 
   return (
-    <header className={`fixed inset-x-0 z-50 pointer-events-none transition-all duration-300 ${isAdmin ? "top-12" : "top-0"}`}>
-      {path === "/" && (
-        <div className="w-full flex justify-center px-4 sm:px-8 pt-4 sm:pt-6 pointer-events-auto">
-          <NoticeTicker />
-        </div>
-      )}
-      <div className="flex justify-center px-3 sm:px-4">
+    <header className={`sticky z-50 pointer-events-none transition-all duration-300 -mb-14 sm:-mb-16 ${isAdmin ? "top-14" : "top-3"}`}>
+      <div className="flex justify-center px-3 sm:px-4 bg-transparent">
         <div
           ref={islandRef}
-          className={`pointer-events-auto ${path === "/" ? "mt-3 sm:mt-4" : "mt-6 sm:mt-8"} transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+          className={`pointer-events-auto my-1 transition-all duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
             expanded
-              ? "w-full max-w-[1400px] rounded-[32px] bg-[oklch(0.18_0.04_255/0.85)] backdrop-blur-2xl shadow-[0_20px_60px_-20px_oklch(0.20_0.10_255/0.55),inset_0_1px_0_oklch(1_0_0/0.08)] border border-white/10"
-              : "w-auto rounded-full bg-[oklch(0.16_0.04_255/0.88)] backdrop-blur-2xl shadow-[0_12px_40px_-12px_oklch(0.20_0.10_255/0.6),inset_0_1px_0_oklch(1_0_0/0.1)] border border-white/10"
+              ? "w-full max-w-[1400px] rounded-[32px] bg-slate-950/90 backdrop-blur-2xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.12)] border border-white/15"
+              : "w-auto rounded-full bg-slate-950/85 backdrop-blur-2xl shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.15)] border border-white/20"
           }`}
           onMouseLeave={() => setOpenIdx(null)}
         >
           <div
-            className={`flex items-center justify-between transition-all duration-200 ${expanded ? "px-6 sm:px-8 h-[72px]" : "px-4 h-14"}`}
+            className={`flex items-center justify-between transition-all duration-200 ${expanded ? "px-6 sm:px-8 h-[60px]" : "px-5 h-12"}`}
           >
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 group shrink-0" onClick={closeAll}>
-              <div
-                className={`rounded-full bg-white grid place-items-center transition-all duration-200 overflow-hidden border border-white/20 ${expanded ? "h-11 w-11" : "h-9 w-9"}`}
-              >
-                <img src="/logo-circle.png" alt="JNTU-GV Logo" className="h-full w-full object-cover" />
+            {/* Mobile Header indicator */}
+            <Link to="/" className="lg:hidden flex items-center gap-2 group shrink-0" onClick={closeAll}>
+              <div className="rounded-full bg-white/10 p-1.5 border border-white/20 text-white">
+                <Home className="h-4 w-4" />
               </div>
-              <div
-                className={`leading-tight overflow-hidden transition-all duration-200 ${expanded ? "max-w-[260px] opacity-100" : "max-w-0 opacity-0 lg:max-w-[120px] lg:opacity-100"}`}
-              >
-                <div className="text-base font-bold text-white whitespace-nowrap">
-                  {SITE.name}
-                </div>
-                {expanded && (
-                  <div className="text-[9px] uppercase tracking-[0.18em] text-white/50 hidden sm:block whitespace-nowrap">
-                    College of Engineering · Vizianagaram
-                  </div>
-                )}
-              </div>
+              <span className="text-xs font-bold text-white tracking-wide">JNTU-GV CEV</span>
             </Link>
 
-            {/* Divider */}
-            <div className="hidden lg:block h-6 w-px bg-white/10 mx-1" />
-
-            {/* Desktop nav */}
-            <nav className={`hidden lg:flex items-center flex-1 justify-center transition-all duration-200 ${expanded ? "gap-1" : "gap-0.5"}`}>
+            {/* Desktop nav - Dynamic Island Menu Items Only (No logo / name as requested) */}
+            <nav className={`hidden lg:flex items-center justify-center transition-all duration-200 ${expanded ? "gap-1.5" : "gap-0.5"}`}>
               {NAV.map((item, i) => {
                 const active =
                   item.to === path ||
@@ -186,29 +165,30 @@ export function MegaMenu() {
                     {item.to ? (
                       <Link
                         to={item.to}
-                        className={`px-3.5 py-2 text-[14px] font-semibold rounded-full transition-all ${
+                        className={`px-3.5 py-1.5 text-[14px] font-semibold rounded-full transition-all ${
                           active
-                            ? "bg-white/15 text-white shadow-sm"
-                            : "text-white/80 hover:text-white hover:bg-white/10"
+                            ? "bg-white/20 text-white shadow-sm"
+                            : "text-white/85 hover:text-white hover:bg-white/10"
                         }`}
                       >
                         {item.label}
                       </Link>
                     ) : (
                       <button
-                        className={`flex items-center gap-1.5 px-3.5 py-2 text-[14px] font-semibold rounded-full transition-all ${
+                        className={`flex items-center gap-1.5 px-3.5 py-1.5 text-[14px] font-semibold rounded-full transition-all ${
                           active || openIdx === i
-                            ? "bg-white/15 text-white shadow-sm"
-                            : "text-white/80 hover:text-white hover:bg-white/10"
+                            ? "bg-white/20 text-white shadow-sm"
+                            : "text-white/85 hover:text-white hover:bg-white/10"
                         }`}
                       >
                         {item.label}
                         <ChevronDown
-                          className={`h-3.5 w-3.5 transition-transform duration-300 ${openIdx === i ? "rotate-180 text-blue-300" : "text-white/50"}`}
+                          className={`h-3.5 w-3.5 transition-transform duration-300 ${openIdx === i ? "rotate-180 text-cyan-300" : "text-white/50"}`}
                         />
                       </button>
                     )}
-                    {/* Groups dropdown — glassmorphic popover */}
+
+                    {/* Groups dropdown — glassmorphic popover */}
                     {openIdx === i && item.groups && !searchOpen && (
                       <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 z-50 animate-[fade-in_0.2s_ease-out]">
                         {/* Top Caret Arrow Notch */}

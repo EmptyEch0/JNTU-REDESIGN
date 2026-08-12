@@ -7,10 +7,13 @@ export function getQueryClient() {
     queryClient = new QueryClient({
       defaultOptions: {
         queries: {
-          staleTime: 5 * 60 * 1000, // 5 minutes fresh
-          gcTime: 15 * 60 * 1000, // Keep in memory for 15 minutes
+          staleTime: 30 * 60 * 1000, // 30 minutes fresh
+          gcTime: 60 * 60 * 1000, // Keep in memory for 1 hour
           refetchOnWindowFocus: false,
+          refetchOnMount: false,
           refetchOnReconnect: false,
+          retry: 1,
+          networkMode: "offlineFirst",
         },
       },
     });
@@ -18,3 +21,4 @@ export function getQueryClient() {
 
   return queryClient;
 }
+

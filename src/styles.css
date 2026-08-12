@@ -265,6 +265,7 @@ body {
     transition:
       transform 0.4s var(--transition-smooth),
       box-shadow 0.4s var(--transition-smooth);
+    will-change: transform;
   }
 
   .hover-lift:hover {
@@ -302,6 +303,7 @@ body {
     transition:
       opacity 0.8s var(--transition-smooth),
       transform 0.8s var(--transition-smooth);
+    will-change: opacity, transform;
   }
 
   .reveal.is-visible {
@@ -386,6 +388,8 @@ body {
     display: flex;
     width: max-content;
     animation: marquee 40s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
   }
 
   .marquee-track:hover {
@@ -401,6 +405,7 @@ body {
     scrollbar-width: none;
   }
 }
+
 
 /* From Uiverse.io by Rajan1092 */ 
 .spinner {

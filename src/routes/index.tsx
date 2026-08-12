@@ -225,26 +225,12 @@ function HomePage() {
     return [...topRecent, ...shuffled.slice(0, 5)].slice(0, 7);
   }, [galleryImages]);
 
-  const getFacilityImage = (title: string, staticImg: string) => {
-    if (title === "Hostels" && hostelData?.images?.[0]?.url) {
-      return getAssetUrl(hostelData.images[0].url);
-    }
-    if (title === "Library" && libraryData?.images?.[0]?.url) {
-      return getAssetUrl(libraryData.images[0].url);
-    }
-    if (title === "Dispensary" && dispensaryData?.images?.[0]?.url) {
-      return getAssetUrl(dispensaryData.images[0].url);
-    }
-    if (title === "Sports" && sportsData?.images?.[0]?.url) {
-      return getAssetUrl(sportsData.images[0].url);
-    }
-    return staticImg;
-  };
+  const getFacilityImage = (title: string, staticImg: string) => staticImg;
 
   return (
     <>
       {/* HERO — auto-rotating slideshow */}
-      <section className="relative h-[100svh] min-h-[640px] w-full overflow-hidden">
+      <section className="relative w-full overflow-hidden">
         <HeroSlideshow
           images={[
             { src: hero5, alt: "JNTU-GV VIZIANAGARAM main building" },
@@ -254,28 +240,31 @@ function HomePage() {
             { src: hero4, alt: "Library at dusk" },
           ]}
           interval={6500}
-          minHeight="100svh"
-          overlay="linear-gradient(180deg, oklch(0.18 0.05 260 / 0.55) 0%, oklch(0.18 0.05 260 / 0.35) 40%, oklch(0.18 0.05 260 / 0.85) 100%)"
+          minHeight="min(82vh, 680px)"
+          overlay="linear-gradient(180deg, oklch(0.18 0.05 260 / 0.6) 0%, oklch(0.18 0.05 260 / 0.4) 40%, oklch(0.18 0.05 260 / 0.85) 100%)"
         >
-          <div className="container-narrow h-full min-h-[100svh] flex flex-col justify-end pt-32 pb-32 md:pb-36 text-white">
-            <div className="text-eyebrow !text-white/80 animate-[fade-up_0.3s_ease-out_0.3s_both] flex items-center gap-3">
+          <div className="container-narrow h-full min-h-[min(82vh,680px)] flex flex-col justify-center pt-4 pb-10 text-white">
+            <div className="text-eyebrow !text-cyan-300 animate-[fade-up_0.3s_ease-out_0.3s_both] flex items-center gap-2.5 font-bold tracking-wider">
               <span className="flex items-center gap-1.5">
-                <MapPin className="h-3 w-3" />
-                Vizianagaram, AP
+                <MapPin className="h-3.5 w-3.5 text-cyan-400" />
+                VIZIANAGARAM, AP
               </span>
-              <span className="h-1 w-1 rounded-full bg-white/30" />
-              <span>Established in 2007</span>
+              <span className="h-1 w-1 rounded-full bg-white/40" />
+              <span>ESTABLISHED IN 2007</span>
             </div>
-            <h1 className="text-display text-5xl sm:text-6xl md:text-8xl mt-4 max-w-5xl animate-[fade-up_0.4s_ease-out_0.5s_both]">
+
+            <h1 className="text-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mt-2.5 max-w-4xl animate-[fade-up_0.4s_ease-out_0.5s_both] leading-[1.08] tracking-tight">
               Engineering tomorrow,
               <br />
-              <span className="italic text-white/85">together.</span>
+              <span className="italic text-cyan-200">together.</span>
             </h1>
-            <p className="mt-6 text-base md:text-xl text-white/80 max-w-2xl leading-relaxed animate-[fade-up_0.4s_ease-out_0.8s_both]">
+
+            <p className="mt-3.5 text-sm sm:text-base md:text-lg text-white/90 max-w-2xl leading-relaxed animate-[fade-up_0.4s_ease-out_0.8s_both] font-normal">
               A constituent college of JNTU-GV, approved by AICTE New Delhi, and recognized by UGC
               under section 2(f) & 12(B) of UGC Act 1956 — shaping the future of engineering since 2007.
             </p>
-            <div className="mt-10 flex flex-wrap gap-3 animate-[fade-up_0.4s_ease-out_1s_both]">
+
+            <div className="mt-5 flex flex-wrap gap-3 animate-[fade-up_0.4s_ease-out_1s_both]">
               <Link to="/academics" className="btn-primary">
                 Academics <ArrowRight className="h-4 w-4" />
               </Link>
@@ -289,11 +278,12 @@ function HomePage() {
           </div>
         </HeroSlideshow>
 
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-xs uppercase tracking-[0.3em] flex flex-col items-center gap-2 animate-[float_3s_ease-in-out_infinite] z-20 pointer-events-none">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-white/60 text-[10px] uppercase tracking-[0.3em] flex flex-col items-center gap-1 animate-[float_3s_ease-in-out_infinite] z-20 pointer-events-none hidden sm:flex">
           <span>Scroll</span>
-          <ArrowDown className="h-4 w-4" />
+          <ArrowDown className="h-3.5 w-3.5" />
         </div>
       </section>
+
 
       {/* ABOUT, VISION & PRINCIPAL SECTION */}
       <section className="py-20 md:py-28 relative overflow-hidden">

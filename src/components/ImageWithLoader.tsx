@@ -9,10 +9,21 @@ interface ImageWithLoaderProps extends ImgHTMLAttributes<HTMLImageElement> {
   aspectRatio?: string;
   fallbackSrc?: string;
   smartFit?: boolean;
+  priority?: boolean;
 }
 
 // Global in-memory cache set to track already loaded image URLs across re-renders
 const globalLoadedImages = new Set<string>();
+
+/**
+ * Preload an image programmatically so browser caches it early
+ */
+export function preloadImage(src: string) {
+  if (!src || globalLoadedImages.has(src)) return;
+  const img = new Image();
+  img.src = src;
+  img.onload = () => globalLoadedImages.add(src);
+}
 
 export function ImageWithLoader({
   src,
@@ -22,6 +33,8 @@ export function ImageWithLoader({
   aspectRatio,
   fallbackSrc = "https://images.unsplash.com/photo-1594322436404-5a0526db4d13?w=500",
   smartFit = false,
+  priority = false,
+  loading,
   ...props
 }: ImageWithLoaderProps) {
   const [hasError, setHasError] = useState(false);
@@ -78,7 +91,9 @@ export function ImageWithLoader({
         src={displaySrc}
         alt={alt}
         decoding="async"
-        loading="lazy"
+        loading={priority ? "eager" : loading || "lazy"}
+        // @ts-expect-error - fetchPriority is supported in modern browsers
+        fetchPriority={priority ? "high" : "auto"}
         onLoad={() => {
           globalLoadedImages.add(displaySrc);
           setIsLoaded(true);
@@ -95,3 +110,4 @@ export function ImageWithLoader({
     </div>
   );
 }
+

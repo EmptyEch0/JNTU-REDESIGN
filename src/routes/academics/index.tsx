@@ -41,6 +41,17 @@ import {
 } from "lucide-react";
 import { useState, useMemo } from "react";
 
+import labImg from "@/assets/lab.jpg";
+import hostelImg from "@/assets/hostel.jpg";
+import sportsImg from "@/assets/sports.jpg";
+import libraryImg from "@/assets/library-interior.jpg";
+import cultureImg from "@/assets/culture.jpeg";
+import placementsImg from "@/assets/placements-bg.jpg";
+import guestOfficeImg from "@/assets/guestoffice.jpg";
+import groundImg from "@/assets/Ground.jpg";
+import facQuatersImg from "@/assets/faculity-quaters1.jpg";
+import principalImg from "@/assets/Principal.png";
+
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/")({
@@ -63,8 +74,7 @@ const MODULES = [
     icon: GraduationCap,
     to: "/academics/programs",
     gradient: "from-transparent via-slate-900/40 to-blue-950/90",
-    image:
-      "https://cgoe.stanford.edu/sites/default/files/styles/highlight/public/2025-04/credit-bearing-course-class-cgoe.jpg.webp?h=fbf7a813&itok=QQOXBfjC",
+    image: labImg,
   },
   {
     name: "Admissions",
@@ -72,8 +82,7 @@ const MODULES = [
     icon: Users,
     to: "/academics/admissions",
     gradient: "from-transparent via-slate-900/40 to-teal-950/90",
-    image:
-      "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80",
+    image: guestOfficeImg,
   },
   {
     name: "Academic Calendar",
@@ -81,8 +90,7 @@ const MODULES = [
     icon: Calendar,
     to: "/academics/academic-calendar",
     gradient: "from-transparent via-slate-900/40 to-slate-900/90",
-    image:
-      "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=800&q=80",
+    image: groundImg,
   },
   {
     name: "Regulations",
@@ -90,8 +98,7 @@ const MODULES = [
     icon: FileText,
     to: "/academics/regulations",
     gradient: "from-transparent via-slate-900/40 to-slate-950/90",
-    image:
-      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80",
+    image: libraryImg,
   },
   {
     name: "Syllabus",
@@ -99,8 +106,7 @@ const MODULES = [
     icon: BookOpen,
     to: "/academics/syllabus",
     gradient: "from-transparent via-slate-900/40 to-indigo-950/90",
-    image:
-      "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80",
+    image: cultureImg,
   },
   {
     name: "Examinations",
@@ -108,8 +114,7 @@ const MODULES = [
     icon: FileSignature,
     to: "/academics/examination",
     gradient: "from-transparent via-slate-900/40 to-slate-900/90",
-    image:
-      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80",
+    image: labImg,
   },
   {
     name: "Downloads",
@@ -117,8 +122,7 @@ const MODULES = [
     icon: Download,
     to: "/academics/downloads",
     gradient: "from-transparent via-slate-900/40 to-slate-900/90",
-    image:
-      "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=800&q=80",
+    image: facQuatersImg,
   },
   {
     name: "Time Tables",
@@ -126,8 +130,7 @@ const MODULES = [
     icon: Clock,
     to: "/academics/timetables",
     gradient: "from-transparent via-slate-900/40 to-slate-900/90",
-    image:
-      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzMzQxNTUiPkFDQURFTUlDIENBTEVOREFSPC90ZXh0PgogIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjI0IiBmb250LWZhbWlseT0iQXJpYWwiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NDc0OGIiPkZPUiBJSSBNLlRlY2ggKDIwMjYtMjcpPC90ZXh0PgogIDx0ZXh0IHg9IjUwJSIgeT0iNjUlIiBmb250LXNpemU9IjE2IiBmb250LWZhbWlseT0iQXJpYWwiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5NDdhOGQiPltQbGFjZWhvbGRlcjogUGxlYXNlIHJlcGxhY2Ugd2l0aCB5b3VyIGJhc2U2NCBzdHJpbmddPC90ZXh0Pgo8L3N2Zz4=",
+    image: sportsImg,
   },
   {
     name: "Scholarships",
@@ -135,8 +138,7 @@ const MODULES = [
     icon: Award,
     to: "/academics/scholarships",
     gradient: "from-transparent via-slate-900/40 to-amber-950/90",
-    image:
-      "https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=800&q=80",
+    image: placementsImg,
   },
   {
     name: "Faculty Directory",
@@ -144,8 +146,7 @@ const MODULES = [
     icon: Users2,
     to: "/academics/faculty",
     gradient: "from-transparent via-slate-900/40 to-slate-900/90",
-    image:
-      "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80",
+    image: hostelImg,
   },
   {
     name: "Leadership Desk",
@@ -153,8 +154,7 @@ const MODULES = [
     icon: UserCheck,
     to: "/academics/faculty",
     gradient: "from-transparent via-slate-900/40 to-slate-950/90",
-    image:
-      "http://89.116.134.182/local-assets/uploads/images/administration/principal.jpeg",
+    image: principalImg,
   },
   {
     name: "HOD Message Desk",
@@ -162,8 +162,7 @@ const MODULES = [
     icon: UserCheck,
     to: "/academics/faculty?tab=hods",
     gradient: "from-transparent via-slate-900/40 to-red-950/90",
-    image:
-      "http://89.116.134.182/local-assets/uploads/departments/hod_photos/it-hod.jpg",
+    image: principalImg,
   },
 ];
 

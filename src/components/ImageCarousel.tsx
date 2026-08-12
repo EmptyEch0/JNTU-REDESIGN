@@ -11,6 +11,18 @@ export function ImageCarousel({ images, fallback }: Props) {
   const [autoplay, setAutoplay] = useState(true);
   const [visited, setVisited] = useState<Record<number, boolean>>({ 0: true });
 
+  // Preload all carousel images in background
+  useEffect(() => {
+    if (!images) return;
+    images.forEach((img) => {
+      const url = getAssetUrl(img);
+      if (url) {
+        const i = new Image();
+        i.src = url;
+      }
+    });
+  }, [images]);
+
   useEffect(() => {
     if (!autoplay || !images || images.length <= 1) return;
     const timer = setInterval(() => {
@@ -25,6 +37,7 @@ export function ImageCarousel({ images, fallback }: Props) {
       return { ...prev, [currentIndex]: true };
     });
   }, [currentIndex]);
+
 
   if (!images || images.length === 0) {
     return (

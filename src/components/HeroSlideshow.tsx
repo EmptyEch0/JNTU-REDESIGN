@@ -18,6 +18,16 @@ export function HeroSlideshow({
   const [active, setActive] = useState(0);
   const [visited, setVisited] = useState<Record<number, boolean>>({ 0: true });
 
+  // Preload all slideshow images in the background so transitions are instant
+  useEffect(() => {
+    images.forEach((img) => {
+      if (img.src) {
+        const i = new Image();
+        i.src = img.src;
+      }
+    });
+  }, [images]);
+
   useEffect(() => {
     if (images.length <= 1) return;
     const id = window.setInterval(() => {
@@ -32,6 +42,7 @@ export function HeroSlideshow({
       return { ...prev, [active]: true };
     });
   }, [active]);
+
 
   return (
     <div className="relative overflow-hidden" style={{ minHeight }}>
@@ -64,14 +75,14 @@ export function HeroSlideshow({
 
       {/* Slide indicators */}
       {images.length > 1 && (
-        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
           {images.map((_, i) => (
             <button
               key={i}
               onClick={() => setActive(i)}
               aria-label={`Slide ${i + 1}`}
-              className={`h-1 rounded-full transition-all duration-200 ${
-                i === active ? "w-10 bg-white" : "w-4 bg-white/40 hover:bg-white/70"
+              className={`h-1 rounded-full transition-all duration-200 cursor-pointer ${
+                i === active ? "w-8 bg-white" : "w-3 bg-white/40 hover:bg-white/70"
               }`}
             />
           ))}
@@ -82,3 +93,4 @@ export function HeroSlideshow({
     </div>
   );
 }
+

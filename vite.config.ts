@@ -70,10 +70,25 @@ export default defineConfig({
           manualChunks(id) {
             if (id.includes("node_modules")) {
               if (id.includes("react-dom") || /[\\/]react[\\/]/.test(id)) {
-                return "vendor";
+                return "vendor-react";
               }
-              if (id.includes("@tanstack/react-router")) {
-                return "router";
+              if (id.includes("@tanstack")) {
+                return "vendor-tanstack";
+              }
+              if (id.includes("framer-motion")) {
+                return "chunk-motion";
+              }
+              if (id.includes("recharts") || id.includes("d3-")) {
+                return "chunk-charts";
+              }
+              if (id.includes("@xenova/transformers")) {
+                return "chunk-ai";
+              }
+              if (id.includes("lucide-react")) {
+                return "chunk-icons";
+              }
+              if (id.includes("@radix-ui")) {
+                return "chunk-radix";
               }
             }
           },
@@ -81,4 +96,4 @@ export default defineConfig({
       },
     },
   },
-});
+});

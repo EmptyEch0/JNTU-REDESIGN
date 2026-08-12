@@ -11,10 +11,13 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import appCss from "../styles.css?url";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Footer } from "@/components/Footer";
+import { HeaderBanner } from "@/components/HeaderBanner";
+import { NoticeTicker } from "@/components/NoticeTicker";
 import { getQueryClient } from "@/lib/query-client";
 import { AdminProvider, useAdmin } from "@/context/AdminContext";
 import { FacultyProvider } from "@/context/FacultyContext";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
+import { PageProgressBar } from "@/components/PageProgressBar";
 import { lazy, Suspense } from "react";
 
 const Chatbot = lazy(() =>
@@ -94,10 +97,12 @@ export const Route = createRootRoute({
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev" },
+      { rel: "preconnect", href: "http://89.116.134.182" },
       { rel: "preconnect", href: "https://ui-avatars.com" },
       { rel: "dns-prefetch", href: "https://fonts.googleapis.com" },
       { rel: "dns-prefetch", href: "https://fonts.gstatic.com" },
       { rel: "dns-prefetch", href: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev" },
+      { rel: "dns-prefetch", href: "http://89.116.134.182" },
       { rel: "dns-prefetch", href: "https://ui-avatars.com" },
       {
         rel: "stylesheet",
@@ -140,6 +145,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AdminProvider>
         <FacultyProvider>
+        <PageProgressBar />
         <OfflineIndicator />
         <AdminContent />
       </FacultyProvider>
@@ -219,9 +225,16 @@ function AdminContent() {
         </div>
       )}
 
+      {/* Official College Header Banner */}
+      <HeaderBanner />
+
+      {/* Updates / Notice Marquee Ticker */}
+      <NoticeTicker />
+
+      {/* Clean Floating Pill Navigation Bar (Menu items only) */}
       <MegaMenu />
 
-      <main key={path} className="flex-1 animate-[fade-in_0.2s_ease-out] w-full max-w-full">
+      <main className="flex-1 w-full max-w-full">
         <Outlet />
       </main>
 
@@ -232,3 +245,4 @@ function AdminContent() {
     </div>
   );
 }
+

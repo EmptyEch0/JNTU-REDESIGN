@@ -59,42 +59,49 @@ const NOTICES = [
 
 export function NoticeTicker() {
   return (
-    <div className="w-full max-w-[1500px] mx-auto animate-in fade-in slide-in-from-top-4 duration-300 delay-100 pointer-events-auto relative z-0">
-      <div className="relative h-9 bg-[oklch(0.16_0.04_255/0.8)] backdrop-blur-xl border border-white/10 rounded-full overflow-hidden flex items-center group shadow-2xl marquee-container">
-        {/* Label */}
+    <div className="w-full bg-[#0A192F] border-b border-blue-900/40 text-white relative z-30 shadow-sm">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 flex items-center h-10 overflow-hidden marquee-container">
+        
+        {/* UPDATES Pill Button */}
         <Link
           to="/notices"
-          className="h-full px-4 bg-primary hover:bg-primary/90 text-white flex items-center gap-2 shrink-0 z-10 shadow-[4px_0_12px_rgba(0,0,0,0.3)] transition-colors cursor-pointer"
+          className="h-7 px-3 sm:px-3.5 bg-[#1E40AF] hover:bg-[#1D4ED8] text-white flex items-center gap-1.5 rounded-full shrink-0 z-20 shadow-md transition-all cursor-pointer border border-blue-400/30 mr-3"
         >
-          <Bell className="h-3.5 w-3.5 animate-bounce" />
-          <span className="text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Updates</span>
+          <Bell className="h-3 w-3 text-cyan-300 animate-pulse" />
+          <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider whitespace-nowrap">
+            UPDATES
+          </span>
         </Link>
 
-        {/* Marquee */}
-        <div className="flex-1 overflow-hidden relative">
-          <div className="flex items-center whitespace-nowrap gap-12 h-full">
-            <div className="flex items-center gap-12 animate-marquee">
-              {[...NOTICES, ...NOTICES, ...NOTICES].map((notice, i) => (
+        {/* Marquee Ticker */}
+        <div className="flex-1 overflow-hidden relative h-full flex items-center">
+          <div className="flex items-center whitespace-nowrap gap-8 h-full">
+            <div className="flex items-center gap-10 animate-marquee">
+              {[...NOTICES, ...NOTICES].map((notice, i) => (
                 <Link
                   key={i}
                   to="/notices"
-                  className="flex items-center gap-3 shrink-0 group/item cursor-pointer"
+                  className="flex items-center gap-2.5 shrink-0 group/item cursor-pointer text-slate-200 hover:text-white transition-colors"
                 >
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary-glow shadow-[0_0_8px_rgba(var(--primary-rgb),0.5)]" />
-                  <span className="text-[12px] font-medium text-white/70 group-hover/item:text-white group-hover/item:underline transition-colors">
-                    {notice.title} <span className="text-white/40 text-[10px] ml-1">({notice.date})</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#38bdf8]" />
+                  <span className="text-xs font-medium tracking-tight group-hover/item:text-cyan-200 group-hover/item:underline">
+                    {notice.title}
                   </span>
-                  <ArrowRight className="h-3 w-3 text-primary-glow opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
+                  <span className="text-[10px] font-medium text-slate-400">
+                    {notice.date}
+                  </span>
+                  <ArrowRight className="h-3 w-3 text-cyan-400 opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
                 </Link>
               ))}
             </div>
           </div>
           
           {/* Fades */}
-          <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-zinc-900/40 to-transparent pointer-events-none z-10" />
-          <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-zinc-900/40 to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-[#0A192F] to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#0A192F] to-transparent pointer-events-none z-10" />
         </div>
       </div>
+
 
       <style>{`
         @keyframes marquee {

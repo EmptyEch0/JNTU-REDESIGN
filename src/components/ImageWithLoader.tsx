@@ -1,4 +1,4 @@
-import { useState, ImgHTMLAttributes } from "react";
+import { useState, useEffect, useRef, ImgHTMLAttributes } from "react";
 import { Image as ImageIcon, Loader2 } from "lucide-react";
 
 interface ImageWithLoaderProps extends ImgHTMLAttributes<HTMLImageElement> {
@@ -11,6 +11,9 @@ interface ImageWithLoaderProps extends ImgHTMLAttributes<HTMLImageElement> {
   smartFit?: boolean;
 }
 
+// Global in-memory cache set to track already loaded image URLs across re-renders
+const globalLoadedImages = new Set<string>();
+
 export function ImageWithLoader({
   src,
   alt,
@@ -21,10 +24,28 @@ export function ImageWithLoader({
   smartFit = false,
   ...props
 }: ImageWithLoaderProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-
   const displaySrc = hasError ? fallbackSrc : src;
+
+  const [isLoaded, setIsLoaded] = useState(() => globalLoadedImages.has(displaySrc));
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (globalLoadedImages.has(displaySrc)) {
+      setIsLoaded(true);
+      return;
+    }
+
+    if (imgRef.current && imgRef.current.complete) {
+      if (imgRef.current.naturalWidth > 0) {
+        globalLoadedImages.add(displaySrc);
+        setIsLoaded(true);
+      } else {
+        setHasError(true);
+        setIsLoaded(true);
+      }
+    }
+  }, [displaySrc]);
 
   return (
     <div
@@ -53,16 +74,20 @@ export function ImageWithLoader({
 
       {/* Main Image */}
       <img
+        ref={imgRef}
         src={displaySrc}
         alt={alt}
         decoding="async"
         loading="lazy"
-        onLoad={() => setIsLoaded(true)}
+        onLoad={() => {
+          globalLoadedImages.add(displaySrc);
+          setIsLoaded(true);
+        }}
         onError={() => {
           setHasError(true);
           setIsLoaded(true);
         }}
-        className={`relative z-10 transition-opacity duration-500 ease-in-out ${
+        className={`relative z-10 transition-opacity duration-300 ease-in-out ${
           isLoaded ? "opacity-100" : "opacity-0"
         } ${smartFit ? "w-full h-full object-contain p-1" : className}`}
         {...props}

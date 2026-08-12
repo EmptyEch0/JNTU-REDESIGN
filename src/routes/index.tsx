@@ -85,7 +85,7 @@ export const Route = createFileRoute("/")({
           "@type": "EducationalOrganization",
           "name": "JNTU-GV College of Engineering Vizianagaram",
           "url": "https://jntugvcev.edu.in/",
-          "logo": "https://jntugvcev.edu.in/logo.jpeg",
+          "logo": "https://jntugvcev.edu.in/logo-circle.png",
           "description": "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV.",
           "address": {
             "@type": "PostalAddress",

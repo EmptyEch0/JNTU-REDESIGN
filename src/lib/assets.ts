@@ -6,16 +6,18 @@ const rawBase = (
 
 const BASE = rawBase.replace("89.116.134.182:8080", "89.116.134.182");
 
+const assetUrlCache = new Map<string, string>();
+
 export const getAssetUrl = (
   path: string | null | undefined,
 ): string => {
   if (!path) return undefined as unknown as string;
 
   const trimmedPath = path.trim();
+  if (assetUrlCache.has(trimmedPath)) return assetUrlCache.get(trimmedPath)!;
 
-  // If this is already a bundler-resolved local asset (Vite import, e.g.
-  // "/assets/hero-5.abc123.webp" or a dev-server path), pass it through
-  // untouched. These should never be re-derived from a filename guess.
+  let resolvedUrl: string;
+
   if (
     trimmedPath.startsWith("data:") ||
     trimmedPath.startsWith("/src/") ||
@@ -23,102 +25,70 @@ export const getAssetUrl = (
     trimmedPath.startsWith("/@fs/") ||
     trimmedPath.startsWith("blob:")
   ) {
-    return trimmedPath;
-  }
+    resolvedUrl = trimmedPath;
+  } else {
+    // legacy map check
+    const filename = trimmedPath.split("/").pop() ?? "";
+    const LEGACY_FILENAME_MAP: Record<string, string> = {
+      "hero-campus.jpg": `${BASE}/uploads/images/administration/JNTU%201.png`,
+      "hero-2.jpg": `${BASE}/uploads/2022/03/Frame-1-1200x374.jpg`,
+      "hero-2.jpeg": `${BASE}/uploads/2022/03/Frame-1-1200x374.jpg`,
+      "Dr.-G.-J.-Naga-Raju1.png": `${BASE}/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`,
+      "logo.jpeg": "/logo-circle.png",
+    };
 
-  // Known legacy filename → current asset mappings.
-  // Match on the filename only (not a substring anywhere in the path) to
-  // avoid accidentally hijacking unrelated files that happen to share a
-  // fragment of the name (e.g. "hero-2.jpg" inside a hero-carousel path).
-  const filename = trimmedPath.split("/").pop() ?? "";
-
-  const LEGACY_FILENAME_MAP: Record<string, string> = {
-    "hero-campus.jpg": `${BASE}/uploads/images/administration/JNTU%201.png`,
-    "hero-2.jpg": `${BASE}/uploads/2022/03/Frame-1-1200x374.jpg`,
-    "hero-2.jpeg": `${BASE}/uploads/2022/03/Frame-1-1200x374.jpg`,
-    "Dr.-G.-J.-Naga-Raju1.png": `${BASE}/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`,
-  };
-
-  if (LEGACY_FILENAME_MAP[filename]) {
-    return LEGACY_FILENAME_MAP[filename];
-  }
-
-  // External URLs
-  if (
-    trimmedPath.startsWith("http://") ||
-    trimmedPath.startsWith("https://")
-  ) {
-    // Robust VPS Host URL mapping (handles :8080, double slashes, local-assets prefix)
-    const vpsMatch = trimmedPath.match(
-      /^https?:\/\/89\.116\.134\.182(?::\d+)?\/*(?:local-assets\/*)?(.*)$/,
-    );
-    if (vpsMatch) {
-      const relativePath = vpsMatch[1].replace(/\\/g, "/").replace(/^\/+/, "");
-      return `${BASE}/${relativePath}`;
-    }
-
-    // Fallback: If URL contains 89.116.134.182:8080 anywhere, strip the :8080 port
-    if (trimmedPath.includes("89.116.134.182:8080")) {
-      return trimmedPath.replace("89.116.134.182:8080", "89.116.134.182");
-    }
-
-    // Localhost URL mapping
-    if (trimmedPath.startsWith("http://localhost:8081/")) {
-      const relativePath = trimmedPath.replace(
-        "http://localhost:8081/",
-        "",
+    if (LEGACY_FILENAME_MAP[filename]) {
+      resolvedUrl = LEGACY_FILENAME_MAP[filename];
+    } else if (
+      trimmedPath.startsWith("http://") ||
+      trimmedPath.startsWith("https://")
+    ) {
+      const vpsMatch = trimmedPath.match(
+        /^https?:\/\/89\.116\.134\.182(?::\d+)?\/*(?:local-assets\/*)?(.*)$/,
       );
-
-      return `${BASE}/${relativePath
-        .replace(/\\/g, "/")
-        .replace(/^\/+/, "")}`;
-    }
-
-    // WordPress media mapping
-    if (trimmedPath.includes("jntugvcev.edu.in/wp-content/")) {
-      const wpPath = trimmedPath.match(/wp-content\/(.+)/);
-
-      if (wpPath) {
-        const SPECIAL_WP_FILES = [
-          "EEE-3.Dr_.V.S.VAKULA-Asst-Prof.jpg",
-          "V.-Mani-Kumar-Photo-Mech.jpg",
-          "WhatsApp-Image-2020-08-26-at-10.23.09-AM.jpeg",
-        ];
-
-        if (SPECIAL_WP_FILES.some((f) => trimmedPath.includes(f))) {
-          return `${BASE}/${wpPath[1]}`;
+      if (vpsMatch) {
+        const relativePath = vpsMatch[1].replace(/\\/g, "/").replace(/^\/+/, "");
+        resolvedUrl = `${BASE}/${relativePath}`;
+      } else if (trimmedPath.includes("89.116.134.182:8080")) {
+        resolvedUrl = trimmedPath.replace("89.116.134.182:8080", "89.116.134.182");
+      } else if (trimmedPath.startsWith("http://localhost:8081/")) {
+        const relativePath = trimmedPath.replace("http://localhost:8081/", "");
+        resolvedUrl = `${BASE}/${relativePath.replace(/\\/g, "/").replace(/^\/+/, "")}`;
+      } else if (trimmedPath.includes("jntugvcev.edu.in/wp-content/")) {
+        const wpPath = trimmedPath.match(/wp-content\/(.+)/);
+        if (wpPath) {
+          const SPECIAL_WP_FILES = [
+            "EEE-3.Dr_.V.S.VAKULA-Asst-Prof.jpg",
+            "V.-Mani-Kumar-Photo-Mech.jpg",
+            "WhatsApp-Image-2020-08-26-at-10.23.09-AM.jpeg",
+          ];
+          if (SPECIAL_WP_FILES.some((f) => trimmedPath.includes(f))) {
+            resolvedUrl = `${BASE}/${wpPath[1]}`;
+          } else {
+            resolvedUrl = `${BASE}/wp-content/${wpPath[1]}`;
+          }
+        } else {
+          resolvedUrl = trimmedPath;
         }
-
-        return `${BASE}/wp-content/${wpPath[1]}`;
+      } else {
+        resolvedUrl = trimmedPath;
+      }
+    } else {
+      let cleanPath = trimmedPath.replace(/\\/g, "/");
+      if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
+      if (cleanPath.startsWith("uploads/")) cleanPath = `local-assets/${cleanPath}`;
+      if (cleanPath.startsWith("facilities/")) cleanPath = `local-assets/uploads/${cleanPath}`;
+      if (cleanPath.startsWith("local-assets/")) {
+        const subPath = cleanPath.substring("local-assets/".length);
+        resolvedUrl = `${BASE}/${subPath}`;
+      } else {
+        resolvedUrl = `${BASE}/${cleanPath}`;
       }
     }
-
-    return trimmedPath;
   }
 
-  let cleanPath = trimmedPath.replace(/\\/g, "/");
-
-  if (cleanPath.startsWith("/")) {
-    cleanPath = cleanPath.substring(1);
-  }
-
-  // Legacy support
-  if (cleanPath.startsWith("uploads/")) {
-    cleanPath = `local-assets/${cleanPath}`;
-  }
-
-  // Map facilities to uploads
-  if (cleanPath.startsWith("facilities/")) {
-    cleanPath = `local-assets/uploads/${cleanPath}`;
-  }
-
-  // New upload system support
-  if (cleanPath.startsWith("local-assets/")) {
-    const subPath = cleanPath.substring("local-assets/".length);
-
-    return `${BASE}/${subPath}`;
-  }
-  return `${BASE}/${cleanPath}`;
+  assetUrlCache.set(trimmedPath, resolvedUrl);
+  return resolvedUrl;
 };
 
 export const assetUrl = (

@@ -5,13 +5,9 @@ const sql = postgres(connectionString);
 
 async function run() {
   try {
-    const syllabus = await sql`SELECT * FROM academic_syllabus`;
-    console.log("=== ALL ACADEMIC SYLLABUS RECORDS ===");
-    console.log(JSON.stringify(syllabus, null, 2));
-
-    const regs = await sql`SELECT * FROM academic_regulations`;
-    console.log("=== ALL ACADEMIC REGULATIONS RECORDS ===");
-    console.log(JSON.stringify(regs, null, 2));
+    const depts = await sql`SELECT id, name, slug, image FROM departments`;
+    console.log("=== DEPARTMENTS IMAGES ===");
+    console.log(JSON.stringify(depts, null, 2));
   } catch (err) {
     console.error(err);
   } finally {

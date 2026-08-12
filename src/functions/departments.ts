@@ -91,7 +91,7 @@ export const getAllDepartments = createServerFn({ method: "GET" })
 
       // Fetch all records sorted alphabetically by name
       const result = await sql`
-      SELECT id, name, slug, description, image 
+      SELECT id, name, slug, description, image, hod 
       FROM departments 
       ORDER BY name ASC
     `;

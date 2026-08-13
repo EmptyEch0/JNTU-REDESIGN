@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
 import {
   Users2, Mail, Phone, BookOpen, Star, Sparkles, Plus, Trash2,
-  Edit2, Save, X, Search, Briefcase, Award, Quote, UserCheck, Shield
+  Edit2, Save, X, Search, Briefcase, Award, Quote, UserCheck, Shield, Eye
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
@@ -10,9 +10,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import {
-  getAcademicsFacultyList,
-  upsertAcademicsFaculty,
-  deleteAcademicsFaculty,
   getAcademicsVcProfiles,
   upsertAcademicsVcProfile,
   deleteAcademicsVcProfile,
@@ -24,6 +21,7 @@ import {
   deleteAcademicsPrincipal
 } from "@/lib/academics";
 import { getDepartments } from "@/lib/departments";
+import { getAllFacultyList } from "@/functions/departments";
 import { getAssetUrl, imageUrl } from "@/lib/assets";
 import { SafeImage } from "@/components/SafeImage";
 import { PageHero } from "@/components/PageHero";
@@ -35,6 +33,60 @@ const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 export const Route = createFileRoute("/academics/faculty")({
   component: FacultyPage,
 });
+
+interface FacultyCardProps {
+  f: {
+    id: string | number;
+    name: string;
+    designation: string;
+    photo_url?: string | null;
+    department_name?: string;
+    department_slug?: string;
+  };
+}
+
+function FacultyCard({ f }: FacultyCardProps) {
+  return (
+    <div className="p-6 border rounded-3xl bg-white flex gap-6 items-center relative transition-all h-full border-slate-100 shadow-sm hover:border-blue-500/30">
+      <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 border-slate-50 bg-slate-100">
+        <SafeImage 
+          src={f.photo_url || ""} 
+          alt={f.name}
+          decoding="async"
+          loading="lazy"
+          fallbackName={f.name}
+          className="h-full w-full object-cover" 
+        />
+      </div>
+
+      <div className="flex-grow space-y-2">
+        <div className="flex flex-col h-full justify-between">
+          <div>
+            {f.department_name && (
+              <span className="text-[9px] font-extrabold uppercase tracking-widest bg-blue-50 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded mb-2 inline-block">
+                {f.department_name.replace("Engineering", "Engg")}
+              </span>
+            )}
+            <h3 className="text-xl font-bold text-blue-900 leading-snug">{f.name}</h3>
+            <p className="text-slate-600 font-medium text-sm">{f.designation}</p>
+          </div>
+          
+          <div className="pt-2">
+            {f.department_slug ? (
+              <Link
+                to="/departments/$id/faculty/$facultyId"
+                params={{ id: f.department_slug, facultyId: String(f.id) }}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl transition-colors"
+              >
+                <Eye size={14} /> View Profile
+              </Link>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FALLBACK_VCS = [
   {
@@ -152,20 +204,11 @@ function FacultyPage() {
   const [hodImageUrl, setHodImageUrl] = useState("");
   const [hodAchievements, setHodAchievements] = useState("");
 
-  // State for Editing Faculty Directory
-  const [editFacId, setEditFacId] = useState<number | null>(null);
-  const [facName, setFacName] = useState("");
-  const [facDesignation, setFacDesignation] = useState("");
-  const [facDept, setFacDept] = useState("Computer Science & Engineering");
-  const [facQualification, setFacQualification] = useState("");
-  const [facExperience, setFacExperience] = useState("");
-  const [facEmail, setFacEmail] = useState("");
-  const [facPhotoUrl, setFacPhotoUrl] = useState("");
 
   // Queries
   const { data: faculty = [] } = useQuery({
     queryKey: ["academics-faculty"],
-    queryFn: getAcademicsFacultyList,
+    queryFn: getAllFacultyList,
   });
 
   const { data: vcList = [] } = useQuery({
@@ -203,11 +246,11 @@ function FacultyPage() {
   }));
 
   const hods = deptHods.length > 0 ? deptHods : (hodData.length > 0 ? hodData : FALLBACK_HODS);
-  const directoryList = faculty.length > 0 ? faculty : FALLBACK_FACULTY;
+  const directoryList = faculty;
 
   // Faculty Directory Departments List
   const departmentsList = useMemo(() => {
-    const depts = new Set(directoryList.map((f: any) => f.department));
+    const depts = new Set(directoryList.map((f: any) => f.department_name || "Unknown"));
     return ["All", ...Array.from(depts)];
   }, [directoryList]);
 
@@ -265,23 +308,7 @@ function FacultyPage() {
     }
   });
 
-  // Mutations - Faculty Member
-  const saveFacultyMutation = useMutation({
-    mutationFn: (data: any) => upsertAcademicsFaculty({ data }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["academics-faculty"] });
-      setEditFacId(null);
-      toast.success("Faculty member saved successfully!");
-    }
-  });
 
-  const deleteFacultyMutation = useMutation({
-    mutationFn: (id: number) => deleteAcademicsFaculty({ data: { id } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["academics-faculty"] });
-      toast.success("Faculty member deleted successfully!");
-    }
-  });
 
   // Edit triggers
   const startEditVc = (item: any) => {
@@ -336,37 +363,17 @@ function FacultyPage() {
     setHodAchievements("");
   };
 
-  const startEditFac = (item: any) => {
-    setEditFacId(item.id);
-    setFacName(item.faculty_name);
-    setFacDesignation(item.designation);
-    setFacDept(item.department);
-    setFacQualification(item.qualification);
-    setFacExperience(item.experience);
-    setFacEmail(item.email);
-    setFacPhotoUrl(item.photo_url);
-  };
-
-  const startAddFac = () => {
-    setEditFacId(-1);
-    setFacName("");
-    setFacDesignation("");
-    setFacDept(activeDept === "All" ? "Computer Science & Engineering" : activeDept);
-    setFacQualification("");
-    setFacExperience("");
-    setFacEmail("");
-    setFacPhotoUrl("");
-  };
 
   // Directory filter logic
   const filteredFaculty = directoryList.filter((item: any) => {
+    const nameStr = item.name || item.faculty_name || "";
     const matchesSearch =
-      item.faculty_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.designation.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.qualification.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.department.toLowerCase().includes(searchTerm.toLowerCase());
+      nameStr.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.designation || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.qualification || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.department_name || item.department || "").toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesDept = activeDept === "All" || item.department === activeDept;
+    const matchesDept = activeDept === "All" || (item.department_name || item.department) === activeDept;
 
     return matchesSearch && matchesDept;
   });
@@ -447,14 +454,7 @@ function FacultyPage() {
                     + Add HOD
                   </button>
                 )}
-                {activeTab === "faculty" && (
-                  <button
-                    onClick={startAddFac}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow"
-                  >
-                    + Add Faculty
-                  </button>
-                )}
+
               </div>
             </GlassCard>
           )}
@@ -1074,109 +1074,20 @@ function FacultyPage() {
                 </GlassCard>
 
                 {/* Directory Cards Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <AnimatePresence mode="popLayout">
-                    {filteredFaculty.map((member: any, idx: number) => {
-                      const hasPhoto = !!member.photo_url;
-                      const nameInitials = member.faculty_name
-                        .split(" ")
-                        .filter((s: string) => s.length > 0)
-                        .map((s: string) => s[0])
-                        .join("")
-                        .slice(0, 2)
-                        .toUpperCase();
-
-                      return (
-                        <motion.div
-                          key={member.id || idx}
-                          initial={{ opacity: 0, y: 15 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.3, delay: idx * 0.03 }}
-                          className="h-full flex"
-                        >
-                          <GlassCard className="p-6 relative overflow-hidden group hover:border-blue-500/30 transition-all duration-300 w-full flex flex-col justify-between">
-                            <div>
-
-                              {/* Top Badge & Admin Controls */}
-                              <div className="flex justify-between items-start gap-4 mb-4">
-                                <span className="text-[9px] font-extrabold uppercase tracking-widest bg-blue-50 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded">
-                                  {member.department.replace("Engineering", "Engg")}
-                                </span>
-
-                                {isEditMode && (
-                                  <div className="flex items-center gap-1.5 ml-2 bg-white/90 dark:bg-slate-900/90 p-1 rounded border border-amber-200 shadow-sm z-10">
-                                    <button
-                                      onClick={() => startEditFac(member)}
-                                      className="p-1 hover:bg-amber-100 dark:hover:bg-slate-700 text-amber-600 rounded"
-                                      title="Edit Record"
-                                    >
-                                      <Edit2 size={10} />
-                                    </button>
-                                    <button
-                                      onClick={() => { if (confirm("Delete this member from directory?")) deleteFacultyMutation.mutate(member.id); }}
-                                      className="p-1 hover:bg-red-105 dark:hover:bg-slate-700 text-red-650 rounded"
-                                      title="Delete Member"
-                                    >
-                                      <Trash2 size={10} />
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-
-                              {/* Profile info */}
-                              <div className="flex items-center gap-4 mb-6">
-                                {hasPhoto ? (
-                                  <SafeImage
-                                    src={member.photo_url}
-                                    alt={member.faculty_name}
-                                    fallbackName={member.faculty_name}
-                                    className="w-14 h-14 rounded-2xl object-cover shadow-md border border-slate-200/50 dark:border-slate-800 shrink-0"
-                                  />
-                                ) : (
-                                  <div className="w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-650 text-white rounded-2xl flex items-center justify-center font-extrabold text-base shadow-md shrink-0">
-                                    {nameInitials}
-                                  </div>
-                                )}
-                                <div>
-                                  <h3 className="font-extrabold text-slate-900 dark:text-white text-sm leading-tight flex items-center gap-1">
-                                    {member.faculty_name}
-                                    {member.designation.toLowerCase().includes("dean") && <Sparkles className="w-3 h-3 text-amber-500 shrink-0" />}
-                                  </h3>
-                                  <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mt-1 leading-snug">{member.designation}</p>
-                                </div>
-                              </div>
-
-                              {/* Contact & Credentials info list */}
-                              <div className="space-y-2.5 pt-4 border-t border-slate-105 dark:border-slate-800 text-xs">
-                                <div className="flex items-start gap-2 text-slate-650 dark:text-slate-400">
-                                  <BookOpen className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
-                                  <span className="leading-snug"><strong>Qual:</strong> {member.qualification}</span>
-                                </div>
-                                <div className="flex items-start gap-2 text-slate-650 dark:text-slate-400">
-                                  <Briefcase className="w-3.5 h-3.5 text-violet-500 shrink-0 mt-0.5" />
-                                  <span className="leading-snug"><strong>Experience:</strong> {member.experience}</span>
-                                </div>
-                                <div className="flex items-start gap-2 text-slate-650 dark:text-slate-400">
-                                  <Mail className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
-                                  <a href={`mailto:${member.email}`} className="hover:text-blue-600 transition-colors truncate">{member.email}</a>
-                                </div>
-                              </div>
-
-                            </div>
-
-                            <div className="pt-5 font-sans">
-                              <a
-                                href={`mailto:${member.email}`}
-                                className="w-full py-2 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/40 dark:hover:bg-slate-800/80 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-350 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 transition-all"
-                              >
-                                <Mail className="w-3 h-3" /> Email Professor
-                              </a>
-                            </div>
-                          </GlassCard>
-                        </motion.div>
-                      );
-                    })}
+                    {filteredFaculty.map((member: any, idx: number) => (
+                      <motion.div
+                        key={member.id || idx}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.3, delay: idx * 0.03 }}
+                        className="h-full flex"
+                      >
+                        <FacultyCard f={member} />
+                      </motion.div>
+                    ))}
                   </AnimatePresence>
                 </div>
 

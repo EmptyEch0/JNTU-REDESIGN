@@ -256,7 +256,7 @@ function HomePage() {
             <h1 className="text-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mt-2.5 max-w-4xl animate-[fade-up_0.4s_ease-out_0.5s_both] leading-[1.08] tracking-tight">
               Engineering tomorrow,
               <br />
-              <span className="italic text-cyan-200">together.</span>
+              <span >together.</span>
             </h1>
 
             <p className="mt-3.5 text-sm sm:text-base md:text-lg text-white/90 max-w-2xl leading-relaxed animate-[fade-up_0.4s_ease-out_0.8s_both] font-normal">
@@ -305,8 +305,8 @@ function HomePage() {
                   shaping futures.
                 </h2>
                 <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl">
-                  Established in 2007 as a constituent college of JNTU-GV, our institution is 
-                  recognized by UGC under section 2(f) & 12(B) and approved by AICTE. We bring 
+                  Established in 2007 as a constituent college of JNTU-GV, our institution is
+                  recognized by UGC under section 2(f) & 12(B) and approved by AICTE. We bring
                   together rigorous academics and a thriving research community.
                 </p>
               </RevealOnScroll>
@@ -321,9 +321,9 @@ function HomePage() {
                       <div>
                         <h3 className="text-xl font-bold text-ink mb-2">Our Vision</h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">
-                          To emerge as a premier technical Institution in the field of engineering and 
-                          research, with a dedicated focus on producing professionally competent and 
-                          socially sensitive engineers capable of thriving in a multidisciplinary 
+                          To emerge as a premier technical Institution in the field of engineering and
+                          research, with a dedicated focus on producing professionally competent and
+                          socially sensitive engineers capable of thriving in a multidisciplinary
                           global environment.
                         </p>
                       </div>
@@ -340,10 +340,10 @@ function HomePage() {
                       <div>
                         <h3 className="text-xl font-bold text-ink mb-2">Core Mission</h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">
-                          We are committed to providing high-quality technical education through a 
-                          creative balance of academia and industry. By adopting highly effective 
-                          teaching-learning processes and promoting multidisciplinary research, 
-                          we inculcate ethical and moral values that contribute to professional 
+                          We are committed to providing high-quality technical education through a
+                          creative balance of academia and industry. By adopting highly effective
+                          teaching-learning processes and promoting multidisciplinary research,
+                          we inculcate ethical and moral values that contribute to professional
                           growth and societal development.
                         </p>
                       </div>
@@ -370,13 +370,13 @@ function HomePage() {
                 <div className="relative group mx-auto max-w-[380px]">
                   <div className="absolute -top-8 -right-8 w-32 h-32 bg-primary/10 rounded-full blur-3xl animate-pulse" />
                   <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-accent/10 rounded-full blur-3xl" />
-                  
+
                   <div className="relative bg-card rounded-[40px] p-6 md:p-8 border border-border shadow-elegant overflow-hidden transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
                     <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden mb-6 border border-white/50 shadow-inner group/img bg-slate-100">
                       {principal?.image ? (
-                        <img 
-                          src={getAssetUrl(principal.image)} 
-                          alt={principal.name} 
+                        <img
+                          src={getAssetUrl(principal.image)}
+                          alt={principal.name}
                           width="380"
                           height="475"
                           loading="lazy"
@@ -390,9 +390,9 @@ function HomePage() {
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
                       <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
-                         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-[10px] font-bold text-white uppercase tracking-widest">
-                           <CheckCircle2 className="h-3 w-3" /> {principal?.designation?.split(',')[0] || "Principal"}
-                         </div>
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-[10px] font-bold text-white uppercase tracking-widest">
+                          <CheckCircle2 className="h-3 w-3" /> {principal?.designation?.split(',')[0] || "Principal"}
+                        </div>
                       </div>
                     </div>
 
@@ -404,7 +404,7 @@ function HomePage() {
                           {principal?.designation?.includes(',') ? principal.designation.split(',').slice(1).join(',') : "Principal, JNTU-GV CEV"}
                         </p>
                       </div>
-                      
+
                       <div className="relative">
                         <Quote className="h-10 w-10 text-primary/10 absolute -top-4 -left-4 -z-10" />
                         <p className="text-sm text-muted-foreground leading-relaxed italic">
@@ -417,8 +417,8 @@ function HomePage() {
                           Principal's Desk <ArrowRight className="h-4 w-4" />
                         </Link>
                         <div className="flex flex-col items-end">
-                           <div className="text-[9px] uppercase tracking-tighter text-muted-foreground font-bold">Member</div>
-                           <div className="text-[11px] font-black text-ink">IEEE Senior Member</div>
+                          <div className="text-[9px] uppercase tracking-tighter text-muted-foreground font-bold">Member</div>
+                          <div className="text-[11px] font-black text-ink">IEEE Senior Member</div>
                         </div>
                       </div>
                     </div>
@@ -463,11 +463,10 @@ function HomePage() {
               ) : (
                 liveDepartments.map((d: any, i: number) => (
                   <Link
-                  key={d.id}
-                  to="/departments/$slug"
-                  params={{ slug: d.slug }}
-                  className="snap-start group shrink-0 w-[280px] md:w-[340px] aspect-[3/4] relative rounded-3xl overflow-hidden bg-slate-900 shadow-xl hover-lift"
-                >
+                    key={d.id}
+                    to="/departments"
+                    className="snap-start group shrink-0 w-[280px] md:w-[340px] aspect-[3/4] relative rounded-3xl overflow-hidden bg-slate-900 shadow-xl hover-lift"
+                  >
                     {/* Background Visual Image with full visibility and smooth dark overlay */}
                     {d.image ? (
                       <img decoding="async" loading="lazy"
@@ -481,10 +480,10 @@ function HomePage() {
                         className="absolute inset-0 bg-slate-800"
                       />
                     )}
-                    
+
                     {/* High contrast dark gradient overlay mirroring the main grid design */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 transition-opacity group-hover:opacity-95" />
-                    
+
                     {/* Content Area */}
                     <div className="absolute inset-0 p-6 md:p-7 flex flex-col justify-between text-white z-10">
                       <div className="flex items-center justify-between">
@@ -495,19 +494,19 @@ function HomePage() {
                           <ArrowRight className="h-4 w-4" />
                         </div>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white leading-tight">
                           {d.name.includes("(") ? d.name : `${d.name} (${d.slug.toUpperCase()})`}
                         </h3>
-                        
+
                         {/* HOD Information Line */}
                         {d.hod && (
                           <div className="text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded inline-block">
                             HOD: <span className="text-white">{d.hod}</span>
                           </div>
                         )}
-                        
+
                         <p className="text-xs md:text-sm text-white/80 line-clamp-2 md:line-clamp-3 font-medium leading-relaxed pt-1">
                           {d.description}
                         </p>
@@ -706,7 +705,7 @@ function HomePage() {
                   className="col-span-12 sm:col-span-6 md:col-span-4 aspect-[4/3] w-full rounded-3xl p-6 md:p-8 bg-gradient-to-br from-primary via-indigo-950 to-slate-950 text-white flex flex-col justify-between hover-lift shadow-xl border border-white/10 group relative overflow-hidden"
                 >
                   <div className="absolute -top-12 -right-12 h-40 w-40 rounded-full bg-amber-400/10 blur-2xl group-hover:bg-amber-400/20 transition-colors" />
-                  
+
                   <div className="flex items-center justify-between z-10">
                     <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-widest text-amber-300">
                       Campus Archive

@@ -104,3 +104,28 @@ export const getAllDepartments = createServerFn({ method: "GET" })
       return [];
     }
   });
+
+export const getAllFacultyList = createServerFn({ method: "GET" })
+  .handler(async () => {
+    try {
+      const cacheKey = "faculty_all";
+      const cached = serverCache.get<any[]>(cacheKey);
+      if (cached) return cached;
+
+      const { sql } = await import("@/lib/db");
+
+      const result = await sql`
+        SELECT f.*, d.name as department_name, d.slug as department_slug
+        FROM faculty f
+        LEFT JOIN departments d ON f.dept_id = d.id
+        ORDER BY f.name ASC
+      `;
+
+      const data = result || [];
+      serverCache.set(cacheKey, data);
+      return data;
+    } catch (err) {
+      console.error("Error fetching all faculty:", err);
+      return [];
+    }
+  });

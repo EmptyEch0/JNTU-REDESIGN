@@ -20,7 +20,7 @@ import {
 import { ProfileRenderer } from "@/components/ProfileRenderer";
 export const Route = createFileRoute("/departments/$id/hod")({
   head: ({ matches }) => {
-    const parentMatch = matches.find((m) => m.routeId === "/departments/$id");
+    const parentMatch = matches.find((m) => (m.routeId as string) === "/departments/$id");
     const parentData = parentMatch?.loaderData as DepartmentData | undefined;
     const name = parentData?.name || "Department";
     const hod = parentData?.hod || "Head of Department";

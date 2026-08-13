@@ -162,42 +162,51 @@ const FACILITIES = [
   },
 ];
 
+// Shared cache config — data is stable, reuse it for 10 min before refetching
+const QUERY_CACHE = { staleTime: 10 * 60 * 1000, gcTime: 30 * 60 * 1000 } as const;
+
 function HomePage() {
   const { data: principal } = useQuery({
     queryKey: ["leadership", "principal"],
     queryFn: () => getLeadershipData({ data: "principal" }),
+    ...QUERY_CACHE,
   });
 
   // Pull array dynamically from Neon database
   const { data: liveDepartments = [], isLoading } = useQuery({
     queryKey: ["departments", "all"],
     queryFn: () => getAllDepartments(),
+    ...QUERY_CACHE,
   });
 
   const { data: hostelData } = useQuery({
     queryKey: ["hostel", "data"],
     queryFn: () => getHostelData(),
+    ...QUERY_CACHE,
   });
 
   const { data: libraryData } = useQuery({
     queryKey: ["library", "data"],
     queryFn: () => getLibraryData(),
+    ...QUERY_CACHE,
   });
 
   const { data: dispensaryData } = useQuery({
     queryKey: ["dispensary", "data"],
     queryFn: () => getDispensaryData(),
+    ...QUERY_CACHE,
   });
 
   const { data: sportsData } = useQuery({
     queryKey: ["sports", "data"],
     queryFn: () => getSportsData(),
+    ...QUERY_CACHE,
   });
 
   const { data: galleryImages = [] } = useQuery({
     queryKey: ["jntugv-gallery"],
     queryFn: () => getJntugvGalleryImages(),
-    staleTime: 5 * 60 * 1000, // cache for 5 minutes
+    ...QUERY_CACHE,
   });
 
   // Select a diverse mix of recent + randomized items across unique campus events
@@ -464,7 +473,8 @@ function HomePage() {
                 liveDepartments.map((d: any, i: number) => (
                   <Link
                     key={d.id}
-                    to="/departments"
+                    to="/departments/$id"
+                    params={{ id: d.slug }}
                     className="snap-start group shrink-0 w-[280px] md:w-[340px] aspect-[3/4] relative rounded-3xl overflow-hidden bg-slate-900 shadow-xl hover-lift"
                   >
                     {/* Background Visual Image with full visibility and smooth dark overlay */}

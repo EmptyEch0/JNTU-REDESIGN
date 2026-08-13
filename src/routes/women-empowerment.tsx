@@ -32,9 +32,40 @@ export const Route = createFileRoute("/women-empowerment")({
   component: WomenLayout,
 });
 
+import { useRouterState } from "@tanstack/react-router";
+
+function getWeHeroInfo(pathname: string) {
+  const clean = pathname.replace(/\/$/, "");
+  if (clean.endsWith("/activities")) {
+    return {
+      title: "Activities & Events",
+      subtitle: "Seminars, workshops, awareness rallies, guest lectures and annual celebrations empowering women.",
+    };
+  }
+  if (clean.endsWith("/recreation")) {
+    return {
+      title: "Recreation Club",
+      subtitle: "Sports, wellness programs, stress-busting workshops and interactive fitness platforms for women.",
+    };
+  }
+  if (clean.endsWith("/magazine")) {
+    return {
+      title: "Empowerment Magazine",
+      subtitle: "Publications, articles, newsletters and stories highlighting campus women achievers.",
+    };
+  }
+  return {
+    title: "Safe. Supported. Ambitious.",
+    subtitle: "A campus-wide cell that ensures every woman at JNTU-GV CEV has the safety, mentorship and platform to lead.",
+  };
+}
+
 function WomenLayout() {
   const queryClient = useQueryClient();
   const { isEditMode } = useAdmin();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const heroInfo = getWeHeroInfo(pathname);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [newSlideTitle, setNewSlideTitle] = useState("");
@@ -101,7 +132,7 @@ function WomenLayout() {
   const handleDeleteSlide = (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
     if (confirm("Are you sure you want to delete this slide?")) {
-      deleteMutation.mutate({ data: id });
+      deleteMutation.mutate({ data: { id } });
     }
   };
 
@@ -109,8 +140,8 @@ function WomenLayout() {
     <>
       <PageHero
         eyebrow="Women Empowerment Cell"
-        title="Safe. Supported. Ambitious."
-        subtitle="A campus-wide cell that ensures every woman at JNTU-GV CEV has the safety, mentorship and platform to lead."
+        title={heroInfo.title}
+        subtitle={heroInfo.subtitle}
         image={heroImg}
       />
       <SubNav items={WE_SUBNAV} />

@@ -45,7 +45,7 @@ function PublicationsPage() {
   });
 
   const saveAll = async () => {
-    const promises = [];
+    const promises: Promise<any>[] = [];
 
     Object.entries(editedPubs).forEach(([id, data]) => {
       promises.push(updatePublication({ data: { id: parseInt(id), ...data } }));

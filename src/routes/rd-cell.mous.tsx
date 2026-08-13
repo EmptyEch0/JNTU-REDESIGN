@@ -136,7 +136,7 @@ function MOUsPage() {
                       onChange={(e) =>
                         setEditedMous((prev) => ({
                           ...prev,
-                          [m.id]: { ...prev[prev.id], body: e.target.value },
+                          [m.id]: { ...prev[m.id], body: e.target.value },
                         }))
                       }
                       rows={5}

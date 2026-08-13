@@ -16,7 +16,10 @@ import {
   upsertAcademicsDashboardStat,
   deleteAcademicsDashboardStat,
   getAcademicsCalendar,
-  getAcademicsExamData
+  getAcademicsExamData,
+  getTickerNotifications,
+  upsertTickerNotification,
+  deleteTickerNotification,
 } from "@/lib/academics";
 import {
   GraduationCap,
@@ -178,9 +181,23 @@ function AcademicsDashboard() {
   const [sColor, setSColor] = useState("text-blue-400");
   const [sTrend, setSTrend] = useState("");
 
+  // Ticker notifications state
+  const [editNotifId, setEditNotifId] = useState<number | null>(null);
+  const [nSource, setNSource] = useState("calendar");
+  const [nLabel, setNLabel] = useState("Academic Notice");
+  const [nDate, setNDate] = useState("");
+  const [nText, setNText] = useState("");
+  const [nTo, setNTo] = useState("/academics/calendar");
+  const [nUrgent, setNUrgent] = useState(false);
+
   const { data: dbStats = [], isLoading: isLoadingStats } = useQuery({
     queryKey: ["academics-dashboard-stats"],
     queryFn: getAcademicsDashboardStats,
+  });
+
+  const { data: tickerNotifsList = [] } = useQuery({
+    queryKey: ["academics-ticker-notifications"],
+    queryFn: getTickerNotifications,
   });
 
   const { data: calendarList = [] } = useQuery({
@@ -211,6 +228,23 @@ function AcademicsDashboard() {
     }
   });
 
+  const saveNotifMutation = useMutation({
+    mutationFn: (data: any) => upsertTickerNotification({ data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["academics-ticker-notifications"] });
+      setEditNotifId(null);
+      toast.success("Notification saved!");
+    }
+  });
+
+  const deleteNotifMutation = useMutation({
+    mutationFn: (id: number) => deleteTickerNotification({ data: { id } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["academics-ticker-notifications"] });
+      toast.success("Notification deleted!");
+    }
+  });
+
   const startEditStat = (stat: any) => {
     setEditStatId(stat.id);
     setSLabel(stat.label);
@@ -227,6 +261,26 @@ function AcademicsDashboard() {
     setSIcon("GraduationCap");
     setSColor("text-blue-400");
     setSTrend("");
+  };
+
+  const startEditNotif = (notif: any) => {
+    setEditNotifId(notif.id);
+    setNSource(notif.source || "calendar");
+    setNLabel(notif.label || "Notice");
+    setNDate(notif.date || "");
+    setNText(notif.text || "");
+    setNTo(notif.to || "");
+    setNUrgent(Boolean(notif.urgent));
+  };
+
+  const startAddNotif = () => {
+    setEditNotifId(-1);
+    setNSource("calendar");
+    setNLabel("Notice");
+    setNDate(new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }));
+    setNText("");
+    setNTo("/academics/calendar");
+    setNUrgent(false);
   };
 
   return (
@@ -587,15 +641,11 @@ function AcademicsDashboard() {
       <section className="py-12 bg-slate-50/50 dark:bg-slate-900/20 border-t border-border rounded-3xl">
         <div className="w-full px-6">
           <div className="flex items-center justify-between mb-8">
-            <div>
-              <SectionLabel>Academic Modules</SectionLabel>
-              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2">
-                Explore JNTU Academics
-              </h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                Navigate to any academic section or resource below
-              </p>
-            </div>
+            <SectionLabel
+              eyebrow="Explore JNTU Academics"
+              title="Academic Modules"
+              subtitle="Navigate to any academic section or resource below"
+            />
             <span className="text-xs font-semibold text-muted-foreground border border-border rounded-full px-3 py-1">
               {MODULES.length} modules
             </span>

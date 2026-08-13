@@ -28,9 +28,34 @@ export const Route = createFileRoute("/nss")({
   component: NSSLayout,
 });
 
+import { useRouterState } from "@tanstack/react-router";
+
+function getNssHeroInfo(pathname: string) {
+  const clean = pathname.replace(/\/$/, "");
+  if (clean.endsWith("/activities")) {
+    return {
+      title: "NSS Activities & Social Drives",
+      subtitle: "Blood donation camps, plantation drives, literacy programs and community outreach.",
+    };
+  }
+  if (clean.endsWith("/special-camp")) {
+    return {
+      title: "NSS Special Camp Activities",
+      subtitle: "Annual 7-day residential village service camp empowering rural communities.",
+    };
+  }
+  return {
+    title: "Not me, but you.",
+    subtitle: "The National Service Scheme on campus is a quiet, consistent commitment to community — led entirely by students.",
+  };
+}
+
 function NSSLayout() {
   const queryClient = useQueryClient();
   const { isEditMode } = useAdmin();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const heroInfo = getNssHeroInfo(pathname);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [newSlideTitle, setNewSlideTitle] = useState("");
@@ -97,7 +122,7 @@ function NSSLayout() {
   const handleDeleteSlide = (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
     if (confirm("Are you sure you want to delete this slide?")) {
-      deleteMutation.mutate({ data: id });
+      deleteMutation.mutate({ data: { id } });
     }
   };
 
@@ -105,8 +130,8 @@ function NSSLayout() {
     <>
       <PageHero
         eyebrow="NSS"
-        title="Not me, but you."
-        subtitle="The National Service Scheme on campus is a quiet, consistent commitment to community — led entirely by students."
+        title={heroInfo.title}
+        subtitle={heroInfo.subtitle}
         image={cultureImg}
       />
       <SubNav items={NSS_SUBNAV} />

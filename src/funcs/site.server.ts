@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { db } from "../db";
 import { siteContent, notices, academicRegulations, campusGallery, leadership, academicSyllabus, academicDownloads, academicTimetables, academicsExamCell, academicFeeStructure, academicCalendars } from "../db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
+import { serverCache } from "../lib/server-cache";
 import { ingestSingleChunk, deleteSingleChunk } from "../lib/ingest";
 import { runChatbotEngine } from "../lib/chatbot-engine";
 
@@ -51,6 +52,7 @@ export const updatePageSection = createServerFn({
       title?: string;
       content?: string;
       imageUrl?: string;
+      [key: string]: any;
     }) => d
   )
   .handler(async ({ data }) => {
@@ -65,6 +67,7 @@ export const updatePageSection = createServerFn({
           )
         );
 
+      let updated: any;
       let recordId: number;
       if (existing) {
         const rows = await db
@@ -226,8 +229,12 @@ export const deleteAcademicRegulation = createServerFn({
 export const getCampusGallery = createServerFn({
   method: "GET",
 }).handler(async () => {
+  const cached = serverCache.get<any[]>("campus_gallery_db");
+  if (cached) return cached;
   try {
-    return await db.select().from(campusGallery).orderBy(desc(campusGallery.id));
+    const res = await db.select().from(campusGallery).orderBy(desc(campusGallery.id));
+    serverCache.set("campus_gallery_db", res, 15 * 60 * 1000);
+    return res;
   } catch {
     return [];
   }
@@ -243,6 +250,7 @@ export const addCampusGalleryItem = createServerFn({
         src: data.src,
         caption: data.caption || "",
       });
+      serverCache.invalidate("campus_gallery_db");
       return { success: true };
     } catch (err) {
       console.error("Add campus gallery item failed:", err);
@@ -257,6 +265,7 @@ export const deleteCampusGalleryItem = createServerFn({
   .handler(async ({ data }) => {
     try {
       await db.delete(campusGallery).where(eq(campusGallery.id, data.id));
+      serverCache.invalidate("campus_gallery_db");
       return { success: true };
     } catch (err) {
       console.error("Delete campus gallery item failed:", err);
@@ -359,30 +368,39 @@ export interface JntugvGalleryItem {
 export const getJntugvGalleryImages = createServerFn({
   method: "GET",
 }).handler(async (): Promise<JntugvGalleryItem[]> => {
+  const cached = serverCache.get<JntugvGalleryItem[]>("jntugv_gallery_external");
+  if (cached) return cached;
+
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2500); // 2.5s fast timeout
     const res = await fetch(
       "https://api.jntugv.edu.in/api/webadmin/dmc/getgallery",
-      { next: { revalidate: 300 } } as any,
+      { signal: controller.signal } as any,
     );
+    clearTimeout(timeoutId);
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        return data.filter(
+        const filtered = data.filter(
           (img: JntugvGalleryItem) =>
             img.admin_approval === "accepted" &&
             img.carousel_scrolling === "yes",
         );
+        serverCache.set("jntugv_gallery_external", filtered, 30 * 60 * 1000);
+        return filtered;
       }
     }
   } catch (err) {
     console.warn("Using local fallback gallery data due to API fetch error");
   }
 
-  // Fallback to local dataset provided by university admin
   const fallback = jntugvGalleryData as JntugvGalleryItem[];
-  return fallback.filter(
+  const filtered = fallback.filter(
     (img) =>
       img.admin_approval === "accepted" &&
       (img.carousel_scrolling === "yes" || img.gallery_scrolling === "yes"),
   );
+  serverCache.set("jntugv_gallery_external", filtered, 30 * 60 * 1000);
+  return filtered;
 });

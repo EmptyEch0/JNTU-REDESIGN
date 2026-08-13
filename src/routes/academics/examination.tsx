@@ -284,7 +284,7 @@ const EXAMINATION_OFFICERS = [
 const SUPPORTING_STAFF = [
   { sno: 1, name: "Mr. S. Vamsidhar", designation: "Typist", mobile: "8121461375" },
   { sno: 2, name: "Mr. E. Rama Krishna", designation: "Technician", mobile: "9030671658" },
-  { sno: sno => 3, name: "Mr. CH Srinivasa Rao", designation: "Mechanic", mobile: "9440852724" },
+  { sno: 3, name: "Mr. CH Srinivasa Rao", designation: "Mechanic", mobile: "9440852724" },
   { sno: 4, name: "Mr. K Satya Rao", designation: "Attender", mobile: "9966862042" },
   { sno: 5, name: "Mrs. CH Aruna Jyothi", designation: "Helper", mobile: "7386739431" }
 ];
@@ -298,14 +298,15 @@ function ExaminationPage() {
 
   // Interactive Hall Ticket Form States
   const [hallTicketRoll, setHallTicketRoll] = useState("");
-  const [hallTicketSem, setHallTicketSem] = useState("Semester 3");
+  const [hallTicketSem, setHallTicketSem] = useState("I-B.Tech I-Sem (R23)");
+  const [hallTicketStatus, setHallTicketStatus] = useState<"idle" | "loading" | "found" | "not-found">("idle");
 
-  // Interactive Results Form States
+  // Interactive Result Form States
   const [resultRoll, setResultRoll] = useState("");
-  const [resultSem, setResultSem] = useState("Semester 3");
+  const [resultSem, setResultSem] = useState("I-B.Tech I-Sem (R23)");
   const [resultScore, setResultScore] = useState<{ gpa: string; pass: boolean } | null>(null);
 
-  // States for Editing dynamic database records
+  // Dynamic Drizzle Backend Form States
   const [editExamId, setEditExamId] = useState<number | null>(null);
   const [examType, setExamType] = useState<"Notification" | "Announcement" | "Result" | "HallTicket">("Notification");
   const [examTitle, setExamTitle] = useState("");
@@ -313,13 +314,14 @@ function ExaminationPage() {
   const [examDate, setExamDate] = useState("");
   const [examFileUrl, setExamFileUrl] = useState("");
 
-  const { data: examData = [], isLoading } = useQuery({
+  const { data: dbExams = [], isLoading: isLoadingExams } = useQuery({
     queryKey: ["academics-exams"],
     queryFn: getAcademicsExamData,
   });
 
   // Dynamic Drizzle Mutations
   const saveExamMutation = useMutation({
+    mutationFn: (data: any) => upsertAcademicsExamData({ data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["academics-exams"] });
       setEditExamId(null);
@@ -331,6 +333,7 @@ function ExaminationPage() {
   });
 
   const deleteExamMutation = useMutation({
+    mutationFn: (id: number) => deleteAcademicsExamData({ data: { id } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["academics-exams"] });
       toast.success("Exam record deleted successfully!");
@@ -385,8 +388,8 @@ function ExaminationPage() {
   };
 
   // Dynamic Drizzle DB notifications
-  const dbNotifications = examData.filter(item => item.type === "Notification" || item.type === "Announcement");
-  const dbResults = examData.filter(item => item.type === "Result");
+  const dbNotifications = dbExams.filter((item: any) => item.type === "Notification" || item.type === "Announcement");
+  const dbResults = dbExams.filter((item: any) => item.type === "Result");
 
   // Merge static notifications + database dynamic notifications
   const allNotifications = [

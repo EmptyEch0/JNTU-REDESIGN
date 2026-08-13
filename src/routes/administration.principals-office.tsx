@@ -215,7 +215,7 @@ function PrincipalsOfficePage() {
 
   const supportList = editTexts.supportServicesText
     .split("\n")
-    .map((l) => l.trim())
+    .map((l: string) => l.trim())
     .filter(Boolean);
 
   return (
@@ -433,7 +433,7 @@ function PrincipalsOfficePage() {
               <div className="p-10 space-y-8">
                 <h3 className="text-2xl font-bold text-ink">{editTexts.supportServicesTitle}</h3>
                 <div className="space-y-4">
-                  {supportList.map((item, i) => (
+                  {supportList.map((item: string, i: number) => (
                     <div key={i} className="flex gap-4 items-center p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
                       <div className="h-2 w-2 rounded-full bg-primary" />
                       <span className="text-muted-foreground">{item}</span>

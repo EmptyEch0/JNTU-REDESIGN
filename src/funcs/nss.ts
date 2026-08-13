@@ -20,15 +20,15 @@ export const getNssProfile = createServerFn({ method: "GET" }).handler(async () 
   return data;
 });
 
-export const updateNssProfile = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const updateNssProfile = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return nssMutate(async () => {
       await db.update(nssProfile).set(updateData).where(eq(nssProfile.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
 export const getNssActivities = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any[]>("nss_activities");
@@ -39,33 +39,33 @@ export const getNssActivities = createServerFn({ method: "GET" }).handler(async 
   return records;
 });
 
-export const addNssActivity = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const addNssActivity = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     return nssMutate(async () => {
       await db.insert(nssActivities).values(data);
       return { success: true };
     });
-  },
-);
+  });
 
-export const updateNssActivity = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const updateNssActivity = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return nssMutate(async () => {
       await db.update(nssActivities).set(updateData).where(eq(nssActivities.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
-export const deleteNssActivity = createServerFn({ method: "POST" }).handler(
-  async ({ data: id }: { data: number }) => {
+export const deleteNssActivity = createServerFn({ method: "POST" })
+  .inputValidator((d: number) => d)
+  .handler(async ({ data: id }) => {
     return nssMutate(async () => {
       await db.delete(nssActivities).where(eq(nssActivities.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
 export const getNssSpecialCamp = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any[]>("nss_special_camp");
@@ -76,57 +76,74 @@ export const getNssSpecialCamp = createServerFn({ method: "GET" }).handler(async
   return records;
 });
 
-export const addNssSpecialCamp = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const addNssSpecialCamp = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     return nssMutate(async () => {
       await db.insert(nssSpecialCamp).values(data);
       return { success: true };
     });
-  },
-);
+  });
 
-export const updateNssSpecialCamp = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const updateNssSpecialCamp = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return nssMutate(async () => {
       await db.update(nssSpecialCamp).set(updateData).where(eq(nssSpecialCamp.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
-export const deleteNssSpecialCamp = createServerFn({ method: "POST" }).handler(
-  async ({ data: id }: { data: number }) => {
+export const deleteNssSpecialCamp = createServerFn({ method: "POST" })
+  .inputValidator((d: number) => d)
+  .handler(async ({ data: id }) => {
     return nssMutate(async () => {
       await db.delete(nssSpecialCamp).where(eq(nssSpecialCamp.id, id));
       return { success: true };
     });
-  },
-);
+  });
+
+const DEFAULT_NSS_GALLERY = [
+  { id: -1, title: "NSS Youth Camp Activity", imageUrl: "uploads/2021/01/WhatsApp-Image-2021-01-11-at-15.48.17-1.jpeg" },
+  { id: -2, title: "NSS Community Service Drive", imageUrl: "uploads/2021/01/WhatsApp-Image-2021-01-11-at-16.42.54-1.jpeg" },
+  { id: -3, title: "3-Day Special Camp Activity", imageUrl: "uploads/2020/08/3-day-10-scaled.jpg" },
+  { id: -4, title: "Volunteers Community Program", imageUrl: "uploads/2020/08/3-day-17-scaled.jpg" },
+  { id: -5, title: "Cancer Awareness Day Drive 1", imageUrl: "uploads/2020/08/cancer-day1-scaled.jpg" },
+  { id: -6, title: "Cancer Awareness Rally", imageUrl: "uploads/2020/08/cancerday-2.jpg" },
+  { id: -7, title: "Cancer Awareness Session", imageUrl: "uploads/2020/08/cancer-day-3-scaled.jpg" },
+  { id: -8, title: "Cancer Day Health Camp", imageUrl: "uploads/2020/08/cancer-day4.jpg" },
+  { id: -9, title: "3-Day Special Service Event", imageUrl: "uploads/2020/08/3-day-9-scaled.jpg" },
+];
 
 export const getNssGallery = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any[]>("nss_gallery");
-  if (cached) return cached;
+  if (cached && cached.length > 0) return cached;
 
-  const records = await db.select().from(nssGallery).orderBy(asc(nssGallery.id));
-  serverCache.set("nss_gallery", records);
-  return records;
+  try {
+    const records = await db.select().from(nssGallery).orderBy(asc(nssGallery.id));
+    const result = records.length > 0 ? records : DEFAULT_NSS_GALLERY;
+    serverCache.set("nss_gallery", result);
+    return result;
+  } catch {
+    return DEFAULT_NSS_GALLERY;
+  }
 });
 
-export const addNssGalleryImage = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const addNssGalleryImage = createServerFn({ method: "POST" })
+  .inputValidator((data: { title: string; imageUrl: string }) => data)
+  .handler(async ({ data }) => {
     return nssMutate(async () => {
       await db.insert(nssGallery).values(data);
       return { success: true };
     });
-  },
-);
+  });
 
-export const deleteNssGalleryImage = createServerFn({ method: "POST" }).handler(
-  async ({ data: id }: { data: number }) => {
+export const deleteNssGalleryImage = createServerFn({ method: "POST" })
+  .inputValidator((data: { id: number }) => data)
+  .handler(async ({ data }) => {
     return nssMutate(async () => {
-      await db.delete(nssGallery).where(eq(nssGallery.id, id));
+      await db.delete(nssGallery).where(eq(nssGallery.id, data.id));
       return { success: true };
     });
-  },
-);
+  });

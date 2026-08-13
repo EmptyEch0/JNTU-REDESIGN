@@ -234,7 +234,7 @@ function JntukPage() {
                   {editTexts.historyTitle}
                 </h2>
                 <div className="mt-6 space-y-4 text-muted-foreground text-lg leading-relaxed whitespace-pre-line">
-                  {editTexts.historyContent.split("\n\n").map((para, idx) => (
+                  {editTexts.historyContent.split("\n\n").map((para: string, idx: number) => (
                     <p key={idx}>{para}</p>
                   ))}
                 </div>

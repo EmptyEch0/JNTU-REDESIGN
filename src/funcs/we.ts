@@ -27,15 +27,15 @@ export const getWeProfile = createServerFn({ method: "GET" }).handler(async () =
   return data;
 });
 
-export const updateWeProfile = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const updateWeProfile = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return weMutate(async () => {
       await db.update(weProfile).set(updateData).where(eq(weProfile.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
 export const getWeCommittee = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any[]>("we_committee");
@@ -46,33 +46,33 @@ export const getWeCommittee = createServerFn({ method: "GET" }).handler(async ()
   return records;
 });
 
-export const addWeCommitteeMember = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const addWeCommitteeMember = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     return weMutate(async () => {
       await db.insert(weCommittee).values(data);
       return { success: true };
     });
-  },
-);
+  });
 
-export const updateWeCommitteeMember = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const updateWeCommitteeMember = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return weMutate(async () => {
       await db.update(weCommittee).set(updateData).where(eq(weCommittee.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
-export const deleteWeCommitteeMember = createServerFn({ method: "POST" }).handler(
-  async ({ data: id }: { data: number }) => {
+export const deleteWeCommitteeMember = createServerFn({ method: "POST" })
+  .inputValidator((d: number) => d)
+  .handler(async ({ data: id }) => {
     return weMutate(async () => {
       await db.delete(weCommittee).where(eq(weCommittee.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
 export const getWeActivities = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any[]>("we_activities");
@@ -83,33 +83,33 @@ export const getWeActivities = createServerFn({ method: "GET" }).handler(async (
   return records;
 });
 
-export const addWeActivity = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const addWeActivity = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     return weMutate(async () => {
       await db.insert(weActivities).values(data);
       return { success: true };
     });
-  },
-);
+  });
 
-export const updateWeActivity = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const updateWeActivity = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return weMutate(async () => {
       await db.update(weActivities).set(updateData).where(eq(weActivities.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
-export const deleteWeActivity = createServerFn({ method: "POST" }).handler(
-  async ({ data: id }: { data: number }) => {
+export const deleteWeActivity = createServerFn({ method: "POST" })
+  .inputValidator((d: number) => d)
+  .handler(async ({ data: id }) => {
     return weMutate(async () => {
       await db.delete(weActivities).where(eq(weActivities.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
 export const getWeRecreation = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any>("we_recreation");
@@ -121,15 +121,15 @@ export const getWeRecreation = createServerFn({ method: "GET" }).handler(async (
   return data;
 });
 
-export const updateWeRecreation = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const updateWeRecreation = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return weMutate(async () => {
       await db.update(weRecreation).set(updateData).where(eq(weRecreation.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
 export const getWeMagazines = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any[]>("we_magazines");
@@ -140,57 +140,75 @@ export const getWeMagazines = createServerFn({ method: "GET" }).handler(async ()
   return records;
 });
 
-export const addWeMagazine = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const addWeMagazine = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     return weMutate(async () => {
       await db.insert(weMagazine).values(data);
       return { success: true };
     });
-  },
-);
+  });
 
-export const updateWeMagazine = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const updateWeMagazine = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return weMutate(async () => {
       await db.update(weMagazine).set(updateData).where(eq(weMagazine.id, id));
       return { success: true };
     });
-  },
-);
+  });
 
-export const deleteWeMagazine = createServerFn({ method: "POST" }).handler(
-  async ({ data: id }: { data: number }) => {
+export const deleteWeMagazine = createServerFn({ method: "POST" })
+  .inputValidator((d: number) => d)
+  .handler(async ({ data: id }) => {
     return weMutate(async () => {
       await db.delete(weMagazine).where(eq(weMagazine.id, id));
       return { success: true };
     });
-  },
-);
+  });
+
+const DEFAULT_WE_GALLERY = [
+  { id: -1, title: "Women Empowerment Activity", imageUrl: "uploads/2020/08/IMG-20191216-WA0038.jpg" },
+  { id: -2, title: "Campus Program", imageUrl: "uploads/2020/08/DSCN0609-scaled.jpg" },
+  { id: -3, title: "Women Empowerment Awareness Session", imageUrl: "uploads/2020/08/WhatsApp-Image-2020-08-28-at-11.25.46-AM.jpeg" },
+  { id: -4, title: "Empowerment Workshop", imageUrl: "uploads/2020/08/DSCN0825-scaled.jpg" },
+  { id: -5, title: "Special Gathering", imageUrl: "uploads/2020/08/12.jpg" },
+  { id: -6, title: "Community Interactive Session", imageUrl: "uploads/2020/08/DSCN0648-scaled.jpg" },
+  { id: -7, title: "Campus Leadership Event", imageUrl: "uploads/2020/08/DSCN0649-scaled.jpg" },
+  { id: -8, title: "Empowerment Cell Meeting", imageUrl: "uploads/2020/08/WhatsApp-Image-2020-08-28-at-11.09.16-AM-3.jpeg" },
+  { id: -9, title: "Student Awareness Drive", imageUrl: "uploads/2020/08/WhatsApp-Image-2020-08-28-at-11.27.17-AM.jpeg" },
+  { id: -10, title: "Annual WE&GC Meet", imageUrl: "uploads/2020/08/DSC02794-scaled.jpg" },
+];
 
 export const getWeGallery = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any[]>("we_gallery");
-  if (cached) return cached;
+  if (cached && cached.length > 0) return cached;
 
-  const records = await db.select().from(weGallery).orderBy(asc(weGallery.id));
-  serverCache.set("we_gallery", records);
-  return records;
+  try {
+    const records = await db.select().from(weGallery).orderBy(asc(weGallery.id));
+    const result = records.length > 0 ? records : DEFAULT_WE_GALLERY;
+    serverCache.set("we_gallery", result);
+    return result;
+  } catch {
+    return DEFAULT_WE_GALLERY;
+  }
 });
 
-export const addWeGalleryImage = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const addWeGalleryImage = createServerFn({ method: "POST" })
+  .inputValidator((data: { title: string; imageUrl: string }) => data)
+  .handler(async ({ data }) => {
     return weMutate(async () => {
       await db.insert(weGallery).values(data);
       return { success: true };
     });
-  },
-);
+  });
 
-export const deleteWeGalleryImage = createServerFn({ method: "POST" }).handler(
-  async ({ data: id }: { data: number }) => {
+export const deleteWeGalleryImage = createServerFn({ method: "POST" })
+  .inputValidator((data: { id: number }) => data)
+  .handler(async ({ data }) => {
     return weMutate(async () => {
-      await db.delete(weGallery).where(eq(weGallery.id, id));
+      await db.delete(weGallery).where(eq(weGallery.id, data.id));
       return { success: true };
     });
-  },
-);
+  });

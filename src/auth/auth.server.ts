@@ -1,11 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { redirect } from "@tanstack/react-router";
-import { getCookie, setCookie, deleteCookie, getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
-import { authService } from "./auth.service";
-import { authRepository } from "./auth.repository";
-import { verifyDepartmentAccess } from "../lib/departments";
-// Helper to extract request context for audit logs using framework-safe utilities
-function getRequestContext() {
+
+async function getRequestContext() {
+  const { getRequestHeader, getRequestIP } = await import("@tanstack/react-start/server");
   const userAgent = getRequestHeader("user-agent") || null;
   const ipAddress = getRequestIP({ xForwardedFor: true }) || null;
   return { userAgent, ipAddress };
@@ -28,7 +25,10 @@ export const loginWithEmail = createServerFn({
   })
   .handler(async ({ data }) => {
     const { email, password } = data;
-    const { userAgent, ipAddress } = getRequestContext();
+    const { userAgent, ipAddress } = await getRequestContext();
+    const { authService } = await import("./auth.service");
+    const { authRepository } = await import("./auth.repository");
+    const { setCookie } = await import("@tanstack/react-start/server");
 
     try {
       const admin = await authRepository.findAdminByEmail(email);
@@ -105,7 +105,9 @@ export const loginWithEmail = createServerFn({
 export const getCurrentAdmin = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const { userAgent, ipAddress } = getRequestContext();
+  const { userAgent, ipAddress } = await getRequestContext();
+  const { authService } = await import("./auth.service");
+  const { getCookie, deleteCookie } = await import("@tanstack/react-start/server");
   const token = getCookie("admin_session_token");
 
   if (!token) {
@@ -140,7 +142,9 @@ export const getCurrentAdmin = createServerFn({
 export const logoutAdmin = createServerFn({
   method: "POST",
 }).handler(async () => {
-  const { userAgent, ipAddress } = getRequestContext();
+  const { userAgent, ipAddress } = await getRequestContext();
+  const { authService } = await import("./auth.service");
+  const { getCookie, deleteCookie } = await import("@tanstack/react-start/server");
   const token = getCookie("admin_session_token");
 
   if (token) {
@@ -161,7 +165,8 @@ export const loginHod = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data as { deptId: string; deptSlug: string; password: string })
   .handler(async ({ data }) => {
     const { deptId, deptSlug, password } = data;
-    const { userAgent, ipAddress } = getRequestContext();
+    const { verifyDepartmentAccess } = await import("../lib/departments");
+    const { setCookie } = await import("@tanstack/react-start/server");
 
     const result = await verifyDepartmentAccess({ data: { deptId, password } } as any);
 
@@ -182,11 +187,13 @@ export const loginHod = createServerFn({ method: "POST" })
   });
   
 export const getCurrentHodDept = createServerFn({ method: "GET" }).handler(async () => {
+  const { getCookie } = await import("@tanstack/react-start/server");
   const deptId = getCookie("hod_session_dept");
   return deptId || null;
 });
 
 export const logoutHod = createServerFn({ method: "POST" }).handler(async () => {
+  const { deleteCookie } = await import("@tanstack/react-start/server");
   deleteCookie("hod_session_dept", { path: "/" });
   return { success: true };
 });
@@ -200,6 +207,8 @@ export const initiateGoogleLogin = createServerFn({
   const state = crypto.randomUUID();
   const maxAge = 300; // 5 minutes
   const secure = process.env.NODE_ENV === "production";
+  const { setCookie } = await import("@tanstack/react-start/server");
+  const { authService } = await import("./auth.service");
   
   // Store state in an HTTP-only secure cookie
   setCookie("google_oauth_state", state, {
@@ -218,77 +227,37 @@ export const initiateGoogleLogin = createServerFn({
   });
 });
 
-/**
- * Handles the callback code exchange and session validation for Google OAuth
- */
-export const handleGoogleCallback = createServerFn({
-  method: "POST",
-})
-  .inputValidator((data: any) => {
-    return data as { code: string; state: string };
-  })
+export const handleGoogleCallback = createServerFn({ method: "POST" })
+  .inputValidator((data: any) => data as { code: string; state: string })
   .handler(async ({ data }) => {
     const { code, state } = data;
-    const { userAgent, ipAddress } = getRequestContext();
+    const { getCookie, deleteCookie, setCookie } = await import("@tanstack/react-start/server");
+    const { userAgent, ipAddress } = await getRequestContext();
+    const { authService } = await import("./auth.service");
+    const { authRepository } = await import("./auth.repository");
 
-    // Retrieve state cookie
-    const stateCookie = getCookie("google_oauth_state");
-
-    // Clear state cookie
+    const savedState = getCookie("google_oauth_state");
     deleteCookie("google_oauth_state", { path: "/" });
 
-    if (!code || !state) {
+    if (!savedState || savedState !== state) {
       throw redirect({
-        to: "/admin/",
-        search: {
-          error: "missing_oauth_params",
-        },
-      });
-    }
-
-    // CSRF Protection validation
-    if (!stateCookie || state !== stateCookie) {
-      await authService.logAction({
-        action: "LOGIN_FAILED",
-        ipAddress,
-        userAgent,
-        details: "Google OAuth State mismatch (potential CSRF attempt)",
-      });
-      throw redirect({
-        to: "/admin/",
-        search: {
-          error: "state_mismatch",
-        },
+        to: "/admin",
+        search: { tab: "login" } as any,
       });
     }
 
     try {
-      // Exchange code for Google user details and retrieve verified email
       const email = await authService.verifyGoogleCodeAndGetEmail(code, ipAddress, userAgent);
-
-      // Verify email exists in admins table
       const admin = await authRepository.findAdminByEmail(email);
-
       if (!admin) {
-        await authService.logAction({
-          action: "LOGIN_FAILED",
-          ipAddress,
-          userAgent,
-          details: `Unauthorized Google Sign-In attempt with email: ${email}`,
-        });
         throw redirect({
-          to: "/admin/",
-          search: {
-            error: "unauthorized_google_account",
-            email: email,
-          },
+          to: "/admin",
+          search: { tab: "login" } as any,
         });
       }
 
-      // Create session
       const { token, expiresAt } = await authService.createSession(admin.adminId, ipAddress, userAgent);
 
-      // Set cookie securely
       setCookie("admin_session_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -297,33 +266,14 @@ export const handleGoogleCallback = createServerFn({
         expires: expiresAt,
       });
 
-      await authService.logAction({
-        adminId: admin.adminId,
-        action: "LOGIN_GOOGLE",
-        ipAddress,
-        userAgent,
-        details: `Successful Google Sign-In authentication for ${email}`,
-      });
-
       throw redirect({
-        to: "/admin/",
+        to: "/admin",
       });
     } catch (err: any) {
-      if (err.status === 307 || err.status === 302 || err.headers) {
-        throw err;
-      }
-      console.error("Google OAuth Callback Exception:", err.message);
-      await authService.logAction({
-        action: "LOGIN_FAILED",
-        ipAddress,
-        userAgent,
-        details: `Google OAuth Callback Exception: ${err.message}`,
-      });
+      if (err?.to) throw err;
       throw redirect({
-        to: "/admin/",
-        search: {
-          error: "oauth_exchange_failed",
-        },
+        to: "/admin",
+        search: { tab: "login" } as any,
       });
     }
   });

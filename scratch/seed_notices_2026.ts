@@ -3,6 +3,24 @@ import postgres from "postgres";
 
 const NOTICES = [
   {
+    date: "August 12, 2026",
+    tag: "Academic",
+    title: "Academic Calendar for II B.Tech (2026–2027)",
+    url: "https://jntugvcev.edu.in/wp-content/uploads/2026/08/ii-b-tech-academic-calendar-2026-2027.pdf",
+  },
+  {
+    date: "August 6, 2026",
+    tag: "Academic",
+    title: "SCCI Semiconductor Design – Parikalpak Technical Program at JNTU-GV Vizianagaram (August 6, 2026)",
+    url: "https://jntugvcev.edu.in/wp-content/uploads/2026/08/scci-semiconductor-design-parikalpak-2026.pdf",
+  },
+  {
+    date: "August 4, 2026",
+    tag: "Academic",
+    title: "Academic Calendar for II M.Tech (2026–2027)",
+    url: "https://jntugvcev.edu.in/wp-content/uploads/2026/08/academic-calendar-for-ii-m-tech-2026-27.pdf",
+  },
+  {
     date: "July 20, 2026",
     tag: "Exams",
     title: "Timetable for M.Tech II-Semester (R19) Supplementary End Examinations, July/August-2026",

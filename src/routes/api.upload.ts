@@ -76,16 +76,25 @@ export const Route = createFileRoute("/api/upload")({
           const month = String(now.getMonth() + 1).padStart(2, "0");
 
           let relativeFolder = "";
-          if (mod === "notices" || mod === "date" || cat === "date" || fileExtension === ".pdf") {
+          if (
+            mod === "notices" ||
+            mod === "documents" ||
+            mod === "date" ||
+            mod === "uploads" ||
+            mod === "general" ||
+            cat === "date" ||
+            fileExtension === ".pdf" ||
+            !mod
+          ) {
             relativeFolder = `${year}/${month}`;
           } else if (mod === "engineering") {
-            relativeFolder = `facilities/engineering-cell/${cat}`;
+            relativeFolder = `facilities/engineering-cell/${year}/${month}`;
           } else if (mod === "clubs") {
-            relativeFolder = `facilities/clubs/${cat}`;
+            relativeFolder = `facilities/clubs/${year}/${month}`;
           } else if (mod === "amenities") {
-            relativeFolder = `facilities/amenities/${cat}`;
+            relativeFolder = `facilities/amenities/${year}/${month}`;
           } else {
-            relativeFolder = `${mod}/${cat}`;
+            relativeFolder = `${mod}/${year}/${month}`;
           }
 
           const baseDir = path.join(process.cwd(), "local-assets", "uploads");

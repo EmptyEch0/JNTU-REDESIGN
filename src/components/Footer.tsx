@@ -62,7 +62,7 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/admissions" className="hover:text-white transition-colors">
+              <Link to="/academics/admissions" className="hover:text-white transition-colors">
                 Admissions
               </Link>
             </li>

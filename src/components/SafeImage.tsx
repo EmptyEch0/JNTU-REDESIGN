@@ -1,7 +1,7 @@
 import { useState, ImgHTMLAttributes } from "react";
 import { getAssetUrl } from "@/lib/assets";
 
-interface SafeImageProps extends ImgHTMLAttributes<HTMLImageElement> {
+interface SafeImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
   src?: string | null;
   fallbackName?: string;
   fallbackSrc?: string;

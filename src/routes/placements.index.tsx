@@ -47,7 +47,7 @@ function PlacementsPage() {
   const topPackageValue = topPackageMatch ? parseFloat(topPackageMatch[0]) : 42;
 
   const saveTPO = async () => {
-    if (!editedTPO) return;
+    if (!editedTPO || !tpoData) return;
     toast.promise(updateTPO({ data: { id: tpoData.id, ...editedTPO } }), {
       loading: "Saving...",
       success: () => {

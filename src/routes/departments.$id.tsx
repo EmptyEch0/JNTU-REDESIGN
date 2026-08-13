@@ -65,6 +65,38 @@ export const Route = createFileRoute("/departments/$id")({
   component: DepartmentLayout,
 });
 
+import { getDepartmentNavItems, type DepartmentNavItem } from "@/funcs/department-cms.server";
+import { SidebarManagerModal } from "@/components/cms/SidebarManagerModal";
+import { useQuery } from "@tanstack/react-query";
+import { Settings, Plus, FolderPlus, Award, FileText, Download, Sparkles } from "lucide-react";
+
+function getNavIcon(iconName: string) {
+  switch (iconName) {
+    case "BookOpen":
+      return <BookOpen size={18} />;
+    case "Users":
+      return <Users size={18} />;
+    case "GraduationCap":
+      return <GraduationCap size={18} />;
+    case "FlaskConical":
+      return <FlaskConical size={18} />;
+    case "Trophy":
+      return <Trophy size={18} />;
+    case "ImageIcon":
+      return <ImageIcon size={18} />;
+    case "Award":
+      return <Award size={18} />;
+    case "FileText":
+      return <FileText size={18} />;
+    case "Download":
+      return <Download size={18} />;
+    case "Sparkles":
+      return <Sparkles size={18} />;
+    default:
+      return <span className="text-base">{iconName || "🎓"}</span>;
+  }
+}
+
 function DepartmentLayout() {
   const loaderData = Route.useLoaderData() as unknown as DepartmentData;
   const location = useLocation();
@@ -73,6 +105,7 @@ function DepartmentLayout() {
   const queryClient = useQueryClient();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSidebarManagerOpen, setIsSidebarManagerOpen] = useState(false);
 
   // Redirect guard for HOD sessions trying to roam to other departments
   useEffect(() => {
@@ -83,6 +116,13 @@ function DepartmentLayout() {
 
   const isUnlocked = hasEditPermission(loaderData?.slug || "");
   const isEditMode = isDeptEditing(loaderData?.slug || "");
+
+  // Query dynamic database-driven sidebar nav items
+  const { data: dynamicNavItems = [] } = useQuery({
+    queryKey: ["deptNav", loaderData?.slug, isEditMode],
+    queryFn: () => getDepartmentNavItems({ data: { deptSlug: loaderData.slug, isEditMode } }),
+    enabled: Boolean(loaderData?.slug),
+  });
 
   const [headerEdit, setHeaderEdit] = useState({
     name: loaderData?.name || "",
@@ -134,16 +174,6 @@ function DepartmentLayout() {
     );
   }
 
-  const navLinks = [
-    { name: "About & Vision", path: "", icon: <BookOpen size={18} /> },
-    { name: "HOD's Desk", path: "/hod", icon: <Users size={18} /> },
-    { name: "Programmes", path: "/courses", icon: <GraduationCap size={18} /> },
-    { name: "Faculty", path: "/faculty", icon: <Users size={18} /> },
-    { name: "Laboratories", path: "/labs", icon: <FlaskConical size={18} /> },
-    { name: "Achievements", path: "/achievements", icon: <Trophy size={18} /> },
-    { name: "Gallery", path: "/gallery", icon: <ImageIcon size={18} /> },
-  ];
-
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -152,9 +182,8 @@ function DepartmentLayout() {
           src={headerEdit.image} 
           className="h-full w-full object-cover opacity-40" 
           alt={headerEdit.name} 
-loading="lazy"
-    decoding="async"
-
+          loading="lazy"
+          decoding="async"
           fallbackSrc="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1500&q=80"
         />
         
@@ -182,7 +211,7 @@ loading="lazy"
                     onChange={(e) => setHeaderEdit({ ...headerEdit, name: e.target.value })}
                   />
                 </div>
-                <button onClick={() => mutation.mutate(headerEdit)} className="flex items-center gap-2 bg-amber-500 text-black px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider mx-auto">
+                <button onClick={() => mutation.mutate(headerEdit)} className="flex items-center gap-2 bg-amber-500 text-black px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider mx-auto shadow-lg">
                   <Save size={14} /> Save Header
                 </button>
               </div>
@@ -204,64 +233,121 @@ loading="lazy"
 
       <div className="max-w-7xl mx-auto py-12 px-4 flex flex-col lg:flex-row gap-12 relative">
         
-        {/* Floating Toggle Button for Mobile Screen - MOVED TO LEFT */}
-<button 
-  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-  className="lg:hidden fixed bottom-6 left-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-2xl transition-all duration-200 active:scale-95"
-  aria-label="Toggle Menu"
->
-  {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-</button>
+        {/* Floating Toggle Button for Mobile Screen */}
+        <button 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+          className="lg:hidden fixed bottom-6 left-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-2xl transition-all duration-200 active:scale-95"
+          aria-label="Toggle Menu"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
 
         {/* Sidebar Navigation */}
         <aside className={`
-          fixed inset-y-0 left-0 z-40 w-72 bg-slate-50 p-6 shadow-2xl transition-transform duration-300 ease-in-out
+          fixed inset-y-0 left-0 z-40 w-72 bg-card p-6 shadow-2xl transition-transform duration-300 ease-in-out
           lg:sticky lg:top-28 lg:self-start lg:transform-none lg:p-0 lg:bg-transparent lg:z-0 lg:shadow-none lg:w-64 flex-shrink-0
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}>
-          <div className="bg-white lg:bg-slate-50 rounded-3xl p-6 lg:border border-slate-100 h-fit space-y-6">
+          <div className="bg-card rounded-3xl p-5 lg:border border-border/80 h-fit space-y-5 shadow-sm">
             
             {/* Header Title Inside Mobile Menu */}
-            <div className="flex items-center justify-between lg:hidden border-b pb-4 mb-2 border-slate-200">
-              <span className="font-bold text-slate-800 text-lg uppercase tracking-wider">Navigation</span>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="text-slate-500 hover:text-slate-800">
+            <div className="flex items-center justify-between lg:hidden border-b pb-4 mb-2 border-border">
+              <span className="font-serif font-bold text-ink text-lg uppercase tracking-wider">Navigation</span>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="text-muted-foreground hover:text-foreground p-1">
                 <X size={20} />
               </button>
             </div>
 
-            <nav className="space-y-2">
-              {navLinks.map((link) => {
-                const fullPath = `/departments/${loaderData.slug}${link.path}`;
-                const isActive = link.path === "" 
+            {/* HOD Admin Control Bar in Sidebar */}
+            {isEditMode && (
+              <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-2 mb-3">
+                <div className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 dark:text-amber-300 flex items-center justify-between">
+                  <span>HOD CMS Controls</span>
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                </div>
+                <button
+                  onClick={() => setIsSidebarManagerOpen(true)}
+                  className="w-full py-2 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95"
+                >
+                  <Settings size={14} /> Manage Nav & Reorder
+                </button>
+              </div>
+            )}
+
+            <nav className="space-y-1.5">
+              {dynamicNavItems.map((item) => {
+                const subPath = item.slug ? `/${item.slug}` : "";
+                const fullPath = `/departments/${loaderData.slug}${subPath}`;
+                const isActive = subPath === ""
                   ? location.pathname === fullPath
                   : location.pathname.startsWith(fullPath);
-                
+
                 return (
-                  <Link
-                    key={link.path}
-                    to={fullPath}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                      isActive ? "bg-blue-600 text-white shadow-md shadow-blue-600/20" : "text-slate-600 hover:bg-slate-100 lg:hover:bg-white"
-                    }`}
-                  >
-                    {link.icon} {link.name}
-                  </Link>
+                  <div key={item.id} className="space-y-1">
+                    <Link
+                      to={fullPath}
+                      className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-sm font-semibold transition-all ${
+                        isActive
+                          ? "bg-primary text-white shadow-md shadow-primary/25"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                      }`}
+                    >
+                      {getNavIcon(item.icon)} <span>{item.title}</span>
+                    </Link>
+
+                    {/* Render Nested Children Navigation if present */}
+                    {item.children && item.children.length > 0 && (
+                      <div className="pl-5 space-y-1 pt-1 border-l-2 border-border ml-4">
+                        {item.children.map((child) => {
+                          const childPath = `/departments/${loaderData.slug}/${child.slug}`;
+                          const isChildActive = location.pathname.startsWith(childPath);
+                          return (
+                            <Link
+                              key={child.id}
+                              to={childPath}
+                              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                isChildActive
+                                  ? "bg-primary/15 text-primary font-bold"
+                                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                              }`}
+                            >
+                              {getNavIcon(child.icon)} <span>{child.title}</span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                 );
               })}
             </nav>
+
             {hodDeptId && (
-  <button
-    onClick={async () => {
-      await logout();
-      navigate({ to: "/" });
-    }}
-    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-all mt-4 border-t border-slate-200 pt-4"
-  >
-    <LogOut size={18} /> Logout (HOD)
-  </button>
-)}
+              <button
+                onClick={async () => {
+                  await logout();
+                  navigate({ to: "/" });
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-all mt-4 border-t border-slate-200 pt-4"
+              >
+                <LogOut size={18} /> Logout (HOD)
+              </button>
+            )}
           </div>
         </aside>
+
+        {/* Sidebar Manager Modal */}
+        {isSidebarManagerOpen && (
+          <SidebarManagerModal
+            deptSlug={loaderData.slug}
+            items={dynamicNavItems}
+            isOpen={isSidebarManagerOpen}
+            onClose={() => setIsSidebarManagerOpen(false)}
+            onRefresh={() => {
+              queryClient.invalidateQueries({ queryKey: ["deptNav", loaderData.slug] });
+            }}
+          />
+        )}
 
         {/* Transparent Backdrop Layer Overlay when Drawer is Open on Mobile */}
         {isMobileMenuOpen && (

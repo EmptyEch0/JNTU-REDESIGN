@@ -12,8 +12,9 @@ import {
 import { eq } from "drizzle-orm";
 import { serverCache } from "../lib/server-cache";
 
-export const getLeadershipData = createServerFn({ method: "GET" }).handler(
-  async ({ data: slug }: { data: string }) => {
+export const getLeadershipData = createServerFn({ method: "GET" })
+  .inputValidator((d: string) => d)
+  .handler(async ({ data: slug }) => {
     const cacheKey = `leadership_${slug}`;
     const cached = serverCache.get<any>(cacheKey);
     if (cached) return cached;
@@ -25,8 +26,9 @@ export const getLeadershipData = createServerFn({ method: "GET" }).handler(
   },
 );
 
-export const getLeadershipStaff = createServerFn({ method: "GET" }).handler(
-  async ({ data: slug }: { data: string }) => {
+export const getLeadershipStaff = createServerFn({ method: "GET" })
+  .inputValidator((d: string) => d)
+  .handler(async ({ data: slug }) => {
     const cacheKey = `leadership_staff_${slug}`;
     const cached = serverCache.get<any[]>(cacheKey);
     if (cached) return cached;
@@ -34,8 +36,7 @@ export const getLeadershipStaff = createServerFn({ method: "GET" }).handler(
     const records = await db.select().from(leadershipStaff).where(eq(leadershipStaff.leadershipSlug, slug));
     serverCache.set(cacheKey, records);
     return records;
-  },
-);
+  });
 
 export const getIqacComposition = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any[]>("iqac_composition");
@@ -46,8 +47,9 @@ export const getIqacComposition = createServerFn({ method: "GET" }).handler(asyn
   return records;
 });
 
-export const getIqacReports = createServerFn({ method: "GET" }).handler(
-  async ({ data: type }: { data: string }) => {
+export const getIqacReports = createServerFn({ method: "GET" })
+  .inputValidator((d: string) => d)
+  .handler(async ({ data: type }) => {
     const cacheKey = `iqac_reports_${type}`;
     const cached = serverCache.get<any[]>(cacheKey);
     if (cached) return cached;
@@ -55,8 +57,7 @@ export const getIqacReports = createServerFn({ method: "GET" }).handler(
     const records = await db.select().from(iqacReports).where(eq(iqacReports.type, type));
     serverCache.set(cacheKey, records);
     return records;
-  },
-);
+  });
 
 export const getIqacOutcomes = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any[]>("iqac_outcomes");
@@ -85,11 +86,11 @@ export const getIqacMous = createServerFn({ method: "GET" }).handler(async () =>
   return records;
 });
 
-export const updateLeadershipData = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const updateLeadershipData = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     await db.update(leadership).set(updateData).where(eq(leadership.id, id));
     serverCache.invalidate("leadership_", true);
     return { success: true };
-  },
-);
+  });

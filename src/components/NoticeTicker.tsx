@@ -6,6 +6,21 @@ import { getAssetUrl } from "@/lib/assets";
 
 const NOTICES = [
   {
+    title: "Academic Calendar for II B.Tech (2026–2027)",
+    date: "August 12, 2026",
+    url: "https://jntugvcev.edu.in/wp-content/uploads/2026/08/ii-b-tech-academic-calendar-2026-2027.pdf",
+  },
+  {
+    title: "SCCI Semiconductor Design – Parikalpak Technical Program at JNTU-GV Vizianagaram (August 6, 2026)",
+    date: "August 6, 2026",
+    url: "https://jntugvcev.edu.in/wp-content/uploads/2026/08/scci-semiconductor-design-parikalpak-2026.pdf",
+  },
+  {
+    title: "Academic Calendar for II M.Tech (2026–2027)",
+    date: "August 4, 2026",
+    url: "https://jntugvcev.edu.in/wp-content/uploads/2026/08/academic-calendar-for-ii-m-tech-2026-27.pdf",
+  },
+  {
     title: "Timetable for M.Tech II-Semester (R19) Supplementary End Examinations, July/August-2026",
     date: "July 20, 2026",
     url: getAssetUrl("uploads/2026/07/m-tech-ii-sem-r19-supplementary-end-time-table-july-august-2026.pdf"),

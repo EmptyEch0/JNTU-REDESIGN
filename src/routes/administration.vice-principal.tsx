@@ -93,7 +93,7 @@ function VicePrincipalPage() {
                     <img decoding="async" loading="lazy"
                       src={getAssetUrl(data.image)}
                       alt={data.name}
-                      className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                      className="h-full w-full object-cover transition-all duration-700"
                     />
                   )}
                 </div>

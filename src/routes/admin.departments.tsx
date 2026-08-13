@@ -23,6 +23,7 @@ import {
 import { PageHero } from "@/components/PageHero";
 import { useAdmin } from "../context/AdminContext";
 import { useNavigate } from "@tanstack/react-router";
+import { getAssetUrl } from "@/lib/assets";
 import { toast } from "sonner";
 import { AdminUpload } from "@/components/AdminEditPanel";
 

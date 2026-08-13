@@ -75,7 +75,7 @@ function RDPage() {
   });
 
   const saveAll = async () => {
-    const promises = [
+    const promises: Promise<any>[] = [
       ...Object.entries(editedAreas).map(([id, data]) =>
         updateFocusArea({ data: { id: parseInt(id), ...data } }),
       ),

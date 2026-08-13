@@ -195,10 +195,14 @@ export function MegaMenu() {
 
                     {/* Groups dropdown — glassmorphic popover */}
                     {openIdx === i && item.groups && !searchOpen && (
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 z-50 animate-[fade-in_0.2s_ease-out]">
+                      <div className={`absolute top-full pt-2.5 z-50 animate-[fade-in_0.2s_ease-out] ${
+                        i <= 1 ? "left-0" : i >= NAV.length - 2 ? "right-0" : "left-1/2 -translate-x-1/2"
+                      }`}>
                         {/* Top Caret Arrow Notch */}
                         <div
-                          className="absolute top-[4px] left-1/2 -translate-x-1/2 w-3.5 h-3.5 rotate-45 z-10 pointer-events-none"
+                          className={`absolute top-[4px] w-3.5 h-3.5 rotate-45 z-10 pointer-events-none ${
+                            i <= 1 ? "left-8" : i >= NAV.length - 2 ? "right-8" : "left-1/2 -translate-x-1/2"
+                          }`}
                           style={{
                             background: "rgba(15, 30, 55, 0.75)",
                             borderTop: "1px solid rgba(255, 255, 255, 0.18)",
@@ -224,21 +228,22 @@ export function MegaMenu() {
                             overflow: "hidden",
                           }}
                         >
-<div className={`grid gap-3.5 ${
-  item.groups.length === 1 && item.groups[0].items.length > 4 ? "grid-cols-1" :
-  item.groups.length === 1 ? "grid-cols-1" :
-  item.groups.length === 2 ? "grid-cols-2" :
-  item.groups.length === 3 ? "grid-cols-3" :
-  "grid-cols-4"
-}`}>
-  {item.groups.map((g) => (
-    <div key={g.title}>
-      <div className="text-[10px] uppercase tracking-[0.2em] font-extrabold text-blue-300 px-2 mb-1.5">
-        {g.title}
-      </div>
-      <ul className={`space-y-1 ${
-        item.groups.length === 1 && g.items.length > 4 ? "grid grid-cols-2 gap-x-3 gap-y-1 space-y-0" : ""
-      }`}>
+{item.groups && item.groups.length > 0 && (
+  <div className={`grid gap-3.5 ${
+    item.groups.length === 1 && item.groups[0]?.items.length > 4 ? "grid-cols-1" :
+    item.groups.length === 1 ? "grid-cols-1" :
+    item.groups.length === 2 ? "grid-cols-2" :
+    item.groups.length === 3 ? "grid-cols-3" :
+    "grid-cols-4"
+  }`}>
+    {item.groups.map((g) => (
+      <div key={g.title}>
+        <div className="text-[10px] uppercase tracking-[0.2em] font-extrabold text-blue-300 px-2 mb-1.5">
+          {g.title}
+        </div>
+        <ul className={`space-y-1 ${
+          item.groups?.length === 1 && g.items.length > 4 ? "grid grid-cols-2 gap-x-3 gap-y-1 space-y-0" : ""
+        }`}>
         {g.items.map((it) => {
           const ItemIcon = getItemIcon(it.label);
           return (
@@ -269,6 +274,7 @@ export function MegaMenu() {
     </div>
   ))}
 </div>
+)}
                         </div>
                       </div>
                     )}

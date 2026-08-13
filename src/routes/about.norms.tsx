@@ -81,9 +81,9 @@ function NormsPage() {
   const { isEditMode } = useAdmin();
   const router = useRouter();
 
-  const heroRec = pageContent.find((r) => r.sectionKey === "hero");
-  const recRec = pageContent.find((r) => r.sectionKey === "rec");
-  const ugcRec = pageContent.find((r) => r.sectionKey === "ugc");
+  const heroRec = pageContent.find((r) => r.sectionKey === "hero") as any;
+  const recRec = pageContent.find((r) => r.sectionKey === "rec") as any;
+  const ugcRec = pageContent.find((r) => r.sectionKey === "ugc") as any;
 
   const [editTexts, setEditTexts] = useState({
     heroTitle: heroRec?.title || DEFAULTS.heroTitle,
@@ -347,7 +347,7 @@ function NormsPage() {
               <RevealOnScroll key={doc.id} delay={i * 100}>
                 <div className="group relative flex flex-col md:flex-row items-center gap-6 p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
                   <a
-                    href={doc.link}
+                    href={doc.link || undefined}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 flex flex-col md:flex-row items-center gap-6"

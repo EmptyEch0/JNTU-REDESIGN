@@ -31,17 +31,26 @@ export function ImageWithLoader({
   className = "",
   wrapperClassName = "",
   aspectRatio,
-  fallbackSrc = "https://images.unsplash.com/photo-1594322436404-5a0526db4d13?w=500",
+  fallbackSrc = "/local-assets/uploads/photo-gallery/IMG_6832.JPG",
   smartFit = false,
   priority = false,
   loading,
   ...props
 }: ImageWithLoaderProps) {
   const [hasError, setHasError] = useState(false);
-  const displaySrc = hasError ? fallbackSrc : src;
+  const displaySrc = hasError ? fallbackSrc : (src || fallbackSrc);
 
   const [isLoaded, setIsLoaded] = useState(() => globalLoadedImages.has(displaySrc));
   const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    setHasError(false);
+    if (globalLoadedImages.has(src)) {
+      setIsLoaded(true);
+    } else {
+      setIsLoaded(false);
+    }
+  }, [src]);
 
   useEffect(() => {
     if (globalLoadedImages.has(displaySrc)) {
@@ -53,24 +62,23 @@ export function ImageWithLoader({
       if (imgRef.current.naturalWidth > 0) {
         globalLoadedImages.add(displaySrc);
         setIsLoaded(true);
-      } else {
+      } else if (!hasError) {
         setHasError(true);
-        setIsLoaded(true);
       }
     }
-  }, [displaySrc]);
+  }, [displaySrc, hasError]);
 
   return (
     <div
-      className={`relative overflow-hidden bg-slate-950 ${wrapperClassName}`}
+      className={`relative overflow-hidden bg-muted/40 dark:bg-slate-900/60 ${wrapperClassName}`}
       style={aspectRatio ? { aspectRatio } : undefined}
     >
       {/* Loading Skeleton & Spinner */}
       {!isLoaded && !hasError && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 animate-pulse p-4">
-          <div className="flex items-center gap-2 text-slate-400">
-            <Loader2 className="h-5 w-5 animate-spin text-amber-500" />
-            <ImageIcon className="h-4 w-4 opacity-60" />
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-gradient-to-r from-muted/50 via-muted/80 to-muted/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 animate-pulse p-4">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Loader2 className="h-5 w-5 animate-spin text-primary" />
+            <ImageIcon className="h-4 w-4 opacity-50" />
           </div>
         </div>
       )}
@@ -92,15 +100,17 @@ export function ImageWithLoader({
         alt={alt}
         decoding="async"
         loading={priority ? "eager" : loading || "lazy"}
-        // @ts-expect-error - fetchPriority is supported in modern browsers
         fetchPriority={priority ? "high" : "auto"}
         onLoad={() => {
           globalLoadedImages.add(displaySrc);
           setIsLoaded(true);
         }}
         onError={() => {
-          setHasError(true);
-          setIsLoaded(true);
+          if (!hasError) {
+            setHasError(true);
+          } else {
+            setIsLoaded(true);
+          }
         }}
         className={`relative z-10 transition-opacity duration-300 ease-in-out ${
           isLoaded ? "opacity-100" : "opacity-0"

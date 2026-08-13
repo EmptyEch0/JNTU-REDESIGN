@@ -40,7 +40,8 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
       try {
         const allAcadFaculty = await db.select().from(academicFaculty);
         for (const af of allAcadFaculty) {
-          await ingestSingleChunk(`Academic Faculty Member: ${af.name}, Designation: ${af.designation}, Department ID: ${af.deptId}, Qualification: ${af.qualification || ""}, Specialisation: ${af.specialization || ""}`, `acad_faculty:${af.id}`, "faculty", { deptId: af.deptId });
+          const afObj = af as any;
+          await ingestSingleChunk(`Academic Faculty Member: ${afObj.faculty_name || afObj.name}, Designation: ${afObj.designation}, Department: ${afObj.department || ""}, Qualification: ${afObj.qualification || ""}`, `acad_faculty:${afObj.id}`, "faculty", { department: afObj.department });
           count++;
         }
       } catch {
@@ -61,22 +62,23 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
 
       const allDepts = await db.select().from(departments);
       for (const d of allDepts) {
-        const rawHod = (d.hod || "").trim();
-        const hodName = rawHod.length > 5 ? rawHod : (HOD_MAP[d.slug?.toLowerCase() || ""] || rawHod);
+        const dObj = d as any;
+        const rawHod = (dObj.hod || "").trim();
+        const hodName = rawHod.length > 5 ? rawHod : (HOD_MAP[dObj.slug?.toLowerCase() || ""] || rawHod);
         if (hodName) {
           await ingestSingleChunk(
-            `Head of Department (HOD) of ${d.name}: ${hodName}. Department: ${d.name}. Code: ${d.code || d.slug}.`,
-            `dept_hod:${d.id}`,
+            `Head of Department (HOD) of ${dObj.name}: ${hodName}. Department: ${dObj.name}. Code: ${dObj.slug}.`,
+            `dept_hod:${dObj.id}`,
             "hod",
-            { department: d.name }
+            { department: dObj.name }
           );
           count++;
         }
         await ingestSingleChunk(
-          `Department of ${d.name} (${d.code || d.slug}). Overview: ${d.description || d.about || d.name}. HOD: ${hodName}`,
-          `dept:${d.id}`,
+          `Department of ${dObj.name} (${dObj.slug}). Overview: ${dObj.description || dObj.name}. HOD: ${hodName}`,
+          `dept:${dObj.id}`,
           "department",
-          { department: d.name }
+          { department: dObj.name }
         );
         count++;
       }
@@ -97,7 +99,8 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
       try {
         const allTimetables = await db.select().from(academicTimetables);
         for (const tt of allTimetables) {
-          await ingestSingleChunk(`Class Timetable: ${tt.title}. Branch: ${tt.branch}. Semester: ${tt.semester}. Download: ${tt.pdf_url}`, `timetable:${tt.id}`, "timetable", { pdf_url: tt.pdf_url });
+          const ttObj = tt as any;
+          await ingestSingleChunk(`Class Timetable: ${ttObj.subject_name || ttObj.program_name}. Branch: ${ttObj.branch}. Semester: ${ttObj.semester}. Download: ${ttObj.pdf_url}`, `timetable:${ttObj.id}`, "timetable", { pdf_url: ttObj.pdf_url });
           count++;
         }
       } catch {}
@@ -105,7 +108,8 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
       try {
         const allCalendars = await db.select().from(academicCalendars);
         for (const cal of allCalendars) {
-          await ingestSingleChunk(`Academic Calendar: ${cal.title}. Year: ${cal.year}. PDF: ${cal.pdf_url}`, `calendar:${cal.id}`, "calendar", { pdf_url: cal.pdf_url });
+          const calObj = cal as any;
+          await ingestSingleChunk(`Academic Calendar: ${calObj.calendar_type || calObj.program_name}. Year: ${calObj.academic_year}. PDF: ${calObj.pdf_url}`, `calendar:${calObj.id}`, "calendar", { pdf_url: calObj.pdf_url });
           count++;
         }
       } catch {}
@@ -113,7 +117,8 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
       try {
         const allDownloads = await db.select().from(academicDownloads);
         for (const dl of allDownloads) {
-          await ingestSingleChunk(`Academic Download Form: ${dl.title}. Category: ${dl.category}. PDF: ${dl.pdf_url}`, `download:${dl.id}`, "academic_download", { pdf_url: dl.pdf_url });
+          const dlObj = dl as any;
+          await ingestSingleChunk(`Academic Download Form: ${dlObj.document_name || dlObj.category}. PDF: ${dlObj.pdf_url}`, `download:${dlObj.id}`, "academic_download", { pdf_url: dlObj.pdf_url });
           count++;
         }
       } catch {}
@@ -121,7 +126,8 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
       try {
         const allFee = await db.select().from(academicFeeStructure);
         for (const fee of allFee) {
-          await ingestSingleChunk(`Fee Structure: ${fee.title}. Category: ${fee.category}. Details: ${fee.details}`, `fee:${fee.id}`, "fee", {});
+          const feeObj = fee as any;
+          await ingestSingleChunk(`Fee Structure: ${feeObj.course_name || feeObj.level}. Amount: ${feeObj.amount || ""}`, `fee:${feeObj.id}`, "fee", {});
           count++;
         }
       } catch {}
@@ -227,7 +233,8 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
       try {
         const hostels = await db.select().from(hostelContent);
         for (const h of hostels) {
-          await ingestSingleChunk(`Hostel Facility: ${h.title}. Description: ${h.description}. Capacity: ${h.capacity}`, `hostel:${h.id}`, "hostel", {});
+          const hObj = h as any;
+          await ingestSingleChunk(`Hostel Facility: ${hObj.healthName || hObj.description || ""}. Description: ${hObj.description || ""}`, `hostel:${hObj.id}`, "hostel", {});
           count++;
         }
       } catch {}
@@ -235,7 +242,8 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
       try {
         const libs = await db.select().from(libraryContent);
         for (const lb of libs) {
-          await ingestSingleChunk(`Library Facility & E-Resource: ${lb.title}. Description: ${lb.description}`, `library:${lb.id}`, "library", {});
+          const lbObj = lb as any;
+          await ingestSingleChunk(`Library Facility & E-Resource: ${lbObj.officerName || lbObj.designation || "Library"}. Description: ${lbObj.about || lbObj.digitalDescription || ""}`, `library:${lbObj.id}`, "library", {});
           count++;
         }
       } catch {}
@@ -243,7 +251,7 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
       try {
         const clubs = await db.select().from(studentClubs);
         for (const cl of clubs) {
-          await ingestSingleChunk(`Student Activity Club: ${cl.name}. About: ${cl.about}. Coordinator: ${cl.coordinator}`, `club:${cl.id}`, "student_club", {});
+          await ingestSingleChunk(`Student Activity Club: ${cl.name}. Description: ${(cl as any).description ?? (cl as any).title ?? ""}`, `club:${cl.id}`, "student_club", {});
           count++;
         }
       } catch {}

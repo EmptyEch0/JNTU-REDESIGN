@@ -245,7 +245,7 @@ function InstitutionPage() {
                 {editTexts.aboutTitle}
               </h2>
               <div className="mt-6 space-y-4 text-muted-foreground text-lg leading-relaxed whitespace-pre-line">
-                {editTexts.aboutContent.split("\n\n").map((para, i) => (
+                {editTexts.aboutContent.split("\n\n").map((para: string, i: number) => (
                   <p key={i}>{para}</p>
                 ))}
               </div>

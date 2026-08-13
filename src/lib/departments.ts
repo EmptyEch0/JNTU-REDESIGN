@@ -196,7 +196,8 @@ export const getFacultyByDept = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const id = typeof data === "string" ? data : (data as any)?.data || "";
     if (!id) return [];
-    return await db.select().from(faculty).where(eq(faculty.dept_id, id));
+    const rows = await db.select().from(faculty).where(eq(faculty.dept_id, id));
+    return rows as any[];
   });
 
 export const addFaculty = createServerFn({ method: "POST" })
@@ -219,7 +220,8 @@ export const getLabsByDept = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const id = typeof data === "string" ? data : (data as any)?.data || "";
     if (!id) return [];
-    return await db.select().from(laboratories).where(eq(laboratories.dept_id, id));
+    const rows = await db.select().from(laboratories).where(eq(laboratories.dept_id, id));
+    return rows as any[];
   });
 
 export const addLaboratory = createServerFn({ method: "POST" })

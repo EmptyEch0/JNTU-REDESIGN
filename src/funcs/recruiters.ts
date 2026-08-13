@@ -19,21 +19,21 @@ export const getRecruiters = createServerFn({ method: "GET" }).handler(async () 
   return records;
 });
 
-export const addRecruiter = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const addRecruiter = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     return recruiterMutate(() => db.insert(recruiters).values(data).returning());
-  },
-);
+  });
 
-export const updateRecruiter = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: any }) => {
+export const updateRecruiter = createServerFn({ method: "POST" })
+  .inputValidator((d: any) => d)
+  .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return recruiterMutate(() => db.update(recruiters).set(updateData).where(eq(recruiters.id, id)).returning());
-  },
-);
+  });
 
-export const deleteRecruiter = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: { id: number } }) => {
+export const deleteRecruiter = createServerFn({ method: "POST" })
+  .inputValidator((d: { id: number }) => d)
+  .handler(async ({ data }) => {
     return recruiterMutate(() => db.delete(recruiters).where(eq(recruiters.id, data.id)).returning());
-  },
-);
+  });

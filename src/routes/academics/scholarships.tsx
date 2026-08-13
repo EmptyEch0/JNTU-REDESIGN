@@ -21,7 +21,8 @@ import {
   ShieldAlert,
   FileBadge,
   Sparkles,
-  DollarSign
+  DollarSign,
+  X
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";

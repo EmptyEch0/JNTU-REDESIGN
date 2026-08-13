@@ -17,23 +17,20 @@ export const Route = createFileRoute("/auth/google/callback")({
       email: (search?.email as string) || undefined,
     };
   },
-  loader: async ({ search, location }) => {
-    // 1. Defensively extract search params from validated search parameter or location searchStr fallback
-    let code = search?.code;
-    let state = search?.state;
-    let error = search?.error;
-    let email = search?.email;
+  loader: async ({ location }) => {
+    let code: string | undefined;
+    let state: string | undefined;
+    let error: string | undefined;
+    let email: string | undefined;
 
-    if (!code || !state) {
-      try {
-        const urlParams = new URLSearchParams(location.searchStr);
-        code = urlParams.get("code") || undefined;
-        state = urlParams.get("state") || undefined;
-        error = urlParams.get("error") || undefined;
-        email = urlParams.get("email") || undefined;
-      } catch (err) {
-        console.error("Error parsing location searchStr in callback loader:", err);
-      }
+    try {
+      const urlParams = new URLSearchParams(location.searchStr);
+      code = urlParams.get("code") || undefined;
+      state = urlParams.get("state") || undefined;
+      error = urlParams.get("error") || undefined;
+      email = urlParams.get("email") || undefined;
+    } catch (err) {
+      console.error("Error parsing location searchStr in callback loader:", err);
     }
 
     // Print received callback parameters for diagnostics
@@ -48,21 +45,14 @@ export const Route = createFileRoute("/auth/google/callback")({
     // 2. Defensive handling: If Google returned an error query parameter, redirect to login page with error details
     if (error) {
       throw redirect({
-        to: "/admin/",
-        search: {
-          error,
-          email,
-        },
+        to: "/admin",
       });
     }
 
     // 3. Defensive handling: If code or state are missing, redirect to admin login page with missing parameter error
     if (!code || !state) {
       throw redirect({
-        to: "/admin/",
-        search: {
-          error: "missing_oauth_params",
-        },
+        to: "/admin",
       });
     }
 

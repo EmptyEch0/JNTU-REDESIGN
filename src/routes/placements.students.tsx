@@ -40,7 +40,7 @@ export const Route = createFileRoute("/placements/students")({
 
 function StudentsPlacedPage() {
   const queryClient = useQueryClient();
-  const { isAdmin, isEditMode, toggleEditMode } = useAdmin();
+  const { isAdmin, isEditMode, setGlobalEditMode } = useAdmin();
 
   // Local state for tracking changes
   const [editedYears, setEditedYears] = useState<Record<number, any>>({});
@@ -200,7 +200,7 @@ function StudentsPlacedPage() {
               </span>
             </div>
             <button
-              onClick={toggleEditMode}
+              onClick={() => setGlobalEditMode(!isEditMode)}
               className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all border ${isEditMode ? "bg-amber-600 text-white border-amber-600 shadow-md" : "bg-white text-amber-700 border-amber-200 hover:border-amber-300"}`}
             >
               {isEditMode ? "Disable Edit Mode" : "Enable Edit Mode"}

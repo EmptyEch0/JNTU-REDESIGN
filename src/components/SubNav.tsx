@@ -28,14 +28,29 @@ export function SubNav({ items }: { items: Item[] }) {
     setIsOpen(false);
   }, [path]);
 
-  const activeItem = items.find(it => path === it.to || (it.to !== "/" && path.startsWith(it.to + "/"))) || items[0];
+  const isItemActive = (it: Item) => {
+    const cleanPath = path.replace(/\/$/, "");
+    const cleanTo = it.to.replace(/\/$/, "");
+
+    if (cleanPath === cleanTo) return true;
+    
+    // Check if another item in the list is a more specific match (e.g. /women-empowerment/activities vs /women-empowerment)
+    const hasMoreSpecificMatch = items.some(
+      (other) => other.to !== it.to && other.to.length > it.to.length && (cleanPath === other.to.replace(/\/$/, "") || cleanPath.startsWith(other.to.replace(/\/$/, "") + "/"))
+    );
+
+    if (hasMoreSpecificMatch) return false;
+    return cleanTo !== "" && cleanTo !== "/" && cleanPath.startsWith(cleanTo + "/");
+  };
+
+  const activeItem = items.find(isItemActive) || items[0];
 
   return (
     <div className="sticky top-[80px] z-40 flex justify-center w-full px-4 pointer-events-none">
       {/* Desktop View */}
       <div className="hidden md:flex pointer-events-auto rounded-full bg-[oklch(0.16_0.04_255/0.88)] backdrop-blur-2xl shadow-[0_12px_40px_-12px_oklch(0.20_0.10_255/0.6),inset_0_1px_0_oklch(1_0_0/0.1)] border border-white/10 p-1.5 gap-1 items-center max-w-max">
         {items.map((it) => {
-          const active = path === it.to || (it.to !== "/" && path.startsWith(it.to + "/"));
+          const active = isItemActive(it);
           return (
             <Link
               key={it.to}
@@ -65,7 +80,7 @@ export function SubNav({ items }: { items: Item[] }) {
         {isOpen && (
           <div className="absolute top-full left-0 right-0 mt-2 p-1.5 rounded-2xl bg-[oklch(0.16_0.04_255/0.95)] backdrop-blur-2xl border border-white/10 shadow-xl flex flex-col gap-1 z-50 max-h-[60vh] overflow-y-auto no-scrollbar animate-[fade-in_0.2s_ease-out]">
             {items.map((it) => {
-              const active = path === it.to || (it.to !== "/" && path.startsWith(it.to + "/"));
+              const active = isItemActive(it);
               return (
                 <Link
                   key={it.to}

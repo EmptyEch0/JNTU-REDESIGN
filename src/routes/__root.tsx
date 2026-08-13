@@ -24,30 +24,27 @@ const Chatbot = lazy(() =>
   import("@/components/Chatbot").then((m) => ({ default: m.Chatbot }))
 );
 
+import { NotFound } from "@/components/NotFound";
+
 function NotFoundComponent() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <div className="text-eyebrow mb-3">404</div>
-        <h1 className="text-display text-5xl text-ink">Page not found</h1>
-        <p className="mt-3 text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <Link to="/" className="btn-primary mt-6 inline-flex">
-          Back home
-        </Link>
-      </div>
-    </div>
-  );
+  return <NotFound />;
 }
+
 interface MyRootContext {
   queryClient: import("@tanstack/react-query").QueryClient;
 }
 
 function GlobalSpinner() {
   return (
-    <div className="flex items-center justify-center min-h-[50vh]">
-      <div className="spinner"></div>
+    <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center space-y-4 animate-[fade-in_0.2s_ease-out]">
+      <div className="relative flex items-center justify-center">
+        <div className="spinner scale-125"></div>
+        <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping pointer-events-none" />
+      </div>
+      <div className="space-y-1">
+        <p className="text-sm font-semibold text-foreground tracking-wide">Loading JNTU-GV CEV</p>
+        <p className="text-xs text-muted-foreground">Preparing campus content...</p>
+      </div>
     </div>
   );
 }

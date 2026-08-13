@@ -1,7 +1,7 @@
 const rawBase = (
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_ASSETS_URL) ||
   (typeof process !== "undefined" && process.env?.VITE_ASSETS_URL) ||
-  "http://89.116.134.182/local-assets"
+  "/local-assets"
 ).replace(/\/$/, "");
 
 const BASE = rawBase.replace("89.116.134.182:8080", "89.116.134.182");

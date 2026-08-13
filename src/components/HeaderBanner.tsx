@@ -16,7 +16,6 @@ export function HeaderBanner() {
               alt="JNTU-GV Logo"
               className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain drop-shadow-sm"
               decoding="async"
-              // @ts-expect-error fetchPriority supported in modern browsers
               fetchPriority="high"
             />
           </Link>

@@ -46,14 +46,14 @@ export const Route = createFileRoute("/gallery")({
 });
 
 const DEFAULT_IMAGES = [
-  { id: -1, src: campusImg, caption: "Campus aerial" },
-  { id: -2, src: cultureImg, caption: "Cultural fest" },
-  { id: -3, src: labImg, caption: "Engineering lab" },
-  { id: -4, src: libraryImg, caption: "Library reading hall" },
-  { id: -5, src: campusLifeImg, caption: "Students on campus" },
-  { id: -6, src: sportsImg, caption: "Sports ground" },
-  { id: -7, src: hostelImg, caption: "Hostel building" },
-  { id: -8, src: placementsImg, caption: "Placements event" },
+  { id: -1, src: "uploads/photo-gallery/IMG_6832.JPG", caption: "Campus Administration & Main Building" },
+  { id: -2, src: "uploads/photo-gallery/IMG_6840.JPG", caption: "Cultural Fest & Student Celebrations" },
+  { id: -3, src: "uploads/photo-gallery/IMG_6844.JPG", caption: "Advanced Engineering Laboratories" },
+  { id: -4, src: "uploads/photo-gallery/IMG_6859.JPG", caption: "Central Knowledge Commons & Library" },
+  { id: -5, src: "uploads/photo-gallery/IMG_6868.JPG", caption: "Campus Life & Student Interactions" },
+  { id: -6, src: "uploads/photo-gallery/IMG_6872.JPG", caption: "Sports Meet & Athletic Complex" },
+  { id: -7, src: "uploads/photo-gallery/IMG_6875.JPG", caption: "Hostel & Residential Blocks" },
+  { id: -8, src: "uploads/photo-gallery/IMG_6920.JPG", caption: "Placements Drive & Auditorium Session" },
 ];
 
 // Strips any old absolute VPS host (with or without :8080) down to a
@@ -76,11 +76,12 @@ function GalleryPage() {
 
   const [newImage, setNewImage] = useState({ src: "", caption: "" });
 
-  // Fetch live images from the JNTU-GV external API
+  // Fetch live images from the JNTU-GV external API with memory caching
   const { data: apiImages = [] } = useQuery({
     queryKey: ["jntugv-gallery"],
     queryFn: () => getJntugvGalleryImages(),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 15 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 
   // Convert API images to the same shape as local records
@@ -104,8 +105,10 @@ function GalleryPage() {
     const tId = toast.loading("Adding photo to gallery...");
     try {
       await addCampusGalleryItem({
-        src: normalizeSrcForStorage(newImage.src),
-        caption: newImage.caption || "Campus Moment",
+        data: {
+          src: normalizeSrcForStorage(newImage.src),
+          caption: newImage.caption || "Campus Moment",
+        },
       });
       toast.success("Photo added successfully!", { id: tId });
       setNewImage({ src: "", caption: "" });
@@ -123,7 +126,7 @@ function GalleryPage() {
     if (!confirm("Are you sure you want to delete this photo from the campus gallery?")) return;
     const tId = toast.loading("Deleting photo...");
     try {
-      await deleteCampusGalleryItem({ id });
+      await deleteCampusGalleryItem({ data: { id } });
       toast.success("Photo deleted successfully!", { id: tId });
       router.invalidate();
     } catch {

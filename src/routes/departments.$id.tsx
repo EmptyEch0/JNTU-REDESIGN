@@ -11,6 +11,7 @@ import { DepartmentStrictLockModal } from "@/components/DepartmentStrictLockModa
 import {
   BookOpen,
   Users,
+  KeyRound,
   GraduationCap,
   FlaskConical,
   Trophy,
@@ -323,6 +324,13 @@ function DepartmentLayout() {
             </nav>
 
             {hodDeptId && (
+              <div className="mt-4 border-t border-slate-200 pt-4 space-y-2">
+              <Link
+                to="/hod-account-settings"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 lg:hover:bg-white transition-all"
+              >
+              <KeyRound size={18} /> Account Settings
+                </Link>
               <button
                 onClick={async () => {
                   await logout();
@@ -332,6 +340,7 @@ function DepartmentLayout() {
               >
                 <LogOut size={18} /> Logout (HOD)
               </button>
+            </div>
             )}
           </div>
         </aside>

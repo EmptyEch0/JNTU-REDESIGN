@@ -38,3 +38,4 @@ local-assets
 .vercel
 src/routeTree.gen.ts
 package-lock.json
+hod-credentials-*.txt

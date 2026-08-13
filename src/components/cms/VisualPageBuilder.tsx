@@ -113,13 +113,46 @@ export function VisualPageBuilder({
 
   const handlePublish = async () => {
     setIsSaving(true);
+  
     try {
-      await saveDepartmentPageDraft({ data: { deptSlug, pageSlug, title, blocks } });
-      const res = await publishDepartmentPage({ data: { deptSlug, pageSlug } });
-      toast.success(`Page published live! (Version ${res.versionNumber})`);
-      if (onPublished) onPublished();
+      // 1. Save the current editor state as draft
+      await saveDepartmentPageDraft({
+        data: {
+          deptSlug,
+          pageSlug,
+          title,
+          blocks,
+        },
+      });
+  
+      // 2. Copy draft -> published
+      const res = await publishDepartmentPage({
+        data: {
+          deptSlug,
+          pageSlug,
+        },
+      });
+  
+      toast.success(
+        `Page published live! (Version ${res.versionNumber})`
+      );
+  
+      // 3. Notify parent if provided
+      if (onPublished) {
+        onPublished();
+      }
+  
+      // 4. Close CMS editor
       onClose();
+  
+      // 5. IMPORTANT:
+      // Reload the actual public page so it fetches
+      // the newly published blocks from the database.
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
     } catch (err: any) {
+      console.error("Publish failed:", err);
       toast.error(err.message || "Failed to publish page");
     } finally {
       setIsSaving(false);

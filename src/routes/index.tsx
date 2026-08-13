@@ -463,10 +463,11 @@ function HomePage() {
               ) : (
                 liveDepartments.map((d: any, i: number) => (
                   <Link
-                    key={d.id}
-                    to="/departments" 
-                    className="snap-start group shrink-0 w-[280px] md:w-[340px] aspect-[3/4] relative rounded-3xl overflow-hidden bg-slate-900 shadow-xl hover-lift"
-                  >
+                  key={d.id}
+                  to="/departments/$slug"
+                  params={{ slug: d.slug }}
+                  className="snap-start group shrink-0 w-[280px] md:w-[340px] aspect-[3/4] relative rounded-3xl overflow-hidden bg-slate-900 shadow-xl hover-lift"
+                >
                     {/* Background Visual Image with full visibility and smooth dark overlay */}
                     {d.image ? (
                       <img decoding="async" loading="lazy"

@@ -162,18 +162,23 @@ export function MegaMenu() {
                     className="relative"
                     onMouseEnter={() => setOpenIdx(item.groups || item.simpleItems ? i : null)}
                   >
-                    {item.to ? (
-                      <Link
-                        to={item.to}
-                        className={`px-3.5 py-1.5 text-[14px] font-semibold rounded-full transition-all ${
-                          active
-                            ? "bg-white/20 text-white shadow-sm"
-                            : "text-white/85 hover:text-white hover:bg-white/10"
-                        }`}
-                      >
-                        {item.label}
-                      </Link>
-                    ) : (
+                  {item.to ? (
+  <Link
+    to={item.to}
+    className={`px-3.5 py-1.5 text-[14px] font-semibold rounded-full transition-all flex items-center gap-1.5 ${
+      active || openIdx === i
+        ? "bg-white/20 text-white shadow-sm"
+        : "text-white/85 hover:text-white hover:bg-white/10"
+    }`}
+  >
+    {item.label}
+    {(item.groups || item.simpleItems) && (
+      <ChevronDown
+        className={`h-3.5 w-3.5 transition-transform duration-300 ${openIdx === i ? "rotate-180 text-cyan-300" : "text-white/50"}`}
+      />
+    )}
+  </Link>
+) : (
                       <button
                         className={`flex items-center gap-1.5 px-3.5 py-1.5 text-[14px] font-semibold rounded-full transition-all ${
                           active || openIdx === i
@@ -203,6 +208,7 @@ export function MegaMenu() {
 
                         <div
                           className={`relative p-3.5 w-max ${
+                            item.groups.length === 1 && item.groups[0].items.length > 4 ? "min-w-[480px]" :
                             item.groups.length === 1 ? "min-w-[270px] max-w-[310px]" :
                             item.groups.length === 2 ? "min-w-[480px]" :
                             item.groups.length === 3 ? "min-w-[700px]" :
@@ -218,48 +224,51 @@ export function MegaMenu() {
                             overflow: "hidden",
                           }}
                         >
-                          <div className={`grid gap-3.5 ${
-                            item.groups.length === 1 ? "grid-cols-1" :
-                            item.groups.length === 2 ? "grid-cols-2" :
-                            item.groups.length === 3 ? "grid-cols-3" :
-                            "grid-cols-4"
-                          }`}>
-                            {item.groups.map((g) => (
-                              <div key={g.title}>
-                                <div className="text-[10px] uppercase tracking-[0.2em] font-extrabold text-blue-300 px-2 mb-1.5">
-                                  {g.title}
-                                </div>
-                                <ul className="space-y-1">
-                                  {g.items.map((it) => {
-                                    const ItemIcon = getItemIcon(it.label);
-                                    return (
-                                      <li key={it.label}>
-                                        <Link
-                                          to={it.to}
-                                          className="group flex items-center gap-2.5 p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.14] border border-white/10 hover:border-white/25 transition-all duration-200 cursor-pointer"
-                                        >
-                                          <div className="w-8.5 h-8.5 shrink-0 rounded-xl bg-white/10 border border-white/20 text-blue-200 flex items-center justify-center group-hover:bg-blue-600/40 group-hover:text-white transition-all shadow-inner">
-                                            <ItemIcon className="w-4 h-4" />
-                                          </div>
-                                          <div className="flex-1 min-w-0">
-                                            <div className="text-xs font-semibold text-white group-hover:text-cyan-200 transition-colors leading-tight">
-                                              {it.label}
-                                            </div>
-                                            {it.desc && (
-                                              <div className="text-[10px] text-white/60 group-hover:text-white/85 transition-colors leading-tight mt-0.5 line-clamp-1">
-                                                {it.desc}
-                                              </div>
-                                            )}
-                                          </div>
-                                          <ChevronRight className="w-3.5 h-3.5 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all ml-auto shrink-0" />
-                                        </Link>
-                                      </li>
-                                    );
-                                  })}
-                                </ul>
-                              </div>
-                            ))}
-                          </div>
+<div className={`grid gap-3.5 ${
+  item.groups.length === 1 && item.groups[0].items.length > 4 ? "grid-cols-1" :
+  item.groups.length === 1 ? "grid-cols-1" :
+  item.groups.length === 2 ? "grid-cols-2" :
+  item.groups.length === 3 ? "grid-cols-3" :
+  "grid-cols-4"
+}`}>
+  {item.groups.map((g) => (
+    <div key={g.title}>
+      <div className="text-[10px] uppercase tracking-[0.2em] font-extrabold text-blue-300 px-2 mb-1.5">
+        {g.title}
+      </div>
+      <ul className={`space-y-1 ${
+        item.groups.length === 1 && g.items.length > 4 ? "grid grid-cols-2 gap-x-3 gap-y-1 space-y-0" : ""
+      }`}>
+        {g.items.map((it) => {
+          const ItemIcon = getItemIcon(it.label);
+          return (
+            <li key={it.label}>
+              <Link
+                to={it.to}
+                className="group flex items-center gap-2.5 p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.14] border border-white/10 hover:border-white/25 transition-all duration-200 cursor-pointer"
+              >
+                <div className="w-8.5 h-8.5 shrink-0 rounded-xl bg-white/10 border border-white/20 text-blue-200 flex items-center justify-center group-hover:bg-blue-600/40 group-hover:text-white transition-all shadow-inner">
+                  <ItemIcon className="w-4 h-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold text-white group-hover:text-cyan-200 transition-colors leading-tight">
+                    {it.label}
+                  </div>
+                  {it.desc && (
+                    <div className="text-[10px] text-white/60 group-hover:text-white/85 transition-colors leading-tight mt-0.5 line-clamp-1">
+                      {it.desc}
+                    </div>
+                  )}
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all ml-auto shrink-0" />
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ))}
+</div>
                         </div>
                       </div>
                     )}

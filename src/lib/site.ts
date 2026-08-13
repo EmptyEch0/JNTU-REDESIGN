@@ -103,17 +103,12 @@ export const NAV: {
     label: "Departments",
     groups: [
       {
-        title: "Engineering",
+        title: "Departments",
         items: [
           { label: "Computer Science (CSE)", to: "/departments/cse" },
           { label: "Electronics (ECE)", to: "/departments/ece" },
           { label: "Electrical (EEE)", to: "/departments/eee" },
           { label: "Mechanical", to: "/departments/mech" },
-        ],
-      },
-      {
-        title: "Allied",
-        items: [
           { label: "Metallurgical Engineering", to: "/departments/met" },
           { label: "Information Technology", to: "/departments/it" },
           { label: "MBA", to: "/departments/mba" },

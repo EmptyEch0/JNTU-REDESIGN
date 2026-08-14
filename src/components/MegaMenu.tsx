@@ -43,6 +43,8 @@ function getItemIcon(label: string) {
   if (l.includes("library")) return Library;
   if (l.includes("sport")) return Trophy;
   if (l.includes("music") || l.includes("club")) return Sparkles;
+  if (l.includes("ragging")) return ShieldCheck;
+  if (l.includes("rti")) return FileText;
   if (l.includes("nss") || l.includes("women")) return Heart;
   if (l.includes("edc") || l.includes("placement")) return Briefcase;
   return BookOpen;

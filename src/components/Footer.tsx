@@ -27,8 +27,8 @@ export function Footer() {
 
   return (
     <footer className="bg-ink text-white/85 mt-32">
-      <div className="container-narrow py-16 md:py-20 grid gap-12 md:grid-cols-12">
-        <div className="md:col-span-4 space-y-4">
+      <div className="container-narrow py-16 md:py-20 grid gap-10 sm:grid-cols-2 md:grid-cols-12">
+        <div className="sm:col-span-2 md:col-span-3 space-y-4">
           <div className="flex items-center gap-2.5">
             <div className="h-10 w-10 rounded-xl bg-white grid place-items-center overflow-hidden border border-white/20">
               <img decoding="async" loading="lazy" src="/logo-circle.png" alt="Logo" className="h-full w-full object-cover" />
@@ -66,10 +66,15 @@ export function Footer() {
                 Admissions
               </Link>
             </li>
+            <li>
+              <Link to="/placements" className="hover:text-white transition-colors">
+                Placements
+              </Link>
+            </li>
           </ul>
         </div>
 
-        <div className="md:col-span-3">
+        <div className="md:col-span-2">
           <div className="text-eyebrow text-accent mb-4">Campus</div>
           <ul className="space-y-2.5 text-sm">
             <li>
@@ -97,15 +102,61 @@ export function Footer() {
                 R&D Cell
               </Link>
             </li>
+          </ul>
+        </div>
+
+        <div className="md:col-span-2">
+          <div className="text-eyebrow text-accent mb-4">Statutory & Acts</div>
+          <ul className="space-y-2.5 text-sm">
             <li>
-              <Link to="/placements" className="hover:text-white transition-colors">
-                Placements
+              <Link to="/anti-ragging" className="hover:text-white transition-colors">
+                Anti-Ragging
               </Link>
+            </li>
+            <li>
+              <Link to="/rti" className="hover:text-white transition-colors">
+                RTI Act 2005
+              </Link>
+            </li>
+            <li>
+              <Link to="/about/norms" className="hover:text-white transition-colors">
+                Norms & Compliance
+              </Link>
+            </li>
+            <li>
+              <Link to="/women-empowerment" className="hover:text-white transition-colors">
+                Women Cell
+              </Link>
+            </li>
+            <li>
+              <Link to="/administration/iqac" className="hover:text-white transition-colors">
+                IQAC
+              </Link>
+            </li>
+            <li>
+              <a
+                href="https://jntugvcev.edu.in//wp-content/uploads/2021/03/JNTUACT-compressed.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors text-xs text-white/60 inline-flex items-center gap-1"
+              >
+                JNTU Act ↗
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://jntugvcev.edu.in//wp-content/uploads/2021/03/13022019HE_MS14.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors text-xs text-white/60 inline-flex items-center gap-1"
+              >
+                GO MS. No. 14 ↗
+              </a>
             </li>
           </ul>
         </div>
 
-        <div className="md:col-span-3 space-y-3 text-sm">
+        <div className="sm:col-span-2 md:col-span-3 space-y-3 text-sm">
           <div className="text-eyebrow text-accent mb-4">Reach Us</div>
           <div className="flex items-start gap-2.5">
             <MapPin className="h-4 w-4 mt-0.5 text-accent shrink-0" />

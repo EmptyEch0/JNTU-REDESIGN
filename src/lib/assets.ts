@@ -29,11 +29,22 @@ export const getAssetUrl = (
     // legacy map check
     const filename = trimmedPath.split("/").pop() ?? "";
     const LEGACY_FILENAME_MAP: Record<string, string> = {
-      "hero-campus.jpg": `${BASE}/uploads/images/administration/JNTU%201.png`,
-      "hero-2.jpg": `${BASE}/uploads/2022/03/Frame-1-1200x374.jpg`,
-      "hero-2.jpeg": `${BASE}/uploads/2022/03/Frame-1-1200x374.jpg`,
-      "Dr.-G.-J.-Naga-Raju1.png": `${BASE}/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`,
+      "hero-campus.jpg": `${BASE}/images/hero-carousal/hero-campus.webp`,
+      "hero-campus.webp": `${BASE}/images/hero-carousal/hero-campus.webp`,
+      "hero-2.jpg": `${BASE}/images/hero-carousal/hero-2.webp`,
+      "hero-2.jpeg": `${BASE}/images/hero-carousal/hero-2.webp`,
+      "hero-2.webp": `${BASE}/images/hero-carousal/hero-2.webp`,
+      "Dr.-G.-J.-Naga-Raju1.png": `${BASE}/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`,
       "logo.jpeg": "/logo-circle.png",
+      // Department banner instant local fallbacks
+      "cse-banner.jpg": `${BASE}/uploads/photo-gallery/thumb/IMG_6868.JPG`,
+      "ece-banner.jpg": `${BASE}/uploads/photo-gallery/thumb/IMG_6840.JPG`,
+      "eee-banner.jpg": `${BASE}/uploads/photo-gallery/thumb/IMG_6929.JPG`,
+      "it-banner.jpg": `${BASE}/uploads/photo-gallery/thumb/IMG_6926.JPG`,
+      "mech-banner.jpg": `${BASE}/uploads/photo-gallery/thumb/IMG_6872.JPG`,
+      "met-banner.jpg": `${BASE}/uploads/photo-gallery/thumb/IMG_6946.JPG`,
+      "sh-banner.jpg": `${BASE}/uploads/photo-gallery/thumb/IMG_6844.JPG`,
+      "mba-banner.jpg": `${BASE}/uploads/photo-gallery/thumb/IMG_6972.JPG`,
     };
 
     if (LEGACY_FILENAME_MAP[filename]) {

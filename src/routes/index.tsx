@@ -23,18 +23,18 @@ import {
 } from "lucide-react";
 import { imageUrl } from "@/lib/assets";
 
-const heroImg = imageUrl("hero-carousal/hero-campus.jpg");
-const hero2 = imageUrl("hero-carousal/hero-2.jpg");
+const heroImg = imageUrl("hero-carousal/hero-campus.webp");
+const hero2 = imageUrl("hero-carousal/hero-2.webp");
 const hero3 = imageUrl("hero-carousal/hero-3.webp");
 const hero4 = imageUrl("hero-carousal/hero-4.webp");
 const hero5 = imageUrl("hero-carousal/hero-5.webp");
 const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
-import labImg from "@/assets/lab.jpg";
-import hostelImg from "@/assets/hostel.jpg";
-import sportsImg from "@/assets/sports.jpg";
-import libraryImg from "@/assets/library-interior.jpg";
-import cultureImg from "@/assets/culture.jpeg";
-import placementsImg from "@/assets/placements-bg.jpg";
+import labImg from "@/assets/lab.webp";
+import hostelImg from "@/assets/hostel.webp";
+import sportsImg from "@/assets/sports.webp";
+import libraryImg from "@/assets/library-interior.webp";
+import cultureImg from "@/assets/culture.webp";
+import placementsImg from "@/assets/placements-bg.webp";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { StatCounter } from "@/components/StatCounter";
 import { ParallaxBg } from "@/components/ParallaxBg";
@@ -54,6 +54,38 @@ import { getJntugvGalleryImages } from "@/funcs/site.server";
 import { ImageWithLoader } from "@/components/ImageWithLoader";
 
 export const Route = createFileRoute("/")({
+  loader: async ({ context }) => {
+    await Promise.allSettled([
+      context.queryClient.ensureQueryData({
+        queryKey: ["leadership", "principal"],
+        queryFn: () => getLeadershipData({ data: "principal" }),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["departments", "all"],
+        queryFn: () => getAllDepartments(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["hostel", "data"],
+        queryFn: () => getHostelData(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["library", "data"],
+        queryFn: () => getLibraryData(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["dispensary", "data"],
+        queryFn: () => getDispensaryData(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["sports", "data"],
+        queryFn: () => getSportsData(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["jntugv-gallery"],
+        queryFn: () => getJntugvGalleryImages(),
+      }),
+    ]);
+  },
   head: () => ({
     meta: [
       { title: "JNTU-GV CEV — Engineering Tomorrow, Together" },
@@ -470,60 +502,77 @@ function HomePage() {
                   <div key={i} className="animate-pulse shrink-0 w-[280px] md:w-[340px] aspect-[3/4] rounded-3xl bg-slate-200" />
                 ))
               ) : (
-                liveDepartments.map((d: any, i: number) => (
-                  <Link
-                    key={d.id}
-                    to="/departments/$id"
-                    params={{ id: d.slug }}
-                    className="snap-start group shrink-0 w-[280px] md:w-[340px] aspect-[3/4] relative rounded-3xl overflow-hidden bg-slate-900 shadow-xl hover-lift"
-                  >
-                    {/* Background Visual Image with full visibility and smooth dark overlay */}
-                    {d.image ? (
-                      <img decoding="async" loading="lazy"
-                        src={getAssetUrl(d.image)}
+                liveDepartments.map((d: any, i: number) => {
+                  const fallbackMap: Record<string, string> = {
+                    cse: "/local-assets/uploads/photo-gallery/thumb/IMG_6868.JPG",
+                    ece: "/local-assets/uploads/photo-gallery/thumb/IMG_6840.JPG",
+                    eee: "/local-assets/uploads/photo-gallery/thumb/IMG_6929.JPG",
+                    it: "/local-assets/uploads/photo-gallery/thumb/IMG_6926.JPG",
+                    mech: "/local-assets/uploads/photo-gallery/thumb/IMG_6872.JPG",
+                    met: "/local-assets/uploads/photo-gallery/thumb/IMG_6946.JPG",
+                    sh: "/local-assets/uploads/photo-gallery/thumb/IMG_6844.JPG",
+                    mba: "/local-assets/uploads/photo-gallery/thumb/IMG_6972.JPG",
+                  };
+                  const deptSlug = (d.slug || "").toLowerCase();
+                  const initialImg = getAssetUrl(d.image || `uploads/departments/banners/${deptSlug}-banner.jpg`) || fallbackMap[deptSlug] || "/assets/lab.webp";
+
+                  return (
+                    <Link
+                      key={d.id}
+                      to="/departments/$id"
+                      params={{ id: d.slug }}
+                      className="snap-start group shrink-0 w-[280px] md:w-[340px] aspect-[3/4] relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 shadow-xl hover-lift"
+                    >
+                      {/* Background Visual Image with full visibility and smooth dark overlay */}
+                      <img
+                        decoding="async"
+                        loading="lazy"
+                        src={initialImg}
                         alt={`${d.name} representation`}
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          const fallback = fallbackMap[deptSlug] || "/assets/lab.webp";
+                          if (target.src !== fallback && !target.src.endsWith(fallback)) {
+                            target.src = fallback;
+                          }
+                        }}
                       />
-                    ) : (
-                      <div
-                        aria-hidden
-                        className="absolute inset-0 bg-slate-800"
-                      />
-                    )}
 
-                    {/* High contrast dark gradient overlay mirroring the main grid design */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 transition-opacity group-hover:opacity-95" />
+                      {/* High contrast dark gradient overlay mirroring the main grid design */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 transition-opacity group-hover:opacity-95" />
 
-                    {/* Content Area */}
-                    <div className="absolute inset-0 p-6 md:p-7 flex flex-col justify-between text-white z-10">
-                      <div className="flex items-center justify-between">
-                        <span className="px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white/90">
-                          VIEW DEPT
-                        </span>
-                        <div className="h-9 w-9 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-slate-900 transition-all duration-200">
-                          <ArrowRight className="h-4 w-4" />
+                      {/* Content Area */}
+                      <div className="absolute inset-0 p-6 md:p-7 flex flex-col justify-between text-white z-10">
+                        <div className="flex items-center justify-between">
+                          <span className="px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white/90">
+                            VIEW DEPT
+                          </span>
+                          <div className="h-9 w-9 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-slate-900 transition-all duration-200">
+                            <ArrowRight className="h-4 w-4" />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white leading-tight">
+                            {d.name.includes("(") ? d.name : `${d.name} (${d.slug.toUpperCase()})`}
+                          </h3>
+
+                          {/* HOD Information Line */}
+                          {d.hod && (
+                            <div className="text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded inline-block">
+                              HOD: <span className="text-white">{d.hod}</span>
+                            </div>
+                          )}
+
+                          <p className="text-xs md:text-sm text-white/80 line-clamp-2 md:line-clamp-3 font-medium leading-relaxed pt-1">
+                            {d.description}
+                          </p>
                         </div>
                       </div>
-
-                      <div className="space-y-2">
-                        <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white leading-tight">
-                          {d.name.includes("(") ? d.name : `${d.name} (${d.slug.toUpperCase()})`}
-                        </h3>
-
-                        {/* HOD Information Line */}
-                        {d.hod && (
-                          <div className="text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded inline-block">
-                            HOD: <span className="text-white">{d.hod}</span>
-                          </div>
-                        )}
-
-                        <p className="text-xs md:text-sm text-white/80 line-clamp-2 md:line-clamp-3 font-medium leading-relaxed pt-1">
-                          {d.description}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                ))
+                    </Link>
+                  );
+                })
               )}
             </div>
           </div>

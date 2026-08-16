@@ -19,6 +19,18 @@ import { ACADEMICS_SUBNAV } from "@/lib/site";
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/syllabus")({
+  loader: async ({ context }) => {
+    return await context.queryClient.ensureQueryData({
+      queryKey: ["academics-syllabus"],
+      queryFn: getAcademicsSyllabusList,
+    });
+  },
+  head: () => ({
+    meta: [
+      { title: "Course Syllabus — JNTU-GV CEV" },
+      { name: "description", content: "Access structured, branch-wise syllabus records for all JNTU-GV regulations." },
+    ],
+  }),
   component: SyllabusPage,
 });
 

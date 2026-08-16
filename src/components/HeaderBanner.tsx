@@ -14,7 +14,7 @@ export function HeaderBanner() {
             <img
               src="/logo.png"
               alt="JNTU-GV Logo"
-              className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain drop-shadow-sm"
+              className="h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 object-contain drop-shadow-sm"
               decoding="async"
               fetchPriority="high"
             />

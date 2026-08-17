@@ -518,32 +518,27 @@ function NoticesPage() {
               )}
             </div>
 
-            {/* Quick Results Counter & Reset */}
-            <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end text-xs font-bold text-slate-500 dark:text-slate-400">
-              <span>
-                Showing <strong className="text-blue-600 dark:text-blue-400">{filteredNotices.length}</strong> of{" "}
-                {sortedNotices.length} notices
-              </span>
-              {(searchQuery || activeCategory !== "All") && (
+            {/* Quick Reset */}
+            {(searchQuery || activeCategory !== "All") && (
+              <div className="flex items-center justify-end w-full md:w-auto">
                 <button
                   onClick={() => {
                     setSearchQuery("");
                     setActiveCategory("All");
                   }}
-                  className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                  className="flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer bg-blue-50 dark:bg-blue-950/40 px-3 py-1.5 rounded-xl border border-blue-200/60 dark:border-blue-800/40"
                 >
-                  <RotateCcw className="w-3 h-3" /> Reset
+                  <RotateCcw className="w-3 h-3" /> Reset Filter
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
-          {/* Category Filter Chips */}
+          {/* Category Filter Chips (without number counts) */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
             {categories.map((cat) => {
               const meta = CATEGORY_META[cat] || { icon: Layers, color: "text-slate-600", bg: "bg-slate-100", border: "border-slate-200" };
               const Icon = meta.icon;
-              const count = categoryCounts[cat] || 0;
               const isActive = activeCategory === cat;
 
               return (
@@ -558,13 +553,6 @@ function NoticesPage() {
                 >
                   <Icon className={`w-3.5 h-3.5 ${isActive ? "text-cyan-300" : meta.color}`} />
                   <span>{cat}</span>
-                  <span
-                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-extrabold ${
-                      isActive ? "bg-white/20 text-white" : "bg-slate-200/70 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
-                    }`}
-                  >
-                    {count}
-                  </span>
                 </button>
               );
             })}

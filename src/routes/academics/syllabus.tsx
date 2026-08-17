@@ -41,7 +41,7 @@ function SyllabusPage() {
   const queryClient = useQueryClient();
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedReg, setSelectedReg] = useState("R23");
+  const [selectedReg, setSelectedReg] = useState("All"); // Default to All regulations
   const [selectedCat, setSelectedCat] = useState("All"); // UG / PG
   const [selectedProg, setSelectedProg] = useState("All"); // B.Tech / M.Tech / MBA / MCA
   const [selectedSem, setSelectedSem] = useState("All");
@@ -120,11 +120,29 @@ function SyllabusPage() {
   };
 
   const filteredData = useMemo(() => {
-    return syllabusData.filter((item) => {
-      const matchesSearch = 
-        item.subject_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        item.branch.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.regulation.toLowerCase().includes(searchTerm.toLowerCase());
+    const q = searchTerm.trim().toLowerCase();
+    return syllabusData.filter((item: any) => {
+      const subjectName = (item.subject_name || "").toLowerCase();
+      const branch = (item.branch || "").toLowerCase();
+      const regulation = (item.regulation || "").toLowerCase();
+      const progName = (item.program_name || "").toLowerCase();
+      const level = (item.level || "").toLowerCase();
+
+      // Intelligent keyword matching (handles acronyms like CSE, ECE, EEE, IT, MECH, CIVIL, MET)
+      const matchesSearch = !q || (
+        subjectName.includes(q) ||
+        branch.includes(q) ||
+        regulation.includes(q) ||
+        progName.includes(q) ||
+        level.includes(q) ||
+        (q === "cse" && (branch.includes("comp") || branch.includes("cse"))) ||
+        (q === "ece" && (branch.includes("comm") || branch.includes("ece") || (branch.includes("electr") && branch.includes("comm")))) ||
+        (q === "eee" && (branch.includes("eee") || (branch.includes("electr") && !branch.includes("comm")))) ||
+        (q === "it" && (branch === "it" || branch.includes("information"))) ||
+        (q === "civil" && branch.includes("civil")) ||
+        (q === "mech" && branch.includes("mech")) ||
+        (q === "met" && branch.includes("metal"))
+      );
 
       const matchesReg = selectedReg === "All" || item.regulation === selectedReg;
       const matchesCat = selectedCat === "All" || item.level === selectedCat;
@@ -138,7 +156,7 @@ function SyllabusPage() {
 
   const resetFilters = () => {
     setSearchTerm("");
-    setSelectedReg("R23");
+    setSelectedReg("All");
     setSelectedCat("All");
     setSelectedProg("All");
     setSelectedSem("All");
@@ -381,8 +399,9 @@ function SyllabusPage() {
       {/* Structured Table Layout */}
       <GlassCard className="p-6 overflow-hidden">
         {/* Regulation Tabs */}
-        <div className="flex border-b border-slate-200 dark:border-slate-800 mb-6 overflow-x-auto no-scrollbar">
+        <div className="flex border-b border-slate-200 dark:border-slate-800 mb-6 overflow-x-auto no-scrollbar gap-1">
           {[
+            { label: "All", value: "All" },
             { label: "R25(PG)", value: "R25" },
             { label: "R23", value: "R23" },
             { label: "R20", value: "R20" },
@@ -393,9 +412,9 @@ function SyllabusPage() {
             <button
               key={tab.value}
               onClick={() => setSelectedReg(tab.value)}
-              className={`px-6 py-3 text-sm font-bold whitespace-nowrap transition-colors relative ${
+              className={`px-5 py-3 text-sm font-bold whitespace-nowrap transition-colors relative cursor-pointer ${
                 selectedReg === tab.value 
-                  ? "text-blue-600 dark:text-blue-400" 
+                  ? "text-blue-600 dark:text-blue-400 font-extrabold" 
                   : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
               }`}
             >
@@ -419,6 +438,7 @@ function SyllabusPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-slate-200 dark:border-slate-800 text-[11px] font-extrabold uppercase text-slate-400 tracking-wider">
+                  <th className="py-4 px-4">Regulation</th>
                   <th className="py-4 px-4">Level</th>
                   <th className="py-4 px-4">Program</th>
                   <th className="py-4 px-4">Branch</th>
@@ -440,6 +460,11 @@ function SyllabusPage() {
                         transition={{ duration: 0.2, delay: idx * 0.02 }}
                         className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all duration-300 group"
                       >
+                        <td className="py-4 px-4 text-xs font-bold">
+                          <span className="bg-purple-50 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/40 px-2 py-0.5 rounded-md font-mono text-[11px] font-extrabold">
+                            {item.regulation}
+                          </span>
+                        </td>
                         <td className="py-4 px-4 text-xs font-semibold text-slate-650 dark:text-slate-400">
                           <span className="bg-slate-100 dark:bg-slate-850 px-2 py-0.5 rounded font-mono text-[10px] uppercase font-bold text-slate-500">
                             {item.level}

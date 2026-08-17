@@ -216,17 +216,19 @@ function AdminContent() {
       )}
 
       {/* Unified Persistent Sticky Header Suite */}
-      <div className={`sticky ${isAdmin ? "top-12" : "top-0"} z-50 w-full bg-white shadow-md transition-all duration-200`}>
-        {/* Top Navy Blue Ribbon with Quick Links & Social */}
-        <TopRibbon />
+      <div className={`sticky ${isAdmin ? "top-12" : "top-0"} z-50 w-full pointer-events-none transition-all duration-200`}>
+        <div className="pointer-events-auto shadow-md">
+          {/* Top Navy Blue Ribbon with Quick Links & Social */}
+          <TopRibbon />
 
-        {/* Official College Header Banner */}
-        <HeaderBanner />
+          {/* Official College Header Banner */}
+          <HeaderBanner />
 
-        {/* Updates / Notice Marquee Ticker */}
-        <NoticeTicker />
+          {/* Updates / Notice Marquee Ticker */}
+          <NoticeTicker />
+        </div>
 
-        {/* Navigation Bar */}
+        {/* Floating Dynamic Capsule Navigation Bar (Overlays on carousel with no background) */}
         <MegaMenu />
       </div>
 

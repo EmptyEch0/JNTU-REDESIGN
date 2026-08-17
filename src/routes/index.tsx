@@ -275,8 +275,6 @@ function HomePage() {
         <HeroSlideshow
           images={[
             { src: hero5, alt: "JNTU-GV VIZIANAGARAM main building" },
-            { src: heroImg, alt: "JNTU-GV campus at golden hour" },
-            { src: hero2, alt: "Aerial view of campus at sunset" },
             { src: hero3, alt: "Students walking through campus" },
             { src: hero4, alt: "Library at dusk" },
           ]}
@@ -284,7 +282,7 @@ function HomePage() {
           minHeight="min(82vh, 680px)"
           overlay="linear-gradient(180deg, oklch(0.18 0.05 260 / 0.6) 0%, oklch(0.18 0.05 260 / 0.4) 40%, oklch(0.18 0.05 260 / 0.85) 100%)"
         >
-          <div className="container-narrow h-full min-h-[min(82vh,680px)] flex flex-col justify-center pt-4 pb-10 text-white">
+          <div className="container-narrow h-full min-h-[min(82vh,680px)] flex flex-col justify-center pt-14 sm:pt-20 pb-10 text-white">
             <div className="text-eyebrow !text-cyan-300 animate-[fade-up_0.3s_ease-out_0.3s_both] flex items-center gap-2.5 font-bold tracking-wider">
               <span className="flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5 text-cyan-400" />

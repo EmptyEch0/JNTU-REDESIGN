@@ -130,10 +130,10 @@ export function MegaMenu() {
   };
 
   return (
-    <header className="w-full bg-[#08182F] border-b border-blue-900/40 relative z-40 py-1.5 flex justify-center px-2 sm:px-4">
+    <header className="w-full bg-transparent relative z-40 py-2 sm:py-2.5 flex justify-center px-2 sm:px-4 pointer-events-none -mb-14 sm:-mb-16">
       <div
         ref={islandRef}
-        className="w-auto max-w-[1400px] rounded-full bg-slate-950/85 backdrop-blur-2xl shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.15)] border border-white/20 px-3 sm:px-5 py-1 transition-all duration-300 flex items-center justify-between gap-1.5 sm:gap-2"
+        className="pointer-events-auto w-auto max-w-[1400px] rounded-full bg-slate-950/85 backdrop-blur-2xl shadow-[0_16px_40px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.15)] border border-white/20 px-3 sm:px-5 py-1 transition-all duration-300 flex items-center justify-between gap-1.5 sm:gap-2"
         onMouseLeave={() => setOpenIdx(null)}
       >
         <div className="flex items-center justify-between w-full h-10 sm:h-10.5">

@@ -215,22 +215,17 @@ function AdminContent() {
         </div>
       )}
 
-      {/* Unified Persistent Sticky Header Suite */}
-      <div className={`sticky ${isAdmin ? "top-12" : "top-0"} z-50 w-full pointer-events-none transition-all duration-200`}>
-        <div className="pointer-events-auto shadow-md">
-          {/* Top Navy Blue Ribbon with Quick Links & Social */}
-          <TopRibbon />
+      {/* Top Navy Blue Ribbon with Quick Links & Social */}
+      <TopRibbon />
 
-          {/* Official College Header Banner */}
-          <HeaderBanner />
+      {/* Official College Header Banner */}
+      <HeaderBanner />
 
-          {/* Updates / Notice Marquee Ticker */}
-          <NoticeTicker />
-        </div>
+      {/* Updates / Notice Marquee Ticker */}
+      <NoticeTicker />
 
-        {/* Floating Dynamic Capsule Navigation Bar (Overlays on carousel with no background) */}
-        <MegaMenu />
-      </div>
+      {/* Floating Dynamic Capsule Navigation Bar (Overlays directly on hero carousel with no background) */}
+      <MegaMenu />
 
       <main className="flex-1 w-full max-w-full">
         <Outlet />

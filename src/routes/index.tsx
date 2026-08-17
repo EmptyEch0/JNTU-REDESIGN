@@ -482,7 +482,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* DEPARTMENTS — Grid layout 4 columns, 2 rows */}
+{/* DEPARTMENTS — Optimized with lazy loading */}
 <section className="py-24 md:py-32 bg-sand">
   <div className="container-narrow">
     <RevealOnScroll>
@@ -495,7 +495,6 @@ function HomePage() {
 
     <RevealOnScroll className="mt-12" delay={150}>
       {isLoading ? (
-        // Loading skeleton - 8 cards in 4x2 grid
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {Array.from({ length: 8 }).map((_, i) => (
             <div 
@@ -506,19 +505,27 @@ function HomePage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {liveDepartments.map((d: any) => {
+          {liveDepartments.map((d: any, index: number) => {
             const deptSlug = (d.slug || "").toLowerCase();
+            
+            // Define fallback map for department images
             const fallbackMap: Record<string, string> = {
-              cse: "/local-assets/uploads/departments/banners/cse-banner.jpg",
-              ece: "/local-assets/uploads/departments/banners/ece-banner.jpg",
-              eee: "/local-assets/uploads/departments/banners/eee-banner.jpg",
-              it: "/local-assets/uploads/departments/banners/it-banner.jpg",
-              mech: "/local-assets/uploads/departments/banners/mech-banner.jpg",
-              met: "/local-assets/uploads/departments/banners/met-banner.jpg",
-              sh: "/local-assets/uploads/departments/banners/sh-banner.jpg",
-              mba: "/local-assets/uploads/departments/banners/mba-banner.jpg",
+              cse: "http://89.116.134.182/local-assets/uploads/departments/banners/cse-banner.jpg",
+              ece: "http://89.116.134.182/local-assets/uploads/departments/banners/ece-banner.jpg",
+              eee: "http://89.116.134.182/local-assets/uploads/departments/banners/eee-banner.jpg",
+              it: "http://89.116.134.182/local-assets/uploads/departments/banners/it-banner.jpg",
+              mech: "http://89.116.134.182/local-assets/uploads/departments/banners/mech-banner.jpg",
+              met: "http://89.116.134.182/local-assets/uploads/departments/banners/met-banner.jpg",
+              sh: "http://89.116.134.182/local-assets/uploads/departments/banners/sh-banner.jpg",
+              mba: "http://89.116.134.182/local-assets/uploads/departments/banners/mba-banner.jpg",
             };
-            const initialImg = getAssetUrl(d.image || `uploads/departments/banners/${deptSlug}-banner.jpg`) || fallbackMap[deptSlug] || "/assets/lab.webp";
+            
+            // Get the image source
+            const imageSrc = d.image 
+              ? getAssetUrl(d.image) 
+              : `http://89.116.134.182/local-assets/uploads/departments/banners/${deptSlug}-banner.jpg`;
+            
+            const fallback = fallbackMap[deptSlug] || "/assets/lab.webp";
 
             return (
               <Link
@@ -527,28 +534,26 @@ function HomePage() {
                 params={{ id: d.slug }}
                 className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 aspect-[4/3]"
               >
-                {/* Background Image */}
+                {/* Background Image - using regular img with optimized loading */}
                 <img
-                  decoding="async"
-                  loading="lazy"
-                  src={initialImg}
+                  src={imageSrc}
                   alt={`${d.name} department`}
+                  loading={index < 4 ? "eager" : "lazy"}
+                  decoding="async"
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
                     const target = e.currentTarget;
-                    const fallback = fallbackMap[deptSlug] || "/assets/lab.webp";
                     if (target.src !== fallback && !target.src.endsWith(fallback)) {
                       target.src = fallback;
                     }
                   }}
                 />
 
-                {/* Dark gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300" />
+                {/* Dark gradient overlay - this ensures text is readable */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 z-10" />
 
-                {/* Content */}
-                <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-between text-white">
-                  {/* Top badge */}
+                {/* Content - placed on top with z-index */}
+                <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-between text-white z-20">
                   <div className="flex items-center justify-between">
                     <span className="px-2.5 py-1 text-[9px] font-bold tracking-widest uppercase rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white/90">
                       {d.slug.toUpperCase()}
@@ -558,7 +563,6 @@ function HomePage() {
                     </div>
                   </div>
 
-                  {/* Bottom content */}
                   <div className="space-y-1.5">
                     <h3 className="text-lg md:text-xl font-extrabold tracking-tight text-white leading-tight">
                       {d.name}

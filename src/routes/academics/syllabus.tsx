@@ -19,10 +19,12 @@ import { ACADEMICS_SUBNAV } from "@/lib/site";
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
 export const Route = createFileRoute("/academics/syllabus")({
-  loader: async ({ context }) => {
-    return await context.queryClient.ensureQueryData({
+  loader: ({ context }) => {
+    return context.queryClient.ensureQueryData({
       queryKey: ["academics-syllabus"],
       queryFn: getAcademicsSyllabusList,
+      staleTime: 1000 * 60 * 15, // 15 mins cache
+      gcTime: 1000 * 60 * 60,
     });
   },
   head: () => ({
@@ -59,6 +61,8 @@ function SyllabusPage() {
   const { data: syllabusData = [], isLoading } = useQuery({
     queryKey: ["academics-syllabus"],
     queryFn: getAcademicsSyllabusList,
+    staleTime: 1000 * 60 * 15,
+    gcTime: 1000 * 60 * 60,
   });
 
   // Dynamic branch options collected from active syllabus records

@@ -213,7 +213,7 @@ export const deleteAcademicsRegulation = createServerFn({ method: "POST" })
 // 4. Syllabus Module (REAL TABLE: academic_syllabus)
 // ----------------------------------------------------
 export const getAcademicsSyllabusList = createServerFn({ method: "GET" }).handler(async () => {
-  return memoryCache.getOrSet("academics:syllabus", 10 * 60 * 1000, async () => {
+  return memoryCache.getOrSet("academics:syllabus", 30 * 60 * 1000, async () => {
     return await db.select().from(academicSyllabus);
   });
 });

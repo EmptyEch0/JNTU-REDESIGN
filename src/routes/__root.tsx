@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
 import appCss from "../styles.css?url";
+import { TopRibbon } from "@/components/TopRibbon";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Footer } from "@/components/Footer";
 import { HeaderBanner } from "@/components/HeaderBanner";
@@ -214,14 +215,20 @@ function AdminContent() {
         </div>
       )}
 
-      {/* Official College Header Banner */}
-      <HeaderBanner />
+      {/* Unified Persistent Sticky Header Suite */}
+      <div className={`sticky ${isAdmin ? "top-12" : "top-0"} z-50 w-full bg-white shadow-md transition-all duration-200`}>
+        {/* Top Navy Blue Ribbon with Quick Links & Social */}
+        <TopRibbon />
 
-      {/* Updates / Notice Marquee Ticker */}
-      <NoticeTicker />
+        {/* Official College Header Banner */}
+        <HeaderBanner />
 
-      {/* Clean Floating Pill Navigation Bar (Menu items only) */}
-      <MegaMenu />
+        {/* Updates / Notice Marquee Ticker */}
+        <NoticeTicker />
+
+        {/* Navigation Bar */}
+        <MegaMenu />
+      </div>
 
       <main className="flex-1 w-full max-w-full">
         <Outlet />

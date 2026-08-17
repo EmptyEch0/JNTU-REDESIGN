@@ -11,7 +11,7 @@ interface Props {
 
 export function PageHero({ eyebrow, title, subtitle, children, image }: Props) {
   return (
-    <section className="relative pt-40 pb-20 md:pt-48 md:pb-28 overflow-hidden">
+    <section className="relative pt-12 pb-12 sm:pt-16 sm:pb-16 md:pt-20 md:pb-20 overflow-hidden">
       {/* Base image (when provided) */}
       {image && (
         <img decoding="async"

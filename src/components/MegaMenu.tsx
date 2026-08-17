@@ -130,24 +130,20 @@ export function MegaMenu() {
   };
 
   return (
-    <header className={`sticky z-50 pointer-events-none transition-all duration-300 -mb-14 sm:-mb-16 ${isAdmin ? "top-14" : "top-3"}`}>
-      <div className="flex justify-center px-3 sm:px-4 bg-transparent">
+    <header className="w-full bg-[#08182F] border-b border-blue-900/40 relative z-40">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4">
         <div
           ref={islandRef}
-          className={`pointer-events-auto my-1 transition-all duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
-            expanded
-              ? "w-full max-w-[1400px] rounded-[32px] bg-slate-950/90 backdrop-blur-2xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.12)] border border-white/15"
-              : "w-auto rounded-full bg-slate-950/85 backdrop-blur-2xl shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.15)] border border-white/20"
-          }`}
+          className="w-full"
           onMouseLeave={() => setOpenIdx(null)}
         >
           <div
-            className={`flex items-center justify-between transition-all duration-200 ${expanded ? "px-6 sm:px-8 h-[60px]" : "px-5 h-12"}`}
+            className="flex items-center justify-between h-11 sm:h-12"
           >
             {/* Mobile Header indicator */}
             <Link to="/" className="lg:hidden flex items-center gap-2 group shrink-0" onClick={closeAll}>
-              <div className="rounded-full bg-white/10 p-1.5 border border-white/20 text-white">
-                <Home className="h-4 w-4" />
+              <div className="rounded-full bg-white/10 p-1 border border-white/20 text-white">
+                <Home className="h-3.5 w-3.5" />
               </div>
               <span className="text-xs font-bold text-white tracking-wide">JNTU-GV CEV</span>
             </Link>

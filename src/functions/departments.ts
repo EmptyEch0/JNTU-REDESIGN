@@ -32,7 +32,7 @@ export const getDepartmentDetails = createServerFn({ method: "GET" })
       const { sql } = await import("@/lib/db");
 
       // 1. Fetch the main department row
-      const result = await sql`SELECT * FROM departments WHERE slug = ${slug}`;
+      const result = await sql`SELECT * FROM departments WHERE slug = ${slug} LIMIT 1`;
 
       // 2. CHECK: If no row is returned, the array length is 0
       if (!result || result.length === 0) {
@@ -42,14 +42,14 @@ export const getDepartmentDetails = createServerFn({ method: "GET" })
       // 3. Explicitly grab the first row object
       const dept = result[0];
 
-      // 4. Fetch the other lists
-      const faculty = await sql`SELECT * FROM faculty WHERE dept_id = ${dept.id} ORDER BY ID ASC`;
-      const gallery =
-        await sql`SELECT * FROM department_gallery WHERE dept_id = ${dept.id} ORDER BY created_at DESC`;
-      const courses = await sql`SELECT * FROM courses WHERE dept_id = ${dept.id}`;
-      const laboratories = await sql`SELECT * FROM laboratories WHERE dept_id = ${dept.id}`;
-      const achievements =
-        await sql`SELECT * FROM achievements WHERE dept_id = ${dept.id} ORDER BY year DESC`;
+      // 4. Fetch all other lists IN PARALLEL to eliminate sequential network latency
+      const [faculty, gallery, courses, laboratories, achievements] = await Promise.all([
+        sql`SELECT * FROM faculty WHERE dept_id = ${dept.id} ORDER BY ID ASC`,
+        sql`SELECT * FROM department_gallery WHERE dept_id = ${dept.id} ORDER BY created_at DESC`,
+        sql`SELECT * FROM courses WHERE dept_id = ${dept.id}`,
+        sql`SELECT * FROM laboratories WHERE dept_id = ${dept.id}`,
+        sql`SELECT * FROM achievements WHERE dept_id = ${dept.id} ORDER BY year DESC`,
+      ]);
 
       // 5. MERGE: Create a new object containing EVERYTHING
       const completeData = {
@@ -65,14 +65,14 @@ export const getDepartmentDetails = createServerFn({ method: "GET" })
         hod_photo: dept.hod_photo,
         hod_message: dept.hod_message,
         hod_contact: dept.hod_contact,
-        faculty: faculty.map((row) => ({ ...row })),
-        gallery: gallery.map((row) => ({ ...row })),
-        laboratories: laboratories.map((row) => ({ ...row })),
-        achievements: achievements.map((row) => ({ ...row })),
-        courses: courses.map((row) => ({ ...row })),
+        faculty: (faculty || []).map((row) => ({ ...row })),
+        gallery: (gallery || []).map((row) => ({ ...row })),
+        laboratories: (laboratories || []).map((row) => ({ ...row })),
+        achievements: (achievements || []).map((row) => ({ ...row })),
+        courses: (courses || []).map((row) => ({ ...row })),
       };
 
-      serverCache.set(cacheKey, completeData);
+      serverCache.set(cacheKey, completeData, 1000 * 60 * 30); // 30 mins cache
       return completeData;
     } catch (err) {
       console.error(`Error fetching department details for ${slug}:`, err);

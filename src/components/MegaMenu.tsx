@@ -130,8 +130,8 @@ export function MegaMenu() {
   };
 
   return (
-    <header className={`sticky z-50 pointer-events-none transition-all duration-300 -mb-14 sm:-mb-16 pt-2 sm:pt-3 ${isAdmin ? "top-14" : "top-3"}`}>
-      <div className="flex justify-center px-3 sm:px-4 bg-transparent">
+    <header className="w-full bg-transparent relative z-40 py-2 sm:py-2.5 flex justify-center px-2 sm:px-4 pointer-events-none -mb-14 sm:-mb-16">
+      <div className="flex justify-center px-3 sm:px-4 bg-transparent w-full">
         <div
           ref={islandRef}
           className="pointer-events-auto my-0.5 w-auto max-w-[1400px] rounded-full bg-slate-950/85 backdrop-blur-2xl shadow-[0_16px_40px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.15)] border border-white/20 px-3 sm:px-5 py-1 transition-all duration-300 flex items-center justify-between gap-1.5 sm:gap-2"

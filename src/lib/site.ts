@@ -23,6 +23,10 @@ export const NAV: {
   }[];
 }[] = [
     {
+      label: "Home",
+      to: "/",
+    },
+    {
       label: "About",
       groups: [
         {

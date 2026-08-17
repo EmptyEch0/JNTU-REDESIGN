@@ -75,19 +75,19 @@ export function TopRibbon() {
 
   return (
     <>
-      <div className="w-full bg-[#0B254E] text-white/90 text-[11px] font-medium border-b border-blue-900/50 shadow-inner relative z-50 select-none">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 h-8 sm:h-7.5 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
+      <div className="w-full bg-[#0B254E] text-white/90 text-[10px] sm:text-[10.5px] font-medium border-b border-blue-900/50 shadow-inner relative z-50 select-none">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 h-6.5 sm:h-7 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
           {/* Left: Social Media Icons */}
-          <div className="flex items-center gap-2.5 shrink-0 pl-1">
+          <div className="flex items-center gap-2 shrink-0 pl-0.5">
             <a
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1 text-white/80 hover:text-white hover:bg-white/10 rounded transition-all"
+              className="p-0.5 text-white/80 hover:text-white hover:bg-white/10 rounded transition-all"
               aria-label="Facebook"
               title="Facebook"
             >
-              <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
               </svg>
             </a>
@@ -95,114 +95,114 @@ export function TopRibbon() {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1 text-white/80 hover:text-white hover:bg-white/10 rounded transition-all"
+              className="p-0.5 text-white/80 hover:text-white hover:bg-white/10 rounded transition-all"
               aria-label="Twitter / X"
               title="Twitter / X"
             >
-              <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 24.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
             </a>
           </div>
 
           {/* Right: Quick Links matching Ribbon */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 whitespace-nowrap pr-1">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0 whitespace-nowrap pr-0.5">
             {/* 1. UGC Recognition */}
             <Link
               to="/about/norms"
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+              className="flex items-center gap-1 px-1 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
               title="UGC 2(f) & 12(B) Recognition"
             >
-              <FileText className="w-3 h-3 text-cyan-300" />
+              <FileText className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
               <span className="hidden sm:inline">UGC Recognition</span>
               <span className="sm:hidden">UGC</span>
             </Link>
 
-            <span className="text-white/25">|</span>
+            <span className="text-white/20">|</span>
 
             {/* 2. Feedback */}
             <button
               onClick={() => setFeedbackOpen(true)}
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              className="flex items-center gap-1 px-1 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               title="Give Portal Feedback"
             >
-              <MessageSquare className="w-3 h-3 text-cyan-300" />
+              <MessageSquare className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
               <span>Feedback</span>
             </button>
 
-            <span className="text-white/25">|</span>
+            <span className="text-white/20">|</span>
 
             {/* 3. UCEV Mail */}
             <a
               href="https://mail.google.com/a/jntukcev.ac.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+              className="flex items-center gap-1 px-1 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
               title="Official Institutional Webmail"
             >
-              <Mail className="w-3 h-3 text-cyan-300" />
+              <Mail className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
               <span>UCEV Mail</span>
             </a>
 
-            <span className="text-white/25">|</span>
+            <span className="text-white/20">|</span>
 
             {/* 4. Photo Gallery */}
             <Link
               to="/gallery"
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+              className="flex items-center gap-1 px-1 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
               title="Campus Photo Gallery"
             >
-              <ImageIcon className="w-3 h-3 text-cyan-300" />
+              <ImageIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
               <span className="hidden sm:inline">Photo Gallery</span>
               <span className="sm:hidden">Gallery</span>
             </Link>
 
-            <span className="text-white/25">|</span>
+            <span className="text-white/20">|</span>
 
             {/* 5. Anti Ragging */}
             <Link
               to="/anti-ragging"
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-white/85 hover:text-amber-300 hover:bg-white/10 transition-colors"
+              className="flex items-center gap-1 px-1 py-0.5 rounded text-white/85 hover:text-amber-300 hover:bg-white/10 transition-colors"
               title="Anti Ragging Cell & Helpline"
             >
-              <ShieldBan className="w-3 h-3 text-amber-300" />
+              <ShieldBan className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-300" />
               <span>Anti Ragging</span>
             </Link>
 
-            <span className="text-white/25">|</span>
+            <span className="text-white/20">|</span>
 
             {/* 6. Contact Us */}
             <Link
               to="/contact"
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+              className="flex items-center gap-1 px-1 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
               title="Contact College Administration"
             >
-              <Phone className="w-3 h-3 text-cyan-300" />
+              <Phone className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
               <span className="hidden sm:inline">Contact Us</span>
               <span className="sm:hidden">Contact</span>
             </Link>
 
-            <span className="text-white/25">|</span>
+            <span className="text-white/20">|</span>
 
             {/* 7. Login Popover (Student / Faculty / HOD / Admin) */}
             <div className="relative" ref={loginMenuRef}>
               <button
                 onClick={() => setLoginMenuOpen(!loginMenuOpen)}
-                className={`flex items-center gap-1 px-2 py-0.5 rounded font-semibold transition-all cursor-pointer ${
+                className={`flex items-center gap-1 px-1.5 py-0.5 rounded font-semibold transition-all cursor-pointer ${
                   loginMenuOpen
                     ? "bg-cyan-500/20 text-cyan-200 border border-cyan-400/40"
                     : "text-white/90 hover:text-white hover:bg-white/10"
                 }`}
                 title="Portal Login"
               >
-                <Lock className="w-3 h-3 text-cyan-300" />
+                <Lock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
                 <span>Login</span>
-                <ChevronDown className={`w-3 h-3 text-white/60 transition-transform duration-200 ${loginMenuOpen ? "rotate-180" : ""}`} />
+                <ChevronDown className={`w-2.5 h-2.5 text-white/60 transition-transform duration-200 ${loginMenuOpen ? "rotate-180" : ""}`} />
               </button>
 
               {/* Login Dropdown */}
               {loginMenuOpen && (
-                <div className="absolute right-0 top-full mt-1.5 w-60 bg-slate-900/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-2 z-50 animate-[fade-in_0.15s_ease-out]">
+                <div className="absolute right-0 top-full mt-1 w-56 bg-slate-900/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-2 z-50 animate-[fade-in_0.15s_ease-out]">
                   <div className="text-[10px] uppercase font-bold tracking-widest text-cyan-300 px-3 py-1.5 border-b border-white/10">
                     Portals & Login
                   </div>
@@ -210,10 +210,10 @@ export function TopRibbon() {
                     <Link
                       to="/faculty-login"
                       onClick={() => setLoginMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+                      className="flex items-center gap-2.5 px-3 py-1.5 text-xs font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all"
                     >
-                      <div className="w-6 h-6 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-300">
-                        <GraduationCap className="w-3.5 h-3.5" />
+                      <div className="w-5.5 h-5.5 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-300">
+                        <GraduationCap className="w-3 h-3" />
                       </div>
                       <div>
                         <div>Faculty Portal</div>
@@ -224,10 +224,10 @@ export function TopRibbon() {
                     <Link
                       to="/hod-login"
                       onClick={() => setLoginMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+                      className="flex items-center gap-2.5 px-3 py-1.5 text-xs font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all"
                     >
-                      <div className="w-6 h-6 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-300">
-                        <UserCheck className="w-3.5 h-3.5" />
+                      <div className="w-5.5 h-5.5 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-300">
+                        <UserCheck className="w-3 h-3" />
                       </div>
                       <div>
                         <div>HOD Login</div>
@@ -238,10 +238,10 @@ export function TopRibbon() {
                     <Link
                       to="/admin"
                       onClick={() => setLoginMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+                      className="flex items-center gap-2.5 px-3 py-1.5 text-xs font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all"
                     >
-                      <div className="w-6 h-6 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-300">
-                        <Shield className="w-3.5 h-3.5" />
+                      <div className="w-5.5 h-5.5 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-300">
+                        <Shield className="w-3 h-3" />
                       </div>
                       <div>
                         <div>Admin Dashboard</div>
@@ -254,56 +254,56 @@ export function TopRibbon() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setLoginMenuOpen(false)}
-                      className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all border-t border-white/10 mt-1"
+                      className="flex items-center justify-between px-3 py-1.5 text-xs font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all border-t border-white/10 mt-1"
                     >
                       <div className="flex items-center gap-2">
-                        <Building className="w-3.5 h-3.5 text-cyan-300" />
+                        <Building className="w-3 h-3 text-cyan-300" />
                         <span>Student Portal</span>
                       </div>
-                      <ExternalLink className="w-3 h-3 text-white/40" />
+                      <ExternalLink className="w-2.5 h-2.5 text-white/40" />
                     </a>
                   </div>
                 </div>
               )}
             </div>
 
-            <span className="text-white/25">|</span>
+            <span className="text-white/20">|</span>
 
             {/* 8. RTI Act */}
             <Link
               to="/rti"
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+              className="flex items-center gap-1 px-1 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
               title="Right to Information Act"
             >
-              <Scale className="w-3 h-3 text-cyan-300" />
+              <Scale className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
               <span>RTI Act</span>
             </Link>
 
-            <span className="text-white/25">|</span>
+            <span className="text-white/20">|</span>
 
             {/* 9. GO.M.S.14 */}
             <a
               href="https://jntugvcev.edu.in//wp-content/uploads/2021/03/13022019HE_MS14.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+              className="flex items-center gap-1 px-1 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
               title="Government Order MS No. 14"
             >
-              <FileCheck className="w-3 h-3 text-cyan-300" />
+              <FileCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
               <span>GO.M.S.14</span>
             </a>
 
-            <span className="text-white/25">|</span>
+            <span className="text-white/20">|</span>
 
             {/* 10. JNTU Act */}
             <a
               href="https://jntugvcev.edu.in//wp-content/uploads/2021/03/JNTUACT-compressed.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+              className="flex items-center gap-1 px-1 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
               title="JNTU Act (Act No. 30 of 2008)"
             >
-              <Building className="w-3 h-3 text-cyan-300" />
+              <Building className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
               <span>JNTU Act</span>
             </a>
           </div>

@@ -23,11 +23,11 @@ import {
 } from "lucide-react";
 import { imageUrl } from "@/lib/assets";
 
-const heroImg = imageUrl("hero-carousal/hero-campus.webp");
-const hero2 = imageUrl("hero-carousal/hero-2.webp");
-const hero3 = imageUrl("hero-carousal/hero-3.webp");
-const hero4 = imageUrl("hero-carousal/hero-4.webp");
-const hero5 = imageUrl("hero-carousal/hero-5.webp");
+const heroImg = "/images/hero-carousal/hero-campus.webp";
+const hero2 = "/images/hero-carousal/hero-2.webp";
+const hero3 = "/images/hero-carousal/hero-3.webp";
+const hero4 = "/images/hero-carousal/hero-4.webp";
+const hero5 = "/images/hero-carousal/hero-5.webp";
 const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
 import labImg from "@/assets/lab.webp";
 import hostelImg from "@/assets/hostel.webp";

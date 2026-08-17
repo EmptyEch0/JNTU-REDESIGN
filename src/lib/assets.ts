@@ -29,14 +29,20 @@ export const getAssetUrl = (
     // legacy map check
     const filename = trimmedPath.split("/").pop() ?? "";
     const LEGACY_FILENAME_MAP: Record<string, string> = {
-      "hero-campus.jpg": `${BASE}/images/hero-carousal/hero-campus.jpg`,  // Changed to .jpg
-      "hero-campus.webp": `${BASE}/images/hero-carousal/hero-campus.jpg`, // Map .webp request to .jpg
-      "hero-2.jpg": `${BASE}/images/hero-carousal/hero-2.jpg`,            // Changed to .jpg
-      "hero-2.jpeg": `${BASE}/images/hero-carousal/hero-2.jpg`,           // Changed to .jpg
-      "hero-2.webp": `${BASE}/images/hero-carousal/hero-2.jpg`,           // Map .webp request to .jpg
-      "hero-3.webp": `${BASE}/images/hero-carousal/hero-3.webp`,
-      "hero-4.webp": `${BASE}/images/hero-carousal/hero-4.webp`,
-      "hero-5.webp": `${BASE}/images/hero-carousal/hero-5.webp`,
+      "hero-campus.jpg": "/images/hero-carousal/hero-campus.webp",
+      "hero-campus.webp": "/images/hero-carousal/hero-campus.webp",
+      "hero-2.jpg": "/images/hero-carousal/hero-2.webp",
+      "hero-2.jpeg": "/images/hero-carousal/hero-2.webp",
+      "hero-2.webp": "/images/hero-carousal/hero-2.webp",
+      "hero-3.jpg": "/images/hero-carousal/hero-3.webp",
+      "hero-3.jpeg": "/images/hero-carousal/hero-3.webp",
+      "hero-3.webp": "/images/hero-carousal/hero-3.webp",
+      "hero-4.jpg": "/images/hero-carousal/hero-4.webp",
+      "hero-4.jpeg": "/images/hero-carousal/hero-4.webp",
+      "hero-4.webp": "/images/hero-carousal/hero-4.webp",
+      "hero-5.jpg": "/images/hero-carousal/hero-5.webp",
+      "hero-5.jpeg": "/images/hero-carousal/hero-5.webp",
+      "hero-5.webp": "/images/hero-carousal/hero-5.webp",
       "Dr.-G.-J.-Naga-Raju1.png": `${BASE}/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`,
       "logo.jpeg": "/logo-circle.png",
       // Department banner instant local fallbacks

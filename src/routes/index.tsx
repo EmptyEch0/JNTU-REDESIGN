@@ -752,7 +752,11 @@ function HomePage() {
                       className={`${colClass} w-full rounded-3xl hover-lift overflow-hidden relative group bg-slate-900 shadow-md border border-border/30`}
                     >
                       <ImageWithLoader
-                        src={img.imglink}
+                        src={
+                          img.imglink?.startsWith("http") || img.imglink?.startsWith("/")
+                            ? img.imglink
+                            : getAssetUrl(img.imglink)
+                        }
                         alt={img.title || "Campus moment"}
                         wrapperClassName="h-full w-full rounded-3xl"
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"

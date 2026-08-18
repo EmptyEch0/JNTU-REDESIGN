@@ -46,14 +46,19 @@ export const Route = createFileRoute("/gallery")({
 });
 
 const DEFAULT_IMAGES = [
-  { id: -1, src: "uploads/photo-gallery/IMG_6832.JPG", caption: "Campus Administration & Main Building" },
-  { id: -2, src: "uploads/photo-gallery/IMG_6840.JPG", caption: "Cultural Fest & Student Celebrations" },
-  { id: -3, src: "uploads/photo-gallery/IMG_6844.JPG", caption: "Advanced Engineering Laboratories" },
-  { id: -4, src: "uploads/photo-gallery/IMG_6859.JPG", caption: "Central Knowledge Commons & Library" },
-  { id: -5, src: "uploads/photo-gallery/IMG_6868.JPG", caption: "Campus Life & Student Interactions" },
-  { id: -6, src: "uploads/photo-gallery/IMG_6872.JPG", caption: "Sports Meet & Athletic Complex" },
-  { id: -7, src: "uploads/photo-gallery/IMG_6875.JPG", caption: "Hostel & Residential Blocks" },
-  { id: -8, src: "uploads/photo-gallery/IMG_6920.JPG", caption: "Placements Drive & Auditorium Session" },
+  {
+    id: -1,
+    src: "uploads/2026/08/independence-day-2026.jpg",
+    caption: "80th Independence Day Celebrations on Campus in Presence of Hon'ble Vice-Chancellor",
+  },
+  { id: -2, src: "uploads/photo-gallery/IMG_6832.JPG", caption: "Campus Administration & Main Building" },
+  { id: -3, src: "uploads/photo-gallery/IMG_6840.JPG", caption: "Cultural Fest & Student Celebrations" },
+  { id: -4, src: "uploads/photo-gallery/IMG_6844.JPG", caption: "Advanced Engineering Laboratories" },
+  { id: -5, src: "uploads/photo-gallery/IMG_6859.JPG", caption: "Central Knowledge Commons & Library" },
+  { id: -6, src: "uploads/photo-gallery/IMG_6868.JPG", caption: "Campus Life & Student Interactions" },
+  { id: -7, src: "uploads/photo-gallery/IMG_6872.JPG", caption: "Sports Meet & Athletic Complex" },
+  { id: -8, src: "uploads/photo-gallery/IMG_6875.JPG", caption: "Hostel & Residential Blocks" },
+  { id: -9, src: "uploads/photo-gallery/IMG_6920.JPG", caption: "Placements Drive & Auditorium Session" },
 ];
 
 // Strips any old absolute VPS host (with or without :8080) down to a

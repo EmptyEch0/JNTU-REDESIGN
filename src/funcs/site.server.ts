@@ -371,6 +371,22 @@ export const getJntugvGalleryImages = createServerFn({
   const cached = serverCache.get<JntugvGalleryItem[]>("jntugv_gallery_external");
   if (cached) return cached;
 
+  const featuredItems: JntugvGalleryItem[] = [
+    {
+      id: 166,
+      date: "2026-08-15",
+      title: "80th Independence Day Celebrations at JNTU-GV",
+      file_path: "uploads/2026/08/independence-day-2026.jpg",
+      description:
+        "JNTU-GV celebrated the 80th Independence Day grandly on the campus in the presence of the Honorable Vice-Chancellor, Registrar, Principal, faculty and students.",
+      submitted: "University Admin",
+      admin_approval: "accepted",
+      carousel_scrolling: "yes",
+      gallery_scrolling: "yes",
+      imglink: "/local-assets/uploads/2026/08/independence-day-2026.jpg",
+    },
+  ];
+
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2500); // 2.5s fast timeout
@@ -387,8 +403,9 @@ export const getJntugvGalleryImages = createServerFn({
             img.admin_approval === "accepted" &&
             img.carousel_scrolling === "yes",
         );
-        serverCache.set("jntugv_gallery_external", filtered, 30 * 60 * 1000);
-        return filtered;
+        const combined = [...featuredItems, ...filtered];
+        serverCache.set("jntugv_gallery_external", combined, 30 * 60 * 1000);
+        return combined;
       }
     }
   } catch (err) {

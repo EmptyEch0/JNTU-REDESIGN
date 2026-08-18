@@ -38,6 +38,8 @@ local-assets
 .vercel
 src/routeTree.gen.ts
 package-lock.json
+/iNDEPENDECE DAY.jpg
+/iNDEPENDECE*.jpg
 hod-credentials-*.txt
 *.xlsx
 __pycache__/

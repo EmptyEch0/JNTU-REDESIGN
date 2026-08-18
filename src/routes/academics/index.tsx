@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { PageHero } from "@/components/PageHero";
 import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
-import { imageUrl } from "@/lib/assets";
+import { imageUrl, uploadUrl } from "@/lib/assets";
 import { StatCounter } from "@/components/StatCounter";
 import { SectionLabel } from "@/components/SectionLabel";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -47,8 +47,10 @@ import { useState, useMemo } from "react";
 import labImg from "@/assets/lab.jpg";
 import hostelImg from "@/assets/hostel.jpg";
 import sportsImg from "@/assets/sports.jpg";
+import timetableImg from "@/assets/timetable.png";
 import libraryImg from "@/assets/library-interior.jpg";
 import cultureImg from "@/assets/culture.jpeg";
+import syllabusImg from "@/assets/syllabus.png";
 import placementsImg from "@/assets/placements-bg.jpg";
 import guestOfficeImg from "@/assets/guestoffice.jpg";
 import groundImg from "@/assets/Ground.jpg";
@@ -109,7 +111,7 @@ const MODULES = [
     icon: BookOpen,
     to: "/academics/syllabus",
     gradient: "from-transparent via-slate-900/40 to-indigo-950/90",
-    image: cultureImg,
+    image: syllabusImg,
   },
   {
     name: "Examinations",
@@ -117,7 +119,7 @@ const MODULES = [
     icon: FileSignature,
     to: "/academics/examination",
     gradient: "from-transparent via-slate-900/40 to-slate-900/90",
-    image: labImg,
+    image: uploadUrl("departments/labs/cse/computer-lab-i.png"),
   },
   {
     name: "Downloads",
@@ -133,7 +135,7 @@ const MODULES = [
     icon: Clock,
     to: "/academics/timetables",
     gradient: "from-transparent via-slate-900/40 to-slate-900/90",
-    image: sportsImg,
+    image: timetableImg,
   },
   {
     name: "Scholarships",
@@ -165,7 +167,7 @@ const MODULES = [
     icon: UserCheck,
     to: "/academics/faculty?tab=hods",
     gradient: "from-transparent via-slate-900/40 to-red-950/90",
-    image: principalImg,
+    image: uploadUrl("departments/hod_photos/it-hod.jpg"),
   },
 ];
 

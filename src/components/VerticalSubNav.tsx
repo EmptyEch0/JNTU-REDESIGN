@@ -49,7 +49,7 @@ export function VerticalSubNav({ items }: { items: Item[] }) {
       {/* ── Desktop: sticky vertical sidebar ── */}
       <aside className="hidden md:block w-56 flex-shrink-0 self-start sticky top-28 z-20">
         <div className="bg-white lg:bg-slate-50 rounded-3xl p-6 lg:border border-slate-100 max-h-[calc(100vh-8rem)] overflow-y-auto no-scrollbar space-y-2">
-          <h3 className="text-xs font-extrabold uppercase tracking-widest text-blue-600 px-4 mb-4">
+          <h3 className="text-xs font-extrabold uppercase tracking-widest text-slate-800 px-4 mb-4">
             Navigation
           </h3>
           {items.map((it) => {
@@ -60,7 +60,7 @@ export function VerticalSubNav({ items }: { items: Item[] }) {
                 to={it.to}
                 className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                   active
-                    ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
+                    ? "bg-slate-950 text-white shadow-md shadow-slate-950/20"
                     : "text-slate-600 hover:bg-slate-100 lg:hover:bg-white"
                 }`}
               >
@@ -100,7 +100,7 @@ export function VerticalSubNav({ items }: { items: Item[] }) {
                   to={it.to}
                   className={`w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
                     active
-                      ? "bg-blue-600 text-white"
+                      ? "bg-slate-950 text-white"
                       : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                   }`}
                 >

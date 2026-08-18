@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { uploadUrl } from "@/lib/assets";
 
 export function HeaderBanner() {
   return (
@@ -44,7 +45,7 @@ export function HeaderBanner() {
           {/* Right: NBA Accreditation Logo */}
           <div className="shrink-0 flex items-center justify-center">
             <img
-              src="/nba-logo.png"
+              src={uploadUrl("2024/07/NBA-2.jpg")}
               alt="NBA Accredited - National Board of Accreditation"
               className="h-14 sm:h-16 md:h-20 w-auto object-contain drop-shadow-sm"
               decoding="async"

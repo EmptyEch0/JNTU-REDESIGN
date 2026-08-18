@@ -66,7 +66,8 @@ export type Intent =
   | "canteen"
   | "certificates"
   | "timings"
-  | "unknown";
+  | "unknown"
+  | "alumni";
 
 const INTENT_PATTERNS: Array<{ intent: Intent; pattern: RegExp }> = [
   { intent: "greeting",      pattern: /^\s*(hi|hello|hey|namaste|namaskar|good\s*(morning|evening|afternoon)|howdy|sup|hii+|helo)\b/i },
@@ -110,6 +111,7 @@ const INTENT_PATTERNS: Array<{ intent: Intent; pattern: RegExp }> = [
   { intent: "canteen",       pattern: /\b(canteen|food|cafeteria|mess|eatery|snacks)\b/i },
   { intent: "certificates",  pattern: /\b(certificate|tc\b|transfer certificate|bonafide|conduct|marks memo|transcript)\b/i },
   { intent: "timings",       pattern: /\b(timing|timings|working hours|opening hours|college hours)\b/i },
+  { intent: "alumni", pattern: /\b(alumni|alumnus|former\s*students?|passouts?|graduates?|passed outs?|networking|alumni\s*portal|alumni\s*network|alumni\s*community|old\s*students?|passed\s*out|alumni\s*association|alma\s*mater|ex-students?|ex\s*students?|[\u0C00-\u0C7F]*అలుమ్ని[\u0C00-\u0C7F]*|[\u0C00-\u0C7F]*పూర్వ\s*విద్యార్థి[\u0C00-\u0C7F]*|[\u0C00-\u0C7F]*గ్రాడ్యుయేట్[\u0C00-\u0C7F]*)\b/i }
 ];
 
 export function detectIntents(query: string): Intent[] {
@@ -196,6 +198,7 @@ const SOURCE_BOOST_MAP: Partial<Record<Intent, string[]>> = {
   mou:           ["mou", "iqac"],
   about:         ["site_content"],
   contact:       ["site_content", "leadership"],
+  alumni: ["alumni", "student_corner", "stories_and_experiences"],
 };
 
 export function rerankChunks(chunks: any[], query: string, intents: Intent[]): RankedChunk[] {
@@ -414,6 +417,40 @@ function buildAnswer(
     return `**JNTU-GV CEV Heads of Department (HODs)** 👨‍🏫\n\n${hodList}\n\n🌐 For details, visit [Academics → Faculty](${KB.college.website}/academics/faculty)`;
   }
 
+  // ── ALUMNI ──
+if (intents.includes("alumni")) {
+  const isTe = lang === "telugu";
+  const isTenglish = lang === "tenglish";
+  
+  // Get alumni info from KB
+  const alumniPortal = "https://alumni.jntugv.edu.in";
+  
+  // Check if query asks for "how to connect" or "register"
+  const qLower = query.toLowerCase();
+  const wantsHowTo = /how|connect|register|join|access|way|process/i.test(qLower);
+  
+  let response = "";
+  
+  if (isTe) {
+    response = `**అలుమ్ని పోర్టల్** 🎓\n\nJNTU-GV విశ్వవిద్యాలయం యొక్క అధికారిక అలుమ్ని పోర్టల్:\n\n🔗 **${alumniPortal}**\n\nఇక్కడ మీరు:\n• రిజిస్టర్ చేసుకోవచ్చు\n• ప్రొఫైల్ అప్డేట్ చేసుకోవచ్చు\n• సహ విద్యార్థులతో కనెక్ట్ అవ్వవచ్చు\n• మెంటర్షిప్ అవకాశాలు పొందవచ్చు\n• క్యాంపస్ ఈవెంట్లలో పాల్గొనవచ్చు\n\n🌐 [Visit Alumni Portal](${alumniPortal})`;
+    if (wantsHowTo) {
+      response += `\n\n**ఎలా రిజిస్టర్ చేసుకోవాలి?**\n1. పోర్టల్ లింక్ క్లిక్ చేయండి\n2. 'Register' బటన్ క్లిక్ చేయండి\n3. మీ విద్యార్థి వివరాలు నింపండి\n4. ఓటీపీ ద్వారా వెరిఫై చేయండి\n5. ప్రొఫైల్ పూర్తి చేయండి`;
+    }
+  } else if (isTenglish) {
+    response = `**Alumni Portal** 🎓\n\nOfficial JNTU-GV Alumni Portal:\n\n🔗 **${alumniPortal}**\n\nikkada meeru:\n• Register chesukovachu\n• Profile update cheyochu\n• Fellow alumni tho connect avvachu\n• Mentorship opportunities ponda vachu\n• Campus events lo participate cheyochu\n\n🌐 [Visit Alumni Portal](${alumniPortal})`;
+    if (wantsHowTo) {
+      response += `\n\n**Elanti register chesukovali?**\n1. Portal link click cheyyandi\n2. 'Register' button click cheyyandi\n3. Student details fill cheyyandi\n4. OTP dwara verify cheyyandi\n5. Profile complete cheyyandi`;
+    }
+  } else {
+    response = `**JNTU-GV Alumni Portal** 🎓\n\nThe official alumni platform for JNTU-GV College of Engineering Vizianagaram:\n\n🔗 **${alumniPortal}**\n\n**What you can do on the alumni portal:**\n• **Register & Update Profile**: Stay connected with your alma mater\n• **Networking**: Connect with fellow graduates and seniors\n• **Mentorship**: Guide current students and seek career advice\n• **Events**: Participate in campus events and alumni meets\n• **Career Support**: Access job opportunities and industry connections\n\n**How to get started:**\n1. Visit [${alumniPortal}](${alumniPortal})\n2. Click on 'Register' / 'Sign Up'\n3. Fill in your student details\n4. Verify via OTP\n5. Complete your profile and start connecting!`;
+    
+    if (wantsHowTo) {
+      response += `\n\n**Quick Registration Steps:**\n✅ Step 1: Go to ${alumniPortal}\n✅ Step 2: Click Register\n✅ Step 3: Enter your roll number and email\n✅ Step 4: OTP verification\n✅ Step 5: Create your profile`;
+    }
+  }
+  
+  return response;
+}
   // ── DEPARTMENTS ──
   if (intents.includes("department")) {
     const extra = rel(["seats", "intake", "department", "branch", "offered"]);

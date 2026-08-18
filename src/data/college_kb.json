@@ -7,10 +7,17 @@
     "type": "Constituent University College of JNTU Gurajada Vizianagaram",
     "campusArea": "100+ Acres green campus",
     "website": "https://jntugvcev.edu.in",
+    "alumniPortal": "https://alumni.jntugv.edu.in",
     "email": "principal@jntugvcev.edu.in",
     "phone": "+91 8922 244 100",
     "overview": "JNTU-GV College of Engineering Vizianagaram is a premier autonomous university engineering college in North Coastal Andhra Pradesh. Known for technical excellence, state-of-the-art research laboratories, vibrant student culture, and strong placement records."
   },
+  "alumni": {  
+  "portal": "https://alumni.jntugv.edu.in",
+  "description": "JNTU-GV maintains an active alumni network connecting current students with graduates globally. The dedicated Alumni Portal allows alumni to register, share mentorship, interact with departments, and engage in campus events.",
+  "benefits": "Networking opportunities, mentorship programs, career guidance, industry connections, campus event participation, and lifelong community membership.",
+  "how_to_connect": "Visit https://alumni.jntugv.edu.in to register, update profile, connect with fellow alumni, and access exclusive resources."
+},
   "stories_and_experiences": [
     {
       "id": "story_campus_life",
@@ -29,6 +36,12 @@
       "title": "Placement Success Stories",
       "category": "Placements",
       "content": "JNTU-GV CEV boasts a high placement record with packages reaching up to 42 LPA. Top recruiters include TCS, Wipro, Infosys, Accenture, Cognizant, L&T, Hexaware, and Tech Mahindra. The dedicated Training & Placement Officer (TPO) conducts mock interviews, aptitude training, soft skills workshops, and coding bootcamps starting from 3rd year."
+    },
+    {
+      "id": "story_alumni_network",
+      "title": "Alumni Network & Community",
+      "category": "Alumni",
+      "content": "JNTU-GV maintains an active network connecting current students with alumni globally. The dedicated Alumni Portal at https://alumni.jntugv.edu.in allows alumni to register, share mentorship, interact with departments, and engage in campus events. Over 5,000+ alumni are connected through this platform, providing mentorship, job referrals, and industry collaborations."
     }
   ],
   "departments_detailed": [
@@ -116,6 +129,10 @@
     {
       "question": "What is the highest placement package at JNTU-GV CEV?",
       "answer": "The highest package recorded is 42 LPA, with average packages ranging between 4.5 to 7 LPA across CSE, ECE, IT, EEE, Mechanical, and Metallurgy."
+    },
+    {
+      "question": "What is the URL for the Alumni Portal?",
+      "answer": "The official JNTU-GV Alumni Portal is available at https://alumni.jntugv.edu.in."
     }
   ]
 }

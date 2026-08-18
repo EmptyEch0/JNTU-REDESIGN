@@ -16,6 +16,9 @@
 ### Campus Life & Culture
 Life at JNTU-GV CEV is vibrant and multi-faceted. Students engage in state-level technical symposiums, coding competitions, hackathons, annual sports meets, and cultural festivals. The campus hosts active student units for NSS (National Service Scheme), EDC (Entrepreneurship Development Cell), WEC (Women Empowerment Cell), and IEEE / CSI professional student chapters.
 
+### Alumni Community & Networking
+The official JNTU-GV Alumni Portal (https://alumni.jntugv.edu.in) links graduates and current students. It facilitates mentorship, career guidance, alumni networking, and alumni interaction events.
+
 ### Key Innovations & Student Projects
 - **AI-Powered Precision Agriculture**: IoT sensor networks and drone imagery classification developed by CSE & ECE final year teams.
 - **Solar Energy Storage Optimization**: Renewable microgrid research led by EEE department in collaboration with state power utilities.

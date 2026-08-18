@@ -40,6 +40,7 @@ export const getStudentActivityData =
             (img) => img.clubId === club.id
           ),
         })),
+        overviewImages: images.filter((img) => img.clubId === 0),
       };
 
       serverCache.set("student_activity_data", data);

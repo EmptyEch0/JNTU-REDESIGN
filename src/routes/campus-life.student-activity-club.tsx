@@ -38,13 +38,20 @@ import {
 import { LocalSubNav } from "@/components/LocalSubNav";
 import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload, AdminMultiUpload } from "@/components/AdminEditPanel";
+import { getPageContent, updatePageSection } from "@/funcs/site.server";
 
 export const Route = createFileRoute("/campus-life/student-activity-club")({
-  loader: async () => await getStudentActivityData(),
+  loader: async () => {
+    const [activityData, pageContent] = await Promise.all([
+      getStudentActivityData(),
+      getPageContent({ data: "student-activities" }),
+    ]);
+    return { ...activityData, pageContent };
+  },
   component: StudentActivityClubPage,
 });
 
-const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200";
+const DEFAULT_IMAGE = cultureImg;
 
 function StudentActivityClubPage() {
   const data = Route.useLoaderData() as any;
@@ -52,7 +59,71 @@ function StudentActivityClubPage() {
   const { isEditMode } = useAdmin();
 
   const [tab, setTab] = useState("Overview");
-  const clubs = Array.isArray(data?.clubs) ? data.clubs : [];
+  const clubs = Array.isArray(data?.clubs)
+    ? data.clubs.filter((c: any) => c.name !== "Music Club")
+    : [];
+
+  const pageContent = data?.pageContent || [];
+  const overviewRec = pageContent.find((r: any) => r.sectionKey === "overview");
+
+  const [editOverview, setEditOverview] = useState({
+    title: overviewRec?.title || "Student Activity Clubs Overview",
+    content: overviewRec?.content || `Welcome to the central University Student Activity Portal. Our vibrant ecosystem of active, student-led initiatives supports continuous collaboration across departments.\n\nBy staging large-scale tech meets, orchestral assemblies, and community leadership events, students establish deep professional networks and creative proficiency grids. Explore specific active rosters to find your community segment!`,
+    imageUrl: overviewRec?.imageUrl || "",
+  });
+
+  useEffect(() => {
+    if (overviewRec) {
+      setEditOverview({
+        title: overviewRec.title || "Student Activity Clubs Overview",
+        content: overviewRec.content || "",
+        imageUrl: overviewRec.imageUrl || "",
+      });
+    }
+  }, [overviewRec]);
+
+  async function handleSaveOverview() {
+    const tId = toast.loading("Saving changes...");
+    try {
+      await updatePageSection({
+        data: {
+          page: "student-activities",
+          sectionKey: "overview",
+          title: editOverview.title,
+          content: editOverview.content,
+          imageUrl: editOverview.imageUrl,
+        },
+      });
+      toast.success("Changes saved successfully!", { id: tId });
+      alert("Changes saved successfully!");
+      router.invalidate();
+    } catch {
+      toast.error("Failed to save.", { id: tId });
+    }
+  }
+
+  async function handleAddOverviewImage(url: string) {
+    if (!url.trim()) return;
+    const tId = toast.loading("Adding local picture...");
+    try {
+      await createClubImage({ data: { clubId: 0, url } });
+      toast.success("Photo staged!", { id: tId });
+      router.invalidate();
+    } catch {
+      toast.error("Failed.", { id: tId });
+    }
+  }
+
+  async function handleDeleteOverviewImage(id: number) {
+    const tId = toast.loading("Purging photo...");
+    try {
+      await deleteClubImage({ data: { id } });
+      toast.success("Removed!", { id: tId });
+      router.invalidate();
+    } catch {
+      toast.error("Failed.", { id: tId });
+    }
+  }
 
   // Tab mappings
   const TABS = ["Overview", ...clubs.map((c: any) => c.name)];
@@ -67,12 +138,12 @@ function StudentActivityClubPage() {
 
   const getCarouselImages = () => {
     if (tab === "Overview") {
-      const heroImgs = clubs.map((c: any) => getAssetUrl(c.heroImage)).filter(Boolean);
-      return heroImgs.length > 0 ? heroImgs : [DEFAULT_IMAGE];
+      const overviewImgs = (data?.overviewImages || []).map((img: any) => img.url);
+      return overviewImgs.length > 0 ? overviewImgs : [DEFAULT_IMAGE];
     }
     const activeClub = clubs.find((c: any) => c.name === tab);
-    const clubImgs = activeClub?.images?.map((img: any) => getAssetUrl(img.url)) || [];
-    return clubImgs.length > 0 ? clubImgs : (activeClub?.heroImage ? [getAssetUrl(activeClub.heroImage)] : [DEFAULT_IMAGE]);
+    const clubImgs = activeClub?.images?.map((img: any) => img.url) || [];
+    return clubImgs.length > 0 ? clubImgs : (activeClub?.heroImage ? [activeClub.heroImage] : [DEFAULT_IMAGE]);
   };
 
   // --- ADDING A NEW CLUB TRIGGER ---
@@ -139,13 +210,89 @@ function StudentActivityClubPage() {
           {tab === "Overview" && (
             <div className="space-y-10 animate-[fade-in_0.2s_ease-out]">
 
-              <Card title="Student Activity Clubs Overview" icon={Sparkles}>
-                <p className="text-[15px] text-slate-600 font-medium leading-relaxed bg-slate-50/50 border p-6 rounded-3xl shadow-inner whitespace-pre-line">
-                  Welcome to the central University Student Activity Portal. Our vibrant ecosystem of active, student-led initiatives supports continuous collaboration across departments.
-
-                  By staging large-scale tech meets, orchestral assemblies, and community leadership events, students establish deep professional networks and creative proficiency grids. Explore specific active rosters to find your community segment!
-                </p>
+              <Card title={editOverview.title} icon={Sparkles} className={isEditMode ? "ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10" : ""}>
+                {isEditMode ? (
+                  <div className="space-y-4 animate-[fade-in_0.15s]">
+                    <div>
+                      <label className="text-[9px] font-black text-amber-800 uppercase">Overview Title</label>
+                      <input
+                        value={editOverview.title}
+                        onChange={(e) => setEditOverview({ ...editOverview, title: e.target.value })}
+                        className="w-full border-2 border-amber-200 bg-white p-2.5 rounded-xl text-xs font-bold outline-none focus:border-amber-400"
+                        placeholder="Overview Title"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-black text-amber-800 uppercase">Overview Content</label>
+                      <textarea
+                        value={editOverview.content}
+                        onChange={(e) => setEditOverview({ ...editOverview, content: e.target.value })}
+                        className="w-full border-2 border-amber-200 bg-white h-32 p-2.5 rounded-xl text-xs font-medium outline-none focus:border-amber-400"
+                        placeholder="Overview description..."
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[9px] font-black text-amber-800 uppercase">Overview Image</label>
+                      <AdminUpload
+                        value={editOverview.imageUrl}
+                        onChange={(newUrl) => setEditOverview({ ...editOverview, imageUrl: newUrl || "" })}
+                        module="clubs"
+                        category="student-activities-overview"
+                        placeholder="Upload Overview image"
+                      />
+                    </div>
+                    <div className="flex justify-end">
+                      <button
+                        onClick={handleSaveOverview}
+                        className="bg-amber-500 hover:bg-amber-600 text-amber-950 font-black px-6 py-3 rounded-xl text-xs uppercase transition flex items-center gap-2 cursor-pointer shadow active:scale-95"
+                      >
+                        <Save className="w-4 h-4" /> Save Overview
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col md:flex-row gap-8 items-center">
+                    <div className="flex-1">
+                      <p className="text-[15px] text-slate-600 font-medium leading-relaxed bg-slate-50/50 border p-6 rounded-3xl shadow-inner whitespace-pre-line">
+                        {overviewRec?.content || `Welcome to the central University Student Activity Portal. Our vibrant ecosystem of active, student-led initiatives supports continuous collaboration across departments.\n\nBy staging large-scale tech meets, orchestral assemblies, and community leadership events, students establish deep professional networks and creative proficiency grids. Explore specific active rosters to find your community segment!`}
+                      </p>
+                    </div>
+                    {overviewRec?.imageUrl && (
+                      <div className="w-full md:w-1/3 aspect-[4/3] rounded-[28px] overflow-hidden border-2 border-slate-100 shadow shrink-0">
+                        <img decoding="async" loading="lazy"
+                          src={getAssetUrl(overviewRec.imageUrl)}
+                          className="w-full h-full object-cover"
+                          alt="Overview Image"
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
               </Card>
+
+              {/* OVERVIEW CAROUSEL IMAGES VAULT */}
+              {isEditMode && (
+                <Card title="Student Activities Overview Carousel Images" subtitle="Manage slides showing on the overview page" icon={Camera} className="ring-4 ring-amber-500/10 border-amber-200 bg-amber-50/10">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
+                    {(data?.overviewImages || []).map((img: any) => (
+                      <div key={img.id} className="relative group rounded-xl overflow-hidden aspect-[4/3] border bg-slate-100">
+                        <img alt="" decoding="async" loading="lazy" src={getAssetUrl(img.url)} className="w-full h-full object-cover" />
+                        <button onClick={()=>handleDeleteOverviewImage(img.id)} className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-rose-950/80 text-white font-black text-xs uppercase tracking-wider transition flex flex-col items-center justify-center cursor-pointer"><Trash2 className="w-4 h-4 mb-1"/> Erase</button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex gap-3 border-t pt-4 items-center">
+                    <AdminMultiUpload
+                      onAdd={async (newUrl) => {
+                        if (newUrl) await handleAddOverviewImage(newUrl);
+                      }}
+                      module="clubs"
+                      category="student-activities-overview"
+                      className="w-full font-semibold"
+                    />
+                  </div>
+                </Card>
+              )}
 
               {/* DYNAMIC CLUB ROSTER GRID */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

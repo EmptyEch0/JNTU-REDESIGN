@@ -114,17 +114,18 @@ function MusicClubPage() {
   }
 
   async function handleSaveFaculty() {
-    const tId = toast.loading("Updating coordinator profile...");
+    const tId = toast.loading("Saving changes...");
     try {
       if (faculty?.id) {
         await updateMusicPerson({ data: { ...editFaculty, roleType: "faculty" } });
       } else {
         await createMusicPerson({ data: { ...editFaculty, roleType: "faculty" } });
       }
-      toast.success("Coordinator aligned!", { id: tId });
+      toast.success("Changes saved successfully!", { id: tId });
+      alert("Changes saved successfully!");
       router.invalidate();
     } catch {
-      toast.error("Sync fail.", { id: tId });
+      toast.error("Failed to save.", { id: tId });
     }
   }
 

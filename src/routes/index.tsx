@@ -29,10 +29,11 @@ const hero3 = "/images/hero-carousal/hero-3.webp";
 const hero4 = "/images/hero-carousal/hero-4.webp";
 const hero5 = "/images/hero-carousal/hero-5.webp";
 const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
+import hostelImg from "@/assets/hostel.jpg";
+import sportsImg from "@/assets/sports.jpg";
+import libraryImg from "@/assets/library-interior.jpg";
+import dispensaryImg from "@/assets/dispensary.png";
 import labImg from "@/assets/lab.webp";
-import hostelImg from "@/assets/hostel.webp";
-import sportsImg from "@/assets/sports.webp";
-import libraryImg from "@/assets/library-interior.webp";
 import cultureImg from "@/assets/culture.webp";
 import placementsImg from "@/assets/placements-bg.webp";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -174,7 +175,7 @@ const FACILITIES = [
   {
     title: "Dispensary",
     desc: "On-campus medical care with full-time health assistants.",
-    img: cultureImg,
+    img: dispensaryImg,
     to: "/dispensary",
     icon: Stethoscope,
   },
@@ -266,7 +267,19 @@ function HomePage() {
     return [...topRecent, ...shuffled.slice(0, 5)].slice(0, 7);
   }, [galleryImages]);
 
-  const getFacilityImage = (title: string, staticImg: string) => staticImg;
+  const getFacilityImage = (title: string, staticImg: string) => {
+    let dbImgUrl: string | undefined;
+    if (title === "Hostels") {
+      dbImgUrl = hostelData?.images?.[0]?.url;
+    } else if (title === "Library") {
+      dbImgUrl = libraryData?.images?.[0]?.url;
+    } else if (title === "Dispensary") {
+      dbImgUrl = dispensaryData?.images?.[0]?.url;
+    } else if (title === "Sports") {
+      dbImgUrl = sportsData?.images?.[0]?.url;
+    }
+    return dbImgUrl ? getAssetUrl(dbImgUrl) : staticImg;
+  };
 
   return (
     <>

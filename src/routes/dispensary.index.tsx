@@ -1,7 +1,7 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
-import cultureImg from "@/assets/culture.jpeg";
+import dispensaryImg from "@/assets/dispensary.png";
 import { getDispensaryData } from "@/funcs/dispensary.server";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
@@ -85,17 +85,18 @@ function DispensaryPage() {
 
   // --- MUTATIONS ---
   async function handleSaveInfo() {
-    const tId = toast.loading("Updating dispensary control profile...");
+    const tId = toast.loading("Saving changes...");
     try {
       await updateContent({
         data: {
           ...editInfo,
         },
       });
-      toast.success("Profile synchronized!", { id: tId });
+      toast.success("Changes saved successfully!", { id: tId });
+      alert("Changes saved successfully!");
       router.invalidate();
     } catch {
-      toast.error("Update fail.", { id: tId });
+      toast.error("Failed to save.", { id: tId });
     }
   }
 
@@ -129,7 +130,7 @@ function DispensaryPage() {
       <PageHero
         title="University Dispensary"
         subtitle="Integrated physical healthcare, active emergency networks, and ambulance dispatch schedules."
-        image={getAssetUrl(images[0]?.url) || cultureImg}
+        image={getAssetUrl(images[0]?.url) || dispensaryImg}
       />
 
       <section className="container-narrow py-12 md:py-16 px-4 sm:px-6 max-w-full overflow-x-hidden">
@@ -149,7 +150,7 @@ function DispensaryPage() {
           
           {/* GALLERY STACK */}
           <div className="relative w-full max-w-full overflow-hidden rounded-[32px] shadow-md border border-slate-200/60 bg-slate-200">
-            <ImageCarousel images={getCarouselImages()} fallback={cultureImg} />
+            <ImageCarousel images={getCarouselImages()} fallback={dispensaryImg} />
             {isEditMode && (
               <div className="bg-amber-50/95 backdrop-blur-md border-t border-amber-200 p-6 sm:p-8 flex flex-col gap-5 animate-[fade-in_0.2s]">
                 <div className="flex items-center gap-2 pb-3 border-b border-amber-200/60">

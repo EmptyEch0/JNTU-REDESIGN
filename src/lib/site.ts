@@ -118,10 +118,10 @@ export const NAV: {
         {
           title: "",
           items: [
-            { label: "Computer Science (CSE)", to: "/departments/cse" },
-            { label: "Electronics (ECE)", to: "/departments/ece" },
-            { label: "Electrical (EEE)", to: "/departments/eee" },
-            { label: "Mechanical", to: "/departments/mech" },
+            { label: "Computer Science Engineering", to: "/departments/cse" },
+            { label: "Electronics and Communication Engineering", to: "/departments/ece" },
+            { label: "Electrical and Electronics Engineering", to: "/departments/eee" },
+            { label: "Mechanical Engineering", to: "/departments/mech" },
           ],
         },
         {

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   FileText,
@@ -7,25 +7,17 @@ import {
   Image as ImageIcon,
   ShieldBan,
   Phone,
-  Lock,
   Scale,
   FileCheck,
   Building,
-  GraduationCap,
-  UserCheck,
-  Shield,
   X,
   Send,
-  ExternalLink,
-  ChevronDown,
   CheckCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 
 export function TopRibbon() {
   const [feedbackOpen, setFeedbackOpen] = useState(false);
-  const [loginMenuOpen, setLoginMenuOpen] = useState(false);
-  const loginMenuRef = useRef<HTMLDivElement>(null);
 
   // Feedback form state
   const [feedbackForm, setFeedbackForm] = useState({
@@ -36,21 +28,6 @@ export function TopRibbon() {
     message: "",
   });
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
-
-  // Close dropdown on click outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (loginMenuRef.current && !loginMenuRef.current.contains(event.target as Node)) {
-        setLoginMenuOpen(false);
-      }
-    }
-    if (loginMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [loginMenuOpen]);
 
   const handleFeedbackSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -181,91 +158,6 @@ export function TopRibbon() {
               <span className="hidden sm:inline">Contact Us</span>
               <span className="sm:hidden">Contact</span>
             </Link>
-
-            <span className="text-white/20">|</span>
-
-            {/* 7. Login Popover (Student / Faculty / HOD / Admin) */}
-            <div className="relative" ref={loginMenuRef}>
-              <button
-                onClick={() => setLoginMenuOpen(!loginMenuOpen)}
-                className={`flex items-center gap-1 px-1.5 py-0.5 rounded font-semibold transition-all cursor-pointer ${
-                  loginMenuOpen
-                    ? "bg-cyan-500/20 text-cyan-200 border border-cyan-400/40"
-                    : "text-white/90 hover:text-white hover:bg-white/10"
-                }`}
-                title="Portal Login"
-              >
-                <Lock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
-                <span>Login</span>
-                <ChevronDown className={`w-2.5 h-2.5 text-white/60 transition-transform duration-200 ${loginMenuOpen ? "rotate-180" : ""}`} />
-              </button>
-
-              {/* Login Dropdown */}
-              {loginMenuOpen && (
-                <div className="absolute right-0 top-full mt-1 w-56 bg-slate-900/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-2 z-50 animate-[fade-in_0.15s_ease-out]">
-                  <div className="text-[10px] uppercase font-bold tracking-widest text-cyan-300 px-3 py-1.5 border-b border-white/10">
-                    Portals & Login
-                  </div>
-                  <div className="space-y-1 mt-1">
-                    <Link
-                      to="/faculty-login"
-                      onClick={() => setLoginMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-1.5 text-xs font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all"
-                    >
-                      <div className="w-5.5 h-5.5 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-300">
-                        <GraduationCap className="w-3 h-3" />
-                      </div>
-                      <div>
-                        <div>Faculty Portal</div>
-                        <div className="text-[9px] text-white/50 font-normal">Profile & publications</div>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to="/hod-login"
-                      onClick={() => setLoginMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-1.5 text-xs font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all"
-                    >
-                      <div className="w-5.5 h-5.5 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-300">
-                        <UserCheck className="w-3 h-3" />
-                      </div>
-                      <div>
-                        <div>HOD Login</div>
-                        <div className="text-[9px] text-white/50 font-normal">Department management</div>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to="/admin"
-                      onClick={() => setLoginMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-1.5 text-xs font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all"
-                    >
-                      <div className="w-5.5 h-5.5 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-300">
-                        <Shield className="w-3 h-3" />
-                      </div>
-                      <div>
-                        <div>Admin Dashboard</div>
-                        <div className="text-[9px] text-white/50 font-normal">CMS & site controls</div>
-                      </div>
-                    </Link>
-
-                    <a
-                      href="https://jntugvcev.edu.in/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setLoginMenuOpen(false)}
-                      className="flex items-center justify-between px-3 py-1.5 text-xs font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all border-t border-white/10 mt-1"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Building className="w-3 h-3 text-cyan-300" />
-                        <span>Student Portal</span>
-                      </div>
-                      <ExternalLink className="w-2.5 h-2.5 text-white/40" />
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
 
             <span className="text-white/20">|</span>
 

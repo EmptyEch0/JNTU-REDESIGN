@@ -326,17 +326,17 @@ function HostelsPage() {
                     <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                       <div className="relative shrink-0">
                         <img decoding="async" loading="lazy"
-                          src={getAssetUrl(officer.image) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
-                          onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
+                          src={getAssetUrl(officer.image) || getAssetUrl("uploads/2025/07/Dr.-Ch-Bindu-Madhuri.jpg")}
+                          onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = getAssetUrl("uploads/2025/07/Dr.-Ch-Bindu-Madhuri.jpg"); }}
                           className="w-24 h-24 rounded-[24px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-500 hover:scale-[1.03]"
-                          alt={officer.name}
+                          alt={officer.name || "Dr. Ch. Bindu Madhuri"}
                         />
                       </div>
                       <div>
-                        <h4 className="font-display font-black text-xl text-slate-900 tracking-tight mb-1">{officer.name}</h4>
+                        <h4 className="font-display font-black text-xl text-slate-900 tracking-tight mb-1">{officer.name || "Dr. Ch. Bindu Madhuri"}</h4>
                         <div className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] font-bold text-xs tracking-widest uppercase px-3 py-1.5 rounded-full">
                           <Sparkles className="w-3.5 h-3.5" />
-                          {officer.role}
+                          {officer.role || "Hostel Officer"}
                         </div>
                       </div>
                     </div>

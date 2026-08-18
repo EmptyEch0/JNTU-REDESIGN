@@ -273,16 +273,18 @@ function MusicClubPage() {
                 ) : (
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
                     <img decoding="async" loading="lazy"
-                      src={getAssetUrl(faculty?.img) || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"}
-                      onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=250"; }}
+                      src={getAssetUrl(faculty?.img) || getAssetUrl("uploads/2020/08/WhatsApp-Image-2020-08-27-at-7.42.28-PM.jpeg")}
+                      onError={(e) => { e.currentTarget.src = getAssetUrl("uploads/2020/08/WhatsApp-Image-2020-08-27-at-7.42.28-PM.jpeg"); }}
                       className="w-24 h-24 md:w-28 md:h-28 rounded-[28px] object-cover border-2 border-slate-100 shadow shrink-0 duration-200 hover:scale-105"
-                      alt={faculty?.name || "Coordinator"}
+                      alt={faculty?.name || "Smt. B. Nalini"}
                     />
                     <div>
-                      <h4 className="font-display font-black text-2xl text-slate-900 tracking-tight mb-1 leading-none">{faculty?.name || "Music Coordinator"}</h4>
-                      <div className="inline-flex bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] font-black text-[10.5px] tracking-widest uppercase px-3.5 py-1 rounded-lg shadow-sm mb-3">Club Faculty Director</div>
+                      <h4 className="font-display font-black text-2xl text-slate-900 tracking-tight mb-1 leading-none">{faculty?.name || "Smt. B. Nalini"}</h4>
+                      <div className="inline-flex bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] font-black text-[10.5px] tracking-widest uppercase px-3.5 py-1 rounded-lg shadow-sm mb-3">
+                        {faculty?.designation || "Cultural Coordinator"}
+                      </div>
                       <p className="text-[15px] text-slate-600 leading-relaxed font-medium italic bg-slate-50 border p-5 rounded-2xl shadow-inner">
-                        "{content?.message || "Music aligns structural coordination and allows collaborative acoustics to scale."}"
+                        "{content?.message || "“Music gives a soul to the universe, wings to the mind, flight to the imagination and life to everything.” ― Plato"}"
                       </p>
                     </div>
                   </div>

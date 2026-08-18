@@ -323,23 +323,23 @@ function LibraryPage() {
                 ) : (
                   <div className="flex flex-col md:flex-row gap-6 items-start">
                     <img decoding="async" loading="lazy"
-                      src={getAssetUrl(content?.img) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
+                      src={getAssetUrl(content?.img) || getAssetUrl("uploads/2020/07/Training-Placement-Officer.jpg")}
                       onError={(e) => {
                         e.currentTarget.onerror = null;
-                        e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250";
+                        e.currentTarget.src = getAssetUrl("uploads/2020/07/Training-Placement-Officer.jpg");
                       }}
                       className="w-32 h-40 md:w-40 md:h-52 rounded-[24px] object-cover border-2 border-slate-100 shadow-md shrink-0"
-                      alt={content?.officerName || "Officer"}
+                      alt={content?.officerName || "Officer In-charge of Library"}
                     />
                     <div className="flex-1">
                       <h4 className="font-display font-black text-xl text-slate-900 tracking-tight mb-1">
-                        {content?.officerName || "Librarian"}
+                        {content?.officerName || "Sri. D. D. V. Siva Ram Rolangi"}
                       </h4>
                       <div className="inline-flex bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] font-bold text-xs px-3 py-1.5 rounded-full uppercase tracking-wider mb-4">
-                        {content?.designation || "Officer In Charge"}
+                        {content?.designation || "Officer In-charge of Library"}
                       </div>
                       <p className="text-[15px] text-slate-600 leading-relaxed italic bg-slate-50 p-5 rounded-2xl border border-slate-100 font-medium">
-                        "{content?.message || "Welcome to the knowledge repository hub."}"
+                        "{content?.message || "Welcome to the Central Library knowledge repository hub."}"
                       </p>
                     </div>
                   </div>

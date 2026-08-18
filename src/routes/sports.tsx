@@ -409,14 +409,14 @@ function SportsPage() {
                 ) : (
                   <div className="flex flex-col md:flex-row gap-8 items-start">
                     <img decoding="async" loading="lazy"
-                      src={getAssetUrl(data?.info?.img) || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"}
-                      onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250"; }}
+                      src={getAssetUrl(data?.info?.img) || getAssetUrl("uploads/2020/07/BSHSS-3-A.V.Papa-Rao.jpg")}
+                      onError={(e) => { e.currentTarget.src = getAssetUrl("uploads/2020/07/BSHSS-3-A.V.Papa-Rao.jpg"); }}
                       className="w-32 h-40 md:w-40 md:h-52 rounded-[28px] object-cover border-2 border-slate-100 shadow-md shrink-0 transition duration-200 hover:scale-[1.02]"
-                      alt={data?.info?.name}
+                      alt={data?.info?.name || "Dr. A. V. Papa Rao"}
                     />
                     <div className="flex-1 w-full">
-                      <h4 className="font-display font-black text-2xl text-slate-900 tracking-tight leading-none mb-2">{data?.info?.name || "Athletics Coordinator"}</h4>
-                      <div className="inline-flex bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] font-black text-xs tracking-widest uppercase px-4 py-1.5 rounded-lg shadow-sm mb-4">{data?.info?.designation || "Director of Physical Education"}</div>
+                      <h4 className="font-display font-black text-2xl text-slate-900 tracking-tight leading-none mb-2">{data?.info?.name || "Dr. A. V. Papa Rao"}</h4>
+                      <div className="inline-flex bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] font-black text-xs tracking-widest uppercase px-4 py-1.5 rounded-lg shadow-sm mb-4">{data?.info?.designation || "Sports Coordinator"}</div>
                       <p className="text-[15px] text-slate-600 leading-relaxed italic bg-slate-50 border p-5 rounded-2xl mb-6 shadow-inner font-medium">"{data?.info?.message || "Advocating total endurance and sportsmen spirits across student horizons."}"</p>
                       
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm font-bold text-slate-700">

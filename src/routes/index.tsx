@@ -23,19 +23,19 @@ import {
 } from "lucide-react";
 import { imageUrl } from "@/lib/assets";
 
-const heroImg = imageUrl("hero-carousal/hero-campus.jpg");
-const hero2 = imageUrl("hero-carousal/hero-2.jpg");
-const hero3 = imageUrl("hero-carousal/hero-3.webp");
-const hero4 = imageUrl("hero-carousal/hero-4.webp");
-const hero5 = imageUrl("hero-carousal/hero-5.webp");
+const heroImg = "/images/hero-carousal/hero-campus.webp";
+const hero2 = "/images/hero-carousal/hero-2.webp";
+const hero3 = "/images/hero-carousal/hero-3.webp";
+const hero4 = "/images/hero-carousal/hero-4.webp";
+const hero5 = "/images/hero-carousal/hero-5.webp";
 const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
-import labImg from "@/assets/lab.jpg";
 import hostelImg from "@/assets/hostel.jpg";
 import sportsImg from "@/assets/sports.jpg";
 import libraryImg from "@/assets/library-interior.jpg";
-import cultureImg from "@/assets/culture.jpeg";
 import dispensaryImg from "@/assets/dispensary.png";
-import placementsImg from "@/assets/placements-bg.jpg";
+import labImg from "@/assets/lab.webp";
+import cultureImg from "@/assets/culture.webp";
+import placementsImg from "@/assets/placements-bg.webp";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { StatCounter } from "@/components/StatCounter";
 import { ParallaxBg } from "@/components/ParallaxBg";
@@ -55,6 +55,38 @@ import { getJntugvGalleryImages } from "@/funcs/site.server";
 import { ImageWithLoader } from "@/components/ImageWithLoader";
 
 export const Route = createFileRoute("/")({
+  loader: async ({ context }) => {
+    await Promise.allSettled([
+      context.queryClient.ensureQueryData({
+        queryKey: ["leadership", "principal"],
+        queryFn: () => getLeadershipData({ data: "principal" }),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["departments", "all"],
+        queryFn: () => getAllDepartments(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["hostel", "data"],
+        queryFn: () => getHostelData(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["library", "data"],
+        queryFn: () => getLibraryData(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["dispensary", "data"],
+        queryFn: () => getDispensaryData(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["sports", "data"],
+        queryFn: () => getSportsData(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["jntugv-gallery"],
+        queryFn: () => getJntugvGalleryImages(),
+      }),
+    ]);
+  },
   head: () => ({
     meta: [
       { title: "JNTU-GV CEV — Engineering Tomorrow, Together" },
@@ -256,8 +288,6 @@ function HomePage() {
         <HeroSlideshow
           images={[
             { src: hero5, alt: "JNTU-GV VIZIANAGARAM main building" },
-            { src: heroImg, alt: "JNTU-GV campus at golden hour" },
-            { src: hero2, alt: "Aerial view of campus at sunset" },
             { src: hero3, alt: "Students walking through campus" },
             { src: hero4, alt: "Library at dusk" },
           ]}
@@ -265,7 +295,7 @@ function HomePage() {
           minHeight="min(82vh, 680px)"
           overlay="linear-gradient(180deg, oklch(0.18 0.05 260 / 0.6) 0%, oklch(0.18 0.05 260 / 0.4) 40%, oklch(0.18 0.05 260 / 0.85) 100%)"
         >
-          <div className="container-narrow h-full min-h-[min(82vh,680px)] flex flex-col justify-center pt-4 pb-10 text-white">
+          <div className="container-narrow h-full min-h-[min(82vh,680px)] flex flex-col justify-center pt-14 sm:pt-20 pb-10 text-white">
             <div className="text-eyebrow !text-cyan-300 animate-[fade-up_0.3s_ease-out_0.3s_both] flex items-center gap-2.5 font-bold tracking-wider">
               <span className="flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5 text-cyan-400" />
@@ -463,85 +493,113 @@ function HomePage() {
         </div>
       </section>
 
-      {/* DEPARTMENTS — horizontal scroll dynamically sourced from Neon */}
-      <section className="py-24 md:py-32 bg-sand">
-        <div className="container-narrow">
-          <RevealOnScroll>
-            <SectionLabel
-              eyebrow="Departments"
-              title="Eight departments. One academic culture."
-              subtitle="Each department is led by faculty who teach with conviction, mentor with care and research with rigour."
+{/* DEPARTMENTS — Optimized with lazy loading */}
+<section className="py-24 md:py-32 bg-sand">
+  <div className="container-narrow">
+    <RevealOnScroll>
+      <SectionLabel
+        eyebrow="Departments"
+        title="Eight departments. One academic culture."
+        subtitle="Each department is led by faculty who teach with conviction, mentor with care and research with rigour."
+      />
+    </RevealOnScroll>
+
+    <RevealOnScroll className="mt-12" delay={150}>
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div 
+              key={i} 
+              className="aspect-[4/3] rounded-3xl bg-slate-200 animate-pulse"
             />
-          </RevealOnScroll>
+          ))}
         </div>
-        <RevealOnScroll className="mt-10" delay={150}>
-          <div className="overflow-x-auto pb-6 [scrollbar-width:thin] snap-x snap-mandatory">
-            <div className="flex gap-5 px-[max(1.25rem,calc((100vw-1280px)/2+2rem))]">
-              {isLoading ? (
-                // Clean loading cards layout fallback 
-                Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="animate-pulse shrink-0 w-[280px] md:w-[340px] aspect-[3/4] rounded-3xl bg-slate-200" />
-                ))
-              ) : (
-                liveDepartments.map((d: any, i: number) => (
-                  <Link
-                    key={d.id}
-                    to="/departments/$id"
-                    params={{ id: d.slug }}
-                    className="snap-start group shrink-0 w-[280px] md:w-[340px] aspect-[3/4] relative rounded-3xl overflow-hidden bg-slate-900 shadow-xl hover-lift"
-                  >
-                    {/* Background Visual Image with full visibility and smooth dark overlay */}
-                    {d.image ? (
-                      <img decoding="async" loading="lazy"
-                        src={getAssetUrl(d.image)}
-                        alt={`${d.name} representation`}
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div
-                        aria-hidden
-                        className="absolute inset-0 bg-slate-800"
-                      />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {liveDepartments.map((d: any, index: number) => {
+            const deptSlug = (d.slug || "").toLowerCase();
+            
+            // Define fallback map for department images
+            const fallbackMap: Record<string, string> = {
+              cse: "http://89.116.134.182/local-assets/uploads/departments/banners/cse-banner.jpg",
+              ece: "http://89.116.134.182/local-assets/uploads/departments/banners/ece-banner.jpg",
+              eee: "http://89.116.134.182/local-assets/uploads/departments/banners/eee-banner.jpg",
+              it: "http://89.116.134.182/local-assets/uploads/departments/banners/it-banner.jpg",
+              mech: "http://89.116.134.182/local-assets/uploads/departments/banners/mech-banner.jpg",
+              met: "http://89.116.134.182/local-assets/uploads/departments/banners/met-banner.jpg",
+              sh: "http://89.116.134.182/local-assets/uploads/departments/banners/sh-banner.jpg",
+              mba: "http://89.116.134.182/local-assets/uploads/departments/banners/mba-banner.jpg",
+            };
+            
+            // Get the image source
+            const imageSrc = d.image 
+              ? getAssetUrl(d.image) 
+              : `http://89.116.134.182/local-assets/uploads/departments/banners/${deptSlug}-banner.jpg`;
+            
+            const fallback = fallbackMap[deptSlug] || "/assets/lab.webp";
+
+            return (
+              <Link
+                key={d.id}
+                to="/departments/$id"
+                params={{ id: d.slug }}
+                className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 aspect-[4/3]"
+              >
+                {/* Background Image - using regular img with optimized loading */}
+                <img
+                  src={imageSrc}
+                  alt={`${d.name} department`}
+                  loading={index < 4 ? "eager" : "lazy"}
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (target.src !== fallback && !target.src.endsWith(fallback)) {
+                      target.src = fallback;
+                    }
+                  }}
+                />
+
+                {/* Dark gradient overlay - this ensures text is readable */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 z-10" />
+
+                {/* Content - placed on top with z-index */}
+                <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-between text-white z-20">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2.5 py-1 text-[9px] font-bold tracking-widest uppercase rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white/90">
+                      {d.slug.toUpperCase()}
+                    </span>
+                    <div className="h-8 w-8 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-slate-900 transition-all duration-200">
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <h3 className="text-lg md:text-xl font-extrabold tracking-tight text-white leading-tight">
+                      {d.name}
+                    </h3>
+                    
+                    {d.hod && (
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded inline-block">
+                          HOD: <span className="text-white">{d.hod}</span>
+                        </span>
+                      </div>
                     )}
 
-                    {/* High contrast dark gradient overlay mirroring the main grid design */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 transition-opacity group-hover:opacity-95" />
-
-                    {/* Content Area */}
-                    <div className="absolute inset-0 p-6 md:p-7 flex flex-col justify-between text-white z-10">
-                      <div className="flex items-center justify-between">
-                        <span className="px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white/90">
-                          VIEW DEPT
-                        </span>
-                        <div className="h-9 w-9 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-slate-900 transition-all duration-200">
-                          <ArrowRight className="h-4 w-4" />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white leading-tight">
-                          {d.name.includes("(") ? d.name : `${d.name} (${d.slug.toUpperCase()})`}
-                        </h3>
-
-                        {/* HOD Information Line */}
-                        {d.hod && (
-                          <div className="text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded inline-block">
-                            HOD: <span className="text-white">{d.hod}</span>
-                          </div>
-                        )}
-
-                        <p className="text-xs md:text-sm text-white/80 line-clamp-2 md:line-clamp-3 font-medium leading-relaxed pt-1">
-                          {d.description}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                ))
-              )}
-            </div>
-          </div>
-        </RevealOnScroll>
-      </section>
+                    <p className="text-xs text-white/80 line-clamp-2 font-medium leading-relaxed">
+                      {d.description}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </RevealOnScroll>
+  </div>
+</section>
 
       {/* FACILITIES — interactive showcase */}
       <section className="py-20 md:py-28">

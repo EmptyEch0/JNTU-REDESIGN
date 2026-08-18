@@ -220,17 +220,35 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
       <Link
         to="/departments/$id"
         params={{ id: dept.slug }}
-        className={`group relative block h-full overflow-hidden rounded-3xl border border-white/20 bg-card shadow-[var(--shadow-soft)] ring-1 ring-black/5 transition-all duration-300 hover:ring-2 hover:ring-primary/20 ${spanClass}`}
+        className={`group relative block h-full overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 shadow-[var(--shadow-soft)] ring-1 ring-black/5 transition-all duration-300 hover:ring-2 hover:ring-primary/20 ${spanClass}`}
       >
         <article className="h-full">
           <img
-            src={getAssetUrl(dept.image)}
+            src={getAssetUrl(dept.image || `uploads/departments/banners/${dept.slug}-banner.jpg`)}
             alt={dept.name}
             width="400"
             height="280"
             loading="lazy"
             decoding="async"
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+            onError={(e) => {
+              const fallbackMap: Record<string, string> = {
+                cse: "/local-assets/uploads/photo-gallery/thumb/IMG_6868.JPG",
+                ece: "/local-assets/uploads/photo-gallery/thumb/IMG_6840.JPG",
+                eee: "/local-assets/uploads/photo-gallery/thumb/IMG_6929.JPG",
+                it: "/local-assets/uploads/photo-gallery/thumb/IMG_6926.JPG",
+                mech: "/local-assets/uploads/photo-gallery/thumb/IMG_6872.JPG",
+                met: "/local-assets/uploads/photo-gallery/thumb/IMG_6946.JPG",
+                sh: "/local-assets/uploads/photo-gallery/thumb/IMG_6844.JPG",
+                mba: "/local-assets/uploads/photo-gallery/thumb/IMG_6972.JPG",
+              };
+              const slug = (dept.slug || "").toLowerCase();
+              const target = e.currentTarget;
+              const fallback = fallbackMap[slug] || "/assets/lab.webp";
+              if (target.src !== fallback && !target.src.endsWith(fallback)) {
+                target.src = fallback;
+              }
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 

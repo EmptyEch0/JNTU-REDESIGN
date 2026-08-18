@@ -43,6 +43,8 @@ function getItemIcon(label: string) {
   if (l.includes("library")) return Library;
   if (l.includes("sport")) return Trophy;
   if (l.includes("music") || l.includes("club")) return Sparkles;
+  if (l.includes("ragging")) return ShieldCheck;
+  if (l.includes("rti")) return FileText;
   if (l.includes("nss") || l.includes("women")) return Heart;
   if (l.includes("edc") || l.includes("placement")) return Briefcase;
   return BookOpen;
@@ -128,70 +130,65 @@ export function MegaMenu() {
   };
 
   return (
-    <header className={`sticky z-50 pointer-events-none transition-all duration-300 -mb-14 sm:-mb-16 ${isAdmin ? "top-14" : "top-3"}`}>
-      <div className="flex justify-center px-3 sm:px-4 bg-transparent">
+    <header className="w-full bg-transparent relative z-40 py-2 sm:py-2.5 flex justify-center px-2 sm:px-4 pointer-events-none -mb-14 sm:-mb-16">
+      <div className="flex justify-center px-3 sm:px-4 bg-transparent w-full">
         <div
           ref={islandRef}
-          className={`pointer-events-auto my-1 transition-all duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
-            expanded
-              ? "w-full max-w-[1400px] rounded-[32px] bg-slate-950/90 backdrop-blur-2xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.12)] border border-white/15"
-              : "w-auto rounded-full bg-slate-950/85 backdrop-blur-2xl shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.15)] border border-white/20"
-          }`}
+          className="pointer-events-auto my-0.5 w-auto max-w-[1400px] rounded-full bg-slate-950/85 backdrop-blur-2xl shadow-[0_16px_40px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.15)] border border-white/20 px-3 sm:px-5 py-1 transition-all duration-300 flex items-center justify-between gap-1.5 sm:gap-2"
           onMouseLeave={() => setOpenIdx(null)}
         >
-          <div
-            className={`flex items-center justify-between transition-all duration-200 ${expanded ? "px-6 sm:px-8 h-[60px]" : "px-5 h-12"}`}
-          >
-            {/* Mobile Header indicator */}
-            <Link to="/" className="lg:hidden flex items-center gap-2 group shrink-0" onClick={closeAll}>
-              <div className="rounded-full bg-white/10 p-1.5 border border-white/20 text-white">
-                <Home className="h-4 w-4" />
-              </div>
-              <span className="text-xs font-bold text-white tracking-wide">JNTU-GV CEV</span>
-            </Link>
+        <div className="flex items-center justify-between w-full h-10 sm:h-10.5">
+          {/* Mobile Header indicator */}
+          <Link to="/" className="lg:hidden flex items-center gap-2 group shrink-0" onClick={closeAll}>
+            <div className="rounded-full bg-white/10 p-1 border border-white/20 text-white">
+              <Home className="h-3.5 w-3.5" />
+            </div>
+            <span className="text-xs font-bold text-white tracking-wide">JNTU-GV CEV</span>
+          </Link>
 
-            {/* Desktop nav - Dynamic Island Menu Items Only (No logo / name as requested) */}
-            <nav className={`hidden lg:flex items-center justify-center transition-all duration-200 ${expanded ? "gap-1.5" : "gap-0.5"}`}>
-              {NAV.map((item, i) => {
-                const active =
-                  item.to === path ||
-                  (item.groups?.some((g) => g.items.some((it) => it.to === path)) ?? false);
-                return (
-                  <div
-                    key={item.label}
-                    className="relative"
-                    onMouseEnter={() => setOpenIdx(item.groups || item.simpleItems ? i : null)}
-                  >
+          {/* Desktop nav - Dynamic Island Menu Items */}
+          <nav className="hidden lg:flex items-center justify-center gap-1">
+            {NAV.map((item, i) => {
+              const active =
+                item.to === path ||
+                (item.groups?.some((g) => g.items.some((it) => it.to === path)) ?? false);
+              return (
+                <div
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => setOpenIdx(item.groups || item.simpleItems ? i : null)}
+                >
                   {item.to ? (
-  <Link
-    to={item.to}
-    className={`px-3.5 py-1.5 text-[14px] font-semibold rounded-full transition-all flex items-center gap-1.5 ${
-      active || openIdx === i
-        ? "bg-white/20 text-white shadow-sm"
-        : "text-white/85 hover:text-white hover:bg-white/10"
-    }`}
-  >
-    {item.label}
-    {(item.groups || item.simpleItems) && (
-      <ChevronDown
-        className={`h-3.5 w-3.5 transition-transform duration-300 ${openIdx === i ? "rotate-180 text-cyan-300" : "text-white/50"}`}
-      />
-    )}
-  </Link>
-) : (
-                      <button
-                        className={`flex items-center gap-1.5 px-3.5 py-1.5 text-[14px] font-semibold rounded-full transition-all ${
-                          active || openIdx === i
-                            ? "bg-white/20 text-white shadow-sm"
-                            : "text-white/85 hover:text-white hover:bg-white/10"
-                        }`}
-                      >
-                        {item.label}
+                    <Link
+                      to={item.to}
+                      className={`px-3 py-1.5 text-[13.5px] font-semibold rounded-full transition-all flex items-center gap-1.5 ${
+                        active || openIdx === i
+                          ? "bg-white/20 text-white shadow-sm"
+                          : "text-white/85 hover:text-white hover:bg-white/10"
+                      }`}
+                    >
+                      {item.label === "Home" && <Home className="h-3.5 w-3.5 text-cyan-300" />}
+                      <span>{item.label}</span>
+                      {(item.groups || item.simpleItems) && (
                         <ChevronDown
                           className={`h-3.5 w-3.5 transition-transform duration-300 ${openIdx === i ? "rotate-180 text-cyan-300" : "text-white/50"}`}
                         />
-                      </button>
-                    )}
+                      )}
+                    </Link>
+                  ) : (
+                    <button
+                      className={`flex items-center gap-1.5 px-3 py-1.5 text-[13.5px] font-semibold rounded-full transition-all cursor-pointer ${
+                        active || openIdx === i
+                          ? "bg-white/20 text-white shadow-sm"
+                          : "text-white/85 hover:text-white hover:bg-white/10"
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      <ChevronDown
+                        className={`h-3.5 w-3.5 transition-transform duration-300 ${openIdx === i ? "rotate-180 text-cyan-300" : "text-white/50"}`}
+                      />
+                    </button>
+                  )}
 
                     {/* Groups dropdown — glassmorphic popover */}
                     {openIdx === i && item.groups && !searchOpen && (

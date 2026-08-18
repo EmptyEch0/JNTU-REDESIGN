@@ -23,6 +23,10 @@ export const NAV: {
   }[];
 }[] = [
     {
+      label: "Home",
+      to: "/",
+    },
+    {
       label: "About",
       groups: [
         {
@@ -42,6 +46,11 @@ export const NAV: {
               label: "Norms & Recognition",
               to: "/about/norms",
               desc: "UGC status and establishment orders",
+            },
+            {
+              label: "RTI Act 2005",
+              to: "/rti",
+              desc: "Right to Information statutory disclosures",
             },
           ],
         },
@@ -167,6 +176,7 @@ export const NAV: {
           items: [
             { label: "NSS", to: "/nss", desc: "Service & community" },
             { label: "Women Empowerment Cell", to: "/women-empowerment" },
+            { label: "Anti-Ragging", to: "/anti-ragging", desc: "Statutory committee & helpline" },
             { label: "Gallery", to: "/gallery", desc: "Moments on campus" },
           ],
         },
@@ -473,7 +483,9 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   },
 
   { label: "NSS", to: "/nss", group: "Student Corner", keywords: "service community" },
-  { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner" },
+  { label: "Women Empowerment Cell", to: "/women-empowerment", group: "Student Corner", keywords: "women safety gender cell" },
+  { label: "Anti-Ragging Committee", to: "/anti-ragging", group: "Student Corner", keywords: "anti ragging arc aicte ugc act 26 penalties toll free 1800-180-5522 affidavit helpline squad" },
+  { label: "Right to Information (RTI)", to: "/rti", group: "Statutory", keywords: "rti act 2005 public information officer pio apio appellate authority transparency jntu act goms 14" },
   {
     label: "EDC",
     to: "/edc",
@@ -557,6 +569,8 @@ export const IQAC_SUBNAV = [
 export const STUDENT_SUBNAV = [
   { label: "NSS", to: "/nss" },
   { label: "Women Empowerment", to: "/women-empowerment" },
+  { label: "Anti-Ragging", to: "/anti-ragging" },
+  { label: "RTI Act", to: "/rti" },
   { label: "EDC", to: "/edc" },
   { label: "Professional Bodies", to: "/professional-bodies" },
   { label: "IIPC", to: "/iipc" },

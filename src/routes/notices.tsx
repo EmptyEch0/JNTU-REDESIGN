@@ -1,14 +1,38 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
-import { Bell, ArrowRight, Plus, Trash2, Download, ExternalLink, Filter, Eye, X, Upload } from "lucide-react";
-import libraryImg from "@/assets/library-interior.jpg";
+import {
+  Bell,
+  ArrowRight,
+  Plus,
+  Trash2,
+  Download,
+  ExternalLink,
+  Filter,
+  Eye,
+  X,
+  Upload,
+  Search,
+  Calendar,
+  FileText,
+  GraduationCap,
+  Briefcase,
+  Home,
+  Sparkles,
+  Trophy,
+  Layers,
+  CheckCircle2,
+  Clock,
+  RotateCcw
+} from "lucide-react";
+import libraryImg from "@/assets/library-interior.webp";
 import { SubNav } from "@/components/SubNav";
 import { STUDENT_SUBNAV } from "@/lib/site";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { getNotices, addNotice, deleteNotice } from "@/funcs/site.server";
+import { getAssetUrl } from "@/lib/assets";
 import {
   AdminModeBanner,
   AdminPanel,
@@ -21,22 +45,20 @@ export const Route = createFileRoute("/notices")({
   loader: async () => await getNotices(),
   head: () => ({
     meta: [
-      { title: "Notices — JNTU-GV CEV" },
+      { title: "Notices & Announcements — JNTU-GV CEV" },
       {
         name: "description",
-        content: "Latest announcements, circulars and notices from JNTU-GV CEV.",
+        content: "Official notices, academic circulars, exam timetables and announcements from JNTU-GV CEV.",
       },
-      { property: "og:title", content: "Notices — JNTU-GV CEV" },
+      { property: "og:title", content: "Notices & Announcements — JNTU-GV CEV" },
       {
         property: "og:description",
-        content: "Stay updated with academic, hostel and event notices.",
+        content: "Stay updated with academic schedules, examinations, hostel and placement notices.",
       },
     ],
   }),
   component: NoticesPage,
 });
-
-import { getAssetUrl } from "@/lib/assets";
 
 const DEFAULT_NOTICES = [
   {
@@ -178,39 +200,53 @@ const DEFAULT_NOTICES = [
     url: getAssetUrl("uploads/2026/04/I-M.TECH-II-SEM-R25-I-MID-TIME-TABLE-APRIL-2026.pdf"),
   },
   {
-    date: "24 Apr 2026",
+    date: "April 24, 2026",
     tag: "Placements",
-    title: "Pre-placement talks for Capgemini and Hexaware on 02 May.",
+    title: "Pre-placement talks for Capgemini and Hexaware on 02 May 2026.",
   },
   {
-    date: "18 Apr 2026",
+    date: "April 18, 2026",
     tag: "Hostel",
-    title: "Vacation guidelines for residents staying through summer.",
+    title: "Summer Vacation guidelines for resident students staying in campus hostels.",
   },
   {
-    date: "12 Apr 2026",
+    date: "April 12, 2026",
     tag: "R&D",
-    title: "Call for proposals — UGC minor research grants 2026.",
+    title: "Call for Research Proposals — UGC & AICTE Minor Research Grants 2026.",
   },
   {
-    date: "05 Apr 2026",
+    date: "April 5, 2026",
     tag: "Event",
-    title: "Annual cultural fest 'Spandana 2026' opens for registrations.",
+    title: "Annual University Cultural Fest 'Spandana 2026' Registrations Open.",
   },
   {
-    date: "28 Mar 2026",
+    date: "March 28, 2026",
     tag: "General",
-    title: "Library timings extended during examination weeks.",
+    title: "Central Library Extended Reading Hall Timings during End-Semester Examinations.",
   },
 ];
+
+const CATEGORY_META: Record<string, { icon: any; color: string; bg: string; border: string }> = {
+  Academic: { icon: GraduationCap, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-950/40", border: "border-blue-200 dark:border-blue-800/40" },
+  Exams: { icon: FileText, color: "text-purple-600 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-950/40", border: "border-purple-200 dark:border-purple-800/40" },
+  Placements: { icon: Briefcase, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-950/40", border: "border-emerald-200 dark:border-emerald-800/40" },
+  Hostel: { icon: Home, color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-950/40", border: "border-amber-200 dark:border-amber-800/40" },
+  "R&D": { icon: Sparkles, color: "text-pink-600 dark:text-pink-400", bg: "bg-pink-50 dark:bg-pink-950/40", border: "border-pink-200 dark:border-pink-800/40" },
+  Event: { icon: Trophy, color: "text-orange-600 dark:text-orange-400", bg: "bg-orange-50 dark:bg-orange-950/40", border: "border-orange-200 dark:border-orange-800/40" },
+  General: { icon: Bell, color: "text-slate-600 dark:text-slate-400", bg: "bg-slate-100 dark:bg-slate-800/60", border: "border-slate-200 dark:border-slate-700/40" },
+};
 
 function NoticesPage() {
   const dbNotices = Route.useLoaderData() as any[];
   const { isEditMode } = useAdmin();
   const router = useRouter();
 
-  const [activeTab, setActiveTab] = useState<string>("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string>("All");
   const [previewNotice, setPreviewNotice] = useState<any | null>(null);
+  const [showAdminAdd, setShowAdminAdd] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
   const [newNotice, setNewNotice] = useState({
     date: "",
     tag: "Academic",
@@ -218,7 +254,7 @@ function NoticesPage() {
     url: "",
   });
 
-  const rawNotices = dbNotices.length > 0 ? dbNotices : DEFAULT_NOTICES;
+  const rawNotices = dbNotices && dbNotices.length > 0 ? dbNotices : DEFAULT_NOTICES;
 
   const parseDate = (dStr: string) => {
     if (!dStr) return 0;
@@ -226,22 +262,42 @@ function NoticesPage() {
     return isNaN(t) ? 0 : t;
   };
 
-  const activeNotices = [...rawNotices].sort((a, b) => {
-    const timeA = parseDate(a.date);
-    const timeB = parseDate(b.date);
-    if (timeA && timeB && timeA !== timeB) {
-      return timeB - timeA;
-    }
-    return (b.id || 0) - (a.id || 0);
-  });
-
-  const filteredNotices = activeTab === "All"
-    ? activeNotices
-    : activeNotices.filter((n) => (n.tag || "").toLowerCase() === activeTab.toLowerCase());
+  const sortedNotices = useMemo(() => {
+    return [...rawNotices].sort((a, b) => {
+      const timeA = parseDate(a.date);
+      const timeB = parseDate(b.date);
+      if (timeA && timeB && timeA !== timeB) return timeB - timeA;
+      return (b.id || 0) - (a.id || 0);
+    });
+  }, [rawNotices]);
 
   const categories = ["All", "Academic", "Exams", "Placements", "Hostel", "R&D", "Event", "General"];
 
-  const [uploading, setUploading] = useState(false);
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { All: sortedNotices.length };
+    for (const n of sortedNotices) {
+      const tag = n.tag || "General";
+      counts[tag] = (counts[tag] || 0) + 1;
+    }
+    return counts;
+  }, [sortedNotices]);
+
+  const filteredNotices = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return sortedNotices.filter((n) => {
+      const matchesCat =
+        activeCategory === "All" ||
+        (n.tag || "").toLowerCase() === activeCategory.toLowerCase();
+
+      const matchesSearch =
+        !q ||
+        (n.title && n.title.toLowerCase().includes(q)) ||
+        (n.tag && n.tag.toLowerCase().includes(q)) ||
+        (n.date && n.date.toLowerCase().includes(q));
+
+      return matchesCat && matchesSearch;
+    });
+  }, [sortedNotices, activeCategory, searchQuery]);
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -261,10 +317,9 @@ function NoticesPage() {
       });
       const json = await res.json();
       if (json.success) {
-        // Construct full URL pointing to assets server
         const assetUrl = `http://89.116.134.182/${json.path}`;
         setNewNotice((prev) => ({ ...prev, url: assetUrl }));
-        toast.success(`Uploaded successfully to ${json.path}`, { id: tId });
+        toast.success(`Uploaded successfully!`, { id: tId });
       } else {
         toast.error(json.error || "Upload failed", { id: tId });
       }
@@ -276,8 +331,11 @@ function NoticesPage() {
   }
 
   async function handleAdd() {
-    if (!newNotice.title.trim()) return;
-    const tId = toast.loading("Logging new notice...");
+    if (!newNotice.title.trim()) {
+      toast.error("Please enter a notice title.");
+      return;
+    }
+    const tId = toast.loading("Publishing notice...");
     try {
       await addNotice({
         data: {
@@ -287,11 +345,12 @@ function NoticesPage() {
           link: newNotice.url || undefined,
         },
       });
-      toast.success("Notice logged successfully!", { id: tId });
+      toast.success("Notice published successfully!", { id: tId });
       setNewNotice({ date: "", tag: "Academic", title: "", url: "" });
+      setShowAdminAdd(false);
       router.invalidate();
     } catch {
-      toast.error("Failed to log notice.", { id: tId });
+      toast.error("Failed to publish notice.", { id: tId });
     }
   }
 
@@ -299,238 +358,379 @@ function NoticesPage() {
     const tId = toast.loading("Deleting notice...");
     try {
       await deleteNotice({ data: { id } });
-      toast.success("Notice purged!", { id: tId });
+      toast.success("Notice removed!", { id: tId });
       router.invalidate();
     } catch {
       toast.error("Failed to delete notice.", { id: tId });
     }
   }
 
+  // Format date helper: returns { day, monthYear }
+  const formatNoticeDate = (dStr: string) => {
+    if (!dStr) return { day: "--", monthYear: "Recent" };
+    const dateObj = new Date(dStr);
+    if (!isNaN(dateObj.getTime())) {
+      const day = dateObj.toLocaleDateString("en-US", { day: "2-digit" });
+      const month = dateObj.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
+      const year = dateObj.getFullYear();
+      return { day, monthYear: `${month} ${year}` };
+    }
+    const parts = dStr.split(" ");
+    if (parts.length >= 2) {
+      return { day: parts[0], monthYear: parts.slice(1).join(" ") };
+    }
+    return { day: "10", monthYear: dStr };
+  };
+
   return (
-    <>
+    <div className="bg-slate-50/60 dark:bg-slate-950 min-h-screen">
       {isEditMode && <AdminModeBanner label="Notices & Bulletins CMS Active" />}
 
       <PageHero
-        eyebrow="Announcements"
-        title="Notices, circulars & updates."
-        subtitle="The latest from the office of the Principal, departments and student cells."
+        eyebrow="Announcements & Bulletins"
+        title="Official Circulars & Notices"
+        subtitle="Live announcements, exam timetables, academic calendars and circulars issued by the Principal's Office and University Departments."
         image={libraryImg}
       />
       <SubNav items={STUDENT_SUBNAV} />
 
-      <section className="py-20 container-narrow">
+      <main className="py-12 md:py-16 container-narrow">
+        {/* Admin Publish Section */}
         {isEditMode && (
           <div className="mb-10">
-            <AdminPanel>
-              <AdminPanelHeader title="Publish New Announcement / Notice" />
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
-                <AdminField label="Announcement Title">
-                  <AdminInput
-                    value={newNotice.title}
-                    onChange={(e) => setNewNotice({ ...newNotice, title: e.target.value })}
-                    placeholder="e.g. End-semester exam time tables released..."
-                  />
-                </AdminField>
-                <AdminField label="Notice Group Tag">
-                  <select
-                    className="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-sm outline-none font-semibold text-slate-800"
-                    value={newNotice.tag}
-                    onChange={(e) => setNewNotice({ ...newNotice, tag: e.target.value })}
-                  >
-                    {categories.filter(c => c !== "All").map(c => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
-                </AdminField>
-                <AdminField label="Publish Date (Optional)">
-                  <AdminInput
-                    value={newNotice.date}
-                    onChange={(e) => setNewNotice({ ...newNotice, date: e.target.value })}
-                    placeholder="e.g. 29 Apr 2026"
-                  />
-                </AdminField>
-                <AdminField label="Upload PDF / Document">
-                  <label className="flex items-center justify-center gap-2 p-2.5 bg-sky-50 border border-sky-200 hover:bg-sky-100 text-[#0F4C81] rounded-lg font-bold text-xs cursor-pointer transition">
-                    <Upload className="w-4 h-4" />
-                    <span>{uploading ? "Uploading..." : "Choose File (PDF/Image)"}</span>
-                    <input
-                      type="file"
-                      accept=".pdf,image/*"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                      disabled={uploading}
-                    />
-                  </label>
-                </AdminField>
-              </div>
-
-              {newNotice.url && (
-                <div className="mt-3 p-2 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-800 font-semibold flex items-center justify-between">
-                  <span className="truncate">Uploaded File: {newNotice.url}</span>
-                  <button
-                    onClick={() => setNewNotice((prev) => ({ ...prev, url: "" }))}
-                    className="text-rose-600 hover:underline text-[11px] ml-2 shrink-0"
-                  >
-                    Remove
-                  </button>
+            <div className="p-6 bg-amber-50/90 dark:bg-amber-950/30 border-2 border-dashed border-amber-300 dark:border-amber-700/60 rounded-3xl shadow-lg backdrop-blur-md">
+              <div className="flex items-center justify-between gap-4 mb-4">
+                <div>
+                  <h3 className="text-sm font-extrabold uppercase tracking-wider text-amber-900 dark:text-amber-300 flex items-center gap-2">
+                    <Bell className="w-4 h-4 text-amber-600" />
+                    Publish New Notice / Circular
+                  </h3>
+                  <p className="text-xs text-amber-800/80 dark:text-amber-400 mt-0.5">
+                    Upload official PDF circulars or announce general updates to the entire student & faculty portal.
+                  </p>
                 </div>
-              )}
-
-              <div className="flex justify-end mt-4">
                 <button
-                  onClick={handleAdd}
-                  className="bg-slate-900 hover:bg-amber-600 text-white font-bold px-6 py-2.5 rounded-lg flex items-center gap-2 text-sm cursor-pointer"
+                  onClick={() => setShowAdminAdd((v) => !v)}
+                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
                 >
-                  <Plus className="w-4 h-4" /> Publish Announcement
+                  {showAdminAdd ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                  {showAdminAdd ? "Cancel" : "New Notice"}
                 </button>
               </div>
-            </AdminPanel>
+
+              {showAdminAdd && (
+                <div className="pt-4 border-t border-amber-200 dark:border-amber-800/40 space-y-4 animate-fade-in">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+                    <div className="sm:col-span-2">
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 block mb-1.5">
+                        Notice Title <span className="text-rose-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={newNotice.title}
+                        onChange={(e) => setNewNotice({ ...newNotice, title: e.target.value })}
+                        placeholder="e.g. Timetable for B.Tech End Examinations released..."
+                        className="w-full bg-white dark:bg-slate-900 border border-amber-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium text-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-amber-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 block mb-1.5">
+                        Category Tag
+                      </label>
+                      <select
+                        className="w-full bg-white dark:bg-slate-900 border border-amber-200 dark:border-slate-700 rounded-xl p-2.5 text-xs font-bold text-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer"
+                        value={newNotice.tag}
+                        onChange={(e) => setNewNotice({ ...newNotice, tag: e.target.value })}
+                      >
+                        {categories.filter((c) => c !== "All").map((c) => (
+                          <option key={c} value={c}>
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 block mb-1.5">
+                        Upload Document (PDF)
+                      </label>
+                      <label className="flex items-center justify-center gap-2 p-2.5 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 hover:bg-blue-100 text-blue-700 dark:text-blue-300 rounded-xl font-bold text-xs cursor-pointer transition">
+                        <Upload className="w-4 h-4" />
+                        <span>{uploading ? "Uploading..." : "Choose File"}</span>
+                        <input
+                          type="file"
+                          accept=".pdf,image/*"
+                          onChange={handleFileUpload}
+                          className="hidden"
+                          disabled={uploading}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  {newNotice.url && (
+                    <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 rounded-xl text-xs text-emerald-800 dark:text-emerald-300 font-semibold flex items-center justify-between">
+                      <span className="truncate">Uploaded File: {newNotice.url}</span>
+                      <button
+                        onClick={() => setNewNotice((prev) => ({ ...prev, url: "" }))}
+                        className="text-rose-600 hover:underline text-[11px] ml-2 shrink-0 cursor-pointer"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="flex justify-end gap-3 pt-2">
+                    <button
+                      onClick={handleAdd}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 text-xs cursor-pointer shadow-md transition"
+                    >
+                      <Plus className="w-4 h-4" /> Publish Announcement
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
-        {/* Category Filters */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 [scrollbar-width:none]">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider mr-2 shrink-0">
-            <Filter className="w-3.5 h-3.5" /> Filter:
+        {/* Search & Category Filter Toolbar */}
+        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm mb-8 space-y-5">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            {/* Search bar with real-time clear */}
+            <div className="relative w-full md:max-w-md">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search circulars, exam timetables, events..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-9 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl text-xs font-medium text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/40 transition"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-full transition"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Quick Reset */}
+            {(searchQuery || activeCategory !== "All") && (
+              <div className="flex items-center justify-end w-full md:w-auto">
+                <button
+                  onClick={() => {
+                    setSearchQuery("");
+                    setActiveCategory("All");
+                  }}
+                  className="flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer bg-blue-50 dark:bg-blue-950/40 px-3 py-1.5 rounded-xl border border-blue-200/60 dark:border-blue-800/40"
+                >
+                  <RotateCcw className="w-3 h-3" /> Reset Filter
+                </button>
+              </div>
+            )}
           </div>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveTab(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer shrink-0 ${
-                activeTab === cat
-                  ? "bg-[#0F4C81] text-white shadow-md shadow-[#0F4C81]/20 scale-105"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+
+          {/* Category Filter Chips (without number counts) */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
+            {categories.map((cat) => {
+              const meta = CATEGORY_META[cat] || { icon: Layers, color: "text-slate-600", bg: "bg-slate-100", border: "border-slate-200" };
+              const Icon = meta.icon;
+              const isActive = activeCategory === cat;
+
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer shrink-0 border ${
+                    isActive
+                      ? "bg-slate-950 text-white dark:bg-blue-600 border-slate-950 dark:border-blue-600 shadow-md scale-[1.02]"
+                      : "bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-slate-700/60 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900"
+                  }`}
+                >
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? "text-cyan-300" : meta.color}`} />
+                  <span>{cat}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Notices List */}
-        <div className="space-y-4">
-          {filteredNotices.map((n: any, i: number) => (
-            <RevealOnScroll key={i} delay={i * 40}>
-              <article className="group flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-5 sm:p-6 bg-card border border-border rounded-2xl hover:border-[#0F4C81]/30 hover:shadow-lg transition-all duration-300 relative overflow-hidden">
-                <div className="flex items-start gap-4 flex-1 min-w-0 cursor-pointer" onClick={() => setPreviewNotice(n)}>
-                  <div className="h-11 w-11 rounded-xl bg-sky-50 text-[#0F4C81] grid place-items-center shrink-0 group-hover:scale-105 transition-transform">
-                    <Bell className="h-5 w-5" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 text-xs">
-                      <span className="px-2.5 py-0.5 rounded-full bg-[#0F4C81]/10 text-[#0F4C81] font-bold text-[10px] uppercase tracking-wider">
-                        {n.tag}
+        {/* Notices Cards Grid / List */}
+        <div className="space-y-3.5">
+          {filteredNotices.map((n: any, i: number) => {
+            const meta = CATEGORY_META[n.tag] || CATEGORY_META.General;
+            const Icon = meta.icon;
+            const { day, monthYear } = formatNoticeDate(n.date);
+
+            return (
+              <RevealOnScroll key={n.id || n.title + i} delay={Math.min(i * 30, 300)}>
+                <article className="group bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-4 sm:p-5 hover:border-blue-500/40 dark:hover:border-blue-500/40 hover:shadow-lg transition-all duration-300 relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  {/* Left block: Date badge + Category + Title */}
+                  <div className="flex items-start gap-4 flex-1 min-w-0">
+                    {/* Visual Date Badge */}
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200/70 dark:from-slate-800 dark:to-slate-850 border border-slate-200/70 dark:border-slate-700 flex flex-col items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-xs">
+                      <span className="text-base font-black text-slate-900 dark:text-white leading-none font-mono">
+                        {day}
                       </span>
-                      <span className="text-slate-400 font-semibold text-[11px]">{n.date}</span>
+                      <span className="text-[9.5px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-0.5">
+                        {monthYear}
+                      </span>
                     </div>
-                    <h4 className="mt-2 text-slate-900 font-bold text-sm sm:text-base leading-snug group-hover:text-[#0F4C81] transition-colors">
-                      {n.title}
-                    </h4>
+
+                    {/* Notice Info */}
+                    <div className="flex-1 min-w-0 space-y-1.5 cursor-pointer" onClick={() => setPreviewNotice(n)}>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-extrabold uppercase tracking-wider border ${meta.bg} ${meta.color} ${meta.border}`}
+                        >
+                          <Icon className="w-3 h-3" />
+                          {n.tag}
+                        </span>
+
+                        {i < 3 && activeCategory === "All" && !searchQuery && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[9.5px] uppercase tracking-wider">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            Latest
+                          </span>
+                        )}
+                      </div>
+
+                      <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+                        {n.title}
+                      </h4>
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                  <button
-                    onClick={() => setPreviewNotice(n)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sky-50 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white border border-sky-200/60 text-xs font-bold transition-all shadow-sm cursor-pointer"
-                  >
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Preview</span>
-                  </button>
-
-                  {n.url ? (
-                    <a
-                      href={getAssetUrl(n.url)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white border border-emerald-200 text-xs font-bold transition-all shadow-sm cursor-pointer"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>Download PDF</span>
-                    </a>
-                  ) : null}
-
-                  {isEditMode && n.id && (
+                  {/* Right actions: Preview & Download */}
+                  <div className="flex items-center gap-2 shrink-0 self-end sm:self-center pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800/60 w-full sm:w-auto justify-end">
                     <button
-                      onClick={() => handleDelete(n.id)}
-                      className="bg-rose-600 hover:bg-rose-700 text-white p-2 rounded-xl transition shadow cursor-pointer ml-1"
-                      title="Delete Notice"
+                      onClick={() => setPreviewNotice(n)}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-600 hover:text-white border border-blue-200/70 dark:border-blue-800/60 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Preview</span>
                     </button>
-                  )}
-                </div>
-              </article>
-            </RevealOnScroll>
-          ))}
 
+                    {n.url ? (
+                      <a
+                        href={getAssetUrl(n.url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>Download PDF</span>
+                      </a>
+                    ) : null}
+
+                    {isEditMode && n.id && (
+                      <button
+                        onClick={() => handleDelete(n.id)}
+                        className="p-2 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-600 text-rose-600 hover:text-white border border-rose-200 dark:border-rose-800/60 rounded-xl transition cursor-pointer active:scale-95 ml-1"
+                        title="Delete Notice"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </article>
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Empty State */}
           {filteredNotices.length === 0 && (
-            <div className="text-center py-16 bg-slate-50 border border-slate-200/60 rounded-3xl">
-              <Bell className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-              <p className="text-sm font-bold text-slate-500">No notices found in "{activeTab}" category.</p>
+            <div className="text-center py-20 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-8 shadow-xs">
+              <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 text-blue-600 dark:text-blue-400 grid place-items-center mx-auto mb-4">
+                <Bell className="w-7 h-7" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+                No matching notices found
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-5">
+                We couldn't find any announcements matching "{searchQuery}" in the {activeCategory} category. Try searching another keyword or clear filters.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setActiveCategory("All");
+                }}
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow-sm cursor-pointer"
+              >
+                Clear All Filters
+              </button>
             </div>
           )}
         </div>
-      </section>
+      </main>
 
       {/* Interactive Notice Preview Modal */}
       {previewNotice && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in">
-          <div className="bg-white border border-slate-200/80 rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-reveal">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-reveal">
             {/* Header */}
-            <div className="p-6 border-b border-slate-100 flex items-start justify-between gap-4 bg-slate-50/50">
-              <div className="space-y-1">
+            <div className="p-5 sm:p-6 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between gap-4 bg-slate-50/70 dark:bg-slate-850/60">
+              <div className="space-y-1.5 min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#0F4C81]/10 text-[#0F4C81] font-bold text-[10px] uppercase tracking-wider">
+                  <span className="px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-extrabold text-[10.5px] uppercase tracking-wider border border-blue-200 dark:border-blue-800/60">
                     {previewNotice.tag}
                   </span>
-                  <span className="text-slate-400 font-semibold text-xs">{previewNotice.date}</span>
+                  <span className="text-slate-400 dark:text-slate-500 font-semibold text-xs flex items-center gap-1">
+                    <Calendar className="w-3 h-3" />
+                    {previewNotice.date}
+                  </span>
                 </div>
-                <h3 className="text-lg md:text-xl font-bold text-slate-900 leading-snug">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug">
                   {previewNotice.title}
                 </h3>
               </div>
               <button
                 onClick={() => setPreviewNotice(null)}
-                className="p-2 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-slate-900 transition cursor-pointer"
+                className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Content Body */}
-            <div className="p-6 overflow-y-auto flex-1 space-y-4">
+            <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-4">
               {previewNotice.url ? (
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    <span>PDF Document Preview</span>
+                  <div className="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    <span className="flex items-center gap-1.5">
+                      <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      Document Viewer
+                    </span>
                     <a
                       href={getAssetUrl(previewNotice.url)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#0F4C81] hover:underline flex items-center gap-1"
+                      className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-bold"
                     >
-                      Open in New Tab <ExternalLink className="w-3 h-3" />
+                      Open in New Window <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   </div>
-                  <div className="w-full h-[520px] rounded-2xl overflow-hidden border border-slate-200 shadow-inner bg-slate-100 relative">
+                  <div className="w-full h-[520px] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-inner bg-slate-100 dark:bg-slate-950 relative">
                     <iframe
                       src={getAssetUrl(previewNotice.url)}
                       className="w-full h-full border-0"
-                      title="Document Preview"
+                      title="Notice Document Preview"
                     />
                   </div>
                 </div>
               ) : (
-                <div className="p-8 bg-slate-50 rounded-2xl border border-slate-200/60 space-y-4">
-                  <div className="flex items-center gap-2 text-xs font-bold text-[#0F4C81] uppercase tracking-wider">
+                <div className="p-8 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-4">
+                  <div className="flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
                     <Bell className="w-4 h-4" /> Official Notice Announcement
                   </div>
-                  <p className="text-slate-800 text-base leading-relaxed font-semibold">
+                  <p className="text-slate-800 dark:text-slate-200 text-base leading-relaxed font-semibold">
                     {previewNotice.title}
                   </p>
-                  <div className="pt-4 border-t border-slate-200/60 text-xs text-slate-400 font-medium">
+                  <div className="pt-4 border-t border-slate-200 dark:border-slate-700/60 text-xs text-slate-400 font-medium">
                     Issued by JNTU-GV College of Engineering Vizianagaram Administration. Date: {previewNotice.date}.
                   </div>
                 </div>
@@ -538,7 +738,7 @@ function NoticesPage() {
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-end gap-3">
+            <div className="p-4 sm:p-5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-850/60 flex items-center justify-end gap-3">
               {previewNotice.url && (
                 <a
                   href={getAssetUrl(previewNotice.url)}
@@ -546,20 +746,19 @@ function NoticesPage() {
                   rel="noopener noreferrer"
                   className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-emerald-600/20 transition cursor-pointer"
                 >
-                  <Download className="w-4 h-4" /> Download PDF
+                  <Download className="w-4 h-4" /> Download Document
                 </a>
               )}
               <button
                 onClick={() => setPreviewNotice(null)}
-                className="px-5 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs transition cursor-pointer"
+                className="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs transition cursor-pointer"
               >
-                Close
+                Close Preview
               </button>
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
-

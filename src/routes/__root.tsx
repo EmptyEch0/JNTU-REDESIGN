@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
 import appCss from "../styles.css?url";
+import { TopRibbon } from "@/components/TopRibbon";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Footer } from "@/components/Footer";
 import { HeaderBanner } from "@/components/HeaderBanner";
@@ -91,20 +92,12 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev" },
       { rel: "preconnect", href: "http://89.116.134.182" },
       { rel: "preconnect", href: "https://ui-avatars.com" },
-      { rel: "dns-prefetch", href: "https://fonts.googleapis.com" },
-      { rel: "dns-prefetch", href: "https://fonts.gstatic.com" },
       { rel: "dns-prefetch", href: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev" },
       { rel: "dns-prefetch", href: "http://89.116.134.182" },
       { rel: "dns-prefetch", href: "https://ui-avatars.com" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap",
-      },
       { rel: "canonical", href: "https://jntugvcev.edu.in/" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/favicon.png" },
@@ -222,14 +215,22 @@ function AdminContent() {
         </div>
       )}
 
-      {/* Official College Header Banner */}
-      <HeaderBanner />
+      {/* Unified Persistent Sticky Header Suite (Ribbon + Banner + Notice Ticker + Floating Capsule Navbar) */}
+      <div className={`sticky ${isAdmin ? "top-12" : "top-0"} z-50 w-full pointer-events-none transition-all duration-200`}>
+        <div className="pointer-events-auto shadow-md">
+          {/* Top Navy Blue Ribbon with Quick Links & Social */}
+          <TopRibbon />
 
-      {/* Updates / Notice Marquee Ticker */}
-      <NoticeTicker />
+          {/* Official College Header Banner */}
+          <HeaderBanner />
 
-      {/* Clean Floating Pill Navigation Bar (Menu items only) */}
-      <MegaMenu />
+          {/* Updates / Notice Marquee Ticker */}
+          <NoticeTicker />
+        </div>
+
+        {/* Floating Dynamic Capsule Navigation Bar (Overlays directly on hero carousel / page hero with zero background) */}
+        <MegaMenu />
+      </div>
 
       <main className="flex-1 w-full max-w-full">
         <Outlet />

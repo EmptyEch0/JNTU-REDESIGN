@@ -24,7 +24,7 @@ export function HeaderBanner() {
           {/* Center: College Name & Details (Compact Height) */}
           <div className="flex-1 flex flex-col items-center text-center">
             <h1 className="text-sm sm:text-base md:text-lg lg:text-xl font-black tracking-tight text-[#0F387A] leading-tight font-display">
-              JNTU-GV COLLEGE OF ENGINEERING, VIZIANAGARAM
+              JNTU-GV COLLEGE OF ENGINEERING, VIZIANAGARAM(A)
             </h1>
             
             <h2 className="text-[11px] sm:text-xs md:text-sm font-extrabold tracking-tight text-[#CE1126] leading-tight mt-0.5 uppercase">

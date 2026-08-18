@@ -2,7 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Menu, X, ChevronDown, ChevronRight, GraduationCap, Search, CornerDownLeft, FileText, ArrowRight,
-  Users, ShieldCheck, BookOpen, Building2, Landmark, Award, Globe, Compass,
+  Users, ShieldCheck, BookOpen, Building2, Landmark, Award, Globe, Compass, Plane,
   Sparkles, Clock, Download, Home, HeartPulse, Library, Trophy, Briefcase,
   Microscope, Heart, Info, MapPin, Layers, Scale, Lightbulb, Users2, FileCode, Activity
 } from "lucide-react";
@@ -19,7 +19,7 @@ function getItemIcon(label: string) {
   if (l.includes("institution") || l.includes("about")) return Info;
   if (l.includes("vision")) return Compass;
   if (l.includes("norms") || l.includes("recognition")) return Award;
-  if (l.includes("jntuk")) return Globe;
+  if (l.includes("airport") || l.includes("aviation") || l.includes("connectivity") || l.includes("bhogapuram")) return Plane;
   if (l.includes("vizianagaram")) return MapPin;
   if (l.includes("reach")) return Compass;
   if (l.includes("program")) return GraduationCap;

@@ -89,9 +89,9 @@ import { Route as AcademicsAcademicCalendarRouteImport } from './routes/academic
 import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
 import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
 import { Route as AboutNormsRouteImport } from './routes/about.norms'
-import { Route as AboutJntukRouteImport } from './routes/about.jntuk'
 import { Route as AboutInstitutionRouteImport } from './routes/about.institution'
 import { Route as AboutHowToReachRouteImport } from './routes/about.how-to-reach'
+import { Route as AboutAirportConnectivityRouteImport } from './routes/about.airport-connectivity'
 import { Route as DepartmentsIdIndexRouteImport } from './routes/departments.$id.index'
 import { Route as AdministrationIqacIndexRouteImport } from './routes/administration.iqac.index'
 import { Route as LocalAssetsUploadsSplatRouteImport } from './routes/local-assets.uploads.$'
@@ -519,11 +519,6 @@ const AboutNormsRoute = AboutNormsRouteImport.update({
   path: '/norms',
   getParentRoute: () => AboutRoute,
 } as any)
-const AboutJntukRoute = AboutJntukRouteImport.update({
-  id: '/jntuk',
-  path: '/jntuk',
-  getParentRoute: () => AboutRoute,
-} as any)
 const AboutInstitutionRoute = AboutInstitutionRouteImport.update({
   id: '/institution',
   path: '/institution',
@@ -534,6 +529,12 @@ const AboutHowToReachRoute = AboutHowToReachRouteImport.update({
   path: '/how-to-reach',
   getParentRoute: () => AboutRoute,
 } as any)
+const AboutAirportConnectivityRoute =
+  AboutAirportConnectivityRouteImport.update({
+    id: '/airport-connectivity',
+    path: '/airport-connectivity',
+    getParentRoute: () => AboutRoute,
+  } as any)
 const DepartmentsIdIndexRoute = DepartmentsIdIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -654,9 +655,9 @@ export interface FileRoutesByFullPath {
   '/rti': typeof RtiRoute
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRouteWithChildren
+  '/about/airport-connectivity': typeof AboutAirportConnectivityRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
-  '/about/jntuk': typeof AboutJntukRoute
   '/about/norms': typeof AboutNormsRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
@@ -749,9 +750,9 @@ export interface FileRoutesByTo {
   '/professional-bodies': typeof ProfessionalBodiesRoute
   '/rti': typeof RtiRoute
   '/sports': typeof SportsRoute
+  '/about/airport-connectivity': typeof AboutAirportConnectivityRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
-  '/about/jntuk': typeof AboutJntukRoute
   '/about/norms': typeof AboutNormsRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
@@ -850,9 +851,9 @@ export interface FileRoutesById {
   '/rti': typeof RtiRoute
   '/sports': typeof SportsRoute
   '/women-empowerment': typeof WomenEmpowermentRouteWithChildren
+  '/about/airport-connectivity': typeof AboutAirportConnectivityRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
-  '/about/jntuk': typeof AboutJntukRoute
   '/about/norms': typeof AboutNormsRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
@@ -954,9 +955,9 @@ export interface FileRouteTypes {
     | '/rti'
     | '/sports'
     | '/women-empowerment'
+    | '/about/airport-connectivity'
     | '/about/how-to-reach'
     | '/about/institution'
-    | '/about/jntuk'
     | '/about/norms'
     | '/about/vision-mission'
     | '/about/vizianagaram'
@@ -1049,9 +1050,9 @@ export interface FileRouteTypes {
     | '/professional-bodies'
     | '/rti'
     | '/sports'
+    | '/about/airport-connectivity'
     | '/about/how-to-reach'
     | '/about/institution'
-    | '/about/jntuk'
     | '/about/norms'
     | '/about/vision-mission'
     | '/about/vizianagaram'
@@ -1149,9 +1150,9 @@ export interface FileRouteTypes {
     | '/rti'
     | '/sports'
     | '/women-empowerment'
+    | '/about/airport-connectivity'
     | '/about/how-to-reach'
     | '/about/institution'
-    | '/about/jntuk'
     | '/about/norms'
     | '/about/vision-mission'
     | '/about/vizianagaram'
@@ -1826,13 +1827,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutNormsRouteImport
       parentRoute: typeof AboutRoute
     }
-    '/about/jntuk': {
-      id: '/about/jntuk'
-      path: '/jntuk'
-      fullPath: '/about/jntuk'
-      preLoaderRoute: typeof AboutJntukRouteImport
-      parentRoute: typeof AboutRoute
-    }
     '/about/institution': {
       id: '/about/institution'
       path: '/institution'
@@ -1845,6 +1839,13 @@ declare module '@tanstack/react-router' {
       path: '/how-to-reach'
       fullPath: '/about/how-to-reach'
       preLoaderRoute: typeof AboutHowToReachRouteImport
+      parentRoute: typeof AboutRoute
+    }
+    '/about/airport-connectivity': {
+      id: '/about/airport-connectivity'
+      path: '/airport-connectivity'
+      fullPath: '/about/airport-connectivity'
+      preLoaderRoute: typeof AboutAirportConnectivityRouteImport
       parentRoute: typeof AboutRoute
     }
     '/departments/$id/': {
@@ -1970,9 +1971,9 @@ declare module '@tanstack/react-router' {
 }
 
 interface AboutRouteChildren {
+  AboutAirportConnectivityRoute: typeof AboutAirportConnectivityRoute
   AboutHowToReachRoute: typeof AboutHowToReachRoute
   AboutInstitutionRoute: typeof AboutInstitutionRoute
-  AboutJntukRoute: typeof AboutJntukRoute
   AboutNormsRoute: typeof AboutNormsRoute
   AboutVisionMissionRoute: typeof AboutVisionMissionRoute
   AboutVizianagaramRoute: typeof AboutVizianagaramRoute
@@ -1980,9 +1981,9 @@ interface AboutRouteChildren {
 }
 
 const AboutRouteChildren: AboutRouteChildren = {
+  AboutAirportConnectivityRoute: AboutAirportConnectivityRoute,
   AboutHowToReachRoute: AboutHowToReachRoute,
   AboutInstitutionRoute: AboutInstitutionRoute,
-  AboutJntukRoute: AboutJntukRoute,
   AboutNormsRoute: AboutNormsRoute,
   AboutVisionMissionRoute: AboutVisionMissionRoute,
   AboutVizianagaramRoute: AboutVizianagaramRoute,

@@ -405,8 +405,8 @@ function VisionMissionPage() {
           <Link to="/about/institution" className="btn-primary">
             About Institution <ArrowRight className="h-4 w-4" />
           </Link>
-          <Link to="/about/jntuk" className="btn-secondary">
-            About JNTUK <ArrowRight className="h-4 w-4" />
+          <Link to="/about/airport-connectivity" className="btn-secondary">
+            Airport Connectivity <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>

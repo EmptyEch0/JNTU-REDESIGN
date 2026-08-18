@@ -346,8 +346,8 @@ function InstitutionPage() {
       {/* CTA */}
       <section className="py-16 container-narrow text-center">
         <div className="flex flex-wrap justify-center gap-3">
-          <Link to="/about/jntuk" className="btn-primary">
-            About JNTUK <ArrowRight className="h-4 w-4" />
+          <Link to="/about/airport-connectivity" className="btn-primary">
+            Airport Connectivity <ArrowRight className="h-4 w-4" />
           </Link>
           <Link to="/about/vizianagaram" className="btn-secondary">
             About Vizianagaram <ArrowRight className="h-4 w-4" />

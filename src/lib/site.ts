@@ -1,6 +1,6 @@
 export const SITE = {
   name: "JNTU-GV CEV",
-  fullName: "JNTU-GV College of Engineering Vizianagaram",
+  fullName: "JNTU-GV College of Engineering Vizianagaram (A)",
   tagline: "Engineering Tomorrow, Together",
   shortDesc:
     "A constituent college of Jawaharlal Nehru Technological University Gurajada Vizianagaram — shaping engineers, scholars and changemakers since inception.",
@@ -57,7 +57,11 @@ export const NAV: {
         {
           title: "Region",
           items: [
-            { label: "About JNTUK", to: "/about/jntuk", desc: "The parent university" },
+            {
+              label: "Airport Connectivity",
+              to: "/about/airport-connectivity",
+              desc: "Near Bhogapuram Airport",
+            },
             { label: "About Vizianagaram", to: "/about/vizianagaram", desc: "The city of victory" },
             { label: "How to Reach", to: "/about/how-to-reach", desc: "Directions & transport" },
           ],
@@ -333,7 +337,12 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
     group: "About",
     keywords: "college campus history",
   },
-  { label: "About JNTUK", to: "/about/jntuk", group: "About", keywords: "university kakinada" },
+  {
+    label: "Airport Connectivity",
+    to: "/about/airport-connectivity",
+    group: "About",
+    keywords: "airport bhogapuram connectivity alluri sitarama raju flight international",
+  },
   {
     label: "About Vizianagaram",
     to: "/about/vizianagaram",

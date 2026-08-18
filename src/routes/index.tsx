@@ -34,6 +34,7 @@ import hostelImg from "@/assets/hostel.jpg";
 import sportsImg from "@/assets/sports.jpg";
 import libraryImg from "@/assets/library-interior.jpg";
 import cultureImg from "@/assets/culture.jpeg";
+import dispensaryImg from "@/assets/dispensary.png";
 import placementsImg from "@/assets/placements-bg.jpg";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { StatCounter } from "@/components/StatCounter";
@@ -142,7 +143,7 @@ const FACILITIES = [
   {
     title: "Dispensary",
     desc: "On-campus medical care with full-time health assistants.",
-    img: cultureImg,
+    img: dispensaryImg,
     to: "/dispensary",
     icon: Stethoscope,
   },
@@ -234,7 +235,19 @@ function HomePage() {
     return [...topRecent, ...shuffled.slice(0, 5)].slice(0, 7);
   }, [galleryImages]);
 
-  const getFacilityImage = (title: string, staticImg: string) => staticImg;
+  const getFacilityImage = (title: string, staticImg: string) => {
+    let dbImgUrl: string | undefined;
+    if (title === "Hostels") {
+      dbImgUrl = hostelData?.images?.[0]?.url;
+    } else if (title === "Library") {
+      dbImgUrl = libraryData?.images?.[0]?.url;
+    } else if (title === "Dispensary") {
+      dbImgUrl = dispensaryData?.images?.[0]?.url;
+    } else if (title === "Sports") {
+      dbImgUrl = sportsData?.images?.[0]?.url;
+    }
+    return dbImgUrl ? getAssetUrl(dbImgUrl) : staticImg;
+  };
 
   return (
     <>

@@ -94,7 +94,7 @@ function LibraryPage() {
   const magazines = meta.filter((item: any) => item.category === "magazine");
   const newspapers = meta.filter((item: any) => item.category === "newspaper");
 
-  const getCarouselImages = () => images.map((i: any) => i.url);
+  const getCarouselImages = () => images.map((i: any) => getAssetUrl(i.url));
 
   const parsedAbout = parseCompoundAbout(content?.about);
 
@@ -159,6 +159,7 @@ function LibraryPage() {
         },
       });
       toast.success("Changes saved successfully!", { id: tId });
+      alert("Changes saved successfully!");
       router.invalidate();
     } catch {
       toast.error("Failed to save.", { id: tId });

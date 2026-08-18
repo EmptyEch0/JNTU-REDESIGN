@@ -77,7 +77,7 @@ function HostelsPage() {
   const [tab, setTab] = useState<"office" | "girls" | "boys">("office");
 
   const getImages = () =>
-    images.map((i: any) => i.url);
+    images.map((i: any) => getAssetUrl(i.url));
 
   const getRawImages = () =>
     images;
@@ -112,7 +112,7 @@ function HostelsPage() {
 
   // --- MUTATION ACTIONS ---
   async function handleSaveAbout() {
-    const tId = toast.loading("Storing summary edits...");
+    const tId = toast.loading("Saving changes...");
     try {
       await updateContent({
         data: {
@@ -125,15 +125,16 @@ function HostelsPage() {
           healthTiming: health?.timing,
         },
       });
-      toast.success("Summary synchronized!", { id: tId });
+      toast.success("Changes saved successfully!", { id: tId });
+      alert("Changes saved successfully!");
       router.invalidate();
     } catch {
-      toast.error("Update failed.", { id: tId });
+      toast.error("Failed to save.", { id: tId });
     }
   }
 
   async function handleSaveOfficer() {
-    const tId = toast.loading("Saving officer profile...");
+    const tId = toast.loading("Saving changes...");
     try {
       await updateContent({
         data: {
@@ -146,10 +147,11 @@ function HostelsPage() {
           healthTiming: health?.timing,
         },
       });
-      toast.success("Governing profile synchronized!", { id: tId });
+      toast.success("Changes saved successfully!", { id: tId });
+      alert("Changes saved successfully!");
       router.invalidate();
     } catch {
-      toast.error("Sync failed.", { id: tId });
+      toast.error("Failed to save.", { id: tId });
     }
   }
 

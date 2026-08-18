@@ -23,7 +23,8 @@ function serveLocalAssets(): Plugin {
             return;
           }
           if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
-            next();
+            res.writeHead(302, { Location: `http://89.116.134.182/local-assets${safePath}` });
+            res.end();
             return;
           }
 

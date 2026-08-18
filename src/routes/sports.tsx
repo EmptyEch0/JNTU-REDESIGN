@@ -159,6 +159,7 @@ function SportsPage() {
         },
       });
       toast.success("Changes saved successfully!", { id: tId });
+      alert("Changes saved successfully!");
       router.invalidate();
     } catch {
       toast.error("Failed to save.", { id: tId });

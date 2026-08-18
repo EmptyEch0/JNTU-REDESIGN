@@ -77,9 +77,17 @@ export const getAssetUrl = (
       if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
       if (cleanPath.startsWith("uploads/")) cleanPath = `local-assets/${cleanPath}`;
       if (cleanPath.startsWith("facilities/")) cleanPath = `local-assets/uploads/${cleanPath}`;
+      const isDevEnv = 
+        (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) ||
+        (typeof process !== "undefined" && process.env?.NODE_ENV !== "production");
+
       if (cleanPath.startsWith("local-assets/")) {
-        const subPath = cleanPath.substring("local-assets/".length);
-        resolvedUrl = `${BASE}/${subPath}`;
+        if (isDevEnv) {
+          resolvedUrl = `/${cleanPath}`;
+        } else {
+          const subPath = cleanPath.substring("local-assets/".length);
+          resolvedUrl = `${BASE}/${subPath}`;
+        }
       } else {
         resolvedUrl = `${BASE}/${cleanPath}`;
       }

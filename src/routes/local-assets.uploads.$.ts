@@ -22,7 +22,12 @@ export const Route = createFileRoute("/local-assets/uploads/$")({
 
           // Check if file exists and is not a directory
           if (!fs.existsSync(diskPath) || fs.statSync(diskPath).isDirectory()) {
-            return new Response("Asset Not Found", { status: 404 });
+            return new Response(null, {
+              status: 302,
+              headers: {
+                Location: `http://89.116.134.182/local-assets/uploads${relativeFilePath}`,
+              },
+            });
           }
 
           // Read file content

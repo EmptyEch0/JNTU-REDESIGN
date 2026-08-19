@@ -48,7 +48,7 @@ export const Route = createFileRoute("/gallery")({
 const DEFAULT_IMAGES = [
   {
     id: -1,
-    src: "uploads/2026/08/independence-day-2026.jpg",
+    src: "uploads/photo-gallery/independence_day.jpeg",
     caption: "80th Independence Day Celebrations on Campus in Presence of Hon'ble Vice-Chancellor",
   },
   { id: -2, src: "uploads/photo-gallery/IMG_6832.JPG", caption: "Campus Administration & Main Building" },

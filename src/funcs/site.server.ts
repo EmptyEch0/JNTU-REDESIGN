@@ -376,14 +376,14 @@ export const getJntugvGalleryImages = createServerFn({
       id: 166,
       date: "2026-08-15",
       title: "80th Independence Day Celebrations at JNTU-GV",
-      file_path: "uploads/2026/08/independence-day-2026.jpg",
+      file_path: "uploads/photo-gallery/independence_day.jpeg",
       description:
         "JNTU-GV celebrated the 80th Independence Day grandly on the campus in the presence of the Honorable Vice-Chancellor, Registrar, Principal, faculty and students.",
       submitted: "University Admin",
       admin_approval: "accepted",
       carousel_scrolling: "yes",
       gallery_scrolling: "yes",
-      imglink: "/local-assets/uploads/2026/08/independence-day-2026.jpg",
+      imglink: "uploads/photo-gallery/independence_day.jpeg",
     },
   ];
 

@@ -4,7 +4,7 @@ import path from "path";
 const UPLOAD_BASE = process.env.UPLOAD_BASE || "/var/www/local-assets/uploads";
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-export async function POST({ request }: { request: Request }) {
+export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;

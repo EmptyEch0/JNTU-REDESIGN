@@ -259,8 +259,9 @@ export function AdminUpload({
         },
       });
 
-      if (res.data.success && res.data.path) {
-        onChange(res.data.path);
+      const filePath = res.data.path || res.data.url;
+      if (res.data.success && filePath) {
+      onChange(filePath);
         setProgress(null);
       } else {
         setError(res.data.error || "Upload failed");
@@ -422,10 +423,11 @@ export function PersonAvatarUpload({
     setProgress(10);
     try {
       const res = await fetch("/api/upload", { method: "POST", body: fd });
-      const json = await res.json() as { success: boolean; path?: string; error?: string };
+      const json = await res.json() as { success: boolean; path?: string; url?: string; error?: string };
       setProgress(100);
-      if (json.success && json.path) {
-        onChange(json.path);
+      const filePath = json.path || json.url;
+      if (json.success && filePath) {
+      onChange(filePath);
       } else {
         setError(json.error || "Upload failed");
       }
@@ -551,6 +553,7 @@ export function AdminMultiUpload({
             if (e.total) updateJob(job.id, { progress: Math.round((e.loaded * 100) / e.total) });
           },
         });
+        const filePath = res.data.path || res.data.url;
         if (res.data.success && res.data.path) {
           await onAdd(res.data.path);
           updateJob(job.id, { progress: 100, done: true });

@@ -129,8 +129,8 @@ export const NAV: {
           items: [
             { label: "Metallurgical Engineering", to: "/departments/met" },
             { label: "Information Technology", to: "/departments/it" },
-            { label: "MBA", to: "/departments/mba" },
-            { label: "Sciences & Humanities", to: "/departments" },
+            { label: "Master of Business Administration (MBA)", to: "/departments/mba" },
+            { label: "Basic Sciences and Humanities and Social Sciences (BS&HSS)", to: "/departments/sh" },
           ],
         },
       ],
@@ -176,11 +176,16 @@ export const NAV: {
       label: "Student Corner",
       groups: [
         {
-          title: "Initiatives",
+          title: "Student Welfare",
           items: [
             { label: "NSS", to: "/nss", desc: "Service & community" },
-            { label: "Women Empowerment Cell", to: "/women-empowerment" },
+            { label: "Women Empowerment Cell", to: "/women-empowerment", desc: "Safety & support for women students" },
             { label: "Anti-Ragging", to: "/anti-ragging", desc: "Statutory committee & helpline" },
+          ],
+        },
+        {
+          title: "Campus Life",
+          items: [
             { label: "Gallery", to: "/gallery", desc: "Moments on campus" },
             { label: "Connect to Alumni", to: "https://alumni.jntugv.edu.in/", desc: "Networking platform for former & current students" },
           ],
@@ -189,11 +194,7 @@ export const NAV: {
           title: "Professional Cells",
           items: [
             { label: "EDC", to: "/edc", desc: "Entrepreneurship & startup cell" },
-            {
-              label: "Professional Bodies",
-              to: "/professional-bodies",
-              desc: "IEEE, ACM, CSI chapters",
-            },
+            { label: "Professional Bodies", to: "/professional-bodies", desc: "IEEE, ACM, CSI chapters" },
             { label: "IIPC", to: "/iipc", desc: "Industry interaction & consultancy" },
           ],
         },

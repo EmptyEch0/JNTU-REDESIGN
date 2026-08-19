@@ -5,10 +5,10 @@
   "type": "module",
   "packageManager": "bun@1.3.12",
   "scripts": {
-    "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 vite dev",
+    "dev": "vite dev",
     "build": "vite build",
     "start": "node dist/server/index.js",
-    "build:dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 vite build --mode development",
+    "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write ."

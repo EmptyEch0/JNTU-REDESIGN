@@ -39,6 +39,50 @@ import { Route as RtiRouteImport } from './routes/rti'
 import { Route as SportsRouteImport } from './routes/sports'
 import { Route as WomenEmpowermentRouteImport } from './routes/women-empowerment'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
+import { Route as WomenEmpowermentRecreationRouteImport } from './routes/women-empowerment.recreation'
+import { Route as WomenEmpowermentMagazineRouteImport } from './routes/women-empowerment.magazine'
+import { Route as WomenEmpowermentActivitiesRouteImport } from './routes/women-empowerment.activities'
+import { Route as RdCellScholarsRouteImport } from './routes/rd-cell.scholars'
+import { Route as RdCellPublicationsRouteImport } from './routes/rd-cell.publications'
+import { Route as RdCellProjectsRouteImport } from './routes/rd-cell.projects'
+import { Route as RdCellMousRouteImport } from './routes/rd-cell.mous'
+import { Route as RdCellAreasRouteImport } from './routes/rd-cell.areas'
+import { Route as RdCellAboutRouteImport } from './routes/rd-cell.about'
+import { Route as PlacementsTrainingRouteImport } from './routes/placements.training'
+import { Route as PlacementsStudentsRouteImport } from './routes/placements.students'
+import { Route as PlacementsRecruitersRouteImport } from './routes/placements.recruiters'
+import { Route as PlacementsGalleryRouteImport } from './routes/placements.gallery'
+import { Route as OtherAmenitiesStaffQuartersRouteImport } from './routes/other-amenities.staff-quarters'
+import { Route as OtherAmenitiesGuestHouseRouteImport } from './routes/other-amenities.guest-house'
+import { Route as NssSpecialCampRouteImport } from './routes/nss.special-camp'
+import { Route as NssActivitiesRouteImport } from './routes/nss.activities'
+import { Route as DepartmentsIdRouteImport } from './routes/departments.$id'
+import { Route as CampusLifeStudentActivityClubRouteImport } from './routes/campus-life.student-activity-club'
+import { Route as CampusLifeMusicClubRouteImport } from './routes/campus-life.music-club'
+import { Route as ApiUploadRouteImport } from './routes/api.upload'
+import { Route as AdministrationVicePrincipalRouteImport } from './routes/administration.vice-principal'
+import { Route as AdministrationPrincipalsOfficeRouteImport } from './routes/administration.principals-office'
+import { Route as AdministrationPrincipalRouteImport } from './routes/administration.principal'
+import { Route as AdministrationIqacRouteImport } from './routes/administration.iqac'
+import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
+import { Route as AdminDepartmentsRouteImport } from './routes/admin.departments'
+import { Route as AcademicsTimetablesRouteImport } from './routes/academics/timetables'
+import { Route as AcademicsSyllabusRouteImport } from './routes/academics/syllabus'
+import { Route as AcademicsScholarshipsRouteImport } from './routes/academics/scholarships'
+import { Route as AcademicsRegulationsRouteImport } from './routes/academics/regulations'
+import { Route as AcademicsProgramsRouteImport } from './routes/academics/programs'
+import { Route as AcademicsMissionVisionRouteImport } from './routes/academics/mission-vision'
+import { Route as AcademicsFacultyRouteImport } from './routes/academics/faculty'
+import { Route as AcademicsExaminationRouteImport } from './routes/academics/examination'
+import { Route as AcademicsDownloadsRouteImport } from './routes/academics/downloads'
+import { Route as AcademicsCacRouteImport } from './routes/academics.cac'
+import { Route as AcademicsAdmissionsRouteImport } from './routes/academics/admissions'
+import { Route as AcademicsAcademicCalendarRouteImport } from './routes/academics/academic-calendar'
+import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
+import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
+import { Route as AboutNormsRouteImport } from './routes/about.norms'
+import { Route as AboutInstitutionRouteImport } from './routes/about.institution'
+import { Route as AboutHowToReachRouteImport } from './routes/about.how-to-reach'
 import { Route as AboutAirportConnectivityRouteImport } from './routes/about.airport-connectivity'
 import { Route as AboutHowToReachRouteImport } from './routes/about.how-to-reach'
 import { Route as AboutInstitutionRouteImport } from './routes/about.institution'
@@ -113,6 +157,18 @@ import { Route as LatestUpdatesPressNotesSlugRouteImport } from './routes/latest
 import { Route as LocalAssetsUploadsSplatRouteImport } from './routes/local-assets.uploads.$'
 import { Route as DepartmentsIdFacultyIndexRouteImport } from './routes/departments.$id.faculty/index'
 import { Route as DepartmentsIdFacultyFacultyIdRouteImport } from './routes/departments.$id.faculty/$facultyId'
+import { Route as ApiAdminSocialStatusRouteImport } from './routes/api.admin.social.status'
+import { Route as ApiAdminSocialHealthRouteImport } from './routes/api.admin.social.health'
+import { Route as ApiAdminSocialDisconnectRouteImport } from './routes/api.admin.social.disconnect'
+import { Route as ApiAdminSocialDiagnosticsRouteImport } from './routes/api.admin.social.diagnostics'
+import { Route as ApiAdminSocialConnectLinkedinRouteImport } from './routes/api.admin.social.connect.linkedin'
+import { Route as ApiAdminSocialConnectInstagramRouteImport } from './routes/api.admin.social.connect.instagram'
+import { Route as ApiAdminSocialCallbackLinkedinRouteImport } from './routes/api.admin.social.callback.linkedin'
+import { Route as ApiAdminSocialCallbackInstagramRouteImport } from './routes/api.admin.social.callback.instagram'
+import { Route as ApiAdminNotificationsIdLinkedinRouteImport } from './routes/api.admin.notifications.$id.linkedin'
+import { Route as ApiAdminNotificationsIdInstagramRouteImport } from './routes/api.admin.notifications.$id.instagram'
+import { Route as ApiAdminGalleryIdLinkedinRouteImport } from './routes/api.admin.gallery.$id.linkedin'
+import { Route as ApiAdminGalleryIdInstagramRouteImport } from './routes/api.admin.gallery.$id.instagram'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -424,9 +480,31 @@ const DepartmentsIndexRoute = DepartmentsIndexRouteImport.update({
   path: '/departments/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DepartmentsIdRoute = DepartmentsIdRouteImport.update({
-  id: '/departments/$id',
-  path: '/departments/$id',
+const AdministrationVicePrincipalRoute =
+  AdministrationVicePrincipalRouteImport.update({
+    id: '/vice-principal',
+    path: '/vice-principal',
+    getParentRoute: () => AdministrationRoute,
+  } as any)
+const AdministrationPrincipalsOfficeRoute =
+  AdministrationPrincipalsOfficeRouteImport.update({
+    id: '/principals-office',
+    path: '/principals-office',
+    getParentRoute: () => AdministrationRoute,
+  } as any)
+const AdministrationPrincipalRoute = AdministrationPrincipalRouteImport.update({
+  id: '/principal',
+  path: '/principal',
+  getParentRoute: () => AdministrationRoute,
+} as any)
+const AdministrationIqacRoute = AdministrationIqacRouteImport.update({
+  id: '/iqac',
+  path: '/iqac',
+  getParentRoute: () => AdministrationRoute,
+} as any)
+const AdminPlacementsRoute = AdminPlacementsRouteImport.update({
+  id: '/admin/placements',
+  path: '/admin/placements',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DispensaryIndexRoute = DispensaryIndexRouteImport.update({
@@ -650,6 +728,76 @@ const DepartmentsIdFacultyFacultyIdRoute =
     path: '/faculty/$facultyId',
     getParentRoute: () => DepartmentsIdRoute,
   } as any)
+const ApiAdminSocialStatusRoute = ApiAdminSocialStatusRouteImport.update({
+  id: '/api/admin/social/status',
+  path: '/api/admin/social/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminSocialHealthRoute = ApiAdminSocialHealthRouteImport.update({
+  id: '/api/admin/social/health',
+  path: '/api/admin/social/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminSocialDisconnectRoute =
+  ApiAdminSocialDisconnectRouteImport.update({
+    id: '/api/admin/social/disconnect',
+    path: '/api/admin/social/disconnect',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminSocialDiagnosticsRoute =
+  ApiAdminSocialDiagnosticsRouteImport.update({
+    id: '/api/admin/social/diagnostics',
+    path: '/api/admin/social/diagnostics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminSocialConnectLinkedinRoute =
+  ApiAdminSocialConnectLinkedinRouteImport.update({
+    id: '/api/admin/social/connect/linkedin',
+    path: '/api/admin/social/connect/linkedin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminSocialConnectInstagramRoute =
+  ApiAdminSocialConnectInstagramRouteImport.update({
+    id: '/api/admin/social/connect/instagram',
+    path: '/api/admin/social/connect/instagram',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminSocialCallbackLinkedinRoute =
+  ApiAdminSocialCallbackLinkedinRouteImport.update({
+    id: '/api/admin/social/callback/linkedin',
+    path: '/api/admin/social/callback/linkedin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminSocialCallbackInstagramRoute =
+  ApiAdminSocialCallbackInstagramRouteImport.update({
+    id: '/api/admin/social/callback/instagram',
+    path: '/api/admin/social/callback/instagram',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminNotificationsIdLinkedinRoute =
+  ApiAdminNotificationsIdLinkedinRouteImport.update({
+    id: '/api/admin/notifications/$id/linkedin',
+    path: '/api/admin/notifications/$id/linkedin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminNotificationsIdInstagramRoute =
+  ApiAdminNotificationsIdInstagramRouteImport.update({
+    id: '/api/admin/notifications/$id/instagram',
+    path: '/api/admin/notifications/$id/instagram',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminGalleryIdLinkedinRoute =
+  ApiAdminGalleryIdLinkedinRouteImport.update({
+    id: '/api/admin/gallery/$id/linkedin',
+    path: '/api/admin/gallery/$id/linkedin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminGalleryIdInstagramRoute =
+  ApiAdminGalleryIdInstagramRouteImport.update({
+    id: '/api/admin/gallery/$id/instagram',
+    path: '/api/admin/gallery/$id/instagram',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -705,6 +853,7 @@ export interface FileRoutesByFullPath {
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
   '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
+  '/api/posts': typeof ApiPostsRoute
   '/api/upload': typeof ApiUploadRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
@@ -754,8 +903,20 @@ export interface FileRoutesByFullPath {
   '/local-assets/uploads/$': typeof LocalAssetsUploadsSplatRoute
   '/administration/iqac/': typeof AdministrationIqacIndexRoute
   '/departments/$id/': typeof DepartmentsIdIndexRoute
+  '/api/admin/social/diagnostics': typeof ApiAdminSocialDiagnosticsRoute
+  '/api/admin/social/disconnect': typeof ApiAdminSocialDisconnectRoute
+  '/api/admin/social/health': typeof ApiAdminSocialHealthRoute
+  '/api/admin/social/status': typeof ApiAdminSocialStatusRoute
   '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
   '/departments/$id/faculty/': typeof DepartmentsIdFacultyIndexRoute
+  '/api/admin/gallery/$id/instagram': typeof ApiAdminGalleryIdInstagramRoute
+  '/api/admin/gallery/$id/linkedin': typeof ApiAdminGalleryIdLinkedinRoute
+  '/api/admin/notifications/$id/instagram': typeof ApiAdminNotificationsIdInstagramRoute
+  '/api/admin/notifications/$id/linkedin': typeof ApiAdminNotificationsIdLinkedinRoute
+  '/api/admin/social/callback/instagram': typeof ApiAdminSocialCallbackInstagramRoute
+  '/api/admin/social/callback/linkedin': typeof ApiAdminSocialCallbackLinkedinRoute
+  '/api/admin/social/connect/instagram': typeof ApiAdminSocialConnectInstagramRoute
+  '/api/admin/social/connect/linkedin': typeof ApiAdminSocialConnectLinkedinRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -802,6 +963,7 @@ export interface FileRoutesByTo {
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
   '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
+  '/api/posts': typeof ApiPostsRoute
   '/api/upload': typeof ApiUploadRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
@@ -850,8 +1012,20 @@ export interface FileRoutesByTo {
   '/local-assets/uploads/$': typeof LocalAssetsUploadsSplatRoute
   '/administration/iqac': typeof AdministrationIqacIndexRoute
   '/departments/$id': typeof DepartmentsIdIndexRoute
+  '/api/admin/social/diagnostics': typeof ApiAdminSocialDiagnosticsRoute
+  '/api/admin/social/disconnect': typeof ApiAdminSocialDisconnectRoute
+  '/api/admin/social/health': typeof ApiAdminSocialHealthRoute
+  '/api/admin/social/status': typeof ApiAdminSocialStatusRoute
   '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
   '/departments/$id/faculty': typeof DepartmentsIdFacultyIndexRoute
+  '/api/admin/gallery/$id/instagram': typeof ApiAdminGalleryIdInstagramRoute
+  '/api/admin/gallery/$id/linkedin': typeof ApiAdminGalleryIdLinkedinRoute
+  '/api/admin/notifications/$id/instagram': typeof ApiAdminNotificationsIdInstagramRoute
+  '/api/admin/notifications/$id/linkedin': typeof ApiAdminNotificationsIdLinkedinRoute
+  '/api/admin/social/callback/instagram': typeof ApiAdminSocialCallbackInstagramRoute
+  '/api/admin/social/callback/linkedin': typeof ApiAdminSocialCallbackLinkedinRoute
+  '/api/admin/social/connect/instagram': typeof ApiAdminSocialConnectInstagramRoute
+  '/api/admin/social/connect/linkedin': typeof ApiAdminSocialConnectLinkedinRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -908,6 +1082,7 @@ export interface FileRoutesById {
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
   '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
+  '/api/posts': typeof ApiPostsRoute
   '/api/upload': typeof ApiUploadRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
@@ -957,318 +1132,369 @@ export interface FileRoutesById {
   '/local-assets/uploads/$': typeof LocalAssetsUploadsSplatRoute
   '/administration/iqac/': typeof AdministrationIqacIndexRoute
   '/departments/$id/': typeof DepartmentsIdIndexRoute
+  '/api/admin/social/diagnostics': typeof ApiAdminSocialDiagnosticsRoute
+  '/api/admin/social/disconnect': typeof ApiAdminSocialDisconnectRoute
+  '/api/admin/social/health': typeof ApiAdminSocialHealthRoute
+  '/api/admin/social/status': typeof ApiAdminSocialStatusRoute
   '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
   '/departments/$id/faculty/': typeof DepartmentsIdFacultyIndexRoute
+  '/api/admin/gallery/$id/instagram': typeof ApiAdminGalleryIdInstagramRoute
+  '/api/admin/gallery/$id/linkedin': typeof ApiAdminGalleryIdLinkedinRoute
+  '/api/admin/notifications/$id/instagram': typeof ApiAdminNotificationsIdInstagramRoute
+  '/api/admin/notifications/$id/linkedin': typeof ApiAdminNotificationsIdLinkedinRoute
+  '/api/admin/social/callback/instagram': typeof ApiAdminSocialCallbackInstagramRoute
+  '/api/admin/social/callback/linkedin': typeof ApiAdminSocialCallbackLinkedinRoute
+  '/api/admin/social/connect/instagram': typeof ApiAdminSocialConnectInstagramRoute
+  '/api/admin/social/connect/linkedin': typeof ApiAdminSocialConnectLinkedinRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/$'
-    | '/about'
-    | '/academics'
-    | '/administration'
-    | '/anti-ragging'
-    | '/banking'
-    | '/campus-life'
-    | '/contact'
-    | '/edc'
-    | '/engineering-cell'
-    | '/faculty-account-settings'
-    | '/faculty-login'
-    | '/gallery'
-    | '/hod-account-settings'
-    | '/hod-login'
-    | '/hostels'
-    | '/iipc'
-    | '/latest-updates'
-    | '/library'
-    | '/notices'
-    | '/nss'
-    | '/other-amenities'
-    | '/placements'
-    | '/professional-bodies'
-    | '/rd-cell'
-    | '/rti'
-    | '/sports'
-    | '/women-empowerment'
-    | '/about/airport-connectivity'
-    | '/about/how-to-reach'
-    | '/about/institution'
-    | '/about/norms'
-    | '/about/vision-mission'
-    | '/about/vizianagaram'
-    | '/academics/academic-calendar'
-    | '/academics/admissions'
-    | '/academics/cac'
-    | '/academics/downloads'
-    | '/academics/examination'
-    | '/academics/faculty'
-    | '/academics/mission-vision'
-    | '/academics/programs'
-    | '/academics/regulations'
-    | '/academics/scholarships'
-    | '/academics/syllabus'
-    | '/academics/timetables'
-    | '/admin/departments'
-    | '/admin/placements'
-    | '/administration/iqac'
-    | '/administration/principal'
-    | '/administration/principals-office'
-    | '/administration/vice-principal'
-    | '/api/upload'
-    | '/campus-life/music-club'
-    | '/campus-life/student-activity-club'
-    | '/departments/$id'
-    | '/nss/activities'
-    | '/nss/special-camp'
-    | '/other-amenities/guest-house'
-    | '/other-amenities/staff-quarters'
-    | '/placements/gallery'
-    | '/placements/recruiters'
-    | '/placements/students'
-    | '/placements/training'
-    | '/rd-cell/about'
-    | '/rd-cell/areas'
-    | '/rd-cell/mous'
-    | '/rd-cell/projects'
-    | '/rd-cell/publications'
-    | '/rd-cell/scholars'
-    | '/women-empowerment/activities'
-    | '/women-empowerment/magazine'
-    | '/women-empowerment/recreation'
-    | '/about/'
-    | '/academics/'
-    | '/admin/'
-    | '/campus-life/'
-    | '/departments/'
-    | '/dispensary/'
-    | '/latest-updates/'
-    | '/nss/'
-    | '/placements/'
-    | '/rd-cell/'
-    | '/women-empowerment/'
-    | '/administration/iqac/aqar'
-    | '/administration/iqac/composition'
-    | '/administration/iqac/meetings'
-    | '/administration/iqac/mous'
-    | '/auth/google/callback'
-    | '/auth/google/login'
-    | '/departments/$id/$'
-    | '/departments/$id/achievements'
-    | '/departments/$id/courses'
-    | '/departments/$id/gallery'
-    | '/departments/$id/hod'
-    | '/departments/$id/labs'
-    | '/departments/$id/timetables'
-    | '/latest-updates/press-notes/$slug'
-    | '/local-assets/uploads/$'
-    | '/administration/iqac/'
-    | '/departments/$id/'
-    | '/departments/$id/faculty/$facultyId'
-    | '/departments/$id/faculty/'
+  | '/'
+  | '/$'
+  | '/about'
+  | '/academics'
+  | '/administration'
+  | '/anti-ragging'
+  | '/banking'
+  | '/campus-life'
+  | '/contact'
+  | '/edc'
+  | '/engineering-cell'
+  | '/faculty-account-settings'
+  | '/faculty-login'
+  | '/gallery'
+  | '/hod-account-settings'
+  | '/hod-login'
+  | '/hostels'
+  | '/iipc'
+  | '/latest-updates'
+  | '/library'
+  | '/notices'
+  | '/nss'
+  | '/other-amenities'
+  | '/placements'
+  | '/professional-bodies'
+  | '/rd-cell'
+  | '/rti'
+  | '/sports'
+  | '/women-empowerment'
+  | '/about/airport-connectivity'
+  | '/about/how-to-reach'
+  | '/about/institution'
+  | '/about/norms'
+  | '/about/vision-mission'
+  | '/about/vizianagaram'
+  | '/academics/academic-calendar'
+  | '/academics/admissions'
+  | '/academics/cac'
+  | '/academics/downloads'
+  | '/academics/examination'
+  | '/academics/faculty'
+  | '/academics/mission-vision'
+  | '/academics/programs'
+  | '/academics/regulations'
+  | '/academics/scholarships'
+  | '/academics/syllabus'
+  | '/academics/timetables'
+  | '/admin/departments'
+  | '/admin/placements'
+  | '/administration/iqac'
+  | '/administration/principal'
+  | '/administration/principals-office'
+  | '/administration/vice-principal'
+  | '/api/posts'
+  | '/api/upload'
+  | '/campus-life/music-club'
+  | '/campus-life/student-activity-club'
+  | '/departments/$id'
+  | '/nss/activities'
+  | '/nss/special-camp'
+  | '/other-amenities/guest-house'
+  | '/other-amenities/staff-quarters'
+  | '/placements/gallery'
+  | '/placements/recruiters'
+  | '/placements/students'
+  | '/placements/training'
+  | '/rd-cell/about'
+  | '/rd-cell/areas'
+  | '/rd-cell/mous'
+  | '/rd-cell/projects'
+  | '/rd-cell/publications'
+  | '/rd-cell/scholars'
+  | '/women-empowerment/activities'
+  | '/women-empowerment/magazine'
+  | '/women-empowerment/recreation'
+  | '/about/'
+  | '/academics/'
+  | '/admin/'
+  | '/campus-life/'
+  | '/departments/'
+  | '/dispensary/'
+  | '/latest-updates/'
+  | '/nss/'
+  | '/placements/'
+  | '/rd-cell/'
+  | '/women-empowerment/'
+  | '/administration/iqac/aqar'
+  | '/administration/iqac/composition'
+  | '/administration/iqac/meetings'
+  | '/administration/iqac/mous'
+  | '/auth/google/callback'
+  | '/auth/google/login'
+  | '/departments/$id/$'
+  | '/departments/$id/achievements'
+  | '/departments/$id/courses'
+  | '/departments/$id/gallery'
+  | '/departments/$id/hod'
+  | '/departments/$id/labs'
+  | '/departments/$id/timetables'
+  | '/latest-updates/press-notes/$slug'
+  | '/local-assets/uploads/$'
+  | '/administration/iqac/'
+  | '/departments/$id/'
+  | '/api/admin/social/diagnostics'
+  | '/api/admin/social/disconnect'
+  | '/api/admin/social/health'
+  | '/api/admin/social/status'
+  | '/departments/$id/faculty/$facultyId'
+  | '/departments/$id/faculty/'
+  | '/api/admin/gallery/$id/instagram'
+  | '/api/admin/gallery/$id/linkedin'
+  | '/api/admin/notifications/$id/instagram'
+  | '/api/admin/notifications/$id/linkedin'
+  | '/api/admin/social/callback/instagram'
+  | '/api/admin/social/callback/linkedin'
+  | '/api/admin/social/connect/instagram'
+  | '/api/admin/social/connect/linkedin'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/$'
-    | '/administration'
-    | '/anti-ragging'
-    | '/banking'
-    | '/contact'
-    | '/edc'
-    | '/engineering-cell'
-    | '/faculty-account-settings'
-    | '/faculty-login'
-    | '/gallery'
-    | '/hod-account-settings'
-    | '/hod-login'
-    | '/hostels'
-    | '/iipc'
-    | '/library'
-    | '/notices'
-    | '/other-amenities'
-    | '/professional-bodies'
-    | '/rti'
-    | '/sports'
-    | '/about/airport-connectivity'
-    | '/about/how-to-reach'
-    | '/about/institution'
-    | '/about/norms'
-    | '/about/vision-mission'
-    | '/about/vizianagaram'
-    | '/academics/academic-calendar'
-    | '/academics/admissions'
-    | '/academics/cac'
-    | '/academics/downloads'
-    | '/academics/examination'
-    | '/academics/faculty'
-    | '/academics/mission-vision'
-    | '/academics/programs'
-    | '/academics/regulations'
-    | '/academics/scholarships'
-    | '/academics/syllabus'
-    | '/academics/timetables'
-    | '/admin/departments'
-    | '/admin/placements'
-    | '/administration/principal'
-    | '/administration/principals-office'
-    | '/administration/vice-principal'
-    | '/api/upload'
-    | '/campus-life/music-club'
-    | '/campus-life/student-activity-club'
-    | '/nss/activities'
-    | '/nss/special-camp'
-    | '/other-amenities/guest-house'
-    | '/other-amenities/staff-quarters'
-    | '/placements/gallery'
-    | '/placements/recruiters'
-    | '/placements/students'
-    | '/placements/training'
-    | '/rd-cell/about'
-    | '/rd-cell/areas'
-    | '/rd-cell/mous'
-    | '/rd-cell/projects'
-    | '/rd-cell/publications'
-    | '/rd-cell/scholars'
-    | '/women-empowerment/activities'
-    | '/women-empowerment/magazine'
-    | '/women-empowerment/recreation'
-    | '/about'
-    | '/academics'
-    | '/admin'
-    | '/campus-life'
-    | '/departments'
-    | '/dispensary'
-    | '/latest-updates'
-    | '/nss'
-    | '/placements'
-    | '/rd-cell'
-    | '/women-empowerment'
-    | '/administration/iqac/aqar'
-    | '/administration/iqac/composition'
-    | '/administration/iqac/meetings'
-    | '/administration/iqac/mous'
-    | '/auth/google/callback'
-    | '/auth/google/login'
-    | '/departments/$id/$'
-    | '/departments/$id/achievements'
-    | '/departments/$id/courses'
-    | '/departments/$id/gallery'
-    | '/departments/$id/hod'
-    | '/departments/$id/labs'
-    | '/departments/$id/timetables'
-    | '/latest-updates/press-notes/$slug'
-    | '/local-assets/uploads/$'
-    | '/administration/iqac'
-    | '/departments/$id'
-    | '/departments/$id/faculty/$facultyId'
-    | '/departments/$id/faculty'
+  | '/'
+  | '/$'
+  | '/administration'
+  | '/anti-ragging'
+  | '/banking'
+  | '/contact'
+  | '/edc'
+  | '/engineering-cell'
+  | '/faculty-account-settings'
+  | '/faculty-login'
+  | '/gallery'
+  | '/hod-account-settings'
+  | '/hod-login'
+  | '/hostels'
+  | '/iipc'
+  | '/library'
+  | '/notices'
+  | '/other-amenities'
+  | '/professional-bodies'
+  | '/rti'
+  | '/sports'
+  | '/about/airport-connectivity'
+  | '/about/how-to-reach'
+  | '/about/institution'
+  | '/about/norms'
+  | '/about/vision-mission'
+  | '/about/vizianagaram'
+  | '/academics/academic-calendar'
+  | '/academics/admissions'
+  | '/academics/cac'
+  | '/academics/downloads'
+  | '/academics/examination'
+  | '/academics/faculty'
+  | '/academics/mission-vision'
+  | '/academics/programs'
+  | '/academics/regulations'
+  | '/academics/scholarships'
+  | '/academics/syllabus'
+  | '/academics/timetables'
+  | '/admin/departments'
+  | '/admin/placements'
+  | '/administration/principal'
+  | '/administration/principals-office'
+  | '/administration/vice-principal'
+  | '/api/posts'
+  | '/api/upload'
+  | '/campus-life/music-club'
+  | '/campus-life/student-activity-club'
+  | '/nss/activities'
+  | '/nss/special-camp'
+  | '/other-amenities/guest-house'
+  | '/other-amenities/staff-quarters'
+  | '/placements/gallery'
+  | '/placements/recruiters'
+  | '/placements/students'
+  | '/placements/training'
+  | '/rd-cell/about'
+  | '/rd-cell/areas'
+  | '/rd-cell/mous'
+  | '/rd-cell/projects'
+  | '/rd-cell/publications'
+  | '/rd-cell/scholars'
+  | '/women-empowerment/activities'
+  | '/women-empowerment/magazine'
+  | '/women-empowerment/recreation'
+  | '/about'
+  | '/academics'
+  | '/admin'
+  | '/campus-life'
+  | '/departments'
+  | '/dispensary'
+  | '/latest-updates'
+  | '/nss'
+  | '/placements'
+  | '/rd-cell'
+  | '/women-empowerment'
+  | '/administration/iqac/aqar'
+  | '/administration/iqac/composition'
+  | '/administration/iqac/meetings'
+  | '/administration/iqac/mous'
+  | '/auth/google/callback'
+  | '/auth/google/login'
+  | '/departments/$id/$'
+  | '/departments/$id/achievements'
+  | '/departments/$id/courses'
+  | '/departments/$id/gallery'
+  | '/departments/$id/hod'
+  | '/departments/$id/labs'
+  | '/departments/$id/timetables'
+  | '/latest-updates/press-notes/$slug'
+  | '/local-assets/uploads/$'
+  | '/administration/iqac'
+  | '/departments/$id'
+  | '/api/admin/social/diagnostics'
+  | '/api/admin/social/disconnect'
+  | '/api/admin/social/health'
+  | '/api/admin/social/status'
+  | '/departments/$id/faculty/$facultyId'
+  | '/departments/$id/faculty'
+  | '/api/admin/gallery/$id/instagram'
+  | '/api/admin/gallery/$id/linkedin'
+  | '/api/admin/notifications/$id/instagram'
+  | '/api/admin/notifications/$id/linkedin'
+  | '/api/admin/social/callback/instagram'
+  | '/api/admin/social/callback/linkedin'
+  | '/api/admin/social/connect/instagram'
+  | '/api/admin/social/connect/linkedin'
   id:
-    | '__root__'
-    | '/'
-    | '/$'
-    | '/about'
-    | '/academics'
-    | '/administration'
-    | '/anti-ragging'
-    | '/banking'
-    | '/campus-life'
-    | '/contact'
-    | '/edc'
-    | '/engineering-cell'
-    | '/faculty-account-settings'
-    | '/faculty-login'
-    | '/gallery'
-    | '/hod-account-settings'
-    | '/hod-login'
-    | '/hostels'
-    | '/iipc'
-    | '/latest-updates'
-    | '/library'
-    | '/notices'
-    | '/nss'
-    | '/other-amenities'
-    | '/placements'
-    | '/professional-bodies'
-    | '/rd-cell'
-    | '/rti'
-    | '/sports'
-    | '/women-empowerment'
-    | '/about/airport-connectivity'
-    | '/about/how-to-reach'
-    | '/about/institution'
-    | '/about/norms'
-    | '/about/vision-mission'
-    | '/about/vizianagaram'
-    | '/academics/academic-calendar'
-    | '/academics/admissions'
-    | '/academics/cac'
-    | '/academics/downloads'
-    | '/academics/examination'
-    | '/academics/faculty'
-    | '/academics/mission-vision'
-    | '/academics/programs'
-    | '/academics/regulations'
-    | '/academics/scholarships'
-    | '/academics/syllabus'
-    | '/academics/timetables'
-    | '/admin/departments'
-    | '/admin/placements'
-    | '/administration/iqac'
-    | '/administration/principal'
-    | '/administration/principals-office'
-    | '/administration/vice-principal'
-    | '/api/upload'
-    | '/campus-life/music-club'
-    | '/campus-life/student-activity-club'
-    | '/departments/$id'
-    | '/nss/activities'
-    | '/nss/special-camp'
-    | '/other-amenities/guest-house'
-    | '/other-amenities/staff-quarters'
-    | '/placements/gallery'
-    | '/placements/recruiters'
-    | '/placements/students'
-    | '/placements/training'
-    | '/rd-cell/about'
-    | '/rd-cell/areas'
-    | '/rd-cell/mous'
-    | '/rd-cell/projects'
-    | '/rd-cell/publications'
-    | '/rd-cell/scholars'
-    | '/women-empowerment/activities'
-    | '/women-empowerment/magazine'
-    | '/women-empowerment/recreation'
-    | '/about/'
-    | '/academics/'
-    | '/admin/'
-    | '/campus-life/'
-    | '/departments/'
-    | '/dispensary/'
-    | '/latest-updates/'
-    | '/nss/'
-    | '/placements/'
-    | '/rd-cell/'
-    | '/women-empowerment/'
-    | '/administration/iqac/aqar'
-    | '/administration/iqac/composition'
-    | '/administration/iqac/meetings'
-    | '/administration/iqac/mous'
-    | '/auth/google/callback'
-    | '/auth/google/login'
-    | '/departments/$id/$'
-    | '/departments/$id/achievements'
-    | '/departments/$id/courses'
-    | '/departments/$id/gallery'
-    | '/departments/$id/hod'
-    | '/departments/$id/labs'
-    | '/departments/$id/timetables'
-    | '/latest-updates/press-notes/$slug'
-    | '/local-assets/uploads/$'
-    | '/administration/iqac/'
-    | '/departments/$id/'
-    | '/departments/$id/faculty/$facultyId'
-    | '/departments/$id/faculty/'
+  | '__root__'
+  | '/'
+  | '/$'
+  | '/about'
+  | '/academics'
+  | '/administration'
+  | '/anti-ragging'
+  | '/banking'
+  | '/campus-life'
+  | '/contact'
+  | '/edc'
+  | '/engineering-cell'
+  | '/faculty-account-settings'
+  | '/faculty-login'
+  | '/gallery'
+  | '/hod-account-settings'
+  | '/hod-login'
+  | '/hostels'
+  | '/iipc'
+  | '/latest-updates'
+  | '/library'
+  | '/notices'
+  | '/nss'
+  | '/other-amenities'
+  | '/placements'
+  | '/professional-bodies'
+  | '/rd-cell'
+  | '/rti'
+  | '/sports'
+  | '/women-empowerment'
+  | '/about/airport-connectivity'
+  | '/about/how-to-reach'
+  | '/about/institution'
+  | '/about/norms'
+  | '/about/vision-mission'
+  | '/about/vizianagaram'
+  | '/academics/academic-calendar'
+  | '/academics/admissions'
+  | '/academics/cac'
+  | '/academics/downloads'
+  | '/academics/examination'
+  | '/academics/faculty'
+  | '/academics/mission-vision'
+  | '/academics/programs'
+  | '/academics/regulations'
+  | '/academics/scholarships'
+  | '/academics/syllabus'
+  | '/academics/timetables'
+  | '/admin/departments'
+  | '/admin/placements'
+  | '/administration/iqac'
+  | '/administration/principal'
+  | '/administration/principals-office'
+  | '/administration/vice-principal'
+  | '/api/posts'
+  | '/api/upload'
+  | '/campus-life/music-club'
+  | '/campus-life/student-activity-club'
+  | '/departments/$id'
+  | '/nss/activities'
+  | '/nss/special-camp'
+  | '/other-amenities/guest-house'
+  | '/other-amenities/staff-quarters'
+  | '/placements/gallery'
+  | '/placements/recruiters'
+  | '/placements/students'
+  | '/placements/training'
+  | '/rd-cell/about'
+  | '/rd-cell/areas'
+  | '/rd-cell/mous'
+  | '/rd-cell/projects'
+  | '/rd-cell/publications'
+  | '/rd-cell/scholars'
+  | '/women-empowerment/activities'
+  | '/women-empowerment/magazine'
+  | '/women-empowerment/recreation'
+  | '/about/'
+  | '/academics/'
+  | '/admin/'
+  | '/campus-life/'
+  | '/departments/'
+  | '/dispensary/'
+  | '/latest-updates/'
+  | '/nss/'
+  | '/placements/'
+  | '/rd-cell/'
+  | '/women-empowerment/'
+  | '/administration/iqac/aqar'
+  | '/administration/iqac/composition'
+  | '/administration/iqac/meetings'
+  | '/administration/iqac/mous'
+  | '/auth/google/callback'
+  | '/auth/google/login'
+  | '/departments/$id/$'
+  | '/departments/$id/achievements'
+  | '/departments/$id/courses'
+  | '/departments/$id/gallery'
+  | '/departments/$id/hod'
+  | '/departments/$id/labs'
+  | '/departments/$id/timetables'
+  | '/latest-updates/press-notes/$slug'
+  | '/local-assets/uploads/$'
+  | '/administration/iqac/'
+  | '/departments/$id/'
+  | '/api/admin/social/diagnostics'
+  | '/api/admin/social/disconnect'
+  | '/api/admin/social/health'
+  | '/api/admin/social/status'
+  | '/departments/$id/faculty/$facultyId'
+  | '/departments/$id/faculty/'
+  | '/api/admin/gallery/$id/instagram'
+  | '/api/admin/gallery/$id/linkedin'
+  | '/api/admin/notifications/$id/instagram'
+  | '/api/admin/notifications/$id/linkedin'
+  | '/api/admin/social/callback/instagram'
+  | '/api/admin/social/callback/linkedin'
+  | '/api/admin/social/connect/instagram'
+  | '/api/admin/social/connect/linkedin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1303,6 +1529,7 @@ export interface RootRouteChildren {
   WomenEmpowermentRoute: typeof WomenEmpowermentRouteWithChildren
   AdminDepartmentsRoute: typeof AdminDepartmentsRoute
   AdminPlacementsRoute: typeof AdminPlacementsRoute
+  ApiPostsRoute: typeof ApiPostsRoute
   ApiUploadRoute: typeof ApiUploadRoute
   DepartmentsIdRoute: typeof DepartmentsIdRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
@@ -1311,6 +1538,18 @@ export interface RootRouteChildren {
   AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
   AuthGoogleLoginRoute: typeof AuthGoogleLoginRoute
   LocalAssetsUploadsSplatRoute: typeof LocalAssetsUploadsSplatRoute
+  ApiAdminSocialDiagnosticsRoute: typeof ApiAdminSocialDiagnosticsRoute
+  ApiAdminSocialDisconnectRoute: typeof ApiAdminSocialDisconnectRoute
+  ApiAdminSocialHealthRoute: typeof ApiAdminSocialHealthRoute
+  ApiAdminSocialStatusRoute: typeof ApiAdminSocialStatusRoute
+  ApiAdminGalleryIdInstagramRoute: typeof ApiAdminGalleryIdInstagramRoute
+  ApiAdminGalleryIdLinkedinRoute: typeof ApiAdminGalleryIdLinkedinRoute
+  ApiAdminNotificationsIdInstagramRoute: typeof ApiAdminNotificationsIdInstagramRoute
+  ApiAdminNotificationsIdLinkedinRoute: typeof ApiAdminNotificationsIdLinkedinRoute
+  ApiAdminSocialCallbackInstagramRoute: typeof ApiAdminSocialCallbackInstagramRoute
+  ApiAdminSocialCallbackLinkedinRoute: typeof ApiAdminSocialCallbackLinkedinRoute
+  ApiAdminSocialConnectInstagramRoute: typeof ApiAdminSocialConnectInstagramRoute
+  ApiAdminSocialConnectLinkedinRoute: typeof ApiAdminSocialConnectLinkedinRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1742,11 +1981,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/departments/$id': {
-      id: '/departments/$id'
-      path: '/departments/$id'
-      fullPath: '/departments/$id'
-      preLoaderRoute: typeof DepartmentsIdRouteImport
+    '/administration/vice-principal': {
+      id: '/administration/vice-principal'
+      path: '/vice-principal'
+      fullPath: '/administration/vice-principal'
+      preLoaderRoute: typeof AdministrationVicePrincipalRouteImport
+      parentRoute: typeof AdministrationRoute
+    }
+    '/administration/principals-office': {
+      id: '/administration/principals-office'
+      path: '/principals-office'
+      fullPath: '/administration/principals-office'
+      preLoaderRoute: typeof AdministrationPrincipalsOfficeRouteImport
+      parentRoute: typeof AdministrationRoute
+    }
+    '/administration/principal': {
+      id: '/administration/principal'
+      path: '/principal'
+      fullPath: '/administration/principal'
+      preLoaderRoute: typeof AdministrationPrincipalRouteImport
+      parentRoute: typeof AdministrationRoute
+    }
+    '/administration/iqac': {
+      id: '/administration/iqac'
+      path: '/iqac'
+      fullPath: '/administration/iqac'
+      preLoaderRoute: typeof AdministrationIqacRouteImport
+      parentRoute: typeof AdministrationRoute
+    }
+    '/admin/placements': {
+      id: '/admin/placements'
+      path: '/admin/placements'
+      fullPath: '/admin/placements'
+      preLoaderRoute: typeof AdminPlacementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dispensary/': {
@@ -2043,6 +2310,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsIdFacultyFacultyIdRouteImport
       parentRoute: typeof DepartmentsIdRoute
     }
+    '/api/admin/social/status': {
+      id: '/api/admin/social/status'
+      path: '/api/admin/social/status'
+      fullPath: '/api/admin/social/status'
+      preLoaderRoute: typeof ApiAdminSocialStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/social/health': {
+      id: '/api/admin/social/health'
+      path: '/api/admin/social/health'
+      fullPath: '/api/admin/social/health'
+      preLoaderRoute: typeof ApiAdminSocialHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/social/disconnect': {
+      id: '/api/admin/social/disconnect'
+      path: '/api/admin/social/disconnect'
+      fullPath: '/api/admin/social/disconnect'
+      preLoaderRoute: typeof ApiAdminSocialDisconnectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/social/diagnostics': {
+      id: '/api/admin/social/diagnostics'
+      path: '/api/admin/social/diagnostics'
+      fullPath: '/api/admin/social/diagnostics'
+      preLoaderRoute: typeof ApiAdminSocialDiagnosticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/social/connect/linkedin': {
+      id: '/api/admin/social/connect/linkedin'
+      path: '/api/admin/social/connect/linkedin'
+      fullPath: '/api/admin/social/connect/linkedin'
+      preLoaderRoute: typeof ApiAdminSocialConnectLinkedinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/social/connect/instagram': {
+      id: '/api/admin/social/connect/instagram'
+      path: '/api/admin/social/connect/instagram'
+      fullPath: '/api/admin/social/connect/instagram'
+      preLoaderRoute: typeof ApiAdminSocialConnectInstagramRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/social/callback/linkedin': {
+      id: '/api/admin/social/callback/linkedin'
+      path: '/api/admin/social/callback/linkedin'
+      fullPath: '/api/admin/social/callback/linkedin'
+      preLoaderRoute: typeof ApiAdminSocialCallbackLinkedinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/social/callback/instagram': {
+      id: '/api/admin/social/callback/instagram'
+      path: '/api/admin/social/callback/instagram'
+      fullPath: '/api/admin/social/callback/instagram'
+      preLoaderRoute: typeof ApiAdminSocialCallbackInstagramRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/notifications/$id/linkedin': {
+      id: '/api/admin/notifications/$id/linkedin'
+      path: '/api/admin/notifications/$id/linkedin'
+      fullPath: '/api/admin/notifications/$id/linkedin'
+      preLoaderRoute: typeof ApiAdminNotificationsIdLinkedinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/notifications/$id/instagram': {
+      id: '/api/admin/notifications/$id/instagram'
+      path: '/api/admin/notifications/$id/instagram'
+      fullPath: '/api/admin/notifications/$id/instagram'
+      preLoaderRoute: typeof ApiAdminNotificationsIdInstagramRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/gallery/$id/linkedin': {
+      id: '/api/admin/gallery/$id/linkedin'
+      path: '/api/admin/gallery/$id/linkedin'
+      fullPath: '/api/admin/gallery/$id/linkedin'
+      preLoaderRoute: typeof ApiAdminGalleryIdLinkedinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/gallery/$id/instagram': {
+      id: '/api/admin/gallery/$id/instagram'
+      path: '/api/admin/gallery/$id/instagram'
+      fullPath: '/api/admin/gallery/$id/instagram'
+      preLoaderRoute: typeof ApiAdminGalleryIdInstagramRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -2321,6 +2672,7 @@ const rootRouteChildren: RootRouteChildren = {
   WomenEmpowermentRoute: WomenEmpowermentRouteWithChildren,
   AdminDepartmentsRoute: AdminDepartmentsRoute,
   AdminPlacementsRoute: AdminPlacementsRoute,
+  ApiPostsRoute: ApiPostsRoute,
   ApiUploadRoute: ApiUploadRoute,
   DepartmentsIdRoute: DepartmentsIdRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
@@ -2329,6 +2681,18 @@ const rootRouteChildren: RootRouteChildren = {
   AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
   AuthGoogleLoginRoute: AuthGoogleLoginRoute,
   LocalAssetsUploadsSplatRoute: LocalAssetsUploadsSplatRoute,
+  ApiAdminSocialDiagnosticsRoute: ApiAdminSocialDiagnosticsRoute,
+  ApiAdminSocialDisconnectRoute: ApiAdminSocialDisconnectRoute,
+  ApiAdminSocialHealthRoute: ApiAdminSocialHealthRoute,
+  ApiAdminSocialStatusRoute: ApiAdminSocialStatusRoute,
+  ApiAdminGalleryIdInstagramRoute: ApiAdminGalleryIdInstagramRoute,
+  ApiAdminGalleryIdLinkedinRoute: ApiAdminGalleryIdLinkedinRoute,
+  ApiAdminNotificationsIdInstagramRoute: ApiAdminNotificationsIdInstagramRoute,
+  ApiAdminNotificationsIdLinkedinRoute: ApiAdminNotificationsIdLinkedinRoute,
+  ApiAdminSocialCallbackInstagramRoute: ApiAdminSocialCallbackInstagramRoute,
+  ApiAdminSocialCallbackLinkedinRoute: ApiAdminSocialCallbackLinkedinRoute,
+  ApiAdminSocialConnectInstagramRoute: ApiAdminSocialConnectInstagramRoute,
+  ApiAdminSocialConnectLinkedinRoute: ApiAdminSocialConnectLinkedinRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

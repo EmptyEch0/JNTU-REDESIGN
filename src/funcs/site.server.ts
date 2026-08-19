@@ -146,7 +146,7 @@ export const addNotice = createServerFn({
         (err) => console.error("RAG auto-ingest notice error:", err)
       );
 
-      return { success: true };
+      return { success: true, id: noticeId };
     } catch (err) {
       console.error("Add notice failed:", err);
       throw new Error("Failed to add notice");
@@ -246,12 +246,12 @@ export const addCampusGalleryItem = createServerFn({
   .inputValidator((data: { src: string; caption?: string }) => data)
   .handler(async ({ data }) => {
     try {
-      await db.insert(campusGallery).values({
+      const inserted = await db.insert(campusGallery).values({
         src: data.src,
         caption: data.caption || "",
-      });
+      }).returning({ id: campusGallery.id });
       serverCache.invalidate("campus_gallery_db");
-      return { success: true };
+      return { success: true, id: inserted[0].id };
     } catch (err) {
       console.error("Add campus gallery item failed:", err);
       throw new Error("Failed to add campus gallery item");

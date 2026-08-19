@@ -1148,6 +1148,16 @@ export const notices = pgTable("notices", {
   title: text("title").notNull(),
   url: text("url"),
   createdAt: timestamp("created_at").defaultNow(),
+
+  instagramPosted: boolean("instagram_posted").default(false).notNull(),
+  instagramPostId: text("instagram_post_id"),
+  instagramPostedAt: timestamp("instagram_posted_at"),
+  instagramError: text("instagram_error"),
+
+  linkedinPosted: boolean("linkedin_posted").default(false).notNull(),
+  linkedinPostId: text("linkedin_post_id"),
+  linkedinPostedAt: timestamp("linkedin_posted_at"),
+  linkedinError: text("linkedin_error"),
 });
 
 export const academicRegulations = pgTable("academic_regulations", {
@@ -1164,6 +1174,26 @@ export const campusGallery = pgTable("campus_gallery", {
   src: text("src").notNull(),
   caption: text("caption"),
   createdAt: timestamp("created_at").defaultNow(),
+
+  instagramPosted: boolean("instagram_posted").default(false).notNull(),
+  instagramPostId: text("instagram_post_id"),
+  instagramPostedAt: timestamp("instagram_posted_at"),
+  instagramError: text("instagram_error"),
+
+  linkedinPosted: boolean("linkedin_posted").default(false).notNull(),
+  linkedinPostId: text("linkedin_post_id"),
+  linkedinPostedAt: timestamp("linkedin_posted_at"),
+  linkedinError: text("linkedin_error"),
+});
+
+export const socialConnections = pgTable("social_connections", {
+  id: text("id").primaryKey(), // 'instagram' or 'linkedin'
+  accessToken: text("access_token").notNull(),
+  refreshToken: text("refresh_token"),
+  expiresAt: timestamp("expires_at"),
+  connectedAs: text("connected_as"),
+  metadata: jsonb("metadata").$type<{ memberId?: string; [key: string]: any }>(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // ======================================================
@@ -1497,6 +1527,19 @@ export const tickerNotifications = pgTable("ticker_notifications", {
   to: text("to").notNull(),
   urgent: boolean("urgent").default(false).notNull(),
   created_at: timestamp("created_at").defaultNow(),
+});
+
+export const socialPosts = pgTable("social_posts", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id"),
+  content: text("content").notNull(),
+  platform: text("platform").notNull(),
+  postId: text("post_id").notNull(),
+  postUrl: text("post_url"),
+  status: text("status").notNull(),
+  publishedAt: timestamp("published_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 

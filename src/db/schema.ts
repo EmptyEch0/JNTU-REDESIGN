@@ -1105,6 +1105,30 @@ export const departmentGallery = pgTable("department_gallery", {
   created_at: timestamp("created_at").defaultNow(),
 });
 
+export const departmentTimetables = pgTable(
+  "department_timetables",
+  {
+    id: serial("id").primaryKey(),
+    dept_id: uuid("dept_id")
+      .notNull()
+      .references(() => departments.id, { onDelete: "cascade" }),
+    level: varchar("level", { length: 2 }).notNull(), // 'UG' | 'PG'
+    program_name: text("program_name").notNull(),
+    year: text("year").notNull(),
+    semester: text("semester").notNull(),
+    section: text("section"),
+    academic_year: text("academic_year").notNull(),
+    title: text("title").notNull(),
+    image_url: text("image_url").notNull(),
+    sort_order: integer("sort_order").default(0),
+    created_at: timestamp("created_at").defaultNow(),
+    updated_at: timestamp("updated_at").defaultNow(),
+  },
+  (table) => ({
+    deptIdx: index("timetable_dept_idx").on(table.dept_id),
+    levelIdx: index("timetable_level_idx").on(table.level),
+  })
+);
 /* ===========================
    🌐 SCALABLE GENERIC SITE CONTENT
 =========================== */

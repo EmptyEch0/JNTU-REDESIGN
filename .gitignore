@@ -21,7 +21,7 @@ dist-ssr
 .dev.vars
 
 # Uploaded local assets (stored at project root, NOT committed to git)
-local-assets
+/local-assets
 
 # Editor directories and files
 .vscode/*

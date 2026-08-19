@@ -53,6 +53,7 @@ import { getDispensaryData } from "@/funcs/dispensary.server";
 import { getSportsData } from "@/funcs/sports.server";
 import { getJntugvGalleryImages } from "@/funcs/site.server";
 import { ImageWithLoader } from "@/components/ImageWithLoader";
+import { LatestUpdatesSection } from "@/components/LatestUpdatesSection";
 
 export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
@@ -719,6 +720,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* LATEST UPDATES & PRESS NOTES SECTION */}
+      <LatestUpdatesSection />
 
       {/* GALLERY TEASER — live images from JNTU-GV API */}
       <section className="py-20 md:py-28">

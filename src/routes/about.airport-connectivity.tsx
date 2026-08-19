@@ -57,10 +57,11 @@ const DEFAULTS = {
   heroTitle: "Airport Connectivity",
   heroSubtitle:
     "Strategically located near Alluri Sitarama Raju International Airport (Bhogapuram Airport) — connecting JNTU-GV with India and the world.",
+  introHeading: "First Technical Constituent College Near Bhogapuram Airport",
   introLead:
-    "JNTU-GV College of Engineering, Vizianagaram enjoys a strategic location approximately 36 km from Alluri Sitarama Raju International Airport (Bhogapuram Airport), the major new aviation gateway serving the North Andhra region.",
+    "JNTU-GV College of Engineering, Vizianagaram is an established constituent engineering institution of Jawaharlal Nehru Technological University–Gurajada Vizianagaram. With the opening of Alluri Sitarama Raju International Airport at Bhogapuram, approximately 36 km from the college, the institution now enjoys an enhanced connectivity advantage with a major international aviation gateway in the region.",
   introSub:
-    "The airport's proximity provides enhanced accessibility to the campus for students, faculty, researchers, industry professionals, parents, visitors and international guests.",
+    "The airport's new connectivity strengthens the accessibility of the college for students, faculty, researchers, industry professionals, parents, visitors and academic guests travelling from across India and beyond.",
   gatewayTitle: "A Gateway to JNTU-GV",
   gatewayContent:
     "With the development of Bhogapuram Airport, the region is gaining stronger connectivity with major cities and destinations across India and beyond. This creates new opportunities for academic collaboration, industry interaction, research partnerships, conferences and institutional visits.",
@@ -109,7 +110,8 @@ function AirportConnectivityPage() {
   const [editTexts, setEditTexts] = useState({
     heroTitle: heroRec?.title || DEFAULTS.heroTitle,
     heroSubtitle: heroRec?.content || DEFAULTS.heroSubtitle,
-    introLead: introRec?.title || DEFAULTS.introLead,
+    introHeading: (introRec?.meta as any)?.heading || (introRec?.title && introRec.title !== introRec.content ? introRec.title : DEFAULTS.introHeading),
+    introLead: (introRec?.meta as any)?.lead || (introRec?.title && introRec.title !== DEFAULTS.introHeading ? introRec.title : DEFAULTS.introLead),
     introSub: introRec?.content || DEFAULTS.introSub,
     gatewayTitle: gatewayRec?.title || DEFAULTS.gatewayTitle,
     gatewayContent: gatewayRec?.content || DEFAULTS.gatewayContent,
@@ -119,7 +121,8 @@ function AirportConnectivityPage() {
     setEditTexts({
       heroTitle: heroRec?.title || DEFAULTS.heroTitle,
       heroSubtitle: heroRec?.content || DEFAULTS.heroSubtitle,
-      introLead: introRec?.title || DEFAULTS.introLead,
+      introHeading: (introRec?.meta as any)?.heading || (introRec?.title && introRec.title !== introRec.content ? introRec.title : DEFAULTS.introHeading),
+      introLead: (introRec?.meta as any)?.lead || (introRec?.title && introRec.title !== DEFAULTS.introHeading ? introRec.title : DEFAULTS.introLead),
       introSub: introRec?.content || DEFAULTS.introSub,
       gatewayTitle: gatewayRec?.title || DEFAULTS.gatewayTitle,
       gatewayContent: gatewayRec?.content || DEFAULTS.gatewayContent,
@@ -143,8 +146,9 @@ function AirportConnectivityPage() {
           data: {
             page: "airport-connectivity",
             sectionKey: "intro",
-            title: editTexts.introLead,
+            title: editTexts.introHeading,
             content: editTexts.introSub,
+            meta: { heading: editTexts.introHeading, lead: editTexts.introLead },
           },
         });
       } else if (section === "gateway") {
@@ -220,14 +224,20 @@ function AirportConnectivityPage() {
                       <AdminSaveButton onClick={() => handleSaveSection("intro")} label="Save Intro" />
                     </AdminPanelHeader>
                     <div className="space-y-4">
-                      <AdminField label="Strategic Location Main Paragraph">
+                      <AdminField label="Intro Heading">
+                        <AdminInput
+                          value={editTexts.introHeading}
+                          onChange={(e) => setEditTexts({ ...editTexts, introHeading: e.target.value })}
+                        />
+                      </AdminField>
+                      <AdminField label="Constituent Institution & Location Paragraph">
                         <AdminTextarea
                           value={editTexts.introLead}
                           onChange={(e) => setEditTexts({ ...editTexts, introLead: e.target.value })}
                           rows={4}
                         />
                       </AdminField>
-                      <AdminField label="Accessibility Follow-up Paragraph">
+                      <AdminField label="Accessibility & Reach Paragraph">
                         <AdminTextarea
                           value={editTexts.introSub}
                           onChange={(e) => setEditTexts({ ...editTexts, introSub: e.target.value })}
@@ -239,7 +249,7 @@ function AirportConnectivityPage() {
                 ) : (
                   <>
                     <h2 className="text-display text-3xl sm:text-4xl lg:text-[2.75rem] leading-tight text-ink font-bold">
-                      Strategically Located Near Alluri Sitarama Raju International Airport
+                      {editTexts.introHeading}
                     </h2>
 
                     <p className="text-lg md:text-xl text-ink font-medium leading-relaxed">

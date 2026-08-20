@@ -110,9 +110,20 @@ export const Route = createFileRoute("/admin/")({
 
 function AdminPageRouter() {
   const { isAdmin } = useAdmin();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAdmin) {
+      navigate({ to: "/", replace: true });
+    }
+  }, [isAdmin, navigate]);
 
   if (isAdmin) {
-    return <AdminDashboard />;
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans text-slate-500">
+        <p className="text-xs font-semibold uppercase tracking-wider">Redirecting to Home...</p>
+      </div>
+    );
   }
 
   return <AdminLoginPage />;
@@ -180,7 +191,7 @@ function AdminLoginPage() {
     try {
       const success = await login(email, password);
       if (success) {
-        navigate({ to: "/admin" });
+        navigate({ to: "/" });
       }
     } catch (err: any) {
       setErrorMsg(err.message || "Invalid email or password");

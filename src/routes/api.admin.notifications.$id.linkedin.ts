@@ -100,7 +100,7 @@ async function getLinkedinAuthorUrn(accessToken: string, memberId: string): Prom
   return `urn:li:person:${memberId}`;
 }
 
-async function fetchWithTimeout(url: string, options: any, timeoutMs = 15000): Promise<Response> {
+async function fetchWithTimeout(url: string, options: any, timeoutMs = 60000): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
   
@@ -114,7 +114,7 @@ async function fetchWithTimeout(url: string, options: any, timeoutMs = 15000): P
   } catch (error: any) {
     clearTimeout(id);
     if (error.name === "AbortError") {
-      throw new Error("Request to LinkedIn timed out after 15 seconds.");
+      throw new Error(`Request to LinkedIn timed out after ${Math.round(timeoutMs / 1000)} seconds.`);
     }
     throw error;
   }
@@ -283,11 +283,10 @@ export const Route = createFileRoute("/api/admin/notifications/$id/linkedin")({
               const uploadRes = await fetchWithTimeout(uploadUrl, {
                 method: "PUT",
                 headers: {
-                  Authorization: `Bearer ${conn.accessToken}`,
                   "Content-Type": mimeType,
                 },
                 body: buffer,
-              });
+              }, 60000);
 
               if (!uploadRes.ok) {
                 const errText = await uploadRes.text();

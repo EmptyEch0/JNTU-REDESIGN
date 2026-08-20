@@ -18,6 +18,7 @@ import { getAssetUrl } from "@/lib/assets";
 interface SocialPublishingPanelProps {
   itemId: number;
   itemType: "notice" | "gallery";
+  defaultPlatform?: "instagram" | "linkedin" | "combined" | null;
   initialData: {
     title: string;
     tag?: string;
@@ -40,6 +41,7 @@ interface SocialPublishingPanelProps {
 export function SocialPublishingPanel({
   itemId,
   itemType,
+  defaultPlatform,
   initialData,
   onStatusUpdate
 }: SocialPublishingPanelProps) {
@@ -114,7 +116,10 @@ export function SocialPublishingPanel({
 
   useEffect(() => {
     fetchStatus();
-  }, [itemId]);
+    if (defaultPlatform) {
+      handleOpenPreview(defaultPlatform);
+    }
+  }, [itemId, defaultPlatform]);
 
   // Determine media assets
   const attachmentUrl = itemType === "notice" ? initialData.url : initialData.src;

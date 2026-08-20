@@ -477,46 +477,87 @@ export function LatestUpdatesSection() {
                         </Link>
                       </motion.div>
                     </AnimatePresence>
-                  ) : null}
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="relative z-10 h-full"
+                    >
+                      <div className="flex flex-col items-center justify-center text-center h-full min-h-[400px] sm:min-h-[440px] p-8 sm:p-10 rounded-[36px] bg-white border border-slate-200 shadow-[0_12px_40px_-15px_rgba(0,0,0,0.08)]">
+                        {/* College Logo */}
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-slate-50 border border-slate-200/90 p-3 shadow-xs flex items-center justify-center mb-5">
+                          <img
+                            src="/logo-circle.png"
+                            alt="JNTU-GV University Emblem"
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+
+                        <span className="px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200/60 text-blue-900 font-bold text-[10px] uppercase tracking-widest mb-3">
+                          OFFICIAL PRESS RELEASE
+                        </span>
+
+                        <h3 className="text-xl sm:text-2xl font-bold font-display text-ink tracking-tight">
+                          No updates till now
+                        </h3>
+
+                        <p className="text-xs sm:text-sm text-muted-foreground mt-2 max-w-xs leading-relaxed">
+                          Official press releases, employment notifications, and university circulars will appear here once issued.
+                        </p>
+
+                        {isEditMode && (
+                          <button
+                            type="button"
+                            onClick={() => setShowAddNoteModal(true)}
+                            className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-amber-950 font-bold text-xs uppercase tracking-wider shadow-sm transition cursor-pointer"
+                          >
+                            <Plus size={14} /> Add Press Note
+                          </button>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
               </div>
 
-              {/* Centered Carousel Navigation Controls matching Image 2 */}
-              <div className="mt-6 flex items-center justify-center gap-3">
-                <button
-                  type="button"
-                  onClick={handlePrevNote}
-                  aria-label="Previous Press Note"
-                  className="h-10 w-10 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center text-ink hover:bg-slate-50 hover:text-primary active:scale-90 transition-all cursor-pointer"
-                  title="Previous Slide"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </button>
+              {/* Centered Carousel Navigation Controls */}
+              {pressNotes.length > 1 && (
+                <div className="mt-6 flex items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={handlePrevNote}
+                    aria-label="Previous Press Note"
+                    className="h-10 w-10 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center text-ink hover:bg-slate-50 hover:text-primary active:scale-90 transition-all cursor-pointer"
+                    title="Previous Slide"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
 
-                <div className="flex items-center gap-2 px-1">
-                  {pressNotes.map((_, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => handleSelectNote(idx)}
-                      aria-label={`Go to slide ${idx + 1}`}
-                      className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                        activeNoteIndex === idx ? "w-6 bg-blue-600" : "w-2.5 bg-blue-200 hover:bg-blue-300"
-                      }`}
-                    />
-                  ))}
+                  <div className="flex items-center gap-2 px-1">
+                    {pressNotes.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleSelectNote(idx)}
+                        aria-label={`Go to slide ${idx + 1}`}
+                        className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                          activeNoteIndex === idx ? "w-6 bg-blue-600" : "w-2.5 bg-blue-200 hover:bg-blue-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleNextNote}
+                    aria-label="Next Press Note"
+                    className="h-10 w-10 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center text-ink hover:bg-slate-50 hover:text-primary active:scale-90 transition-all cursor-pointer"
+                    title="Next Slide"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={handleNextNote}
-                  aria-label="Next Press Note"
-                  className="h-10 w-10 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center text-ink hover:bg-slate-50 hover:text-primary active:scale-90 transition-all cursor-pointer"
-                  title="Next Slide"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
+              )}
             </RevealOnScroll>
           </div>
 

@@ -25,6 +25,8 @@ const Chatbot = lazy(() =>
   import("@/components/Chatbot").then((m) => ({ default: m.Chatbot }))
 );
 
+import { Toaster } from "@/components/ui/sonner";
+import { ActionFeedbackOverlay } from "@/components/ActionFeedbackOverlay";
 import { NotFound } from "@/components/NotFound";
 
 function NotFoundComponent() {
@@ -135,10 +137,12 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AdminProvider>
         <FacultyProvider>
-        <PageProgressBar />
-        <OfflineIndicator />
-        <AdminContent />
-      </FacultyProvider>
+          <PageProgressBar />
+          <OfflineIndicator />
+          <AdminContent />
+          <Toaster richColors position="top-right" />
+          <ActionFeedbackOverlay />
+        </FacultyProvider>
       </AdminProvider>
     </QueryClientProvider>
   );

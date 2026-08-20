@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { db } from "@/db";
 import { sql } from "drizzle-orm";
-import dotenv from "dotenv";
-dotenv.config({ override: true });
 
 export const Route = createFileRoute("/api/admin/social/health")({
   server: {

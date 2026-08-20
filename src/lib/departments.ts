@@ -204,6 +204,8 @@ export const addFaculty = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
     await db.insert(faculty).values(data);
+    invalidateDeptCache();
+    serverCache.invalidate("faculty_all");
     return { success: true };
   });
 
@@ -212,6 +214,8 @@ export const deleteFaculty = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const id = typeof data === "number" ? data : (data as any)?.id;
     await db.delete(faculty).where(eq(faculty.id, id));
+    invalidateDeptCache();
+    serverCache.invalidate("faculty_all");
     return { success: true };
   });
 
@@ -228,6 +232,7 @@ export const addLaboratory = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
     await db.insert(laboratories).values(data);
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -236,6 +241,7 @@ export const deleteLaboratory = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const id = typeof data === "number" ? data : (data as any)?.id;
     await db.delete(laboratories).where(eq(laboratories.id, id));
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -251,6 +257,7 @@ export const addAchievement = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
   .handler(async ({ data }) => {
     await db.insert(achievements).values(data);
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -273,6 +280,7 @@ export const addCourse = createServerFn({ method: "POST" })
       regulation,
       syllabus_url
     });
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -281,6 +289,7 @@ export const deleteCourse = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const id = typeof data === "number" ? data : (data as any)?.id;
     await db.delete(courses).where(eq(courses.id, id));
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -303,6 +312,7 @@ export const addToGallery = createServerFn({ method: "POST" })
       category: category || "General",
       description
     });
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -311,6 +321,7 @@ export const deleteFromGallery = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const id = typeof data === "string" ? data : (data as any)?.id;
     await db.delete(departmentGallery).where(eq(departmentGallery.id, id));
+    invalidateDeptCache();
     return { success: true };
   });
 
@@ -338,6 +349,9 @@ export const updateFacultyProfile = createServerFn({ method: "POST" })
         conferences_attended: profileData.conferences_attended,
       })
       .where(eq(faculty.id, Number(facultyId)));
+
+    invalidateDeptCache();
+    serverCache.invalidate("faculty_all");
 
     return { success: true };
   });

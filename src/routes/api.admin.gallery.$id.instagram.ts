@@ -2,8 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { db } from "@/db";
 import { campusGallery, socialConnections } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import dotenv from "dotenv";
-dotenv.config({ override: true });
 
 function getPublicUrl(pathStr: string): string {
   if (!pathStr) return "";

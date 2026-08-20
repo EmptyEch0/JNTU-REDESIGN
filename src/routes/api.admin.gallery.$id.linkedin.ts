@@ -2,8 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { db } from "@/db";
 import { campusGallery, socialConnections, socialPosts } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
-import dotenv from "dotenv";
-dotenv.config({ override: true });
 import fs from "fs";
 import path from "path";
 

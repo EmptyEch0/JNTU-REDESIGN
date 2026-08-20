@@ -35,48 +35,8 @@ export interface VideoItem {
   isCustom?: boolean;
 }
 
-// ── Default Real University Press Notes ──
-export const PRESS_NOTES: PressNote[] = [
-  {
-    id: "press-note-1",
-    slug: "jntugv-revised-corrigendum-extension-final-list-candidates-2026",
-    category: "PRESS NOTE",
-    title:
-      "JNTUGV_Revised_Corrigendum Extension of Final List of Eligibile and Ineligible Candidates Dates_3-8-2026 - 19-08-2026-Reg",
-    homepageDisplayDate: "19 AUG 2026",
-    publishedAt: "03/08/2026 21:13",
-    documentDate: "03/08/2026",
-    revisedDate: "19/08/2026",
-    status: "Published",
-    excerpt:
-      "Corrigendum to the Employment Notifications regarding extension of the timeline for declaration/display of the final list of prima-facie eligible and ineligible candidates. The revised date is 19-08-2026.",
-    documentUrl:
-      "https://api.jntugv.edu.in/press-notes/documents/1786074455831-05bc18e5-e0f6-482a-953c-297bcc9ce150.docx",
-    documentName:
-      "JNTUGV_Revised_Corrigendum Extension of Final List of Eligibile and Ineligible Candidates Dates_3-8-2026 - 19-08-2026-Reg.docx",
-    heading: "EXTENSION OF TIMELINES",
-    subject:
-      "Employment Notifications – Extension of timeline for declaration of the final list of prima-facie eligible and ineligible candidates – Regarding.",
-    references: [
-      "Recruitment Notification for Assistant Professor for SC & BC Backlog Vacancies (Notification No.1/JNTU-GV/Asst.Prof./SC&BC Backlog/2026 Dt.15.05.2026)",
-      "Recruitment Notification for Assistant Professor for Regular Vacancies (Notification No.2/JNTU-GV/Asst.Prof./Regular/2026 Dt.15.05.2026)",
-      "Limited Recruitment Notification for Associate Professor for SC & BC Backlog Vacancies (Notification No.3/JNTU-GV/Assoc.Prof./SC&BC Backlog/2026 Dt.15.05.2026)",
-      "Recruitment Notification for Associate Professor and Professor Regular Vacancies (Notification No.4/JNTU-GV/Assoc.Prof. & Professor/Regular/2026 Dt.15.05.2026)",
-    ],
-    schedule: [
-      {
-        activity:
-          "Declaration/display of the final list of prima facie eligible and ineligible candidates",
-        existingDate: "03-08-2026",
-        revisedDate: "19-08-2026",
-      },
-    ],
-    notes: [
-      "All other terms and conditions contained in the original Notifications and Corrigendum shall remain unchanged.",
-    ],
-    signedBy: "Sd/-\nRegistrar",
-  },
-];
+// ── Default Real University Press Notes (Empty until published) ──
+export const PRESS_NOTES: PressNote[] = [];
 
 // ── Official Supplied Videos Dataset ──
 export const VIDEOS: VideoItem[] = [

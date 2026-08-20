@@ -114,8 +114,14 @@ export const updatePageSection = createServerFn({
 export const getNotices = createServerFn({
   method: "GET",
 }).handler(async () => {
+  const cacheKey = "notices_all";
+  const cached = serverCache.get<any[]>(cacheKey);
+  if (cached) return cached;
+
   try {
-    return await db.select().from(notices).orderBy(desc(notices.id));
+    const results = await db.select().from(notices).orderBy(desc(notices.id));
+    serverCache.set(cacheKey, results, 15 * 60 * 1000); // 15 mins
+    return results;
   } catch {
     return [];
   }
@@ -140,6 +146,8 @@ export const addNotice = createServerFn({
         .returning({ id: notices.id });
 
       const noticeId = inserted[0].id;
+      serverCache.invalidate("notices_all");
+
       const chunkSource = `notice:${noticeId}`;
       const chunkText = `Notice: ${data.title}. Category: ${data.tag}. Date: ${data.date}`;
       ingestSingleChunk(chunkText, chunkSource, "notice", { date: data.date, tag: data.tag }).catch(
@@ -160,6 +168,7 @@ export const deleteNotice = createServerFn({
   .handler(async ({ data }) => {
     try {
       await db.delete(notices).where(eq(notices.id, data.id));
+      serverCache.invalidate("notices_all");
       await deleteSingleChunk(`notice:${data.id}`);
       return { success: true };
     } catch (err) {
@@ -389,7 +398,7 @@ export const getJntugvGalleryImages = createServerFn({
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2500); // 2.5s fast timeout
+    const timeoutId = setTimeout(() => controller.abort(), 800); // 800ms fast timeout
     const res = await fetch(
       "https://api.jntugv.edu.in/api/webadmin/dmc/getgallery",
       { signal: controller.signal } as any,
@@ -404,12 +413,12 @@ export const getJntugvGalleryImages = createServerFn({
             img.carousel_scrolling === "yes",
         );
         const combined = [...featuredItems, ...filtered];
-        serverCache.set("jntugv_gallery_external", combined, 30 * 60 * 1000);
+        serverCache.set("jntugv_gallery_external", combined, 60 * 60 * 1000); // 1 hour
         return combined;
       }
     }
-  } catch (err) {
-    console.warn("Using local fallback gallery data due to API fetch error");
+  } catch {
+    // Graceful fallback to bundled high-speed gallery dataset
   }
 
   const fallback = jntugvGalleryData as JntugvGalleryItem[];
@@ -418,6 +427,7 @@ export const getJntugvGalleryImages = createServerFn({
       img.admin_approval === "accepted" &&
       (img.carousel_scrolling === "yes" || img.gallery_scrolling === "yes"),
   );
-  serverCache.set("jntugv_gallery_external", filtered, 30 * 60 * 1000);
-  return filtered;
+  const combined = [...featuredItems, ...filtered];
+  serverCache.set("jntugv_gallery_external", combined, 60 * 60 * 1000);
+  return combined;
 });

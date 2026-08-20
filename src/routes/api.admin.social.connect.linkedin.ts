@@ -1,6 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import dotenv from "dotenv";
-dotenv.config({ override: true });
 
 export const Route = createFileRoute("/api/admin/social/connect/linkedin")({
   server: {

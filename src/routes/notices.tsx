@@ -58,6 +58,8 @@ const CATEGORY_META: Record<string, { icon: any; color: string; bg: string; bord
   General: { icon: Bell, color: "text-slate-600", bg: "bg-slate-50/70", border: "border-slate-100" },
 };
 
+import { matchNoticeCategory } from "@/components/HomeNotificationsSection";
+
 function NoticesPage() {
   const sortedNotices = Route.useLoaderData() as any[];
   const [activeCategory, setActiveCategory] = useState("All");
@@ -66,13 +68,13 @@ function NoticesPage() {
 
   // Search and Category filtering
   const filteredNotices = useMemo(() => {
-    return sortedNotices.filter((n) => {
-      const matchesCat = activeCategory === "All" || n.tag === activeCategory;
+    return (sortedNotices || []).filter((n) => {
+      const matchesCat = matchNoticeCategory(n.tag, activeCategory);
       const query = searchQuery.trim().toLowerCase();
       const matchesSearch =
         !query ||
-        n.title.toLowerCase().includes(query) ||
-        n.tag.toLowerCase().includes(query) ||
+        (n.title && n.title.toLowerCase().includes(query)) ||
+        (n.tag && n.tag.toLowerCase().includes(query)) ||
         (n.date && n.date.toLowerCase().includes(query));
 
       return matchesCat && matchesSearch;

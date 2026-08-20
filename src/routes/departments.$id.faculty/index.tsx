@@ -1,4 +1,4 @@
-import { createFileRoute, useLoaderData, Link, useParams } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, Link, useParams, useRouter } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
 import { updateDepartment, syncFaculty } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext"; 
@@ -105,14 +105,15 @@ loading="lazy"
 
 function FacultyPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-const queryClient = useQueryClient();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
-// Extract the parent route parameter ($id) cleanly
-const { id: deptId } = useParams({ from: "/departments/$id/faculty/" });
+  // Extract the parent route parameter ($id) cleanly
+  const { id: deptId } = useParams({ from: "/departments/$id/faculty/" });
 
-// Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
-const { isDeptEditing } = useAdmin();
-const isEditMode = isDeptEditing(deptId || "");
+  // Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const { isDeptEditing } = useAdmin();
+  const isEditMode = isDeptEditing(deptId || "");
 
   const [facultyList, setFacultyList] = useState(data?.faculty || []);
 
@@ -123,11 +124,12 @@ const isEditMode = isDeptEditing(deptId || "");
   const mutation = useMutation({
     mutationFn: (newList: any[]) => 
       syncFaculty({ data: { deptId: data.id, facultyList: newList } }),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["departments"] });
+      await router.invalidate();
       toast.success("Faculty roster saved successfully!");
     },
-    onError: () => toast.error("Failed to save changes.")
+    onError: (err: any) => toast.error(err?.message || "Failed to save changes.")
   });
 
   const handleUpdate = (id: string, field: string, value: string) => {
@@ -156,8 +158,22 @@ const isEditMode = isDeptEditing(deptId || "");
             <button onClick={addFaculty} className="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors">
               <UserPlus size={18} /> Add
             </button>
-            <button onClick={() => mutation.mutate(facultyList)} className="flex items-center gap-2 bg-amber-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-amber-700 transition-colors shadow-sm">
-              <Save size={18} /> Save Roster
+            <button 
+              onClick={() => mutation.mutate(facultyList)} 
+              disabled={mutation.isPending}
+              className="flex items-center gap-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-60 text-white px-4 py-2 rounded-xl font-bold text-sm transition-colors shadow-sm cursor-pointer disabled:cursor-not-allowed"
+            >
+              {mutation.isPending ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <Save size={18} />
+                  <span>Save Roster</span>
+                </>
+              )}
             </button>
           </div>
         )}

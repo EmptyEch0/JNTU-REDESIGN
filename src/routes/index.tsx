@@ -51,13 +51,18 @@ import { getHostelData } from "@/funcs/hostel.server";
 import { getLibraryData } from "@/funcs/library.server";
 import { getDispensaryData } from "@/funcs/dispensary.server";
 import { getSportsData } from "@/funcs/sports.server";
-import { getJntugvGalleryImages } from "@/funcs/site.server";
+import { getJntugvGalleryImages, getNotices } from "@/funcs/site.server";
 import { ImageWithLoader } from "@/components/ImageWithLoader";
 import { LatestUpdatesSection } from "@/components/LatestUpdatesSection";
+import { HomeNotificationsSection } from "@/components/HomeNotificationsSection";
 
 export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
     await Promise.allSettled([
+      context.queryClient.ensureQueryData({
+        queryKey: ["notices", "all"],
+        queryFn: () => getNotices(),
+      }),
       context.queryClient.ensureQueryData({
         queryKey: ["leadership", "principal"],
         queryFn: () => getLeadershipData({ data: "principal" }),
@@ -494,8 +499,11 @@ function HomePage() {
         </div>
       </section>
 
-{/* DEPARTMENTS — Optimized with lazy loading */}
-<section className="py-24 md:py-32 bg-sand">
+      {/* LATEST CAMPUS NOTICES & CIRCULARS WITH CATEGORY FILTER TABS */}
+      <HomeNotificationsSection />
+
+      {/* DEPARTMENTS — Optimized with lazy loading */}
+      <section className="py-24 md:py-32 bg-sand">
   <div className="container-narrow">
     <RevealOnScroll>
       <SectionLabel

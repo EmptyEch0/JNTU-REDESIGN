@@ -1,4 +1,4 @@
-import { createFileRoute, useLoaderData, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
@@ -26,21 +26,21 @@ interface ConsultancyProject {
 
 function FacultyDetailProfilePage() {
   const navigate = useNavigate();
+  const router = useRouter();
   const { logout } = useFaculty();
   const { id: deptId, facultyId } = Route.useParams();
-const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
-const queryClient = useQueryClient();
+  const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
+  const queryClient = useQueryClient();
 
-// Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
-const { isDeptEditing } = useAdmin();
-const { isOwnProfile } = useFaculty();
-
+  // Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
+  const { isDeptEditing } = useAdmin();
+  const { isOwnProfile } = useFaculty();
 
   const facultyRaw = data?.faculty?.find((f: any) => String(f.id) === String(facultyId));
   const isDeptLevelEdit = isDeptEditing(deptId || ""); // admin/HOD
-const isFacultySelfEdit = isOwnProfile(facultyId);    // the faculty member themself
+  const isFacultySelfEdit = isOwnProfile(facultyId);    // the faculty member themself
 
-const isEditMode = isDeptLevelEdit || isFacultySelfEdit;
+  const isEditMode = isDeptLevelEdit || isFacultySelfEdit;
   const [activeTab, setActiveTab] = useState<string>("profile");
   
   // Local reactive edit state mapping
@@ -71,12 +71,13 @@ const isEditMode = isDeptLevelEdit || isFacultySelfEdit;
 
   const mutation = useMutation({
     mutationFn: (payload: any) => updateFacultyProfile({ data: { facultyId, profileData: payload } }),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["departments"] });
+      await router.invalidate();
       toast.success("Faculty profile modifications updated successfully!");
     },
-    onError: () => {
-      toast.error("Failed to commit database changes execution.");
+    onError: (err: any) => {
+      toast.error(err?.message || "Failed to commit database changes execution.");
     }
   });
 
@@ -158,9 +159,20 @@ const isEditMode = isDeptLevelEdit || isFacultySelfEdit;
         {isEditMode && (
           <button 
             onClick={() => mutation.mutate(editState)}
-            className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-full font-bold text-xs hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all"
+            disabled={mutation.isPending}
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white px-6 py-2.5 rounded-full font-bold text-xs shadow-lg shadow-indigo-100 transition-all cursor-pointer disabled:cursor-not-allowed"
           >
-            <Save size={14} /> Save Profile Changes
+            {mutation.isPending ? (
+              <>
+                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>Saving Changes...</span>
+              </>
+            ) : (
+              <>
+                <Save size={14} />
+                <span>Save Profile Changes</span>
+              </>
+            )}
           </button>
         )}
       </div>

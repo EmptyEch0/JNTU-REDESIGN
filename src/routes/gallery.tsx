@@ -114,8 +114,9 @@ function GalleryPage() {
     setUploading(true);
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("module", "campus_gallery");
-    formData.append("category", "photos");
+    formData.append("module", "gallery");
+    formData.append("category", "campus");
+    if (newImage.caption) formData.append("name", newImage.caption);
 
     const tId = toast.loading(`Uploading photo ${file.name}...`);
     try {
@@ -125,7 +126,7 @@ function GalleryPage() {
       });
       const json = await res.json();
       if (json.success) {
-        const assetUrl = `http://89.116.134.182/${json.path}`;
+        const assetUrl = json.path;
         setNewImage((prev) => ({ ...prev, src: assetUrl }));
         toast.success(`Photo uploaded successfully!`, { id: tId });
       } else {

@@ -206,6 +206,8 @@ function AdminDepartmentsPage() {
                     onChange={(newUrl) => setHodForm({ ...hodForm, hod_photo: newUrl })}
                     module="departments"
                     category="hod"
+                    dept={currentDept?.slug || selectedDeptId}
+                    name={hodForm.hod}
                     placeholder="Upload HOD Photo"
                   />
                 </div>
@@ -233,6 +235,8 @@ function AdminDepartmentsPage() {
                         onChange={(newUrl) => setFacultyForm({ ...facultyForm, photo_url: newUrl })}
                         module="departments"
                         category="faculty"
+                        dept={currentDept?.slug || selectedDeptId}
+                        name={facultyForm.name}
                         placeholder="Drag & drop or click to upload faculty photo"
                       />
                     </div>
@@ -279,6 +283,8 @@ function AdminDepartmentsPage() {
                         onChange={(newUrl) => setLabForm({ ...labForm, photo_url: newUrl })}
                         module="departments"
                         category="labs"
+                        dept={currentDept?.slug || selectedDeptId}
+                        name={labForm.name}
                         placeholder="Upload Lab Photo"
                       />
                     </div>
@@ -343,6 +349,8 @@ function AdminDepartmentsPage() {
                       onChange={(newUrl) => setGalleryForm({ ...galleryForm, image_url: newUrl })}
                       module="departments"
                       category="gallery"
+                      dept={currentDept?.slug || selectedDeptId}
+                      name={galleryForm.title}
                       placeholder="Upload gallery image"
                     />
                     <button className="w-full bg-primary text-white p-3 rounded-xl font-bold">Upload Image</button>

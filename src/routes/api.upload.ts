@@ -10,8 +10,11 @@ export const Route = createFileRoute("/api/upload")({
         try {
           const formData = await request.formData();
           const file = formData.get("file") as File | null;
-          const module = formData.get("module") as string | null;
-          const category = formData.get("category") as string | null;
+          const module = (formData.get("module") as string | null)?.toLowerCase().trim();
+          const category = (formData.get("category") as string | null)?.toLowerCase().trim();
+          const dept = (formData.get("dept") as string | null)?.toLowerCase().trim();
+          const name = (formData.get("name") as string | null)?.trim();
+          const subfolder = (formData.get("subfolder") as string | null)?.trim();
 
           // 1. Basic field existence checks
           if (!file) {
@@ -21,24 +24,25 @@ export const Route = createFileRoute("/api/upload")({
             );
           }
 
-          const mod = (module || "notices").toLowerCase();
-          const cat = (category || "date").toLowerCase();
-
           // 2. File type validation
-          // Allowed: JPEG, JPG, PNG, WEBP, PDF
+          // Allowed: JPEG, JPG, PNG, WEBP, SVG, PDF
           const allowedMimeTypes = [
             "image/jpeg",
             "image/jpg",
             "image/png",
             "image/webp",
+            "image/svg+xml",
             "application/pdf",
           ];
           
-          if (!allowedMimeTypes.includes(file.type.toLowerCase()) && !file.name.toLowerCase().endsWith(".pdf")) {
+          const fileExtension = path.extname(file.name).toLowerCase();
+          const isPdf = fileExtension === ".pdf" || file.type === "application/pdf";
+          
+          if (!allowedMimeTypes.includes(file.type.toLowerCase()) && !isPdf) {
             return Response.json(
               { 
                 success: false, 
-                error: `Invalid file type. Allowed formats: JPEG, PNG, WEBP, PDF. Received: ${file.type}` 
+                error: `Invalid file type. Allowed formats: JPEG, PNG, WEBP, SVG, PDF. Received: ${file.type}` 
               },
               { status: 400 }
             );
@@ -54,50 +58,100 @@ export const Route = createFileRoute("/api/upload")({
           }
 
           // 4. Filename sanitization & Generation
-          // Format: timestamp-random-originalname.ext
+          // Format: {sanitized-name}-{timestamp}-{random}.ext
           const timestamp = Math.floor(Date.now() / 1000);
-          const randomHex = crypto.randomBytes(4).toString("hex");
+          const randomHex = crypto.randomBytes(3).toString("hex");
           
-          // Extract extension and clean base name
-          const fileExtension = path.extname(file.name).toLowerCase();
-          const baseName = path.basename(file.name, fileExtension);
-          
-          // Sanitize basename to alphanumeric, dashes and underscores
-          const sanitizedBase = baseName
-            .replace(/[^a-zA-Z0-9.-]/g, "_")
-            .replace(/_{2,}/g, "_");
+          let sanitizedName = "";
+          if (name) {
+            sanitizedName = name
+              .toLowerCase()
+              .replace(/[^a-zA-Z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, "");
+          }
 
-          const filename = `${timestamp}-${randomHex}-${sanitizedBase}${fileExtension}`;
+          if (!sanitizedName) {
+            const baseName = path.basename(file.name, fileExtension);
+            sanitizedName = baseName
+              .toLowerCase()
+              .replace(/[^a-zA-Z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, "");
+          }
 
-          // 5. Dynamic Year/Month folder calculation for notices/documents
-          // e.g. 2026/07, 2026/08, 2027/01
+          // Ensure sanitizedName is not empty
+          if (!sanitizedName) {
+            sanitizedName = "file";
+          }
+
+          const filename = `${sanitizedName}-${timestamp}-${randomHex}${fileExtension}`;
+
+          // 5. Organized Folder Structure Calculation
           const now = new Date();
           const year = now.getFullYear().toString();
           const month = String(now.getMonth() + 1).padStart(2, "0");
 
           let relativeFolder = "";
-          if (
-            mod === "notices" ||
-            mod === "documents" ||
-            mod === "date" ||
-            mod === "uploads" ||
-            mod === "general" ||
-            cat === "date" ||
-            fileExtension === ".pdf" ||
-            !mod
-          ) {
-            relativeFolder = `${year}/${month}`;
-          } else if (mod === "engineering") {
-            relativeFolder = `facilities/engineering-cell/${year}/${month}`;
-          } else if (mod === "clubs") {
-            relativeFolder = `facilities/clubs/${year}/${month}`;
-          } else if (mod === "amenities") {
-            relativeFolder = `facilities/amenities/${year}/${month}`;
-          } else if (cat && cat !== "date" && cat !== "general") {
-            relativeFolder = `${mod}/${cat}/${year}/${month}`;
-          } else {
-            relativeFolder = `${mod}/${year}/${month}`;
+          const mod = module || "general";
+          const cat = category || "general";
+
+          // Department-scoped uploads (Faculty, HOD, Timetables, Labs, Gallery, Banners)
+          if (dept || mod === "departments") {
+            const targetDept = dept || (mod === "departments" && cat !== "general" && cat !== "date" ? cat : "general");
+            
+            if (cat === "faculty" || mod === "faculty") {
+              relativeFolder = `departments/${targetDept}/faculty`;
+            } else if (cat === "timetables" || cat === "timetable" || mod === "timetables") {
+              relativeFolder = `departments/${targetDept}/timetables`;
+            } else if (cat === "hod") {
+              relativeFolder = `departments/${targetDept}/hod`;
+            } else if (cat === "labs" || cat === "lab") {
+              relativeFolder = `departments/${targetDept}/labs`;
+            } else if (cat === "gallery") {
+              relativeFolder = `departments/${targetDept}/gallery`;
+            } else if (cat === "banners" || cat === "banner") {
+              relativeFolder = `departments/${targetDept}/banners`;
+            } else if (cat && cat !== "general" && cat !== "date") {
+              relativeFolder = `departments/${targetDept}/${cat}`;
+            } else {
+              relativeFolder = `departments/${targetDept}`;
+            }
           }
+          // Global Faculty uploads
+          else if (mod === "faculty" || cat === "faculty") {
+            relativeFolder = `faculty`;
+          }
+          // Global / Institutional Timetables
+          else if (mod === "timetables" || cat === "timetables" || cat === "timetable") {
+            relativeFolder = `timetables/${year}`;
+          }
+          // Notices and Circulars
+          else if (mod === "notices" || mod === "circulars" || cat === "notices" || cat === "circulars") {
+            relativeFolder = `notices/${year}/${month}`;
+          }
+          // University / Campus Gallery
+          else if (mod === "gallery") {
+            relativeFolder = `gallery/${cat || "campus"}`;
+          }
+          // Logos & Institutional Branding
+          else if (mod === "branding" || mod === "logo" || mod === "settings" || cat === "logo" || cat === "branding") {
+            relativeFolder = `branding`;
+          }
+          // Campus Facilities & Units (Dispensary, Hostels, Sports, Library, Bank, Amenities, Clubs, Engineering Cell)
+          else if (mod === "facilities" || mod === "amenities" || mod === "clubs" || mod === "engineering" || mod === "dispensary" || mod === "hostels" || mod === "sports" || mod === "library") {
+            const facilityName = cat !== "general" && cat !== "date" ? cat : mod;
+            relativeFolder = `facilities/${facilityName}`;
+          }
+          // Custom subfolder if explicitly provided
+          else if (subfolder) {
+            relativeFolder = subfolder.replace(/^\/+|\/+$/g, "");
+          }
+          // Default fallback organized by module and date
+          else {
+            relativeFolder = `${mod}/${cat !== "general" && cat !== "date" ? `${cat}/` : ""}${year}/${month}`;
+          }
+
+          // Clean up any double slashes
+          relativeFolder = relativeFolder.replace(/\/{2,}/g, "/");
 
           const baseDir = path.join(process.cwd(), "local-assets", "uploads");
           const targetDir = path.join(baseDir, relativeFolder);
@@ -113,12 +167,13 @@ export const Route = createFileRoute("/api/upload")({
           const buffer = Buffer.from(arrayBuffer);
           fs.writeFileSync(targetFilePath, buffer);
 
-          // 6. Return relative DB path: local-assets/uploads/YYYY/MM/filename.ext
+          // 6. Return relative DB path: local-assets/uploads/...
           const relativeDbPath = `local-assets/uploads/${relativeFolder}/${filename}`;
 
           return Response.json({
             success: true,
             path: relativeDbPath,
+            url: `/${relativeDbPath}`,
           });
         } catch (error: any) {
           console.error("API Upload error:", error);

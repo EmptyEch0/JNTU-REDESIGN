@@ -28,6 +28,7 @@ const Chatbot = lazy(() =>
 import { Toaster } from "@/components/ui/sonner";
 import { ActionFeedbackOverlay } from "@/components/ActionFeedbackOverlay";
 import { NotFound } from "@/components/NotFound";
+import { PushNotificationBanner } from "@/components/PushNotificationBanner";
 
 function NotFoundComponent() {
   return <NotFound />;
@@ -140,6 +141,7 @@ function RootComponent() {
           <PageProgressBar />
           <OfflineIndicator />
           <AdminContent />
+          <PushNotificationBanner />
           <Toaster richColors position="top-right" />
           <ActionFeedbackOverlay />
         </FacultyProvider>

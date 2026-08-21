@@ -15,6 +15,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { toast } from "sonner";
+import { PushNotificationToggle } from "./PushNotificationBanner";
 
 export function TopRibbon() {
   const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -54,7 +55,7 @@ export function TopRibbon() {
     <>
       <div className="w-full bg-[#0B254E] text-white/90 text-[10px] sm:text-[10.5px] font-medium border-b border-blue-900/50 shadow-inner relative z-50 select-none">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 h-6.5 sm:h-7 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
-          {/* Left: Social Media Icons */}
+          {/* Left: Social Media Icons & Push Toggle */}
           <div className="flex items-center gap-2 shrink-0 pl-0.5">
             <a
               href="https://facebook.com"
@@ -80,6 +81,9 @@ export function TopRibbon() {
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 24.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
             </a>
+            <div className="ml-1.5 hidden xs:block">
+              <PushNotificationToggle />
+            </div>
           </div>
 
           {/* Right: Quick Links matching Ribbon */}

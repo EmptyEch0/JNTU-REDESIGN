@@ -26,6 +26,7 @@ import { STUDENT_SUBNAV } from "@/lib/site";
 import { useState, useMemo } from "react";
 import { getNotices } from "@/funcs/site.server";
 import { getAssetUrl } from "@/lib/assets";
+import { NoticesPushBanner } from "@/components/PushNotificationBanner";
 
 export const Route = createFileRoute("/notices")({
   loader: async () => await getNotices(),
@@ -108,6 +109,9 @@ function NoticesPage() {
       <SubNav items={STUDENT_SUBNAV} />
 
       <main className="py-12 md:py-16 container-narrow">
+        {/* Instant Web Push Notification Callout */}
+        <NoticesPushBanner />
+
         {/* Search & Category Filter Toolbar */}
         <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm mb-8 space-y-5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">

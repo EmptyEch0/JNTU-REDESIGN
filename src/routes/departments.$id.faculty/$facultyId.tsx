@@ -230,6 +230,8 @@ function FacultyDetailProfilePage() {
                   onChange={(newUrl) => setEditState({ ...editState, photo_url: newUrl })}
                   module="departments"
                   category="faculty"
+                  dept={deptId}
+                  name={editState.name || facultyRaw.name}
                   placeholder="Drag & drop or click to upload faculty photo"
                   className="w-full"
                 />

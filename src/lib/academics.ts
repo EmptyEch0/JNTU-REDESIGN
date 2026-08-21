@@ -738,6 +738,17 @@ export const upsertTickerNotification = createServerFn({ method: "POST" })
         to: data.to,
         urgent: data.urgent
       }).where(eq(tickerNotifications.id, data.id));
+
+      // Push notification for updated ticker
+      import("@/funcs/push.server").then(({ sendPushToAllSubscribers }) => {
+        sendPushToAllSubscribers({
+          title: `🔔 Update: ${data.label || "College Announcement"}`,
+          body: data.text || "An announcement has been updated.",
+          url: data.to || "/notices",
+          tag: `ticker-${data.id}`,
+        }).catch((err) => console.error("Push notification broadcast error on ticker update:", err));
+      }).catch(() => {});
+
       return { success: true };
     } else {
       await db.insert(tickerNotifications).values({
@@ -748,6 +759,17 @@ export const upsertTickerNotification = createServerFn({ method: "POST" })
         to: data.to,
         urgent: data.urgent
       });
+
+      // Push notification for new ticker
+      import("@/funcs/push.server").then(({ sendPushToAllSubscribers }) => {
+        sendPushToAllSubscribers({
+          title: `📢 Announcement: ${data.label || "New Announcement"}`,
+          body: data.text || "A new update has been posted to JNTU-GV CEV.",
+          url: data.to || "/notices",
+          tag: `ticker-new-${Date.now()}`,
+        }).catch((err) => console.error("Push notification broadcast error on ticker insert:", err));
+      }).catch(() => {});
+
       return { success: true };
     }
   });

@@ -100,8 +100,8 @@ export default defineConfig({
       ],
       // @tanstack/react-start contains server-only Node.js code (AsyncLocalStorage)
       // that must NOT be pre-bundled for the browser client.
-      // @xenova/transformers is huge — exclude from pre-bundler so it loads lazily.
-      exclude: ["@xenova/transformers", "@tanstack/react-start"],
+      // @xenova/transformers and web-push are server/lazy modules — exclude from pre-bundler.
+      exclude: ["@xenova/transformers", "@tanstack/react-start", "web-push"],
     },
     plugins: [
       serveLocalAssets(),

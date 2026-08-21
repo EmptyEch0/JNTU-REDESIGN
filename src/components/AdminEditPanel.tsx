@@ -211,6 +211,10 @@ export function AdminUpload({
   onChange,
   module,
   category,
+  dept,
+  name,
+  subfolder,
+  allowPdf = true,
   placeholder = "Drag & drop or click to upload...",
   className = "",
 }: {
@@ -218,6 +222,10 @@ export function AdminUpload({
   onChange: (path: string) => void;
   module: string;
   category: string;
+  dept?: string;
+  name?: string;
+  subfolder?: string;
+  allowPdf?: boolean;
   placeholder?: string;
   className?: string;
 }) {
@@ -227,14 +235,22 @@ export function AdminUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = (file: File) => {
-    const allowed = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-    if (!allowed.includes(file.type.toLowerCase())) {
-      setError("Allowed formats: JPEG, JPG, PNG, WEBP.");
+    const allowed = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/svg+xml"];
+    const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+    
+    if (isPdf) {
+      if (!allowPdf) {
+        setError("PDF files are not allowed for this field.");
+        return false;
+      }
+    } else if (!allowed.includes(file.type.toLowerCase())) {
+      setError(allowPdf ? "Allowed formats: JPEG, PNG, WEBP, PDF." : "Allowed formats: JPEG, PNG, WEBP.");
       return false;
     }
-    const maxBytes = 5 * 1024 * 1024;
+
+    const maxBytes = 15 * 1024 * 1024;
     if (file.size > maxBytes) {
-      setError("File exceeds 5MB limit.");
+      setError("File exceeds 15MB limit.");
       return false;
     }
     return true;
@@ -247,6 +263,9 @@ export function AdminUpload({
     formData.append("file", file);
     formData.append("module", module);
     formData.append("category", category);
+    if (dept) formData.append("dept", dept);
+    if (name) formData.append("name", name);
+    if (subfolder) formData.append("subfolder", subfolder);
 
     try {
       setProgress(0);
@@ -261,7 +280,7 @@ export function AdminUpload({
 
       const filePath = res.data.path || res.data.url;
       if (res.data.success && filePath) {
-      onChange(filePath);
+        onChange(filePath);
         setProgress(null);
       } else {
         setError(res.data.error || "Upload failed");
@@ -309,12 +328,21 @@ export function AdminUpload({
   };
 
   const previewUrl = value ? getAssetUrl(value) : null;
+  const isValuePdf = value?.toLowerCase().endsWith(".pdf");
 
   return (
     <div className={`space-y-2 ${className}`}>
       {previewUrl ? (
         <div className="relative group rounded-xl overflow-hidden border-2 border-amber-200 aspect-[16/9] max-h-48 bg-slate-50 flex items-center justify-center shadow-inner">
-          <img decoding="async" loading="lazy" src={previewUrl} className="w-full h-full object-cover" alt="Preview" />
+          {isValuePdf ? (
+            <div className="flex flex-col items-center justify-center p-4 text-center">
+              <span className="text-2xl mb-1">📄</span>
+              <span className="text-xs font-bold text-slate-700 truncate max-w-[200px]">{value.split("/").pop()}</span>
+              <span className="text-[10px] text-emerald-600 font-semibold mt-1">PDF Attached</span>
+            </div>
+          ) : (
+            <img decoding="async" loading="lazy" src={previewUrl} className="w-full h-full object-cover" alt="Preview" />
+          )}
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
             <button
               type="button"
@@ -346,7 +374,7 @@ export function AdminUpload({
         >
           <Upload className="w-8 h-8 text-amber-500 animate-bounce duration-1000" />
           <span className="text-xs font-semibold text-slate-600">{placeholder}</span>
-          <span className="text-[10px] text-slate-400">JPEG, PNG, WEBP up to 5MB</span>
+          <span className="text-[10px] text-slate-400">{allowPdf ? "JPEG, PNG, WEBP, PDF up to 15MB" : "JPEG, PNG, WEBP up to 15MB"}</span>
         </div>
       )}
 
@@ -370,7 +398,7 @@ export function AdminUpload({
         type="file"
         ref={fileInputRef}
         onChange={onFileSelect}
-        accept="image/jpeg,image/jpg,image/png,image/webp"
+        accept={allowPdf ? "image/jpeg,image/jpg,image/png,image/webp,application/pdf" : "image/jpeg,image/jpg,image/png,image/webp"}
         className="hidden"
       />
     </div>
@@ -385,6 +413,8 @@ export function AdminUpload({
  *   onChange — called with new DB path on successful upload
  *   module   — upload module (e.g. "facilities")
  *   category — upload category/subfolder (e.g. "sports/director")
+ *   dept     — department code (e.g. "cse")
+ *   name     — person's name for semantic filename
  *   size     — diameter in pixels, default 96
  * ─────────────────────────────────────────────────────────────────────────*/
 export function PersonAvatarUpload({
@@ -392,6 +422,9 @@ export function PersonAvatarUpload({
   onChange,
   module,
   category,
+  dept,
+  name,
+  subfolder,
   size = 96,
   fallbackName,
   className = "",
@@ -400,6 +433,9 @@ export function PersonAvatarUpload({
   onChange: (v: string) => void;
   module: string;
   category: string;
+  dept?: string;
+  name?: string;
+  subfolder?: string;
   size?: number;
   fallbackName?: string;
   className?: string;
@@ -424,6 +460,10 @@ export function PersonAvatarUpload({
     fd.append("file", file);
     fd.append("module", module);
     fd.append("category", category);
+    if (dept) fd.append("dept", dept);
+    if (name || fallbackName) fd.append("name", name || fallbackName || "");
+    if (subfolder) fd.append("subfolder", subfolder);
+
     setProgress(10);
     try {
       const res = await fetch("/api/upload", { method: "POST", body: fd });
@@ -511,11 +551,15 @@ export function AdminMultiUpload({
   onAdd,
   module,
   category,
+  dept,
+  subfolder,
   className = "",
 }: {
   onAdd: (path: string) => Promise<void> | void;
   module: string;
   category: string;
+  dept?: string;
+  subfolder?: string;
   className?: string;
 }) {
   const [dragOver, setDragOver] = useState(false);

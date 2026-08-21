@@ -28,13 +28,17 @@ import {
   Globe,
   ChevronRight,
   Activity,
-  Check
+  Check,
+  Pencil,
+  BellRing,
+  Radio,
+  X
 } from "lucide-react";
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
-import { notices, campusGallery, socialPosts, socialConnections } from "@/db/schema";
+import { notices, campusGallery, socialPosts, socialConnections, pushSubscriptions } from "@/db/schema";
 import { desc, count, eq } from "drizzle-orm";
-import { addNotice, deleteNotice, addCampusGalleryItem, deleteCampusGalleryItem } from "@/funcs/site.server";
+import { addNotice, updateNotice, deleteNotice, addCampusGalleryItem, deleteCampusGalleryItem } from "@/funcs/site.server";
 import { SocialPublishingPanel } from "@/components/SocialPublishingPanel";
 
 export const getDashboardData = createServerFn({ method: "GET" })
@@ -69,6 +73,11 @@ export const getDashboardData = createServerFn({ method: "GET" })
         .from(socialPosts)
         .where(eq(socialPosts.platform, "instagram"));
 
+      const [pushCountResult] = await db
+        .select({ val: count() })
+        .from(pushSubscriptions)
+        .catch(() => [{ val: 0 }]);
+
       const recentPosts = await db
         .select()
         .from(socialPosts)
@@ -93,6 +102,7 @@ export const getDashboardData = createServerFn({ method: "GET" })
           totalGallery: galleryCountResult.val,
           linkedinPosts: linkedinCountResult.val,
           instagramPosts: instagramCountResult.val,
+          totalPushSubscribers: pushCountResult?.val ?? 0,
         },
         recentPosts,
         recentNotices,
@@ -369,7 +379,17 @@ function AdminDashboard() {
 
   // Forms states
   const [newNotice, setNewNotice] = useState({ title: "", tag: "Academic", url: "" });
+  const [editingNotice, setEditingNotice] = useState<{ id: number; title: string; tag: string; url?: string } | null>(null);
   const [uploadingNoticeFile, setUploadingNoticeFile] = useState(false);
+  const [testingPush, setTestingPush] = useState(false);
+  const [showCustomPushModal, setShowCustomPushModal] = useState(false);
+  const [customPushData, setCustomPushData] = useState({
+    title: "",
+    body: "",
+    url: "/notices",
+    tag: "campus-alert",
+  });
+  const [sendingCustomPush, setSendingCustomPush] = useState(false);
   const [savedNoticeItem, setSavedNoticeItem] = useState<any | null>(null);
   const [selectedNoticeForShare, setSelectedNoticeForShare] = useState<number | null>(null);
 
@@ -422,7 +442,8 @@ function AdminDashboard() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("module", "notices");
-    formData.append("category", "date");
+    formData.append("category", newNotice.tag || "circulars");
+    if (newNotice.title) formData.append("name", newNotice.title);
 
     const tId = toast.loading(`Uploading document ${file.name}...`);
     try {
@@ -432,7 +453,7 @@ function AdminDashboard() {
       });
       const json = await res.json();
       if (json.success) {
-        const assetUrl = `http://89.116.134.182/${json.path}`;
+        const assetUrl = json.path;
         setNewNotice((prev) => ({ ...prev, url: assetUrl }));
         toast.success(`File uploaded successfully!`, { id: tId });
       } else {
@@ -491,6 +512,100 @@ function AdminDashboard() {
     }
   };
 
+  const handleUpdateNoticeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingNotice || !editingNotice.title.trim()) {
+      toast.error("Please enter notice title.");
+      return;
+    }
+
+    const tId = toast.loading("Updating notice & broadcasting push alert...");
+    try {
+      const dateStr = new Date().toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      await updateNotice({
+        data: {
+          id: editingNotice.id,
+          title: editingNotice.title.trim(),
+          tag: editingNotice.tag,
+          link: editingNotice.url || undefined,
+          date: dateStr,
+        },
+      });
+
+      toast.success("Notice updated & push notification sent!", { id: tId });
+      setEditingNotice(null);
+      fetchAllData();
+    } catch (err: any) {
+      toast.error("Failed to update notice.", { id: tId });
+    }
+  };
+
+  const handleSendTestPush = async () => {
+    setTestingPush(true);
+    const tId = toast.loading("Broadcasting test push alert...");
+    try {
+      const res = await fetch("/api/push/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: "📢 JNTU-GV College Alert (Test)",
+          body: "Web Push Notifications are working! Subscribers receive real-time alerts.",
+          url: "/notices",
+          tag: `test-${Date.now()}`,
+        }),
+      });
+      const data = await res.json();
+      if (data && data.success) {
+        toast.success(`Push alert broadcast to ${data.sent ?? 0} active subscriber(s)!`, { id: tId });
+      } else {
+        toast.error(data?.reason || data?.error || "Failed to broadcast test push.", { id: tId });
+      }
+    } catch (err: any) {
+      toast.error("Error sending push alert.", { id: tId });
+    } finally {
+      setTestingPush(false);
+    }
+  };
+
+  const handleSendCustomPushSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customPushData.title.trim() || !customPushData.body.trim()) {
+      toast.error("Title and message are required.");
+      return;
+    }
+    setSendingCustomPush(true);
+    const tId = toast.loading("Broadcasting campus alert to all subscribers...");
+    try {
+      const res = await fetch("/api/push/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: customPushData.title.trim(),
+          body: customPushData.body.trim(),
+          url: customPushData.url.trim() || "/notices",
+          tag: customPushData.tag.trim() || `custom-${Date.now()}`,
+        }),
+      });
+      const data = await res.json();
+      if (data && data.success) {
+        toast.success(`Alert sent to ${data.sent ?? 0} active subscriber(s)!`, { id: tId });
+        setShowCustomPushModal(false);
+        setCustomPushData({ title: "", body: "", url: "/notices", tag: "campus-alert" });
+      } else {
+        toast.error(data?.reason || data?.error || "Failed to broadcast alert.", { id: tId });
+      }
+    } catch (err: any) {
+      toast.error("Error sending push broadcast.", { id: tId });
+    } finally {
+      setSendingCustomPush(false);
+    }
+  };
+
   const handleDeleteNoticeClick = async (id: number) => {
     if (!confirm("Delete this notice?")) return;
     const tId = toast.loading("Deleting notice...");
@@ -499,6 +614,7 @@ function AdminDashboard() {
       toast.success("Notice deleted.", { id: tId });
       if (selectedNoticeForShare === id) setSelectedNoticeForShare(null);
       if (savedNoticeItem?.id === id) setSavedNoticeItem(null);
+      if (editingNotice?.id === id) setEditingNotice(null);
       fetchAllData();
     } catch {
       toast.error("Failed to delete notice.", { id: tId });
@@ -854,25 +970,186 @@ function AdminDashboard() {
           {/* TAB 2: NOTICE BOARD */}
           {activeTab === "notices" && (
             <div className="space-y-8 animate-fade-in">
-              <div className="flex flex-col gap-1">
-                <h2 className="text-xl font-bold font-display uppercase tracking-wider">Notice Board Management</h2>
-                <p className="text-xs text-slate-400">Post announcements and optional documents to the site notice board.</p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex flex-col gap-1">
+                  <h2 className="text-xl font-bold font-display uppercase tracking-wider">Notice Board Management</h2>
+                  <p className="text-xs text-slate-400">Post announcements and optional documents. Subscribed users receive instant push alerts.</p>
+                </div>
+
+                {/* Push Notification Realtime Badge & Test Trigger */}
+                <div className="flex items-center gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-slate-850 p-3 rounded-2xl border border-blue-200/70 dark:border-blue-900/40 shadow-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-xl bg-[#0F4C81] text-white flex items-center justify-center shadow-sm relative">
+                      <BellRing className="w-4 h-4" />
+                      <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
+                          {dashboardData?.stats?.totalPushSubscribers ?? 0}
+                        </span>
+                        <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+                          Push Subscriber(s)
+                        </span>
+                      </div>
+                      <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold block">
+                        ● Live on Create & Edit
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowCustomPushModal(true)}
+                      className="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-[11px] font-bold rounded-xl transition shadow-sm flex items-center gap-1.5 cursor-pointer shrink-0"
+                      title="Compose and broadcast a custom push alert to all subscribers"
+                    >
+                      <BellRing className="w-3 h-3" />
+                      <span>Broadcast Alert</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleSendTestPush}
+                      disabled={testingPush}
+                      className="px-3 py-1.5 bg-[#0F4C81] hover:bg-[#0D3F6D] text-white text-[11px] font-bold rounded-xl transition shadow-sm flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shrink-0"
+                      title="Send a sample push notification to all subscribed devices"
+                    >
+                      <Radio className={`w-3 h-3 ${testingPush ? "animate-spin" : ""}`} />
+                      <span>{testingPush ? "Sending..." : "Test Push"}</span>
+                    </button>
+                  </div>
+                </div>
               </div>
+
+              {/* Custom Push Broadcast Modal */}
+              {showCustomPushModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+                  <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 max-w-lg w-full shadow-2xl relative">
+                    <div className="flex items-center justify-between pb-4 border-b border-slate-150 dark:border-slate-800">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 text-white flex items-center justify-center shadow-md">
+                          <BellRing className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Broadcast Custom Campus Alert</h3>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                            Sent directly to {dashboardData?.stats?.totalPushSubscribers ?? 0} subscribed devices
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setShowCustomPushModal(false)}
+                        className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <form onSubmit={handleSendCustomPushSubmit} className="space-y-4 mt-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Notification Title *</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g., 📢 Emergency Campus Notice / Timetable Update"
+                          value={customPushData.title}
+                          onChange={(e) => setCustomPushData({ ...customPushData, title: e.target.value })}
+                          className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500/30 transition"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Message Body *</label>
+                        <textarea
+                          required
+                          rows={3}
+                          placeholder="Type the message that subscribers will see on their mobile & desktop screens..."
+                          value={customPushData.body}
+                          onChange={(e) => setCustomPushData({ ...customPushData, body: e.target.value })}
+                          className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-normal text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500/30 transition resize-none"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Target URL</label>
+                          <input
+                            type="text"
+                            placeholder="/notices or https://..."
+                            value={customPushData.url}
+                            onChange={(e) => setCustomPushData({ ...customPushData, url: e.target.value })}
+                            className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white outline-none"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Alert Tag</label>
+                          <input
+                            type="text"
+                            placeholder="campus-alert"
+                            value={customPushData.tag}
+                            onChange={(e) => setCustomPushData({ ...customPushData, tag: e.target.value })}
+                            className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-150 dark:border-slate-800">
+                        <button
+                          type="button"
+                          onClick={() => setShowCustomPushModal(false)}
+                          className="px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 rounded-xl transition"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={sendingCustomPush}
+                          className="px-5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                        >
+                          <Radio className={`w-3.5 h-3.5 ${sendingCustomPush ? "animate-spin" : ""}`} />
+                          <span>{sendingCustomPush ? "Broadcasting..." : "Broadcast Alert Now"}</span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Form Column */}
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-3xl shadow-sm h-fit">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 mb-4">Publish Announcement</h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xs font-black uppercase tracking-wider text-slate-400">
+                      {editingNotice ? "Edit Announcement" : "Publish Announcement"}
+                    </h3>
+                    {editingNotice && (
+                      <button
+                        type="button"
+                        onClick={() => setEditingNotice(null)}
+                        className="text-[10px] font-bold text-slate-500 hover:text-rose-600 uppercase tracking-wider transition cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
                   
-                  <form onSubmit={handleAddNoticeSubmit} className="space-y-4">
+                  <form onSubmit={editingNotice ? handleUpdateNoticeSubmit : handleAddNoticeSubmit} className="space-y-4">
                     <div className="space-y-1">
                       <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Notice Title</label>
                       <input
                         type="text"
                         placeholder="e.g. B.Tech Exams circular postponed..."
                         className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 focus:border-[#0F4C81] dark:text-white"
-                        value={newNotice.title}
-                        onChange={(e) => setNewNotice({ ...newNotice, title: e.target.value })}
+                        value={editingNotice ? editingNotice.title : newNotice.title}
+                        onChange={(e) => {
+                          if (editingNotice) {
+                            setEditingNotice({ ...editingNotice, title: e.target.value });
+                          } else {
+                            setNewNotice({ ...newNotice, title: e.target.value });
+                          }
+                        }}
                         required
                       />
                     </div>
@@ -882,8 +1159,14 @@ function AdminDashboard() {
                         <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Category Tag</label>
                         <select
                           className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 cursor-pointer dark:text-white"
-                          value={newNotice.tag}
-                          onChange={(e) => setNewNotice({ ...newNotice, tag: e.target.value })}
+                          value={editingNotice ? editingNotice.tag : newNotice.tag}
+                          onChange={(e) => {
+                            if (editingNotice) {
+                              setEditingNotice({ ...editingNotice, tag: e.target.value });
+                            } else {
+                              setNewNotice({ ...newNotice, tag: e.target.value });
+                            }
+                          }}
                         >
                           {noticeCategories.map((c) => (
                             <option key={c} value={c}>{c}</option>
@@ -899,7 +1182,38 @@ function AdminDashboard() {
                           <input
                             type="file"
                             accept=".pdf,image/*"
-                            onChange={handleNoticeUpload}
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              setUploadingNoticeFile(true);
+                              const formData = new FormData();
+                              formData.append("file", file);
+                              formData.append("module", "notices");
+                              formData.append("category", editingNotice ? editingNotice.tag || "circulars" : newNotice.tag || "circulars");
+                              if (editingNotice?.title || newNotice.title) {
+                                formData.append("name", editingNotice ? editingNotice.title : newNotice.title);
+                              }
+                              const tId = toast.loading(`Uploading document ${file.name}...`);
+                              try {
+                                const res = await fetch("/api/upload", { method: "POST", body: formData });
+                                const json = await res.json();
+                                if (json.success) {
+                                  const assetUrl = json.path;
+                                  if (editingNotice) {
+                                    setEditingNotice((prev: any) => ({ ...prev, url: assetUrl }));
+                                  } else {
+                                    setNewNotice((prev) => ({ ...prev, url: assetUrl }));
+                                  }
+                                  toast.success("File uploaded successfully!", { id: tId });
+                                } else {
+                                  toast.error(json.error || "Upload failed", { id: tId });
+                                }
+                              } catch {
+                                toast.error("Failed to upload file", { id: tId });
+                              } finally {
+                                setUploadingNoticeFile(false);
+                              }
+                            }}
                             className="hidden"
                             disabled={uploadingNoticeFile}
                           />
@@ -907,12 +1221,18 @@ function AdminDashboard() {
                       </div>
                     </div>
 
-                    {newNotice.url && (
+                    {(editingNotice?.url || newNotice.url) && (
                       <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-xs text-emerald-800 dark:text-emerald-350 font-semibold flex items-center justify-between">
-                        <span className="truncate max-w-[200px]">Attached: {newNotice.url}</span>
+                        <span className="truncate max-w-[200px]">Attached: {editingNotice ? editingNotice.url : newNotice.url}</span>
                         <button
                           type="button"
-                          onClick={() => setNewNotice((prev) => ({ ...prev, url: "" }))}
+                          onClick={() => {
+                            if (editingNotice) {
+                              setEditingNotice((prev: any) => ({ ...prev, url: "" }));
+                            } else {
+                              setNewNotice((prev) => ({ ...prev, url: "" }));
+                            }
+                          }}
                           className="text-rose-600 font-bold hover:underline shrink-0 text-[10px] cursor-pointer"
                         >
                           Remove
@@ -920,12 +1240,22 @@ function AdminDashboard() {
                       </div>
                     )}
 
-                    <button
-                      type="submit"
-                      className="w-full bg-[#0F4C81] hover:bg-[#0D3F6D] text-white font-bold py-3 rounded-xl transition shadow-md text-xs flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider mt-2"
-                    >
-                      <Plus className="w-4 h-4" /> Publish Announcement
-                    </button>
+                    <div className="pt-2">
+                      <button
+                        type="submit"
+                        className="w-full bg-[#0F4C81] hover:bg-[#0D3F6D] text-white font-bold py-3 rounded-xl transition shadow-md text-xs flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider"
+                      >
+                        {editingNotice ? (
+                          <>
+                            <Pencil className="w-4 h-4" /> Update & Send Push Alert
+                          </>
+                        ) : (
+                          <>
+                            <Plus className="w-4 h-4" /> Publish & Send Push Alert
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </form>
                 </div>
 
@@ -948,6 +1278,21 @@ function AdminDashboard() {
                               <p className="text-[10px] text-slate-400 font-medium">Posted on: {notice.date}</p>
                             </div>
                             <div className="flex items-center gap-1.5 shrink-0">
+                              <button
+                                onClick={() => {
+                                  setEditingNotice({
+                                    id: notice.id,
+                                    title: notice.title,
+                                    tag: notice.tag,
+                                    url: notice.url || "",
+                                  });
+                                  window.scrollTo({ top: 0, behavior: "smooth" });
+                                }}
+                                className="p-1.5 bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 rounded-lg transition flex items-center justify-center cursor-pointer"
+                                title="Edit Notice"
+                              >
+                                <Pencil className="w-3.5 h-3.5" />
+                              </button>
                               <button
                                 onClick={() => setSelectedNoticeForShare(selectedNoticeForShare === notice.id ? null : notice.id)}
                                 className={`p-1.5 rounded-lg border transition flex items-center justify-center cursor-pointer ${

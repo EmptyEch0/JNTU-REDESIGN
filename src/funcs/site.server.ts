@@ -154,10 +154,63 @@ export const addNotice = createServerFn({
         (err) => console.error("RAG auto-ingest notice error:", err)
       );
 
+      // Web Push Notification broadcast for newly published notice
+      import("./push.server").then(({ sendPushToAllSubscribers }) => {
+        sendPushToAllSubscribers({
+          title: `📢 New Notice: ${data.title}`,
+          body: `Category: ${data.tag} • ${data.date}`,
+          url: data.link || "/notices",
+          tag: `notice-${noticeId}`,
+        }).catch((err) => console.error("Push notification broadcast error on addNotice:", err));
+      }).catch(() => {});
+
       return { success: true, id: noticeId };
     } catch (err) {
       console.error("Add notice failed:", err);
       throw new Error("Failed to add notice");
+    }
+  });
+
+export const updateNotice = createServerFn({
+  method: "POST",
+})
+  .inputValidator(
+    (data: { id: number; title: string; date: string; tag: string; link?: string }) => data
+  )
+  .handler(async ({ data }) => {
+    try {
+      await db
+        .update(notices)
+        .set({
+          title: data.title,
+          date: data.date,
+          tag: data.tag,
+          url: data.link || null,
+        })
+        .where(eq(notices.id, data.id));
+
+      serverCache.invalidate("notices_all");
+
+      const chunkSource = `notice:${data.id}`;
+      const chunkText = `Notice: ${data.title}. Category: ${data.tag}. Date: ${data.date}`;
+      ingestSingleChunk(chunkText, chunkSource, "notice", { date: data.date, tag: data.tag }).catch(
+        (err) => console.error("RAG auto-ingest notice error on update:", err)
+      );
+
+      // Web Push Notification broadcast for updated notice
+      import("./push.server").then(({ sendPushToAllSubscribers }) => {
+        sendPushToAllSubscribers({
+          title: `🔔 Notice Updated: ${data.title}`,
+          body: `Category: ${data.tag} • Updated: ${data.date}`,
+          url: data.link || "/notices",
+          tag: `notice-${data.id}`,
+        }).catch((err) => console.error("Push notification broadcast error on updateNotice:", err));
+      }).catch(() => {});
+
+      return { success: true };
+    } catch (err) {
+      console.error("Update notice failed:", err);
+      throw new Error("Failed to update notice");
     }
   });
 

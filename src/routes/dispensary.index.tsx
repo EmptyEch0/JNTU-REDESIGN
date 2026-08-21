@@ -480,6 +480,7 @@ function PeopleRegistryEditable({ data, roleType, isEdit, onRefetch }: any) {
                                 fd.append("file", file);
                                 fd.append("module", "facilities");
                                 fd.append("category", roleType === "doctor" ? "dispensary/officer" : `dispensary/${roleType}`);
+                                if (p.name) fd.append("name", p.name);
                                 const tId = toast.loading("Uploading photo...");
                                 try {
                                   const res = await fetch("/api/upload", { method: "POST", body: fd });

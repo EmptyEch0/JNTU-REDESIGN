@@ -100,6 +100,10 @@ import { Route as AdministrationIqacAqarRouteImport } from './routes/administrat
 import { Route as AdministrationIqacCompositionRouteImport } from './routes/administration.iqac.composition'
 import { Route as AdministrationIqacMeetingsRouteImport } from './routes/administration.iqac.meetings'
 import { Route as AdministrationIqacMousRouteImport } from './routes/administration.iqac.mous'
+import { Route as ApiPushKeyRouteImport } from './routes/api.push.key'
+import { Route as ApiPushSendRouteImport } from './routes/api.push.send'
+import { Route as ApiPushSubscribeRouteImport } from './routes/api.push.subscribe'
+import { Route as ApiPushUnsubscribeRouteImport } from './routes/api.push.unsubscribe'
 import { Route as AuthGoogleCallbackRouteImport } from './routes/auth.google.callback'
 import { Route as AuthGoogleLoginRouteImport } from './routes/auth.google.login'
 import { Route as DepartmentsIdIndexRouteImport } from './routes/departments.$id.index'
@@ -594,6 +598,26 @@ const AdministrationIqacMousRoute = AdministrationIqacMousRouteImport.update({
   path: '/mous',
   getParentRoute: () => AdministrationIqacRoute,
 } as any)
+const ApiPushKeyRoute = ApiPushKeyRouteImport.update({
+  id: '/api/push/key',
+  path: '/api/push/key',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPushSendRoute = ApiPushSendRouteImport.update({
+  id: '/api/push/send',
+  path: '/api/push/send',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPushSubscribeRoute = ApiPushSubscribeRouteImport.update({
+  id: '/api/push/subscribe',
+  path: '/api/push/subscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPushUnsubscribeRoute = ApiPushUnsubscribeRouteImport.update({
+  id: '/api/push/unsubscribe',
+  path: '/api/push/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthGoogleCallbackRoute = AuthGoogleCallbackRouteImport.update({
   id: '/auth/google/callback',
   path: '/auth/google/callback',
@@ -830,6 +854,10 @@ export interface FileRoutesByFullPath {
   '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
   '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
+  '/api/push/key': typeof ApiPushKeyRoute
+  '/api/push/send': typeof ApiPushSendRoute
+  '/api/push/subscribe': typeof ApiPushSubscribeRoute
+  '/api/push/unsubscribe': typeof ApiPushUnsubscribeRoute
   '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/auth/google/login': typeof AuthGoogleLoginRoute
   '/departments/$id/$': typeof DepartmentsIdSplatRoute
@@ -939,6 +967,10 @@ export interface FileRoutesByTo {
   '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
   '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
+  '/api/push/key': typeof ApiPushKeyRoute
+  '/api/push/send': typeof ApiPushSendRoute
+  '/api/push/subscribe': typeof ApiPushSubscribeRoute
+  '/api/push/unsubscribe': typeof ApiPushUnsubscribeRoute
   '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/auth/google/login': typeof AuthGoogleLoginRoute
   '/departments/$id/$': typeof DepartmentsIdSplatRoute
@@ -1059,6 +1091,10 @@ export interface FileRoutesById {
   '/administration/iqac/composition': typeof AdministrationIqacCompositionRoute
   '/administration/iqac/meetings': typeof AdministrationIqacMeetingsRoute
   '/administration/iqac/mous': typeof AdministrationIqacMousRoute
+  '/api/push/key': typeof ApiPushKeyRoute
+  '/api/push/send': typeof ApiPushSendRoute
+  '/api/push/subscribe': typeof ApiPushSubscribeRoute
+  '/api/push/unsubscribe': typeof ApiPushUnsubscribeRoute
   '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/auth/google/login': typeof AuthGoogleLoginRoute
   '/departments/$id/$': typeof DepartmentsIdSplatRoute
@@ -1180,6 +1216,10 @@ export interface FileRouteTypes {
     | '/administration/iqac/composition'
     | '/administration/iqac/meetings'
     | '/administration/iqac/mous'
+    | '/api/push/key'
+    | '/api/push/send'
+    | '/api/push/subscribe'
+    | '/api/push/unsubscribe'
     | '/auth/google/callback'
     | '/auth/google/login'
     | '/departments/$id/$'
@@ -1289,6 +1329,10 @@ export interface FileRouteTypes {
     | '/administration/iqac/composition'
     | '/administration/iqac/meetings'
     | '/administration/iqac/mous'
+    | '/api/push/key'
+    | '/api/push/send'
+    | '/api/push/subscribe'
+    | '/api/push/unsubscribe'
     | '/auth/google/callback'
     | '/auth/google/login'
     | '/departments/$id/$'
@@ -1408,6 +1452,10 @@ export interface FileRouteTypes {
     | '/administration/iqac/composition'
     | '/administration/iqac/meetings'
     | '/administration/iqac/mous'
+    | '/api/push/key'
+    | '/api/push/send'
+    | '/api/push/subscribe'
+    | '/api/push/unsubscribe'
     | '/auth/google/callback'
     | '/auth/google/login'
     | '/departments/$id/$'
@@ -1475,6 +1523,10 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
   DispensaryIndexRoute: typeof DispensaryIndexRoute
+  ApiPushKeyRoute: typeof ApiPushKeyRoute
+  ApiPushSendRoute: typeof ApiPushSendRoute
+  ApiPushSubscribeRoute: typeof ApiPushSubscribeRoute
+  ApiPushUnsubscribeRoute: typeof ApiPushUnsubscribeRoute
   AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
   AuthGoogleLoginRoute: typeof AuthGoogleLoginRoute
   LocalAssetsUploadsSplatRoute: typeof LocalAssetsUploadsSplatRoute
@@ -2131,6 +2183,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationIqacMousRouteImport
       parentRoute: typeof AdministrationIqacRoute
     }
+    '/api/push/key': {
+      id: '/api/push/key'
+      path: '/api/push/key'
+      fullPath: '/api/push/key'
+      preLoaderRoute: typeof ApiPushKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/push/send': {
+      id: '/api/push/send'
+      path: '/api/push/send'
+      fullPath: '/api/push/send'
+      preLoaderRoute: typeof ApiPushSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/push/subscribe': {
+      id: '/api/push/subscribe'
+      path: '/api/push/subscribe'
+      fullPath: '/api/push/subscribe'
+      preLoaderRoute: typeof ApiPushSubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/push/unsubscribe': {
+      id: '/api/push/unsubscribe'
+      path: '/api/push/unsubscribe'
+      fullPath: '/api/push/unsubscribe'
+      preLoaderRoute: typeof ApiPushUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/google/callback': {
       id: '/auth/google/callback'
       path: '/auth/google/callback'
@@ -2597,6 +2677,10 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,
   DispensaryIndexRoute: DispensaryIndexRoute,
+  ApiPushKeyRoute: ApiPushKeyRoute,
+  ApiPushSendRoute: ApiPushSendRoute,
+  ApiPushSubscribeRoute: ApiPushSubscribeRoute,
+  ApiPushUnsubscribeRoute: ApiPushUnsubscribeRoute,
   AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
   AuthGoogleLoginRoute: AuthGoogleLoginRoute,
   LocalAssetsUploadsSplatRoute: LocalAssetsUploadsSplatRoute,

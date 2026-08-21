@@ -320,7 +320,9 @@ function TimetablesPage() {
                 onChange={(url: string) => setEditing({ ...editing, image_url: url })}
                 module="departments"
                 category="timetables"
-                placeholder="Upload timetable photo"
+                dept={routeSlug || data.slug || data.id}
+                name={`${editing.year || ""}-${editing.semester || ""}-${editing.title || "timetable"}`}
+                placeholder="Upload timetable photo or PDF"
               />
             </div>
 

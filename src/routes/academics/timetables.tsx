@@ -34,6 +34,7 @@ import { getAssetUrl, imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
+import { AdminUpload } from "@/components/AdminEditPanel";
 
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
@@ -329,13 +330,15 @@ function TimetablesPage() {
                     </select>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Timetable File PDF URL</label>
-                    <input 
-                      type="text" 
-                      placeholder="https://..."
-                      value={tPdfUrl} 
-                      onChange={(e) => setTPdfUrl(e.target.value)} 
-                      className="w-full bg-slate-50 border border-slate-200 text-slate-850 rounded-xl text-xs p-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" 
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Timetable File (PDF / Image)</label>
+                    <AdminUpload
+                      value={tPdfUrl}
+                      onChange={(url) => setTPdfUrl(url)}
+                      module="timetables"
+                      category="timetables"
+                      dept={tBranch?.toLowerCase()}
+                      name={tSubjectName || `${tBranch}-${tSemester}`}
+                      placeholder="Upload Timetable PDF / Image"
                     />
                   </div>
                   <div className="md:col-span-4">

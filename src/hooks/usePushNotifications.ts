@@ -11,6 +11,11 @@ function urlBase64ToUint8Array(base64String: string) {
   return outputArray;
 }
 
+const FALLBACK_VAPID_PUBLIC_KEY =
+  "BD1s6zOfEGWlhKZ1yscLf-TrMCGSLiIGZl8t5of5hJJapWfs0f2FaiiTmvlRcjiAzZkjpHJ8LJ7lH2v935PKO9E";
+
+let cachedRegistration: ServiceWorkerRegistration | null = null;
+
 export function usePushNotifications() {
   const [isSupported, setIsSupported] = useState<boolean>(false);
   const [permission, setPermission] = useState<NotificationPermission>("default");
@@ -36,10 +41,11 @@ export function usePushNotifications() {
 
     setPermission(Notification.permission);
 
-    // Register service worker and check existing subscription
+    // Register service worker and pre-cache existing subscription
     navigator.serviceWorker
       .register("/sw.js", { scope: "/" })
       .then(async (reg) => {
+        cachedRegistration = reg;
         const sub = await reg.pushManager.getSubscription();
         setIsSubscribed(Boolean(sub));
       })
@@ -61,7 +67,7 @@ export function usePushNotifications() {
     setError(null);
 
     try {
-      // 1. Request browser permission
+      // 1. Request browser permission immediately
       const currentPermission = await Notification.requestPermission();
       setPermission(currentPermission);
 
@@ -71,22 +77,14 @@ export function usePushNotifications() {
         return false;
       }
 
-      // 2. Fetch VAPID public key
-      let vapidKey = (import.meta as any).env?.VITE_VAPID_PUBLIC_KEY;
-      if (!vapidKey) {
-        const keyRes = await fetch("/api/push/key");
-        if (keyRes.ok) {
-          const keyJson = await keyRes.json();
-          vapidKey = keyJson.publicKey;
-        }
-      }
+      // 2. Resolve VAPID public key instantly without extra blocking roundtrip
+      const vapidKey =
+        (import.meta as any).env?.VITE_VAPID_PUBLIC_KEY ||
+        FALLBACK_VAPID_PUBLIC_KEY;
 
-      if (!vapidKey) {
-        throw new Error("VAPID public key not found on server.");
-      }
-
-      // 3. Ensure Service Worker is ready
-      const registration = await navigator.serviceWorker.ready;
+      // 3. Ensure Service Worker registration is ready
+      const registration = cachedRegistration || (await navigator.serviceWorker.ready);
+      cachedRegistration = registration;
 
       // 4. Subscribe to browser push service
       const convertedKey = urlBase64ToUint8Array(vapidKey);
@@ -99,7 +97,7 @@ export function usePushNotifications() {
         });
       }
 
-      // 5. Send subscription to server endpoint
+      // 5. Send subscription to server endpoint asynchronously
       const subJson = subscription.toJSON();
       const endpoint = subscription.endpoint;
       const p256dh = subJson.keys?.p256dh || "";

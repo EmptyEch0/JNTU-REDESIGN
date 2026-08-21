@@ -232,6 +232,7 @@ export function AdminUpload({
   const [dragOver, setDragOver] = useState(false);
   const [progress, setProgress] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = (file: File) => {
@@ -259,6 +260,13 @@ export function AdminUpload({
   const uploadFile = async (file: File) => {
     if (!validateFile(file)) return;
     
+    if (file.type.startsWith("image/")) {
+      try {
+        const objUrl = URL.createObjectURL(file);
+        setLocalPreview(objUrl);
+      } catch {}
+    }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("module", module);
@@ -317,6 +325,7 @@ export function AdminUpload({
 
   const removeImage = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setLocalPreview(null);
     onChange("");
     setError(null);
   };
@@ -327,8 +336,8 @@ export function AdminUpload({
     }
   };
 
-  const previewUrl = value ? getAssetUrl(value) : null;
-  const isValuePdf = value?.toLowerCase().endsWith(".pdf");
+  const previewUrl = localPreview || (value ? getAssetUrl(value) : null);
+  const isValuePdf = (value?.toLowerCase().endsWith(".pdf") || false) && !localPreview;
 
   return (
     <div className={`space-y-2 ${className}`}>
@@ -442,8 +451,9 @@ export function PersonAvatarUpload({
 }) {
   const [progress, setProgress] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const previewUrl = value ? getAssetUrl(value) : null;
+  const previewUrl = localPreview || (value ? getAssetUrl(value) : null);
 
   const upload = async (file: File) => {
     setError(null);
@@ -456,6 +466,12 @@ export function PersonAvatarUpload({
       setError("Max 15 MB");
       return;
     }
+
+    try {
+      const objUrl = URL.createObjectURL(file);
+      setLocalPreview(objUrl);
+    } catch {}
+
     const fd = new FormData();
     fd.append("file", file);
     fd.append("module", module);

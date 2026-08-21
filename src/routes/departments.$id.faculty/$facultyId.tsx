@@ -181,15 +181,20 @@ function FacultyDetailProfilePage() {
       {/* Profile Header Block */}
       <div className={`relative bg-gradient-to-br from-slate-900 to-blue-950 rounded-[2.5rem] p-8 text-white shadow-xl flex flex-col md:flex-row gap-8 items-center border transition-all ${isEditMode ? 'border-amber-400 ring-4 ring-amber-400/10' : 'border-transparent'}`}>
         {isEditMode ? (
-          <div className="shrink-0">
+          <div className="shrink-0 flex flex-col items-center gap-2">
             <PersonAvatarUpload
               value={editState.photo_url || ""}
               onChange={(newUrl) => setEditState({ ...editState, photo_url: newUrl })}
               module="departments"
               category="faculty"
+              dept={deptId}
+              name={editState.name || facultyRaw.name}
               size={144}
               fallbackName={editState.name}
             />
+            <span className="text-[11px] text-amber-300 font-bold uppercase tracking-wider bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-400/30">
+              Click photo to change
+            </span>
           </div>
         ) : (
           <div className="h-32 w-32 md:h-40 md:w-40 rounded-full overflow-hidden border-4 border-white/10 shrink-0 bg-white/5 relative group">
@@ -214,27 +219,14 @@ function FacultyDetailProfilePage() {
               <p className="text-lg text-slate-300 font-medium">{editState.designation}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left bg-white/5 p-5 rounded-2xl border border-white/10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left bg-white/5 p-6 rounded-2xl border border-white/10">
               <div className="space-y-1">
                 <label className="text-[10px] text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1"><Type size={12}/> Faculty Name</label>
-                <input className="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-sm outline-none font-bold text-white" value={editState.name} onChange={(e) => setEditState({ ...editState, name: e.target.value })} />
+                <input className="w-full bg-slate-800 border border-slate-700 p-2.5 rounded-xl text-sm outline-none font-bold text-white focus:ring-2 focus:ring-amber-400/40" value={editState.name} onChange={(e) => setEditState({ ...editState, name: e.target.value })} />
               </div>
               <div className="space-y-1">
                 <label className="text-[10px] text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1"><IdCard size={12}/> Designation</label>
-                <input className="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-sm outline-none text-white" value={editState.designation} onChange={(e) => setEditState({ ...editState, designation: e.target.value })} />
-              </div>
-              <div className="space-y-1 md:col-span-2">
-                <label className="text-[10px] text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1"><Camera size={12}/> Upload Photo Directly</label>
-                <AdminUpload
-                  value={editState.photo_url || ""}
-                  onChange={(newUrl) => setEditState({ ...editState, photo_url: newUrl })}
-                  module="departments"
-                  category="faculty"
-                  dept={deptId}
-                  name={editState.name || facultyRaw.name}
-                  placeholder="Drag & drop or click to upload faculty photo"
-                  className="w-full"
-                />
+                <input className="w-full bg-slate-800 border border-slate-700 p-2.5 rounded-xl text-sm outline-none text-white focus:ring-2 focus:ring-amber-400/40" value={editState.designation} onChange={(e) => setEditState({ ...editState, designation: e.target.value })} />
               </div>
             </div>
           )}

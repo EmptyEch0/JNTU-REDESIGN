@@ -86,19 +86,19 @@ export function PushNotificationBanner() {
           className="fixed bottom-5 right-5 z-[99] max-w-[400px] w-[calc(100vw-2.5rem)]"
         >
           {/* Outer glow aura */}
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-[#0F4C81] via-blue-500 to-amber-500 rounded-3xl blur-md opacity-35 dark:opacity-50 animate-pulse pointer-events-none" />
+          <div className="absolute -inset-1 bg-gradient-to-r from-[#0F4C81]/30 via-blue-500/25 to-amber-500/25 rounded-[2rem] blur-xl opacity-60 dark:opacity-40 animate-pulse pointer-events-none" />
 
-          <div className="relative overflow-hidden rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-blue-600/20 dark:border-blue-400/20 shadow-[0_20px_50px_rgba(15,76,129,0.25)] p-5 text-slate-800 dark:text-slate-100 ring-1 ring-black/5">
+          <div className="relative overflow-hidden rounded-3xl bg-white/80 dark:bg-slate-900/85 backdrop-blur-3xl border border-white/70 dark:border-white/10 shadow-[0_25px_60px_-15px_rgba(15,76,129,0.35)] p-5 text-slate-800 dark:text-slate-100 ring-1 ring-black/5">
             {/* Background Decorative Mesh */}
-            <div className="absolute -top-12 -right-12 w-36 h-36 bg-gradient-to-br from-blue-600/15 via-[#0F4C81]/15 to-transparent rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-10 -left-10 w-28 h-28 bg-amber-500/10 rounded-full blur-xl pointer-events-none" />
+            <div className="absolute -top-14 -right-14 w-40 h-40 bg-gradient-to-br from-blue-500/20 via-[#0F4C81]/20 to-transparent rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-500/15 rounded-full blur-2xl pointer-events-none" />
 
             {/* Header / Top Bar */}
             <div className="flex items-start justify-between gap-3 relative z-10">
               <div className="flex items-center gap-3">
                 {/* Animated Bell Icon Container */}
                 <div className="relative">
-                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#0F4C81] via-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-900/25 border border-white/20">
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#0F4C81] via-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-900/25 border border-white/30 backdrop-blur-md">
                     <BellRing className="w-5 h-5 text-amber-300 animate-bounce" />
                   </div>
                   {/* Radar ping dot */}
@@ -110,14 +110,14 @@ export function PushNotificationBanner() {
 
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-[#0F4C81] dark:text-blue-300 border border-blue-200 dark:border-blue-800/50">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-blue-500/10 dark:bg-blue-400/15 text-[#0F4C81] dark:text-blue-300 border border-blue-500/20 dark:border-blue-400/25 backdrop-blur-sm">
                       <Sparkles className="w-2.5 h-2.5 text-amber-500" /> JNTU-GV Alerts
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/40">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-400/15 px-2 py-0.5 rounded-full border border-emerald-500/20 dark:border-emerald-400/25 backdrop-blur-sm">
                       Live
                     </span>
                   </div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">
+                  <h3 className="text-sm font-extrabold text-slate-900 dark:text-white mt-0.5 tracking-tight">
                     Never Miss an Official Notice
                   </h3>
                 </div>
@@ -126,7 +126,7 @@ export function PushNotificationBanner() {
               {/* Dismiss button */}
               <button
                 onClick={handleDismiss}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 shrink-0 cursor-pointer"
+                className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition p-1.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 shrink-0 cursor-pointer"
                 aria-label="Dismiss notifications prompt"
                 title="Dismiss"
               >
@@ -135,8 +135,8 @@ export function PushNotificationBanner() {
             </div>
 
             {/* Description Body */}
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mt-3 relative z-10">
-              Get instant notifications on your device whenever new exam schedules, fee circulars, timetables, or placement alerts are released.
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mt-2.5 relative z-10 font-medium">
+              Get instant alerts on your phone or laptop whenever new exam schedules, fee circulars, or timetables are published.
             </p>
 
             {/* Benefit Feature Chips */}

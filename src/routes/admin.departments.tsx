@@ -116,6 +116,40 @@ function AdminDepartmentsPage() {
     }
   });
 
+  const addFacultyMutation = useMutation({
+    mutationFn: (data: any) => addFaculty({ data: { ...data, dept_id: selectedDeptId } } as any),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["faculty", selectedDeptId] });
+      setFacultyForm({ name: "", designation: "", specialization: "", photo_url: "", profile_link: "" });
+      toast.success("Faculty member added successfully");
+    }
+  });
+
+  const deleteFacultyMutation = useMutation({
+    mutationFn: (id: number) => deleteFaculty({ data: { id } } as any),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["faculty", selectedDeptId] });
+      toast.success("Faculty member removed");
+    }
+  });
+
+  const addLabMutation = useMutation({
+    mutationFn: (data: any) => addLaboratory({ data: { ...data, dept_id: selectedDeptId } } as any),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["labs", selectedDeptId] });
+      setLabForm({ name: "", description: "", location: "", photo_url: "", specs: "{}" });
+      toast.success("Laboratory added successfully");
+    }
+  });
+
+  const deleteLabMutation = useMutation({
+    mutationFn: (id: number) => deleteLaboratory({ data: { id } } as any),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["labs", selectedDeptId] });
+      toast.success("Laboratory removed");
+    }
+  });
+
   if (!isAdmin) return null;
 
   return (
@@ -181,6 +215,98 @@ function AdminDepartmentsPage() {
               </section>
             )}
 
+            {/* FACULTY TAB */}
+            {activeTab === "faculty" && (
+              <div className="space-y-6">
+                <section className="bg-card p-8 rounded-2xl border border-border space-y-4">
+                  <h3 className="text-xl font-bold text-ink">Add Faculty Member</h3>
+                  <form onSubmit={(e) => { e.preventDefault(); addFacultyMutation.mutate(facultyForm); }} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input className="p-3 border rounded-lg" placeholder="Faculty Name" value={facultyForm.name} onChange={e => setFacultyForm({...facultyForm, name: e.target.value})} required />
+                      <input className="p-3 border rounded-lg" placeholder="Designation (e.g. Professor, Assistant Professor)" value={facultyForm.designation} onChange={e => setFacultyForm({...facultyForm, designation: e.target.value})} required />
+                      <input className="p-3 border rounded-lg md:col-span-2" placeholder="Specialization" value={facultyForm.specialization} onChange={e => setFacultyForm({...facultyForm, specialization: e.target.value})} />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-550">Faculty Photo (Direct VPS Upload)</label>
+                      <AdminUpload
+                        value={facultyForm.photo_url}
+                        onChange={(newUrl) => setFacultyForm({ ...facultyForm, photo_url: newUrl })}
+                        module="departments"
+                        category="faculty"
+                        placeholder="Drag & drop or click to upload faculty photo"
+                      />
+                    </div>
+                    <button className="w-full bg-primary text-white p-3 rounded-xl font-bold cursor-pointer">Add Faculty Member</button>
+                  </form>
+                </section>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {facultyList?.map((f: any) => (
+                    <div key={f.id} className="p-4 bg-white border rounded-xl flex items-center justify-between shadow-sm gap-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <img 
+                          src={getAssetUrl(f.photo_url) || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"} 
+                          alt={f.name} 
+                          className="w-12 h-12 rounded-full object-cover shrink-0 bg-slate-100" 
+                        />
+                        <div className="min-w-0">
+                          <p className="font-bold text-slate-900 truncate">{f.name}</p>
+                          <p className="text-xs text-slate-500 truncate">{f.designation}</p>
+                        </div>
+                      </div>
+                      <button onClick={() => deleteFacultyMutation.mutate(f.id)} className="text-red-500 font-bold text-xs p-2 hover:bg-red-50 rounded-lg">Delete</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* LABS TAB */}
+            {activeTab === "labs" && (
+              <div className="space-y-6">
+                <section className="bg-card p-8 rounded-2xl border border-border space-y-4">
+                  <h3 className="text-xl font-bold text-ink">Add Laboratory</h3>
+                  <form onSubmit={(e) => { e.preventDefault(); addLabMutation.mutate(labForm); }} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input className="p-3 border rounded-lg" placeholder="Lab Name" value={labForm.name} onChange={e => setLabForm({...labForm, name: e.target.value})} required />
+                      <input className="p-3 border rounded-lg" placeholder="Location" value={labForm.location} onChange={e => setLabForm({...labForm, location: e.target.value})} />
+                      <textarea className="p-3 border rounded-lg md:col-span-2" placeholder="Description" rows={3} value={labForm.description} onChange={e => setLabForm({...labForm, description: e.target.value})} />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-550">Lab Photo</label>
+                      <AdminUpload
+                        value={labForm.photo_url}
+                        onChange={(newUrl) => setLabForm({ ...labForm, photo_url: newUrl })}
+                        module="departments"
+                        category="labs"
+                        placeholder="Upload Lab Photo"
+                      />
+                    </div>
+                    <button className="w-full bg-primary text-white p-3 rounded-xl font-bold cursor-pointer">Add Laboratory</button>
+                  </form>
+                </section>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {labsList?.map((l: any) => (
+                    <div key={l.id} className="p-4 bg-white border rounded-xl flex items-center justify-between shadow-sm gap-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <img 
+                          src={getAssetUrl(l.photo_url) || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100"} 
+                          alt={l.name} 
+                          className="w-12 h-12 rounded-lg object-cover shrink-0 bg-slate-100" 
+                        />
+                        <div className="min-w-0">
+                          <p className="font-bold text-slate-900 truncate">{l.name}</p>
+                          <p className="text-xs text-slate-500 truncate">{l.location}</p>
+                        </div>
+                      </div>
+                      <button onClick={() => deleteLabMutation.mutate(l.id)} className="text-red-500 font-bold text-xs p-2 hover:bg-red-50 rounded-lg">Delete</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* COURSES TAB */}
             {activeTab === "courses" && (
               <div className="space-y-6">
@@ -234,9 +360,6 @@ function AdminDepartmentsPage() {
                 </div>
               </div>
             )}
-
-            {/* FACULTY & LABS (Existing logic but ensuring UI consistency) */}
-            {/* ... Keep your existing faculty and labs code here ... */}
             
           </div>
         )}

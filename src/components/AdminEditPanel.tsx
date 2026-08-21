@@ -393,12 +393,16 @@ export function PersonAvatarUpload({
   module,
   category,
   size = 96,
+  fallbackName,
+  className = "",
 }: {
   value: string;
   onChange: (v: string) => void;
   module: string;
   category: string;
   size?: number;
+  fallbackName?: string;
+  className?: string;
 }) {
   const [progress, setProgress] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -412,8 +416,8 @@ export function PersonAvatarUpload({
       setError("JPEG, PNG or WEBP only");
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      setError("Max 5 MB");
+    if (file.size > 15 * 1024 * 1024) {
+      setError("Max 15 MB");
       return;
     }
     const fd = new FormData();
@@ -427,7 +431,7 @@ export function PersonAvatarUpload({
       setProgress(100);
       const filePath = json.path || json.url;
       if (json.success && filePath) {
-      onChange(filePath);
+        onChange(filePath);
       } else {
         setError(json.error || "Upload failed");
       }
@@ -439,7 +443,7 @@ export function PersonAvatarUpload({
   };
 
   return (
-    <div className="flex flex-col items-center gap-2 shrink-0">
+    <div className={`flex flex-col items-center gap-2 shrink-0 ${className}`}>
       {/* Circle zone */}
       <div
         className="relative group cursor-pointer rounded-full border-[3px] border-dashed border-amber-300 hover:border-amber-500 bg-slate-50 transition-all duration-300 overflow-hidden shadow-md"
@@ -450,16 +454,16 @@ export function PersonAvatarUpload({
       >
         {previewUrl ? (
           <>
-            <img decoding="async" loading="lazy" src={previewUrl} className="w-full h-full object-cover" alt="Portrait" />
+            <img decoding="async" loading="lazy" src={previewUrl} className="w-full h-full object-cover" alt={fallbackName || "Portrait"} />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1">
               <Camera className="w-5 h-5 text-white" />
               <span className="text-[9px] text-white font-black tracking-wider uppercase">Change</span>
             </div>
           </>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-1">
-            <Camera className="text-amber-400" style={{ width: size * 0.28, height: size * 0.28 }} />
-            <span className="text-amber-500 font-black tracking-widest uppercase" style={{ fontSize: size * 0.09 }}>Upload</span>
+          <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-slate-100/80">
+            <Camera className="text-amber-500" style={{ width: size * 0.28, height: size * 0.28 }} />
+            <span className="text-amber-600 font-black tracking-widest uppercase" style={{ fontSize: Math.max(9, size * 0.09) }}>Upload</span>
           </div>
         )}
       </div>

@@ -93,6 +93,8 @@ export const Route = createFileRoute("/api/upload")({
             relativeFolder = `facilities/clubs/${year}/${month}`;
           } else if (mod === "amenities") {
             relativeFolder = `facilities/amenities/${year}/${month}`;
+          } else if (cat && cat !== "date" && cat !== "general") {
+            relativeFolder = `${mod}/${cat}/${year}/${month}`;
           } else {
             relativeFolder = `${mod}/${year}/${month}`;
           }

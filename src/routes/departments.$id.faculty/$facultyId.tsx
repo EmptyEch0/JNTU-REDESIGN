@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { getAssetUrl } from "@/lib/assets";
 import { SafeImage } from "@/components/SafeImage";
+import { PersonAvatarUpload, AdminUpload } from "@/components/AdminEditPanel";
 
 
 export const Route = createFileRoute("/departments/$id/faculty/$facultyId")({
@@ -179,16 +180,29 @@ function FacultyDetailProfilePage() {
 
       {/* Profile Header Block */}
       <div className={`relative bg-gradient-to-br from-slate-900 to-blue-950 rounded-[2.5rem] p-8 text-white shadow-xl flex flex-col md:flex-row gap-8 items-center border transition-all ${isEditMode ? 'border-amber-400 ring-4 ring-amber-400/10' : 'border-transparent'}`}>
-        <div className="h-32 w-32 md:h-40 md:w-40 rounded-full overflow-hidden border-4 border-white/10 shrink-0 bg-white/5 relative group">
-          <SafeImage 
-            src={editState.photo_url} 
-            alt={editState.name}
-            decoding="async"
-loading="lazy"
-            fallbackName={editState.name}
-            className="w-full h-full object-cover"
-          />
-        </div>
+        {isEditMode ? (
+          <div className="shrink-0">
+            <PersonAvatarUpload
+              value={editState.photo_url || ""}
+              onChange={(newUrl) => setEditState({ ...editState, photo_url: newUrl })}
+              module="departments"
+              category="faculty"
+              size={144}
+              fallbackName={editState.name}
+            />
+          </div>
+        ) : (
+          <div className="h-32 w-32 md:h-40 md:w-40 rounded-full overflow-hidden border-4 border-white/10 shrink-0 bg-white/5 relative group">
+            <SafeImage 
+              src={editState.photo_url} 
+              alt={editState.name}
+              decoding="async"
+              loading="lazy"
+              fallbackName={editState.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
 
         <div className="text-center md:text-left flex-grow space-y-4 w-full">
           {!isEditMode ? (
@@ -210,8 +224,15 @@ loading="lazy"
                 <input className="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-sm outline-none text-white" value={editState.designation} onChange={(e) => setEditState({ ...editState, designation: e.target.value })} />
               </div>
               <div className="space-y-1 md:col-span-2">
-                <label className="text-[10px] text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1"><Camera size={12}/> Profile Photo URL</label>
-                <input className="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs outline-none text-slate-300 font-mono" value={editState.photo_url} onChange={(e) => setEditState({ ...editState, photo_url: e.target.value })} />
+                <label className="text-[10px] text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1"><Camera size={12}/> Upload Photo Directly</label>
+                <AdminUpload
+                  value={editState.photo_url || ""}
+                  onChange={(newUrl) => setEditState({ ...editState, photo_url: newUrl })}
+                  module="departments"
+                  category="faculty"
+                  placeholder="Drag & drop or click to upload faculty photo"
+                  className="w-full"
+                />
               </div>
             </div>
           )}

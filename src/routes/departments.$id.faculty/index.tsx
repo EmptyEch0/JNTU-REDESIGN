@@ -8,6 +8,7 @@ import { Users, UserPlus, Trash2, Save, ImageIcon, Briefcase, Eye, UserCheck } f
 import { toast } from "sonner";
 import { getAssetUrl } from "@/lib/assets";
 import { SafeImage } from "@/components/SafeImage";
+import { PersonAvatarUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/departments/$id/faculty/")({
   component: FacultyPage,
@@ -37,16 +38,29 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
         </button>
       )}
 
-      <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 border-slate-50 bg-slate-100">
-        <SafeImage 
-          src={f.photo_url} 
-          alt={f.name}
-          decoding="async"
-loading="lazy"
-          fallbackName={f.name}
-          className="h-full w-full object-cover" 
-        />
-      </div>
+      {isEditMode ? (
+        <div className="flex-shrink-0">
+          <PersonAvatarUpload
+            value={f.photo_url || ""}
+            onChange={(newUrl) => handleUpdate(f.id, "photo_url", newUrl)}
+            module="departments"
+            category="faculty"
+            size={88}
+            fallbackName={f.name}
+          />
+        </div>
+      ) : (
+        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 border-slate-50 bg-slate-100">
+          <SafeImage 
+            src={f.photo_url} 
+            alt={f.name}
+            decoding="async"
+            loading="lazy"
+            fallbackName={f.name}
+            className="h-full w-full object-cover" 
+          />
+        </div>
+      )}
 
       <div className="flex-grow space-y-2">
         {isEditMode ? (
@@ -54,19 +68,19 @@ loading="lazy"
             <input 
               className="w-full font-bold text-blue-900 border-b border-amber-100 focus:border-amber-500 outline-none text-base" 
               value={f.name} 
+              placeholder="Faculty Name"
               onChange={(e) => handleUpdate(f.id, "name", e.target.value)} 
             />
             <input 
               className="w-full text-sm text-slate-600 border-b border-amber-100 focus:border-amber-500 outline-none" 
               value={f.designation} 
+              placeholder="Designation (e.g. Assistant Professor)"
               onChange={(e) => handleUpdate(f.id, "designation", e.target.value)} 
             />
-            <input 
-              className="w-full text-[10px] text-amber-600 bg-amber-50 rounded p-1 font-mono" 
-              value={f.photo_url || ""} 
-              placeholder="Photo URL" 
-              onChange={(e) => handleUpdate(f.id, "photo_url", e.target.value)} 
-            />
+            <div className="flex items-center gap-1 text-[11px] text-amber-700 font-medium pt-0.5">
+              <ImageIcon size={12} className="text-amber-500" />
+              <span>Click or drop on avatar to change photo</span>
+            </div>
             
             {/* Admin Direct Deep Link Edit Button */}
             <div className="pt-1">

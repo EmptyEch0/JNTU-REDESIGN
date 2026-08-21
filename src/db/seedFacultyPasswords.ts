@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { db } from "./index";
 import { faculty } from "./schema";
 import { eq } from "drizzle-orm";
@@ -85,37 +86,88 @@ const FACULTY_CREDENTIALS: { facultyId: number; email: string; plainPassword: st
   { facultyId: 90, email: "bonthula.sridurga@jntugv.edu.in", plainPassword: "Faculty@2026" },
   { facultyId: 91, email: "p.sree.devi@jntugv.edu.in", plainPassword: "Faculty@2026" },
   { facultyId: 92, email: "potula.laxmana.sunand@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 167, email: "tirimula.rao.benala@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 168, email: "g.jaya.suma@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 169, email: "ch.bindu.madhuri@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 170, email: "g.madhavi@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 171, email: "w.anil@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 172, email: "rss.jyothi@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 173, email: "eswar.patnaala@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 174, email: "kolli.srikanth@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 175, email: "rajeti.roje.spandana@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 176, email: "pynam.venkateswarlu@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 177, email: "madhumita.chanda@jntugv.edu.in", plainPassword: "Faculty@2026" },
-  { facultyId: 178, email: "bobbadi.manasa@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 179, email: "tirimula.rao.benala@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 180, email: "g.jaya.suma@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 181, email: "ch.bindu.madhuri@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 182, email: "g.madhavi@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 183, email: "w.anil@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 184, email: "rss.jyothi@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 185, email: "eswar.patnaala@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 186, email: "kolli.srikanth@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 187, email: "rajeti.roje.spandana@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 188, email: "pynam.venkateswarlu@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 189, email: "madhumita.chanda@jntugv.edu.in", plainPassword: "Faculty@2026" },
+  { facultyId: 190, email: "bobbadi.manasa@jntugv.edu.in", plainPassword: "Faculty@2026" },
 ];
 
 async function seed() {
+  console.log("🌱 Checking and seeding faculty credentials (only updating rows with missing email or password)...");
+
+  let updatedCount = 0;
+  let skippedCount = 0;
+  let notFoundCount = 0;
+
   for (const cred of FACULTY_CREDENTIALS) {
-    const hash = await bcrypt.hash(cred.plainPassword, 10);
+    const [existing] = await db
+      .select({
+        id: faculty.id,
+        name: faculty.name,
+        faculty_email: faculty.faculty_email,
+        faculty_password_hash: faculty.faculty_password_hash,
+      })
+      .from(faculty)
+      .where(eq(faculty.id, cred.facultyId))
+      .limit(1);
+
+    if (!existing) {
+      console.log(`⚠️  [NOT FOUND] Faculty ID ${cred.facultyId} (${cred.email}) does not exist in the database.`);
+      notFoundCount++;
+      continue;
+    }
+
+    const emailMissing = !existing.faculty_email || existing.faculty_email.trim() === "";
+    const passwordMissing = !existing.faculty_password_hash || existing.faculty_password_hash.trim() === "";
+
+    // If both email and password are already set with data, skip updating this row
+    if (!emailMissing && !passwordMissing) {
+      console.log(
+        `⏭️  [SKIPPED] Faculty ID ${cred.facultyId} (${existing.name}): already has email "${existing.faculty_email}" and password hash.`
+      );
+      skippedCount++;
+      continue;
+    }
+
+    const updateFields: { faculty_email?: string; faculty_password_hash?: string } = {};
+
+    if (emailMissing) {
+      updateFields.faculty_email = cred.email.toLowerCase().trim();
+    }
+
+    if (passwordMissing) {
+      updateFields.faculty_password_hash = await bcrypt.hash(cred.plainPassword, 10);
+    }
+
     await db
       .update(faculty)
-      .set({
-        faculty_email: cred.email.toLowerCase().trim(),
-        faculty_password_hash: hash,
-      })
+      .set(updateFields)
       .where(eq(faculty.id, cred.facultyId));
-    console.log(`Set credentials for faculty ID ${cred.facultyId} (${cred.email})`);
+
+    console.log(
+      `✅ [UPDATED] Faculty ID ${cred.facultyId} (${existing.name}): set ${Object.keys(updateFields).join(", ")}.`
+    );
+    updatedCount++;
   }
-  console.log("Done.");
+
+  console.log("\n📊 Seeding summary:");
+  console.log(`   - Updated:   ${updatedCount}`);
+  console.log(`   - Skipped:   ${skippedCount}`);
+  console.log(`   - Not Found: ${notFoundCount}`);
+  console.log(`   - Total:     ${FACULTY_CREDENTIALS.length}`);
+
   process.exit(0);
 }
 
 seed().catch((err) => {
-  console.error(err);
+  console.error("❌ Error running faculty password seed:", err);
   process.exit(1);
 });

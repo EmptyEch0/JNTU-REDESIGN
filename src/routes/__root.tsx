@@ -213,8 +213,11 @@ function AdminContent() {
             </button>
           </div>
 
-          <div className="flex items-center gap-4 md:gap-6 shrink-0 ml-4">
+          <div className="flex items-center gap-3 md:gap-5 shrink-0 ml-4">
+            <Link to="/admin/departments" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Departments</Link>
+            <Link to="/admin/users" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Users</Link>
             <Link to="/admin/placements" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Placements</Link>
+            <Link to="/admin-account-settings" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Account</Link>
 
             <Link
               to="/"

@@ -127,6 +127,7 @@ export const getCurrentAdmin = createServerFn({
       name: admin.name,
       email: admin.email,
       role: admin.role,
+      authProvider: admin.authProvider,
       authorizedDepts: admin.authorizedDepts,
     };
   } catch (err) {
@@ -134,6 +135,81 @@ export const getCurrentAdmin = createServerFn({
     deleteCookie("admin_session_token", { path: "/" });
     return null;
   }
+});
+
+/**
+ * Self-service password change for email/password admins.
+ */
+export const changeAdminCredentials = createServerFn({
+  method: "POST",
+})
+  .inputValidator((d: { currentPassword: string; newPassword: string }) => d)
+  .handler(async ({ data }) => {
+    const { currentPassword, newPassword } = data;
+    const { userAgent, ipAddress } = await getRequestContext();
+    const { authService } = await import("./auth.service");
+    const { authRepository } = await import("./auth.repository");
+    const { getCookie } = await import("@tanstack/react-start/server");
+
+    const token = getCookie("admin_session_token");
+    if (!token) throw new Error("Not authenticated");
+
+    const admin = await authService.validateSession(token, ipAddress, userAgent);
+    if (!admin) throw new Error("Not authenticated");
+
+    if (admin.authProvider !== "email" || !admin.passwordHash) {
+      throw new Error("This account uses Google sign-in. Password cannot be changed here.");
+    }
+
+    if (!currentPassword) throw new Error("Current password is required");
+    if (newPassword.length < 12) {
+      throw new Error("New password must be at least 12 characters");
+    }
+    if (
+      !/[A-Z]/.test(newPassword) ||
+      !/[a-z]/.test(newPassword) ||
+      !/[0-9]/.test(newPassword) ||
+      !/[^A-Za-z0-9]/.test(newPassword)
+    ) {
+      throw new Error(
+        "New password must include an uppercase letter, a lowercase letter, a digit, and a symbol",
+      );
+    }
+
+    const isValid = await authService.verifyPassword(currentPassword, admin.passwordHash);
+    if (!isValid) throw new Error("Current password is incorrect");
+
+    const passwordHash = await authService.hashPassword(newPassword);
+    await authRepository.updateAdminPassword(admin.adminId, passwordHash);
+
+    await authService.logAction({
+      adminId: admin.adminId,
+      action: "PASSWORD_CHANGED",
+      ipAddress,
+      userAgent,
+      details: "Admin changed their own password",
+    });
+
+    return { success: true };
+  });
+
+export const listAdminsForManagement = createServerFn({
+  method: "GET",
+}).handler(async () => {
+  const { userAgent, ipAddress } = await getRequestContext();
+  const { authService } = await import("./auth.service");
+  const { authRepository } = await import("./auth.repository");
+  const { getCookie } = await import("@tanstack/react-start/server");
+
+  const token = getCookie("admin_session_token");
+  if (!token) throw new Error("Unauthorized");
+
+  const admin = await authService.validateSession(token, ipAddress, userAgent);
+  if (!admin || admin.role !== "super_admin") {
+    throw new Error("Unauthorized");
+  }
+
+  return authRepository.listAdmins();
 });
 
 /**

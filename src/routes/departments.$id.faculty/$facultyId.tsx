@@ -4,15 +4,17 @@ import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateFacultyProfile } from "@/lib/departments";
+import { setFacultyCredentials } from "@/lib/facultyAuth";
 import { toast } from "sonner";
 import { useFaculty } from "@/context/FacultyContext";
 import { 
   ArrowLeft, GraduationCap, Trophy, Globe, 
-  Briefcase, BookOpen, Save, Plus, Trash2, Camera, Type, IdCard, LogOut, RotateCcw
+  Briefcase, BookOpen, Save, Plus, Trash2, Camera, Type, IdCard, LogOut, RotateCcw, KeyRound, Mail
 } from "lucide-react";
 import { getAssetUrl } from "@/lib/assets";
 import { SafeImage } from "@/components/SafeImage";
 import { PersonAvatarUpload, AdminUpload } from "@/components/AdminEditPanel";
+import { PasswordInput, TextInput } from "@/components/AccountSettingsLayout";
 
 
 export const Route = createFileRoute("/departments/$id/faculty/$facultyId")({
@@ -267,6 +269,10 @@ function FacultyDetailProfilePage() {
           )}
         </div>
       </div>
+
+      {isDeptLevelEdit && (
+        <FacultyLoginPanel facultyId={Number(facultyId)} currentEmail={(facultyRaw as any).faculty_email || ""} />
+      )}
 
       {/* Tabs Navigation */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-2">
@@ -601,6 +607,104 @@ function FacultyDetailProfilePage() {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function FacultyLoginPanel({
+  facultyId,
+  currentEmail,
+}: {
+  facultyId: number;
+  currentEmail: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState(currentEmail);
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    setEmail(currentEmail);
+  }, [currentEmail]);
+
+  const mutation = useMutation({
+    mutationFn: () =>
+      setFacultyCredentials({
+        data: { facultyId, email, newPassword: password },
+      }),
+    onSuccess: () => {
+      toast.success("Faculty portal login updated.");
+      setPassword("");
+      setOpen(false);
+    },
+    onError: (err: any) => toast.error(err?.message || "Failed to update login."),
+  });
+
+  return (
+    <div className="rounded-2xl border border-teal-200 bg-teal-50/40 p-5 space-y-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-start gap-3">
+          <div className="h-10 w-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center shrink-0">
+            <KeyRound size={18} />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-ink">Faculty portal login</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {currentEmail
+                ? `Current login: ${currentEmail}`
+                : "No portal login set yet. Create email and password so this faculty can sign in."}
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="text-xs font-bold text-teal-800 bg-white border border-teal-200 px-3 py-2 rounded-xl hover:bg-teal-50 transition-colors shrink-0"
+        >
+          {open ? "Close" : currentEmail ? "Reset login" : "Set login"}
+        </button>
+      </div>
+
+      {open && (
+        <form
+          className="grid gap-3 sm:grid-cols-2 bg-white/80 border border-teal-100 rounded-xl p-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            mutation.mutate();
+          }}
+        >
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Login email</label>
+            <TextInput
+              accent="faculty"
+              type="email"
+              icon={Mail}
+              value={email}
+              onChange={setEmail}
+              required
+              placeholder="name@jntugv.edu.in"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Temporary password</label>
+            <PasswordInput
+              accent="faculty"
+              value={password}
+              onChange={setPassword}
+              required
+              showStrength
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <button
+              type="submit"
+              disabled={mutation.isPending || password.length < 8}
+              className="px-5 py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold disabled:opacity-50"
+            >
+              {mutation.isPending ? "Saving…" : "Save portal credentials"}
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { db } from "../db";
 import { admins, adminSessions, adminAuditLogs } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 export interface NewAdmin {
   name: string;
@@ -89,6 +89,30 @@ export class AuthRepository {
       userAgent: data.userAgent || null,
       details: data.details || null,
     });
+  }
+
+  async updateAdminPassword(adminId: string, passwordHash: string) {
+    const [admin] = await db
+      .update(admins)
+      .set({ passwordHash })
+      .where(eq(admins.adminId, adminId))
+      .returning();
+    return admin || null;
+  }
+
+  async listAdmins() {
+    return db
+      .select({
+        adminId: admins.adminId,
+        name: admins.name,
+        email: admins.email,
+        role: admins.role,
+        authProvider: admins.authProvider,
+        authorizedDepts: admins.authorizedDepts,
+        createdAt: admins.createdAt,
+      })
+      .from(admins)
+      .orderBy(asc(admins.name));
   }
 }
 

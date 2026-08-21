@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AcademicsRouteImport } from './routes/academics'
+import { Route as AdminAccountSettingsRouteImport } from './routes/admin-account-settings'
 import { Route as AdministrationRouteImport } from './routes/administration'
 import { Route as AntiRaggingRouteImport } from './routes/anti-ragging'
 import { Route as BankingRouteImport } from './routes/banking'
@@ -61,6 +62,7 @@ import { Route as AcademicsTimetablesRouteImport } from './routes/academics/time
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminDepartmentsRouteImport } from './routes/admin.departments'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdministrationIqacRouteImport } from './routes/administration.iqac'
 import { Route as AdministrationPrincipalRouteImport } from './routes/administration.principal'
 import { Route as AdministrationPrincipalsOfficeRouteImport } from './routes/administration.principals-office'
@@ -149,6 +151,11 @@ const AboutRoute = AboutRouteImport.update({
 const AcademicsRoute = AcademicsRouteImport.update({
   id: '/academics',
   path: '/academics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAccountSettingsRoute = AdminAccountSettingsRouteImport.update({
+  id: '/admin-account-settings',
+  path: '/admin-account-settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdministrationRoute = AdministrationRouteImport.update({
@@ -391,6 +398,11 @@ const AdminDepartmentsRoute = AdminDepartmentsRouteImport.update({
 const AdminPlacementsRoute = AdminPlacementsRouteImport.update({
   id: '/admin/placements',
   path: '/admin/placements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdministrationIqacRoute = AdministrationIqacRouteImport.update({
@@ -768,6 +780,7 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
+  '/admin-account-settings': typeof AdminAccountSettingsRoute
   '/administration': typeof AdministrationRouteWithChildren
   '/anti-ragging': typeof AntiRaggingRoute
   '/banking': typeof BankingRoute
@@ -813,6 +826,7 @@ export interface FileRoutesByFullPath {
   '/academics/timetables': typeof AcademicsTimetablesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
@@ -889,6 +903,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/admin-account-settings': typeof AdminAccountSettingsRoute
   '/administration': typeof AdministrationRouteWithChildren
   '/anti-ragging': typeof AntiRaggingRoute
   '/banking': typeof BankingRoute
@@ -928,6 +943,7 @@ export interface FileRoutesByTo {
   '/academics/timetables': typeof AcademicsTimetablesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
   '/administration/vice-principal': typeof AdministrationVicePrincipalRoute
@@ -1005,6 +1021,7 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/about': typeof AboutRouteWithChildren
   '/academics': typeof AcademicsRouteWithChildren
+  '/admin-account-settings': typeof AdminAccountSettingsRoute
   '/administration': typeof AdministrationRouteWithChildren
   '/anti-ragging': typeof AntiRaggingRoute
   '/banking': typeof BankingRoute
@@ -1050,6 +1067,7 @@ export interface FileRoutesById {
   '/academics/timetables': typeof AcademicsTimetablesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
   '/administration/principal': typeof AdministrationPrincipalRoute
   '/administration/principals-office': typeof AdministrationPrincipalsOfficeRoute
@@ -1130,6 +1148,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/about'
     | '/academics'
+    | '/admin-account-settings'
     | '/administration'
     | '/anti-ragging'
     | '/banking'
@@ -1175,6 +1194,7 @@ export interface FileRouteTypes {
     | '/academics/timetables'
     | '/admin/departments'
     | '/admin/placements'
+    | '/admin/users'
     | '/administration/iqac'
     | '/administration/principal'
     | '/administration/principals-office'
@@ -1251,6 +1271,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$'
+    | '/admin-account-settings'
     | '/administration'
     | '/anti-ragging'
     | '/banking'
@@ -1290,6 +1311,7 @@ export interface FileRouteTypes {
     | '/academics/timetables'
     | '/admin/departments'
     | '/admin/placements'
+    | '/admin/users'
     | '/administration/principal'
     | '/administration/principals-office'
     | '/administration/vice-principal'
@@ -1366,6 +1388,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/about'
     | '/academics'
+    | '/admin-account-settings'
     | '/administration'
     | '/anti-ragging'
     | '/banking'
@@ -1411,6 +1434,7 @@ export interface FileRouteTypes {
     | '/academics/timetables'
     | '/admin/departments'
     | '/admin/placements'
+    | '/admin/users'
     | '/administration/iqac'
     | '/administration/principal'
     | '/administration/principals-office'
@@ -1490,6 +1514,7 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRouteWithChildren
   AcademicsRoute: typeof AcademicsRouteWithChildren
+  AdminAccountSettingsRoute: typeof AdminAccountSettingsRoute
   AdministrationRoute: typeof AdministrationRouteWithChildren
   AntiRaggingRoute: typeof AntiRaggingRoute
   BankingRoute: typeof BankingRoute
@@ -1517,6 +1542,7 @@ export interface RootRouteChildren {
   WomenEmpowermentRoute: typeof WomenEmpowermentRouteWithChildren
   AdminDepartmentsRoute: typeof AdminDepartmentsRoute
   AdminPlacementsRoute: typeof AdminPlacementsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   ApiPostsRoute: typeof ApiPostsRoute
   ApiUploadRoute: typeof ApiUploadRoute
   DepartmentsIdRoute: typeof DepartmentsIdRouteWithChildren
@@ -1572,6 +1598,13 @@ declare module '@tanstack/react-router' {
       path: '/academics'
       fullPath: '/academics'
       preLoaderRoute: typeof AcademicsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-account-settings': {
+      id: '/admin-account-settings'
+      path: '/admin-account-settings'
+      fullPath: '/admin-account-settings'
+      preLoaderRoute: typeof AdminAccountSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/administration': {
@@ -1908,6 +1941,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/placements'
       fullPath: '/admin/placements'
       preLoaderRoute: typeof AdminPlacementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/administration/iqac': {
@@ -2644,6 +2684,7 @@ const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   AboutRoute: AboutRouteWithChildren,
   AcademicsRoute: AcademicsRouteWithChildren,
+  AdminAccountSettingsRoute: AdminAccountSettingsRoute,
   AdministrationRoute: AdministrationRouteWithChildren,
   AntiRaggingRoute: AntiRaggingRoute,
   BankingRoute: BankingRoute,
@@ -2671,6 +2712,7 @@ const rootRouteChildren: RootRouteChildren = {
   WomenEmpowermentRoute: WomenEmpowermentRouteWithChildren,
   AdminDepartmentsRoute: AdminDepartmentsRoute,
   AdminPlacementsRoute: AdminPlacementsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   ApiPostsRoute: ApiPostsRoute,
   ApiUploadRoute: ApiUploadRoute,
   DepartmentsIdRoute: DepartmentsIdRouteWithChildren,

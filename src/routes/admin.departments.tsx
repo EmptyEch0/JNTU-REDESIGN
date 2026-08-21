@@ -179,7 +179,7 @@ function AdminDepartmentsPage() {
 
   return (
     <div className="min-h-screen bg-sand/30 pb-20">
-      <PageHero eyebrow="Dashboard" title="Department Admin" subtitle="Manage courses, faculty, and gallery." />
+      <PageHero eyebrow="Dashboard" title="Department Admin" subtitle="Update department content, HOD profile, and faculty roster. Login credentials live under User Access." />
 
       <div className="container-narrow mt-10 space-y-8">
         <section className="bg-card p-6 rounded-2xl border border-border shadow-sm">
@@ -221,40 +221,77 @@ function AdminDepartmentsPage() {
 
             {/* HOD TAB */}
             {activeTab === "hod" && (
-              <section className="bg-card p-8 rounded-2xl border border-border space-y-4">
-                <h3 className="text-xl font-bold text-ink">HOD Information</h3>
-                <input className="w-full p-3 rounded-lg border border-border" placeholder="HOD Name" value={hodForm.hod} onChange={e => setHodForm({...hodForm, hod: e.target.value})} />
+              <section className="bg-card p-6 md:p-8 rounded-2xl border border-border space-y-5 shadow-sm">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-500">HOD Photo</label>
-                  <AdminUpload
-                    value={hodForm.hod_photo}
-                    onChange={(newUrl) => setHodForm({ ...hodForm, hod_photo: newUrl })}
-                    module="departments"
-                    category="hod"
-                    dept={currentDept?.slug || selectedDeptId}
-                    name={hodForm.hod}
-                    placeholder="Upload HOD Photo"
-                  />
+                  <h3 className="text-xl font-bold text-ink font-display">HOD Profile</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Public department head details shown on the department page. Portal password is managed under User Access.
+                  </p>
                 </div>
-                <input className="w-full p-3 rounded-lg border border-border" placeholder="Contact Info" value={hodForm.hod_contact} onChange={e => setHodForm({...hodForm, hod_contact: e.target.value})} />
-                <textarea className="w-full p-3 rounded-lg border border-border" placeholder="HOD Message" value={hodForm.hod_message} onChange={e => setHodForm({...hodForm, hod_message: e.target.value})} />
-                <button onClick={() => updateDeptMutation.mutate(hodForm)} className="w-full bg-primary text-white p-3 rounded-xl font-bold">Update HOD Details</button>
+                <div className="grid gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">Full name</label>
+                    <input className="w-full p-3 rounded-xl border border-border bg-white" placeholder="HOD Name" value={hodForm.hod} onChange={e => setHodForm({...hodForm, hod: e.target.value})} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">Photo</label>
+                    <AdminUpload
+                      value={hodForm.hod_photo}
+                      onChange={(newUrl) => setHodForm({ ...hodForm, hod_photo: newUrl })}
+                      module="departments"
+                      category="hod"
+                      dept={currentDept?.slug || selectedDeptId}
+                      name={hodForm.hod}
+                      placeholder="Upload HOD Photo"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">Contact</label>
+                    <input className="w-full p-3 rounded-xl border border-border bg-white" placeholder="Email or phone" value={hodForm.hod_contact} onChange={e => setHodForm({...hodForm, hod_contact: e.target.value})} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">Message</label>
+                    <textarea className="w-full p-3 rounded-xl border border-border bg-white" rows={4} placeholder="Welcome message from the HOD" value={hodForm.hod_message} onChange={e => setHodForm({...hodForm, hod_message: e.target.value})} />
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button onClick={() => updateDeptMutation.mutate(hodForm)} className="flex-1 bg-primary text-white p-3 rounded-xl font-bold hover:bg-primary/90 transition-colors">
+                    Save HOD details
+                  </button>
+                  <a href="/admin/users" className="flex-1 text-center border border-border bg-white p-3 rounded-xl font-bold text-sm text-ink hover:bg-sand/50 transition-colors">
+                    Manage HOD login password
+                  </a>
+                </div>
               </section>
             )}
 
             {/* FACULTY TAB */}
             {activeTab === "faculty" && (
               <div className="space-y-6">
-                <section className="bg-card p-8 rounded-2xl border border-border space-y-4">
-                  <h3 className="text-xl font-bold text-ink">Add Faculty Member</h3>
+                <section className="bg-card p-6 md:p-8 rounded-2xl border border-border space-y-5 shadow-sm">
+                  <div className="space-y-1">
+                    <h3 className="text-xl font-bold text-ink font-display">Add faculty member</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Creates a public roster entry. Set portal login later from User Access.
+                    </p>
+                  </div>
                   <form onSubmit={(e) => { e.preventDefault(); addFacultyMutation.mutate(facultyForm); }} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <input className="p-3 border rounded-lg" placeholder="Faculty Name" value={facultyForm.name} onChange={e => setFacultyForm({...facultyForm, name: e.target.value})} required />
-                      <input className="p-3 border rounded-lg" placeholder="Designation (e.g. Professor, Assistant Professor)" value={facultyForm.designation} onChange={e => setFacultyForm({...facultyForm, designation: e.target.value})} required />
-                      <input className="p-3 border rounded-lg md:col-span-2" placeholder="Specialization" value={facultyForm.specialization} onChange={e => setFacultyForm({...facultyForm, specialization: e.target.value})} />
+                      <div className="space-y-1.5">
+                        <label className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">Name</label>
+                        <input className="w-full p-3 border border-border rounded-xl bg-white" placeholder="Faculty Name" value={facultyForm.name} onChange={e => setFacultyForm({...facultyForm, name: e.target.value})} required />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">Designation</label>
+                        <input className="w-full p-3 border border-border rounded-xl bg-white" placeholder="e.g. Assistant Professor" value={facultyForm.designation} onChange={e => setFacultyForm({...facultyForm, designation: e.target.value})} required />
+                      </div>
+                      <div className="space-y-1.5 md:col-span-2">
+                        <label className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">Specialization</label>
+                        <input className="w-full p-3 border border-border rounded-xl bg-white" placeholder="Specialization" value={facultyForm.specialization} onChange={e => setFacultyForm({...facultyForm, specialization: e.target.value})} />
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-550">Faculty Photo (Direct VPS Upload)</label>
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">Photo</label>
                       <AdminUpload
                         value={facultyForm.photo_url}
                         onChange={(newUrl) => setFacultyForm({ ...facultyForm, photo_url: newUrl })}
@@ -265,13 +302,20 @@ function AdminDepartmentsPage() {
                         placeholder="Drag & drop or click to upload faculty photo"
                       />
                     </div>
-                    <button className="w-full bg-primary text-white p-3 rounded-xl font-bold cursor-pointer">Add Faculty Member</button>
+                    <button className="w-full bg-primary text-white p-3 rounded-xl font-bold cursor-pointer hover:bg-primary/90 transition-colors">Add faculty member</button>
                   </form>
                 </section>
 
+                <div className="flex items-center justify-between gap-3">
+                  <h4 className="text-sm font-bold text-ink">Current roster</h4>
+                  <a href="/admin/users" className="text-xs font-bold text-primary hover:underline">
+                    Manage faculty logins →
+                  </a>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {facultyList?.map((f: any) => (
-                    <div key={f.id} className="p-4 bg-white border rounded-xl flex items-center justify-between shadow-sm gap-4">
+                    <div key={f.id} className="p-4 bg-white border border-border rounded-2xl flex items-center justify-between shadow-sm gap-4">
                       <div className="flex items-center gap-3 min-w-0">
                         <img 
                           src={getAssetUrl(f.photo_url) || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"} 
@@ -283,7 +327,7 @@ function AdminDepartmentsPage() {
                           <p className="text-xs text-slate-500 truncate">{f.designation}</p>
                         </div>
                       </div>
-                      <button onClick={() => deleteFacultyMutation.mutate(f.id)} className="text-red-500 font-bold text-xs p-2 hover:bg-red-50 rounded-lg">Delete</button>
+                      <button onClick={() => deleteFacultyMutation.mutate(f.id)} className="text-red-500 font-bold text-xs p-2 hover:bg-red-50 rounded-lg shrink-0">Delete</button>
                     </div>
                   ))}
                 </div>

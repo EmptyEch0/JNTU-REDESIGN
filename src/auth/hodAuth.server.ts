@@ -2,7 +2,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getCookie } from "@tanstack/react-start/server";
 import { db } from "../db";
-import { departments } from "../db/schema";
+import { departments, admins, adminSessions } from "../db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
@@ -20,7 +20,7 @@ function assertStrongPassword(password: string) {
   const hasSymbol = /[^A-Za-z0-9]/.test(password);
   if (!hasUpper || !hasLower || !hasDigit || !hasSymbol) {
     throw new Error(
-      "New password must include an uppercase letter, a lowercase letter, a digit, and a symbol"
+      "New password must include an uppercase letter, a lowercase letter, a digit, and a symbol",
     );
   }
 }
@@ -60,6 +60,39 @@ export const changeHodCredentials = createServerFn({ method: "POST" })
       .update(departments)
       .set({ hod_password: newHash })
       .where(eq(departments.slug, deptSlug));
+
+    return { success: true };
+  });
+
+/**
+ * Super-admin only: set or reset a department HOD portal password.
+ */
+export const setHodPasswordByAdmin = createServerFn({ method: "POST" })
+  .inputValidator((d: { deptId: string; newPassword: string }) => d)
+  .handler(async ({ data }) => {
+    const { deptId, newPassword } = data;
+
+    const token = getCookie("admin_session_token");
+    if (!token) throw new Error("Unauthorized");
+
+    const [session] = await db
+      .select({ role: admins.role })
+      .from(adminSessions)
+      .innerJoin(admins, eq(adminSessions.adminId, admins.adminId))
+      .where(eq(adminSessions.id, token))
+      .limit(1);
+
+    if (!session || session.role !== "super_admin") {
+      throw new Error("Unauthorized");
+    }
+
+    assertStrongPassword(newPassword);
+
+    const hash = await bcrypt.hash(newPassword, 10);
+    await db
+      .update(departments)
+      .set({ hod_password: hash })
+      .where(eq(departments.id, deptId));
 
     return { success: true };
   });

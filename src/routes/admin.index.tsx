@@ -32,7 +32,8 @@ import {
   Pencil,
   BellRing,
   Radio,
-  X
+  X,
+  UserCircle
 } from "lucide-react";
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
@@ -215,138 +216,202 @@ function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-50/40 via-slate-50 to-slate-100 flex flex-col font-sans text-slate-800">
-      <div className="w-full max-w-7xl mx-auto px-6 pt-4 flex justify-end">
-        <a
-          href="/"
-          className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-[#0F4C81] transition-colors bg-white px-4 py-2 rounded-full border border-slate-200/60 shadow-sm"
-        >
-          Main Site <ExternalLink className="w-3.5 h-3.5" />
-        </a>
-      </div>
+    <div className="min-h-screen flex flex-col lg:flex-row font-sans">
+      {/* ─── Left Branding Panel ─── */}
+      <div className="login-brand-panel hidden lg:flex lg:w-[48%] xl:w-[45%] flex-col items-center justify-center p-12 xl:p-16 relative">
+        {/* Floating decorative shapes */}
+        <div className="login-floating-shape w-64 h-64 bg-white/10 -top-20 -left-20" style={{ animation: "login-float 8s ease-in-out infinite" }} />
+        <div className="login-floating-shape w-40 h-40 bg-sky-300/10 bottom-32 -right-10" style={{ animation: "login-float-alt 10s ease-in-out infinite 1s" }} />
+        <div className="login-floating-shape w-24 h-24 bg-indigo-300/10 top-1/3 right-16" style={{ animation: "login-float 12s ease-in-out infinite 2s" }} />
 
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 md:py-16">
-        <div className="text-center max-w-2xl mx-auto mb-10 flex flex-col items-center animate-fade-in">
-          <div className="relative group mb-6">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-sky-400 to-[#0F4C81] rounded-full blur opacity-35 group-hover:opacity-55 transition duration-500"></div>
-            <img decoding="async" loading="lazy"
-              src={getAssetUrl("https://jntugvcev.edu.in/wp-content/uploads/2022/07/logo-min.jpeg")}
+        <div className="relative z-10 flex flex-col items-center text-center space-y-8 max-w-md" style={{ animation: "login-slide-right 0.8s cubic-bezier(0.22, 1, 0.36, 1) both" }}>
+          {/* Logo with glow */}
+          <div className="relative">
+            <div className="absolute -inset-4 rounded-full" style={{ animation: "login-glow 3s ease-in-out infinite" }} />
+            <img
+              src="/logo.png"
               alt="JNTU-GV Logo"
-              className="relative h-24 w-24 object-contain rounded-full border border-slate-200 bg-white p-1 shadow-lg transform group-hover:scale-105 transition duration-300"
+              className="relative w-28 h-28 xl:w-32 xl:h-32 object-contain rounded-full border-2 border-white/20 bg-white p-1.5 shadow-2xl"
             />
           </div>
-          
-          <h1 className="text-xl md:text-2xl font-black text-slate-900 tracking-wide leading-snug uppercase max-w-xl font-display">
-            Jawaharlal Nehru Technological University Gurajada Vizianagaram
-          </h1>
-          <p className="text-xs md:text-sm text-slate-500 font-semibold tracking-wider uppercase mt-1">
-            College of Engineering Vizianagaram (CEV)
-          </p>
-          
-          <div className="mt-4 inline-flex items-center gap-2 bg-[#0F4C81]/10 border border-[#0F4C81]/25 text-[#0F4C81] font-bold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            University Administration Portal
-          </div>
-        </div>
 
-        <div className="w-full max-w-md bg-white rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/40 p-8 md:p-10 animate-scale-reveal">
-          <div className="space-y-6">
-            <div className="text-center space-y-1">
-              <h3 className="text-2xl font-bold text-slate-900 font-display">Sign In</h3>
-              <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
-                Enter your administrative credentials
-              </p>
-            </div>
-
-            {errorMsg && (
-              <div className="p-4 bg-rose-50 border border-rose-100 text-rose-700 rounded-2xl text-xs leading-relaxed animate-fade-in flex items-start gap-3">
-                <Info className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                <span>{errorMsg}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleLogin} className="space-y-5">
-              <div className="space-y-1.5">
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  placeholder="name@jntugv.edu.in"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F4C81]/20 focus:border-[#0F4C81] transition-all text-sm shadow-sm placeholder-slate-400"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F4C81]/20 focus:border-[#0F4C81] transition-all text-sm shadow-sm placeholder-slate-400"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full mt-2 bg-[#0F4C81] hover:bg-[#0D3F6D] text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-md shadow-[#0F4C81]/15 text-sm flex items-center justify-center cursor-pointer gap-2 hover:-translate-y-0.5"
-              >
-                {loading ? (
-                  <>
-                    <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
-                    <span>Signing in...</span>
-                  </>
-                ) : (
-                  <>
-                    <Lock className="w-4 h-4" />
-                    <span>Secure Sign In</span>
-                  </>
-                )}
-              </button>
-            </form>
-
-            <div className="relative flex py-2 items-center">
-              <div className="flex-grow border-t border-slate-200/60"></div>
-              <span className="flex-shrink mx-4 text-slate-400 text-[10px] font-bold uppercase tracking-wider">or</span>
-              <div className="flex-grow border-t border-slate-200/60"></div>
-            </div>
-
-            <button
-              onClick={handleGoogleLogin}
-              disabled={loading}
-              className="w-full flex items-center justify-center gap-2.5 p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-bold text-slate-700 text-sm transition-all shadow-sm cursor-pointer hover:shadow hover:-translate-y-0.5"
-            >
-              <GoogleIcon />
-              <span>Continue with Google</span>
-            </button>
+          {/* University name */}
+          <div className="space-y-3">
+            <h1 className="text-2xl xl:text-[1.7rem] font-bold text-white leading-tight font-display tracking-wide">
+              Jawaharlal Nehru Technological University
+              <span className="block text-sky-300/90 mt-1">Gurajada Vizianagaram</span>
+            </h1>
+            <p className="text-sm text-sky-200/60 font-medium tracking-wider uppercase">
+              College of Engineering Vizianagaram
+            </p>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-center gap-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-            <Shield className="w-3.5 h-3.5 text-slate-400" />
-            <span>Encrypted ERP Session</span>
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2.5 bg-white/8 border border-white/15 px-5 py-2.5 rounded-full backdrop-blur-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[11px] font-bold text-white/80 uppercase tracking-[0.18em]">
+              University Administration Portal
+            </span>
+          </div>
+
+          {/* Accreditation line */}
+          <div className="flex items-center gap-2 pt-4">
+            <Shield className="w-4 h-4 text-sky-300/50" />
+            <span className="text-[10px] text-sky-200/40 font-semibold uppercase tracking-widest">
+              ISO 9001:2015 Certified Institution
+            </span>
           </div>
         </div>
       </div>
 
-      <footer className="w-full border-t border-slate-200/60 bg-white py-6 px-6 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
-          <span>© 2026 JNTU-GV CEV. All Rights Reserved.</span>
-          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/60 px-3 py-1 rounded-full text-slate-600 shadow-sm">
-            <Shield className="w-3.5 h-3.5 text-[#0F4C81]" />
-            <span>ISO 9001:2015 Certified Institution</span>
+      {/* ─── Right Login Panel ─── */}
+      <div className="flex-1 flex flex-col bg-gradient-to-br from-slate-50 via-white to-sky-50/30">
+        {/* Top bar */}
+        <div className="w-full px-6 pt-5 flex justify-end">
+          <a
+            href="/"
+            className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-[#0F4C81] transition-colors bg-white px-4 py-2 rounded-full border border-slate-200/60 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+          >
+            Main Site <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        </div>
+
+        <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 md:py-12">
+          {/* Mobile logo (hidden on desktop) */}
+          <div className="lg:hidden text-center mb-8 flex flex-col items-center" style={{ animation: "login-entrance 0.6s cubic-bezier(0.22, 1, 0.36, 1) both" }}>
+            <div className="relative group mb-4">
+              <div className="absolute -inset-1 bg-gradient-to-r from-sky-400 to-[#0F4C81] rounded-full blur opacity-30 group-hover:opacity-50 transition duration-500" />
+              <img
+                src="/logo.png"
+                alt="JNTU-GV Logo"
+                className="relative h-20 w-20 object-contain rounded-full border border-slate-200 bg-white p-1 shadow-lg"
+              />
+            </div>
+            <h1 className="text-lg font-bold text-slate-900 tracking-wide uppercase font-display leading-snug max-w-xs">
+              JNTU-GV CEV
+            </h1>
+            <p className="text-[10px] text-slate-500 font-semibold tracking-wider uppercase mt-1">
+              Administration Portal
+            </p>
+          </div>
+
+          {/* Login card */}
+          <div className="w-full max-w-[420px] login-card rounded-3xl shadow-xl shadow-slate-200/50 p-8 md:p-10">
+            <div className="space-y-6">
+              {/* Header */}
+              <div className="text-center space-y-1.5">
+                <h2 className="text-2xl font-bold text-slate-900 font-display">Sign In</h2>
+                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                  Enter your administrative credentials
+                </p>
+              </div>
+
+              {/* Error message */}
+              {errorMsg && (
+                <div className="p-4 bg-rose-50 border border-rose-100 text-rose-700 rounded-2xl text-xs leading-relaxed animate-fade-in flex items-start gap-3">
+                  <Info className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                  <span>{errorMsg}</span>
+                </div>
+              )}
+
+              {/* Form */}
+              <form onSubmit={handleLogin} className="space-y-5">
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em] ml-1">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                      <UserCircle className="w-4 h-4" />
+                    </div>
+                    <input
+                      type="email"
+                      placeholder="name@jntugv.edu.in"
+                      className="login-input"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em] ml-1">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                      <Lock className="w-4 h-4" />
+                    </div>
+                    <input
+                      type="password"
+                      placeholder="Enter your password"
+                      className="login-input"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full mt-1 bg-[#0F4C81] hover:bg-[#0D3F6D] text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-[#0F4C81]/20 text-sm flex items-center justify-center cursor-pointer gap-2 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#0F4C81]/25 disabled:opacity-50 disabled:hover:translate-y-0"
+                >
+                  {loading ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                      <span>Signing in...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Lock className="w-4 h-4" />
+                      <span>Secure Sign In</span>
+                    </>
+                  )}
+                </button>
+              </form>
+
+              {/* Divider */}
+              <div className="relative flex py-1 items-center">
+                <div className="flex-grow border-t border-slate-200/60" />
+                <span className="flex-shrink mx-4 text-slate-400 text-[10px] font-bold uppercase tracking-wider">or</span>
+                <div className="flex-grow border-t border-slate-200/60" />
+              </div>
+
+              {/* Google SSO */}
+              <button
+                onClick={handleGoogleLogin}
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-2.5 p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-bold text-slate-700 text-sm transition-all shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
+              >
+                <GoogleIcon />
+                <span>Continue with Google</span>
+              </button>
+            </div>
+
+            {/* Footer inside card */}
+            <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-center gap-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+              <Shield className="w-3.5 h-3.5 text-slate-400" />
+              <span>Encrypted ERP Session</span>
+            </div>
           </div>
         </div>
-      </footer>
+
+        {/* Page footer */}
+        <footer className="w-full border-t border-slate-200/60 bg-white/80 py-5 px-6">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 font-medium">
+            <span>© 2026 JNTU-GV CEV. All Rights Reserved.</span>
+            <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/60 px-3 py-1 rounded-full text-slate-600 shadow-sm">
+              <Shield className="w-3.5 h-3.5 text-[#0F4C81]" />
+              <span>ISO 9001:2015 Certified Institution</span>
+            </div>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }

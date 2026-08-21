@@ -489,3 +489,88 @@ body {
     transform: rotate(0.5turn);
   }
 }
+
+/* ─── Login Pages ─── */
+
+@keyframes login-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(3deg); }
+}
+
+@keyframes login-float-alt {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(-4deg); }
+}
+
+@keyframes login-glow {
+  0%, 100% { box-shadow: 0 0 30px oklch(0.55 0.2 265 / 0.2), 0 0 60px oklch(0.55 0.2 265 / 0.08); }
+  50% { box-shadow: 0 0 40px oklch(0.55 0.2 265 / 0.35), 0 0 80px oklch(0.55 0.2 265 / 0.14); }
+}
+
+@keyframes login-entrance {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes login-slide-right {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.login-brand-panel {
+  background: linear-gradient(160deg, oklch(0.22 0.06 255) 0%, oklch(0.18 0.12 265) 40%, oklch(0.15 0.08 280) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-brand-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, oklch(0.55 0.2 265 / 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, oklch(0.5 0.18 285 / 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.login-card {
+  background: oklch(1 0 0 / 0.92);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid oklch(0.9 0.01 80 / 0.7);
+  animation: login-entrance 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.login-input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.75rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid oklch(0.88 0.015 80);
+  background: oklch(0.97 0.005 85 / 0.6);
+  font-size: 0.875rem;
+  color: oklch(0.25 0.02 250);
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  outline: none;
+}
+
+.login-input:focus {
+  border-color: oklch(0.5 0.18 265);
+  background: white;
+  box-shadow: 0 0 0 3px oklch(0.55 0.2 265 / 0.1), 0 2px 8px oklch(0.3 0.1 265 / 0.06);
+}
+
+.login-input::placeholder {
+  color: oklch(0.65 0.01 250);
+}
+
+.login-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.login-floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.08;
+}

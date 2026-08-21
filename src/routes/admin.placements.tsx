@@ -10,6 +10,8 @@ import {
 import { PageHero } from "@/components/PageHero";
 import { useAdmin } from "../context/AdminContext";
 
+import { toast } from "sonner";
+
 export const Route = createFileRoute("/admin/placements")({
   component: AdminPlacementsPage,
 });
@@ -48,7 +50,11 @@ function AdminPlacementsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["placementYears"] });
       setYearForm({ year: "", offers: 0, top: "", recruiters: 0 });
+      toast.success("Placement yearly statistics added successfully!");
     },
+    onError: (err: any) => {
+      toast.error(err?.message || "Failed to add placement year statistics.");
+    }
   });
 
   const addHighlightMutation = useMutation({
@@ -56,7 +62,11 @@ function AdminPlacementsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["placementHighlights"] });
       setHighlightForm({ name: "", branch: "", company: "", package: "" });
+      toast.success("Student placement highlight added successfully!");
     },
+    onError: (err: any) => {
+      toast.error(err?.message || "Failed to add student highlight.");
+    }
   });
 
   return (

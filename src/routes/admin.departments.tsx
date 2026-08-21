@@ -100,12 +100,22 @@ function AdminDepartmentsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses", selectedDeptId] });
       setCourseForm({ name: "", level: "", regulation: "", syllabus_url: "" });
+      toast.success("Course added successfully!");
+    },
+    onError: (err: any) => {
+      toast.error(err?.message || "Failed to add course.");
     }
   });
 
   const deleteCourseMutation = useMutation({
     mutationFn: (id: number) => deleteCourse({ data: { id } } as any),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["courses", selectedDeptId] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses", selectedDeptId] });
+      toast.success("Course deleted successfully!");
+    },
+    onError: (err: any) => {
+      toast.error(err?.message || "Failed to delete course.");
+    }
   });
 
   const addGalleryMutation = useMutation({
@@ -113,6 +123,21 @@ function AdminDepartmentsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["gallery", selectedDeptId] });
       setGalleryForm({ title: "", image_url: "", category: "General", description: "" });
+      toast.success("Gallery image added successfully!");
+    },
+    onError: (err: any) => {
+      toast.error(err?.message || "Failed to add image to gallery.");
+    }
+  });
+
+  const deleteGalleryMutation = useMutation({
+    mutationFn: (id: number) => deleteFromGallery({ data: { id } } as any),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["gallery", selectedDeptId] });
+      toast.success("Image removed from gallery successfully!");
+    },
+    onError: (err: any) => {
+      toast.error(err?.message || "Failed to remove image from gallery.");
     }
   });
 
@@ -361,7 +386,7 @@ function AdminDepartmentsPage() {
                     <div key={g.id} className="relative aspect-video rounded-xl overflow-hidden group">
                       <img decoding="async" loading="lazy" src={getAssetUrl(g.image_url)} className="object-cover w-full h-full" alt={g.title} />
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                        <button onClick={() => deleteFromGallery({ data: { id: g.id } } as any)} className="bg-red-500 text-white p-2 rounded-lg text-xs">Delete</button>
+                        <button onClick={() => deleteGalleryMutation.mutate(g.id)} className="bg-red-500 text-white p-2 rounded-lg text-xs cursor-pointer">Delete</button>
                       </div>
                     </div>
                   ))}

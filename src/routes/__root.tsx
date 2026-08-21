@@ -164,6 +164,12 @@ function AdminContent() {
     logout
   } = useAdmin();
 
+  // Login entry routes where the full site chrome (Navbar, Footer, Chatbot)
+  // should be hidden. Account-settings pages are intentionally excluded —
+  // they are authenticated internal screens that need full navigation.
+  const LOGIN_ROUTES = new Set(["/admin", "/admin/", "/faculty-login", "/hod-login"]);
+  const isLoginPage = LOGIN_ROUTES.has(path.replace(/\/$/, "") || "/") || LOGIN_ROUTES.has(path);
+
   // 2. Identify if the user is actively viewing a department sub-route
   const pathSegments = path.split("/").filter(Boolean); // e.g., ["departments", "cse"]
   const isDepartmentPage = pathSegments[0] === "departments" && pathSegments[1];
@@ -221,32 +227,37 @@ function AdminContent() {
         </div>
       )}
 
-      {/* Unified Persistent Sticky Header Suite (Ribbon + Banner + Notice Ticker + Floating Capsule Navbar) */}
-      <div className={`sticky ${isAdmin ? "top-12" : "top-0"} z-50 w-full pointer-events-none transition-all duration-200`}>
-        <div className="pointer-events-auto shadow-md">
-          {/* Top Navy Blue Ribbon with Quick Links & Social */}
-          <TopRibbon />
+      {/* Unified Persistent Sticky Header Suite — hidden on login pages */}
+      {!isLoginPage && (
+        <div className={`sticky ${isAdmin ? "top-12" : "top-0"} z-50 w-full pointer-events-none transition-all duration-200`}>
+          <div className="pointer-events-auto shadow-md">
+            {/* Top Navy Blue Ribbon with Quick Links & Social */}
+            <TopRibbon />
 
-          {/* Official College Header Banner */}
-          <HeaderBanner />
+            {/* Official College Header Banner */}
+            <HeaderBanner />
 
-          {/* Updates / Notice Marquee Ticker */}
-          <NoticeTicker />
+            {/* Updates / Notice Marquee Ticker */}
+            <NoticeTicker />
+          </div>
+
+          {/* Floating Dynamic Capsule Navigation Bar (Overlays directly on hero carousel / page hero with zero background) */}
+          <MegaMenu />
         </div>
-
-        {/* Floating Dynamic Capsule Navigation Bar (Overlays directly on hero carousel / page hero with zero background) */}
-        <MegaMenu />
-      </div>
+      )}
 
       <main className="flex-1 w-full max-w-full">
         <Outlet />
       </main>
 
-      <Footer />
-      <Suspense fallback={null}>
-        <Chatbot />
-      </Suspense>
+      {!isLoginPage && <Footer />}
+      {!isLoginPage && (
+        <Suspense fallback={null}>
+          <Chatbot />
+        </Suspense>
+      )}
     </div>
   );
 }
+
 

@@ -5,6 +5,7 @@
  */
 
 import { Save, Plus, Trash2, X, Edit3 } from "lucide-react";
+import { toast } from "sonner";
 
 /* ─── Outer wrapper for any editable section ──────────────────────────── */
 export function AdminPanel({
@@ -16,7 +17,7 @@ export function AdminPanel({
 }) {
   return (
     <div
-      className={`bg-amber-50/60 border-2 border-amber-200/80 rounded-2xl p-5 space-y-4 animate-[fade-in_0.25s_ease-out] ${className}`}
+      className={`bg-amber-500/[0.02] backdrop-blur-xs border-2 border-amber-500/10 hover:border-amber-500/20 rounded-3xl p-6 shadow-xs hover:shadow-sm transition-all duration-300 space-y-4 animate-[fade-in_0.25s_ease-out] ${className}`}
     >
       {children}
     </div>
@@ -32,10 +33,12 @@ export function AdminPanelHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between border-b border-amber-200/60 pb-3">
+    <div className="flex items-center justify-between border-b border-amber-500/10 pb-3.5 mb-2">
       <div className="flex items-center gap-2">
-        <Edit3 className="w-3.5 h-3.5 text-amber-700" />
-        <span className="text-[10px] font-black text-amber-800 uppercase tracking-wider">
+        <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-700">
+          <Edit3 className="w-3.5 h-3.5" />
+        </div>
+        <span className="text-[11px] font-black text-amber-800 uppercase tracking-wider">
           {title}
         </span>
       </div>
@@ -54,7 +57,7 @@ export function AdminField({
 }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[9px] font-black text-amber-800 uppercase tracking-widest block">
+      <label className="text-[9px] font-bold text-amber-800/80 dark:text-amber-300/85 uppercase tracking-[0.18em] block ml-1">
         {label}
       </label>
       {children}
@@ -67,7 +70,7 @@ export function AdminInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      className={`w-full border-2 border-amber-200 bg-white rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-800 outline-none focus:border-amber-400 transition placeholder:text-slate-300 ${props.className ?? ""}`}
+      className={`w-full border border-amber-500/15 bg-white/80 focus:bg-white rounded-2xl px-4 py-3 text-sm font-semibold text-slate-800 outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all placeholder:text-slate-350 shadow-xs ${props.className ?? ""}`}
     />
   );
 }
@@ -79,7 +82,7 @@ export function AdminTextarea(
   return (
     <textarea
       {...props}
-      className={`w-full border-2 border-amber-200 bg-white rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-700 outline-none focus:border-amber-400 transition resize-none leading-relaxed placeholder:text-slate-300 ${props.className ?? ""}`}
+      className={`w-full border border-amber-500/15 bg-white/80 focus:bg-white rounded-2xl px-4 py-3 text-sm font-semibold text-slate-800 outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all resize-none leading-relaxed placeholder:text-slate-355 shadow-xs ${props.className ?? ""}`}
     />
   );
 }
@@ -97,7 +100,7 @@ export function AdminSaveButton({
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 active:scale-95 text-amber-950 font-black px-5 py-2.5 rounded-xl text-[11px] uppercase tracking-wider shadow transition cursor-pointer ${className}`}
+      className={`inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 active:scale-95 text-slate-950 font-black px-6 py-3 rounded-2xl text-[11px] uppercase tracking-wider shadow-sm hover:shadow transition-all duration-200 cursor-pointer ${className}`}
     >
       <Save className="w-3.5 h-3.5" />
       {label}
@@ -118,7 +121,7 @@ export function AdminAddButton({
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-2 bg-slate-900 hover:bg-amber-600 active:scale-95 text-white font-black px-5 py-2.5 rounded-xl text-[11px] uppercase tracking-wider shadow transition cursor-pointer ${className}`}
+      className={`inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-black px-6 py-3 rounded-2xl text-[11px] uppercase tracking-wider shadow-sm hover:shadow transition-all duration-200 cursor-pointer ${className}`}
     >
       <Plus className="w-3.5 h-3.5" />
       {label}
@@ -137,8 +140,8 @@ export function AdminDeleteButton({
   return (
     <button
       onClick={onClick}
-      className={`text-slate-300 hover:text-rose-600 hover:bg-rose-50 active:scale-90 transition duration-200 cursor-pointer inline-grid place-items-center ${
-        round ? "w-8 h-8 rounded-full" : "w-8 h-8 rounded-xl"
+      className={`text-slate-400 hover:text-rose-600 hover:bg-rose-50 active:scale-90 transition-all duration-200 cursor-pointer inline-grid place-items-center ${
+        round ? "w-8 h-8 rounded-full" : "w-9 h-9 rounded-2xl border border-slate-200/60 bg-white shadow-xs"
       }`}
     >
       <Trash2 className="w-4 h-4" />
@@ -161,11 +164,11 @@ export function AdminRemoveButton({ onClick }: { onClick: () => void }) {
 /* ─── Sticky admin mode banner (top of page) ───────────────────────────── */
 export function AdminModeBanner({ label }: { label: string }) {
   return (
-    <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white font-black py-2.5 px-6 sticky top-0 z-[100] shadow-lg flex items-center justify-center gap-2.5 border-b border-amber-700/30 animate-[fade-in_0.15s] backdrop-blur-md text-[11px] uppercase tracking-widest">
-      <span className="inline-block w-2 h-2 rounded-full bg-amber-950 animate-pulse shrink-0" />
+    <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-slate-950 font-black py-3 px-6 sticky top-0 z-[100] shadow-md flex items-center justify-center gap-2.5 border-b border-amber-600/30 animate-[fade-in_0.15s] backdrop-blur-md text-[11px] uppercase tracking-widest">
+      <span className="inline-block w-2.5 h-2.5 rounded-full bg-slate-950 animate-pulse shrink-0" />
       <span>{label}</span>
-      <span className="hidden md:inline text-amber-100/70 normal-case italic font-medium text-[10px]">
-        — Click any field to edit, then save.
+      <span className="hidden md:inline text-slate-800/80 normal-case italic font-medium text-[10px]">
+        — Fields with edit controls are active. Simply click, edit, then save.
       </span>
     </div>
   );
@@ -184,16 +187,16 @@ export function AdminAddRow({
   placeholder?: string;
 }) {
   return (
-    <div className="flex gap-2.5 bg-white border-2 border-amber-200 rounded-xl p-2 shadow-inner">
+    <div className="flex gap-2.5 bg-white/90 border border-amber-500/20 focus-within:border-amber-500 focus-within:ring-4 focus-within:ring-amber-500/10 rounded-2xl p-2.5 shadow-xs transition-all">
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && onAdd()}
         placeholder={placeholder}
-        className="flex-1 bg-transparent px-2 py-1 text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-300"
+        className="flex-1 bg-transparent px-3 py-1 text-sm font-semibold text-slate-850 outline-none placeholder:text-slate-350"
       />
-      <AdminAddButton onClick={onAdd} label="Add" className="!px-4 !py-2" />
+      <AdminAddButton onClick={onAdd} label="Add" className="!px-4 !py-2.5 !rounded-xl" />
     </div>
   );
 }
@@ -290,9 +293,11 @@ export function AdminUpload({
       if (res.data.success && filePath) {
         onChange(filePath);
         setProgress(null);
+        toast.success("File uploaded successfully!");
       } else {
         setError(res.data.error || "Upload failed");
         setProgress(null);
+        toast.error(res.data.error || "Upload failed");
       }
     } catch (err: any) {
       setError(err.response?.data?.error || err.message || "Upload failed");
@@ -488,11 +493,14 @@ export function PersonAvatarUpload({
       const filePath = json.path || json.url;
       if (json.success && filePath) {
         onChange(filePath);
+        toast.success("Photo uploaded successfully!");
       } else {
         setError(json.error || "Upload failed");
+        toast.error(json.error || "Upload failed");
       }
     } catch (e: any) {
       setError(e.message || "Upload failed");
+      toast.error(e.message || "Upload failed");
     } finally {
       setProgress(null);
     }
@@ -621,11 +629,16 @@ export function AdminMultiUpload({
         if (res.data.success && res.data.path) {
           await onAdd(res.data.path);
           updateJob(job.id, { progress: 100, done: true });
+          toast.success(`Uploaded ${arr[i].name} successfully!`);
         } else {
-          updateJob(job.id, { done: true, error: res.data.error || "Failed" });
+          const errMsg = res.data.error || "Failed";
+          updateJob(job.id, { done: true, error: errMsg });
+          toast.error(`Failed to upload ${arr[i].name}: ${errMsg}`);
         }
       } catch (err: any) {
-        updateJob(job.id, { done: true, error: err.message || "Failed" });
+        const errMsg = err.message || "Failed";
+        updateJob(job.id, { done: true, error: errMsg });
+        toast.error(`Failed to upload ${arr[i].name}: ${errMsg}`);
       }
     }
 

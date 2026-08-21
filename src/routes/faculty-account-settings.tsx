@@ -63,91 +63,129 @@ function FacultyAccountSettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl border border-slate-200 max-w-md w-full p-10 shadow-xl space-y-6">
-        <div className="text-center space-y-2">
-          <div className="h-16 w-16 bg-blue-50 border border-blue-200 text-blue-600 rounded-2xl flex items-center justify-center mx-auto">
-            <KeyRound size={28} />
+    <div className="min-h-[80vh] bg-gradient-to-br from-slate-50 via-white to-sky-50/30 flex items-center justify-center p-4 md:p-8">
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-slate-200/80 max-w-md w-full p-8 md:p-10 shadow-xl shadow-slate-200/40 space-y-6" style={{ animation: "login-entrance 0.6s cubic-bezier(0.22, 1, 0.36, 1) both" }}>
+        {/* Logo + Header */}
+        <div className="text-center space-y-3">
+          <div className="flex justify-center mb-2">
+            <img
+              src="/logo.png"
+              alt="JNTU-GV Logo"
+              className="h-16 w-16 object-contain rounded-full border border-slate-200 bg-white p-0.5 shadow-md"
+            />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">Account Settings</h1>
+          <div className="h-14 w-14 bg-blue-50 border border-blue-200 text-blue-600 rounded-2xl flex items-center justify-center mx-auto">
+            <KeyRound size={24} />
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900 font-display">Account Settings</h1>
           <p className="text-xs text-slate-500">Update your login email or password.</p>
         </div>
 
         {errorMsg && (
-          <div className="p-3 bg-rose-50 border border-rose-100 text-rose-700 rounded-xl text-xs">
-            {errorMsg}
+          <div className="p-3.5 bg-rose-50 border border-rose-100 text-rose-700 rounded-2xl text-xs flex items-start gap-2.5" style={{ animation: "login-entrance 0.3s ease-out both" }}>
+            <svg className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{errorMsg}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-              <Lock size={12} /> Current Password (required)
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em] flex items-center gap-1 ml-1">
+              <Lock size={10} /> Current Password (required)
             </label>
-            <input
-              type="password"
-              required
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              disabled={loading}
-            />
+            <div className="relative">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                <Lock className="w-4 h-4" />
+              </div>
+              <input
+                type="password"
+                required
+                className="login-input"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                disabled={loading}
+              />
+            </div>
           </div>
 
           <hr className="border-slate-100" />
 
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-              <Mail size={12} /> New Email (optional)
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em] flex items-center gap-1 ml-1">
+              <Mail size={10} /> New Email (optional)
             </label>
-            <input
-              type="email"
-              placeholder="Leave blank to keep current email"
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-              disabled={loading}
-            />
+            <div className="relative">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                <Mail className="w-4 h-4" />
+              </div>
+              <input
+                type="email"
+                placeholder="Leave blank to keep current email"
+                className="login-input"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                disabled={loading}
+              />
+            </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-              <KeyRound size={12} /> New Password (optional)
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em] flex items-center gap-1 ml-1">
+              <KeyRound size={10} /> New Password (optional)
             </label>
-            <input
-              type="password"
-              placeholder="Leave blank to keep current password"
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              disabled={loading}
-            />
+            <div className="relative">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                <KeyRound className="w-4 h-4" />
+              </div>
+              <input
+                type="password"
+                placeholder="Leave blank to keep current password"
+                className="login-input"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                disabled={loading}
+              />
+            </div>
           </div>
 
           {newPassword && (
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+            <div className="space-y-1.5" style={{ animation: "login-entrance 0.3s ease-out both" }}>
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em] ml-1">
                 Confirm New Password
               </label>
-              <input
-                type="password"
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                disabled={loading}
-              />
+              <div className="relative">
+                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <Lock className="w-4 h-4" />
+                </div>
+                <input
+                  type="password"
+                  className="login-input"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
             </div>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm disabled:opacity-50"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl text-sm disabled:opacity-50 transition-all duration-300 shadow-lg shadow-blue-600/15 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-blue-600/20 flex items-center justify-center gap-2"
           >
-            {loading ? "Updating..." : "Update Credentials"}
+            {loading ? (
+              <>
+                <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                <span>Updating...</span>
+              </>
+            ) : (
+              "Update Credentials"
+            )}
           </button>
         </form>
       </div>
     </div>
   );
-}
+}

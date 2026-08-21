@@ -17,17 +17,16 @@ export const Route = createFileRoute("/local-assets/uploads/$")({
           }
 
           const relativeFilePath = pathname.substring(prefix.length);
-          const baseDir = path.join(process.cwd(), "local-assets", "uploads");
-          const diskPath = path.join(baseDir, relativeFilePath);
+          let diskPath = path.join(process.cwd(), "local-assets", "uploads", relativeFilePath);
 
-          // Check if file exists and is not a directory
-          if (!fs.existsSync(diskPath) || fs.statSync(diskPath).isDirectory()) {
-            return new Response(null, {
-              status: 302,
-              headers: {
-                Location: `http://89.116.134.182/local-assets/uploads${relativeFilePath}`,
-              },
-            });
+          // Check if file exists in primary cwd or absolute VPS directory
+          if (!fs.existsSync(diskPath) || !fs.statSync(diskPath).isFile()) {
+            const vpsPath = path.join("/var/www/JNTU-REDESIGN/local-assets/uploads", relativeFilePath);
+            if (fs.existsSync(vpsPath) && fs.statSync(vpsPath).isFile()) {
+              diskPath = vpsPath;
+            } else {
+              return new Response("Asset Not Found", { status: 404 });
+            }
           }
 
           // Read file content
@@ -43,6 +42,8 @@ export const Route = createFileRoute("/local-assets/uploads/$")({
             contentType = "image/png";
           } else if (extension === ".webp") {
             contentType = "image/webp";
+          } else if (extension === ".svg") {
+            contentType = "image/svg+xml";
           } else if (extension === ".pdf") {
             contentType = "application/pdf";
           }

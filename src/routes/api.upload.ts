@@ -153,7 +153,11 @@ export const Route = createFileRoute("/api/upload")({
           // Clean up any double slashes
           relativeFolder = relativeFolder.replace(/\/{2,}/g, "/");
 
-          const baseDir = path.join(process.cwd(), "local-assets", "uploads");
+          let baseDir = path.join(process.cwd(), "local-assets", "uploads");
+          if (fs.existsSync("/var/www/JNTU-REDESIGN/local-assets")) {
+            baseDir = "/var/www/JNTU-REDESIGN/local-assets/uploads";
+          }
+          
           const targetDir = path.join(baseDir, relativeFolder);
 
           if (!fs.existsSync(targetDir)) {

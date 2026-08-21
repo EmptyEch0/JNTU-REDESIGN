@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { useFaculty } from "@/context/FacultyContext";
 import { 
   ArrowLeft, GraduationCap, Trophy, Globe, 
-  Briefcase, BookOpen, Save, Plus, Trash2, Camera, Type, IdCard, LogOut
+  Briefcase, BookOpen, Save, Plus, Trash2, Camera, Type, IdCard, LogOut, RotateCcw
 } from "lucide-react";
 import { getAssetUrl } from "@/lib/assets";
 import { SafeImage } from "@/components/SafeImage";
@@ -46,6 +46,30 @@ function FacultyDetailProfilePage() {
   
   // Local reactive edit state mapping
   const [editState, setEditState] = useState<any>(null);
+
+  const resetToOriginal = () => {
+    if (facultyRaw) {
+      setEditState({
+        name: facultyRaw.name || "",
+        designation: facultyRaw.designation || "",
+        photo_url: facultyRaw.photo_url || "",
+        qualifications: facultyRaw.qualifications || ["M.Tech", "Ph.D"],
+        specialization: facultyRaw.specialization || "Advanced Systems Architectures",
+        experience_years: facultyRaw.experience_years ?? 10,
+        awards: facultyRaw.awards || ["Best Faculty Achievement Award"],
+        fellowships: facultyRaw.fellowships || ["Institutional Research Fellow"],
+        professional_memberships: facultyRaw.professional_memberships || ["IEEE Member", "ISTE Life Member"],
+        international_exchanges: facultyRaw.international_exchanges || ["Visiting Professor Scheme"],
+        sabbaticals: facultyRaw.sabbaticals || ["Research Sabbatical Leave Program"],
+        consultancy_projects: facultyRaw.consultancy_projects || [
+          { title: "Industrial Optimization Framework", client: "Local Technical Agency", status: "Completed" }
+        ],
+        fdps_attended: facultyRaw.fdps_attended || ["National Faculty Development Initiative"],
+        conferences_attended: facultyRaw.conferences_attended || ["International Research Symposium Presentation"]
+      });
+      toast.info("Unsaved modifications reverted to original profile.");
+    }
+  };
 
   useEffect(() => {
     if (facultyRaw) {
@@ -158,23 +182,34 @@ function FacultyDetailProfilePage() {
 )}
 
         {isEditMode && (
-          <button 
-            onClick={() => mutation.mutate(editState)}
-            disabled={mutation.isPending}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white px-6 py-2.5 rounded-full font-bold text-xs shadow-lg shadow-indigo-100 transition-all cursor-pointer disabled:cursor-not-allowed"
-          >
-            {mutation.isPending ? (
-              <>
-                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Saving Changes...</span>
-              </>
-            ) : (
-              <>
-                <Save size={14} />
-                <span>Save Profile Changes</span>
-              </>
-            )}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={resetToOriginal}
+              className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-full font-bold text-xs border border-slate-300 transition cursor-pointer"
+              title="Revert unsaved changes"
+            >
+              <RotateCcw size={14} />
+              <span>Undo Changes</span>
+            </button>
+            <button 
+              onClick={() => mutation.mutate(editState)}
+              disabled={mutation.isPending}
+              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white px-6 py-2.5 rounded-full font-bold text-xs shadow-lg shadow-indigo-100 transition-all cursor-pointer disabled:cursor-not-allowed"
+            >
+              {mutation.isPending ? (
+                <>
+                  <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Saving Changes...</span>
+                </>
+              ) : (
+                <>
+                  <Save size={14} />
+                  <span>Save Profile Changes</span>
+                </>
+              )}
+            </button>
+          </div>
         )}
       </div>
 

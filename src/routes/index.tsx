@@ -371,8 +371,8 @@ function HomePage() {
 
               <div className="space-y-6">
                 <RevealOnScroll delay={100}>
-                  <div className="group p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
-                    <div className="flex gap-6 items-start">
+                  <div className="group p-5 sm:p-8 rounded-3xl sm:rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
                       <div className="h-12 w-12 shrink-0 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Eye className="h-6 w-6" />
                       </div>
@@ -390,8 +390,8 @@ function HomePage() {
                 </RevealOnScroll>
 
                 <RevealOnScroll delay={200}>
-                  <div className="group p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
-                    <div className="flex gap-6 items-start">
+                  <div className="group p-5 sm:p-8 rounded-3xl sm:rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
                       <div className="h-12 w-12 shrink-0 rounded-2xl bg-accent/10 text-accent flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Target className="h-6 w-6" />
                       </div>
@@ -504,111 +504,111 @@ function HomePage() {
 
       {/* DEPARTMENTS — Optimized with lazy loading */}
       <section className="py-24 md:py-32 bg-sand">
-  <div className="container-narrow">
-    <RevealOnScroll>
-      <SectionLabel
-        eyebrow="Departments"
-        title="Eight departments. One academic culture."
-        subtitle="Each department is led by faculty who teach with conviction, mentor with care and research with rigour."
-      />
-    </RevealOnScroll>
-
-    <RevealOnScroll className="mt-12" delay={150}>
-      {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div 
-              key={i} 
-              className="aspect-[4/3] rounded-3xl bg-slate-200 animate-pulse"
+        <div className="container-narrow">
+          <RevealOnScroll>
+            <SectionLabel
+              eyebrow="Departments"
+              title="Eight departments. One academic culture."
+              subtitle="Each department is led by faculty who teach with conviction, mentor with care and research with rigour."
             />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {liveDepartments.map((d: any, index: number) => {
-            const deptSlug = (d.slug || "").toLowerCase();
-            
-            // Define fallback map for department images
-            const fallbackMap: Record<string, string> = {
-              cse: "http://89.116.134.182/local-assets/uploads/departments/banners/cse-banner.jpg",
-              ece: "http://89.116.134.182/local-assets/uploads/departments/banners/ece-banner.jpg",
-              eee: "http://89.116.134.182/local-assets/uploads/departments/banners/eee-banner.jpg",
-              it: "http://89.116.134.182/local-assets/uploads/departments/banners/it-banner.jpg",
-              mech: "http://89.116.134.182/local-assets/uploads/departments/banners/mech-banner.jpg",
-              met: "http://89.116.134.182/local-assets/uploads/departments/banners/met-banner.jpg",
-              sh: "http://89.116.134.182/local-assets/uploads/departments/banners/sh-banner.jpg",
-              mba: "http://89.116.134.182/local-assets/uploads/departments/banners/mba-banner.jpg",
-            };
-            
-            // Get the image source
-            const imageSrc = d.image 
-              ? getAssetUrl(d.image) 
-              : `http://89.116.134.182/local-assets/uploads/departments/banners/${deptSlug}-banner.jpg`;
-            
-            const fallback = fallbackMap[deptSlug] || "/assets/lab.webp";
+          </RevealOnScroll>
 
-            return (
-              <Link
-                key={d.id}
-                to="/departments/$id"
-                params={{ id: d.slug }}
-                className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 aspect-[4/3]"
-              >
-                {/* Background Image - using regular img with optimized loading */}
-                <img
-                  src={imageSrc}
-                  alt={`${d.name} department`}
-                  loading={index < 4 ? "eager" : "lazy"}
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (target.src !== fallback && !target.src.endsWith(fallback)) {
-                      target.src = fallback;
-                    }
-                  }}
-                />
+          <RevealOnScroll className="mt-12" delay={150}>
+            {isLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="aspect-[4/3] rounded-3xl bg-slate-200 animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {liveDepartments.map((d: any, index: number) => {
+                  const deptSlug = (d.slug || "").toLowerCase();
 
-                {/* Dark gradient overlay - this ensures text is readable */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 z-10" />
+                  // Define fallback map for department images
+                  const fallbackMap: Record<string, string> = {
+                    cse: "http://89.116.134.182/local-assets/uploads/departments/banners/cse-banner.jpg",
+                    ece: "http://89.116.134.182/local-assets/uploads/departments/banners/ece-banner.jpg",
+                    eee: "http://89.116.134.182/local-assets/uploads/departments/banners/eee-banner.jpg",
+                    it: "http://89.116.134.182/local-assets/uploads/departments/banners/it-banner.jpg",
+                    mech: "http://89.116.134.182/local-assets/uploads/departments/banners/mech-banner.jpg",
+                    met: "http://89.116.134.182/local-assets/uploads/departments/banners/met-banner.jpg",
+                    sh: "http://89.116.134.182/local-assets/uploads/departments/banners/sh-banner.jpg",
+                    mba: "http://89.116.134.182/local-assets/uploads/departments/banners/mba-banner.jpg",
+                  };
 
-                {/* Content - placed on top with z-index */}
-                <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-between text-white z-20">
-                  <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 text-[9px] font-bold tracking-widest uppercase rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white/90">
-                      {d.slug.toUpperCase()}
-                    </span>
-                    <div className="h-8 w-8 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-slate-900 transition-all duration-200">
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </div>
-                  </div>
+                  // Get the image source
+                  const imageSrc = d.image
+                    ? getAssetUrl(d.image)
+                    : `http://89.116.134.182/local-assets/uploads/departments/banners/${deptSlug}-banner.jpg`;
 
-                  <div className="space-y-1.5">
-                    <h3 className="text-lg md:text-xl font-extrabold tracking-tight text-white leading-tight">
-                      {d.name}
-                    </h3>
-                    
-                    {d.hod && (
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded inline-block">
-                          HOD: <span className="text-white">{d.hod}</span>
-                        </span>
+                  const fallback = fallbackMap[deptSlug] || "/assets/lab.webp";
+
+                  return (
+                    <Link
+                      key={d.id}
+                      to="/departments/$id"
+                      params={{ id: d.slug }}
+                      className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 aspect-[4/3]"
+                    >
+                      {/* Background Image - using regular img with optimized loading */}
+                      <img
+                        src={imageSrc}
+                        alt={`${d.name} department`}
+                        loading={index < 4 ? "eager" : "lazy"}
+                        decoding="async"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (target.src !== fallback && !target.src.endsWith(fallback)) {
+                            target.src = fallback;
+                          }
+                        }}
+                      />
+
+                      {/* Dark gradient overlay - this ensures text is readable */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 z-10" />
+
+                      {/* Content - placed on top with z-index */}
+                      <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-between text-white z-20">
+                        <div className="flex items-center justify-between">
+                          <span className="px-2.5 py-1 text-[9px] font-bold tracking-widest uppercase rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white/90">
+                            {d.slug.toUpperCase()}
+                          </span>
+                          <div className="h-8 w-8 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-slate-900 transition-all duration-200">
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <h3 className="text-lg md:text-xl font-extrabold tracking-tight text-white leading-tight">
+                            {d.name}
+                          </h3>
+
+                          {d.hod && (
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded inline-block">
+                                HOD: <span className="text-white">{d.hod}</span>
+                              </span>
+                            </div>
+                          )}
+
+                          <p className="text-xs text-white/80 line-clamp-2 font-medium leading-relaxed">
+                            {d.description}
+                          </p>
+                        </div>
                       </div>
-                    )}
-
-                    <p className="text-xs text-white/80 line-clamp-2 font-medium leading-relaxed">
-                      {d.description}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </RevealOnScroll>
         </div>
-      )}
-    </RevealOnScroll>
-  </div>
-</section>
+      </section>
 
       {/* FACILITIES — interactive showcase */}
       <section className="py-20 md:py-28">
@@ -909,33 +909,40 @@ function HomePage() {
                   </p>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-10 lg:gap-16">
-                  <div className="space-y-4">
-                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-bold">
-                      Contact Number
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full lg:max-w-2xl">
+                  <a
+                    href="tel:08922277388"
+                    className="group flex items-center gap-4 p-5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-primary-glow/40 transition-all duration-300 backdrop-blur-sm min-w-0"
+                  >
+                    <div className="h-12 w-12 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary-glow group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all duration-300 shrink-0 shadow-inner">
+                      <Phone className="h-5 w-5" />
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary-glow shadow-inner">
-                        <Phone className="h-5 w-5" />
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-bold mb-1">
+                        Contact Number
                       </div>
-                      <div className="text-2xl md:text-3xl font-bold tracking-tight">
+                      <div className="text-base sm:text-lg xl:text-xl font-bold tracking-tight text-white group-hover:text-primary-glow transition-colors whitespace-nowrap">
                         08922 277388
                       </div>
                     </div>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-bold">
-                      Email Support
+                  </a>
+
+                  <a
+                    href="mailto:principal@jntugv.edu.in"
+                    className="group flex items-center gap-4 p-5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-primary-glow/40 transition-all duration-300 backdrop-blur-sm"
+                  >
+                    <div className="h-12 w-12 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary-glow group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all duration-300 shrink-0 shadow-inner">
+                      <Mail className="h-5 w-5" />
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary-glow shadow-inner">
-                        <Mail className="h-5 w-5" />
+                    <div className="flex-1">
+                      <div className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-bold mb-1">
+                        Email Support
                       </div>
-                      <div className="text-2xl md:text-3xl font-bold tracking-tight">
+                      <div className="text-sm sm:text-base xl:text-lg font-bold tracking-tight text-white group-hover:text-primary-glow transition-colors whitespace-nowrap">
                         principal@jntugv.edu.in
                       </div>
                     </div>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>

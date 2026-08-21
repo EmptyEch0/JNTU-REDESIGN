@@ -148,6 +148,18 @@ function DepartmentLayout() {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
+  // Lock body scroll when mobile department menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
   const mutation = useMutation({
     mutationFn: (updatedFields: any) =>
       updateDepartment({ data: { id: loaderData.id, ...updatedFields } }),
@@ -243,6 +255,15 @@ function DepartmentLayout() {
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
+        {/* Mobile Backdrop Overlay */}
+        {isMobileMenuOpen && (
+          <div
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="lg:hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-30 transition-opacity duration-300 animate-[fade-in_0.2s_ease-out]"
+            aria-hidden="true"
+          />
+        )}
+
         {/* Sidebar Navigation */}
         <aside className={`
           fixed inset-y-0 left-0 z-40 w-72 bg-card p-6 shadow-2xl transition-transform duration-300 ease-in-out
@@ -287,6 +308,7 @@ function DepartmentLayout() {
                   <div key={item.id} className="space-y-1">
                     <Link
                       to={fullPath}
+                      onClick={() => setIsMobileMenuOpen(false)}
                       className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-sm font-semibold transition-all ${
                         isActive
                           ? "bg-primary text-white shadow-md shadow-primary/25"

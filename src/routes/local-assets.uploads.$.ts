@@ -19,11 +19,14 @@ export const Route = createFileRoute("/local-assets/uploads/$")({
           const relativeFilePath = pathname.substring(prefix.length);
           let diskPath = path.join(process.cwd(), "local-assets", "uploads", relativeFilePath);
 
-          // Check if file exists in primary cwd or absolute VPS directory
+          // Check if file exists in primary cwd or absolute VPS directory (/var/www/local-assets or /var/www/JNTU-REDESIGN)
           if (!fs.existsSync(diskPath) || !fs.statSync(diskPath).isFile()) {
-            const vpsPath = path.join("/var/www/JNTU-REDESIGN/local-assets/uploads", relativeFilePath);
-            if (fs.existsSync(vpsPath) && fs.statSync(vpsPath).isFile()) {
-              diskPath = vpsPath;
+            const vpsPath1 = path.join("/var/www/local-assets/uploads", relativeFilePath);
+            const vpsPath2 = path.join("/var/www/JNTU-REDESIGN/local-assets/uploads", relativeFilePath);
+            if (fs.existsSync(vpsPath1) && fs.statSync(vpsPath1).isFile()) {
+              diskPath = vpsPath1;
+            } else if (fs.existsSync(vpsPath2) && fs.statSync(vpsPath2).isFile()) {
+              diskPath = vpsPath2;
             } else {
               return new Response("Asset Not Found", { status: 404 });
             }

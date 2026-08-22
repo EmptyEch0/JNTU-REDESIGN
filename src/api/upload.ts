@@ -1,4 +1,5 @@
 import { writeFile, mkdir } from "fs/promises";
+import fs from "fs";
 import path from "path";
 
 const UPLOAD_BASE = process.env.UPLOAD_BASE || "/var/www/local-assets/uploads";
@@ -51,12 +52,30 @@ export async function POST(request: Request) {
     const random = Math.random().toString(36).substring(2, 8);
     const filename = `${timestamp}-${random}${ext}`;
 
-    const uploadDir = path.join(UPLOAD_BASE, module, category);
-    await mkdir(uploadDir, { recursive: true });
-    
     const buffer = Buffer.from(await file.arrayBuffer());
-    const filePath = path.join(uploadDir, filename);
-    await writeFile(filePath, buffer);
+
+    const targetDirs = new Set<string>();
+
+    if (fs.existsSync("/var/www/local-assets")) {
+      targetDirs.add(path.join("/var/www/local-assets/uploads", module, category));
+    } else if (fs.existsSync("/var/www")) {
+      targetDirs.add(path.join("/var/www/local-assets/uploads", module, category));
+    }
+
+    if (fs.existsSync("/var/www/JNTU-REDESIGN/local-assets")) {
+      targetDirs.add(path.join("/var/www/JNTU-REDESIGN/local-assets/uploads", module, category));
+    }
+
+    targetDirs.add(path.join(process.cwd(), "local-assets", "uploads", module, category));
+
+    for (const tDir of targetDirs) {
+      try {
+        await mkdir(tDir, { recursive: true });
+        await writeFile(path.join(tDir, filename), buffer);
+      } catch (err) {
+        console.error(`Error saving upload to ${tDir}:`, err);
+      }
+    }
 
     const pathUrl = `/uploads/${module}/${category}/${filename}`;
     

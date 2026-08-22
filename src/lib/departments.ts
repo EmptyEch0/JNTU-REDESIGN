@@ -347,6 +347,7 @@ export const updateFacultyProfile = createServerFn({ method: "POST" })
         consultancy_projects: profileData.consultancy_projects,
         fdps_attended: profileData.fdps_attended,
         conferences_attended: profileData.conferences_attended,
+        documents: profileData.documents || [],
       })
       .where(eq(faculty.id, Number(facultyId)));
 

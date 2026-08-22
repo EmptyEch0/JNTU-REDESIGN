@@ -1062,6 +1062,9 @@ export const faculty = pgTable("faculty", {
   fdps_attended: text("fdps_attended").array().default([]),
   conferences_attended: text("conferences_attended").array().default([]),
   workshops_completed: text("workshops_completed").array().default([]),
+
+  // Section 6: Documents & Certificates
+  documents: jsonb("documents").default([]),
 })
 
 export const achievements = pgTable("achievements", {

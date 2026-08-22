@@ -153,23 +153,35 @@ export const Route = createFileRoute("/api/upload")({
           // Clean up any double slashes
           relativeFolder = relativeFolder.replace(/\/{2,}/g, "/");
 
-          let baseDir = path.join(process.cwd(), "local-assets", "uploads");
-          if (fs.existsSync("/var/www/JNTU-REDESIGN/local-assets")) {
-            baseDir = "/var/www/JNTU-REDESIGN/local-assets/uploads";
-          }
-          
-          const targetDir = path.join(baseDir, relativeFolder);
-
-          if (!fs.existsSync(targetDir)) {
-            fs.mkdirSync(targetDir, { recursive: true });
-          }
-
-          const targetFilePath = path.join(targetDir, filename);
-
-          // Write file content buffer to disk
+          // 5. Save buffer to target directories (VPS /var/www/local-assets, VPS project, and local cwd)
           const arrayBuffer = await file.arrayBuffer();
           const buffer = Buffer.from(arrayBuffer);
-          fs.writeFileSync(targetFilePath, buffer);
+
+          const targetDirPaths = new Set<string>();
+
+          if (fs.existsSync("/var/www/local-assets")) {
+            targetDirPaths.add(path.join("/var/www/local-assets/uploads", relativeFolder));
+          } else if (fs.existsSync("/var/www")) {
+            targetDirPaths.add(path.join("/var/www/local-assets/uploads", relativeFolder));
+          }
+
+          if (fs.existsSync("/var/www/JNTU-REDESIGN/local-assets")) {
+            targetDirPaths.add(path.join("/var/www/JNTU-REDESIGN/local-assets/uploads", relativeFolder));
+          }
+
+          targetDirPaths.add(path.join(process.cwd(), "local-assets", "uploads", relativeFolder));
+
+          for (const targetDir of targetDirPaths) {
+            try {
+              if (!fs.existsSync(targetDir)) {
+                fs.mkdirSync(targetDir, { recursive: true });
+              }
+              const targetFilePath = path.join(targetDir, filename);
+              fs.writeFileSync(targetFilePath, buffer);
+            } catch (err) {
+              console.error(`Error saving upload to ${targetDir}:`, err);
+            }
+          }
 
           // 6. Return relative DB path: local-assets/uploads/...
           const relativeDbPath = `local-assets/uploads/${relativeFolder}/${filename}`;

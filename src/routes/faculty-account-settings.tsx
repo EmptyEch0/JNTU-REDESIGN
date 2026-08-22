@@ -18,7 +18,7 @@ import {
 export const getFacultyAccountInfo = createServerFn({ method: "GET" }).handler(async () => {
   const { getCookie } = await import("@tanstack/react-start/server");
   const { db } = await import("@/db");
-  const { faculty } = await import("@/db/schema");
+  const { faculty, departments } = await import("@/db/schema");
   const { eq } = await import("drizzle-orm");
 
   const id = getCookie("faculty_session_id");
@@ -30,8 +30,10 @@ export const getFacultyAccountInfo = createServerFn({ method: "GET" }).handler(a
       name: faculty.name,
       email: faculty.faculty_email,
       designation: faculty.designation,
+      deptSlug: departments.slug,
     })
     .from(faculty)
+    .leftJoin(departments, eq(faculty.dept_id, departments.id))
     .where(eq(faculty.id, Number(id)))
     .limit(1);
 
@@ -51,6 +53,7 @@ function FacultyAccountSettingsPage() {
     name: string;
     email: string | null;
     designation: string | null;
+    deptSlug: string | null;
   } | null>(null);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -120,6 +123,17 @@ function FacultyAccountSettingsPage() {
     }
   };
 
+  const backLink = account?.deptSlug && account?.id
+    ? {
+        label: "Back to profile",
+        to: "/departments/$id/faculty/$facultyId" as const,
+        params: { id: account.deptSlug, facultyId: String(account.id) },
+      }
+    : {
+        label: "Back to login",
+        href: "/faculty-login",
+      };
+
   return (
     <AccountSettingsLayout
       accent="faculty"
@@ -127,6 +141,7 @@ function FacultyAccountSettingsPage() {
       roleLabel="Faculty Portal"
       title="Account Settings"
       description="Update the email and password you use to sign in to your faculty profile."
+      back={backLink}
     >
       {account && (
         <div className="rounded-2xl border border-border bg-sand/50 px-4 py-3.5 flex items-start gap-3">

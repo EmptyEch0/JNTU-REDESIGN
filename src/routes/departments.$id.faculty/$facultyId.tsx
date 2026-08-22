@@ -10,7 +10,7 @@ import { useFaculty } from "@/context/FacultyContext";
 import { 
   ArrowLeft, GraduationCap, Trophy, Globe, 
   Briefcase, BookOpen, Save, Plus, Trash2, Camera, Type, IdCard, LogOut, RotateCcw, KeyRound, Mail,
-  FileText, ExternalLink, Paperclip, Upload, Download, FolderKanban, File, CheckCircle2
+  FileText, ExternalLink, Paperclip, Upload, Download, FolderKanban, File, CheckCircle2, Settings
 } from "lucide-react";
 import { getAssetUrl } from "@/lib/assets";
 import { SafeImage } from "@/components/SafeImage";
@@ -353,64 +353,85 @@ function FacultyDetailProfilePage() {
 
   return (
     <div className="animate-in fade-in duration-300 space-y-8 max-w-5xl mx-auto pb-16">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <Link 
-          to="/departments/$id/faculty"
-          params={{ id: deptId }}
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
-        >
-          <ArrowLeft size={16} /> Back to Faculty List
-        </Link>
-        {isFacultySelfEdit && (
-          <button
-            onClick={async () => {
-              await logout();
-              navigate({ to: "/faculty-login" });
-            }}
-            className="text-xs font-bold text-rose-600 hover:underline"
+      {/* Top Header Control Toolbar */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/90 backdrop-blur-md p-3 md:px-5 md:py-3 rounded-2xl border border-slate-200/80 shadow-xs">
+        {/* Left: Back Button & Session Status */}
+        <div className="flex flex-wrap items-center gap-3">
+          <Link 
+            to="/departments/$id/faculty"
+            params={{ id: deptId }}
+            className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-indigo-600 bg-slate-100 hover:bg-slate-200/80 px-3.5 py-2 rounded-xl border border-slate-200 transition-all cursor-pointer"
           >
-            Logout
-          </button>
-        )}
-        {isFacultySelfEdit && (
-          <Link
-            to="/faculty-account-settings"
-            className="text-xs font-bold text-slate-600 hover:underline"
-          >
-            Account Settings
+            <ArrowLeft size={15} />
+            <span>Back to Faculty List</span>
           </Link>
-        )}
 
-        {isEditMode && (
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={resetToOriginal}
-              className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-full font-bold text-xs border border-slate-300 transition cursor-pointer"
-              title="Revert unsaved changes"
-            >
-              <RotateCcw size={14} />
-              <span>Undo Changes</span>
-            </button>
-            <button 
-              onClick={() => mutation.mutate(editState)}
-              disabled={mutation.isPending}
-              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white px-6 py-2.5 rounded-full font-bold text-xs shadow-lg shadow-indigo-100 transition-all cursor-pointer disabled:cursor-not-allowed"
-            >
-              {mutation.isPending ? (
-                <>
-                  <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span>Saving Changes...</span>
-                </>
-              ) : (
-                <>
-                  <Save size={14} />
-                  <span>Save Profile Changes</span>
-                </>
-              )}
-            </button>
-          </div>
-        )}
+          {isFacultySelfEdit && (
+            <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-bold text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-xl">
+              <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+              Faculty Portal Session
+            </span>
+          )}
+        </div>
+
+        {/* Right: Actions (Account Settings, Logout, Revert, Save) */}
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+          {isFacultySelfEdit && (
+            <>
+              <Link
+                to="/faculty-account-settings"
+                className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                title="Manage login email and password"
+              >
+                <KeyRound size={14} className="text-slate-600" />
+                <span>Account Settings</span>
+              </Link>
+              <button
+                type="button"
+                onClick={async () => {
+                  await logout();
+                  navigate({ to: "/faculty-login" });
+                }}
+                className="inline-flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                title="Sign out of faculty profile"
+              >
+                <LogOut size={14} />
+                <span>Logout</span>
+              </button>
+            </>
+          )}
+
+          {isEditMode && (
+            <>
+              <button
+                type="button"
+                onClick={resetToOriginal}
+                className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-bold text-xs border border-slate-300 transition cursor-pointer"
+                title="Revert unsaved changes"
+              >
+                <RotateCcw size={14} />
+                <span className="hidden sm:inline">Undo</span>
+              </button>
+              <button 
+                onClick={() => mutation.mutate(editState)}
+                disabled={mutation.isPending}
+                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white px-5 py-2 rounded-xl font-bold text-xs shadow-md shadow-indigo-100 transition-all cursor-pointer disabled:cursor-not-allowed"
+              >
+                {mutation.isPending ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save size={14} />
+                    <span>Save Profile Changes</span>
+                  </>
+                )}
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Profile Header Block */}

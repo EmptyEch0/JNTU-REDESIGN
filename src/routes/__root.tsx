@@ -164,11 +164,20 @@ function AdminContent() {
     logout
   } = useAdmin();
 
-  // Login entry routes where the full site chrome (Navbar, Footer, Chatbot)
-  // should be hidden. Account-settings pages are intentionally excluded —
-  // they are authenticated internal screens that need full navigation.
-  const LOGIN_ROUTES = new Set(["/admin", "/admin/", "/faculty-login", "/hod-login"]);
-  const isLoginPage = LOGIN_ROUTES.has(path.replace(/\/$/, "") || "/") || LOGIN_ROUTES.has(path);
+  // Entry and account-settings routes where full site chrome (Navbar, Footer, Chatbot) is hidden
+  const HIDE_CHROME_ROUTES = new Set([
+    "/admin",
+    "/admin/",
+    "/faculty-login",
+    "/hod-login",
+    "/hod-account-settings",
+    "/hod-account-settings/",
+    "/faculty-account-settings",
+    "/faculty-account-settings/",
+    "/admin-account-settings",
+    "/admin-account-settings/",
+  ]);
+  const isLoginPage = HIDE_CHROME_ROUTES.has(path.replace(/\/$/, "") || "/") || HIDE_CHROME_ROUTES.has(path);
 
   // 2. Identify if the user is actively viewing a department sub-route
   const pathSegments = path.split("/").filter(Boolean); // e.g., ["departments", "cse"]

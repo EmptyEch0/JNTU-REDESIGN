@@ -1,10 +1,9 @@
-// Location: src/routes/hod-login.tsx
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useQuery } from "@tanstack/react-query";
 import { getDepartments } from "@/lib/departments";
-import { Lock, ShieldCheck, ExternalLink, Shield, ChevronDown } from "lucide-react";
+import { Lock, ShieldCheck, ExternalLink, Shield, ChevronDown, Building2, Check } from "lucide-react";
 
 export const Route = createFileRoute("/hod-login")({
   component: HodLoginPage,
@@ -12,11 +11,23 @@ export const Route = createFileRoute("/hod-login")({
 
 function HodLoginPage() {
   const [selectedSlug, setSelectedSlug] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { loginAsHod } = useAdmin();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const { data: depts, isLoading: deptsLoading } = useQuery({
     queryKey: ["departments"],
@@ -171,29 +182,57 @@ function HodLoginPage() {
                   <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em] ml-1">
                     Department
                   </label>
-                  <div className="relative">
-                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                      <ShieldCheck className="w-4 h-4" />
-                    </div>
-                    <select
-                      required
+                  <div className="relative" ref={dropdownRef}>
+                    <button
+                      type="button"
                       disabled={deptsLoading || loading}
-                      className="login-input appearance-none cursor-pointer pr-10"
-                      value={selectedSlug}
-                      onChange={(e) => setSelectedSlug(e.target.value)}
+                      onClick={() => setIsDropdownOpen((prev) => !prev)}
+                      className={`w-full flex items-center justify-between text-left pl-10 pr-4 py-3 rounded-2xl border text-sm font-semibold transition-all duration-200 outline-none cursor-pointer ${
+                        isDropdownOpen
+                          ? "border-indigo-500 ring-4 ring-indigo-500/10 bg-white shadow-md"
+                          : "border-slate-200 bg-slate-50/60 hover:bg-white hover:border-slate-300 text-slate-800"
+                      }`}
                     >
-                      <option value="" disabled>
-                        {deptsLoading ? "Loading departments..." : "Select your department"}
-                      </option>
-                      {sortedDepts.map((d: any) => (
-                        <option key={d.slug} value={d.slug}>
-                          {d.name}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                      <ChevronDown className="w-4 h-4" />
-                    </div>
+                      <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-600 pointer-events-none">
+                        <Building2 className="w-4 h-4" />
+                      </div>
+                      <span className={`block truncate ${selectedSlug ? "text-slate-900 font-bold" : "text-slate-400"}`}>
+                        {deptsLoading
+                          ? "Loading departments..."
+                          : sortedDepts.find((d: any) => d.slug === selectedSlug)?.name || "Select your department"}
+                      </span>
+                      <ChevronDown
+                        className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${
+                          isDropdownOpen ? "rotate-180 text-indigo-600" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {isDropdownOpen && (
+                      <div className="absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200/90 rounded-2xl shadow-2xl z-50 overflow-hidden py-1.5 animate-in fade-in slide-in-from-top-2 duration-200 max-h-60 overflow-y-auto">
+                        {sortedDepts.map((d: any) => {
+                          const isSelected = d.slug === selectedSlug;
+                          return (
+                            <button
+                              key={d.slug}
+                              type="button"
+                              onClick={() => {
+                                setSelectedSlug(d.slug);
+                                setIsDropdownOpen(false);
+                              }}
+                              className={`w-full px-4 py-2.5 text-left text-xs md:text-sm font-semibold flex items-center justify-between transition-colors cursor-pointer ${
+                                isSelected
+                                  ? "bg-indigo-50 text-indigo-700 font-bold"
+                                  : "text-slate-700 hover:bg-slate-50 hover:text-indigo-600"
+                              }`}
+                            >
+                              <span className="truncate">{d.name}</span>
+                              {isSelected && <Check className="w-4 h-4 text-indigo-600 shrink-0 ml-2" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
 

@@ -11,6 +11,7 @@ import {
   Plus, Trash2, Save, Calendar, X, Eye, Download, FileText, 
   Search, Filter, Grid3x3, List, ChevronDown, ChevronUp 
 } from "lucide-react";
+import { getAssetUrl } from "@/lib/assets";
 
 export const Route = createFileRoute("/departments/$id/timetables")({
   component: TimetablesPage,
@@ -138,8 +139,10 @@ function TimetablesPage() {
   };
 
   const handleDownload = (imageUrl: string, title: string) => {
+    if (!imageUrl) return;
+    const resolvedUrl = getAssetUrl(imageUrl);
     const link = document.createElement('a');
-    link.href = imageUrl;
+    link.href = resolvedUrl;
     link.download = `${title.replace(/\s+/g, '_')}.png`;
     document.body.appendChild(link);
     link.click();
@@ -147,7 +150,9 @@ function TimetablesPage() {
   };
 
   const handleView = (imageUrl: string) => {
-    window.open(imageUrl, '_blank');
+    if (!imageUrl) return;
+    const resolvedUrl = getAssetUrl(imageUrl);
+    window.open(resolvedUrl, '_blank');
   };
 
   const toggleExpand = (id: number) => {
@@ -737,7 +742,7 @@ function TimetablesPage() {
                                   </div>
                                 </div>
                                 <img 
-                                  src={tt.image_url} 
+                                  src={getAssetUrl(tt.image_url)} 
                                   alt={tt.title}
                                   className="max-h-80 mx-auto object-contain rounded-lg"
                                   onError={(e) => {
@@ -766,7 +771,7 @@ function TimetablesPage() {
         >
           <div className="relative max-w-5xl w-full max-h-[90vh] flex items-center justify-center">
             <img 
-              src={lightbox} 
+              src={getAssetUrl(lightbox)} 
               alt="Timetable preview"
               className="max-h-full max-w-full object-contain rounded-lg shadow-2xl" 
               onError={(e) => {

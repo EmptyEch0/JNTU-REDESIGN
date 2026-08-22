@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "../db";
 import { departments, faculty, achievements, courses, laboratories, departmentGallery } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { ingestSingleChunk } from "./ingest";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
@@ -26,7 +26,7 @@ export const getDepartments = createServerFn({ method: "GET" }).handler(async ()
 
 export const updateDepartment = createServerFn({ method: "POST" })
   .inputValidator((d: any) => d)
-  .handler(async ({ data }) => { 
+  .handler(async ({ data }) => {
     const { id, faculty: facultyData, ...updateData } = data;
 
     // Update core department details
@@ -76,25 +76,54 @@ export const syncFaculty = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { deptId, facultyList } = data;
 
-    // A simple sync strategy: delete existing and re-insert 
-    // (Or use individual add/delete functions)
-    await db.delete(faculty).where(eq(faculty.dept_id, deptId));
-    
-    if (facultyList.length > 0) {
-      await db.insert(faculty).values(
-        facultyList.map(f => ({
+    // Get current faculty ids for this dept
+    const existing = await db
+      .select({ id: faculty.id })
+      .from(faculty)
+      .where(eq(faculty.dept_id, deptId));
+    const existingIds = new Set(existing.map(f => f.id));
+
+    const incomingIds = new Set(
+      facultyList
+        .filter(f => typeof f.id === "number" || (typeof f.id === "string" && /^\d+$/.test(f.id)))
+        .map(f => Number(f.id))
+    );
+
+    // Only delete rows that were explicitly removed from the list
+    const removedIds = [...existingIds].filter(id => !incomingIds.has(id));
+    if (removedIds.length > 0) {
+      await db.delete(faculty).where(inArray(faculty.id, removedIds));
+    }
+
+    // Update existing rows, insert only genuinely new ones
+    for (const f of facultyList) {
+      const numericId = typeof f.id === "number" ? f.id : (typeof f.id === "string" && /^\d+$/.test(f.id) ? Number(f.id) : null);
+
+      if (numericId !== null && existingIds.has(numericId)) {
+        await db
+          .update(faculty)
+          .set({
+            name: f.name,
+            designation: f.designation,
+            photo_url: f.photo_url,
+          })
+          .where(eq(faculty.id, numericId));
+      } else {
+        await db.insert(faculty).values({
           name: f.name,
           designation: f.designation,
           photo_url: f.photo_url,
-          dept_id: deptId
-        }))
-      );
+          dept_id: deptId,
+        });
+      }
     }
+
     invalidateDeptCache();
+    serverCache.invalidate("faculty_all");
     return { success: true };
   });
 
-  export const syncAchievements = createServerFn({ method: "POST" })
+export const syncAchievements = createServerFn({ method: "POST" })
   .inputValidator((d: { deptId: string; achievementList: any[] }) => d)
   .handler(async ({ data }) => {
     const { deptId, achievementList } = data;
@@ -119,7 +148,7 @@ export const syncFaculty = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-  export const syncCourses = createServerFn({ method: "POST" })
+export const syncCourses = createServerFn({ method: "POST" })
   .inputValidator((d: { deptId: string; courseList: any[] }) => d)
   .handler(async ({ data }) => {
     const { deptId, courseList } = data;
@@ -142,7 +171,7 @@ export const syncFaculty = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-  export const syncLaboratories = createServerFn({ method: "POST" })
+export const syncLaboratories = createServerFn({ method: "POST" })
   .inputValidator((d: { deptId: string; labList: any[] }) => d)
   .handler(async ({ data }) => {
     const { deptId, labList } = data;
@@ -166,7 +195,7 @@ export const syncFaculty = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-  export const syncGallery = createServerFn({ method: "POST" })
+export const syncGallery = createServerFn({ method: "POST" })
   .inputValidator((d: { deptId: string; galleryList: any[] }) => d)
   .handler(async ({ data }) => {
     const { deptId, galleryList } = data;

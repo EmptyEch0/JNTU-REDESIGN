@@ -19,7 +19,7 @@ import { AdminProvider, useAdmin } from "@/context/AdminContext";
 import { FacultyProvider } from "@/context/FacultyContext";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { PageProgressBar } from "@/components/PageProgressBar";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 
 const Chatbot = lazy(() =>
   import("@/components/Chatbot").then((m) => ({ default: m.Chatbot }))
@@ -158,6 +158,10 @@ function AdminContent() {
   // 1. Safely pull the active pathname string
   const path = useRouterState({ select: (s) => s.location.pathname });
 
+  // 2. Defer Chatbot mount until the browser is idle — prevents the lazy
+  //    bundle from being requested or rendered during initial paint.
+  const [chatbotReady, setChatbotReady] = useState(false);
+
   const {
     isAdmin,
     isEditMode,
@@ -182,6 +186,19 @@ function AdminContent() {
     "/admin-account-settings/",
   ]);
   const isLoginPage = HIDE_CHROME_ROUTES.has(path.replace(/\/$/, "") || "/") || HIDE_CHROME_ROUTES.has(path);
+
+  useEffect(() => {
+    if (isLoginPage) return;
+    const cb = () => setChatbotReady(true);
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      const id = (window as any).requestIdleCallback(cb, { timeout: 3000 });
+      return () => (window as any).cancelIdleCallback(id);
+    } else {
+      // Safari fallback — mount after 1.5 s
+      const t = setTimeout(cb, 1500);
+      return () => clearTimeout(t);
+    }
+  }, [isLoginPage]);
 
   // 2. Identify if the user is actively viewing a department sub-route
   const pathSegments = path.split("/").filter(Boolean); // e.g., ["departments", "cse"]
@@ -267,7 +284,7 @@ function AdminContent() {
       </main>
 
       {!isLoginPage && <Footer />}
-      {!isLoginPage && (
+      {!isLoginPage && chatbotReady && (
         <Suspense fallback={null}>
           <Chatbot />
         </Suspense>

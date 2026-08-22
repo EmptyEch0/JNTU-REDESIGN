@@ -25,6 +25,10 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id")({
+  // Disable router pre-fetching so the heavy getDepartmentDetails payload
+  // (faculty + gallery + courses + labs + achievements) is NOT triggered when
+  // the user hovers department card links on the home page.
+  preload: false,
   loader: async ({ params }) => {
     const data = await getDepartmentDetails({ data: params.id });
     if (!data) throw new Error("Department not found");

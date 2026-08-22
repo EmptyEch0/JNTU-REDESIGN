@@ -1,20 +1,20 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {  getDepartments, updateDepartment } from "@/lib/departments";
+import { useMemo, useState } from "react";
+import { getDepartments, updateDepartment, STATIC_DEPARTMENTS } from "@/lib/departments";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { useAdmin } from "@/context/AdminContext";
-import { useState } from "react";
-import { 
-  Save, 
-  Image as ImageIcon, 
-  User, 
-  Eye, 
-  Edit2, 
-  X, 
+import {
+  Save,
+  Image as ImageIcon,
+  User,
+  Eye,
+  Edit2,
+  X,
   Check,
-  ExternalLink 
+  ExternalLink
 } from "lucide-react";
 import { toast } from "sonner";
 import labImg from "@/assets/lab.jpg";
@@ -80,8 +80,28 @@ function DepartmentsPage() {
     },
   });
 
-  // Sort departments alphabetically by name
-  const sortedData = data ? [...data].sort((a, b) => a.name.localeCompare(b.name)) : [];
+  // Merge static fallbacks with live data for instant frame-0 rendering
+  const sortedData = useMemo(() => {
+    const map = new Map(STATIC_DEPARTMENTS.map((d) => [d.slug.toLowerCase(), { ...d }]));
+    if (Array.isArray(data) && data.length > 0) {
+      for (const live of data) {
+        const slugKey = (live.slug || "").toLowerCase();
+        if (slugKey) {
+          const existing = map.get(slugKey);
+          map.set(slugKey, {
+            ...existing,
+            ...live,
+            id: live.id || existing?.id || slugKey,
+            name: live.name || existing?.name || "",
+            hod: live.hod || existing?.hod || "",
+            description: live.description || existing?.description || "",
+            image: live.image || existing?.image || "",
+          });
+        }
+      }
+    }
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, [data]);
 
   return (
     <>
@@ -101,28 +121,14 @@ function DepartmentsPage() {
             />
           </RevealOnScroll>
 
-          {isPending && (
-            <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, idx) => (
-                <div key={idx} className="h-80 animate-pulse rounded-3xl border border-border bg-muted/30" />
-              ))}
-            </div>
-          )}
-
-          {isError && (
-            <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-6 text-destructive">
-              Error: {error instanceof Error ? error.message : "Failed to load"}
-            </div>
-          )}
-
-          {!isPending && !isError && (
-            <div className="mt-12 grid auto-rows-[280px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {sortedData?.map((dept, index) => (
-                <DepartmentCard 
-                  key={dept.id} 
-                  dept={dept} 
-                  index={index} 
-                  isEditMode={isEditMode} 
+          {!isError && (
+            <div className="mt-12 grid auto-rows-[280px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 dept-section-wrapper">
+              {sortedData.map((dept, index) => (
+                <DepartmentCard
+                  key={dept.id || dept.slug}
+                  dept={dept}
+                  index={index}
+                  isEditMode={isEditMode}
                   onSave={(payload) => mutation.mutate({ id: dept.id, payload })}
                 />
               ))}
@@ -140,8 +146,8 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
   const [tempData, setTempData] = useState(dept);
 
   const spanClass =
-    index % 5 === 0 ? "lg:col-span-2 lg:row-span-2" : 
-    index % 5 === 3 ? "sm:col-span-2 lg:col-span-2" : "";
+    index % 5 === 0 ? "lg:col-span-2 lg:row-span-2" :
+      index % 5 === 3 ? "sm:col-span-2 lg:col-span-2" : "";
 
   const handleSave = () => {
     onSave(tempData);
@@ -158,27 +164,27 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
     return (
       <div className={`group relative flex flex-col overflow-hidden rounded-3xl border-2 border-primary/30 bg-white shadow-xl transition-all ${spanClass}`}>
         <div className="relative flex-1 overflow-y-auto p-5 space-y-3" style={{ height: '280px' }}>
-          <input 
-            className="w-full bg-transparent text-xl font-bold text-ink outline-none border-b border-primary/30" 
-            value={tempData.name} 
-            onChange={e => setTempData({...tempData, name: e.target.value})}
+          <input
+            className="w-full bg-transparent text-xl font-bold text-ink outline-none border-b border-primary/30"
+            value={tempData.name}
+            onChange={e => setTempData({ ...tempData, name: e.target.value })}
             placeholder="Department name"
           />
 
           <div className="flex items-center gap-2">
             <User size={14} className="text-primary flex-shrink-0" />
-            <input 
-              className="flex-1 bg-transparent text-sm font-medium outline-none border-b border-primary/30" 
-              value={tempData.hod} 
-              onChange={e => setTempData({...tempData, hod: e.target.value})}
+            <input
+              className="flex-1 bg-transparent text-sm font-medium outline-none border-b border-primary/30"
+              value={tempData.hod}
+              onChange={e => setTempData({ ...tempData, hod: e.target.value })}
               placeholder="HOD name"
             />
           </div>
 
-          <textarea 
+          <textarea
             className="w-full h-24 bg-transparent text-xs text-ink/70 outline-none border rounded p-2 border-primary/30 resize-none"
             value={tempData.description}
-            onChange={e => setTempData({...tempData, description: e.target.value})}
+            onChange={e => setTempData({ ...tempData, description: e.target.value })}
             placeholder="Department description"
           />
 
@@ -188,7 +194,7 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
             </div>
             <AdminUpload
               value={tempData.image}
-              onChange={(newUrl) => setTempData({...tempData, image: newUrl || ""})}
+              onChange={(newUrl) => setTempData({ ...tempData, image: newUrl || "" })}
               module="departments"
               category="banners"
               className="w-full"
@@ -196,13 +202,13 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
           </div>
 
           <div className="flex gap-2 pt-2 sticky bottom-0 bg-white py-2">
-            <button 
+            <button
               onClick={handleSave}
               className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-primary py-2 text-xs font-bold text-white hover:bg-primary/90"
             >
               <Save size={14} /> Save
             </button>
-            <button 
+            <button
               onClick={handleCancel}
               className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50"
             >
@@ -220,7 +226,7 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
       <Link
         to="/departments/$id"
         params={{ id: dept.slug }}
-        className={`group relative block h-full overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 shadow-[var(--shadow-soft)] ring-1 ring-black/5 transition-all duration-300 hover:ring-2 hover:ring-primary/20 ${spanClass}`}
+        className={`dept-card group relative block h-full overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 shadow-md transition-all duration-300 hover:border-primary/40 ${spanClass}`}
       >
         <article className="h-full">
           <img
@@ -259,7 +265,7 @@ function DepartmentCard({ dept, index, isEditMode, onSave }: { dept: any, index:
                 e.preventDefault();
                 setIsEditing(true);
               }}
-              className="absolute top-3 right-3 z-10 rounded-lg bg-primary/90 p-2 text-white backdrop-blur-sm transition-all hover:bg-primary hover:scale-105"
+              className="absolute top-3 right-3 z-10 rounded-lg bg-primary p-2 text-white transition-all hover:bg-primary/90 hover:scale-105"
               title="Edit Department"
             >
               <Edit2 size={16} />

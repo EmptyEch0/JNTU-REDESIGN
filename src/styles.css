@@ -204,6 +204,7 @@ body {
 }
 
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0);
@@ -356,6 +357,9 @@ body {
   .reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
+    /* Release the compositor layer once the animation has finished.
+       Keeping will-change alive on every revealed element wastes VRAM. */
+    will-change: auto;
   }
 
   .text-display {
@@ -451,7 +455,47 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* ── Department card — GPU-accelerated hover with zero-repaint shadow ── */
+  .dept-card {
+    will-change: transform;
+    transform: translateZ(0);
+    contain: layout paint style;
+    transition:
+      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.3s ease;
+  }
+
+  .dept-section-wrapper {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 400px;
+  }
+
+  .dept-card:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Shadow via ::after pseudo-element so opacity changes instead of
+     box-shadow value — avoids a repaint on every hover frame. */
+  .dept-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow:
+      0 20px 40px -12px oklch(0.1 0.05 260 / 0.55),
+      0 8px 16px -8px oklch(0.1 0.05 260 / 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .dept-card:hover::after {
+    opacity: 1;
+  }
 }
+
 
 /* Spinner component styling */
 .spinner {
@@ -493,28 +537,63 @@ body {
 /* ─── Login Pages ─── */
 
 @keyframes login-float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-18px) rotate(3deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-18px) rotate(3deg);
+  }
 }
 
 @keyframes login-float-alt {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-14px) rotate(-4deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-14px) rotate(-4deg);
+  }
 }
 
 @keyframes login-glow {
-  0%, 100% { box-shadow: 0 0 30px oklch(0.55 0.2 265 / 0.2), 0 0 60px oklch(0.55 0.2 265 / 0.08); }
-  50% { box-shadow: 0 0 40px oklch(0.55 0.2 265 / 0.35), 0 0 80px oklch(0.55 0.2 265 / 0.14); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 30px oklch(0.55 0.2 265 / 0.2), 0 0 60px oklch(0.55 0.2 265 / 0.08);
+  }
+
+  50% {
+    box-shadow: 0 0 40px oklch(0.55 0.2 265 / 0.35), 0 0 80px oklch(0.55 0.2 265 / 0.14);
+  }
 }
 
 @keyframes login-entrance {
-  from { opacity: 0; transform: translateY(24px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes login-slide-right {
-  from { opacity: 0; transform: translateX(-30px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .login-brand-panel {
@@ -573,4 +652,4 @@ body {
   border-radius: 50%;
   pointer-events: none;
   opacity: 0.08;
-}
+}

@@ -15,6 +15,82 @@ const invalidateDeptCache = () => {
   serverCache.invalidate("departments_list");
 };
 
+export type StaticDepartment = {
+  id: string;
+  slug: string;
+  name: string;
+  hod: string;
+  description: string;
+  image: string;
+};
+
+export const STATIC_DEPARTMENTS: StaticDepartment[] = [
+  {
+    id: "cse",
+    slug: "cse",
+    name: "Computer Science & Engineering",
+    hod: "Dr. R. Rajeswara Rao",
+    description: "Pioneering research and education in artificial intelligence, software engineering, cloud computing, and data systems.",
+    image: "http://89.116.134.182/local-assets/uploads/departments/banners/cse-banner.jpg",
+  },
+  {
+    id: "ece",
+    slug: "ece",
+    name: "Electronics & Communication Engineering",
+    hod: "Dr. K. Babulu",
+    description: "Advancing frontier innovation in VLSI design, signal processing, embedded systems, and wireless communications.",
+    image: "http://89.116.134.182/local-assets/uploads/departments/banners/ece-banner.jpg",
+  },
+  {
+    id: "eee",
+    slug: "eee",
+    name: "Electrical & Electronics Engineering",
+    hod: "Dr. K. Sri Kumar",
+    description: "Empowering future technologies in smart power grids, renewable energy, control systems, and electric automation.",
+    image: "http://89.116.134.182/local-assets/uploads/departments/banners/eee-banner.jpg",
+  },
+  {
+    id: "mech",
+    slug: "mech",
+    name: "Mechanical Engineering",
+    hod: "Dr. R. Umamaheswara Rao",
+    description: "Fostering excellence in CAD/CAM design, thermal engineering, robotics, and advanced manufacturing systems.",
+    image: "http://89.116.134.182/local-assets/uploads/departments/banners/mech-banner.jpg",
+  },
+  {
+    id: "met",
+    slug: "met",
+    name: "Metallurgical Engineering",
+    hod: "Dr. G. Swami Naidu",
+    description: "Leading research in materials science, alloy design, industrial metallurgy, and advanced materials engineering.",
+    image: "http://89.116.134.182/local-assets/uploads/departments/banners/met-banner.jpg",
+  },
+  {
+    id: "it",
+    slug: "it",
+    name: "Information Technology",
+    hod: "Dr. P. Aruna Kumari",
+    description: "Architecting enterprise IT systems, cybersecurity frameworks, web platforms, and mobile software applications.",
+    image: "http://89.116.134.182/local-assets/uploads/departments/banners/it-banner.jpg",
+  },
+  {
+    id: "mba",
+    slug: "mba",
+    name: "Management Studies (MBA)",
+    hod: "Dr. K. V. S. M. Ramanesh",
+    description: "Nurturing executive leadership, strategic management, corporate finance, marketing, and technology entrepreneurship.",
+    image: "http://89.116.134.182/local-assets/uploads/departments/banners/mba-banner.jpg",
+  },
+  {
+    id: "sh",
+    slug: "sh",
+    name: "Basic Sciences & Humanities",
+    hod: "Dr. G. J. Naga Raju",
+    description: "Building strong foundational knowledge in Mathematics, Physics, Chemistry, and Professional Communication skills.",
+    image: "http://89.116.134.182/local-assets/uploads/departments/banners/sh-banner.jpg",
+  },
+];
+
 // --- Department Core ---
 export const getDepartments = createServerFn({ method: "GET" }).handler(async () => {
   const cached = serverCache.get<any[]>("departments_list");
@@ -123,13 +199,8 @@ export const syncFaculty = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-<<<<<<< HEAD
 export const syncAchievements = createServerFn({ method: "POST" })
-  .inputValidator((d: { deptId: string; achievementList: any[] }) => d)
-=======
-  export const syncAchievements = createServerFn({ method: "POST" })
   .validator((d: { deptId: string; achievementList: any[] }) => d)
->>>>>>> 3594e5d (feat: hybrid chatbot, hero mini carousel, gallery deduplication & performance optimizations)
   .handler(async ({ data }) => {
     const { deptId, achievementList } = data;
 
@@ -153,13 +224,8 @@ export const syncAchievements = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-<<<<<<< HEAD
 export const syncCourses = createServerFn({ method: "POST" })
-  .inputValidator((d: { deptId: string; courseList: any[] }) => d)
-=======
-  export const syncCourses = createServerFn({ method: "POST" })
   .validator((d: { deptId: string; courseList: any[] }) => d)
->>>>>>> 3594e5d (feat: hybrid chatbot, hero mini carousel, gallery deduplication & performance optimizations)
   .handler(async ({ data }) => {
     const { deptId, courseList } = data;
 
@@ -181,13 +247,8 @@ export const syncCourses = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-<<<<<<< HEAD
 export const syncLaboratories = createServerFn({ method: "POST" })
-  .inputValidator((d: { deptId: string; labList: any[] }) => d)
-=======
-  export const syncLaboratories = createServerFn({ method: "POST" })
   .validator((d: { deptId: string; labList: any[] }) => d)
->>>>>>> 3594e5d (feat: hybrid chatbot, hero mini carousel, gallery deduplication & performance optimizations)
   .handler(async ({ data }) => {
     const { deptId, labList } = data;
 
@@ -210,13 +271,8 @@ export const syncLaboratories = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-<<<<<<< HEAD
 export const syncGallery = createServerFn({ method: "POST" })
-  .inputValidator((d: { deptId: string; galleryList: any[] }) => d)
-=======
-  export const syncGallery = createServerFn({ method: "POST" })
   .validator((d: { deptId: string; galleryList: any[] }) => d)
->>>>>>> 3594e5d (feat: hybrid chatbot, hero mini carousel, gallery deduplication & performance optimizations)
   .handler(async ({ data }) => {
     const { deptId, galleryList } = data;
 

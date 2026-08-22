@@ -47,7 +47,7 @@ import { STATS, RECRUITERS } from "@/lib/site"; // Removed static DEPARTMENTS im
 import { useQuery } from "@tanstack/react-query";
 import { getLeadershipData } from "../funcs/leadership";
 import { getAllDepartments } from "@/functions/departments"; // Added our new query hook target
-import { getAssetUrl } from "@/lib/departments";
+import { getAssetUrl, STATIC_DEPARTMENTS } from "@/lib/departments";
 import { getHostelData } from "@/funcs/hostel.server";
 import { getLibraryData } from "@/funcs/library.server";
 import { getDispensaryData } from "@/funcs/dispensary.server";
@@ -60,6 +60,9 @@ import { HeroGalleryMiniCarousel } from "@/components/HeroGalleryMiniCarousel";
 
 export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
+    // Phase 1 — CRITICAL (blocking): data needed for above-the-fold render.
+    // Await these so the page paints with notices, principal card and department
+    // grid already populated from cache.
     await Promise.allSettled([
       context.queryClient.ensureQueryData({
         queryKey: ["notices", "all"],
@@ -73,6 +76,13 @@ export const Route = createFileRoute("/")({
         queryKey: ["departments", "all"],
         queryFn: () => getAllDepartments(),
       }),
+    ]);
+
+    // Phase 2 — DEFERRED (non-blocking): below-the-fold sections.
+    // Intentionally NOT awaited — these populate the React Query cache in the
+    // background while the page is already visible, eliminating the 9-request
+    // waterfall that was blocking initial paint.
+    Promise.allSettled([
       context.queryClient.ensureQueryData({
         queryKey: ["hostel", "data"],
         queryFn: () => getHostelData(),
@@ -218,11 +228,34 @@ function HomePage() {
   });
 
   // Pull array dynamically from Neon database
-  const { data: liveDepartments = [], isLoading } = useQuery({
+  const { data: liveDepartments = [] } = useQuery({
     queryKey: ["departments", "all"],
     queryFn: () => getAllDepartments(),
     ...QUERY_CACHE,
   });
+
+  // Instantly merge static fallbacks with live DB departments for zero-latency frame 0 rendering
+  const departmentsList = useMemo(() => {
+    const map = new Map(STATIC_DEPARTMENTS.map((d) => [d.slug.toLowerCase(), { ...d }]));
+    if (Array.isArray(liveDepartments) && liveDepartments.length > 0) {
+      for (const live of liveDepartments) {
+        const slugKey = (live.slug || "").toLowerCase();
+        if (slugKey) {
+          const existing = map.get(slugKey);
+          map.set(slugKey, {
+            ...existing,
+            ...live,
+            id: live.id || existing?.id || slugKey,
+            name: live.name || existing?.name || "",
+            hod: live.hod || existing?.hod || "",
+            description: live.description || existing?.description || "",
+            image: live.image || existing?.image || "",
+          });
+        }
+      }
+    }
+    return Array.from(map.values());
+  }, [liveDepartments]);
 
   const { data: hostelData } = useQuery({
     queryKey: ["hostel", "data"],
@@ -529,7 +562,7 @@ function HomePage() {
 
       {/* DEPARTMENTS — Optimized with lazy loading */}
       <section className="py-24 md:py-32 bg-sand">
-        <div className="container-narrow">
+        <div className="container-narrow dept-section-wrapper">
           <RevealOnScroll>
             <SectionLabel
               eyebrow="Departments"
@@ -538,100 +571,92 @@ function HomePage() {
             />
           </RevealOnScroll>
 
-          <RevealOnScroll className="mt-12" delay={150}>
-            {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="aspect-[4/3] rounded-3xl bg-slate-200 animate-pulse"
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {departmentsList.map((d: any, index: number) => {
+              const deptSlug = (d.slug || "").toLowerCase();
+
+              // Define fallback map for department images
+              const fallbackMap: Record<string, string> = {
+                cse: "http://89.116.134.182/local-assets/uploads/departments/banners/cse-banner.jpg",
+                ece: "http://89.116.134.182/local-assets/uploads/departments/banners/ece-banner.jpg",
+                eee: "http://89.116.134.182/local-assets/uploads/departments/banners/eee-banner.jpg",
+                it: "http://89.116.134.182/local-assets/uploads/departments/banners/it-banner.jpg",
+                mech: "http://89.116.134.182/local-assets/uploads/departments/banners/mech-banner.jpg",
+                met: "http://89.116.134.182/local-assets/uploads/departments/banners/met-banner.jpg",
+                sh: "http://89.116.134.182/local-assets/uploads/departments/banners/sh-banner.jpg",
+                mba: "http://89.116.134.182/local-assets/uploads/departments/banners/mba-banner.jpg",
+              };
+
+              // Get the image source
+              const imageSrc = d.image
+                ? getAssetUrl(d.image)
+                : fallbackMap[deptSlug] || `http://89.116.134.182/local-assets/uploads/departments/banners/${deptSlug}-banner.jpg`;
+
+              const fallback = fallbackMap[deptSlug] || "/assets/lab.webp";
+
+              return (
+                <Link
+                  key={d.id || d.slug}
+                  to="/departments/$id"
+                  params={{ id: d.slug }}
+                  className="dept-card group relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 shadow-lg aspect-[4/3]"
+                >
+                  {/* Background Image */}
+                  <img
+                    src={imageSrc}
+                    alt={`${d.name} department`}
+                    width={600}
+                    height={450}
+                    loading={index < 4 ? "eager" : "lazy"}
+                    decoding="async"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (target.src !== fallback && !target.src.endsWith(fallback)) {
+                        target.src = fallback;
+                      }
+                    }}
                   />
-                ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {liveDepartments.map((d: any, index: number) => {
-                  const deptSlug = (d.slug || "").toLowerCase();
 
-                  // Define fallback map for department images
-                  const fallbackMap: Record<string, string> = {
-                    cse: "http://89.116.134.182/local-assets/uploads/departments/banners/cse-banner.jpg",
-                    ece: "http://89.116.134.182/local-assets/uploads/departments/banners/ece-banner.jpg",
-                    eee: "http://89.116.134.182/local-assets/uploads/departments/banners/eee-banner.jpg",
-                    it: "http://89.116.134.182/local-assets/uploads/departments/banners/it-banner.jpg",
-                    mech: "http://89.116.134.182/local-assets/uploads/departments/banners/mech-banner.jpg",
-                    met: "http://89.116.134.182/local-assets/uploads/departments/banners/met-banner.jpg",
-                    sh: "http://89.116.134.182/local-assets/uploads/departments/banners/sh-banner.jpg",
-                    mba: "http://89.116.134.182/local-assets/uploads/departments/banners/mba-banner.jpg",
-                  };
+                  {/* Dark gradient overlay — opacity-only transition avoids repaint */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:opacity-100 opacity-90 transition-opacity duration-300 z-10" />
 
-                  // Get the image source
-                  const imageSrc = d.image
-                    ? getAssetUrl(d.image)
-                    : `http://89.116.134.182/local-assets/uploads/departments/banners/${deptSlug}-banner.jpg`;
-
-                  const fallback = fallbackMap[deptSlug] || "/assets/lab.webp";
-
-                  return (
-                    <Link
-                      key={d.id}
-                      to="/departments/$id"
-                      params={{ id: d.slug }}
-                      className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 aspect-[4/3]"
-                    >
-                      {/* Background Image - using regular img with optimized loading */}
-                      <img
-                        src={imageSrc}
-                        alt={`${d.name} department`}
-                        loading={index < 4 ? "eager" : "lazy"}
-                        decoding="async"
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        onError={(e) => {
-                          const target = e.currentTarget;
-                          if (target.src !== fallback && !target.src.endsWith(fallback)) {
-                            target.src = fallback;
-                          }
-                        }}
-                      />
-
-                      {/* Dark gradient overlay - this ensures text is readable */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 z-10" />
-
-                      {/* Content - placed on top with z-index */}
-                      <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-between text-white z-20">
-                        <div className="flex items-center justify-between">
-                          <span className="px-2.5 py-1 text-[9px] font-bold tracking-widest uppercase rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white/90">
-                            {d.slug.toUpperCase()}
-                          </span>
-                          <div className="h-8 w-8 rounded-full grid place-items-center bg-white/15 backdrop-blur-md group-hover:bg-white group-hover:text-slate-900 transition-all duration-200">
-                            <ArrowRight className="h-3.5 w-3.5" />
-                          </div>
-                        </div>
-
-                        <div className="space-y-1.5">
-                          <h3 className="text-lg md:text-xl font-extrabold tracking-tight text-white leading-tight">
-                            {d.name}
-                          </h3>
-
-                          {d.hod && (
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded inline-block">
-                                HOD: <span className="text-white">{d.hod}</span>
-                              </span>
-                            </div>
-                          )}
-
-                          <p className="text-xs text-white/80 line-clamp-2 font-medium leading-relaxed">
-                            {d.description}
-                          </p>
-                        </div>
+                  {/* Content */}
+                  <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-between text-white z-20">
+                    <div className="flex items-center justify-between">
+                      {/* Flat badge — no backdrop-blur so no GPU filter layer */}
+                      <span className="px-2.5 py-1 text-[9px] font-bold tracking-widest uppercase rounded-full bg-white/20 border border-white/10 text-white/90">
+                        {(d.slug || "").toUpperCase()}
+                      </span>
+                      {/* Flat arrow button — replaces backdrop-blur-md */}
+                      <div className="h-8 w-8 rounded-full grid place-items-center bg-white/15 border border-white/10 group-hover:bg-white group-hover:text-slate-900 transition-colors duration-200">
+                        <ArrowRight className="h-3.5 w-3.5" />
                       </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </RevealOnScroll>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h3 className="text-lg md:text-xl font-extrabold tracking-tight text-white leading-tight">
+                        {d.name}
+                      </h3>
+
+                      {d.hod && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded inline-block">
+                            HOD: <span className="text-white">{d.hod}</span>
+                          </span>
+                        </div>
+                      )}
+
+                      <p className="text-xs text-white/80 line-clamp-2 font-medium leading-relaxed">
+                        {d.description}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              );
+
+            })}
+          </div>
         </div>
       </section>
 
@@ -796,9 +821,9 @@ function HomePage() {
                         wrapperClassName="h-full w-full rounded-3xl"
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      {/* Top Glassmorphic Date Badge */}
+                      {/* Top Date Badge — solid, no blur (avoids repaint on scroll) */}
                       <div className="absolute top-4 left-4 z-20 pointer-events-none">
-                        <span className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white/90 font-extrabold text-[10px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
+                        <span className="px-3 py-1 rounded-full bg-black/75 border border-white/20 text-white/90 font-extrabold text-[10px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
                           <Calendar className="h-3 w-3 text-amber-400" />
                           {img.date}
                         </span>

@@ -87,7 +87,7 @@ export const getHostelData = createServerFn({ method: "GET" })
 export const updateImage = createServerFn({
   method: "POST",
 })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data }) => {
     return hostelMutate(() => db
       .update(hostelImages)
@@ -102,7 +102,7 @@ export const updateImage = createServerFn({
 // 📝 CONTENT
 // =======================================
 export const updateContent = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data }) => {
     const { id, ...rest } = data;
 
@@ -118,13 +118,13 @@ export const updateContent = createServerFn({ method: "POST" })
 // 🏢 STRUCTURE (BLOCK + FACILITY)
 // =======================================
 export const addStructure = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data }) => {
     return hostelMutate(() => db.insert(hostelStructure).values(data).returning());
   });
 
 export const updateStructure = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data }) => {
     return hostelMutate(() => db
       .update(hostelStructure)
@@ -134,7 +134,7 @@ export const updateStructure = createServerFn({ method: "POST" })
   });
 
 export const deleteStructure = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data }) => {
     return hostelMutate(() => db
       .delete(hostelStructure)
@@ -146,13 +146,13 @@ export const deleteStructure = createServerFn({ method: "POST" })
 // 👥 PEOPLE (WARDEN + STAFF)
 // =======================================
 export const addPerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data }) => {
     return hostelMutate(() => db.insert(hostelPeople).values(data).returning());
   });
 
 export const updatePerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data }) => {
     return hostelMutate(() => db
       .update(hostelPeople)
@@ -162,7 +162,7 @@ export const updatePerson = createServerFn({ method: "POST" })
   });
 
 export const deletePerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data }) => {
     return hostelMutate(() => db
       .delete(hostelPeople)
@@ -174,13 +174,13 @@ export const deletePerson = createServerFn({ method: "POST" })
 // 🖼️ IMAGES
 // =======================================
 export const addImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data }) => {
     return hostelMutate(() => db.insert(hostelImages).values(data).returning());
   });
 
 export const deleteImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data }) => {
     return hostelMutate(() => db
       .delete(hostelImages)

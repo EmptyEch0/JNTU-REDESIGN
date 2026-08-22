@@ -21,7 +21,7 @@ export const getNssProfile = createServerFn({ method: "GET" }).handler(async () 
 });
 
 export const updateNssProfile = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return nssMutate(async () => {
@@ -40,7 +40,7 @@ export const getNssActivities = createServerFn({ method: "GET" }).handler(async 
 });
 
 export const addNssActivity = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return nssMutate(async () => {
       await db.insert(nssActivities).values(data);
@@ -49,7 +49,7 @@ export const addNssActivity = createServerFn({ method: "POST" })
   });
 
 export const updateNssActivity = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return nssMutate(async () => {
@@ -59,7 +59,7 @@ export const updateNssActivity = createServerFn({ method: "POST" })
   });
 
 export const deleteNssActivity = createServerFn({ method: "POST" })
-  .inputValidator((d: number) => d)
+  .validator((d: number) => d)
   .handler(async ({ data: id }) => {
     return nssMutate(async () => {
       await db.delete(nssActivities).where(eq(nssActivities.id, id));
@@ -77,7 +77,7 @@ export const getNssSpecialCamp = createServerFn({ method: "GET" }).handler(async
 });
 
 export const addNssSpecialCamp = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return nssMutate(async () => {
       await db.insert(nssSpecialCamp).values(data);
@@ -86,7 +86,7 @@ export const addNssSpecialCamp = createServerFn({ method: "POST" })
   });
 
 export const updateNssSpecialCamp = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return nssMutate(async () => {
@@ -96,7 +96,7 @@ export const updateNssSpecialCamp = createServerFn({ method: "POST" })
   });
 
 export const deleteNssSpecialCamp = createServerFn({ method: "POST" })
-  .inputValidator((d: number) => d)
+  .validator((d: number) => d)
   .handler(async ({ data: id }) => {
     return nssMutate(async () => {
       await db.delete(nssSpecialCamp).where(eq(nssSpecialCamp.id, id));
@@ -131,7 +131,7 @@ export const getNssGallery = createServerFn({ method: "GET" }).handler(async () 
 });
 
 export const addNssGalleryImage = createServerFn({ method: "POST" })
-  .inputValidator((data: { title: string; imageUrl: string }) => data)
+  .validator((data: { title: string; imageUrl: string }) => data)
   .handler(async ({ data }) => {
     return nssMutate(async () => {
       await db.insert(nssGallery).values(data);
@@ -140,7 +140,7 @@ export const addNssGalleryImage = createServerFn({ method: "POST" })
   });
 
 export const deleteNssGalleryImage = createServerFn({ method: "POST" })
-  .inputValidator((data: { id: number }) => data)
+  .validator((data: { id: number }) => data)
   .handler(async ({ data }) => {
     return nssMutate(async () => {
       await db.delete(nssGallery).where(eq(nssGallery.id, data.id));

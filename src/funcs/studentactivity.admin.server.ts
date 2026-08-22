@@ -27,7 +27,7 @@ function assertAdmin(ctx: any) {
    🎪 STUDENT CLUBS
 =========================== */
 export const updateStudentClub = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -44,7 +44,7 @@ export const updateStudentClub = createServerFn({ method: "POST" })
   });
 
 export const deleteStudentClub = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -63,7 +63,7 @@ export const deleteStudentClub = createServerFn({ method: "POST" })
    📝 CLUB SECTIONS (CONTENT)
 =========================== */
 export const createClubContent = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -71,7 +71,7 @@ export const createClubContent = createServerFn({ method: "POST" })
   });
 
 export const deleteClubContent = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -81,7 +81,7 @@ export const deleteClubContent = createServerFn({ method: "POST" })
   });
 
 export const updateClubContent = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -96,7 +96,7 @@ export const updateClubContent = createServerFn({ method: "POST" })
    🖼️ CLUB GALLERY IMAGES
 =========================== */
 export const createClubImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -104,7 +104,7 @@ export const createClubImage = createServerFn({ method: "POST" })
   });
 
 export const deleteClubImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 

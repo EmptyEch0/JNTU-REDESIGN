@@ -6,8 +6,10 @@ import { serverCache } from "../lib/server-cache";
 import { ingestSingleChunk, deleteSingleChunk } from "../lib/ingest";
 import { runChatbotEngine } from "../lib/chatbot-engine";
 
-// ── Singleton embedder cache (avoids reloading the WASM model on every request) ──
+// ── Singleton embedder + Query Vector cache (0ms for repeated queries) ──
 let _embedder: any = null;
+const _queryVectorCache = new Map<string, number[]>();
+
 async function getCachedEmbedder() {
   if (!_embedder) {
     const { pipeline } = await import("@xenova/transformers");
@@ -15,10 +17,18 @@ async function getCachedEmbedder() {
   }
   return _embedder;
 }
+
 async function embedQuery(text: string): Promise<number[]> {
+  const cleanKey = text.trim().toLowerCase();
+  if (_queryVectorCache.has(cleanKey)) {
+    return _queryVectorCache.get(cleanKey)!;
+  }
   const pipe = await getCachedEmbedder();
   const result = await pipe(text, { pooling: "mean", normalize: true });
-  return Array.from(result.data as number[]);
+  const vector = Array.from(result.data as number[]);
+  if (_queryVectorCache.size > 500) _queryVectorCache.clear();
+  _queryVectorCache.set(cleanKey, vector);
+  return vector;
 }
 
 
@@ -27,7 +37,7 @@ import { memoryCache } from "../lib/cache";
 export const getPageContent = createServerFn({
   method: "GET",
 })
-  .inputValidator((page: string) => page)
+  .validator((page: string) => page)
   .handler(async ({ data: page }) => {
     return memoryCache.getOrSet(`siteContent:${page}`, 10 * 60 * 1000, async () => {
       try {
@@ -45,7 +55,7 @@ export const getPageContent = createServerFn({
 export const updatePageSection = createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (d: {
       page: string;
       sectionKey: string;
@@ -130,7 +140,7 @@ export const getNotices = createServerFn({
 export const addNotice = createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (data: { title: string; date: string; tag: string; link?: string }) => data
   )
   .handler(async ({ data }) => {
@@ -174,7 +184,7 @@ export const addNotice = createServerFn({
 export const updateNotice = createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (data: { id: number; title: string; date: string; tag: string; link?: string }) => data
   )
   .handler(async ({ data }) => {
@@ -217,7 +227,7 @@ export const updateNotice = createServerFn({
 export const deleteNotice = createServerFn({
   method: "POST",
 })
-  .inputValidator((data: { id: number }) => data)
+  .validator((data: { id: number }) => data)
   .handler(async ({ data }) => {
     try {
       await db.delete(notices).where(eq(notices.id, data.id));
@@ -243,7 +253,7 @@ export const getAcademicRegulations = createServerFn({
 export const addAcademicRegulation = createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (data: { title: string; category: string; link: string }) => data
   )
   .handler(async ({ data }) => {
@@ -276,7 +286,7 @@ export const addAcademicRegulation = createServerFn({
 export const deleteAcademicRegulation = createServerFn({
   method: "POST",
 })
-  .inputValidator((data: { id: number }) => data)
+  .validator((data: { id: number }) => data)
   .handler(async ({ data }) => {
     try {
       await db.delete(academicRegulations).where(eq(academicRegulations.id, data.id));
@@ -305,7 +315,7 @@ export const getCampusGallery = createServerFn({
 export const addCampusGalleryItem = createServerFn({
   method: "POST",
 })
-  .inputValidator((data: { src: string; caption?: string }) => data)
+  .validator((data: { src: string; caption?: string }) => data)
   .handler(async ({ data }) => {
     try {
       const inserted = await db.insert(campusGallery).values({
@@ -323,7 +333,7 @@ export const addCampusGalleryItem = createServerFn({
 export const deleteCampusGalleryItem = createServerFn({
   method: "POST",
 })
-  .inputValidator((data: { id: number }) => data)
+  .validator((data: { id: number }) => data)
   .handler(async ({ data }) => {
     try {
       await db.delete(campusGallery).where(eq(campusGallery.id, data.id));
@@ -336,7 +346,7 @@ export const deleteCampusGalleryItem = createServerFn({
   });
 
 export const queryChatbot = createServerFn({ method: "POST" })
-  .inputValidator((data: {
+  .validator((data: {
     messages: Array<{ role: "system" | "user" | "assistant"; content: string }>;
   }) => data)
   .handler(async ({ data }) => {
@@ -477,10 +487,25 @@ export const getJntugvGalleryImages = createServerFn({
   const fallback = jntugvGalleryData as JntugvGalleryItem[];
   const filtered = fallback.filter(
     (img) =>
+      img.id !== 166 && // Prevent duplicate of featured item 166
       img.admin_approval === "accepted" &&
       (img.carousel_scrolling === "yes" || img.gallery_scrolling === "yes"),
   );
-  const combined = [...featuredItems, ...filtered];
+
+  // Strictly deduplicate by ID and Title
+  const seenIds = new Set<number>();
+  const seenTitles = new Set<string>();
+  const combined: JntugvGalleryItem[] = [];
+
+  for (const item of [...featuredItems, ...filtered]) {
+    const cleanTitle = (item.title || "").trim().toLowerCase();
+    if (!seenIds.has(item.id) && !seenTitles.has(cleanTitle)) {
+      seenIds.add(item.id);
+      if (cleanTitle) seenTitles.add(cleanTitle);
+      combined.push(item);
+    }
+  }
+
   serverCache.set("jntugv_gallery_external", combined, 60 * 60 * 1000);
   return combined;
 });

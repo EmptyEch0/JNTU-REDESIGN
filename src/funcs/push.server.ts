@@ -133,7 +133,7 @@ export const getVapidPublicKey = createServerFn({ method: "GET" }).handler(async
  * Server function: Save or update client's push subscription
  */
 export const savePushSubscription = createServerFn({ method: "POST" })
-  .inputValidator((data: { endpoint: string; p256dh: string; auth: string; userAgent?: string }) => data)
+  .validator((data: { endpoint: string; p256dh: string; auth: string; userAgent?: string }) => data)
   .handler(async ({ data }) => {
     try {
       if (!data.endpoint || !data.p256dh || !data.auth) {
@@ -174,7 +174,7 @@ export const savePushSubscription = createServerFn({ method: "POST" })
  * Server function: Unsubscribe client's endpoint
  */
 export const removePushSubscription = createServerFn({ method: "POST" })
-  .inputValidator((data: { endpoint: string }) => data)
+  .validator((data: { endpoint: string }) => data)
   .handler(async ({ data }) => {
     try {
       if (!data.endpoint) return { success: false };
@@ -202,7 +202,7 @@ export const getPushSubscriberStats = createServerFn({ method: "GET" }).handler(
  * Server function: Admin manual trigger or test notification
  */
 export const sendManualPushNotification = createServerFn({ method: "POST" })
-  .inputValidator((data: { title: string; body: string; url?: string; tag?: string }) => data)
+  .validator((data: { title: string; body: string; url?: string; tag?: string }) => data)
   .handler(async ({ data }) => {
     try {
       const res = await sendPushToAllSubscribers({

@@ -8,7 +8,7 @@ const COOKIE_MAX_AGE = 60 * 60 * 8; // 8 hours, same as HOD
  * Sets a cookie containing ONLY that faculty's numeric id.
  */
 export const loginFaculty = createServerFn({ method: "POST" })
-  .inputValidator((d: { email: string; password: string }) => d)
+  .validator((d: { email: string; password: string }) => d)
   .handler(async ({ data }) => {
     const { email, password } = data;
     const { setCookie } = await import("@tanstack/react-start/server");
@@ -54,7 +54,7 @@ export const loginFaculty = createServerFn({ method: "POST" })
   });
 
 export const changeFacultyCredentials = createServerFn({ method: "POST" })
-  .inputValidator((d: { currentPassword: string; newEmail?: string; newPassword?: string }) => d)
+  .validator((d: { currentPassword: string; newEmail?: string; newPassword?: string }) => d)
   .handler(async ({ data }) => {
     const { currentPassword, newEmail, newPassword } = data;
     const { getCookie } = await import("@tanstack/react-start/server");
@@ -121,7 +121,7 @@ export const logoutFaculty = createServerFn({ method: "POST" }).handler(async ()
  * Admin/HOD-only: set or reset a faculty member's login credentials.
  */
 export const setFacultyCredentials = createServerFn({ method: "POST" })
-  .inputValidator((d: { facultyId: number; email: string; newPassword: string }) => d)
+  .validator((d: { facultyId: number; email: string; newPassword: string }) => d)
   .handler(async ({ data }) => {
     const { facultyId, email, newPassword } = data;
     const { getCookie } = await import("@tanstack/react-start/server");

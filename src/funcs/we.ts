@@ -28,7 +28,7 @@ export const getWeProfile = createServerFn({ method: "GET" }).handler(async () =
 });
 
 export const updateWeProfile = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return weMutate(async () => {
@@ -47,7 +47,7 @@ export const getWeCommittee = createServerFn({ method: "GET" }).handler(async ()
 });
 
 export const addWeCommitteeMember = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return weMutate(async () => {
       await db.insert(weCommittee).values(data);
@@ -56,7 +56,7 @@ export const addWeCommitteeMember = createServerFn({ method: "POST" })
   });
 
 export const updateWeCommitteeMember = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return weMutate(async () => {
@@ -66,7 +66,7 @@ export const updateWeCommitteeMember = createServerFn({ method: "POST" })
   });
 
 export const deleteWeCommitteeMember = createServerFn({ method: "POST" })
-  .inputValidator((d: number) => d)
+  .validator((d: number) => d)
   .handler(async ({ data: id }) => {
     return weMutate(async () => {
       await db.delete(weCommittee).where(eq(weCommittee.id, id));
@@ -84,7 +84,7 @@ export const getWeActivities = createServerFn({ method: "GET" }).handler(async (
 });
 
 export const addWeActivity = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return weMutate(async () => {
       await db.insert(weActivities).values(data);
@@ -93,7 +93,7 @@ export const addWeActivity = createServerFn({ method: "POST" })
   });
 
 export const updateWeActivity = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return weMutate(async () => {
@@ -103,7 +103,7 @@ export const updateWeActivity = createServerFn({ method: "POST" })
   });
 
 export const deleteWeActivity = createServerFn({ method: "POST" })
-  .inputValidator((d: number) => d)
+  .validator((d: number) => d)
   .handler(async ({ data: id }) => {
     return weMutate(async () => {
       await db.delete(weActivities).where(eq(weActivities.id, id));
@@ -122,7 +122,7 @@ export const getWeRecreation = createServerFn({ method: "GET" }).handler(async (
 });
 
 export const updateWeRecreation = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return weMutate(async () => {
@@ -141,7 +141,7 @@ export const getWeMagazines = createServerFn({ method: "GET" }).handler(async ()
 });
 
 export const addWeMagazine = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return weMutate(async () => {
       await db.insert(weMagazine).values(data);
@@ -150,7 +150,7 @@ export const addWeMagazine = createServerFn({ method: "POST" })
   });
 
 export const updateWeMagazine = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return weMutate(async () => {
@@ -160,7 +160,7 @@ export const updateWeMagazine = createServerFn({ method: "POST" })
   });
 
 export const deleteWeMagazine = createServerFn({ method: "POST" })
-  .inputValidator((d: number) => d)
+  .validator((d: number) => d)
   .handler(async ({ data: id }) => {
     return weMutate(async () => {
       await db.delete(weMagazine).where(eq(weMagazine.id, id));
@@ -196,7 +196,7 @@ export const getWeGallery = createServerFn({ method: "GET" }).handler(async () =
 });
 
 export const addWeGalleryImage = createServerFn({ method: "POST" })
-  .inputValidator((data: { title: string; imageUrl: string }) => data)
+  .validator((data: { title: string; imageUrl: string }) => data)
   .handler(async ({ data }) => {
     return weMutate(async () => {
       await db.insert(weGallery).values(data);
@@ -205,7 +205,7 @@ export const addWeGalleryImage = createServerFn({ method: "POST" })
   });
 
 export const deleteWeGalleryImage = createServerFn({ method: "POST" })
-  .inputValidator((data: { id: number }) => data)
+  .validator((data: { id: number }) => data)
   .handler(async ({ data }) => {
     return weMutate(async () => {
       await db.delete(weGallery).where(eq(weGallery.id, data.id));

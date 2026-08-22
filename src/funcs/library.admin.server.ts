@@ -33,7 +33,7 @@ function assertAdmin(ctx: any) {
    📚 CONTENT (MERGED)
 =========================== */
 export const updateLibraryContent = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -58,7 +58,7 @@ export const updateLibraryContent = createServerFn({ method: "POST" })
    🏢 SECTIONS
 =========================== */
 export const createSection = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -66,7 +66,7 @@ export const createSection = createServerFn({ method: "POST" })
   });
 
 export const deleteSection = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -74,7 +74,7 @@ export const deleteSection = createServerFn({ method: "POST" })
   });
 
 export const updateSection = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -85,7 +85,7 @@ export const updateSection = createServerFn({ method: "POST" })
    📊 STATS (TITLES + PERIODICALS)
 =========================== */
 export const createStat = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -93,7 +93,7 @@ export const createStat = createServerFn({ method: "POST" })
   });
 
 export const deleteStat = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -101,7 +101,7 @@ export const deleteStat = createServerFn({ method: "POST" })
   });
 
 export const updateStat = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -112,7 +112,7 @@ export const updateStat = createServerFn({ method: "POST" })
    📋 META (DIGITAL / MAGAZINE / NEWSPAPER)
 =========================== */
 export const createMeta = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -120,7 +120,7 @@ export const createMeta = createServerFn({ method: "POST" })
   });
 
 export const deleteMeta = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -128,7 +128,7 @@ export const deleteMeta = createServerFn({ method: "POST" })
   });
 
 export const updateMeta = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -139,7 +139,7 @@ export const updateMeta = createServerFn({ method: "POST" })
    👥 TEAM
 =========================== */
 export const createTeam = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -147,7 +147,7 @@ export const createTeam = createServerFn({ method: "POST" })
   });
 
 export const deleteTeam = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -155,7 +155,7 @@ export const deleteTeam = createServerFn({ method: "POST" })
   });
 
 export const updateTeam = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -166,7 +166,7 @@ export const updateTeam = createServerFn({ method: "POST" })
    🖼️ IMAGES
 =========================== */
 export const createImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -174,7 +174,7 @@ export const createImage = createServerFn({ method: "POST" })
   });
 
 export const deleteImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 

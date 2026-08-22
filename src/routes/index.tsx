@@ -20,6 +20,7 @@ import {
   Quote,
   CheckCircle2,
   Users,
+  Calendar,
 } from "lucide-react";
 import { imageUrl } from "@/lib/assets";
 
@@ -51,10 +52,11 @@ import { getHostelData } from "@/funcs/hostel.server";
 import { getLibraryData } from "@/funcs/library.server";
 import { getDispensaryData } from "@/funcs/dispensary.server";
 import { getSportsData } from "@/funcs/sports.server";
-import { getJntugvGalleryImages, getNotices } from "@/funcs/site.server";
+import { getJntugvGalleryImages, getNotices, getCampusGallery } from "@/funcs/site.server";
 import { ImageWithLoader } from "@/components/ImageWithLoader";
 import { LatestUpdatesSection } from "@/components/LatestUpdatesSection";
 import { HomeNotificationsSection } from "@/components/HomeNotificationsSection";
+import { HeroGalleryMiniCarousel } from "@/components/HeroGalleryMiniCarousel";
 
 export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
@@ -90,6 +92,10 @@ export const Route = createFileRoute("/")({
       context.queryClient.ensureQueryData({
         queryKey: ["jntugv-gallery"],
         queryFn: () => getJntugvGalleryImages(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["campus-gallery-db"],
+        queryFn: () => getCampusGallery(),
       }),
     ]);
   },
@@ -248,29 +254,38 @@ function HomePage() {
     ...QUERY_CACHE,
   });
 
-  // Select a diverse mix of recent + randomized items across unique campus events
+  const { data: dbGallery = [] } = useQuery({
+    queryKey: ["campus-gallery-db"],
+    queryFn: () => getCampusGallery(),
+    ...QUERY_CACHE,
+  });
+
+  // Select a diverse mix of recent + randomized items across unique campus events (strictly deduplicated)
   const homepageSelectedImages = useMemo(() => {
     if (!galleryImages || galleryImages.length === 0) return [];
 
-    // Group items by event title to avoid showing photos from identical events
-    const uniqueByTitleMap = new Map<string, (typeof galleryImages)[0]>();
-    const topRecent = galleryImages.slice(0, 2);
+    // Strictly deduplicate by event title and ID
+    const uniqueMap = new Map<string, (typeof galleryImages)[0]>();
 
     for (const item of galleryImages) {
-      if (!uniqueByTitleMap.has(item.title)) {
-        uniqueByTitleMap.set(item.title, item);
+      const cleanKey = (item.title || "").trim().toLowerCase();
+      if (cleanKey && !uniqueMap.has(cleanKey)) {
+        uniqueMap.set(cleanKey, item);
       }
     }
 
-    const uniqueItems = Array.from(uniqueByTitleMap.values()).filter(
-      (item) => !topRecent.some((r) => r.id === item.id),
-    );
+    const uniqueList = Array.from(uniqueMap.values());
+    if (uniqueList.length === 0) return [];
 
-    // Shuffle the rest of the pool for random visual variety on each load
-    const shuffled = [...uniqueItems].sort(() => 0.5 - Math.random());
+    // 1 featured top recent item (Independence Day)
+    const topItem = uniqueList[0];
+    const rest = uniqueList.slice(1);
 
-    // 2 top recent + 5 diverse random items = 7 items (8th card is CTA)
-    return [...topRecent, ...shuffled.slice(0, 5)].slice(0, 7);
+    // Shuffle the rest of the pool for variety
+    const shuffled = [...rest].sort(() => 0.5 - Math.random());
+
+    // 1 top recent + 6 diverse random items = 7 items (8th card is Bento CTA)
+    return [topItem, ...shuffled.slice(0, 6)].slice(0, 7);
   }, [galleryImages]);
 
   const getFacilityImage = (title: string, staticImg: string) => {
@@ -302,36 +317,46 @@ function HomePage() {
           overlay="linear-gradient(180deg, oklch(0.18 0.05 260 / 0.6) 0%, oklch(0.18 0.05 260 / 0.4) 40%, oklch(0.18 0.05 260 / 0.85) 100%)"
         >
           <div className="container-narrow h-full min-h-[min(82vh,680px)] flex flex-col justify-center pt-14 sm:pt-20 pb-10 text-white">
-            <div className="text-eyebrow !text-cyan-300 animate-[fade-up_0.3s_ease-out_0.3s_both] flex items-center gap-2.5 font-bold tracking-wider">
-              <span className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5 text-cyan-400" />
-                VIZIANAGARAM, AP
-              </span>
-              <span className="h-1 w-1 rounded-full bg-white/40" />
-              <span>ESTABLISHED IN 2007</span>
-            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
+              {/* Left Column: Hero Typography & Actions */}
+              <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center">
+                <div className="text-eyebrow !text-cyan-300 animate-[fade-up_0.3s_ease-out_0.3s_both] flex items-center gap-2.5 font-bold tracking-wider">
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="h-3.5 w-3.5 text-cyan-400" />
+                    VIZIANAGARAM, AP
+                  </span>
+                  <span className="h-1 w-1 rounded-full bg-white/40" />
+                  <span>ESTABLISHED IN 2007</span>
+                </div>
 
-            <h1 className="text-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mt-2.5 max-w-4xl animate-[fade-up_0.4s_ease-out_0.5s_both] leading-[1.08] tracking-tight">
-              Engineering tomorrow,
-              <br />
-              <span >together.</span>
-            </h1>
+                <h1 className="text-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mt-2.5 max-w-4xl animate-[fade-up_0.4s_ease-out_0.5s_both] leading-[1.08] tracking-tight">
+                  Engineering tomorrow,
+                  <br />
+                  <span>together.</span>
+                </h1>
 
-            <p className="mt-3.5 text-sm sm:text-base md:text-lg text-white/90 max-w-2xl leading-relaxed animate-[fade-up_0.4s_ease-out_0.8s_both] font-normal">
-              A constituent college of JNTU-GV, approved by AICTE New Delhi, and recognized by UGC
-              under section 2(f) & 12(B) of UGC Act 1956 — shaping the future of engineering since 2007.
-            </p>
+                <p className="mt-3.5 text-sm sm:text-base md:text-lg text-white/90 max-w-2xl leading-relaxed animate-[fade-up_0.4s_ease-out_0.8s_both] font-normal">
+                  A constituent college of JNTU-GV, approved by AICTE New Delhi, and recognized by UGC
+                  under section 2(f) & 12(B) of UGC Act 1956 — shaping the future of engineering since 2007.
+                </p>
 
-            <div className="mt-5 flex flex-wrap gap-3 animate-[fade-up_0.4s_ease-out_1s_both]">
-              <Link to="/academics" className="btn-primary">
-                Academics <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link to="/campus-life" className="btn-ghost">
-                Explore Campus
-              </Link>
-              <Link to="/notices" className="btn-ghost">
-                <Bell className="h-4 w-4" /> Notices
-              </Link>
+                <div className="mt-5 flex flex-wrap gap-3 animate-[fade-up_0.4s_ease-out_1s_both]">
+                  <Link to="/academics" className="btn-primary">
+                    Academics <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link to="/campus-life" className="btn-ghost">
+                    Explore Campus
+                  </Link>
+                  <Link to="/notices" className="btn-ghost">
+                    <Bell className="h-4 w-4" /> Notifications
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right Column: Sleek Mini Highlights Carousel */}
+              <div className="lg:col-span-6 xl:col-span-6 flex justify-start lg:justify-end w-full lg:pr-2 xl:pr-4 animate-[fade-up_0.5s_ease-out_0.8s_both]">
+                <HeroGalleryMiniCarousel galleryImages={galleryImages} dbGallery={dbGallery} />
+              </div>
             </div>
           </div>
         </HeroSlideshow>
@@ -752,11 +777,9 @@ function HomePage() {
               <div className="grid grid-cols-12 gap-3 md:gap-4">
                 {homepageSelectedImages.map((img, i) => {
                   const colClass =
-                    i === 0
-                      ? "col-span-12 md:col-span-7 aspect-[16/10]"
-                      : i === 1
-                        ? "col-span-12 md:col-span-5 aspect-[16/10]"
-                        : "col-span-12 sm:col-span-6 md:col-span-4 aspect-[4/3]";
+                    i < 2
+                      ? "col-span-12 md:col-span-6 aspect-[16/10]"
+                      : "col-span-12 sm:col-span-6 md:col-span-4 aspect-[4/3]";
                   return (
                     <Link
                       key={img.id}
@@ -776,7 +799,7 @@ function HomePage() {
                       {/* Top Glassmorphic Date Badge */}
                       <div className="absolute top-4 left-4 z-20 pointer-events-none">
                         <span className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white/90 font-extrabold text-[10px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
-                          <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                          <Calendar className="h-3 w-3 text-amber-400" />
                           {img.date}
                         </span>
                       </div>

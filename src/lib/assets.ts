@@ -21,8 +21,12 @@ export const getAssetUrl = (
     trimmedPath.startsWith("data:") ||
     trimmedPath.startsWith("/src/") ||
     trimmedPath.startsWith("/assets/") ||
+    trimmedPath.startsWith("/images/") ||
     trimmedPath.startsWith("/@fs/") ||
-    trimmedPath.startsWith("blob:")
+    trimmedPath.startsWith("blob:") ||
+    trimmedPath === "/logo-circle.png" ||
+    trimmedPath === "/logo.png" ||
+    trimmedPath === "/favicon.png"
   ) {
     resolvedUrl = trimmedPath;
   } else {
@@ -43,6 +47,9 @@ export const getAssetUrl = (
       "hero-5.jpg": "/images/hero-carousal/hero-5.webp",
       "hero-5.jpeg": "/images/hero-carousal/hero-5.webp",
       "hero-5.webp": "/images/hero-carousal/hero-5.webp",
+      "independence_day.webp": "/images/independence_day.webp",
+      "independence_day.jpeg": "/images/independence_day.webp",
+      "independence-day-2026.jpg": "/images/independence_day.webp",
       "Dr.-G.-J.-Naga-Raju1.png": `${BASE}/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`,
       "logo.jpeg": "/logo-circle.png",
       // Department banner instant local fallbacks
@@ -56,7 +63,10 @@ export const getAssetUrl = (
   "mba-banner.jpg": `${BASE}/uploads/departments/banners/mba-banner.jpg`,
     };
 
-    if (LEGACY_FILENAME_MAP[filename]) {
+    if (filename.startsWith("IMG_") && (filename.endsWith(".JPG") || filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".webp"))) {
+      const baseName = filename.replace(/\.[^.]+$/, "");
+      resolvedUrl = `/images/gallery/${baseName}.webp`;
+    } else if (LEGACY_FILENAME_MAP[filename]) {
       resolvedUrl = LEGACY_FILENAME_MAP[filename];
     } else if (
       trimmedPath.startsWith("http://") ||

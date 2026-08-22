@@ -28,7 +28,7 @@ function getPayload(data: any) {
 
 /* ================= UPDATE CONTENT ================= */
 export const updateEngineeringContent = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -49,7 +49,7 @@ export const updateEngineeringContent = createServerFn({ method: "POST" })
 
 /* ================= SAVE/UPDATE ELECTRICAL INFO ================= */
 export const updateElectricalInfo = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -77,7 +77,7 @@ export const updateElectricalInfo = createServerFn({ method: "POST" })
 
 /* ================= CREATE META POINT (CONSTRUCTION) ================= */
 export const createMetaPoint = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -95,7 +95,7 @@ export const createMetaPoint = createServerFn({ method: "POST" })
 
 /* ================= DELETE META POINT ================= */
 export const deleteMetaPoint = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -109,7 +109,7 @@ export const deleteMetaPoint = createServerFn({ method: "POST" })
   });
 
 export const updateMetaPoint = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -126,7 +126,7 @@ export const updateMetaPoint = createServerFn({ method: "POST" })
 
 /* ================= CREATE STAFF MEMBER ================= */
 export const createStaffMember = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -146,7 +146,7 @@ export const createStaffMember = createServerFn({ method: "POST" })
 
 /* ================= DELETE STAFF MEMBER ================= */
 export const deleteStaffMember = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -160,7 +160,7 @@ export const deleteStaffMember = createServerFn({ method: "POST" })
   });
 
 export const updateStaffMember = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 

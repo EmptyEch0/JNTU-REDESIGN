@@ -22,7 +22,7 @@ export const getEdcProfile = createServerFn({ method: "GET" }).handler(async () 
 });
 
 export const updateEdcProfile = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return scMutate(async () => {
@@ -42,7 +42,7 @@ export const getEdcCommittee = createServerFn({ method: "GET" }).handler(async (
 });
 
 export const addEdcCommittee = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return scMutate(async () => {
       await db.insert(edcCommittee).values(data);
@@ -51,7 +51,7 @@ export const addEdcCommittee = createServerFn({ method: "POST" })
   });
 
 export const updateEdcCommittee = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return scMutate(async () => {
@@ -61,7 +61,7 @@ export const updateEdcCommittee = createServerFn({ method: "POST" })
   });
 
 export const deleteEdcCommittee = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const id = typeof data === "number" ? data : data.id;
     return scMutate(async () => {
@@ -81,7 +81,7 @@ export const getEdcActivities = createServerFn({ method: "GET" }).handler(async 
 });
 
 export const addEdcActivity = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return scMutate(async () => {
       await db.insert(edcActivities).values(data);
@@ -90,7 +90,7 @@ export const addEdcActivity = createServerFn({ method: "POST" })
   });
 
 export const updateEdcActivity = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return scMutate(async () => {
@@ -100,7 +100,7 @@ export const updateEdcActivity = createServerFn({ method: "POST" })
   });
 
 export const deleteEdcActivity = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const id = typeof data === "number" ? data : data.id;
     return scMutate(async () => {
@@ -120,7 +120,7 @@ export const getProfChapters = createServerFn({ method: "GET" }).handler(async (
 });
 
 export const addProfChapter = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return scMutate(async () => {
       await db.insert(profChapters).values(data);
@@ -129,7 +129,7 @@ export const addProfChapter = createServerFn({ method: "POST" })
   });
 
 export const updateProfChapter = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return scMutate(async () => {
@@ -139,7 +139,7 @@ export const updateProfChapter = createServerFn({ method: "POST" })
   });
 
 export const deleteProfChapter = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const id = typeof data === "number" ? data : data.id;
     return scMutate(async () => {
@@ -160,7 +160,7 @@ export const getIipcData = createServerFn({ method: "GET" }).handler(async () =>
 });
 
 export const updateIipcData = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return scMutate(async () => {

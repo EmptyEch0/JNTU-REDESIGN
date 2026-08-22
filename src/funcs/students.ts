@@ -29,13 +29,13 @@ export const getStudents = createServerFn({
   return records;
 });
 export const addStudent = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return studentMutate(() => db.insert(students).values(data).returning());
   });
 
 export const updateStudent = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
 
@@ -49,7 +49,7 @@ export const updateStudent = createServerFn({ method: "POST" })
   });
 
 export const deleteStudent = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data: { id } }) => {
     return studentMutate(() =>
       db
@@ -60,7 +60,7 @@ export const deleteStudent = createServerFn({ method: "POST" })
   });
 
 export const getStudentsByYear = createServerFn({ method: "GET" })
-  .inputValidator((d: { year: string }) => d)
+  .validator((d: { year: string }) => d)
   .handler(async ({ data }) => {
     const cacheKey = `placements_students_year_${data.year}`;
     const cached = serverCache.get<any[]>(cacheKey);

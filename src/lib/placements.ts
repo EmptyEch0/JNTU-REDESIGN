@@ -27,7 +27,7 @@ export const getPlacementHighlights = createServerFn({ method: "GET" }).handler(
 });
 
 export const addPlacementYear = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const res = await db.insert(placementYears).values(data).returning();
     memoryCache.invalidatePrefix("placements:");
@@ -35,13 +35,13 @@ export const addPlacementYear = createServerFn({ method: "POST" })
   });
 
 export const addPlacementHighlight = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return await db.insert(placementHighlights).values(data).returning();
   });
 
 export const updatePlacementYear = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return await db
@@ -52,13 +52,13 @@ export const updatePlacementYear = createServerFn({ method: "POST" })
   });
 
 export const deletePlacementYear = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     return await db.delete(placementYears).where(eq(placementYears.id, data.id)).returning();
   });
 
 export const updatePlacementHighlight = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return await db
@@ -69,7 +69,7 @@ export const updatePlacementHighlight = createServerFn({ method: "POST" })
   });
 
 export const deletePlacementHighlight = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     return await db
       .delete(placementHighlights)
@@ -84,7 +84,7 @@ export const getTPO = createServerFn({ method: "GET" }).handler(async () => {
 });
 
 export const updateTPO = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return await db.update(tpo).set(updateData).where(eq(tpo.id, id)).returning();
@@ -96,13 +96,13 @@ export const getGoals = createServerFn({ method: "GET" }).handler(async () => {
 });
 
 export const addGoal = createServerFn({ method: "POST" })
-  .inputValidator((d: { text: string }) => d)
+  .validator((d: { text: string }) => d)
   .handler(async ({ data }) => {
     return await db.insert(placementGoals).values(data).returning();
   });
 
 export const updateGoal = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return await db
@@ -113,7 +113,7 @@ export const updateGoal = createServerFn({ method: "POST" })
   });
 
 export const deleteGoal = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     return await db.delete(placementGoals).where(eq(placementGoals.id, data.id)).returning();
   });
@@ -124,13 +124,13 @@ export const getMajorRecruiters = createServerFn({ method: "GET" }).handler(asyn
 });
 
 export const addRecruiter = createServerFn({ method: "POST" })
-  .inputValidator((d: { name: string }) => d)
+  .validator((d: { name: string }) => d)
   .handler(async ({ data }) => {
     return await db.insert(majorRecruiters).values(data).returning();
   });
 
 export const deleteRecruiter = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     return await db.delete(majorRecruiters).where(eq(majorRecruiters.id, data.id)).returning();
   });
@@ -141,13 +141,13 @@ export const getStaff = createServerFn({ method: "GET" }).handler(async () => {
 });
 
 export const addStaff = createServerFn({ method: "POST" })
-  .inputValidator((d: { name: string; role: string }) => d)
+  .validator((d: { name: string; role: string }) => d)
   .handler(async ({ data }) => {
     return await db.insert(placementStaff).values(data).returning();
   });
 
 export const updateStaff = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return await db
@@ -158,7 +158,7 @@ export const updateStaff = createServerFn({ method: "POST" })
   });
 
 export const deleteStaff = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     return await db.delete(placementStaff).where(eq(placementStaff.id, data.id)).returning();
   });
@@ -191,7 +191,7 @@ export const getGallery = createServerFn({ method: "GET" }).handler(async () => 
 });
 
 export const addGalleryItem = createServerFn({ method: "POST" })
-  .inputValidator((d: { src: string; caption: string }) => d)
+  .validator((d: { src: string; caption: string }) => d)
   .handler(async ({ data }) => {
     const res = await db.insert(placementGallery).values(data).returning();
     serverCache.invalidate("placement_gallery");
@@ -199,7 +199,7 @@ export const addGalleryItem = createServerFn({ method: "POST" })
   });
 
 export const updateGalleryItem = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     const res = await db
@@ -212,7 +212,7 @@ export const updateGalleryItem = createServerFn({ method: "POST" })
   });
 
 export const deleteGalleryItem = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     const res = await db.delete(placementGallery).where(eq(placementGallery.id, data.id)).returning();
     serverCache.invalidate("placement_gallery");

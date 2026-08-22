@@ -123,6 +123,8 @@ export default defineConfig({
         : []),
     ],
     build: {
+      target: "es2022",
+      cssCodeSplit: true,
       // Increase chunk warning limit since we're intentionally splitting
       chunkSizeWarningLimit: 1000,
       rollupOptions: {

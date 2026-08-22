@@ -14,7 +14,7 @@ async function getRequestContext() {
 export const loginWithEmail = createServerFn({
   method: "POST",
 })
-  .inputValidator((data: any) => {
+  .validator((data: any) => {
     if (!data.email || typeof data.email !== "string" || !data.email.includes("@")) {
       throw new Error("Invalid email format");
     }
@@ -238,7 +238,7 @@ export const logoutAdmin = createServerFn({
 });
 
 export const loginHod = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data as { deptId: string; deptSlug: string; password: string })
+  .validator((data: any) => data as { deptId: string; deptSlug: string; password: string })
   .handler(async ({ data }) => {
     const { deptId, deptSlug, password } = data;
     const { verifyDepartmentAccess } = await import("../lib/departments");
@@ -304,7 +304,7 @@ export const initiateGoogleLogin = createServerFn({
 });
 
 export const handleGoogleCallback = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data as { code: string; state: string })
+  .validator((data: any) => data as { code: string; state: string })
   .handler(async ({ data }) => {
     const { code, state } = data;
     const { getCookie, deleteCookie, setCookie } = await import("@tanstack/react-start/server");

@@ -21,14 +21,14 @@ function assertAdmin(ctx: any) {
    🏢 STRUCTURE (BLOCK + FACILITY)
 =========================== */
 export const createStructure = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return db.insert(hostelStructure).values(data).returning();
   });
 
 export const updateStructure = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return db
@@ -39,7 +39,7 @@ export const updateStructure = createServerFn({ method: "POST" })
   });
 
 export const deleteStructure = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return db
@@ -51,14 +51,14 @@ export const deleteStructure = createServerFn({ method: "POST" })
    👥 PEOPLE (WARDEN + STAFF)
 =========================== */
 export const createPerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return db.insert(hostelPeople).values(data).returning();
   });
 
 export const updatePerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return db
@@ -69,7 +69,7 @@ export const updatePerson = createServerFn({ method: "POST" })
   });
 
 export const deletePerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return db
@@ -81,7 +81,7 @@ export const deletePerson = createServerFn({ method: "POST" })
    🏠 CONTENT
 =========================== */
 export const updateContent = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -101,14 +101,14 @@ export const updateContent = createServerFn({ method: "POST" })
    🖼️ IMAGES
 =========================== */
 export const createImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return db.insert(hostelImages).values(data).returning();
   });
 
 export const deleteImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return db

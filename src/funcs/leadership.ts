@@ -13,7 +13,7 @@ import { eq } from "drizzle-orm";
 import { serverCache } from "../lib/server-cache";
 
 export const getLeadershipData = createServerFn({ method: "GET" })
-  .inputValidator((d: string) => d)
+  .validator((d: string) => d)
   .handler(async ({ data: slug }) => {
     const cacheKey = `leadership_${slug}`;
     const cached = serverCache.get<any>(cacheKey);
@@ -27,7 +27,7 @@ export const getLeadershipData = createServerFn({ method: "GET" })
 );
 
 export const getLeadershipStaff = createServerFn({ method: "GET" })
-  .inputValidator((d: string) => d)
+  .validator((d: string) => d)
   .handler(async ({ data: slug }) => {
     const cacheKey = `leadership_staff_${slug}`;
     const cached = serverCache.get<any[]>(cacheKey);
@@ -48,7 +48,7 @@ export const getIqacComposition = createServerFn({ method: "GET" }).handler(asyn
 });
 
 export const getIqacReports = createServerFn({ method: "GET" })
-  .inputValidator((d: string) => d)
+  .validator((d: string) => d)
   .handler(async ({ data: type }) => {
     const cacheKey = `iqac_reports_${type}`;
     const cached = serverCache.get<any[]>(cacheKey);
@@ -87,7 +87,7 @@ export const getIqacMous = createServerFn({ method: "GET" }).handler(async () =>
 });
 
 export const updateLeadershipData = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     await db.update(leadership).set(updateData).where(eq(leadership.id, id));

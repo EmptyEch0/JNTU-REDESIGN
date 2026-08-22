@@ -34,7 +34,7 @@ export const getAcademicsBrochures = createServerFn({ method: "GET" }).handler(a
 });
 
 export const upsertAcademicsBrochure = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicsBrochures).set({
@@ -54,7 +54,7 @@ export const upsertAcademicsBrochure = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsBrochure = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicsBrochures).where(eq(academicsBrochures.id, data.id));
     return { success: true };
@@ -65,7 +65,7 @@ export const getAcademicsAdmissions = createServerFn({ method: "GET" }).handler(
 });
 
 export const upsertAcademicsAdmission = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicsAdmissionsNew).set({
@@ -87,7 +87,7 @@ export const upsertAcademicsAdmission = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsAdmission = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicsAdmissionsNew).where(eq(academicsAdmissionsNew.id, data.id));
     return { success: true };
@@ -99,7 +99,7 @@ export const getAcademicFeeStructures = createServerFn({ method: "GET" }).handle
 });
 
 export const upsertAcademicFeeStructure = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicFeeStructure).set({
@@ -121,7 +121,7 @@ export const upsertAcademicFeeStructure = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicFeeStructure = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicFeeStructure).where(eq(academicFeeStructure.id, data.id));
     return { success: true };
@@ -135,7 +135,7 @@ export const getAcademicsCalendar = createServerFn({ method: "GET" }).handler(as
 });
 
 export const upsertAcademicsCalendarEvent = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicCalendars).set({
@@ -161,7 +161,7 @@ export const upsertAcademicsCalendarEvent = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsCalendarEvent = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicCalendars).where(eq(academicCalendars.id, data.id));
     return { success: true };
@@ -177,7 +177,7 @@ export const getAcademicsRegulations = createServerFn({ method: "GET" }).handler
 });
 
 export const upsertAcademicsRegulation = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     memoryCache.invalidatePrefix("academics:");
     if (data.id) {
@@ -202,7 +202,7 @@ export const upsertAcademicsRegulation = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsRegulation = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     memoryCache.invalidatePrefix("academics:");
     await db.delete(academicRegulations).where(eq(academicRegulations.id, data.id));
@@ -219,7 +219,7 @@ export const getAcademicsSyllabusList = createServerFn({ method: "GET" }).handle
 });
 
 export const upsertAcademicsSyllabus = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     memoryCache.invalidatePrefix("academics:");
     if (data.id) {
@@ -250,7 +250,7 @@ export const upsertAcademicsSyllabus = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsSyllabus = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     memoryCache.invalidatePrefix("academics:");
     await db.delete(academicSyllabus).where(eq(academicSyllabus.id, data.id));
@@ -267,7 +267,7 @@ export const getAcademicsExamData = createServerFn({ method: "GET" }).handler(as
 });
 
 export const upsertAcademicsExamData = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     memoryCache.invalidatePrefix("academics:");
     if (data.id) {
@@ -292,7 +292,7 @@ export const upsertAcademicsExamData = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsExamData = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     memoryCache.invalidatePrefix("academics:");
     await db.delete(academicsExamCell).where(eq(academicsExamCell.id, data.id));
@@ -309,7 +309,7 @@ export const getAcademicsDownloadsList = createServerFn({ method: "GET" }).handl
 });
 
 export const upsertAcademicsDownload = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     memoryCache.invalidatePrefix("academics:");
     if (data.id) {
@@ -330,7 +330,7 @@ export const upsertAcademicsDownload = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsDownload = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     memoryCache.invalidatePrefix("academics:");
     await db.delete(academicDownloads).where(eq(academicDownloads.id, data.id));
@@ -347,7 +347,7 @@ export const getAcademicsTimetablesList = createServerFn({ method: "GET" }).hand
 });
 
 export const upsertAcademicsTimetable = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicTimetables).set({
@@ -377,7 +377,7 @@ export const upsertAcademicsTimetable = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsTimetable = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicTimetables).where(eq(academicTimetables.id, data.id));
     return { success: true };
@@ -391,7 +391,7 @@ export const getAcademicsScholarshipsList = createServerFn({ method: "GET" }).ha
 });
 
 export const upsertAcademicsScholarship = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicsScholarshipsNew).set({
@@ -419,7 +419,7 @@ export const upsertAcademicsScholarship = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsScholarship = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicsScholarshipsNew).where(eq(academicsScholarshipsNew.id, data.id));
     return { success: true };
@@ -433,7 +433,7 @@ export const getAcademicsFacultyList = createServerFn({ method: "GET" }).handler
 });
 
 export const upsertAcademicsFaculty = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicFaculty).set({
@@ -461,7 +461,7 @@ export const upsertAcademicsFaculty = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsFaculty = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicFaculty).where(eq(academicFaculty.id, data.id));
     return { success: true };
@@ -475,7 +475,7 @@ export const getAcademicCoursesOffered = createServerFn({ method: "GET" }).handl
 });
 
 export const upsertAcademicCourseOffered = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicCoursesOffered).set({
@@ -501,7 +501,7 @@ export const upsertAcademicCourseOffered = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicCourseOffered = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicCoursesOffered).where(eq(academicCoursesOffered.id, data.id));
     return { success: true };
@@ -515,7 +515,7 @@ export const getAcademicsVcProfiles = createServerFn({ method: "GET" }).handler(
 });
 
 export const upsertAcademicsVcProfile = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicsVcProfiles).set({
@@ -537,7 +537,7 @@ export const upsertAcademicsVcProfile = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsVcProfile = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicsVcProfiles).where(eq(academicsVcProfiles.id, data.id));
     return { success: true };
@@ -551,7 +551,7 @@ export const getAcademicsHodDesk = createServerFn({ method: "GET" }).handler(asy
 });
 
 export const upsertAcademicsHodDesk = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicsHodDesk).set({
@@ -577,7 +577,7 @@ export const upsertAcademicsHodDesk = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsHodDesk = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicsHodDesk).where(eq(academicsHodDesk.id, data.id));
     return { success: true };
@@ -591,7 +591,7 @@ export const getAcademicsPrincipals = createServerFn({ method: "GET" }).handler(
 });
 
 export const upsertAcademicsPrincipal = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicsPrincipals).set({
@@ -613,7 +613,7 @@ export const upsertAcademicsPrincipal = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsPrincipal = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicsPrincipals).where(eq(academicsPrincipals.id, data.id));
     return { success: true };
@@ -628,7 +628,7 @@ export const getAcademicsMissionVision = createServerFn({ method: "GET" }).handl
 });
 
 export const updateAcademicsMissionVision = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const existing = await db.select().from(academicsMissionVision);
     if (existing.length > 0) {
@@ -655,7 +655,7 @@ export const getAcademicsDashboardStats = createServerFn({ method: "GET" }).hand
 });
 
 export const upsertAcademicsDashboardStat = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicsDashboardStats).set({
@@ -679,7 +679,7 @@ export const upsertAcademicsDashboardStat = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsDashboardStat = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicsDashboardStats).where(eq(academicsDashboardStats.id, data.id));
     return { success: true };
@@ -693,7 +693,7 @@ export const getAcademicsCac = createServerFn({ method: "GET" }).handler(async (
 });
 
 export const upsertAcademicsCac = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(academicsCac).set({
@@ -713,7 +713,7 @@ export const upsertAcademicsCac = createServerFn({ method: "POST" })
   });
 
 export const deleteAcademicsCac = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(academicsCac).where(eq(academicsCac.id, data.id));
     return { success: true };
@@ -727,7 +727,7 @@ export const getTickerNotifications = createServerFn({ method: "GET" }).handler(
 });
 
 export const upsertTickerNotification = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     if (data.id) {
       await db.update(tickerNotifications).set({
@@ -775,7 +775,7 @@ export const upsertTickerNotification = createServerFn({ method: "POST" })
   });
 
 export const deleteTickerNotification = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     await db.delete(tickerNotifications).where(eq(tickerNotifications.id, data.id));
     return { success: true };

@@ -20,20 +20,20 @@ export const getRecruiters = createServerFn({ method: "GET" }).handler(async () 
 });
 
 export const addRecruiter = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     return recruiterMutate(() => db.insert(recruiters).values(data).returning());
   });
 
 export const updateRecruiter = createServerFn({ method: "POST" })
-  .inputValidator((d: any) => d)
+  .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
     return recruiterMutate(() => db.update(recruiters).set(updateData).where(eq(recruiters.id, id)).returning());
   });
 
 export const deleteRecruiter = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => d)
+  .validator((d: { id: number }) => d)
   .handler(async ({ data }) => {
     return recruiterMutate(() => db.delete(recruiters).where(eq(recruiters.id, data.id)).returning());
   });

@@ -29,7 +29,7 @@ function assertAdmin(ctx: any) {
    🎸 CONTENT (INFO)
 =========================== */
 export const updateMusicContent = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -48,7 +48,7 @@ export const updateMusicContent = createServerFn({ method: "POST" })
    👥 PEOPLE (FACULTY + STUDENTS)
 =========================== */
 export const createMusicPerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -56,7 +56,7 @@ export const createMusicPerson = createServerFn({ method: "POST" })
   });
 
 export const updateMusicPerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -68,7 +68,7 @@ export const updateMusicPerson = createServerFn({ method: "POST" })
   });
 
 export const deleteMusicPerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -81,7 +81,7 @@ export const deleteMusicPerson = createServerFn({ method: "POST" })
    🎹 EQUIPMENT
 =========================== */
 export const createMusicEquipment = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -89,7 +89,7 @@ export const createMusicEquipment = createServerFn({ method: "POST" })
   });
 
 export const updateMusicEquipment = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -100,7 +100,7 @@ export const updateMusicEquipment = createServerFn({ method: "POST" })
   });
 
 export const deleteMusicEquipment = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -113,7 +113,7 @@ export const deleteMusicEquipment = createServerFn({ method: "POST" })
    🎤 MEMBERS
 =========================== */
 export const createMusicMember = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -121,7 +121,7 @@ export const createMusicMember = createServerFn({ method: "POST" })
   });
 
 export const updateMusicMember = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -132,7 +132,7 @@ export const updateMusicMember = createServerFn({ method: "POST" })
   });
 
 export const deleteMusicMember = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -145,7 +145,7 @@ export const deleteMusicMember = createServerFn({ method: "POST" })
    🖼️ IMAGES
 =========================== */
 export const createMusicImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -153,7 +153,7 @@ export const createMusicImage = createServerFn({ method: "POST" })
   });
 
 export const deleteMusicImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 

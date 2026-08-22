@@ -26,7 +26,7 @@ function assertStrongPassword(password: string) {
 }
 
 export const changeHodCredentials = createServerFn({ method: "POST" })
-  .inputValidator((d: { currentPassword: string; newPassword: string }) => d)
+  .validator((d: { currentPassword: string; newPassword: string }) => d)
   .handler(async ({ data }) => {
     const { currentPassword, newPassword } = data;
 

@@ -105,7 +105,20 @@ function GalleryPage() {
   }));
 
   const localImages = records.length > 0 ? records : [];
-  const images = [...localImages, ...apiGalleryItems, ...(apiGalleryItems.length === 0 && localImages.length === 0 ? DEFAULT_IMAGES : [])];
+  const rawImages = [
+    ...localImages,
+    ...apiGalleryItems,
+    ...(apiGalleryItems.length === 0 && localImages.length === 0 ? DEFAULT_IMAGES : []),
+  ];
+
+  // Strictly deduplicate by caption/title and src
+  const seenKeys = new Set<string>();
+  const images = rawImages.filter((img) => {
+    const key = (img.caption || img.src || "").trim().toLowerCase();
+    if (!key || seenKeys.has(key)) return false;
+    seenKeys.add(key);
+    return true;
+  });
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

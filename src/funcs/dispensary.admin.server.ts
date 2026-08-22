@@ -28,7 +28,7 @@ function assertAdmin(ctx: any) {
    🏥 CONTENT (HOD + MESSAGE)
 =========================== */
 export const updateContent = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -45,14 +45,14 @@ export const updateContent = createServerFn({ method: "POST" })
    👥 PEOPLE (doctor/staff/driver)
 =========================== */
 export const createPerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return dispensaryMutate(() => db.insert(dispensaryPeople).values(data).returning());
   });
 
 export const updatePerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -64,7 +64,7 @@ export const updatePerson = createServerFn({ method: "POST" })
   });
 
 export const deletePerson = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -77,14 +77,14 @@ export const deletePerson = createServerFn({ method: "POST" })
    📋 META (facility / medicine)
 =========================== */
 export const createMeta = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return dispensaryMutate(() => db.insert(dispensaryMeta).values(data).returning());
   });
 
 export const deleteMeta = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -94,7 +94,7 @@ export const deleteMeta = createServerFn({ method: "POST" })
   });
 
 export const updateMeta = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -109,14 +109,14 @@ export const updateMeta = createServerFn({ method: "POST" })
    🖼️ IMAGES
 =========================== */
 export const createImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
     return dispensaryMutate(() => db.insert(dispensaryImages).values(data).returning());
   });
 
 export const deleteImage = createServerFn({ method: "POST" })
-  .inputValidator((data: any) => data)
+  .validator((data: any) => data)
   .handler(async ({ data, context }) => {
     assertAdmin(context);
 

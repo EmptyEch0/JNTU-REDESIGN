@@ -22,7 +22,7 @@ export type DepartmentData = {
 };
 
 export const getDepartmentDetails = createServerFn({ method: "GET" })
-  .inputValidator((slug: string) => slug)
+  .validator((slug: string) => slug)
   .handler(async ({ data: slug }) => {
     try {
       const cacheKey = `dept_details_${slug}`;

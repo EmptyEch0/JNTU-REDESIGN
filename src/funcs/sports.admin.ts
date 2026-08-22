@@ -29,7 +29,7 @@ function assertAdmin(ctx: any) {
 🏆 CONTENT (INFO)
 =========================== */
 export const updateSportsContent = createServerFn({ method: "POST" })
-.inputValidator((data: any) => data)
+.validator((data: any) => data)
 .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -46,7 +46,7 @@ export const updateSportsContent = createServerFn({ method: "POST" })
 });
 
 export const deleteSportsContent = createServerFn({ method: "POST" })
-.inputValidator((data: any) => data)
+.validator((data: any) => data)
 .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -59,7 +59,7 @@ export const deleteSportsContent = createServerFn({ method: "POST" })
 👥 PEOPLE (FACULTY + NON TEACHING)
 =========================== */
 export const createPerson = createServerFn({ method: "POST" })
-.inputValidator((data: any) => data)
+.validator((data: any) => data)
 .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -67,7 +67,7 @@ export const createPerson = createServerFn({ method: "POST" })
 });
 
 export const updatePerson = createServerFn({ method: "POST" })
-.inputValidator((data: any) => data)
+.validator((data: any) => data)
 .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -79,7 +79,7 @@ export const updatePerson = createServerFn({ method: "POST" })
 });
 
 export const deletePerson = createServerFn({ method: "POST" })
-.inputValidator((data: any) => data)
+.validator((data: any) => data)
 .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -92,7 +92,7 @@ export const deletePerson = createServerFn({ method: "POST" })
 🏟️ INFRA (FIELDS + GYM)
 =========================== */
 export const createInfra = createServerFn({ method: "POST" })
-.inputValidator((data: any) => data)
+.validator((data: any) => data)
 .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -103,7 +103,7 @@ export const createInfra = createServerFn({ method: "POST" })
 });
 
 export const updateInfra = createServerFn({ method: "POST" })
-.inputValidator((data: any) => data)
+.validator((data: any) => data)
 .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -118,7 +118,7 @@ export const updateInfra = createServerFn({ method: "POST" })
 });
 
 export const deleteInfra = createServerFn({ method: "POST" })
-.inputValidator((data: any) => data)
+.validator((data: any) => data)
 .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -136,7 +136,7 @@ export const createAchievement =
 createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (data: any) => data
   )
   .handler(
@@ -192,7 +192,7 @@ export const updateAchievement =
 createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (data: any) => data
   )
   .handler(
@@ -254,7 +254,7 @@ export const deleteAchievement =
 createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (data: any) => data
   )
   .handler(
@@ -281,7 +281,7 @@ createServerFn({
 🖼️ IMAGES
 =========================== */
 export const createImage = createServerFn({ method: "POST" })
-.inputValidator((data: any) => data)
+.validator((data: any) => data)
 .handler(async ({ data, context }) => {
     assertAdmin(context);
 
@@ -289,7 +289,7 @@ export const createImage = createServerFn({ method: "POST" })
 });
 
 export const deleteImage = createServerFn({ method: "POST" })
-.inputValidator((data: any) => data)
+.validator((data: any) => data)
 .handler(async ({ data, context }) => {
     assertAdmin(context);
 

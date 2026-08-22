@@ -423,7 +423,7 @@ async function ensureCmsPageForNavItem(
    ========================================================= */
 
 export const getDepartmentNavItems = createServerFn({ method: "GET" })
-  .inputValidator(
+  .validator(
     (d: { deptSlug: string; isEditMode?: boolean }) => d
   )
   .handler(async ({ data: { deptSlug, isEditMode = false } }) => {
@@ -542,7 +542,7 @@ export const getDepartmentNavItems = createServerFn({ method: "GET" })
 export const saveDepartmentNavItems = createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (d: {
       deptSlug: string;
       items: Array<{
@@ -664,7 +664,7 @@ export const saveDepartmentNavItems = createServerFn({
 export const createDepartmentNavPage = createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (d: {
       deptSlug: string;
       title: string;
@@ -785,7 +785,7 @@ export const createDepartmentNavPage = createServerFn({
 export const deleteDepartmentNavPage = createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (d: { id: number; deptSlug: string }) => d
   )
   .handler(async ({ data: { id, deptSlug } }) => {
@@ -853,7 +853,7 @@ export const deleteDepartmentNavPage = createServerFn({
 export const getDepartmentPage = createServerFn({
   method: "GET",
 })
-  .inputValidator(
+  .validator(
     (d: {
       deptSlug: string;
       pageSlug: string;
@@ -945,7 +945,7 @@ export const getDepartmentPage = createServerFn({
 export const saveDepartmentPageDraft = createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (d: {
       deptSlug: string;
       pageSlug: string;
@@ -1076,7 +1076,7 @@ export const saveDepartmentPageDraft = createServerFn({
 export const publishDepartmentPage = createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (d: {
       deptSlug: string;
       pageSlug: string;
@@ -1216,7 +1216,7 @@ export const publishDepartmentPage = createServerFn({
 export const getPageVersions = createServerFn({
   method: "GET",
 })
-  .inputValidator(
+  .validator(
     (d: { pageId: number }) => d
   )
   .handler(async ({ data: { pageId } }) => {
@@ -1255,7 +1255,7 @@ export const getPageVersions = createServerFn({
 export const restorePageVersion = createServerFn({
   method: "POST",
 })
-  .inputValidator(
+  .validator(
     (d: {
       pageId: number;
       versionId: number;

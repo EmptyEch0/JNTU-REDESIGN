@@ -52,11 +52,11 @@ const isDev = process.env.NODE_ENV !== "production";
 
 export default defineConfig({
   nitro: {
-    preset: "vercel",
+    preset: "node-server",
     output: {
-      dir: ".vercel/output",
-      serverDir: ".vercel/output/functions/__server.func",
-      publicDir: ".vercel/output/static",
+      dir: "dist",
+      serverDir: "dist/server",
+      publicDir: "dist/public",
     },
   },
   vite: {

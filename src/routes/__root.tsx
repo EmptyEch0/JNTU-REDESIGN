@@ -86,11 +86,11 @@ export const Route = createRootRoute({
       },
       {
         property: "og:image",
-        content: "http://89.116.134.182/logo-circle.png",
+        content: "https://jntugvcev.edu.in/logo-circle.png",
       },
       {
         name: "twitter:image",
-        content: "http://89.116.134.182/logo-circle.png",
+        content: "https://jntugvcev.edu.in/logo-circle.png",
       },
     ],
     links: [
@@ -99,11 +99,11 @@ export const Route = createRootRoute({
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev" },
-      { rel: "preconnect", href: "http://89.116.134.182" },
+      { rel: "preconnect", href: "https://jntugvcev.edu.in" },
       { rel: "dns-prefetch", href: "https://api.jntugv.edu.in" },
       { rel: "dns-prefetch", href: "https://fonts.googleapis.com" },
       { rel: "dns-prefetch", href: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev" },
-      { rel: "dns-prefetch", href: "http://89.116.134.182" },
+      { rel: "dns-prefetch", href: "https://jntugvcev.edu.in" },
       { rel: "dns-prefetch", href: "https://ui-avatars.com" },
       { rel: "canonical", href: "https://jntugvcev.edu.in/" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },

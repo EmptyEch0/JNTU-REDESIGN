@@ -267,7 +267,7 @@ const EXAMINATION_OFFICERS = [
     email: "oie2@jntugvcev.edu.in",
     email2: "oie3@jntugvcev.edu.in",
     mobile: "Contact via Email",
-    photo: "http://89.116.134.182/local-assets/uploads/departments/hod_photos/cse-hod.jpg",
+    photo: "https://jntugvcev.edu.in/local-assets/uploads/departments/hod_photos/cse-hod.jpg",
     role: "OIE-II"
   },
   {
@@ -275,7 +275,7 @@ const EXAMINATION_OFFICERS = [
     designation: "Officer In-charge of Examinations – IV (I-B.Tech & IV-B.Tech)",
     email: "oie4@jntugvcev.edu.in",
     mobile: "Contact via Email",
-    photo: "http://89.116.134.182/local-assets/uploads/departments/hod_photos/sh-hod.jpg",
+    photo: "https://jntugvcev.edu.in/local-assets/uploads/departments/hod_photos/sh-hod.jpg",
     role: "OIE-IV"
   }
 ];

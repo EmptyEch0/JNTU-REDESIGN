@@ -5,9 +5,20 @@ interface Props {
   label: string;
   suffix?: string;
   duration?: number;
+  className?: string;
+  valueClassName?: string;
+  labelClassName?: string;
 }
 
-export function StatCounter({ value, label, suffix = "", duration = 1600 }: Props) {
+export function StatCounter({
+  value,
+  label,
+  suffix = "",
+  duration = 1600,
+  className = "group",
+  valueClassName = "text-display text-5xl md:text-6xl text-primary tabular-nums",
+  labelClassName = "mt-2 text-sm uppercase tracking-[0.2em] text-muted-foreground",
+}: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
 
@@ -37,12 +48,12 @@ export function StatCounter({ value, label, suffix = "", duration = 1600 }: Prop
   }, [value, duration]);
 
   return (
-    <div ref={ref} className="group">
-      <div className="text-display text-5xl md:text-6xl text-primary tabular-nums">
+    <div ref={ref} className={className}>
+      <div className={valueClassName}>
         {count.toLocaleString()}
         <span className="text-accent">{suffix}</span>
       </div>
-      <div className="mt-2 text-sm uppercase tracking-[0.2em] text-muted-foreground">{label}</div>
+      <div className={labelClassName}>{label}</div>
     </div>
   );
 }

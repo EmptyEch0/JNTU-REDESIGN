@@ -23,7 +23,7 @@ function serveLocalAssets(): Plugin {
             return;
           }
           if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
-            res.writeHead(302, { Location: `http://89.116.134.182/local-assets${safePath}` });
+            res.writeHead(302, { Location: `https://jntugvcev.edu.in/local-assets${safePath}` });
             res.end();
             return;
           }

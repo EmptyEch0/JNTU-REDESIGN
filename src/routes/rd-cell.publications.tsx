@@ -90,7 +90,7 @@ function PublicationsPage() {
       
       <div className="container-narrow py-8 text-center border-b border-border">
         <img 
-          src="http://89.116.134.182/local-assets/uploads/2020/08/image.png" 
+          src="https://jntugvcev.edu.in/local-assets/uploads/2020/08/image.png" 
           alt="Publications Chart" 
           decoding="async"
 loading="lazy"

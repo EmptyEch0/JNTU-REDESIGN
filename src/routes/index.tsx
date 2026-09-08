@@ -35,6 +35,8 @@ import dispensaryImg from "@/assets/dispensary.png";
 import labImg from "@/assets/lab.webp";
 import cultureImg from "@/assets/culture.webp";
 import placementsImg from "@/assets/placements-bg.webp";
+import vakulaImg from "@/assets/vakula.jpg";
+import nagaRajuImg from "@/assets/naga-raju.webp";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { StatCounter } from "@/components/StatCounter";
 import { ParallaxBg } from "@/components/ParallaxBg";
@@ -69,6 +71,10 @@ export const Route = createFileRoute("/")({
       context.queryClient.ensureQueryData({
         queryKey: ["leadership", "principal"],
         queryFn: () => getLeadershipData({ data: "principal" }),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["leadership", "vice-principal"],
+        queryFn: () => getLeadershipData({ data: "vice-principal" }),
       }),
       context.queryClient.ensureQueryData({
         queryKey: ["departments", "all"],
@@ -138,7 +144,7 @@ export const Route = createFileRoute("/")({
           "@type": "EducationalOrganization",
           "name": "JNTU-GV College of Engineering Vizianagaram",
           "url": "https://jntugvcev.edu.in/",
-          "logo": "http://89.116.134.182/logo-circle.png",
+          "logo": "https://jntugvcev.edu.in/logo-circle.png",
           "description": "A premier engineering college shaping tomorrow's innovators — JNTU-GV CEV.",
           "address": {
             "@type": "PostalAddress",
@@ -224,6 +230,24 @@ function HomePage() {
     queryFn: () => getLeadershipData({ data: "principal" }),
     ...QUERY_CACHE,
   });
+
+  const { data: vicePrincipal } = useQuery({
+    queryKey: ["leadership", "vice-principal"],
+    queryFn: () => getLeadershipData({ data: "vice-principal" }),
+    ...QUERY_CACHE,
+  });
+
+  const principalPhoto =
+    principal?.image &&
+    !principal.image.includes("placeholder") &&
+    !principal.image.endsWith("Principal.png")
+      ? getAssetUrl(principal.image)
+      : vakulaImg;
+
+  const vicePrincipalPhoto =
+    vicePrincipal?.image && !vicePrincipal.image.includes("placeholder")
+      ? getAssetUrl(vicePrincipal.image)
+      : nagaRajuImg;
 
   // Pull array dynamically from Neon database
   const { data: liveDepartments = [] } = useQuery({
@@ -397,8 +421,8 @@ function HomePage() {
       </section>
 
 
-      {/* ABOUT, VISION & PRINCIPAL SECTION */}
-      <section className="py-20 md:py-28 relative overflow-hidden">
+      {/* ABOUT, VISION, LEADERSHIP & STATS SECTION */}
+      <section className="py-20 md:py-28 relative overflow-hidden bg-[#FAF8F5]/85">
         <div
           aria-hidden
           className="absolute inset-0 -z-10"
@@ -408,32 +432,35 @@ function HomePage() {
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[100px] -z-10" />
 
         <div className="container-narrow">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-            <div className="lg:col-span-8 space-y-10">
+          <div className="grid lg:grid-cols-12 gap-10 xl:gap-14 items-start">
+            {/* Left Column: Who We Are, Vision, Mission */}
+            <div className="lg:col-span-7 space-y-8">
               <RevealOnScroll>
-                <div className="text-eyebrow">Who we are</div>
-                <h2 className="text-display text-4xl md:text-6xl mt-3 text-ink leading-[1.1]">
-                  Building <span className="italic text-primary">excellence</span>,<br />
+                <div className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
+                  Who we are
+                </div>
+                <h2 className="text-display text-4xl sm:text-5xl lg:text-[54px] font-bold mt-3 text-ink leading-[1.12] tracking-tight">
+                  Building <span className="italic text-primary font-normal">excellence</span>,<br />
                   shaping futures.
                 </h2>
-                <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                <p className="mt-5 text-base sm:text-[17px] text-muted-foreground leading-relaxed">
                   Established in 2007 as a constituent college of JNTU-GV, our institution is
-                  recognized by UGC under section 2(f) & 12(B) and approved by AICTE. We bring
+                  recognized by UGC under section 2(f) &amp; 12(B) and approved by AICTE. We bring
                   together rigorous academics and a thriving research community.
                 </p>
               </RevealOnScroll>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <RevealOnScroll delay={100}>
-                  <div className="group p-5 sm:p-8 rounded-3xl sm:rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
-                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
-                      <div className="h-12 w-12 shrink-0 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Eye className="h-6 w-6" />
+                  <div className="group p-6 sm:p-7 rounded-[22px] bg-white border border-[#EAE6DF] shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:border-primary/20 hover:shadow-md transition-all duration-200">
+                    <div className="flex flex-col sm:flex-row gap-5 items-start">
+                      <div className="h-12 w-12 shrink-0 rounded-full bg-blue-50 text-primary border border-blue-100/60 flex items-center justify-center group-hover:scale-105 transition-transform">
+                        <Eye className="h-5 w-5" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-ink mb-2">Our Vision</h3>
+                        <h3 className="text-xl font-bold font-display text-ink mb-1.5">Our Vision</h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">
-                          To emerge as a premier technical Institution in the field of engineering and
+                          To emerge as a premier technical institution in the field of engineering and
                           research, with a dedicated focus on producing professionally competent and
                           socially sensitive engineers capable of thriving in a multidisciplinary
                           global environment.
@@ -444,19 +471,19 @@ function HomePage() {
                 </RevealOnScroll>
 
                 <RevealOnScroll delay={200}>
-                  <div className="group p-5 sm:p-8 rounded-3xl sm:rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
-                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
-                      <div className="h-12 w-12 shrink-0 rounded-2xl bg-accent/10 text-accent flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Target className="h-6 w-6" />
+                  <div className="group p-6 sm:p-7 rounded-[22px] bg-white border border-[#EAE6DF] shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:border-primary/20 hover:shadow-md transition-all duration-200">
+                    <div className="flex flex-col sm:flex-row gap-5 items-start">
+                      <div className="h-12 w-12 shrink-0 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100/60 flex items-center justify-center group-hover:scale-105 transition-transform">
+                        <Target className="h-5 w-5" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-ink mb-2">Core Mission</h3>
+                        <h3 className="text-xl font-bold font-display text-ink mb-1.5">Core Mission</h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">
                           We are committed to providing high-quality technical education through a
-                          creative balance of academia and industry. By adopting highly effective
-                          teaching-learning processes and promoting multidisciplinary research,
-                          we inculcate ethical and moral values that contribute to professional
-                          growth and societal development.
+                          creative balance of academics and industry. By adopting highly effective
+                          teaching-learning processes and promoting multidisciplinary research, we
+                          inculcate ethical and moral values that contribute to professional growth and
+                          social development.
                         </p>
                       </div>
                     </div>
@@ -465,72 +492,103 @@ function HomePage() {
               </div>
 
               <RevealOnScroll delay={300}>
-                <div className="flex flex-wrap items-center gap-6 pt-4">
-                  <Link to="/about/vision-mission" className="story-link inline-flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest">
+                <div className="flex flex-wrap items-center gap-6 pt-2">
+                  <Link
+                    to="/about/vision-mission"
+                    className="story-link inline-flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest hover:underline"
+                  >
                     View full mandate <ArrowRight className="h-4 w-4" />
                   </Link>
-                  <div className="h-px w-12 bg-border hidden sm:block" />
-                  <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">
-                    <Shield className="h-3.5 w-3.5" /> AICTE Approved
+                  <div className="h-px w-12 bg-[#DED9D0] hidden sm:block" />
+                  <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground/75 uppercase tracking-widest">
+                    <span className="inline-block h-2.5 w-2.5 rounded-full border-2 border-muted-foreground/60" />
+                    AICTE Approved
                   </div>
                 </div>
               </RevealOnScroll>
             </div>
 
-            <div className="lg:col-span-4 lg:sticky lg:top-32">
+            {/* Right Column: Dual Leadership (Principal & Vice Principal) */}
+            <div className="lg:col-span-5 w-full">
               <RevealOnScroll delay={200}>
-                <div className="relative group mx-auto max-w-[380px]">
-                  <div className="absolute -top-8 -right-8 w-32 h-32 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-                  <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-accent/10 rounded-full blur-3xl" />
-
-                  <div className="relative bg-card rounded-[40px] p-6 md:p-8 border border-border shadow-elegant overflow-hidden transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
-                    <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden mb-6 border border-white/50 shadow-inner group/img bg-slate-100">
-                      {principal?.image ? (
+                <div className="bg-white/60 backdrop-blur-sm rounded-[32px] p-3.5 sm:p-4 border border-[#EAE6DF] shadow-sm space-y-4">
+                  {/* Principal Card */}
+                  <div className="bg-white rounded-[24px] p-5 sm:p-6 border border-[#EFECE6] shadow-[0_2px_12px_rgba(0,0,0,0.02)] transition-all duration-200 hover:shadow-md">
+                    <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
+                      <div className="relative w-36 sm:w-40 shrink-0 aspect-[4/5] rounded-[20px] overflow-hidden bg-slate-100 border border-black/5 shadow-inner">
                         <img
-                          src={getAssetUrl(principal.image)}
-                          alt={principal.name}
-                          width="380"
-                          height="475"
+                          src={principalPhoto}
+                          alt={principal?.name || "Dr. V. S. Vakula"}
+                          width="180"
+                          height="225"
                           loading="lazy"
                           decoding="async"
-                          className="h-full w-full object-cover transition-all duration-300 group-hover/img:scale-105"
+                          className="h-full w-full object-cover object-top transition-transform duration-300 hover:scale-105"
                         />
-                      ) : (
-                        <div className="h-full w-full grid place-items-center bg-slate-50">
-                          <Users className="h-12 w-12 text-slate-200" />
+                      </div>
+                      <div className="flex-1 flex flex-col justify-between self-stretch text-center sm:text-left">
+                        <div>
+                          <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1">
+                            Principal
+                          </div>
+                          <h3 className="text-xl sm:text-2xl font-bold font-display text-ink leading-tight">
+                            {principal?.name || "Dr. V. S. Vakula"}
+                          </h3>
+                          <p className="text-xs font-semibold text-muted-foreground mt-1">
+                            JNTU-GV CEV
+                          </p>
+                          <p className="text-[13px] text-muted-foreground italic leading-relaxed mt-3">
+                            "{principal?.quote || "Empowering students through academic excellence, innovative engineering education, and holistic development to meet global challenges."}"
+                          </p>
                         </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
-                      <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-[10px] font-bold text-white uppercase tracking-widest">
-                          <CheckCircle2 className="h-3 w-3" /> {principal?.designation?.split(',')[0] || "Principal"}
+                        <div className="mt-4 pt-1">
+                          <Link
+                            to="/administration/principal"
+                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-primary-dark text-white text-xs font-semibold shadow-sm hover:shadow transition-all duration-150"
+                          >
+                            Principal's Desk <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="space-y-4">
-                      <div>
-                        <div className="text-[10px] uppercase tracking-[0.25em] text-primary font-black mb-2">Leadership</div>
-                        <h3 className="text-2xl font-bold text-ink leading-tight">{principal?.name || "Dr. V. S. Vakula"}</h3>
-                        <p className="text-muted-foreground text-sm font-medium mt-1">
-                          {principal?.designation?.includes(',') ? principal.designation.split(',').slice(1).join(',') : "Principal, JNTU-GV CEV"}
-                        </p>
+                  {/* Vice Principal Card */}
+                  <div className="bg-white rounded-[24px] p-5 sm:p-6 border border-[#EFECE6] shadow-[0_2px_12px_rgba(0,0,0,0.02)] transition-all duration-200 hover:shadow-md">
+                    <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
+                      <div className="relative w-36 sm:w-40 shrink-0 aspect-[4/5] rounded-[20px] overflow-hidden bg-slate-100 border border-black/5 shadow-inner">
+                        <img
+                          src={vicePrincipalPhoto}
+                          alt={vicePrincipal?.name || "Prof. G. J. Naga Raju"}
+                          width="180"
+                          height="225"
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover object-top transition-transform duration-300 hover:scale-105"
+                        />
                       </div>
-
-                      <div className="relative">
-                        <Quote className="h-10 w-10 text-primary/10 absolute -top-4 -left-4 -z-10" />
-                        <p className="text-sm text-muted-foreground leading-relaxed italic">
-                          "{principal?.quote || "Empowering students through academic excellence, innovative engineering education, and holistic development to meet global challenges."}"
-                        </p>
-                      </div>
-
-                      <div className="pt-6 border-t border-border flex items-center justify-between">
-                        <Link to="/administration/principal" className="btn-primary !px-6 !py-3 !text-[11px]">
-                          Principal's Desk <ArrowRight className="h-4 w-4" />
-                        </Link>
-                        <div className="flex flex-col items-end">
-                          <div className="text-[9px] uppercase tracking-tighter text-muted-foreground font-bold">Member</div>
-                          <div className="text-[11px] font-black text-ink">IEEE Senior Member</div>
+                      <div className="flex-1 flex flex-col justify-between self-stretch text-center sm:text-left">
+                        <div>
+                          <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1">
+                            Vice Principal
+                          </div>
+                          <h3 className="text-xl sm:text-2xl font-bold font-display text-ink leading-tight">
+                            {vicePrincipal?.name || "Prof. G. J. Naga Raju"}
+                          </h3>
+                          <p className="text-xs font-semibold text-muted-foreground mt-1">
+                            Professor of Physics &amp; Vice Principal (i/c) · JNTU-GV CEV
+                          </p>
+                          <p className="text-[13px] text-muted-foreground italic leading-relaxed mt-3">
+                            "{vicePrincipal?.quote || "Fostering a supportive academic environment and encouraging innovation for the holistic growth and success of every student."}"
+                          </p>
+                        </div>
+                        <div className="mt-4 pt-1">
+                          <Link
+                            to="/administration/vice-principal"
+                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-primary-dark text-white text-xs font-semibold shadow-sm hover:shadow transition-all duration-150"
+                          >
+                            Vice Principal's Desk <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -540,14 +598,21 @@ function HomePage() {
             </div>
           </div>
 
-          <RevealOnScroll delay={400} className="mt-20 lg:mt-28">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-[32px] overflow-hidden border border-border shadow-sm">
-              {STATS.map((s, i) => (
-                <div key={s.label} className="bg-white p-8 lg:p-10 hover:bg-slate-50 transition-colors group">
-                  <StatCounter value={s.value} label={s.label} />
-                  <div className="mt-2 h-1 w-0 bg-primary group-hover:w-full transition-all duration-200 rounded-full" />
-                </div>
-              ))}
+          {/* Full-width Stats Banner */}
+          <RevealOnScroll delay={300} className="mt-14 sm:mt-16 lg:mt-20">
+            <div className="bg-white rounded-[24px] sm:rounded-[32px] border border-[#EAE6DF] p-6 sm:p-8 lg:p-10 shadow-sm">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-0 lg:divide-x lg:divide-[#EAE6DF]">
+                {STATS.map((s) => (
+                  <div key={s.label} className="px-2 sm:px-6 lg:px-8 first:pl-0 last:pr-0">
+                    <StatCounter
+                      value={s.value}
+                      label={s.label}
+                      valueClassName="text-display text-3xl sm:text-4xl md:text-5xl font-bold text-primary tabular-nums"
+                      labelClassName="mt-2 text-xs sm:text-[13px] font-bold uppercase tracking-[0.16em] text-muted-foreground/90"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </RevealOnScroll>
         </div>
@@ -573,22 +638,22 @@ function HomePage() {
 
               // Define fallback map for department images
               const fallbackMap: Record<string, string> = {
-                cse: "http://89.116.134.182/local-assets/uploads/departments/banners/cse-banner.jpg",
-                ece: "http://89.116.134.182/local-assets/uploads/departments/banners/ece-banner.jpg",
-                eee: "http://89.116.134.182/local-assets/uploads/departments/banners/eee-banner.jpg",
-                it: "http://89.116.134.182/local-assets/uploads/departments/banners/it-banner.jpg",
-                mech: "http://89.116.134.182/local-assets/uploads/departments/banners/mech-banner.jpg",
-                met: "http://89.116.134.182/local-assets/uploads/departments/banners/met-banner.jpg",
-                sh: "http://89.116.134.182/local-assets/uploads/departments/banners/sh-banner.jpg",
-                bsh: "http://89.116.134.182/local-assets/uploads/departments/banners/sh-banner.jpg",
-                bshss: "http://89.116.134.182/local-assets/uploads/departments/banners/sh-banner.jpg",
-                mba: "http://89.116.134.182/local-assets/uploads/departments/banners/mba-banner.jpg",
+                cse: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/cse-banner.jpg",
+                ece: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/ece-banner.jpg",
+                eee: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/eee-banner.jpg",
+                it: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/it-banner.jpg",
+                mech: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/mech-banner.jpg",
+                met: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/met-banner.jpg",
+                sh: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/sh-banner.jpg",
+                bsh: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/sh-banner.jpg",
+                bshss: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/sh-banner.jpg",
+                mba: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/mba-banner.jpg",
               };
 
               // Get the image source
               const imageSrc = d.image
                 ? getAssetUrl(d.image)
-                : fallbackMap[deptSlug] || `http://89.116.134.182/local-assets/uploads/departments/banners/${deptSlug}-banner.jpg`;
+                : fallbackMap[deptSlug] || `https://jntugvcev.edu.in/local-assets/uploads/departments/banners/${deptSlug}-banner.jpg`;
 
               const fallback = fallbackMap[deptSlug] || "/assets/lab.webp";
 

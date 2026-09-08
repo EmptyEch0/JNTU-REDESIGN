@@ -1,9 +1,12 @@
 const rawBase = (
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_ASSETS_URL) ||
   (typeof process !== "undefined" && process.env?.VITE_ASSETS_URL) ||
-  "http://89.116.134.182/local-assets"
+  "https://jntugvcev.edu.in/local-assets"
 ).replace(/\/$/, "");
-const BASE = rawBase.replace("89.116.134.182:8080", "89.116.134.182");
+const BASE = rawBase
+  .replace("89.116.134.182:8080", "jntugvcev.edu.in")
+  .replace("http://89.116.134.182", "https://jntugvcev.edu.in")
+  .replace("http://jntugvcev.edu.in", "https://jntugvcev.edu.in");
 
 const assetUrlCache = new Map<string, string>();
 
@@ -87,7 +90,9 @@ export const getAssetUrl = (
         const relativePath = vpsMatch[1].replace(/\\/g, "/").replace(/^\/+/, "");
         resolvedUrl = `${BASE}/${relativePath}`;
       } else if (trimmedPath.includes("89.116.134.182:8080")) {
-        resolvedUrl = trimmedPath.replace("89.116.134.182:8080", "89.116.134.182");
+        resolvedUrl = trimmedPath.replace("http://89.116.134.182:8080", "https://jntugvcev.edu.in").replace("89.116.134.182:8080", "jntugvcev.edu.in");
+      } else if (trimmedPath.startsWith("http://jntugvcev.edu.in")) {
+        resolvedUrl = trimmedPath.replace("http://jntugvcev.edu.in", "https://jntugvcev.edu.in");
       } else if (trimmedPath.startsWith("http://localhost:8081/")) {
         const relativePath = trimmedPath.replace("http://localhost:8081/", "");
         resolvedUrl = `${BASE}/${relativePath.replace(/\\/g, "/").replace(/^\/+/, "")}`;

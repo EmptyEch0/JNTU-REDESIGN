@@ -10,9 +10,9 @@ async function main() {
     slug: "vice-principal",
     name: "Prof. G. J. Naga Raju",
     designation: "Professor of Physics & Vice Principal (i/c)",
-    image: "https://via.placeholder.com/800x1000?text=Vice+Principal", // Placeholder for now
+    image: "https://jntugvcev.edu.in/local-assets/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg",
     email: "viceprincipal@jntugvcev.edu.in",
-    quote: "Dedicated to fostering academic excellence and scientific inquiry at JNTU-GV.",
+    quote: "Fostering a supportive academic environment and encouraging innovation for the holistic growth and success of every student.",
     message:
       "Prof. G. J. Naga Raju is presently working as Professor in the Department of Physics, JNTU-GV, CEV, Vizianagaram. He brings extensive experience in academic administration and scientific research to the office of the Vice Principal.",
     profile: `Prof. G. J. Naga Raju

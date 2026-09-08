@@ -104,7 +104,7 @@ const FALLBACK_PRINCIPALS = [
     name: "Dr. V. S. Vakula",
     designation: "Principal, College of Engineering",
     message: "Our focus is to provide high-quality technical education, promote research activities, and ensure our graduates are equipped with values and competencies for global success.",
-    image_url: "http://89.116.134.182/local-assets/uploads/images/administration/principal-1788413473-42996f.jpg",
+    image_url: "https://jntugvcev.edu.in/local-assets/uploads/images/administration/principal-1788413473-42996f.jpg",
   },
 ];
 
@@ -115,7 +115,7 @@ const FALLBACK_HODS = [
     name: "Dr. P. Aruna Kumari",
     designation: "Head of Department, CSE",
     message: "The Department of CSE is committed to producing technically competent graduates with strong ethical values and research acumen, ready to take on global challenges.",
-    image_url: "http://89.116.134.182/local-assets/uploads/departments/hod_photos/cse-hod.jpg",
+    image_url: "https://jntugvcev.edu.in/local-assets/uploads/departments/hod_photos/cse-hod.jpg",
     achievements: "State-of-the-art labs, NPTEL certified faculty, 100% placement.",
   },
   {
@@ -124,7 +124,7 @@ const FALLBACK_HODS = [
     name: "Dr. T. S. N. Murthy",
     designation: "Head of Department, ECE",
     message: "ECE at JNTU-GV focuses on innovation in embedded systems, communication technologies, and VLSI design, bridging academia and industry.",
-    image_url: "http://89.116.134.182/local-assets/uploads/departments/hod_photos/ece-hod.jpeg",
+    image_url: "https://jntugvcev.edu.in/local-assets/uploads/departments/hod_photos/ece-hod.jpeg",
     achievements: "Research grants from DST, ISRO collaborative projects.",
   },
 ];
@@ -138,7 +138,7 @@ const FALLBACK_FACULTY = [
     qualification: "Ph.D. in Computer Science",
     experience: "22 Years",
     email: "hod.cse@jntugvcev.edu.in",
-    photo_url: "http://89.116.134.182/local-assets/uploads/departments/hod_photos/cse-hod.jpg",
+    photo_url: "https://jntugvcev.edu.in/local-assets/uploads/departments/hod_photos/cse-hod.jpg",
   },
   {
     id: 2,
@@ -158,7 +158,7 @@ const FALLBACK_FACULTY = [
     qualification: "Ph.D. in VLSI & Communications",
     experience: "18 Years",
     email: "hod.ece@jntugvcev.edu.in",
-    photo_url: "http://89.116.134.182/local-assets/uploads/departments/hod_photos/ece-hod.jpeg",
+    photo_url: "https://jntugvcev.edu.in/local-assets/uploads/departments/hod_photos/ece-hod.jpeg",
   }
 ];
 

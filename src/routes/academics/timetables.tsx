@@ -18,7 +18,8 @@ import {
   SlidersHorizontal,
   Layers,
   X,
-  FileText
+  FileText,
+  Eye
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
@@ -31,6 +32,7 @@ import {
   deleteAcademicsTimetable
 } from "@/lib/academics";
 import { getAssetUrl, imageUrl } from "@/lib/assets";
+import { downloadFile, previewFile } from "@/lib/download";
 import { PageHero } from "@/components/PageHero";
 import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
@@ -624,12 +626,26 @@ function TimetablesPage() {
                           </div>
                         )}
 
-                        <button 
-                          onClick={() => window.open(getAssetUrl(item.pdf_url), "_blank")}
-                          className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg px-3.5 py-2 text-[10px] font-black tracking-wider uppercase transition-all shadow-md group-hover:scale-[1.02] active:scale-[0.98]"
-                        >
-                          <Download className="w-3.5 h-3.5" /> View PDF
-                        </button>
+                        {item.pdf_url ? (
+                          <div className="flex items-center gap-1.5">
+                            <button 
+                              onClick={() => previewFile(item.pdf_url)}
+                              className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+                              title="Preview Timetable Online"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                            </button>
+                            <button 
+                              onClick={() => downloadFile(item.pdf_url, `${item.program_name || 'Timetable'}_${item.branch || ''}_${item.semester || ''}_Schedule.pdf`)}
+                              className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg px-3.5 py-2 text-[10px] font-black tracking-wider uppercase transition-all shadow-md group-hover:scale-[1.02] active:scale-[0.98]"
+                              title="Download Timetable PDF to Device"
+                            >
+                              <Download className="w-3.5 h-3.5" /> Download PDF
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-[10px] text-slate-400 italic">No File</span>
+                        )}
                       </div>
                     </div>
                   </GlassCard>

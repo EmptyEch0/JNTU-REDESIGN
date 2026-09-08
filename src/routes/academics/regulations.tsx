@@ -26,14 +26,79 @@ export const Route = createFileRoute("/academics/regulations")({
 });
 
 const DEFAULT_BTECH = [
-  { title: "R23 Academic Regulations (B.Tech)", category: "B.Tech", size: "1.2 MB", date: "Sep 2023", link: "#" },
-  { title: "R20 Academic Regulations (B.Tech)", category: "B.Tech", size: "1.5 MB", date: "Aug 2020", link: "#" },
-  { title: "R19 Academic Regulations (B.Tech)", category: "B.Tech", size: "2.1 MB", date: "Jul 2019", link: "#" },
+  {
+    title: "R23 Academic Regulations (B.Tech)",
+    category: "B.Tech",
+    size: "1.2 MB",
+    date: "Sep 2023",
+    link: "/uploads/2024/07/JNTUGVCEV-UG-B.Tech_.-R23-Regulations.pdf",
+  },
+  {
+    title: "R20 Academic Regulations (B.Tech)",
+    category: "B.Tech",
+    size: "1.5 MB",
+    date: "Aug 2020",
+    link: "/uploads/2021/04/R20-B.TECH-UCEV-REGULATIONS-FINAL.pdf",
+  },
+  {
+    title: "R19 Academic Regulations (B.Tech)",
+    category: "B.Tech",
+    size: "2.1 MB",
+    date: "Jul 2019",
+    link: "/uploads/2019/12/R19_UCEV-JNTUK-B.Tech-R19-Regulations-FINAL.pdf",
+  },
+  {
+    title: "R16 Academic Regulations (B.Tech)",
+    category: "B.Tech",
+    size: "1.8 MB",
+    date: "Aug 2016",
+    link: "/uploads/2020/08/B.Tech-R16-Regulations.pdf",
+  },
+  {
+    title: "R13 Academic Regulations (B.Tech)",
+    category: "B.Tech",
+    size: "2.4 MB",
+    date: "Aug 2013",
+    link: "/uploads/2020/08/BTechR13-Regulation.pdf",
+  },
 ];
 
 const DEFAULT_MTECH = [
-  { title: "R23 Academic Regulations (M.Tech)", category: "M.Tech", size: "900 KB", date: "Sep 2023", link: "#" },
-  { title: "R20 Academic Regulations (M.Tech)", category: "M.Tech", size: "1.1 MB", date: "Aug 2020", link: "#" },
+  {
+    title: "R25 Academic Regulations (M.Tech)",
+    category: "M.Tech",
+    size: "1.1 MB",
+    date: "Dec 2025",
+    link: "/uploads/2025/12/JNTU-GV-R25-M.Tech-Revised-Regulations-22.12.2025.pdf",
+  },
+  {
+    title: "R25 Academic Regulations (MCA)",
+    category: "MCA",
+    size: "950 KB",
+    date: "Dec 2025",
+    link: "/uploads/2025/12/JNTUGV-R-25-MCA-regulations.pdf",
+  },
+  {
+    title: "R25 Academic Regulations (MBA)",
+    category: "MBA",
+    size: "980 KB",
+    date: "Dec 2025",
+    link: "/uploads/2025/12/MBA-R25-Regulations-2.pdf",
+  },
+  {
+    title: "R19 Academic Regulations (M.Tech)",
+    category: "M.Tech",
+    size: "900 KB",
+    date: "Dec 2019",
+    link: "/uploads/2019/12/M.Tech-R19-revised-regulations.pdf",
+  },
+  {
+    title: "R13 Academic Regulations (M.Tech)",
+    category: "M.Tech",
+    size: "1.1 MB",
+    date: "Aug 2013",
+    link: "/uploads/2020/08/M.Tech-R13-Regulation.pdf",
+  },
 ];
 
 function RegulationsPage() {

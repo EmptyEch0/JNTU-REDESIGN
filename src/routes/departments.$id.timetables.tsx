@@ -12,6 +12,7 @@ import {
   Search, Filter, Grid3x3, List, ChevronDown, ChevronUp 
 } from "lucide-react";
 import { getAssetUrl } from "@/lib/assets";
+import { downloadFile, previewFile } from "@/lib/download";
 
 export const Route = createFileRoute("/departments/$id/timetables")({
   component: TimetablesPage,
@@ -140,19 +141,12 @@ function TimetablesPage() {
 
   const handleDownload = (imageUrl: string, title: string) => {
     if (!imageUrl) return;
-    const resolvedUrl = getAssetUrl(imageUrl);
-    const link = document.createElement('a');
-    link.href = resolvedUrl;
-    link.download = `${title.replace(/\s+/g, '_')}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadFile(imageUrl, `${title.replace(/\s+/g, '_')}.png`);
   };
 
   const handleView = (imageUrl: string) => {
     if (!imageUrl) return;
-    const resolvedUrl = getAssetUrl(imageUrl);
-    window.open(resolvedUrl, '_blank');
+    previewFile(imageUrl);
   };
 
   const toggleExpand = (id: number) => {

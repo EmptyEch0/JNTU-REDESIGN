@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
-import { FileText, Download, ShieldCheck, Building2, ExternalLink, Plus, Trash2 } from "lucide-react";
+import { FileText, Download, Eye, ShieldCheck, Building2, ExternalLink, Plus, Trash2 } from "lucide-react";
+import { downloadFile, previewFile } from "@/lib/download";
 const heroImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { getPageContent, updatePageSection, getAcademicRegulations, addAcademicRegulation, deleteAcademicRegulation } from "@/funcs/site.server";
 import { useAdmin } from "@/context/AdminContext";
@@ -367,12 +368,7 @@ function NormsPage() {
             return (
               <RevealOnScroll key={doc.id} delay={i * 100}>
                 <div className="group relative flex flex-col md:flex-row items-center gap-6 p-8 rounded-[32px] bg-white border border-border hover:border-primary/20 hover:shadow-elegant transition-all duration-200">
-                  <a
-                    href={doc.link || undefined}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex flex-col md:flex-row items-center gap-6"
-                  >
+                  <div className="flex-1 flex flex-col md:flex-row items-center gap-6">
                     <div className="h-16 w-16 shrink-0 rounded-2xl bg-primary/5 text-primary flex items-center justify-center group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-200">
                       <Icon className="h-8 w-8" />
                     </div>
@@ -387,11 +383,25 @@ function NormsPage() {
                       <p className="text-sm text-muted-foreground leading-relaxed">{doc.size}</p>
                     </div>
 
-                    <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-slate-50 text-ink text-xs font-bold uppercase tracking-widest group-hover:bg-primary group-hover:text-white transition-all">
-                      <Download className="h-4 w-4" />
-                      Download PDF
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => previewFile(doc.link)}
+                        className="flex items-center gap-1.5 px-4 py-3 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-widest hover:bg-slate-200 transition-all cursor-pointer"
+                        title="Preview Document Online"
+                      >
+                        <Eye className="h-4 w-4" />
+                        Preview
+                      </button>
+                      <button
+                        onClick={() => downloadFile(doc.link, `${doc.title}.pdf`)}
+                        className="flex items-center gap-1.5 px-5 py-3 rounded-full bg-primary text-white text-xs font-bold uppercase tracking-widest hover:bg-primary/90 shadow transition-all cursor-pointer"
+                        title="Download Document PDF to Device"
+                      >
+                        <Download className="h-4 w-4" />
+                        Download PDF
+                      </button>
                     </div>
-                  </a>
+                  </div>
 
                   {isEditMode && doc.id > 0 && (
                     <button

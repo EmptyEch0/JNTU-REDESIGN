@@ -4,7 +4,7 @@ import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
 import { imageUrl } from "@/lib/assets";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
-import { Calendar as CalendarIcon, Search, Download, Filter, Clock, AlertCircle, Save, Plus, Trash2, Edit2, X, FileText, Palmtree, GraduationCap } from "lucide-react";
+import { Calendar as CalendarIcon, Search, Download, Eye, Filter, Clock, AlertCircle, Save, Plus, Trash2, Edit2, X, FileText, Palmtree, GraduationCap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,6 +16,7 @@ import {
   deleteAcademicsCalendarEvent 
 } from "@/lib/academics";
 import { getAssetUrl } from "@/lib/assets";
+import { downloadFile, previewFile } from "@/lib/download";
 
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
@@ -116,9 +117,17 @@ function AcademicCalendarPage() {
   // Calculate upcoming / latest calendar
   const latestCalendar = filteredEvents[0];
 
-  const handleDownloadPDF = (url: string) => {
+  const handleDownloadPDF = (url: string, title?: string) => {
     if (url) {
-      window.open(getAssetUrl(url), "_blank");
+      downloadFile(url, title ? `${title}_Academic_Calendar.pdf` : "Academic_Calendar.pdf");
+    } else {
+      toast.error("PDF file URL not available");
+    }
+  };
+
+  const handlePreviewPDF = (url: string) => {
+    if (url) {
+      previewFile(url);
     } else {
       toast.error("PDF file URL not available");
     }
@@ -282,7 +291,7 @@ function AcademicCalendarPage() {
 
         {latestCalendar && (
           <button 
-            onClick={() => handleDownloadPDF(latestCalendar.pdf_url)}
+            onClick={() => handleDownloadPDF(latestCalendar.pdf_url, `${latestCalendar.program_name}_${latestCalendar.regulation}_${latestCalendar.academic_year}`)}
             className="flex-shrink-0 flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-lg hover:shadow-blue-500/20"
           >
             <Download className="w-4 h-4" />
@@ -379,8 +388,16 @@ function AcademicCalendarPage() {
 
                           <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
                             <button
-                              onClick={() => handleDownloadPDF(event.pdf_url)}
-                              className="flex-1 flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 text-blue-600 dark:text-slate-200 py-2 rounded-lg text-xs font-bold transition-all"
+                              onClick={() => handlePreviewPDF(event.pdf_url)}
+                              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 transition-colors"
+                              title="Preview Calendar Online"
+                            >
+                              <Eye size={14} />
+                            </button>
+                            <button
+                              onClick={() => handleDownloadPDF(event.pdf_url, `${event.program_name}_${event.regulation}_${event.academic_year}`)}
+                              className="flex-1 flex items-center justify-center gap-1.5 bg-blue-50 dark:bg-slate-800 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 text-blue-600 dark:text-slate-200 py-2 rounded-lg text-xs font-bold transition-all"
+                              title="Download Calendar PDF to Device"
                             >
                               <Download size={14} /> Download PDF
                             </button>

@@ -20,7 +20,8 @@ import {
   ArrowRight, 
   Building2, 
   HelpCircle,
-  CreditCard
+  CreditCard,
+  Eye
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
@@ -39,6 +40,7 @@ import {
   deleteAcademicFeeStructure
 } from "@/lib/academics";
 import { getAssetUrl } from "@/lib/assets";
+import { downloadFile, previewFile } from "@/lib/download";
 
 export const Route = createFileRoute("/academics/admissions")({
   head: () => ({
@@ -722,11 +724,18 @@ function AdmissionsPage() {
                           <td className="px-4 py-3 font-bold text-slate-700 dark:text-slate-350">{fee.program_name}</td>
                           <td className="px-4 py-3 text-slate-800 dark:text-slate-200">{fee.title}</td>
                           <td className="px-4 py-3 text-center">
-                            <div className="flex justify-center items-center gap-2">
+                            <div className="flex justify-center items-center gap-1.5">
                               <button
-                                onClick={() => window.open(getAssetUrl(fee.pdf_url), "_blank")}
-                                className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-red-950/20 rounded"
-                                title="Download Official Fee Structure PDF"
+                                onClick={() => previewFile(fee.pdf_url)}
+                                className="p-1.5 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded transition-colors"
+                                title="Preview Official Fee Structure PDF"
+                              >
+                                <Eye size={14} />
+                              </button>
+                              <button
+                                onClick={() => downloadFile(fee.pdf_url, `${fee.program_name || fee.level}_Fee_Structure_${fee.title || ''}.pdf`)}
+                                className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded transition-colors"
+                                title="Download Official Fee Structure PDF to Device"
                               >
                                 <Download size={14} />
                               </button>

@@ -15,7 +15,8 @@ import {
   HardDrive,
   Filter,
   RefreshCw,
-  X
+  X,
+  Eye
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
@@ -28,6 +29,7 @@ import {
   deleteAcademicsDownload
 } from "@/lib/academics";
 import { getAssetUrl, imageUrl } from "@/lib/assets";
+import { downloadFile, previewFile } from "@/lib/download";
 import { PageHero } from "@/components/PageHero";
 import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
@@ -479,9 +481,18 @@ function DownloadsPage() {
                                 </div>
                               )}
 
+                              {/* View & Download buttons */}
                               <button 
-                                onClick={() => window.open(getAssetUrl(item.pdf_url), "_blank")}
+                                onClick={() => previewFile(item.pdf_url)}
+                                className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+                                title="Preview Document Online"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                              </button>
+                              <button 
+                                onClick={() => downloadFile(item.pdf_url, `${item.document_name}.pdf`)}
                                 className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-[10px] font-black tracking-wider uppercase transition-all shadow-md group-hover:scale-[1.02] active:scale-[0.98]"
+                                title="Download Document to Device"
                               >
                                 <FileDown className="w-3.5 h-3.5" /> Download
                               </button>

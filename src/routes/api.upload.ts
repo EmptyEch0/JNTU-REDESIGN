@@ -24,35 +24,25 @@ export const Route = createFileRoute("/api/upload")({
             );
           }
 
-          // 2. File type validation
-          // Allowed: JPEG, JPG, PNG, WEBP, SVG, PDF
-          const allowedMimeTypes = [
-            "image/jpeg",
-            "image/jpg",
-            "image/png",
-            "image/webp",
-            "image/svg+xml",
-            "application/pdf",
-          ];
-          
+          // 2. File type validation (Supports PDFs, Images, Documents, Spreadsheets, Presentations, Archives, etc.)
+          const blockedExtensions = [".exe", ".bat", ".sh", ".cmd", ".vbs", ".msi", ".dll", ".com", ".scr"];
           const fileExtension = path.extname(file.name).toLowerCase();
-          const isPdf = fileExtension === ".pdf" || file.type === "application/pdf";
           
-          if (!allowedMimeTypes.includes(file.type.toLowerCase()) && !isPdf) {
+          if (blockedExtensions.includes(fileExtension)) {
             return Response.json(
               { 
                 success: false, 
-                error: `Invalid file type. Allowed formats: JPEG, PNG, WEBP, SVG, PDF. Received: ${file.type}` 
+                error: `Executable and script files are not allowed for security reasons.` 
               },
               { status: 400 }
             );
           }
 
-          // 3. File size validation (Max 15 MB)
-          const maxSizeBytes = 15 * 1024 * 1024;
+          // 3. File size validation (Max 50 MB)
+          const maxSizeBytes = 50 * 1024 * 1024;
           if (file.size > maxSizeBytes) {
             return Response.json(
-              { success: false, error: "File size exceeds the maximum limit of 15MB." },
+              { success: false, error: "File size exceeds the maximum limit of 50MB." },
               { status: 400 }
             );
           }

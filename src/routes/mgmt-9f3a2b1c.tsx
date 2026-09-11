@@ -41,6 +41,7 @@ import { notices, campusGallery, socialPosts, socialConnections, pushSubscriptio
 import { desc, count, eq } from "drizzle-orm";
 import { addNotice, updateNotice, deleteNotice, addCampusGalleryItem, deleteCampusGalleryItem } from "@/funcs/site.server";
 import { SocialPublishingPanel } from "@/components/SocialPublishingPanel";
+import { FileUploadDropzone } from "@/components/FileUploadDropzone";
 
 export const getDashboardData = createServerFn({ method: "GET" })
   .handler(async () => {
@@ -121,20 +122,9 @@ export const Route = createFileRoute("/mgmt-9f3a2b1c")({
 
 function AdminPageRouter() {
   const { isAdmin } = useAdmin();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAdmin) {
-      navigate({ to: "/", replace: true });
-    }
-  }, [isAdmin, navigate]);
 
   if (isAdmin) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans text-slate-500">
-        <p className="text-xs font-semibold uppercase tracking-wider">Redirecting to Home...</p>
-      </div>
-    );
+    return <AdminDashboard />;
   }
 
   return <AdminLoginPage />;
@@ -1212,91 +1202,40 @@ function AdminDashboard() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Category Tag</label>
-                        <select
-                          className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 cursor-pointer dark:text-white"
-                          value={editingNotice ? editingNotice.tag : newNotice.tag}
-                          onChange={(e) => {
-                            if (editingNotice) {
-                              setEditingNotice({ ...editingNotice, tag: e.target.value });
-                            } else {
-                              setNewNotice({ ...newNotice, tag: e.target.value });
-                            }
-                          }}
-                        >
-                          {noticeCategories.map((c) => (
-                            <option key={c} value={c}>{c}</option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">PDF Document</label>
-                        <label className="flex items-center justify-center gap-1.5 p-2.5 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 hover:bg-blue-100 text-blue-700 dark:text-blue-300 rounded-xl font-bold text-xs cursor-pointer transition">
-                          <Upload className="w-3.5 h-3.5" />
-                          <span>{uploadingNoticeFile ? "Uploading..." : "Attach File"}</span>
-                          <input
-                            type="file"
-                            accept=".pdf,image/*"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (!file) return;
-                              setUploadingNoticeFile(true);
-                              const formData = new FormData();
-                              formData.append("file", file);
-                              formData.append("module", "notices");
-                              formData.append("category", editingNotice ? editingNotice.tag || "circulars" : newNotice.tag || "circulars");
-                              if (editingNotice?.title || newNotice.title) {
-                                formData.append("name", editingNotice ? editingNotice.title : newNotice.title);
-                              }
-                              const tId = toast.loading(`Uploading document ${file.name}...`);
-                              try {
-                                const res = await fetch("/api/upload", { method: "POST", body: formData });
-                                const json = await res.json();
-                                if (json.success) {
-                                  const assetUrl = json.path;
-                                  if (editingNotice) {
-                                    setEditingNotice((prev: any) => ({ ...prev, url: assetUrl }));
-                                  } else {
-                                    setNewNotice((prev) => ({ ...prev, url: assetUrl }));
-                                  }
-                                  toast.success("File uploaded successfully!", { id: tId });
-                                } else {
-                                  toast.error(json.error || "Upload failed", { id: tId });
-                                }
-                              } catch {
-                                toast.error("Failed to upload file", { id: tId });
-                              } finally {
-                                setUploadingNoticeFile(false);
-                              }
-                            }}
-                            className="hidden"
-                            disabled={uploadingNoticeFile}
-                          />
-                        </label>
-                      </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Category Tag</label>
+                      <select
+                        className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 cursor-pointer dark:text-white"
+                        value={editingNotice ? editingNotice.tag : newNotice.tag}
+                        onChange={(e) => {
+                          if (editingNotice) {
+                            setEditingNotice({ ...editingNotice, tag: e.target.value });
+                          } else {
+                            setNewNotice({ ...newNotice, tag: e.target.value });
+                          }
+                        }}
+                      >
+                        {noticeCategories.map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
                     </div>
 
-                    {(editingNotice?.url || newNotice.url) && (
-                      <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-xs text-emerald-800 dark:text-emerald-350 font-semibold flex items-center justify-between">
-                        <span className="truncate max-w-[200px]">Attached: {editingNotice ? editingNotice.url : newNotice.url}</span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (editingNotice) {
-                              setEditingNotice((prev: any) => ({ ...prev, url: "" }));
-                            } else {
-                              setNewNotice((prev) => ({ ...prev, url: "" }));
-                            }
-                          }}
-                          className="text-rose-600 font-bold hover:underline shrink-0 text-[10px] cursor-pointer"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    )}
+                    <FileUploadDropzone
+                      label="Notice Attachment (PDF, Image, Word Doc, Excel, Zip)"
+                      sublabel="Drag & drop any file (PDF, JPG, PNG, DOCX, XLSX, ZIP up to 50MB) or browse"
+                      value={editingNotice ? editingNotice.url : newNotice.url}
+                      onChange={(uploadedPath) => {
+                        if (editingNotice) {
+                          setEditingNotice((prev: any) => ({ ...prev, url: uploadedPath }));
+                        } else {
+                          setNewNotice((prev) => ({ ...prev, url: uploadedPath }));
+                        }
+                      }}
+                      module="notices"
+                      category={editingNotice ? editingNotice.tag : newNotice.tag}
+                      fileNamePrefix={editingNotice ? editingNotice.title : newNotice.title}
+                    />
 
                     <div className="pt-2">
                       <button
@@ -1410,17 +1349,16 @@ function AdminDashboard() {
                   <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 mb-4">Log New Photo</h3>
 
                   <form onSubmit={handleAddGallerySubmit} className="space-y-4">
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Image Asset URL</label>
-                      <input
-                        type="text"
-                        placeholder="uploads/photo-gallery/img.jpg or full https:// URL"
-                        className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 focus:border-[#0F4C81] dark:text-white"
-                        value={newImage.src}
-                        onChange={(e) => setNewImage({ ...newImage, src: e.target.value })}
-                        required
-                      />
-                    </div>
+                    <FileUploadDropzone
+                      label="Upload Campus Photograph / Picture"
+                      sublabel="Drag & drop any photo (JPG, PNG, WEBP, GIF, SVG) or browse/paste link"
+                      value={newImage.src}
+                      onChange={(uploadedPath) => setNewImage({ ...newImage, src: uploadedPath })}
+                      module="gallery"
+                      category="campus"
+                      fileNamePrefix={newImage.caption || "campus-photo"}
+                      accept="image/*"
+                    />
 
                     <div className="space-y-1">
                       <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Caption / Description</label>
@@ -1432,20 +1370,6 @@ function AdminDashboard() {
                         onChange={(e) => setNewImage({ ...newImage, caption: e.target.value })}
                       />
                     </div>
-
-                    {newImage.src && (
-                      <div className="p-3 bg-slate-50 border border-slate-100 rounded-2xl max-w-sm">
-                        <span className="block text-[9px] uppercase font-bold text-slate-400 mb-2">Asset Preview</span>
-                        <img decoding="async" loading="lazy"
-                          src={getAssetUrl(normalizeSrcForStorage(newImage.src))}
-                          alt="Preview"
-                          className="w-full h-32 object-cover rounded-xl"
-                          onError={(e) => {
-                            (e.target as any).src = "https://images.unsplash.com/photo-1594322436404-5a0526db4d13?w=500";
-                          }}
-                        />
-                      </div>
-                    )}
 
                     <button
                       type="submit"

@@ -226,10 +226,10 @@ function AdminContent() {
       {isAdmin && (
         <div className="fixed top-0 left-0 right-0 h-12 bg-black text-white px-4 md:px-6 flex items-center justify-between z-[100] shadow-lg overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-3 md:gap-6 shrink-0">
-            <div className="flex items-center gap-2">
+            <Link to="/mgmt-9f3a2b1c" className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
               <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Admin</span>
               <span className="text-xs font-medium hidden sm:inline">Dashboard</span>
-            </div>
+            </Link>
 
             <button
               onClick={handleEditToggleClick}
@@ -244,6 +244,7 @@ function AdminContent() {
           </div>
 
           <div className="flex items-center gap-3 md:gap-5 shrink-0 ml-4">
+            <Link to="/mgmt-9f3a2b1c" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Notices & Gallery</Link>
             <Link to="/admin/departments" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Departments</Link>
             <Link to="/admin/users" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Users</Link>
             <Link to="/admin/placements" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Placements</Link>

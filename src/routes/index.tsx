@@ -21,11 +21,15 @@ import {
   CheckCircle2,
   Users,
   Calendar,
+  Save,
+  X,
+  Check,
+  Edit2,
 } from "lucide-react";
 import { imageUrl } from "@/lib/assets";
 
 const hero1 = "/images/independence_day.webp";
-const hero2 = "/images/hero-carousal/hero-3.webp";
+const hero2 = "/images/hero-carousal/hero-5.webp";
 const hero3 = "/images/hero-carousal/hero-4.webp";
 const campusLifeImg = imageUrl("campus-life/campus-life.jpg");
 import hostelImg from "@/assets/hostel.jpg";
@@ -44,19 +48,24 @@ import { HeroSlideshow } from "@/components/HeroSlideshow";
 import { SectionLabel } from "@/components/SectionLabel";
 import { MarqueeLogos } from "@/components/MarqueeLogos";
 import { STATS, RECRUITERS } from "@/lib/site"; // Removed static DEPARTMENTS import
-import { useQuery } from "@tanstack/react-query";
-import { getLeadershipData } from "../funcs/leadership";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { useAdmin } from "@/context/AdminContext";
+import { toast } from "sonner";
+import { getLeadershipData, updateLeadershipData } from "../funcs/leadership";
 import { getAllDepartments } from "@/functions/departments"; // Added our new query hook target
 import { getAssetUrl, STATIC_DEPARTMENTS } from "@/lib/departments";
 import { getHostelData } from "@/funcs/hostel.server";
 import { getLibraryData } from "@/funcs/library.server";
 import { getDispensaryData } from "@/funcs/dispensary.server";
 import { getSportsData } from "@/funcs/sports.server";
-import { getJntugvGalleryImages, getNotices, getCampusGallery } from "@/funcs/site.server";
+import { getJntugvGalleryImages, getNotices, getCampusGallery, getPageContent, updatePageSection } from "@/funcs/site.server";
+import { AdminUpload } from "@/components/AdminEditPanel";
 import { ImageWithLoader } from "@/components/ImageWithLoader";
 import { LatestUpdatesSection } from "@/components/LatestUpdatesSection";
 import { HomeNotificationsSection } from "@/components/HomeNotificationsSection";
 import { HeroGalleryMiniCarousel } from "@/components/HeroGalleryMiniCarousel";
+
 
 export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
@@ -225,6 +234,15 @@ const FACILITIES = [
 const QUERY_CACHE = { staleTime: 10 * 60 * 1000, gcTime: 30 * 60 * 1000 } as const;
 
 function HomePage() {
+  const { isEditMode } = useAdmin();
+  const queryClient = useQueryClient();
+
+  const { data: homeRecords = [] } = useQuery({
+    queryKey: ["site-content", "homepage"],
+    queryFn: () => getPageContent({ data: "homepage" }),
+    ...QUERY_CACHE,
+  });
+
   const { data: principal } = useQuery({
     queryKey: ["leadership", "principal"],
     queryFn: () => getLeadershipData({ data: "principal" }),
@@ -237,16 +255,112 @@ function HomePage() {
     ...QUERY_CACHE,
   });
 
+  // Home content sections
+  const whoRec = (homeRecords as any[]).find((r: any) => r.sectionKey === "who-we-are");
+  const visionRec = (homeRecords as any[]).find((r: any) => r.sectionKey === "vision");
+  const missionRec = (homeRecords as any[]).find((r: any) => r.sectionKey === "mission");
+
+  let defaultWhoHeading = "Building excellence, shaping futures.";
+  let defaultWhoDesc =
+    "Established in 2007 as a constituent college of JNTU-GV, our institution is recognized by UGC under section 2(f) & 12(B) and approved by AICTE. We bring together rigorous academics and a thriving research community.";
+  if (whoRec?.content) {
+    try {
+      const parsed = JSON.parse(whoRec.content);
+      if (parsed.title) defaultWhoHeading = parsed.title;
+      if (parsed.description) defaultWhoDesc = parsed.description;
+    } catch {
+      defaultWhoDesc = whoRec.content;
+    }
+  }
+
+  const [whoData, setWhoData] = useState({
+    eyebrow: whoRec?.title || "Who we are",
+    title: defaultWhoHeading,
+    description: defaultWhoDesc,
+  });
+
+  const [visionData, setVisionData] = useState({
+    title: visionRec?.title || "Our Vision",
+    content:
+      visionRec?.content ||
+      "To emerge as a premier technical institution in the field of engineering and research, with a dedicated focus on producing professionally competent and socially sensitive engineers capable of thriving in a multidisciplinary global environment.",
+  });
+
+  const [missionData, setMissionData] = useState({
+    title: missionRec?.title || "Core Mission",
+    content:
+      missionRec?.content ||
+      "We are committed to providing high-quality technical education through a creative balance of academics and industry. By adopting highly effective teaching-learning processes and promoting multidisciplinary research, we inculcate ethical and moral values that contribute to professional growth and social development.",
+  });
+
+  useEffect(() => {
+    if (whoRec) {
+      let h = "Building excellence, shaping futures.";
+      let d =
+        "Established in 2007 as a constituent college of JNTU-GV, our institution is recognized by UGC under section 2(f) & 12(B) and approved by AICTE. We bring together rigorous academics and a thriving research community.";
+      try {
+        const parsed = JSON.parse(whoRec.content);
+        if (parsed.title) h = parsed.title;
+        if (parsed.description) d = parsed.description;
+      } catch {
+        d = whoRec.content || d;
+      }
+      setWhoData({
+        eyebrow: whoRec.title || "Who we are",
+        title: h,
+        description: d,
+      });
+    }
+    if (visionRec) {
+      setVisionData({
+        title: visionRec.title || "Our Vision",
+        content: visionRec.content || visionData.content,
+      });
+    }
+    if (missionRec) {
+      setMissionData({
+        title: missionRec.title || "Core Mission",
+        content: missionRec.content || missionData.content,
+      });
+    }
+  }, [homeRecords]);
+
+  const [principalEdit, setPrincipalEdit] = useState<any>(null);
+  const [vicePrincipalEdit, setVicePrincipalEdit] = useState<any>(null);
+
+  const principalActive = principalEdit || principal;
+  const vicePrincipalActive = vicePrincipalEdit || vicePrincipal;
+
+  const updateHomeSectionMut = useMutation({
+    mutationFn: updatePageSection,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["site-content", "homepage"] });
+      toast.success("Homepage content section saved!");
+    },
+    onError: () => toast.error("Failed to save homepage section."),
+  });
+
+  const updateLeadershipMut = useMutation({
+    mutationFn: updateLeadershipData,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leadership"] });
+      setPrincipalEdit(null);
+      setVicePrincipalEdit(null);
+      toast.success("Leadership profile updated!");
+    },
+    onError: () => toast.error("Failed to update leadership profile."),
+  });
+
   const principalPhoto =
-    principal?.image &&
-    !principal.image.includes("placeholder") &&
-    !principal.image.endsWith("Principal.png")
-      ? getAssetUrl(principal.image)
+    principalActive?.image &&
+    !principalActive.image.includes("placeholder") &&
+    !principalActive.image.endsWith("Principal.png")
+      ? getAssetUrl(principalActive.image)
       : vakulaImg;
 
   const vicePrincipalPhoto =
-    vicePrincipal?.image && !vicePrincipal.image.includes("placeholder")
-      ? getAssetUrl(vicePrincipal.image)
+    vicePrincipalActive?.image && !vicePrincipalActive.image.includes("placeholder")
+      ? getAssetUrl(vicePrincipalActive.image)
       : nagaRajuImg;
 
   // Pull array dynamically from Neon database
@@ -362,7 +476,7 @@ function HomePage() {
         <HeroSlideshow
           images={[
             { src: hero1, alt: "80th Independence Day Celebrations at JNTU-GV" },
-            { src: hero2, alt: "Students and Faculty at JNTU-GV Campus" },
+            { src: hero2, alt: "JNTU-GV College of Engineering Campus Building" },
             { src: hero3, alt: "Dr. Y.S.R. Central Knowledge Commons & Library" },
           ]}
           interval={6500}
@@ -390,7 +504,7 @@ function HomePage() {
 
                 <p className="mt-3.5 text-sm sm:text-base md:text-lg 2xl:text-xl text-white/90 max-w-2xl 2xl:max-w-3xl leading-relaxed animate-[fade-up_0.4s_ease-out_0.8s_both] font-normal">
                   A constituent college of JNTU-GV, approved by AICTE New Delhi, and recognized by UGC
-                  under section 2(f) & 12(B) of UGC Act 1956 — shaping the future of engineering since 2007.
+                  under section 2(f) &amp; 12(B) of UGC Act 1956 — shaping the future of engineering since 2007.
                 </p>
 
                 <div className="mt-5 flex flex-wrap gap-3 animate-[fade-up_0.4s_ease-out_1s_both]">
@@ -436,18 +550,79 @@ function HomePage() {
             {/* Left Column: Who We Are, Vision, Mission */}
             <div className="lg:col-span-7 space-y-8">
               <RevealOnScroll>
-                <div className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
-                  Who we are
-                </div>
-                <h2 className="text-display text-4xl sm:text-5xl lg:text-[54px] font-bold mt-3 text-ink leading-[1.12] tracking-tight">
-                  Building <span className="italic text-primary font-normal">excellence</span>,<br />
-                  shaping futures.
-                </h2>
-                <p className="mt-5 text-base sm:text-[17px] text-muted-foreground leading-relaxed">
-                  Established in 2007 as a constituent college of JNTU-GV, our institution is
-                  recognized by UGC under section 2(f) &amp; 12(B) and approved by AICTE. We bring
-                  together rigorous academics and a thriving research community.
-                </p>
+                {isEditMode ? (
+                  <div className="p-5 rounded-2xl bg-primary/5 border border-primary/20 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-wider text-primary">
+                        Edit Who We Are
+                      </span>
+                      <button
+                        onClick={() =>
+                          updateHomeSectionMut.mutate({
+                            data: {
+                              page: "homepage",
+                              sectionKey: "who-we-are",
+                              title: whoData.eyebrow,
+                              content: JSON.stringify({
+                                title: whoData.title,
+                                description: whoData.description,
+                              }),
+                            },
+                          })
+                        }
+                        disabled={updateHomeSectionMut.isPending}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all"
+                      >
+                        <Save className="h-3.5 w-3.5" /> Save Section
+                      </button>
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold text-muted-foreground uppercase">
+                        Eyebrow Label
+                      </label>
+                      <input
+                        type="text"
+                        value={whoData.eyebrow}
+                        onChange={(e) => setWhoData({ ...whoData, eyebrow: e.target.value })}
+                        className="w-full bg-white px-3 py-1.5 rounded-lg border border-border text-xs font-bold text-primary outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold text-muted-foreground uppercase">
+                        Main Title
+                      </label>
+                      <input
+                        type="text"
+                        value={whoData.title}
+                        onChange={(e) => setWhoData({ ...whoData, title: e.target.value })}
+                        className="w-full bg-white px-3 py-2 rounded-lg border border-border text-sm font-bold text-ink outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold text-muted-foreground uppercase">
+                        Description
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={whoData.description}
+                        onChange={(e) => setWhoData({ ...whoData, description: e.target.value })}
+                        className="w-full bg-white px-3 py-2 rounded-lg border border-border text-xs text-muted-foreground leading-relaxed outline-none"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
+                      {whoData.eyebrow}
+                    </div>
+                    <h2 className="text-display text-4xl sm:text-5xl lg:text-[54px] font-bold mt-3 text-ink leading-[1.12] tracking-tight whitespace-pre-line">
+                      {whoData.title}
+                    </h2>
+                    <p className="mt-5 text-base sm:text-[17px] text-muted-foreground leading-relaxed">
+                      {whoData.description}
+                    </p>
+                  </>
+                )}
               </RevealOnScroll>
 
               <div className="space-y-4">
@@ -457,14 +632,57 @@ function HomePage() {
                       <div className="h-12 w-12 shrink-0 rounded-full bg-blue-50 text-primary border border-blue-100/60 flex items-center justify-center group-hover:scale-105 transition-transform">
                         <Eye className="h-5 w-5" />
                       </div>
-                      <div>
-                        <h3 className="text-xl font-bold font-display text-ink mb-1.5">Our Vision</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          To emerge as a premier technical institution in the field of engineering and
-                          research, with a dedicated focus on producing professionally competent and
-                          socially sensitive engineers capable of thriving in a multidisciplinary
-                          global environment.
-                        </p>
+                      <div className="flex-1 w-full">
+                        {isEditMode ? (
+                          <div className="space-y-2.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold uppercase tracking-wider text-primary">
+                                Edit Vision Card
+                              </span>
+                              <button
+                                onClick={() =>
+                                  updateHomeSectionMut.mutate({
+                                    data: {
+                                      page: "homepage",
+                                      sectionKey: "vision",
+                                      title: visionData.title,
+                                      content: visionData.content,
+                                    },
+                                  })
+                                }
+                                disabled={updateHomeSectionMut.isPending}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all"
+                              >
+                                <Save className="h-3.5 w-3.5" /> Save Vision
+                              </button>
+                            </div>
+                            <input
+                              type="text"
+                              value={visionData.title}
+                              onChange={(e) =>
+                                setVisionData({ ...visionData, title: e.target.value })
+                              }
+                              className="w-full bg-slate-50 px-3 py-1.5 rounded-lg border border-border text-sm font-bold text-ink outline-none"
+                            />
+                            <textarea
+                              rows={3}
+                              value={visionData.content}
+                              onChange={(e) =>
+                                setVisionData({ ...visionData, content: e.target.value })
+                              }
+                              className="w-full bg-slate-50 px-3 py-2 rounded-lg border border-border text-xs text-muted-foreground outline-none"
+                            />
+                          </div>
+                        ) : (
+                          <>
+                            <h3 className="text-xl font-bold font-display text-ink mb-1.5">
+                              {visionData.title}
+                            </h3>
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                              {visionData.content}
+                            </p>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -476,15 +694,57 @@ function HomePage() {
                       <div className="h-12 w-12 shrink-0 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100/60 flex items-center justify-center group-hover:scale-105 transition-transform">
                         <Target className="h-5 w-5" />
                       </div>
-                      <div>
-                        <h3 className="text-xl font-bold font-display text-ink mb-1.5">Core Mission</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          We are committed to providing high-quality technical education through a
-                          creative balance of academics and industry. By adopting highly effective
-                          teaching-learning processes and promoting multidisciplinary research, we
-                          inculcate ethical and moral values that contribute to professional growth and
-                          social development.
-                        </p>
+                      <div className="flex-1 w-full">
+                        {isEditMode ? (
+                          <div className="space-y-2.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+                                Edit Mission Card
+                              </span>
+                              <button
+                                onClick={() =>
+                                  updateHomeSectionMut.mutate({
+                                    data: {
+                                      page: "homepage",
+                                      sectionKey: "mission",
+                                      title: missionData.title,
+                                      content: missionData.content,
+                                    },
+                                  })
+                                }
+                                disabled={updateHomeSectionMut.isPending}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition-all"
+                              >
+                                <Save className="h-3.5 w-3.5" /> Save Mission
+                              </button>
+                            </div>
+                            <input
+                              type="text"
+                              value={missionData.title}
+                              onChange={(e) =>
+                                setMissionData({ ...missionData, title: e.target.value })
+                              }
+                              className="w-full bg-slate-50 px-3 py-1.5 rounded-lg border border-border text-sm font-bold text-ink outline-none"
+                            />
+                            <textarea
+                              rows={3}
+                              value={missionData.content}
+                              onChange={(e) =>
+                                setMissionData({ ...missionData, content: e.target.value })
+                              }
+                              className="w-full bg-slate-50 px-3 py-2 rounded-lg border border-border text-xs text-muted-foreground outline-none"
+                            />
+                          </div>
+                        ) : (
+                          <>
+                            <h3 className="text-xl font-bold font-display text-ink mb-1.5">
+                              {missionData.title}
+                            </h3>
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                              {missionData.content}
+                            </p>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -516,39 +776,110 @@ function HomePage() {
                   <div className="bg-white rounded-[24px] p-5 sm:p-6 border border-[#EFECE6] shadow-[0_2px_12px_rgba(0,0,0,0.02)] transition-all duration-200 hover:shadow-md">
                     <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
                       <div className="relative w-36 sm:w-40 shrink-0 aspect-[4/5] rounded-[20px] overflow-hidden bg-slate-100 border border-black/5 shadow-inner">
-                        <img
-                          src={principalPhoto}
-                          alt={principal?.name || "Dr. V. S. Vakula"}
-                          width="180"
-                          height="225"
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover object-top transition-transform duration-300 hover:scale-105"
-                        />
+                        {isEditMode ? (
+                          <AdminUpload
+                            value={principalActive?.image || ""}
+                            onChange={(newUrl) =>
+                              setPrincipalEdit({ ...principalActive, image: newUrl })
+                            }
+                            module="administration"
+                            category="leadership"
+                            className="w-full h-full"
+                          />
+                        ) : (
+                          <img
+                            src={principalPhoto}
+                            alt={principalActive?.name || "Dr. V. S. Vakula"}
+                            width="180"
+                            height="225"
+                            loading="lazy"
+                            decoding="async"
+                            className="h-full w-full object-cover object-top transition-transform duration-300 hover:scale-105"
+                          />
+                        )}
                       </div>
                       <div className="flex-1 flex flex-col justify-between self-stretch text-center sm:text-left">
                         <div>
                           <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1">
                             Principal
                           </div>
-                          <h3 className="text-xl sm:text-2xl font-bold font-display text-ink leading-tight">
-                            {principal?.name || "Dr. V. S. Vakula"}
-                          </h3>
-                          <p className="text-xs font-semibold text-muted-foreground mt-1">
-                            JNTU-GV CEV
-                          </p>
-                          <p className="text-[13px] text-muted-foreground italic leading-relaxed mt-3">
-                            "{principal?.quote || "Empowering students through academic excellence, innovative engineering education, and holistic development to meet global challenges."}"
-                          </p>
+                          {isEditMode ? (
+                            <div className="space-y-2 mt-1">
+                              <input
+                                type="text"
+                                value={principalActive?.name || ""}
+                                onChange={(e) =>
+                                  setPrincipalEdit({ ...principalActive, name: e.target.value })
+                                }
+                                placeholder="Principal Name"
+                                className="w-full bg-slate-50 px-2.5 py-1 rounded-lg border border-border text-sm font-bold text-ink outline-none"
+                              />
+                              <input
+                                type="text"
+                                value={principalActive?.designation || ""}
+                                onChange={(e) =>
+                                  setPrincipalEdit({
+                                    ...principalActive,
+                                    designation: e.target.value,
+                                  })
+                                }
+                                placeholder="Designation"
+                                className="w-full bg-slate-50 px-2.5 py-1 rounded-lg border border-border text-xs font-semibold text-muted-foreground outline-none"
+                              />
+                              <textarea
+                                rows={3}
+                                value={principalActive?.quote || ""}
+                                onChange={(e) =>
+                                  setPrincipalEdit({ ...principalActive, quote: e.target.value })
+                                }
+                                placeholder="Principal's Quote / Message"
+                                className="w-full bg-slate-50 px-2.5 py-1.5 rounded-lg border border-border text-xs italic text-muted-foreground outline-none"
+                              />
+                              <button
+                                onClick={() => {
+                                  if (principalActive?.id) {
+                                    updateLeadershipMut.mutate({
+                                      data: {
+                                        id: principalActive.id,
+                                        name: principalActive.name,
+                                        designation: principalActive.designation,
+                                        quote: principalActive.quote,
+                                        image: principalActive.image,
+                                      },
+                                    });
+                                  }
+                                }}
+                                disabled={updateLeadershipMut.isPending}
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold shadow-xs hover:bg-primary/90 transition-all"
+                              >
+                                <Save className="h-3.5 w-3.5" /> Save Principal Card
+                              </button>
+                            </div>
+                          ) : (
+                            <>
+                              <h3 className="text-xl sm:text-2xl font-bold font-display text-ink leading-tight">
+                                {principalActive?.name || "Dr. V. S. Vakula"}
+                              </h3>
+                              <p className="text-xs font-semibold text-muted-foreground mt-1">
+                                {principalActive?.designation || "JNTU-GV CEV"}
+                              </p>
+                              <p className="text-[13px] text-muted-foreground italic leading-relaxed mt-3">
+                                "{principalActive?.quote ||
+                                  "Empowering students through academic excellence, innovative engineering education, and holistic development to meet global challenges."}"
+                              </p>
+                            </>
+                          )}
                         </div>
-                        <div className="mt-4 pt-1">
-                          <Link
-                            to="/administration/principal"
-                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-primary-dark text-white text-xs font-semibold shadow-sm hover:shadow transition-all duration-150"
-                          >
-                            Principal's Desk <ArrowRight className="h-3.5 w-3.5" />
-                          </Link>
-                        </div>
+                        {!isEditMode && (
+                          <div className="mt-4 pt-1">
+                            <Link
+                              to="/administration/principal"
+                              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-primary-dark text-white text-xs font-semibold shadow-sm hover:shadow transition-all duration-150"
+                            >
+                              Principal's Desk <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -557,39 +888,117 @@ function HomePage() {
                   <div className="bg-white rounded-[24px] p-5 sm:p-6 border border-[#EFECE6] shadow-[0_2px_12px_rgba(0,0,0,0.02)] transition-all duration-200 hover:shadow-md">
                     <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
                       <div className="relative w-36 sm:w-40 shrink-0 aspect-[4/5] rounded-[20px] overflow-hidden bg-slate-100 border border-black/5 shadow-inner">
-                        <img
-                          src={vicePrincipalPhoto}
-                          alt={vicePrincipal?.name || "Prof. G. J. Naga Raju"}
-                          width="180"
-                          height="225"
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover object-top transition-transform duration-300 hover:scale-105"
-                        />
+                        {isEditMode ? (
+                          <AdminUpload
+                            value={vicePrincipalActive?.image || ""}
+                            onChange={(newUrl) =>
+                              setVicePrincipalEdit({ ...vicePrincipalActive, image: newUrl })
+                            }
+                            module="administration"
+                            category="leadership"
+                            className="w-full h-full"
+                          />
+                        ) : (
+                          <img
+                            src={vicePrincipalPhoto}
+                            alt={vicePrincipalActive?.name || "Prof. G. J. Naga Raju"}
+                            width="180"
+                            height="225"
+                            loading="lazy"
+                            decoding="async"
+                            className="h-full w-full object-cover object-top transition-transform duration-300 hover:scale-105"
+                          />
+                        )}
                       </div>
                       <div className="flex-1 flex flex-col justify-between self-stretch text-center sm:text-left">
                         <div>
                           <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1">
                             Vice Principal
                           </div>
-                          <h3 className="text-xl sm:text-2xl font-bold font-display text-ink leading-tight">
-                            {vicePrincipal?.name || "Prof. G. J. Naga Raju"}
-                          </h3>
-                          <p className="text-xs font-semibold text-muted-foreground mt-1">
-                            Professor of Physics &amp; Vice Principal (i/c) · JNTU-GV CEV
-                          </p>
-                          <p className="text-[13px] text-muted-foreground italic leading-relaxed mt-3">
-                            "{vicePrincipal?.quote || "Fostering a supportive academic environment and encouraging innovation for the holistic growth and success of every student."}"
-                          </p>
+                          {isEditMode ? (
+                            <div className="space-y-2 mt-1">
+                              <input
+                                type="text"
+                                value={vicePrincipalActive?.name || ""}
+                                onChange={(e) =>
+                                  setVicePrincipalEdit({
+                                    ...vicePrincipalActive,
+                                    name: e.target.value,
+                                  })
+                                }
+                                placeholder="Vice Principal Name"
+                                className="w-full bg-slate-50 px-2.5 py-1 rounded-lg border border-border text-sm font-bold text-ink outline-none"
+                              />
+                              <input
+                                type="text"
+                                value={vicePrincipalActive?.designation || ""}
+                                onChange={(e) =>
+                                  setVicePrincipalEdit({
+                                    ...vicePrincipalActive,
+                                    designation: e.target.value,
+                                  })
+                                }
+                                placeholder="Designation"
+                                className="w-full bg-slate-50 px-2.5 py-1 rounded-lg border border-border text-xs font-semibold text-muted-foreground outline-none"
+                              />
+                              <textarea
+                                rows={3}
+                                value={vicePrincipalActive?.quote || ""}
+                                onChange={(e) =>
+                                  setVicePrincipalEdit({
+                                    ...vicePrincipalActive,
+                                    quote: e.target.value,
+                                  })
+                                }
+                                placeholder="Vice Principal's Quote / Message"
+                                className="w-full bg-slate-50 px-2.5 py-1.5 rounded-lg border border-border text-xs italic text-muted-foreground outline-none"
+                              />
+                              <button
+                                onClick={() => {
+                                  if (vicePrincipalActive?.id) {
+                                    updateLeadershipMut.mutate({
+                                      data: {
+                                        id: vicePrincipalActive.id,
+                                        name: vicePrincipalActive.name,
+                                        designation: vicePrincipalActive.designation,
+                                        quote: vicePrincipalActive.quote,
+                                        image: vicePrincipalActive.image,
+                                      },
+                                    });
+                                  }
+                                }}
+                                disabled={updateLeadershipMut.isPending}
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold shadow-xs hover:bg-primary/90 transition-all"
+                              >
+                                <Save className="h-3.5 w-3.5" /> Save Vice Principal Card
+                              </button>
+                            </div>
+                          ) : (
+                            <>
+                              <h3 className="text-xl sm:text-2xl font-bold font-display text-ink leading-tight">
+                                {vicePrincipalActive?.name || "Prof. G. J. Naga Raju"}
+                              </h3>
+                              <p className="text-xs font-semibold text-muted-foreground mt-1">
+                                {vicePrincipalActive?.designation ||
+                                  "Professor of Physics & Vice Principal (i/c) · JNTU-GV CEV"}
+                              </p>
+                              <p className="text-[13px] text-muted-foreground italic leading-relaxed mt-3">
+                                "{vicePrincipalActive?.quote ||
+                                  "Fostering a supportive academic environment and encouraging innovation for the holistic growth and success of every student."}"
+                              </p>
+                            </>
+                          )}
                         </div>
-                        <div className="mt-4 pt-1">
-                          <Link
-                            to="/administration/vice-principal"
-                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-primary-dark text-white text-xs font-semibold shadow-sm hover:shadow transition-all duration-150"
-                          >
-                            Vice Principal's Desk <ArrowRight className="h-3.5 w-3.5" />
-                          </Link>
-                        </div>
+                        {!isEditMode && (
+                          <div className="mt-4 pt-1">
+                            <Link
+                              to="/administration/vice-principal"
+                              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-primary-dark text-white text-xs font-semibold shadow-sm hover:shadow transition-all duration-150"
+                            >
+                              Vice Principal's Desk <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -4,13 +4,20 @@ import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { ADMINISTRATION_SUBNAV } from "@/lib/site";
-import { Quote, Mail, MapPin, Save, X, Users } from "lucide-react";
+import { Quote, Mail, MapPin, Save, X, Users, Plus, Edit2, Trash2, Check } from "lucide-react";
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
-import { getLeadershipData, getLeadershipStaff, updateLeadershipData } from "@/funcs/leadership";
+import {
+  getLeadershipData,
+  getLeadershipStaff,
+  updateLeadershipData,
+  addLeadershipStaff,
+  updateLeadershipStaff,
+  deleteLeadershipStaff,
+} from "@/funcs/leadership";
 import { AdminUpload } from "@/components/AdminEditPanel";
 import { ProfileRenderer } from "@/components/ProfileRenderer";
 
@@ -31,6 +38,12 @@ function PrincipalPage() {
   const queryClient = useQueryClient();
   const { isAdmin, isEditMode } = useAdmin();
   const [editedData, setEditedData] = useState<any>(null);
+
+  // Supporting Staff state
+  const [isAddingStaff, setIsAddingStaff] = useState(false);
+  const [newStaff, setNewStaff] = useState({ name: "", section: "", role: "" });
+  const [editingStaffId, setEditingStaffId] = useState<number | null>(null);
+  const [editingStaffData, setEditingStaffData] = useState({ name: "", section: "", role: "" });
 
   const { data: principal, isLoading: isPrincipalLoading } = useQuery({
     queryKey: ["leadership", "principal"],
@@ -54,9 +67,75 @@ function PrincipalPage() {
     },
   });
 
+  const addStaffMut = useMutation({
+    mutationFn: addLeadershipStaff,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leadership-staff", "principal"] });
+      setIsAddingStaff(false);
+      setNewStaff({ name: "", section: "", role: "" });
+      toast.success("Supporting staff member added successfully!");
+    },
+    onError: () => toast.error("Failed to add supporting staff member."),
+  });
+
+  const updateStaffMut = useMutation({
+    mutationFn: updateLeadershipStaff,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leadership-staff", "principal"] });
+      setEditingStaffId(null);
+      toast.success("Supporting staff record updated!");
+    },
+    onError: () => toast.error("Failed to update supporting staff record."),
+  });
+
+  const deleteStaffMut = useMutation({
+    mutationFn: deleteLeadershipStaff,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leadership-staff", "principal"] });
+      toast.success("Supporting staff record deleted.");
+    },
+    onError: () => toast.error("Failed to delete supporting staff record."),
+  });
+
   const handleSave = () => {
     if (!editedData) return;
     updateMutation.mutate({ data: { id: principal.id, ...editedData } });
+  };
+
+  const handleAddStaffSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newStaff.name.trim() || !newStaff.section.trim() || !newStaff.role.trim()) {
+      toast.error("Please fill in all fields (Name, Section, Designation)");
+      return;
+    }
+    addStaffMut.mutate({
+      data: {
+        leadershipSlug: "principal",
+        name: newStaff.name.trim(),
+        section: newStaff.section.trim(),
+        role: newStaff.role.trim(),
+      },
+    });
+  };
+
+  const startEditStaff = (member: any) => {
+    setEditingStaffId(member.id);
+    setEditingStaffData({ name: member.name, section: member.section, role: member.role });
+  };
+
+  const saveEditStaff = (id: number) => {
+    if (!editingStaffData.name.trim() || !editingStaffData.section.trim() || !editingStaffData.role.trim()) {
+      toast.error("All fields are required.");
+      return;
+    }
+    updateStaffMut.mutate({
+      data: {
+        id,
+        name: editingStaffData.name.trim(),
+        section: editingStaffData.section.trim(),
+        role: editingStaffData.role.trim(),
+      },
+    });
   };
 
   if (isPrincipalLoading || !principal)
@@ -188,18 +267,101 @@ function PrincipalPage() {
         {/* Supporting Staff Section */}
         <RevealOnScroll delay={250}>
           <div className="mt-20 pt-16 border-t border-border max-w-6xl mx-auto">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="h-12 w-12 rounded-2xl bg-primary/10 grid place-items-center text-primary">
-                <Users className="h-6 w-6" />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-2xl bg-primary/10 grid place-items-center text-primary shrink-0">
+                  <Users className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-ink">Supporting Staff</h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    The Principal’s Office plays a key role in supporting the academic activities and
+                    the overall management of CEV.
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-2xl font-bold text-ink">Supporting Staff</h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  The Principal’s Office plays a key role in supporting the academic activities and
-                  the overall management of CEV.
-                </p>
-              </div>
+
+              {isEditMode && (
+                <button
+                  onClick={() => setIsAddingStaff(!isAddingStaff)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-sm font-semibold shadow-sm hover:bg-primary/90 transition-all self-start sm:self-auto"
+                >
+                  <Plus className="h-4 w-4" /> {isAddingStaff ? "Close Form" : "Add Staff Member"}
+                </button>
+              )}
             </div>
+
+            {/* Add Staff Form when in Edit Mode */}
+            {isEditMode && isAddingStaff && (
+              <form
+                onSubmit={handleAddStaffSubmit}
+                className="mb-8 p-6 rounded-2xl bg-primary/5 border border-primary/20 space-y-4 animate-in fade-in slide-in-from-top-2"
+              >
+                <div className="text-sm font-bold text-primary flex items-center gap-2">
+                  <Plus className="h-4 w-4" /> Add New Supporting Staff Member
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="text-xs font-semibold text-muted-foreground block mb-1">
+                      Name of the Employee *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Sri. M. Umamaheswara Rao"
+                      value={newStaff.name}
+                      onChange={(e) => setNewStaff({ ...newStaff, name: e.target.value })}
+                      className="w-full bg-white px-3.5 py-2 rounded-xl border border-border text-sm outline-none focus:border-primary"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-muted-foreground block mb-1">
+                      Section *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Principal's Office / Administration"
+                      value={newStaff.section}
+                      onChange={(e) => setNewStaff({ ...newStaff, section: e.target.value })}
+                      className="w-full bg-white px-3.5 py-2 rounded-xl border border-border text-sm outline-none focus:border-primary"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-muted-foreground block mb-1">
+                      Designation *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. SUPERINTENDENT / PA to Principal"
+                      value={newStaff.role}
+                      onChange={(e) => setNewStaff({ ...newStaff, role: e.target.value })}
+                      className="w-full bg-white px-3.5 py-2 rounded-xl border border-border text-sm outline-none focus:border-primary"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAddingStaff(false);
+                      setNewStaff({ name: "", section: "", role: "" });
+                    }}
+                    className="px-4 py-2 rounded-xl border border-border text-sm font-medium text-muted-foreground hover:text-ink transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={addStaffMut.isPending}
+                    className="px-5 py-2 rounded-xl bg-primary text-white text-sm font-semibold shadow-sm hover:bg-primary/90 transition-all disabled:opacity-50"
+                  >
+                    {addStaffMut.isPending ? "Adding..." : "Save Member"}
+                  </button>
+                </div>
+              </form>
+            )}
 
             <div className="overflow-hidden rounded-3xl border border-border bg-card/50 backdrop-blur-sm shadow-sm">
               <table className="w-full text-left border-collapse">
@@ -217,46 +379,141 @@ function PrincipalPage() {
                     <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">
                       Designation
                     </th>
+                    {isEditMode && (
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-foreground text-right">
+                        Actions
+                      </th>
+                    )}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {isStaffLoading ? (
                     <tr>
                       <td
-                        colSpan={4}
+                        colSpan={isEditMode ? 5 : 4}
                         className="px-6 py-12 text-center text-muted-foreground animate-pulse"
                       >
                         Loading staff records...
                       </td>
                     </tr>
                   ) : (
-                    staff?.map((member: any, idx: number) => (
-                      <tr
-                        key={member.id}
-                        className="group hover:bg-primary/[0.02] transition-colors"
-                      >
-                        <td className="px-6 py-4 text-sm font-medium text-muted-foreground">
-                          {idx + 1}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-bold text-ink group-hover:text-primary transition-colors">
-                          {member.name}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-muted-foreground font-medium">
-                          {member.section}
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="inline-flex px-3 py-1 rounded-full bg-primary/5 text-primary text-xs font-bold tracking-tight">
-                            {member.role}
-                          </span>
-                        </td>
-                      </tr>
-                    ))
+                    staff?.map((member: any, idx: number) => {
+                      const isEditingThis = editingStaffId === member.id;
+                      return (
+                        <tr
+                          key={member.id}
+                          className="group hover:bg-primary/[0.02] transition-colors"
+                        >
+                          <td className="px-6 py-4 text-sm font-medium text-muted-foreground">
+                            {idx + 1}
+                          </td>
+                          <td className="px-6 py-4 text-sm font-bold text-ink">
+                            {isEditingThis ? (
+                              <input
+                                type="text"
+                                value={editingStaffData.name}
+                                onChange={(e) =>
+                                  setEditingStaffData({ ...editingStaffData, name: e.target.value })
+                                }
+                                className="w-full bg-white px-2.5 py-1.5 rounded-lg border border-primary text-sm font-semibold outline-none"
+                              />
+                            ) : (
+                              <span className="group-hover:text-primary transition-colors">
+                                {member.name}
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-muted-foreground font-medium">
+                            {isEditingThis ? (
+                              <input
+                                type="text"
+                                value={editingStaffData.section}
+                                onChange={(e) =>
+                                  setEditingStaffData({
+                                    ...editingStaffData,
+                                    section: e.target.value,
+                                  })
+                                }
+                                className="w-full bg-white px-2.5 py-1.5 rounded-lg border border-primary text-sm outline-none"
+                              />
+                            ) : (
+                              member.section
+                            )}
+                          </td>
+                          <td className="px-6 py-4">
+                            {isEditingThis ? (
+                              <input
+                                type="text"
+                                value={editingStaffData.role}
+                                onChange={(e) =>
+                                  setEditingStaffData({ ...editingStaffData, role: e.target.value })
+                                }
+                                className="w-full bg-white px-2.5 py-1.5 rounded-lg border border-primary text-xs font-bold outline-none uppercase"
+                              />
+                            ) : (
+                              <span className="inline-flex px-3 py-1 rounded-full bg-primary/5 text-primary text-xs font-bold tracking-tight">
+                                {member.role}
+                              </span>
+                            )}
+                          </td>
+                          {isEditMode && (
+                            <td className="px-6 py-4 text-right">
+                              {isEditingThis ? (
+                                <div className="flex items-center justify-end gap-2">
+                                  <button
+                                    onClick={() => saveEditStaff(member.id)}
+                                    disabled={updateStaffMut.isPending}
+                                    title="Save"
+                                    className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"
+                                  >
+                                    <Check className="h-4 w-4" />
+                                  </button>
+                                  <button
+                                    onClick={() => setEditingStaffId(null)}
+                                    title="Cancel"
+                                    className="p-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="flex items-center justify-end gap-2">
+                                  <button
+                                    onClick={() => startEditStaff(member)}
+                                    title="Edit"
+                                    className="p-1.5 rounded-lg bg-primary/5 text-primary hover:bg-primary/10 transition-colors"
+                                  >
+                                    <Edit2 className="h-4 w-4" />
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      if (
+                                        confirm(
+                                          `Are you sure you want to remove ${member.name} from Supporting Staff?`
+                                        )
+                                      ) {
+                                        deleteStaffMut.mutate({ data: { id: member.id } });
+                                      }
+                                    }}
+                                    title="Delete"
+                                    className="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              )}
+                            </td>
+                          )}
+                        </tr>
+                      );
+                    })
                   )}
                 </tbody>
               </table>
             </div>
           </div>
         </RevealOnScroll>
+
 
         {/* Professional Profile */}
         <RevealOnScroll delay={300}>

@@ -500,9 +500,13 @@ if (intents.includes("alumni")) {
       { subject: "MET R20 B.Tech Syllabus", reg: "R20", branch: "MET", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-MET-SYLLABUS.pdf" },
       { subject: "IT R20 B.Tech Syllabus", reg: "R20", branch: "IT", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-IT-SYLLABUS.pdf" },
 
-      { subject: "M.Tech IT R25 Syllabus", reg: "R25", branch: "IT", year: "1st & 2nd Year", pdf: "/uploads/2025/12/R25_M.Tech_ITDS.pdf" },
-      { subject: "MCA R25 Syllabus", reg: "R25", branch: "MCA", year: "1st & 2nd Year", pdf: "/uploads/2025/11/JNTUGV_R25_MCA_Syllabus-Course-structure.pdf" },
-      { subject: "MBA R25 Syllabus", reg: "R25", branch: "MBA", year: "1st & 2nd Year", pdf: "/uploads/2025/12/MBA-R25-Syllabus.pdf" },
+      { subject: "M.Tech IT / Data Science R25 Syllabus", reg: "R25", branch: "IT", year: "1st & 2nd Year", pdf: "/uploads/2025/12/R25_M.Tech_ITDS.pdf" },
+      { subject: "MCA R25 Syllabus & Course Structure", reg: "R25", branch: "MCA", year: "1st & 2nd Year", pdf: "/uploads/2025/11/JNTUGV_R25_MCA_Syllabus-Course-structure.pdf" },
+      { subject: "MBA R25 Course Structure & Syllabus", reg: "R25", branch: "MBA", year: "1st & 2nd Year", pdf: "/uploads/2025/11/MBA-R25-Course-Structure-Syllabus.pdf" },
+      { subject: "M.Tech Thermal Engineering (Mechanical) R25 Syllabus", reg: "R25", branch: "MECH", year: "1st & 2nd Year", pdf: "/uploads/2025/11/R25-MTech-Thermal-Engg_JNTU-GV-CEV-CS-Syllabus-1.pdf" },
+      { subject: "M.Tech Power Systems & Allied Courses (EEE) R25 Syllabus", reg: "R25", branch: "EEE", year: "1st & 2nd Year", pdf: "/uploads/2025/12/JNTUGV-R25-M.tech-Power-systems-Allied-courses-Course-structure-Syllabus-3-1.pdf" },
+      { subject: "M.Tech VLSI Design & Embedded Systems (ECE) R25 Syllabus", reg: "R25", branch: "ECE", year: "1st & 2nd Year", pdf: "/uploads/2025/12/R-25-M.-Tech-VLSID-ES-Syllabus.pdf" },
+      { subject: "M.Tech R25 Final Course Structure & Syllabus (General)", reg: "R25", branch: "M.Tech", year: "1st & 2nd Year", pdf: "/uploads/2025/10/M.Tech-R25-Final-Course-Structure-Syllabus.pdf" },
     ];
 
     // Supplement items from incoming RAG chunks if available

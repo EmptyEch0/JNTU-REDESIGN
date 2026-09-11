@@ -94,3 +94,33 @@ export const updateLeadershipData = createServerFn({ method: "POST" })
     serverCache.invalidate("leadership_", true);
     return { success: true };
   });
+
+export const addLeadershipStaff = createServerFn({ method: "POST" })
+  .validator((d: { leadershipSlug: string; name: string; role: string; section: string }) => d)
+  .handler(async ({ data }) => {
+    const inserted = await db.insert(leadershipStaff).values(data).returning();
+    serverCache.invalidate("leadership_staff_", true);
+    return inserted[0];
+  });
+
+export const updateLeadershipStaff = createServerFn({ method: "POST" })
+  .validator((d: { id: number; name?: string; role?: string; section?: string }) => d)
+  .handler(async ({ data }) => {
+    const { id, ...updateData } = data;
+    const updated = await db
+      .update(leadershipStaff)
+      .set(updateData)
+      .where(eq(leadershipStaff.id, id))
+      .returning();
+    serverCache.invalidate("leadership_staff_", true);
+    return updated[0];
+  });
+
+export const deleteLeadershipStaff = createServerFn({ method: "POST" })
+  .validator((d: { id: number }) => d)
+  .handler(async ({ data }) => {
+    await db.delete(leadershipStaff).where(eq(leadershipStaff.id, data.id));
+    serverCache.invalidate("leadership_staff_", true);
+    return { success: true };
+  });
+

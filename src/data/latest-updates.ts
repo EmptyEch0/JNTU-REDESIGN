@@ -52,8 +52,9 @@ export const PRESS_NOTES: PressNote[] = [
     status: "Published",
     excerpt:
       "JNTU-GV has officially kick-started preparations for Smart India Hackathon (SIH) 2026. The official brochure was unveiled by Hon'ble Vice-Chancellor Prof. V. V. Subbarao, Registrar Mr. K. Chandra Bhushan Rao, Principal Prof. V. S. Vakula, and HODs. Internal Hackathon scheduled for Sept 16.",
-    documentUrl: "https://forms.gle/P7Z9WchjecFPUzo18",
-    documentName: "SIH 2026 Official Brochure & Registration Form",
+    documentUrl: "/local-assets/uploads/press/2026/09/sih-2026-launch-newspaper-clipping.jpg",
+    imageUrl: "/local-assets/uploads/press/2026/09/sih-2026-launch-newspaper-clipping.jpg",
+    documentName: "SIH 2026 Newspaper Clipping & Official Brochure",
     heading: "OFFICIAL BROCHURE UNVEILED – INTERNAL HACKATHON ON SEPTEMBER 16",
     subject:
       "JNTU-GV launches Smart India Hackathon (SIH) 2026 preparations, brochure release and internal hackathon announcement",

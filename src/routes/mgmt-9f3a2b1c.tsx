@@ -33,7 +33,8 @@ import {
   BellRing,
   Radio,
   X,
-  UserCircle
+  UserCircle,
+  Newspaper
 } from "lucide-react";
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
@@ -42,6 +43,12 @@ import { desc, count, eq } from "drizzle-orm";
 import { addNotice, updateNotice, deleteNotice, addCampusGalleryItem, deleteCampusGalleryItem } from "@/funcs/site.server";
 import { SocialPublishingPanel } from "@/components/SocialPublishingPanel";
 import { FileUploadDropzone } from "@/components/FileUploadDropzone";
+import {
+  getActivePressNotes,
+  savePressNoteToStorage,
+  deletePressNoteFromStorage,
+  PressNote,
+} from "@/data/latest-updates";
 
 export const getDashboardData = createServerFn({ method: "GET" })
   .handler(async () => {
@@ -422,12 +429,29 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const router = useRouter();
 
-  const [activeTab, setActiveTab] = useState<"overview" | "notices" | "gallery" | "posts" | "connections">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "notices" | "press" | "gallery" | "posts" | "connections">("overview");
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [healthData, setHealthData] = useState<any>(null);
   const [connections, setConnections] = useState<any>(null);
   const [diagnostics, setDiagnostics] = useState<any>(null);
   const [linkedinPosts, setLinkedinPosts] = useState<any[]>([]);
+
+  // Press Notes state
+  const [pressNotesList, setPressNotesList] = useState<PressNote[]>(() =>
+    typeof window !== "undefined" ? getActivePressNotes() : []
+  );
+  const [editingPressNote, setEditingPressNote] = useState<PressNote | null>(null);
+  const [newPressNote, setNewPressNote] = useState<Partial<PressNote>>({
+    title: "",
+    category: "PRESS COVERAGE",
+    excerpt: "",
+    documentUrl: "",
+    imageUrl: "",
+    status: "Published",
+    heading: "OFFICIAL NOTIFICATION",
+    subject: "",
+    signedBy: "University Public Relations Cell\nJNTU-GV Vizianagaram",
+  });
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -458,6 +482,10 @@ function AdminDashboard() {
       const stats = await getDashboardData();
       setDashboardData(stats);
 
+      if (typeof window !== "undefined") {
+        setPressNotesList(getActivePressNotes());
+      }
+
       const healthRes = await fetch("/api/admin/social/health");
       if (healthRes.ok) {
         setHealthData(await healthRes.json());
@@ -483,6 +511,96 @@ function AdminDashboard() {
       setLoading(false);
       setRefreshing(false);
     }
+  };
+
+  const handleAddPressNoteSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPressNote.title?.trim() || !newPressNote.excerpt?.trim()) {
+      toast.error("Please enter press note title and excerpt.");
+      return;
+    }
+
+    const now = new Date();
+    const formattedDisplay =
+      now.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).toUpperCase();
+    const formattedPublished =
+      `${now.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" })} ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+
+    const newSlug =
+      newPressNote.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 60) + `-${Date.now().toString().slice(-4)}`;
+
+    const isDocAnImage = /\.(jpg|jpeg|png|webp|gif|svg|avif)$/i.test(newPressNote.documentUrl || "");
+
+    const noteToSave: PressNote = {
+      id: `custom-note-${Date.now()}`,
+      slug: newSlug,
+      category: newPressNote.category || "PRESS COVERAGE",
+      title: newPressNote.title.trim(),
+      homepageDisplayDate: formattedDisplay,
+      publishedAt: formattedPublished,
+      documentDate: newPressNote.documentDate || formattedDisplay,
+      revisedDate: formattedDisplay,
+      status: (newPressNote.status as any) || "Published",
+      excerpt: newPressNote.excerpt.trim(),
+      documentUrl: newPressNote.documentUrl || "",
+      documentName: newPressNote.documentName || newPressNote.title.trim(),
+      imageUrl: newPressNote.imageUrl || (isDocAnImage ? newPressNote.documentUrl : undefined),
+      heading: newPressNote.heading || "OFFICIAL NOTIFICATION",
+      subject: newPressNote.subject || newPressNote.title.trim(),
+      references: [],
+      schedule: [],
+      notes: [],
+      signedBy: newPressNote.signedBy || "University Public Relations Cell\nJNTU-GV Vizianagaram",
+      isCustom: true,
+    };
+
+    const updated = savePressNoteToStorage(noteToSave);
+    setPressNotesList(updated);
+    toast.success("Press note / news article published successfully!");
+    setNewPressNote({
+      title: "",
+      category: "PRESS COVERAGE",
+      excerpt: "",
+      documentUrl: "",
+      imageUrl: "",
+      status: "Published",
+      heading: "OFFICIAL NOTIFICATION",
+      subject: "",
+      signedBy: "University Public Relations Cell\nJNTU-GV Vizianagaram",
+    });
+  };
+
+  const handleUpdatePressNoteSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingPressNote || !editingPressNote.title?.trim() || !editingPressNote.excerpt?.trim()) {
+      toast.error("Please enter press note title and excerpt.");
+      return;
+    }
+
+    const isDocAnImage = /\.(jpg|jpeg|png|webp|gif|svg|avif)$/i.test(editingPressNote.documentUrl || "");
+
+    const updatedItem: PressNote = {
+      ...editingPressNote,
+      imageUrl: editingPressNote.imageUrl || (isDocAnImage ? editingPressNote.documentUrl : undefined),
+      isCustom: true,
+    };
+
+    const updated = savePressNoteToStorage(updatedItem);
+    setPressNotesList(updated);
+    setEditingPressNote(null);
+    toast.success("Press note updated successfully!");
+  };
+
+  const handleDeletePressNoteClick = (id: string) => {
+    if (!confirm("Are you sure you want to delete this press note / news article?")) return;
+    const updated = deletePressNoteFromStorage(id);
+    setPressNotesList(updated);
+    if (editingPressNote?.id === id) setEditingPressNote(null);
+    toast.success("Press note deleted.");
   };
 
   useEffect(() => {
@@ -815,6 +933,15 @@ function AdminDashboard() {
               }`}
           >
             <FileText className="w-4 h-4" /> Notice Board
+          </button>
+          <button
+            onClick={() => setActiveTab("press")}
+            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2.5 transition cursor-pointer ${activeTab === "press"
+              ? "bg-[#0F4C81]/15 text-[#0F4C81] dark:bg-sky-500/10 dark:text-sky-400"
+              : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800"
+              }`}
+          >
+            <Newspaper className="w-4 h-4" /> Press & News
           </button>
           <button
             onClick={() => setActiveTab("gallery")}
@@ -1328,6 +1455,289 @@ function AdminDashboard() {
                     <div className="py-12 text-center text-slate-450 dark:text-slate-500 font-medium flex flex-col items-center gap-1.5">
                       <FileText className="w-8 h-8 opacity-45 mb-1" />
                       <span>No announcements posted yet.</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2.5: PRESS & NEWS MANAGEMENT */}
+          {activeTab === "press" && (
+            <div className="space-y-8 animate-fade-in">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex flex-col gap-1">
+                  <h2 className="text-xl font-bold font-display uppercase tracking-wider">
+                    Press & News Article Management
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Publish newspaper clippings, official press releases, and media announcements with photos, PDFs, or external links.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Form Column */}
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-3xl shadow-sm h-fit">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xs font-black uppercase tracking-wider text-slate-400">
+                      {editingPressNote ? "Edit Press / News Article" : "Publish Press / News Article"}
+                    </h3>
+                    {editingPressNote && (
+                      <button
+                        type="button"
+                        onClick={() => setEditingPressNote(null)}
+                        className="text-[10px] font-bold text-slate-500 hover:text-rose-600 uppercase tracking-wider transition cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
+
+                  <form
+                    onSubmit={editingPressNote ? handleUpdatePressNoteSubmit : handleAddPressNoteSubmit}
+                    className="space-y-4"
+                  >
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                        Article Title *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g., JNTU-GV Launches SIH 2026..."
+                        className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 focus:border-[#0F4C81] dark:text-white"
+                        value={editingPressNote ? editingPressNote.title : newPressNote.title || ""}
+                        onChange={(e) => {
+                          if (editingPressNote) {
+                            setEditingPressNote({ ...editingPressNote, title: e.target.value });
+                          } else {
+                            setNewPressNote({ ...newPressNote, title: e.target.value });
+                          }
+                        }}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                          Category Tag
+                        </label>
+                        <select
+                          className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 cursor-pointer dark:text-white"
+                          value={editingPressNote ? editingPressNote.category : newPressNote.category || "PRESS COVERAGE"}
+                          onChange={(e) => {
+                            if (editingPressNote) {
+                              setEditingPressNote({ ...editingPressNote, category: e.target.value });
+                            } else {
+                              setNewPressNote({ ...newPressNote, category: e.target.value });
+                            }
+                          }}
+                        >
+                          <option value="PRESS COVERAGE">PRESS COVERAGE</option>
+                          <option value="PRESS NOTE">PRESS NOTE</option>
+                          <option value="NEWS ARTICLE">NEWS ARTICLE</option>
+                          <option value="MEDIA RELEASE">MEDIA RELEASE</option>
+                          <option value="CORRIGENDUM">CORRIGENDUM</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                          Document Date
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. 11 SEP 2026"
+                          className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white outline-none"
+                          value={editingPressNote ? editingPressNote.documentDate : newPressNote.documentDate || ""}
+                          onChange={(e) => {
+                            if (editingPressNote) {
+                              setEditingPressNote({ ...editingPressNote, documentDate: e.target.value });
+                            } else {
+                              setNewPressNote({ ...newPressNote, documentDate: e.target.value });
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                        Excerpt / Description *
+                      </label>
+                      <textarea
+                        required
+                        rows={3}
+                        placeholder="Brief overview or news summary of the announcement..."
+                        className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-normal text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-[#0F4C81]/25 resize-none"
+                        value={editingPressNote ? editingPressNote.excerpt : newPressNote.excerpt || ""}
+                        onChange={(e) => {
+                          if (editingPressNote) {
+                            setEditingPressNote({ ...editingPressNote, excerpt: e.target.value });
+                          } else {
+                            setNewPressNote({ ...newPressNote, excerpt: e.target.value });
+                          }
+                        }}
+                      />
+                    </div>
+
+                    {/* Newspaper Clipping Image / PDF / Link Dropzone */}
+                    <FileUploadDropzone
+                      label="Newspaper Clipping / Scanned Image or PDF Document"
+                      sublabel="Drag & drop scanned clipping photo (JPG/PNG/WEBP), PDF document, or paste link"
+                      value={
+                        editingPressNote
+                          ? editingPressNote.imageUrl || editingPressNote.documentUrl || ""
+                          : newPressNote.imageUrl || newPressNote.documentUrl || ""
+                      }
+                      onChange={(uploadedPath) => {
+                        const isImg = /\.(jpg|jpeg|png|webp|gif|svg|avif)$/i.test(uploadedPath);
+                        if (editingPressNote) {
+                          setEditingPressNote({
+                            ...editingPressNote,
+                            imageUrl: isImg ? uploadedPath : editingPressNote.imageUrl,
+                            documentUrl: uploadedPath,
+                          });
+                        } else {
+                          setNewPressNote({
+                            ...newPressNote,
+                            imageUrl: isImg ? uploadedPath : newPressNote.imageUrl,
+                            documentUrl: uploadedPath,
+                          });
+                        }
+                      }}
+                      module="press"
+                      category="clippings"
+                      fileNamePrefix={
+                        editingPressNote ? editingPressNote.title : newPressNote.title || "press-article"
+                      }
+                    />
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                        External Registration / Source URL
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="https://forms.gle/... or https://..."
+                        className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white outline-none"
+                        value={editingPressNote ? editingPressNote.sourceUrl || "" : newPressNote.sourceUrl || ""}
+                        onChange={(e) => {
+                          if (editingPressNote) {
+                            setEditingPressNote({ ...editingPressNote, sourceUrl: e.target.value });
+                          } else {
+                            setNewPressNote({ ...newPressNote, sourceUrl: e.target.value });
+                          }
+                        }}
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full bg-[#0F4C81] hover:bg-[#0D3F6D] text-white font-bold py-3 rounded-xl transition shadow-md text-xs flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider mt-2"
+                    >
+                      {editingPressNote ? (
+                        <>
+                          <Pencil className="w-4 h-4" /> Save Article Changes
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="w-4 h-4" /> Publish Press Note
+                        </>
+                      )}
+                    </button>
+                  </form>
+                </div>
+
+                {/* List Column */}
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-3xl shadow-sm lg:col-span-2 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-black uppercase tracking-wider text-slate-400">
+                      Published Press Releases & News Coverage ({pressNotesList.length})
+                    </h3>
+                  </div>
+
+                  {pressNotesList && pressNotesList.length > 0 ? (
+                    <div className="divide-y divide-slate-100 dark:divide-slate-800/60">
+                      {pressNotesList.map((note) => {
+                        const hasImg = Boolean(note.imageUrl) || (note.documentUrl && /\.(jpg|jpeg|png|webp|gif|svg|avif)$/i.test(note.documentUrl));
+                        const displayImg = note.imageUrl || (hasImg ? note.documentUrl : "");
+
+                        return (
+                          <div key={note.id} className="py-4 space-y-3">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex items-start gap-3">
+                                {displayImg ? (
+                                  <img
+                                    src={displayImg}
+                                    alt={note.title}
+                                    className="w-14 h-14 object-cover rounded-xl border border-slate-200 dark:border-slate-800 shrink-0 bg-slate-100"
+                                    onError={(e) => {
+                                      (e.target as any).style.display = "none";
+                                    }}
+                                  />
+                                ) : (
+                                  <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 text-slate-400">
+                                    <Newspaper className="w-6 h-6" />
+                                  </div>
+                                )}
+
+                                <div className="space-y-1">
+                                  <div className="flex flex-wrap items-center gap-1.5">
+                                    <span className="inline-flex px-2 py-0.5 bg-blue-50 text-[#0F4C81] dark:bg-sky-950/30 dark:text-sky-400 border border-blue-100 dark:border-blue-900/40 rounded-full text-[9px] font-black uppercase">
+                                      {note.category}
+                                    </span>
+                                    <span className="text-[10px] text-slate-400 font-medium">
+                                      {note.homepageDisplayDate || note.documentDate}
+                                    </span>
+                                  </div>
+                                  <h4 className="text-xs font-bold text-slate-800 dark:text-white leading-snug">
+                                    {note.title}
+                                  </h4>
+                                  <p className="text-[11px] text-slate-500 line-clamp-2">
+                                    {note.excerpt}
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                <a
+                                  href={`/latest-updates/press-notes/${note.slug}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="p-1.5 bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 rounded-lg transition flex items-center justify-center"
+                                  title="View Public Page"
+                                >
+                                  <ExternalLink className="w-3.5 h-3.5" />
+                                </a>
+                                <button
+                                  onClick={() => {
+                                    setEditingPressNote(note);
+                                    window.scrollTo({ top: 0, behavior: "smooth" });
+                                  }}
+                                  className="p-1.5 bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 rounded-lg transition flex items-center justify-center cursor-pointer"
+                                  title="Edit Press Note"
+                                >
+                                  <Pencil className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => handleDeletePressNoteClick(note.id)}
+                                  className="p-1.5 bg-rose-50 border border-rose-100 text-rose-600 hover:bg-rose-100 dark:bg-rose-950/20 dark:border-rose-900/30 rounded-lg transition flex items-center justify-center cursor-pointer"
+                                  title="Delete Press Note"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="py-12 text-center text-slate-450 dark:text-slate-500 font-medium flex flex-col items-center gap-1.5">
+                      <Newspaper className="w-8 h-8 opacity-45 mb-1" />
+                      <span>No press releases published yet.</span>
                     </div>
                   )}
                 </div>

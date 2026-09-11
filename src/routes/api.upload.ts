@@ -75,7 +75,7 @@ export const Route = createFileRoute("/api/upload")({
 
           const filename = `${sanitizedName}-${timestamp}-${randomHex}${fileExtension}`;
 
-          // 5. Organized Folder Structure Calculation
+          // 5. Organized Folder Structure Calculation (VPS: /var/www/local-assets/uploads/[module]/[year]/[month]/)
           const now = new Date();
           const year = now.getFullYear().toString();
           const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -84,56 +84,78 @@ export const Route = createFileRoute("/api/upload")({
           const mod = module || "general";
           const cat = category || "general";
 
+          // Notices & Announcements
+          if (
+            mod === "notices" ||
+            mod === "notice" ||
+            mod === "circulars" ||
+            mod === "circular" ||
+            cat === "notices" ||
+            cat === "circulars"
+          ) {
+            relativeFolder = `notices/${year}/${month}`;
+          }
+          // Press Notes, News Articles, Press Coverage, Newspaper Clippings
+          else if (
+            mod === "press" ||
+            mod === "press-notes" ||
+            mod === "press_notes" ||
+            mod === "news" ||
+            mod === "articles" ||
+            cat === "press" ||
+            cat === "clippings" ||
+            cat === "news"
+          ) {
+            relativeFolder = `press/${year}/${month}`;
+          }
+          // Tenders & Quotations
+          else if (mod === "tenders" || mod === "tender" || cat === "tenders" || cat === "tender") {
+            relativeFolder = `tenders/${year}/${month}`;
+          }
+          // Events & Activities
+          else if (mod === "events" || mod === "event" || cat === "events" || cat === "event") {
+            relativeFolder = `events/${year}/${month}`;
+          }
+          // Campus Gallery Photos
+          else if (mod === "gallery" || cat === "gallery") {
+            const subCategory = cat && cat !== "gallery" && cat !== "general" && cat !== "date" ? cat : "campus";
+            relativeFolder = `gallery/${subCategory}/${year}/${month}`;
+          }
           // Department-scoped uploads (Faculty, HOD, Timetables, Labs, Gallery, Banners)
-          if (dept || mod === "departments") {
+          else if (dept || mod === "departments") {
             const targetDept = dept || (mod === "departments" && cat !== "general" && cat !== "date" ? cat : "general");
-            
-            if (cat === "faculty" || mod === "faculty") {
-              relativeFolder = `departments/${targetDept}/faculty`;
-            } else if (cat === "timetables" || cat === "timetable" || mod === "timetables") {
-              relativeFolder = `departments/${targetDept}/timetables`;
-            } else if (cat === "hod") {
-              relativeFolder = `departments/${targetDept}/hod`;
-            } else if (cat === "labs" || cat === "lab") {
-              relativeFolder = `departments/${targetDept}/labs`;
-            } else if (cat === "gallery") {
-              relativeFolder = `departments/${targetDept}/gallery`;
-            } else if (cat === "banners" || cat === "banner") {
-              relativeFolder = `departments/${targetDept}/banners`;
-            } else if (cat && cat !== "general" && cat !== "date") {
-              relativeFolder = `departments/${targetDept}/${cat}`;
-            } else {
-              relativeFolder = `departments/${targetDept}`;
-            }
+            const subCat = cat && cat !== "general" && cat !== "date" && cat !== targetDept ? cat : "general";
+            relativeFolder = `departments/${targetDept}/${subCat}/${year}/${month}`;
           }
           // Global Faculty uploads
           else if (mod === "faculty" || cat === "faculty") {
-            relativeFolder = `faculty`;
+            relativeFolder = `faculty/${year}/${month}`;
           }
           // Global / Institutional Timetables
           else if (mod === "timetables" || cat === "timetables" || cat === "timetable") {
-            relativeFolder = `timetables/${year}`;
-          }
-          // Notices and Circulars
-          else if (mod === "notices" || mod === "circulars" || cat === "notices" || cat === "circulars") {
-            relativeFolder = `notices/${year}/${month}`;
-          }
-          // University / Campus Gallery
-          else if (mod === "gallery") {
-            relativeFolder = `gallery/${cat || "campus"}`;
+            relativeFolder = `timetables/${year}/${month}`;
           }
           // Logos & Institutional Branding
           else if (mod === "branding" || mod === "logo" || mod === "settings" || cat === "logo" || cat === "branding") {
             relativeFolder = `branding`;
           }
           // Campus Facilities & Units (Dispensary, Hostels, Sports, Library, Bank, Amenities, Clubs, Engineering Cell)
-          else if (mod === "facilities" || mod === "amenities" || mod === "clubs" || mod === "engineering" || mod === "dispensary" || mod === "hostels" || mod === "sports" || mod === "library") {
+          else if (
+            mod === "facilities" ||
+            mod === "amenities" ||
+            mod === "clubs" ||
+            mod === "engineering" ||
+            mod === "dispensary" ||
+            mod === "hostels" ||
+            mod === "sports" ||
+            mod === "library"
+          ) {
             const facilityName = cat !== "general" && cat !== "date" ? cat : mod;
-            relativeFolder = `facilities/${facilityName}`;
+            relativeFolder = `facilities/${facilityName}/${year}/${month}`;
           }
           // Custom subfolder if explicitly provided
           else if (subfolder) {
-            relativeFolder = subfolder.replace(/^\/+|\/+$/g, "");
+            relativeFolder = `${subfolder.replace(/^\/+|\/+$/g, "")}/${year}/${month}`;
           }
           // Default fallback organized by module and date
           else {
@@ -141,14 +163,15 @@ export const Route = createFileRoute("/api/upload")({
           }
 
           // Clean up any double slashes
-          relativeFolder = relativeFolder.replace(/\/{2,}/g, "/");
+          relativeFolder = relativeFolder.replace(/\/{2,}/g, "/").replace(/\/+$/, "");
 
-          // 5. Save buffer to target directories (VPS /var/www/local-assets, VPS project, and local cwd)
+          // 5. Save buffer to target directories (VPS /var/www/local-assets, VPS project, local-assets, and public/uploads)
           const arrayBuffer = await file.arrayBuffer();
           const buffer = Buffer.from(arrayBuffer);
 
           const targetDirPaths = new Set<string>();
 
+          // Production VPS Nginx/Caddy static root
           if (fs.existsSync("/var/www/local-assets")) {
             targetDirPaths.add(path.join("/var/www/local-assets/uploads", relativeFolder));
           } else if (fs.existsSync("/var/www")) {
@@ -159,7 +182,11 @@ export const Route = createFileRoute("/api/upload")({
             targetDirPaths.add(path.join("/var/www/JNTU-REDESIGN/local-assets/uploads", relativeFolder));
           }
 
+          // Local project local-assets folder
           targetDirPaths.add(path.join(process.cwd(), "local-assets", "uploads", relativeFolder));
+
+          // Local public/uploads folder for seamless static asset dev server support
+          targetDirPaths.add(path.join(process.cwd(), "public", "uploads", relativeFolder));
 
           for (const targetDir of targetDirPaths) {
             try {

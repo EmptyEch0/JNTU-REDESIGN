@@ -45,3 +45,8 @@ hod-credentials-*.txt
 __pycache__/
 *.py[cod]
 scratch/
+
+# Sensitive deployment configs & setup guides
+.github/workflows/deploy.yml
+.agents/
+social-setup.md

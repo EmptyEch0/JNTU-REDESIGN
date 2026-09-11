@@ -37,6 +37,7 @@ import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { VideoModal } from "@/components/VideoModal";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
+import { FileUploadDropzone } from "@/components/FileUploadDropzone";
 
 export function LatestUpdatesSection() {
   const { isEditMode } = useAdmin();
@@ -190,6 +191,8 @@ export function LatestUpdatesSection() {
         .replace(/^-+|-+$/g, "")
         .slice(0, 60) + `-${Date.now().toString().slice(-4)}`;
 
+    const isDocAnImage = /\.(jpg|jpeg|png|webp|gif|svg|avif)$/i.test(newNoteForm.documentUrl || "");
+
     const newNote: PressNote = {
       id: `custom-note-${Date.now()}`,
       slug: newSlug,
@@ -202,7 +205,8 @@ export function LatestUpdatesSection() {
       status: "Published",
       excerpt: newNoteForm.excerpt,
       documentUrl: newNoteForm.documentUrl || "https://api.jntugv.edu.in/press-notes/",
-      documentName: newNoteForm.documentName || `${newNoteForm.title}.docx`,
+      documentName: newNoteForm.documentName || `${newNoteForm.title}`,
+      imageUrl: isDocAnImage ? newNoteForm.documentUrl : undefined,
       heading: newNoteForm.heading || "OFFICIAL NOTIFICATION",
       subject: newNoteForm.subject || newNoteForm.title,
       references: [],
@@ -858,18 +862,17 @@ export function LatestUpdatesSection() {
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase text-muted-foreground mb-1">
-                  Source Document URL (DOCX / PDF link)
-                </label>
-                <input
-                  type="text"
-                  value={newNoteForm.documentUrl}
-                  onChange={(e) => setNewNoteForm({ ...newNoteForm, documentUrl: e.target.value })}
-                  placeholder="https://api.jntugv.edu.in/... or uploads/..."
-                  className="w-full bg-white border border-border rounded-xl p-3 text-sm text-ink outline-none focus:border-primary"
-                />
-              </div>
+              <FileUploadDropzone
+                label="Newspaper Clipping / Scanned Photo or Document (Image / PDF / DOCX)"
+                sublabel="Drag & drop scanned clipping photo (JPG/PNG/WEBP), PDF, Word document, or paste link"
+                value={newNoteForm.documentUrl}
+                onChange={(uploadedPath) =>
+                  setNewNoteForm({ ...newNoteForm, documentUrl: uploadedPath })
+                }
+                module="press"
+                category="clippings"
+                fileNamePrefix={newNoteForm.title || "press-note"}
+              />
 
               <div className="flex justify-end gap-3 pt-4 border-t border-border">
                 <button

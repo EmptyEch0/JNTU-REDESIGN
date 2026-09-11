@@ -41,6 +41,52 @@ export interface VideoItem {
 // ── Default Real University Press Notes (Official Press Coverage) ──
 export const PRESS_NOTES: PressNote[] = [
   {
+    id: "press-sih-2026-launch",
+    slug: "jntugv-launches-sih-2026-grand-inauguration-hackathon",
+    category: "PRESS COVERAGE",
+    title: "JNTU-GV Launches SIH 2026 with Grand Inauguration – Internal Hackathon on September 16",
+    homepageDisplayDate: "11 SEP 2026",
+    publishedAt: "11/09/2026 09:00",
+    documentDate: "10/09/2026",
+    revisedDate: "11/09/2026",
+    status: "Published",
+    excerpt:
+      "JNTU-GV has officially kick-started preparations for Smart India Hackathon (SIH) 2026. The official brochure was unveiled by Hon'ble Vice-Chancellor Prof. V. V. Subbarao, Registrar Mr. K. Chandra Bhushan Rao, Principal Prof. V. S. Vakula, and HODs. Internal Hackathon scheduled for Sept 16.",
+    documentUrl: "https://forms.gle/P7Z9WchjecFPUzo18",
+    documentName: "SIH 2026 Official Brochure & Registration Form",
+    heading: "OFFICIAL BROCHURE UNVEILED – INTERNAL HACKATHON ON SEPTEMBER 16",
+    subject:
+      "JNTU-GV launches Smart India Hackathon (SIH) 2026 preparations, brochure release and internal hackathon announcement",
+    references: [
+      "JNTU-GV Central Administration & Public Relations",
+      "Internal Hackathon SPOC: Dr. G. Jayasuma",
+      "Student Coordinators: M. Likhith Kumar, K. Pravalika",
+      "Registration Link: https://forms.gle/P7Z9WchjecFPUzo18",
+    ],
+    schedule: [
+      {
+        activity: "SIH 2026 Brochure Unveiling & Registration Kick-off",
+        existingDate: "10/09/2026",
+        revisedDate: "10/09/2026",
+      },
+      {
+        activity: "Internal Hackathon for Team Shortlisting",
+        existingDate: "16/09/2026",
+        revisedDate: "16/09/2026",
+      },
+    ],
+    notes: [
+      "Jawaharlal Nehru Technological University Gurajada Vizianagaram (JNTU-GV) has officially kick-started preparations for the Smart India Hackathon (SIH) 2026. As part of the initiative, the official SIH 2026 brochure was unveiled in the presence of the University Vice-Chancellor, Professor V. V. Subbarao, Registrar Mr. K. Chandra Bhushan Rao, Principal Professor V. S. Vakula, and Heads of various Departments (HODs).",
+      "The primary objective of SIH 2026 is to foster creativity, technical skills, and problem-solving abilities among students, while encouraging them to develop innovative technological solutions to real-world problems faced by the nation.",
+      "As part of SIH 2026, an Internal Hackathon will be conducted at JNTU-GV on September 16. Student teams will present their innovative ideas and project proposals to compete for national nomination.",
+      "Dr. G. Jayasuma will serve as the SPOC (Single Point of Contact) for the Internal Hackathon. M. Likhith Kumar and K. Pravalika will serve as the Student Coordinators.",
+      "Official Student Team Registration Form: https://forms.gle/P7Z9WchjecFPUzo18",
+    ],
+    signedBy: "University Public Relations Cell & SIH 2026 Committee\nJNTU-GV Vizianagaram",
+    sourceUrl: "https://forms.gle/P7Z9WchjecFPUzo18",
+    sourceName: "Manasulo Maata / University PR",
+  },
+  {
     id: "press-1",
     slug: "jntugv-80th-independence-day-sakshi-2026",
     category: "PRESS COVERAGE",

@@ -6,16 +6,28 @@ let embedder: any = null;
 
 async function getEmbedder() {
   if (!embedder) {
-    const { pipeline } = await import("@xenova/transformers");
-    embedder = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+    try {
+      const { createRequire } = await import("node:module");
+      const req = createRequire(import.meta.url);
+      const { pipeline } = req("@xenova/transformers");
+      embedder = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+    } catch (err) {
+      console.warn("Ingest embedder init skipped or failed:", err);
+      return null;
+    }
   }
   return embedder;
 }
 
-async function embed(text: string): Promise<number[]> {
-  const pipe = await getEmbedder();
-  const result = await pipe(text, { pooling: "mean", normalize: true });
-  return Array.from(result.data);
+async function embed(text: string): Promise<number[] | null> {
+  try {
+    const pipe = await getEmbedder();
+    if (!pipe) return null;
+    const result = await pipe(text, { pooling: "mean", normalize: true });
+    return Array.from(result.data);
+  } catch {
+    return null;
+  }
 }
 
 export async function ingestSingleChunk(content: string, source: string, sourceType: string, metadata: object = {}) {
@@ -32,18 +44,30 @@ export async function ingestSingleChunk(content: string, source: string, sourceT
   }
 
   const vector = await embed(content);
-  const vectorStr = `[${vector.join(",")}]`;
+  const vectorStr = vector ? `[${vector.join(",")}]` : null;
 
-  await db.execute(sql`
-    INSERT INTO rag_chunks (content, embedding, source, source_type, metadata, content_hash)
-    VALUES (${content}, ${vectorStr}::vector, ${source}, ${sourceType}, ${JSON.stringify(metadata)}, ${hash})
-    ON CONFLICT (source) DO UPDATE SET
-      content = EXCLUDED.content,
-      embedding = EXCLUDED.embedding,
-      metadata = EXCLUDED.metadata,
-      content_hash = EXCLUDED.content_hash,
-      updated_at = now()
-  `);
+  if (vectorStr) {
+    await db.execute(sql`
+      INSERT INTO rag_chunks (content, embedding, source, source_type, metadata, content_hash)
+      VALUES (${content}, ${vectorStr}::vector, ${source}, ${sourceType}, ${JSON.stringify(metadata)}, ${hash})
+      ON CONFLICT (source) DO UPDATE SET
+        content = EXCLUDED.content,
+        embedding = EXCLUDED.embedding,
+        metadata = EXCLUDED.metadata,
+        content_hash = EXCLUDED.content_hash,
+        updated_at = now()
+    `);
+  } else {
+    await db.execute(sql`
+      INSERT INTO rag_chunks (content, source, source_type, metadata, content_hash)
+      VALUES (${content}, ${source}, ${sourceType}, ${JSON.stringify(metadata)}, ${hash})
+      ON CONFLICT (source) DO UPDATE SET
+        content = EXCLUDED.content,
+        metadata = EXCLUDED.metadata,
+        content_hash = EXCLUDED.content_hash,
+        updated_at = now()
+    `);
+  }
 
   console.log(`✓ Ingested chunk: ${source}`);
 }

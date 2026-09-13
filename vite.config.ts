@@ -58,16 +58,17 @@ export default defineConfig({
       serverDir: "dist/server",
       publicDir: "dist/public",
     },
-    rollupConfig: {
+  },
+  vite: {
+    ssr: {
       external: [
+        "@xenova/transformers",
         "onnxruntime-node",
         "onnxruntime-common",
         "onnxruntime-web",
         "sharp",
       ],
     },
-  },
-  vite: {
     // Fix: Use a stable port so Vite never wastes time scanning for a free one
     server: {
       port: 5173,
@@ -150,9 +151,6 @@ export default defineConfig({
               }
               if (id.includes("recharts") || id.includes("d3-")) {
                 return "chunk-charts";
-              }
-              if (id.includes("@xenova/transformers")) {
-                return "chunk-ai";
               }
               if (id.includes("lucide-react")) {
                 return "chunk-icons";

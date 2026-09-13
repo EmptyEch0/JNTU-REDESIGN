@@ -12,23 +12,36 @@ const _queryVectorCache = new Map<string, number[]>();
 
 async function getCachedEmbedder() {
   if (!_embedder) {
-    const { pipeline } = await import("@xenova/transformers");
-    _embedder = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+    try {
+      const { createRequire } = await import("node:module");
+      const req = createRequire(import.meta.url);
+      const { pipeline } = req("@xenova/transformers");
+      _embedder = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+    } catch (err) {
+      console.warn("Embedder initialization skipped or failed:", err);
+      return null;
+    }
   }
   return _embedder;
 }
 
-async function embedQuery(text: string): Promise<number[]> {
+async function embedQuery(text: string): Promise<number[] | null> {
   const cleanKey = text.trim().toLowerCase();
   if (_queryVectorCache.has(cleanKey)) {
     return _queryVectorCache.get(cleanKey)!;
   }
-  const pipe = await getCachedEmbedder();
-  const result = await pipe(text, { pooling: "mean", normalize: true });
-  const vector = Array.from(result.data as number[]);
-  if (_queryVectorCache.size > 500) _queryVectorCache.clear();
-  _queryVectorCache.set(cleanKey, vector);
-  return vector;
+  try {
+    const pipe = await getCachedEmbedder();
+    if (!pipe) return null;
+    const result = await pipe(text, { pooling: "mean", normalize: true });
+    const vector = Array.from(result.data as number[]);
+    if (_queryVectorCache.size > 500) _queryVectorCache.clear();
+    _queryVectorCache.set(cleanKey, vector);
+    return vector;
+  } catch (err) {
+    console.warn("Vector embedding failed:", err);
+    return null;
+  }
 }
 
 
@@ -355,7 +368,7 @@ export const queryChatbot = createServerFn({ method: "POST" })
 
     // 1. Embed query using cached singleton embedder + query vector cache (0ms for repeat queries)
     const vector = await embedQuery(query);
-    const vectorStr = `[${vector.join(",")}]`;
+    const vectorStr = vector ? `[${vector.join(",")}]` : null;
 
     // 2. Elastic Hybrid Search: Postgres Vector Cosine Distance + Fulltext OR Terms Search
     const cleanQuery = query.replace(/[^a-zA-Z0-9\s]/g, " ").trim();
@@ -363,32 +376,50 @@ export const queryChatbot = createServerFn({ method: "POST" })
     const orQueryStr = words.length > 0 ? words.join(" | ") : cleanQuery;
 
     let chunks: any[] = [];
-    try {
-      const queryResult = await db.execute(sql`
-        SELECT content, source_type, metadata,
-               (1 - (embedding <=> ${vectorStr}::vector)) AS similarity,
-               ts_rank_cd(to_tsvector('english', content), to_tsquery('english', ${orQueryStr})) AS text_rank,
-               (0.50 * (1 - (embedding <=> ${vectorStr}::vector)) +
-                0.50 * COALESCE(ts_rank_cd(to_tsvector('english', content), to_tsquery('english', ${orQueryStr})), 0)) AS combined_score
-        FROM rag_chunks
-        WHERE (1 - (embedding <=> ${vectorStr}::vector)) > 0.01
-           OR (to_tsvector('english', content) @@ to_tsquery('english', ${orQueryStr}))
-        ORDER BY combined_score DESC, similarity DESC
-        LIMIT 30
-      `);
-      chunks = Array.from(queryResult);
-    } catch {
-      // Fallback to pure vector search if fulltext query syntax fails
+    if (vectorStr) {
       try {
-        const fallbackResult = await db.execute(sql`
+        const queryResult = await db.execute(sql`
           SELECT content, source_type, metadata,
-                 1 - (embedding <=> ${vectorStr}::vector) AS similarity
+                 (1 - (embedding <=> ${vectorStr}::vector)) AS similarity,
+                 ts_rank_cd(to_tsvector('english', content), to_tsquery('english', ${orQueryStr})) AS text_rank,
+                 (0.50 * (1 - (embedding <=> ${vectorStr}::vector)) +
+                  0.50 * COALESCE(ts_rank_cd(to_tsvector('english', content), to_tsquery('english', ${orQueryStr})), 0)) AS combined_score
           FROM rag_chunks
-          WHERE 1 - (embedding <=> ${vectorStr}::vector) > 0.01
-          ORDER BY embedding <=> ${vectorStr}::vector
+          WHERE (1 - (embedding <=> ${vectorStr}::vector)) > 0.01
+             OR (to_tsvector('english', content) @@ to_tsquery('english', ${orQueryStr}))
+          ORDER BY combined_score DESC, similarity DESC
           LIMIT 30
         `);
-        chunks = Array.from(fallbackResult);
+        chunks = Array.from(queryResult);
+      } catch {
+        // Fallback to pure vector search if fulltext query syntax fails
+        try {
+          const fallbackResult = await db.execute(sql`
+            SELECT content, source_type, metadata,
+                   1 - (embedding <=> ${vectorStr}::vector) AS similarity
+            FROM rag_chunks
+            WHERE 1 - (embedding <=> ${vectorStr}::vector) > 0.01
+            ORDER BY embedding <=> ${vectorStr}::vector
+            LIMIT 30
+          `);
+          chunks = Array.from(fallbackResult);
+        } catch {
+          chunks = [];
+        }
+      }
+    } else {
+      // Fallback to fulltext / pattern search if vector embedding is unavailable
+      try {
+        const textResult = await db.execute(sql`
+          SELECT content, source_type, metadata,
+                 COALESCE(ts_rank_cd(to_tsvector('english', content), to_tsquery('english', ${orQueryStr})), 0) AS text_rank
+          FROM rag_chunks
+          WHERE (to_tsvector('english', content) @@ to_tsquery('english', ${orQueryStr}))
+             OR content ILIKE ${'%' + cleanQuery + '%'}
+          ORDER BY text_rank DESC
+          LIMIT 30
+        `);
+        chunks = Array.from(textResult);
       } catch {
         chunks = [];
       }

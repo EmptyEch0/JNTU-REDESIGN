@@ -103,6 +103,15 @@ export const MEMBERS_ROSTER: { name: string; rollNumber?: string }[] = [
   { name: "GURUBELLU SIRISHA", rollNumber: "24VV5A0135" },
   { name: "Madaka Pavitra", rollNumber: "24VV5A0136" },
   { name: "Panchada Pushpa", rollNumber: "24VV1A0137" },
+  { name: "JONNALAGADDA PREM SAGAR" },
+  { name: "BADAM LEELA AVINASH" },
+  { name: "SEELAM GOWRI CHARAN" },
+  { name: "SIRINGI VINAY" },
+  { name: "POLAVARAPU PHANI DURGA MANI SRINIVASA RAO" },
+  { name: "KURA NARENDRA KUMAR" },
+  { name: "RANGU SRAVYA" },
+  { name: "PITHANI BHARGAVI SRI SATYA SRUJANA" },
+  { name: "PINAKANA SNEHA SWAROOP" },
 ];
 
 export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBERS_ROSTER.map((member, index) => {

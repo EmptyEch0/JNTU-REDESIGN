@@ -30,6 +30,9 @@ export interface CertificationRecord {
     label: string;
     value: string;
   }[];
+  verificationUrl?: string;
+  redirectUrl?: string;
+  isExternalRedirect?: boolean;
 }
 
 const COMMON_SIGNATORIES = [
@@ -399,16 +402,62 @@ export const MEMBERS_ROSTER: MemberRosterEntry[] = [
     project: "Repair & Maintenance of Hostel Buildings",
     imageSrc: "/images/certifications/JNTUGV-ED26-046-panchada-pushpa.jpg",
   },
-  // 47 to 55 Additional Students
-  { name: "JONNALAGADDA PREM SAGAR" },
-  { name: "BADAM LEELA AVINASH" },
-  { name: "SEELAM GOWRI CHARAN" },
-  { name: "SIRINGI VINAY" },
-  { name: "POLAVARAPU PHANI DURGA MANI SRINIVASA RAO" },
-  { name: "KURA NARENDRA KUMAR" },
-  { name: "RANGU SRAVYA" },
-  { name: "PITHANI BHARGAVI SRI SATYA SRUJANA" },
-  { name: "PINAKANA SNEHA SWAROOP" },
+  // 47 to 49: Team Members (Redirect to https://cap.jntugv.edu.in/about/team)
+  {
+    name: "Jonnalagadda Prem Sagar",
+    fullName: "Jonnalagadda Prem Sagar",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  {
+    name: "Badam Leela Avinash",
+    fullName: "Badam Leela Avinash",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  {
+    name: "Seelam Gowri Charan",
+    fullName: "Seelam Gowri Charan",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  // 50 to 55: Contributors (Redirect to https://cap.jntugv.edu.in/contributors)
+  {
+    name: "Siringi Vinay",
+    fullName: "Siringi Vinay",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  {
+    name: "Polavarapu Phani Durga Mani Srinivasa Rao",
+    fullName: "Polavarapu Phani Durga Mani Srinivasa Rao",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  {
+    name: "Kura Narendra Kumar",
+    fullName: "Kura Narendra Kumar",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  {
+    name: "Rangu Sravya",
+    fullName: "Rangu Sravya",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  {
+    name: "Pithani Bhargavi Sri Satya Srujana",
+    fullName: "Pithani Bhargavi Sri Satya Srujana",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  {
+    name: "Pinakana Sneha Swaroop",
+    fullName: "Pinakana Sneha Swaroop",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
 ];
 
 export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBERS_ROSTER.map((member, index) => {
@@ -423,6 +472,15 @@ export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBERS_RO
   const department = member.department || (num <= 22 ? "Information Technology" : "Computer Science & Engineering");
   const project = member.project || "Development & Modernization of JNTUGVCEV Official Web Portal";
   const imageSrc = member.imageSrc || "";
+
+  const isTeam = num >= 47 && num <= 49;
+  const isContributor = num >= 50 && num <= 55;
+  const redirectUrl = isTeam
+    ? "https://cap.jntugv.edu.in/about/team"
+    : isContributor
+    ? "https://cap.jntugv.edu.in/contributors"
+    : undefined;
+  const verificationUrl = redirectUrl || `https://jntugvcev.edu.in/engineersday2026/certifications?id=${id}`;
 
   const highlights = [
     ...(member.rollNumber ? [{ label: "Roll / Reg No", value: member.rollNumber }] : []),
@@ -455,6 +513,9 @@ export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBERS_RO
     skills: COMMON_SKILLS,
     signatories: COMMON_SIGNATORIES,
     highlights,
+    verificationUrl,
+    redirectUrl,
+    isExternalRedirect: isTeam || isContributor,
   };
 });
 

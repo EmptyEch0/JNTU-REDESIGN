@@ -19,6 +19,7 @@ import { Route as AntiRaggingRouteImport } from './routes/anti-ragging'
 import { Route as BankingRouteImport } from './routes/banking'
 import { Route as CampusLifeRouteImport } from './routes/campus-life'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ContributorsRouteImport } from './routes/contributors'
 import { Route as Dept7e1c4d8aRouteImport } from './routes/dept-7e1c4d8a'
 import { Route as EdcRouteImport } from './routes/edc'
 import { Route as EngineeringCellRouteImport } from './routes/engineering-cell'
@@ -39,12 +40,15 @@ import { Route as RdCellRouteImport } from './routes/rd-cell'
 import { Route as RtiRouteImport } from './routes/rti'
 import { Route as SportsRouteImport } from './routes/sports'
 import { Route as Staff2b9f6e3dRouteImport } from './routes/staff-2b9f6e3d'
+import { Route as TeamRouteImport } from './routes/team'
 import { Route as WomenEmpowermentRouteImport } from './routes/women-empowerment'
 import { Route as AboutIndexRouteImport } from './routes/about.index'
 import { Route as AboutAirportConnectivityRouteImport } from './routes/about.airport-connectivity'
+import { Route as AboutContributorsRouteImport } from './routes/about.contributors'
 import { Route as AboutHowToReachRouteImport } from './routes/about.how-to-reach'
 import { Route as AboutInstitutionRouteImport } from './routes/about.institution'
 import { Route as AboutNormsRouteImport } from './routes/about.norms'
+import { Route as AboutTeamRouteImport } from './routes/about.team'
 import { Route as AboutVisionMissionRouteImport } from './routes/about.vision-mission'
 import { Route as AboutVizianagaramRouteImport } from './routes/about.vizianagaram'
 import { Route as AcademicsIndexRouteImport } from './routes/academics/index'
@@ -188,6 +192,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContributorsRoute = ContributorsRouteImport.update({
+  id: '/contributors',
+  path: '/contributors',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Dept7e1c4d8aRoute = Dept7e1c4d8aRouteImport.update({
   id: '/dept-7e1c4d8a',
   path: '/dept-7e1c4d8a',
@@ -288,6 +297,11 @@ const Staff2b9f6e3dRoute = Staff2b9f6e3dRouteImport.update({
   path: '/staff-2b9f6e3d',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WomenEmpowermentRoute = WomenEmpowermentRouteImport.update({
   id: '/women-empowerment',
   path: '/women-empowerment',
@@ -304,6 +318,11 @@ const AboutAirportConnectivityRoute =
     path: '/airport-connectivity',
     getParentRoute: () => AboutRoute,
   } as any)
+const AboutContributorsRoute = AboutContributorsRouteImport.update({
+  id: '/contributors',
+  path: '/contributors',
+  getParentRoute: () => AboutRoute,
+} as any)
 const AboutHowToReachRoute = AboutHowToReachRouteImport.update({
   id: '/how-to-reach',
   path: '/how-to-reach',
@@ -317,6 +336,11 @@ const AboutInstitutionRoute = AboutInstitutionRouteImport.update({
 const AboutNormsRoute = AboutNormsRouteImport.update({
   id: '/norms',
   path: '/norms',
+  getParentRoute: () => AboutRoute,
+} as any)
+const AboutTeamRoute = AboutTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
   getParentRoute: () => AboutRoute,
 } as any)
 const AboutVisionMissionRoute = AboutVisionMissionRouteImport.update({
@@ -820,6 +844,7 @@ export interface FileRoutesByFullPath {
   '/banking': typeof BankingRoute
   '/campus-life': typeof CampusLifeRouteWithChildren
   '/contact': typeof ContactRoute
+  '/contributors': typeof ContributorsRoute
   '/dept-7e1c4d8a': typeof Dept7e1c4d8aRoute
   '/edc': typeof EdcRoute
   '/engineering-cell': typeof EngineeringCellRoute
@@ -840,11 +865,14 @@ export interface FileRoutesByFullPath {
   '/rti': typeof RtiRoute
   '/sports': typeof SportsRoute
   '/staff-2b9f6e3d': typeof Staff2b9f6e3dRoute
+  '/team': typeof TeamRoute
   '/women-empowerment': typeof WomenEmpowermentRouteWithChildren
   '/about/airport-connectivity': typeof AboutAirportConnectivityRoute
+  '/about/contributors': typeof AboutContributorsRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
   '/about/norms': typeof AboutNormsRoute
+  '/about/team': typeof AboutTeamRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
@@ -947,6 +975,7 @@ export interface FileRoutesByTo {
   '/anti-ragging': typeof AntiRaggingRoute
   '/banking': typeof BankingRoute
   '/contact': typeof ContactRoute
+  '/contributors': typeof ContributorsRoute
   '/dept-7e1c4d8a': typeof Dept7e1c4d8aRoute
   '/edc': typeof EdcRoute
   '/engineering-cell': typeof EngineeringCellRoute
@@ -963,10 +992,13 @@ export interface FileRoutesByTo {
   '/rti': typeof RtiRoute
   '/sports': typeof SportsRoute
   '/staff-2b9f6e3d': typeof Staff2b9f6e3dRoute
+  '/team': typeof TeamRoute
   '/about/airport-connectivity': typeof AboutAirportConnectivityRoute
+  '/about/contributors': typeof AboutContributorsRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
   '/about/norms': typeof AboutNormsRoute
+  '/about/team': typeof AboutTeamRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
@@ -1071,6 +1103,7 @@ export interface FileRoutesById {
   '/banking': typeof BankingRoute
   '/campus-life': typeof CampusLifeRouteWithChildren
   '/contact': typeof ContactRoute
+  '/contributors': typeof ContributorsRoute
   '/dept-7e1c4d8a': typeof Dept7e1c4d8aRoute
   '/edc': typeof EdcRoute
   '/engineering-cell': typeof EngineeringCellRoute
@@ -1091,11 +1124,14 @@ export interface FileRoutesById {
   '/rti': typeof RtiRoute
   '/sports': typeof SportsRoute
   '/staff-2b9f6e3d': typeof Staff2b9f6e3dRoute
+  '/team': typeof TeamRoute
   '/women-empowerment': typeof WomenEmpowermentRouteWithChildren
   '/about/airport-connectivity': typeof AboutAirportConnectivityRoute
+  '/about/contributors': typeof AboutContributorsRoute
   '/about/how-to-reach': typeof AboutHowToReachRoute
   '/about/institution': typeof AboutInstitutionRoute
   '/about/norms': typeof AboutNormsRoute
+  '/about/team': typeof AboutTeamRoute
   '/about/vision-mission': typeof AboutVisionMissionRoute
   '/about/vizianagaram': typeof AboutVizianagaramRoute
   '/academics/academic-calendar': typeof AcademicsAcademicCalendarRoute
@@ -1203,6 +1239,7 @@ export interface FileRouteTypes {
     | '/banking'
     | '/campus-life'
     | '/contact'
+    | '/contributors'
     | '/dept-7e1c4d8a'
     | '/edc'
     | '/engineering-cell'
@@ -1223,11 +1260,14 @@ export interface FileRouteTypes {
     | '/rti'
     | '/sports'
     | '/staff-2b9f6e3d'
+    | '/team'
     | '/women-empowerment'
     | '/about/airport-connectivity'
+    | '/about/contributors'
     | '/about/how-to-reach'
     | '/about/institution'
     | '/about/norms'
+    | '/about/team'
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/academics/academic-calendar'
@@ -1330,6 +1370,7 @@ export interface FileRouteTypes {
     | '/anti-ragging'
     | '/banking'
     | '/contact'
+    | '/contributors'
     | '/dept-7e1c4d8a'
     | '/edc'
     | '/engineering-cell'
@@ -1346,10 +1387,13 @@ export interface FileRouteTypes {
     | '/rti'
     | '/sports'
     | '/staff-2b9f6e3d'
+    | '/team'
     | '/about/airport-connectivity'
+    | '/about/contributors'
     | '/about/how-to-reach'
     | '/about/institution'
     | '/about/norms'
+    | '/about/team'
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/academics/academic-calendar'
@@ -1453,6 +1497,7 @@ export interface FileRouteTypes {
     | '/banking'
     | '/campus-life'
     | '/contact'
+    | '/contributors'
     | '/dept-7e1c4d8a'
     | '/edc'
     | '/engineering-cell'
@@ -1473,11 +1518,14 @@ export interface FileRouteTypes {
     | '/rti'
     | '/sports'
     | '/staff-2b9f6e3d'
+    | '/team'
     | '/women-empowerment'
     | '/about/airport-connectivity'
+    | '/about/contributors'
     | '/about/how-to-reach'
     | '/about/institution'
     | '/about/norms'
+    | '/about/team'
     | '/about/vision-mission'
     | '/about/vizianagaram'
     | '/academics/academic-calendar'
@@ -1584,6 +1632,7 @@ export interface RootRouteChildren {
   BankingRoute: typeof BankingRoute
   CampusLifeRoute: typeof CampusLifeRouteWithChildren
   ContactRoute: typeof ContactRoute
+  ContributorsRoute: typeof ContributorsRoute
   Dept7e1c4d8aRoute: typeof Dept7e1c4d8aRoute
   EdcRoute: typeof EdcRoute
   EngineeringCellRoute: typeof EngineeringCellRoute
@@ -1604,6 +1653,7 @@ export interface RootRouteChildren {
   RtiRoute: typeof RtiRoute
   SportsRoute: typeof SportsRoute
   Staff2b9f6e3dRoute: typeof Staff2b9f6e3dRoute
+  TeamRoute: typeof TeamRoute
   WomenEmpowermentRoute: typeof WomenEmpowermentRouteWithChildren
   AdminCertificationsRoute: typeof AdminCertificationsRoute
   AdminDepartmentsRoute: typeof AdminDepartmentsRoute
@@ -1708,6 +1758,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contributors': {
+      id: '/contributors'
+      path: '/contributors'
+      fullPath: '/contributors'
+      preLoaderRoute: typeof ContributorsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dept-7e1c4d8a': {
@@ -1850,6 +1907,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Staff2b9f6e3dRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/women-empowerment': {
       id: '/women-empowerment'
       path: '/women-empowerment'
@@ -1871,6 +1935,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutAirportConnectivityRouteImport
       parentRoute: typeof AboutRoute
     }
+    '/about/contributors': {
+      id: '/about/contributors'
+      path: '/contributors'
+      fullPath: '/about/contributors'
+      preLoaderRoute: typeof AboutContributorsRouteImport
+      parentRoute: typeof AboutRoute
+    }
     '/about/how-to-reach': {
       id: '/about/how-to-reach'
       path: '/how-to-reach'
@@ -1890,6 +1961,13 @@ declare module '@tanstack/react-router' {
       path: '/norms'
       fullPath: '/about/norms'
       preLoaderRoute: typeof AboutNormsRouteImport
+      parentRoute: typeof AboutRoute
+    }
+    '/about/team': {
+      id: '/about/team'
+      path: '/team'
+      fullPath: '/about/team'
+      preLoaderRoute: typeof AboutTeamRouteImport
       parentRoute: typeof AboutRoute
     }
     '/about/vision-mission': {
@@ -2541,9 +2619,11 @@ declare module '@tanstack/react-router' {
 
 interface AboutRouteChildren {
   AboutAirportConnectivityRoute: typeof AboutAirportConnectivityRoute
+  AboutContributorsRoute: typeof AboutContributorsRoute
   AboutHowToReachRoute: typeof AboutHowToReachRoute
   AboutInstitutionRoute: typeof AboutInstitutionRoute
   AboutNormsRoute: typeof AboutNormsRoute
+  AboutTeamRoute: typeof AboutTeamRoute
   AboutVisionMissionRoute: typeof AboutVisionMissionRoute
   AboutVizianagaramRoute: typeof AboutVizianagaramRoute
   AboutIndexRoute: typeof AboutIndexRoute
@@ -2551,9 +2631,11 @@ interface AboutRouteChildren {
 
 const AboutRouteChildren: AboutRouteChildren = {
   AboutAirportConnectivityRoute: AboutAirportConnectivityRoute,
+  AboutContributorsRoute: AboutContributorsRoute,
   AboutHowToReachRoute: AboutHowToReachRoute,
   AboutInstitutionRoute: AboutInstitutionRoute,
   AboutNormsRoute: AboutNormsRoute,
+  AboutTeamRoute: AboutTeamRoute,
   AboutVisionMissionRoute: AboutVisionMissionRoute,
   AboutVizianagaramRoute: AboutVizianagaramRoute,
   AboutIndexRoute: AboutIndexRoute,
@@ -2808,6 +2890,7 @@ const rootRouteChildren: RootRouteChildren = {
   BankingRoute: BankingRoute,
   CampusLifeRoute: CampusLifeRouteWithChildren,
   ContactRoute: ContactRoute,
+  ContributorsRoute: ContributorsRoute,
   Dept7e1c4d8aRoute: Dept7e1c4d8aRoute,
   EdcRoute: EdcRoute,
   EngineeringCellRoute: EngineeringCellRoute,
@@ -2828,6 +2911,7 @@ const rootRouteChildren: RootRouteChildren = {
   RtiRoute: RtiRoute,
   SportsRoute: SportsRoute,
   Staff2b9f6e3dRoute: Staff2b9f6e3dRoute,
+  TeamRoute: TeamRoute,
   WomenEmpowermentRoute: WomenEmpowermentRouteWithChildren,
   AdminCertificationsRoute: AdminCertificationsRoute,
   AdminDepartmentsRoute: AdminDepartmentsRoute,
@@ -2866,12 +2950,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

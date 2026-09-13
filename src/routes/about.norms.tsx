@@ -103,9 +103,9 @@ function NormsPage() {
   const { isEditMode } = useAdmin();
   const router = useRouter();
 
-  const heroRec = pageContent.find((r) => r.sectionKey === "hero") as any;
-  const recRec = pageContent.find((r) => r.sectionKey === "rec") as any;
-  const ugcRec = pageContent.find((r) => r.sectionKey === "ugc") as any;
+  const heroRec = (pageContent as any[]).find((r: any) => r.sectionKey === "hero") as any;
+  const recRec = (pageContent as any[]).find((r: any) => r.sectionKey === "rec") as any;
+  const ugcRec = (pageContent as any[]).find((r: any) => r.sectionKey === "ugc") as any;
 
   const [editTexts, setEditTexts] = useState({
     heroTitle: heroRec?.title || DEFAULTS.heroTitle,
@@ -223,7 +223,7 @@ function NormsPage() {
     }
   }
 
-  const dbDocs = regulations.filter((r) => r.category === "Norms");
+  const dbDocs = (regulations as any[]).filter((r: any) => r.category === "Norms");
   const documents = dbDocs.length > 0 ? dbDocs : DEFAULT_DOCUMENTS;
 
   return (
@@ -363,7 +363,7 @@ function NormsPage() {
         )}
 
         <div className="mt-16 grid gap-6 max-w-4xl">
-          {documents.map((doc, i) => {
+          {documents.map((doc: any, i: number) => {
             const Icon = getDocIcon(doc.date);
             return (
               <RevealOnScroll key={doc.id} delay={i * 100}>

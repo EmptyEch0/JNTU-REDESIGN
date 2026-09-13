@@ -19,6 +19,28 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/about/team",
+      "destination": "https://cap.jntugv.edu.in/about/team",
+      "permanent": false
+    },
+    {
+      "source": "/contributors",
+      "destination": "https://cap.jntugv.edu.in/contributors",
+      "permanent": false
+    },
+    {
+      "source": "/team",
+      "destination": "https://cap.jntugv.edu.in/about/team",
+      "permanent": false
+    },
+    {
+      "source": "/about/contributors",
+      "destination": "https://cap.jntugv.edu.in/contributors",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/vps-assets/:path*",

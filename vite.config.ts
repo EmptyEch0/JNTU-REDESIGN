@@ -58,6 +58,14 @@ export default defineConfig({
       serverDir: "dist/server",
       publicDir: "dist/public",
     },
+    rollupConfig: {
+      external: [
+        "onnxruntime-node",
+        "onnxruntime-common",
+        "onnxruntime-web",
+        "sharp",
+      ],
+    },
   },
   vite: {
     // Fix: Use a stable port so Vite never wastes time scanning for a free one

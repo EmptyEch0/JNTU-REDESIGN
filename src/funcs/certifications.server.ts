@@ -46,12 +46,12 @@ function ensureStorage(): CertificationRecord[] {
         }
       });
 
-      // Synchronize with the 46 official roster entries, preserving any custom uploaded images
+      // Synchronize with the 55 official roster entries, preserving official and custom uploaded images
       const synchronized: CertificationRecord[] = ENGINEERS_DAY_2026_CERTIFICATES.map((official) => {
         const customImage = imageMap.get(official.id.toLowerCase());
         return {
           ...official,
-          imageSrc: customImage || "",
+          imageSrc: customImage || official.imageSrc || "",
         };
       });
 

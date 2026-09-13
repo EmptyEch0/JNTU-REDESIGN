@@ -188,8 +188,8 @@ export function VerificationScannerModal({ certificate, isOpen, onClose }: Props
               <div className="text-xs text-muted-foreground mt-0.5">
                 {certificate.role} • {certificate.department}
               </div>
-              <div className="mt-2 text-xs font-medium text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 py-1 px-3 rounded-md inline-block">
-                Contribution: Developing JNTUGVCEV Website
+              <div className="mt-2 text-xs font-medium text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 py-1 px-3 rounded-md inline-block max-w-full truncate">
+                Contribution: {certificate.project || "Developing JNTUGVCEV Website"}
               </div>
             </div>
           )}

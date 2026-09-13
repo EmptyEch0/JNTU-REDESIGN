@@ -72,7 +72,7 @@ export const Route = createFileRoute("/engineersday2026/certifications")({
       },
       {
         property: "og:image",
-        content: "https://jntugvcev.edu.in/images/certifications/teki-chaitanya-lakshmi-engineers-day-2026.jpg",
+        content: "https://jntugvcev.edu.in/logo.png",
       },
     ],
   }),
@@ -82,17 +82,22 @@ export const Route = createFileRoute("/engineersday2026/certifications")({
 function EngineersDayCertificationsPage() {
   const { allCertificates } = Route.useLoaderData();
   const search = Route.useSearch();
-  const certId = (search.id || "JNTUGV-ED26-001").trim().toLowerCase();
+  const certId = (search.id || "").trim().toLowerCase();
 
   const certificate: CertificationRecord =
-    allCertificates.find(
-      (c) =>
-        c.id.toLowerCase() === certId ||
-        c.slug.toLowerCase() === certId ||
-        c.name.toLowerCase() === certId ||
-        certId.includes(c.slug.toLowerCase()) ||
-        c.id.toLowerCase().replace(/-/g, "") === certId.replace(/-/g, "")
-    ) || allCertificates[0] || ENGINEERS_DAY_2026_CERTIFICATES[0];
+    (certId
+      ? allCertificates.find(
+          (c) =>
+            c.id.toLowerCase() === certId ||
+            c.slug.toLowerCase() === certId ||
+            c.name.toLowerCase() === certId ||
+            (c.rollNumber && c.rollNumber.toLowerCase() === certId) ||
+            c.id.toLowerCase().replace(/-/g, "") === certId.replace(/-/g, "") ||
+            (c.slug && c.slug.length > 2 && certId.includes(c.slug.toLowerCase()))
+        )
+      : null) ||
+    allCertificates[0] ||
+    ENGINEERS_DAY_2026_CERTIFICATES[0];
 
   const [showScannerModal, setShowScannerModal] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState("");

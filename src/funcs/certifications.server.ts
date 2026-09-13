@@ -16,15 +16,57 @@ function ensureStorage(): CertificationRecord[] {
     if (!fs.existsSync(DATA_DIR)) {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
+
+    // Always ensure the file exists with the 46 official certificates
     if (!fs.existsSync(DATA_FILE)) {
       fs.writeFileSync(DATA_FILE, JSON.stringify(ENGINEERS_DAY_2026_CERTIFICATES, null, 2), "utf-8");
       return ENGINEERS_DAY_2026_CERTIFICATES;
     }
+
     const raw = fs.readFileSync(DATA_FILE, "utf-8");
-    const parsed = JSON.parse(raw);
+    const parsed: CertificationRecord[] = JSON.parse(raw);
+
     if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed;
+      // Map existing custom uploaded images by certificate ID
+      const imageMap = new Map<string, string>();
+      const customRecords: CertificationRecord[] = [];
+
+      parsed.forEach((item) => {
+        if (item && item.id) {
+          if (item.imageSrc && item.imageSrc.trim() !== "" && !item.imageSrc.includes("teki-chaitanya-lakshmi")) {
+            imageMap.set(item.id.toLowerCase(), item.imageSrc);
+          }
+          // If it's a completely custom certificate beyond the standard 46
+          const isStandard = ENGINEERS_DAY_2026_CERTIFICATES.some(
+            (std) => std.id.toLowerCase() === item.id.toLowerCase()
+          );
+          if (!isStandard) {
+            customRecords.push(item);
+          }
+        }
+      });
+
+      // Synchronize with the 46 official roster entries, preserving any custom uploaded images
+      const synchronized: CertificationRecord[] = ENGINEERS_DAY_2026_CERTIFICATES.map((official) => {
+        const customImage = imageMap.get(official.id.toLowerCase());
+        return {
+          ...official,
+          imageSrc: customImage || "",
+        };
+      });
+
+      const fullList = [...synchronized, ...customRecords];
+      
+      // Update disk storage with the clean synchronized list
+      try {
+        fs.writeFileSync(DATA_FILE, JSON.stringify(fullList, null, 2), "utf-8");
+      } catch {
+        // ignore write errors
+      }
+
+      return fullList;
     }
+
     return ENGINEERS_DAY_2026_CERTIFICATES;
   } catch (err) {
     console.error("Error reading certifications storage:", err);
@@ -102,7 +144,7 @@ export const createAdminCertificate = createServerFn({
       status: "VERIFIED",
       verificationHash: `SHA256: ${randomHash}`,
       securityCode: `JNTUGV-AUTH-2026-ED${String(nextIndex).padStart(2, "0")}`,
-      imageSrc: data.fileUrl || "/images/certifications/teki-chaitanya-lakshmi-engineers-day-2026.jpg",
+      imageSrc: data.fileUrl || "",
       skills: data.skills && data.skills.length > 0 ? data.skills : [
         "Web Modernization",
         "Frontend & UI Engineering",

@@ -23,7 +23,6 @@ import {
   Calendar,
   Building,
   UserCheck,
-  Search,
   ExternalLink,
   Check,
   Code2,
@@ -164,7 +163,6 @@ function EngineersDayCertificationsPage() {
     ENGINEERS_DAY_2026_CERTIFICATES[0];
 
   const [showScannerModal, setShowScannerModal] = useState<boolean>(true);
-  const [searchQuery, setSearchQuery] = useState("");
   const [copiedLink, setCopiedLink] = useState(false);
 
   // Determine current host verification URL
@@ -574,153 +572,9 @@ function EngineersDayCertificationsPage() {
             </div>
           </div>
         </RevealOnScroll>
-
-        {/* Complete Cohort & Registry Directory (All 55 Members) */}
-        <RevealOnScroll>
-          <div className="bg-card/90 dark:bg-slate-900/90 border border-border rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-border">
-              <div>
-                <h3 className="text-xl font-bold text-foreground font-display flex items-center gap-2">
-                  <UserCheck className="w-6 h-6 text-primary" />
-                  Engineer's Day 2026 — Verified Roster Directory
-                </h3>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-                  Search and access official credentials across all cohorts and project groups
-                </p>
-              </div>
-
-              {/* Instant Search Bar */}
-              <div className="relative w-full sm:w-72">
-                <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Search by name, ID, roll..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-muted/60 border border-input focus:outline-none focus:ring-2 focus:ring-primary text-foreground"
-                />
-              </div>
-            </div>
-
-            {/* Directory Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 max-h-[500px] overflow-y-auto pr-1">
-              {allCertificates
-                .filter((c: CertificationRecord) => {
-                  if (!searchQuery.trim()) return true;
-                  const q = searchQuery.toLowerCase();
-                  return (
-                    c.name.toLowerCase().includes(q) ||
-                    c.id.toLowerCase().includes(q) ||
-                    (c.rollNumber && c.rollNumber.toLowerCase().includes(q)) ||
-                    c.department.toLowerCase().includes(q) ||
-                    c.project.toLowerCase().includes(q)
-                  );
-                })
-                .map((c: CertificationRecord, i: number) => {
-                  const numMatch = c.id.match(/\d+$/);
-                  const num = numMatch ? parseInt(numMatch[0], 10) : i + 1;
-                  const isTeam47_49 = num >= 47 && num <= 49;
-                  const isContrib50_55 = num >= 50 && num <= 55;
-                  const isCurrent = c.id.toLowerCase() === certificate.id.toLowerCase();
-
-                  if (isTeam47_49) {
-                    return (
-                      <a
-                        key={c.id}
-                        href="https://cap.jntugv.edu.in/about/team"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 transition-all flex flex-col justify-between gap-2"
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <span className="font-bold text-xs text-foreground group-hover:text-amber-500 transition-colors block">
-                              {c.name}
-                            </span>
-                            <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 font-semibold block">
-                              {c.id} • Web Systems Team
-                            </span>
-                          </div>
-                          <span className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-slate-950 flex items-center gap-1">
-                            Team Portal <ExternalLink className="w-2.5 h-2.5" />
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-muted-foreground line-clamp-1">
-                          {c.project}
-                        </p>
-                      </a>
-                    );
-                  }
-
-                  if (isContrib50_55) {
-                    return (
-                      <a
-                        key={c.id}
-                        href="https://cap.jntugv.edu.in/contributors"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative p-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/10 transition-all flex flex-col justify-between gap-2"
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <span className="font-bold text-xs text-foreground group-hover:text-emerald-500 transition-colors block">
-                              {c.name}
-                            </span>
-                            <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold block">
-                              {c.id} • Contributor
-                            </span>
-                          </div>
-                          <span className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-slate-950 flex items-center gap-1">
-                            Contributors <ExternalLink className="w-2.5 h-2.5" />
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-muted-foreground line-clamp-1">
-                          {c.project}
-                        </p>
-                      </a>
-                    );
-                  }
-
-                  return (
-                    <a
-                      key={c.id}
-                      href={`/engineersday2026/certifications?id=${c.id}`}
-                      className={`group relative p-3.5 rounded-xl border transition-all flex flex-col justify-between gap-2 ${
-                        isCurrent
-                          ? "border-primary bg-primary/10 shadow-sm"
-                          : "border-border/70 bg-card hover:bg-muted/60"
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <span className="font-bold text-xs text-foreground group-hover:text-primary transition-colors block">
-                            {c.name}
-                          </span>
-                          <span className="text-[10px] font-mono text-primary font-semibold block">
-                            {c.id} {c.rollNumber ? `• ${c.rollNumber}` : ""}
-                          </span>
-                        </div>
-                        <span
-                          className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold ${
-                            isCurrent
-                              ? "bg-primary text-primary-foreground font-bold"
-                              : "bg-muted text-muted-foreground"
-                          }`}
-                        >
-                          {isCurrent ? "Viewing" : "Verified"}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-muted-foreground line-clamp-1">
-                        {c.department}
-                      </p>
-                    </a>
-                  );
-                })}
-            </div>
-          </div>
-        </RevealOnScroll>
       </div>
     </div>
   );
 }
+
 

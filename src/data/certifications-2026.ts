@@ -2,6 +2,7 @@ export interface CertificationRecord {
   id: string; // e.g., 'JNTUGV-ED26-001'
   slug: string;
   name: string;
+  rollNumber?: string;
   honorific?: string;
   department: string;
   college: string;
@@ -55,59 +56,73 @@ const COMMON_SKILLS = [
   "Responsive Digital Ecosystems",
 ];
 
-const MEMBER_NAMES = [
-  "M Likhith Kumar",
-  "P Sai Vamsi",
-  "P Anitha",
-  "Ch Sai Rupini",
-  "B Akhil",
-  "P Jaya Kumar",
-  "Y Tejaswini",
-  "Lavanya D",
-  "Sk Asma",
-  "K Pravallika",
-  "D Gnaneswar",
-  "G Nandini",
-  "Y Naveen",
-  "Lavanya Y",
-  "Shabira Begum",
-  "Sailaja S",
-  "T Chaitanya Lakshmi",
-  "Mounika D",
-  "Y Ghana Satya Karthik",
-  "V Charu Brunda Hasini",
-  "Yuva Teja",
-  "Sahithya",
-  "B. Chakradhar",
-  "D. Yaswanth",
-  "G. Anil Kumar",
-  "J. Sai Saketh",
-  "S. Praveen",
-  "T. Surya Prakash",
-  "M. Uma Mahesh",
-  "Ch. Siddartha",
-  "K. Rama Swamy",
-  "Y. Pavan Kumar",
-  "M. Madhan Kumar",
-  "M. Ajay",
-  "N. Vishal",
-  "T. Ananda Harsha",
-  "K. Manogna Sasidhar",
-  "R.V. Sriteja",
+export const MEMBERS_ROSTER: { name: string; rollNumber?: string }[] = [
+  { name: "M Likhith Kumar" },
+  { name: "P Sai Vamsi" },
+  { name: "P Anitha" },
+  { name: "Ch Sai Rupini" },
+  { name: "B Akhil" },
+  { name: "P Jaya Kumar" },
+  { name: "Y Tejaswini" },
+  { name: "Lavanya D" },
+  { name: "Sk Asma" },
+  { name: "K Pravallika" },
+  { name: "D Gnaneswar" },
+  { name: "G Nandini" },
+  { name: "Y Naveen" },
+  { name: "Lavanya Y" },
+  { name: "Shabira Begum" },
+  { name: "Sailaja S" },
+  { name: "T Chaitanya Lakshmi" },
+  { name: "Mounika D" },
+  { name: "Y Ghana Satya Karthik" },
+  { name: "V Charu Brunda Hasini" },
+  { name: "Yuva Teja" },
+  { name: "Sahithya" },
+  { name: "B. Chakradhar" },
+  { name: "D. Yaswanth" },
+  { name: "G. Anil Kumar" },
+  { name: "J. Sai Saketh" },
+  { name: "S. Praveen" },
+  { name: "T. Surya Prakash" },
+  { name: "M. Uma Mahesh" },
+  { name: "Ch. Siddartha" },
+  { name: "K. Rama Swamy" },
+  { name: "Y. Pavan Kumar" },
+  { name: "M. Madhan Kumar" },
+  { name: "M. Ajay" },
+  { name: "N. Vishal" },
+  { name: "T. Ananda Harsha" },
+  { name: "K. Manogna Sasidhar" },
+  { name: "R.V. Sriteja" },
+  { name: "KOLATI SOWMYA SRI", rollNumber: "23VV1A0109" },
+  { name: "KUNA CHANDRIIKA", rollNumber: "23VV1A0110" },
+  { name: "Patarlapalli Meena", rollNumber: "23VV1A0122" },
+  { name: "Pedapati Leela Sri Deepthi", rollNumber: "23VV1A0123" },
+  { name: "Vanthala Dhanalakshmi", rollNumber: "23VV1A0130" },
+  { name: "GURUBELLU SIRISHA", rollNumber: "24VV5A0135" },
+  { name: "Madaka Pavitra", rollNumber: "24VV5A0136" },
+  { name: "Panchada Pushpa", rollNumber: "24VV1A0137" },
 ];
 
-export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBER_NAMES.map((name, index) => {
+export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBERS_ROSTER.map((member, index) => {
   const num = index + 1;
   const id = `JNTUGV-ED26-${String(num).padStart(3, "0")}`;
-  const slug = name
+  const slug = member.name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
+  const highlights = [
+    ...(member.rollNumber ? [{ label: "Roll / Reg No", value: member.rollNumber }] : []),
+    ...COMMON_HIGHLIGHTS,
+  ];
+
   return {
     id,
     slug,
-    name: name.trim(),
+    name: member.name.trim(),
+    rollNumber: member.rollNumber,
     honorific: "Mr./Ms.",
     department: "Computer Science & Engineering",
     college: "JNTU-GV College of Engineering Vizianagaram",
@@ -127,7 +142,7 @@ export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBER_NAM
     imageSrc: "", // Blank placeholder for now as requested; user will upload certificate images in bulk
     skills: COMMON_SKILLS,
     signatories: COMMON_SIGNATORIES,
-    highlights: COMMON_HIGHLIGHTS,
+    highlights,
   };
 });
 

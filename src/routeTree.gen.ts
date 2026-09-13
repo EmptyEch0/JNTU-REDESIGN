@@ -72,9 +72,11 @@ import { Route as ApiUploadRouteImport } from './routes/api.upload'
 import { Route as CampusLifeIndexRouteImport } from './routes/campus-life.index'
 import { Route as CampusLifeMusicClubRouteImport } from './routes/campus-life.music-club'
 import { Route as CampusLifeStudentActivityClubRouteImport } from './routes/campus-life.student-activity-club'
+import { Route as CertificationsEngineersDay2026RouteImport } from './routes/certifications.engineers-day-2026'
 import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
 import { Route as DepartmentsIdRouteImport } from './routes/departments.$id'
 import { Route as DispensaryIndexRouteImport } from './routes/dispensary.index'
+import { Route as Engineersday2026CertificationsRouteImport } from './routes/engineersday2026.certifications'
 import { Route as LatestUpdatesIndexRouteImport } from './routes/latest-updates.index'
 import { Route as NssIndexRouteImport } from './routes/nss.index'
 import { Route as NssActivitiesRouteImport } from './routes/nss.activities'
@@ -116,6 +118,8 @@ import { Route as DepartmentsIdGalleryRouteImport } from './routes/departments.$
 import { Route as DepartmentsIdHodRouteImport } from './routes/departments.$id.hod'
 import { Route as DepartmentsIdLabsRouteImport } from './routes/departments.$id.labs'
 import { Route as DepartmentsIdTimetablesRouteImport } from './routes/departments.$id.timetables'
+import { Route as Engineersday2026CertificationsIdRouteImport } from './routes/engineersday2026.certifications.$id'
+import { Route as JntugvcevEngineersday2026CertificationsRouteImport } from './routes/jntugvcev.engineersday2026.certifications'
 import { Route as LatestUpdatesPressNotesSlugRouteImport } from './routes/latest-updates.press-notes.$slug'
 import { Route as LocalAssetsUploadsSplatRouteImport } from './routes/local-assets.uploads.$'
 import { Route as ApiAdminSocialDiagnosticsRouteImport } from './routes/api.admin.social.diagnostics'
@@ -453,6 +457,12 @@ const CampusLifeStudentActivityClubRoute =
     path: '/student-activity-club',
     getParentRoute: () => CampusLifeRoute,
   } as any)
+const CertificationsEngineersDay2026Route =
+  CertificationsEngineersDay2026RouteImport.update({
+    id: '/certifications/engineers-day-2026',
+    path: '/certifications/engineers-day-2026',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DepartmentsIndexRoute = DepartmentsIndexRouteImport.update({
   id: '/departments/',
   path: '/departments/',
@@ -468,6 +478,12 @@ const DispensaryIndexRoute = DispensaryIndexRouteImport.update({
   path: '/dispensary/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Engineersday2026CertificationsRoute =
+  Engineersday2026CertificationsRouteImport.update({
+    id: '/engineersday2026/certifications',
+    path: '/engineersday2026/certifications',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LatestUpdatesIndexRoute = LatestUpdatesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -681,6 +697,18 @@ const DepartmentsIdTimetablesRoute = DepartmentsIdTimetablesRouteImport.update({
   path: '/timetables',
   getParentRoute: () => DepartmentsIdRoute,
 } as any)
+const Engineersday2026CertificationsIdRoute =
+  Engineersday2026CertificationsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => Engineersday2026CertificationsRoute,
+  } as any)
+const JntugvcevEngineersday2026CertificationsRoute =
+  JntugvcevEngineersday2026CertificationsRouteImport.update({
+    id: '/jntugvcev/engineersday2026/certifications',
+    path: '/jntugvcev/engineersday2026/certifications',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LatestUpdatesPressNotesSlugRoute =
   LatestUpdatesPressNotesSlugRouteImport.update({
     id: '/press-notes/$slug',
@@ -836,7 +864,9 @@ export interface FileRoutesByFullPath {
   '/api/upload': typeof ApiUploadRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
+  '/certifications/engineers-day-2026': typeof CertificationsEngineersDay2026Route
   '/departments/$id': typeof DepartmentsIdRouteWithChildren
+  '/engineersday2026/certifications': typeof Engineersday2026CertificationsRouteWithChildren
   '/nss/activities': typeof NssActivitiesRoute
   '/nss/special-camp': typeof NssSpecialCampRoute
   '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
@@ -881,6 +911,8 @@ export interface FileRoutesByFullPath {
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
   '/departments/$id/timetables': typeof DepartmentsIdTimetablesRoute
+  '/engineersday2026/certifications/$id': typeof Engineersday2026CertificationsIdRoute
+  '/jntugvcev/engineersday2026/certifications': typeof JntugvcevEngineersday2026CertificationsRoute
   '/latest-updates/press-notes/$slug': typeof LatestUpdatesPressNotesSlugRoute
   '/local-assets/uploads/$': typeof LocalAssetsUploadsSplatRoute
   '/administration/iqac/': typeof AdministrationIqacIndexRoute
@@ -952,6 +984,8 @@ export interface FileRoutesByTo {
   '/api/upload': typeof ApiUploadRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
+  '/certifications/engineers-day-2026': typeof CertificationsEngineersDay2026Route
+  '/engineersday2026/certifications': typeof Engineersday2026CertificationsRouteWithChildren
   '/nss/activities': typeof NssActivitiesRoute
   '/nss/special-camp': typeof NssSpecialCampRoute
   '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
@@ -996,6 +1030,8 @@ export interface FileRoutesByTo {
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
   '/departments/$id/timetables': typeof DepartmentsIdTimetablesRoute
+  '/engineersday2026/certifications/$id': typeof Engineersday2026CertificationsIdRoute
+  '/jntugvcev/engineersday2026/certifications': typeof JntugvcevEngineersday2026CertificationsRoute
   '/latest-updates/press-notes/$slug': typeof LatestUpdatesPressNotesSlugRoute
   '/local-assets/uploads/$': typeof LocalAssetsUploadsSplatRoute
   '/administration/iqac': typeof AdministrationIqacIndexRoute
@@ -1077,7 +1113,9 @@ export interface FileRoutesById {
   '/api/upload': typeof ApiUploadRoute
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
+  '/certifications/engineers-day-2026': typeof CertificationsEngineersDay2026Route
   '/departments/$id': typeof DepartmentsIdRouteWithChildren
+  '/engineersday2026/certifications': typeof Engineersday2026CertificationsRouteWithChildren
   '/nss/activities': typeof NssActivitiesRoute
   '/nss/special-camp': typeof NssSpecialCampRoute
   '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
@@ -1122,6 +1160,8 @@ export interface FileRoutesById {
   '/departments/$id/hod': typeof DepartmentsIdHodRoute
   '/departments/$id/labs': typeof DepartmentsIdLabsRoute
   '/departments/$id/timetables': typeof DepartmentsIdTimetablesRoute
+  '/engineersday2026/certifications/$id': typeof Engineersday2026CertificationsIdRoute
+  '/jntugvcev/engineersday2026/certifications': typeof JntugvcevEngineersday2026CertificationsRoute
   '/latest-updates/press-notes/$slug': typeof LatestUpdatesPressNotesSlugRoute
   '/local-assets/uploads/$': typeof LocalAssetsUploadsSplatRoute
   '/administration/iqac/': typeof AdministrationIqacIndexRoute
@@ -1204,7 +1244,9 @@ export interface FileRouteTypes {
     | '/api/upload'
     | '/campus-life/music-club'
     | '/campus-life/student-activity-club'
+    | '/certifications/engineers-day-2026'
     | '/departments/$id'
+    | '/engineersday2026/certifications'
     | '/nss/activities'
     | '/nss/special-camp'
     | '/other-amenities/guest-house'
@@ -1249,6 +1291,8 @@ export interface FileRouteTypes {
     | '/departments/$id/hod'
     | '/departments/$id/labs'
     | '/departments/$id/timetables'
+    | '/engineersday2026/certifications/$id'
+    | '/jntugvcev/engineersday2026/certifications'
     | '/latest-updates/press-notes/$slug'
     | '/local-assets/uploads/$'
     | '/administration/iqac/'
@@ -1320,6 +1364,8 @@ export interface FileRouteTypes {
     | '/api/upload'
     | '/campus-life/music-club'
     | '/campus-life/student-activity-club'
+    | '/certifications/engineers-day-2026'
+    | '/engineersday2026/certifications'
     | '/nss/activities'
     | '/nss/special-camp'
     | '/other-amenities/guest-house'
@@ -1364,6 +1410,8 @@ export interface FileRouteTypes {
     | '/departments/$id/hod'
     | '/departments/$id/labs'
     | '/departments/$id/timetables'
+    | '/engineersday2026/certifications/$id'
+    | '/jntugvcev/engineersday2026/certifications'
     | '/latest-updates/press-notes/$slug'
     | '/local-assets/uploads/$'
     | '/administration/iqac'
@@ -1444,7 +1492,9 @@ export interface FileRouteTypes {
     | '/api/upload'
     | '/campus-life/music-club'
     | '/campus-life/student-activity-club'
+    | '/certifications/engineers-day-2026'
     | '/departments/$id'
+    | '/engineersday2026/certifications'
     | '/nss/activities'
     | '/nss/special-camp'
     | '/other-amenities/guest-house'
@@ -1489,6 +1539,8 @@ export interface FileRouteTypes {
     | '/departments/$id/hod'
     | '/departments/$id/labs'
     | '/departments/$id/timetables'
+    | '/engineersday2026/certifications/$id'
+    | '/jntugvcev/engineersday2026/certifications'
     | '/latest-updates/press-notes/$slug'
     | '/local-assets/uploads/$'
     | '/administration/iqac/'
@@ -1546,7 +1598,9 @@ export interface RootRouteChildren {
   AdminUsersRoute: typeof AdminUsersRoute
   ApiPostsRoute: typeof ApiPostsRoute
   ApiUploadRoute: typeof ApiUploadRoute
+  CertificationsEngineersDay2026Route: typeof CertificationsEngineersDay2026Route
   DepartmentsIdRoute: typeof DepartmentsIdRouteWithChildren
+  Engineersday2026CertificationsRoute: typeof Engineersday2026CertificationsRouteWithChildren
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
   DispensaryIndexRoute: typeof DispensaryIndexRoute
   ApiPushKeyRoute: typeof ApiPushKeyRoute
@@ -1555,6 +1609,7 @@ export interface RootRouteChildren {
   ApiPushUnsubscribeRoute: typeof ApiPushUnsubscribeRoute
   AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
   AuthGoogleLoginRoute: typeof AuthGoogleLoginRoute
+  JntugvcevEngineersday2026CertificationsRoute: typeof JntugvcevEngineersday2026CertificationsRoute
   LocalAssetsUploadsSplatRoute: typeof LocalAssetsUploadsSplatRoute
   ApiAdminSocialDiagnosticsRoute: typeof ApiAdminSocialDiagnosticsRoute
   ApiAdminSocialDisconnectRoute: typeof ApiAdminSocialDisconnectRoute
@@ -2013,6 +2068,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CampusLifeStudentActivityClubRouteImport
       parentRoute: typeof CampusLifeRoute
     }
+    '/certifications/engineers-day-2026': {
+      id: '/certifications/engineers-day-2026'
+      path: '/certifications/engineers-day-2026'
+      fullPath: '/certifications/engineers-day-2026'
+      preLoaderRoute: typeof CertificationsEngineersDay2026RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/departments/': {
       id: '/departments/'
       path: '/departments'
@@ -2032,6 +2094,13 @@ declare module '@tanstack/react-router' {
       path: '/dispensary'
       fullPath: '/dispensary/'
       preLoaderRoute: typeof DispensaryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engineersday2026/certifications': {
+      id: '/engineersday2026/certifications'
+      path: '/engineersday2026/certifications'
+      fullPath: '/engineersday2026/certifications'
+      preLoaderRoute: typeof Engineersday2026CertificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/latest-updates/': {
@@ -2320,6 +2389,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/departments/$id/timetables'
       preLoaderRoute: typeof DepartmentsIdTimetablesRouteImport
       parentRoute: typeof DepartmentsIdRoute
+    }
+    '/engineersday2026/certifications/$id': {
+      id: '/engineersday2026/certifications/$id'
+      path: '/$id'
+      fullPath: '/engineersday2026/certifications/$id'
+      preLoaderRoute: typeof Engineersday2026CertificationsIdRouteImport
+      parentRoute: typeof Engineersday2026CertificationsRoute
+    }
+    '/jntugvcev/engineersday2026/certifications': {
+      id: '/jntugvcev/engineersday2026/certifications'
+      path: '/jntugvcev/engineersday2026/certifications'
+      fullPath: '/jntugvcev/engineersday2026/certifications'
+      preLoaderRoute: typeof JntugvcevEngineersday2026CertificationsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/latest-updates/press-notes/$slug': {
       id: '/latest-updates/press-notes/$slug'
@@ -2679,6 +2762,21 @@ const DepartmentsIdRouteWithChildren = DepartmentsIdRoute._addFileChildren(
   DepartmentsIdRouteChildren,
 )
 
+interface Engineersday2026CertificationsRouteChildren {
+  Engineersday2026CertificationsIdRoute: typeof Engineersday2026CertificationsIdRoute
+}
+
+const Engineersday2026CertificationsRouteChildren: Engineersday2026CertificationsRouteChildren =
+  {
+    Engineersday2026CertificationsIdRoute:
+      Engineersday2026CertificationsIdRoute,
+  }
+
+const Engineersday2026CertificationsRouteWithChildren =
+  Engineersday2026CertificationsRoute._addFileChildren(
+    Engineersday2026CertificationsRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SplatRoute: SplatRoute,
@@ -2716,7 +2814,10 @@ const rootRouteChildren: RootRouteChildren = {
   AdminUsersRoute: AdminUsersRoute,
   ApiPostsRoute: ApiPostsRoute,
   ApiUploadRoute: ApiUploadRoute,
+  CertificationsEngineersDay2026Route: CertificationsEngineersDay2026Route,
   DepartmentsIdRoute: DepartmentsIdRouteWithChildren,
+  Engineersday2026CertificationsRoute:
+    Engineersday2026CertificationsRouteWithChildren,
   DepartmentsIndexRoute: DepartmentsIndexRoute,
   DispensaryIndexRoute: DispensaryIndexRoute,
   ApiPushKeyRoute: ApiPushKeyRoute,
@@ -2725,6 +2826,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPushUnsubscribeRoute: ApiPushUnsubscribeRoute,
   AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
   AuthGoogleLoginRoute: AuthGoogleLoginRoute,
+  JntugvcevEngineersday2026CertificationsRoute:
+    JntugvcevEngineersday2026CertificationsRoute,
   LocalAssetsUploadsSplatRoute: LocalAssetsUploadsSplatRoute,
   ApiAdminSocialDiagnosticsRoute: ApiAdminSocialDiagnosticsRoute,
   ApiAdminSocialDisconnectRoute: ApiAdminSocialDisconnectRoute,

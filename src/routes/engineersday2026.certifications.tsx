@@ -1,0 +1,485 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { PageHero } from "@/components/PageHero";
+import { RevealOnScroll } from "@/components/RevealOnScroll";
+import {
+  ENGINEERS_DAY_2026_CERTIFICATES,
+  getCertificateById,
+  type CertificationRecord,
+} from "@/data/certifications-2026";
+import { VerificationScannerModal } from "@/components/certifications/VerificationScannerModal";
+import { DigitalCertificateTwin } from "@/components/certifications/DigitalCertificateTwin";
+import { QRCodeTool } from "@/components/certifications/QRCodeTool";
+import {
+  ShieldCheck,
+  Award,
+  FileCheck2,
+  Printer,
+  Download,
+  Share2,
+  Sparkles,
+  QrCode,
+  CheckCircle2,
+  Calendar,
+  Building,
+  UserCheck,
+  Search,
+  ExternalLink,
+  Layers,
+  Image as ImageIcon,
+  Check,
+  Code2,
+  Globe2,
+} from "lucide-react";
+import { toast } from "sonner";
+
+interface SearchParams {
+  id?: string;
+  scan?: string;
+}
+
+export const Route = createFileRoute("/engineersday2026/certifications")({
+  validateSearch: (search: Record<string, unknown>): SearchParams => {
+    return {
+      id: (search.id as string) || "JNTUGV-ED26-001",
+      scan: (search.scan as string) || "true",
+    };
+  },
+  head: () => ({
+    meta: [
+      {
+        title: "Engineer's Day 2026 Certificate Verification — JNTU-GV CEV",
+      },
+      {
+        name: "description",
+        content:
+          "Official digital certificate verification portal for JNTU-GV College of Engineering Vizianagaram Summer Internship & Engineer's Day 2026.",
+      },
+      {
+        property: "og:title",
+        content: "Verified Certificate of Appreciation — JNTU-GV CEV",
+      },
+      {
+        property: "og:description",
+        content:
+          "Verified credentials for Teki Chaitanya Lakshmi — Developing JNTUGVCEV website during Summer Internship.",
+      },
+      {
+        property: "og:image",
+        content: "https://jntugvcev.edu.in/images/certifications/teki-chaitanya-lakshmi-engineers-day-2026.jpg",
+      },
+    ],
+  }),
+  component: EngineersDayCertificationsPage,
+});
+
+function EngineersDayCertificationsPage() {
+  const search = Route.useSearch();
+  const certId = search.id || "JNTUGV-ED26-001";
+  const certificate: CertificationRecord = getCertificateById(certId) || ENGINEERS_DAY_2026_CERTIFICATES[0];
+
+  const [activeTab, setActiveTab] = useState<"original" | "digital">("original");
+  const [showScannerModal, setShowScannerModal] = useState<boolean>(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  // Determine current host verification URL
+  const [baseUrl, setBaseUrl] = useState("https://jntugvcev.edu.in");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setBaseUrl(window.location.origin);
+    }
+  }, []);
+
+  const verificationUrl = `${baseUrl}/engineersday2026/certifications?id=${certificate.id}`;
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleCopyShareLink = async () => {
+    try {
+      await navigator.clipboard.writeText(verificationUrl);
+      setCopiedLink(true);
+      toast.success("Verification link copied to clipboard!");
+      setTimeout(() => setCopiedLink(false), 2500);
+    } catch {
+      toast.error("Failed to copy link");
+    }
+  };
+
+  const handleShareLinkedIn = () => {
+    const text = encodeURIComponent(
+      `Excited to share the verified Certificate of Appreciation from Jawaharlal Nehru Technological University Gurajada Vizianagaram (JNTU-GV CEV) for contributions towards Developing JNTUGVCEV website during the Summer Internship! Verification URL: ${verificationUrl}`
+    );
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(verificationUrl)}`, "_blank");
+  };
+
+  const handleShareWhatsApp = () => {
+    const text = encodeURIComponent(
+      `Official Certificate Verification from JNTU-GV CEV for ${certificate.name} (${certificate.id}): ${verificationUrl}`
+    );
+    window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank");
+  };
+
+  return (
+    <div className="min-h-screen bg-background text-foreground selection:bg-amber-500/30">
+      {/* Holographic Verification Scan Pop-up Animation */}
+      <VerificationScannerModal
+        certificate={certificate}
+        isOpen={showScannerModal}
+        onClose={() => setShowScannerModal(false)}
+      />
+
+      {/* Hero Section */}
+      <PageHero
+        eyebrow="NATIONAL ENGINEER'S DAY 2026 • DIGITAL VERIFICATION PORTAL"
+        title="Official Certificate Verification"
+        subtitle="Jawaharlal Nehru Technological University Gurajada Vizianagaram — Accredited Credential Verification System"
+      >
+        <div className="flex flex-wrap items-center gap-3 mt-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 backdrop-blur-md shadow-lg shadow-emerald-500/10 animate-pulse">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span>AUTHENTICATED BY JNTU-GV REGISTRAR & VC</span>
+          </div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono bg-white/10 text-white/90 border border-white/20 backdrop-blur-md">
+            <span>ID: {certificate.id}</span>
+          </div>
+        </div>
+      </PageHero>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-12">
+        {/* Verification Status Banner */}
+        <RevealOnScroll>
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/90 to-amber-950/90 p-6 sm:p-8 text-white shadow-2xl border border-amber-500/30">
+            {/* Background Glow */}
+            <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+              <div className="space-y-2 max-w-3xl">
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-display text-white">
+                  {certificate.name}
+                </h2>
+                <p className="text-sm sm:text-base text-white/85 leading-relaxed">
+                  Honored with the <strong>{certificate.title}</strong> on the occasion of{" "}
+                  <strong>{certificate.event}</strong> for exemplary contributions to{" "}
+                  <strong>{certificate.project}</strong> under the vision of{" "}
+                  <em className="text-amber-300 font-serif">Viksit Bharat @2047</em>.
+                </p>
+                <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-white/70 font-mono">
+                  <span>Issued: {certificate.formattedDate}</span>
+                  <span>•</span>
+                  <span>Dept: {certificate.department}</span>
+                  <span>•</span>
+                  <span>Code: {certificate.securityCode}</span>
+                </div>
+              </div>
+
+              {/* Quick Action Buttons */}
+              <div className="flex flex-wrap lg:flex-col gap-2.5 w-full lg:w-auto shrink-0">
+                <button
+                  onClick={() => setShowScannerModal(true)}
+                  className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/25 transition-all hover:scale-105"
+                >
+                  <QrCode className="w-4 h-4" />
+                  <span>Replay Scan Animation</span>
+                </button>
+
+                <button
+                  onClick={handlePrint}
+                  className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs border border-white/20 backdrop-blur-sm transition-colors"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Print Certificate</span>
+                </button>
+
+                <button
+                  onClick={handleCopyShareLink}
+                  className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs border border-white/20 backdrop-blur-sm transition-colors"
+                >
+                  {copiedLink ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
+                  <span>{copiedLink ? "Link Copied!" : "Share Verification"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </RevealOnScroll>
+
+        {/* Dual Mode Certificate Viewer Section */}
+        <RevealOnScroll>
+          <div className="space-y-6">
+            {/* View Mode Toggle Header */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2 border-b border-border">
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-foreground font-display flex items-center gap-2">
+                  <Award className="w-6 h-6 text-amber-500" />
+                  Certificate Showcase
+                </h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  Switch between the original high-definition issued certificate and the interactive digital twin.
+                </p>
+              </div>
+
+              <div className="inline-flex p-1 rounded-xl bg-muted border border-border">
+                <button
+                  onClick={() => setActiveTab("original")}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+                    activeTab === "original"
+                      ? "bg-card text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <ImageIcon className="w-3.5 h-3.5" />
+                  <span>Original Issued Certificate (HD)</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("digital")}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+                    activeTab === "digital"
+                      ? "bg-card text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>Digital Twin (Interactive / Print)</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Tab 1: High-Definition Original Certificate Image View */}
+            {activeTab === "original" && (
+              <div className="relative rounded-2xl overflow-hidden bg-card/60 dark:bg-slate-900/60 border border-border p-4 sm:p-8 shadow-2xl flex flex-col items-center">
+                <div className="relative max-w-3xl w-full mx-auto rounded-xl overflow-hidden shadow-2xl border-4 border-amber-600/30 group">
+                  <img
+                    src={certificate.imageSrc}
+                    alt={`Certificate of Appreciation - ${certificate.name}`}
+                    className="w-full h-auto object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.01]"
+                  />
+                  {/* Subtle hover overlay for download */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-6">
+                    <span className="text-white text-xs font-semibold tracking-wide">
+                      Official Certificate • JNTU-GV CEV Engineer's Day 2026
+                    </span>
+                    <a
+                      href={certificate.imageSrc}
+                      download={`JNTUGV_Certificate_${certificate.slug}.jpg`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md transition-colors"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Download HD Image</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                    High Resolution (300 DPI Original)
+                  </span>
+                  <span>•</span>
+                  <span>Recipient: {certificate.name}</span>
+                  <span>•</span>
+                  <span>Presented by Vice-Chancellor & Leadership</span>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 2: Digital Twin Certificate (Rendered & Print Ready) */}
+            {activeTab === "digital" && (
+              <div className="p-2 sm:p-6 bg-muted/30 rounded-2xl border border-border">
+                <DigitalCertificateTwin certificate={certificate} verificationUrl={verificationUrl} />
+              </div>
+            )}
+          </div>
+        </RevealOnScroll>
+
+        {/* Verification Ledger & Candidate Dossier Grid */}
+        <RevealOnScroll>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left 2 Cols: Detailed Credential Metadata */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="bg-card/90 dark:bg-slate-900/90 border border-border rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+                <div className="flex items-center gap-3 pb-4 border-b border-border">
+                  <div className="p-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20">
+                    <FileCheck2 className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground">Verified Credential Details</h3>
+                    <p className="text-xs text-muted-foreground">
+                      Official certificate breakdown and institutional endorsement
+                    </p>
+                  </div>
+                </div>
+
+                {/* Information Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                  <div className="p-3.5 rounded-xl bg-muted/50 border border-border/60">
+                    <span className="text-xs text-muted-foreground uppercase font-medium block">
+                      Certificate Holder
+                    </span>
+                    <span className="font-bold text-foreground text-base mt-0.5 block">
+                      {certificate.honorific} {certificate.name}
+                    </span>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-muted/50 border border-border/60">
+                    <span className="text-xs text-muted-foreground uppercase font-medium block">
+                      Certificate Identifier
+                    </span>
+                    <span className="font-mono font-bold text-primary text-base mt-0.5 block">
+                      {certificate.id}
+                    </span>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-muted/50 border border-border/60">
+                    <span className="text-xs text-muted-foreground uppercase font-medium block">
+                      Program / Initiative
+                    </span>
+                    <span className="font-semibold text-foreground mt-0.5 block">
+                      Summer Internship — Web Modernization
+                    </span>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-muted/50 border border-border/60">
+                    <span className="text-xs text-muted-foreground uppercase font-medium block">
+                      Occasion & Date
+                    </span>
+                    <span className="font-semibold text-foreground mt-0.5 block">
+                      Engineer's Day • {certificate.formattedDate}
+                    </span>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-muted/50 border border-border/60 sm:col-span-2">
+                    <span className="text-xs text-muted-foreground uppercase font-medium block">
+                      Recognized Contribution & Citation
+                    </span>
+                    <p className="mt-1 text-xs sm:text-sm text-foreground/90 leading-relaxed font-serif italic">
+                      "{certificate.citation}"
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-muted/50 border border-border/60 sm:col-span-2">
+                    <span className="text-xs text-muted-foreground uppercase font-medium block mb-1">
+                      Official Security Hash
+                    </span>
+                    <span className="font-mono text-[11px] text-muted-foreground break-all bg-background/80 p-2 rounded-md border border-border block">
+                      {certificate.verificationHash}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Endorsement Signatories */}
+                <div className="pt-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
+                    Authorized Signatories & Leadership
+                  </h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {certificate.signatories.map((sig, i) => (
+                      <div
+                        key={i}
+                        className="p-3 rounded-xl bg-muted/30 border border-border/50 text-center flex flex-col justify-center items-center"
+                      >
+                        <UserCheck className="w-4 h-4 text-emerald-500 mb-1" />
+                        <span className="text-xs font-bold text-foreground block">{sig.title}</span>
+                        <span className="text-[10px] text-muted-foreground leading-tight mt-0.5 block">
+                          {sig.designation}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Skills & Competencies Validated */}
+              <div className="bg-card/90 dark:bg-slate-900/90 border border-border rounded-2xl p-6 sm:p-8 shadow-xl space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                    <Code2 className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-foreground">
+                    Validated Competencies & Technical Skills
+                  </h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {certificate.skills.map((skill, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1.5 rounded-xl text-xs font-medium bg-muted border border-border text-foreground flex items-center gap-1.5"
+                    >
+                      <Sparkles className="w-3 h-3 text-amber-500" />
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: QR Code Tool & Social Sharing */}
+            <div className="space-y-6">
+              {/* QR Code Tool */}
+              <QRCodeTool
+                certificateId={certificate.id}
+                verificationUrl={verificationUrl}
+                recipientName={certificate.name}
+              />
+
+              {/* Share Card */}
+              <div className="bg-card/90 dark:bg-slate-900/90 border border-border rounded-2xl p-6 shadow-xl space-y-4">
+                <h3 className="font-semibold text-foreground text-sm flex items-center gap-2">
+                  <Share2 className="w-4 h-4 text-primary" />
+                  Share Official Verification
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Broadcast your achievement or share this authenticated link with employers, academic
+                  institutions, and professional networks.
+                </p>
+
+                <div className="grid grid-cols-2 gap-2.5 pt-2">
+                  <button
+                    onClick={handleShareLinkedIn}
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-[#0a66c2] hover:bg-[#084e96] text-white text-xs font-semibold shadow-sm transition-colors"
+                  >
+                    <span>LinkedIn</span>
+                  </button>
+
+                  <button
+                    onClick={handleShareWhatsApp}
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1faa53] text-white text-xs font-semibold shadow-sm transition-colors"
+                  >
+                    <span>WhatsApp</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Institutional Endorsement Info */}
+              <div className="bg-muted/40 border border-border rounded-2xl p-6 space-y-3">
+                <div className="flex items-center gap-2 text-xs font-bold text-foreground uppercase tracking-wider">
+                  <Building className="w-4 h-4 text-amber-500" />
+                  <span>Issuing Institution</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  <strong>JNTU-GV College of Engineering Vizianagaram</strong>
+                  <br />
+                  A constituent college of Jawaharlal Nehru Technological University Gurajada
+                  Vizianagaram, Andhra Pradesh, India.
+                </p>
+                <div className="pt-2 border-t border-border/60 flex items-center justify-between text-[11px] text-muted-foreground">
+                  <span>Accreditation: NBA & NAAC</span>
+                  <a
+                    href="/"
+                    className="text-primary hover:underline inline-flex items-center gap-1 font-medium"
+                  >
+                    Visit Website <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </RevealOnScroll>
+      </div>
+    </div>
+  );
+}

@@ -1,4 +1,5 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { nitro } from "nitro/vite";
 import fs from "fs";
 import path from "path";
 import type { Plugin } from "vite";

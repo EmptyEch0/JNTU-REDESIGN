@@ -429,10 +429,10 @@ function EngineersDayCertificationsPage() {
 
                   <div className="p-3.5 rounded-xl bg-muted/50 border border-border/60">
                     <span className="text-xs text-muted-foreground uppercase font-medium block">
-                      Program / Initiative
+                      Program / Role
                     </span>
                     <span className="font-semibold text-foreground mt-0.5 block">
-                      Summer Internship — Web Modernization
+                      {certificate.role}
                     </span>
                   </div>
 

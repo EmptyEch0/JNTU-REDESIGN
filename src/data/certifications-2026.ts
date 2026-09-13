@@ -498,8 +498,20 @@ export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBERS_RO
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-  const department = member.department || (num <= 22 ? "Information Technology" : "Computer Science & Engineering");
-  const project = member.project || "Development & Modernization of JNTUGVCEV Official Web Portal";
+  const isCivil = (num >= 23 && num <= 46) || member.department?.toLowerCase().includes("civil");
+  const department = isCivil
+    ? "Department of Civil Engineering"
+    : member.department
+    ? `Department of ${member.department.replace(/^Department of /i, "")}`
+    : num <= 22 || (num >= 56 && num <= 59)
+    ? "Department of Information Technology"
+    : "Department of Computer Science & Engineering";
+
+  const role = isCivil
+    ? "Structural Repair & Rehabilitation Intern"
+    : "Web Development Intern";
+
+  const project = member.project || (isCivil ? "Repair & Maintenance of Hostel Buildings" : "Development & Modernization of JNTUGVCEV Official Web Portal");
   const imageSrc = member.imageSrc || "";
 
   const isTeam = num >= 47 && num <= 49;
@@ -511,12 +523,33 @@ export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBERS_RO
     : undefined;
   const verificationUrl = redirectUrl || `https://jntugvcev.edu.in/engineersday2026/certifications?id=${id}`;
 
+  const initiative = isCivil
+    ? "Summer Internship — Hostel Repair & Maintenance"
+    : "Summer Internship — Web Modernization Cell";
+
   const highlights = [
     ...(member.rollNumber ? [{ label: "Roll / Reg No", value: member.rollNumber }] : []),
     { label: "Department", value: department },
     { label: "Project Title", value: project },
-    ...COMMON_HIGHLIGHTS,
+    { label: "Initiative", value: initiative },
+    { label: "National Mission", value: "Viksit Bharat @2047 (Self-Reliant India)" },
+    { label: "Occasion", value: "National Engineer's Day 2026" },
+    { label: "Issuing Authority", value: "JNTU-GV Vizianagaram (CEV)" },
+    { label: "Authenticity", value: "100% Officially Verified" },
   ];
+
+  const civilSkills = [
+    "Structural Repair & Rehabilitation",
+    "Hostel Infrastructure Maintenance",
+    "Structural Health Assessment",
+    "Viksit Bharat @2047 Initiative",
+    "Quality Inspection & Oversight",
+    "Civil Infrastructure Systems",
+  ];
+
+  const citation = isCivil
+    ? `Awarded in recognition of the valuable contribution towards the ${project}, sincere dedication, and commendable efforts demonstrated during the Summer Internship. The internship was successfully undertaken in alignment with the vision of a developed and self-reliant India and India's ambitious vision of Viksit Bharat @2047. The commitment and professionalism demonstrated throughout the internship are highly appreciated and commendable.`
+    : `Awarded in recognition of the valuable contribution towards the development of the ${project}, sincere dedication, and commendable efforts demonstrated during the Summer Internship. The internship was successfully undertaken in alignment with the vision of a developed and self-reliant India and India's ambitious vision of Viksit Bharat @2047. The commitment and professionalism demonstrated throughout the internship are highly appreciated and commendable.`;
 
   return {
     id,
@@ -528,18 +561,18 @@ export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBERS_RO
     college: "JNTU-GV College of Engineering Vizianagaram",
     university: "Jawaharlal Nehru Technological University Gurajada Vizianagaram",
     title: "Certificate of Appreciation",
-    role: "Web Development Intern",
+    role,
     project,
     event: "Engineer's Day - 2026",
     eventDate: "2026-09-15",
     formattedDate: "September 15, 2026",
     certificateType: "Appreciation",
-    citation: `Awarded in recognition of the valuable contribution towards the development of the ${project}, sincere dedication, and commendable efforts demonstrated during the Summer Internship. The internship was successfully undertaken in alignment with the vision of a developed and self-reliant India and India's ambitious vision of Viksit Bharat @2047. The commitment and professionalism demonstrated throughout the internship are highly appreciated and commendable.`,
+    citation,
     status: "VERIFIED",
     verificationHash: `SHA256: ed2026-${String(num).padStart(3, "0")}-jntugv-${slug}-auth`,
     securityCode: `JNTUGV-AUTH-2026-ED${String(num).padStart(2, "0")}`,
     imageSrc,
-    skills: COMMON_SKILLS,
+    skills: isCivil ? civilSkills : COMMON_SKILLS,
     signatories: COMMON_SIGNATORIES,
     highlights,
     verificationUrl,

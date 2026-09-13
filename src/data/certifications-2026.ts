@@ -458,6 +458,31 @@ export const MEMBERS_ROSTER: MemberRosterEntry[] = [
     department: "Computer Science & Engineering",
     project: "Development & Modernization of JNTUGV Official Web Systems",
   },
+  // 56 to 59: Additional Members
+  {
+    name: "Chidwilash",
+    fullName: "Chidwilash",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  {
+    name: "G Dhana Sai",
+    fullName: "G Dhana Sai",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  {
+    name: "Vinay D",
+    fullName: "Vinay D",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
+  {
+    name: "Mohan S",
+    fullName: "Mohan S",
+    department: "Computer Science & Engineering",
+    project: "Development & Modernization of JNTUGV Official Web Systems",
+  },
 ];
 
 export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBERS_ROSTER.map((member, index) => {

@@ -248,6 +248,7 @@ function AdminContent() {
             <Link to="/admin/departments" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Departments</Link>
             <Link to="/admin/users" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Users</Link>
             <Link to="/admin/placements" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Placements</Link>
+            <Link to="/admin/certifications" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Certificates & QR</Link>
             <Link to="/admin-account-settings" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Account</Link>
 
             <Link

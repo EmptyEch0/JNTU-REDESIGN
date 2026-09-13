@@ -60,6 +60,7 @@ import { Route as AcademicsRegulationsRouteImport } from './routes/academics/reg
 import { Route as AcademicsScholarshipsRouteImport } from './routes/academics/scholarships'
 import { Route as AcademicsSyllabusRouteImport } from './routes/academics/syllabus'
 import { Route as AcademicsTimetablesRouteImport } from './routes/academics/timetables'
+import { Route as AdminCertificationsRouteImport } from './routes/admin.certifications'
 import { Route as AdminDepartmentsRouteImport } from './routes/admin.departments'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -393,6 +394,11 @@ const AcademicsTimetablesRoute = AcademicsTimetablesRouteImport.update({
   id: '/timetables',
   path: '/timetables',
   getParentRoute: () => AcademicsRoute,
+} as any)
+const AdminCertificationsRoute = AdminCertificationsRouteImport.update({
+  id: '/admin/certifications',
+  path: '/admin/certifications',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDepartmentsRoute = AdminDepartmentsRouteImport.update({
   id: '/admin/departments',
@@ -853,6 +859,7 @@ export interface FileRoutesByFullPath {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/timetables': typeof AcademicsTimetablesRoute
+  '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -974,6 +981,7 @@ export interface FileRoutesByTo {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/timetables': typeof AcademicsTimetablesRoute
+  '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -1102,6 +1110,7 @@ export interface FileRoutesById {
   '/academics/scholarships': typeof AcademicsScholarshipsRoute
   '/academics/syllabus': typeof AcademicsSyllabusRoute
   '/academics/timetables': typeof AcademicsTimetablesRoute
+  '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -1233,6 +1242,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/timetables'
+    | '/admin/certifications'
     | '/admin/departments'
     | '/admin/placements'
     | '/admin/users'
@@ -1354,6 +1364,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/timetables'
+    | '/admin/certifications'
     | '/admin/departments'
     | '/admin/placements'
     | '/admin/users'
@@ -1481,6 +1492,7 @@ export interface FileRouteTypes {
     | '/academics/scholarships'
     | '/academics/syllabus'
     | '/academics/timetables'
+    | '/admin/certifications'
     | '/admin/departments'
     | '/admin/placements'
     | '/admin/users'
@@ -1593,6 +1605,7 @@ export interface RootRouteChildren {
   SportsRoute: typeof SportsRoute
   Staff2b9f6e3dRoute: typeof Staff2b9f6e3dRoute
   WomenEmpowermentRoute: typeof WomenEmpowermentRouteWithChildren
+  AdminCertificationsRoute: typeof AdminCertificationsRoute
   AdminDepartmentsRoute: typeof AdminDepartmentsRoute
   AdminPlacementsRoute: typeof AdminPlacementsRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -1983,6 +1996,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/academics/timetables'
       preLoaderRoute: typeof AcademicsTimetablesRouteImport
       parentRoute: typeof AcademicsRoute
+    }
+    '/admin/certifications': {
+      id: '/admin/certifications'
+      path: '/admin/certifications'
+      fullPath: '/admin/certifications'
+      preLoaderRoute: typeof AdminCertificationsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/departments': {
       id: '/admin/departments'
@@ -2809,6 +2829,7 @@ const rootRouteChildren: RootRouteChildren = {
   SportsRoute: SportsRoute,
   Staff2b9f6e3dRoute: Staff2b9f6e3dRoute,
   WomenEmpowermentRoute: WomenEmpowermentRouteWithChildren,
+  AdminCertificationsRoute: AdminCertificationsRoute,
   AdminDepartmentsRoute: AdminDepartmentsRoute,
   AdminPlacementsRoute: AdminPlacementsRoute,
   AdminUsersRoute: AdminUsersRoute,

@@ -7,6 +7,7 @@ import {
   getCertificateById,
   type CertificationRecord,
 } from "@/data/certifications-2026";
+import { getAdminCertificates } from "@/funcs/certifications.server";
 import { VerificationScannerModal } from "@/components/certifications/VerificationScannerModal";
 import { DigitalCertificateTwin } from "@/components/certifications/DigitalCertificateTwin";
 import { QRCodeTool } from "@/components/certifications/QRCodeTool";
@@ -45,6 +46,14 @@ export const Route = createFileRoute("/engineersday2026/certifications")({
       scan: (search.scan as string) || "true",
     };
   },
+  loader: async () => {
+    try {
+      const all = await getAdminCertificates();
+      return { allCertificates: all as CertificationRecord[] };
+    } catch {
+      return { allCertificates: ENGINEERS_DAY_2026_CERTIFICATES };
+    }
+  },
   head: () => ({
     meta: [
       {
@@ -62,7 +71,7 @@ export const Route = createFileRoute("/engineersday2026/certifications")({
       {
         property: "og:description",
         content:
-          "Verified credentials for Teki Chaitanya Lakshmi — Developing JNTUGVCEV website during Summer Internship.",
+          "Verified credentials for Summer Internship & Website Modernization — JNTU-GV CEV.",
       },
       {
         property: "og:image",
@@ -74,9 +83,19 @@ export const Route = createFileRoute("/engineersday2026/certifications")({
 });
 
 function EngineersDayCertificationsPage() {
+  const { allCertificates } = Route.useLoaderData();
   const search = Route.useSearch();
-  const certId = search.id || "JNTUGV-ED26-001";
-  const certificate: CertificationRecord = getCertificateById(certId) || ENGINEERS_DAY_2026_CERTIFICATES[0];
+  const certId = (search.id || "JNTUGV-ED26-001").trim().toLowerCase();
+
+  const certificate: CertificationRecord =
+    allCertificates.find(
+      (c) =>
+        c.id.toLowerCase() === certId ||
+        c.slug.toLowerCase() === certId ||
+        c.name.toLowerCase() === certId ||
+        certId.includes(c.slug.toLowerCase()) ||
+        c.id.toLowerCase().replace(/-/g, "") === certId.replace(/-/g, "")
+    ) || allCertificates[0] || ENGINEERS_DAY_2026_CERTIFICATES[0];
 
   const [activeTab, setActiveTab] = useState<"original" | "digital">("original");
   const [showScannerModal, setShowScannerModal] = useState<boolean>(true);

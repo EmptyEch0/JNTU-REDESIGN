@@ -236,50 +236,82 @@ function EngineersDayCertificationsPage() {
                 </p>
               </div>
 
-              <div className="inline-flex items-center gap-2">
-                <a
-                  href={certificate.imageSrc}
-                  download={`JNTUGV_Certificate_${certificate.slug}.jpg`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-sm"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Download Full HD</span>
-                </a>
-              </div>
-            </div>
-
-            {/* High-Definition Original Certificate Image View */}
-            <div className="relative rounded-2xl overflow-hidden bg-card/60 dark:bg-slate-900/60 border border-border p-4 sm:p-8 shadow-2xl flex flex-col items-center">
-              <div className="relative max-w-3xl w-full mx-auto rounded-xl overflow-hidden shadow-2xl border-4 border-amber-600/30 group">
-                <img
-                  src={certificate.imageSrc}
-                  alt={`Certificate of Appreciation - ${certificate.name}`}
-                  className="w-full h-auto object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.01]"
-                />
-                {/* Subtle hover overlay for download */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-6">
-                  <span className="text-white text-xs font-semibold tracking-wide">
-                    Official Certificate • JNTU-GV CEV Engineer's Day 2026
-                  </span>
+              {certificate.imageSrc && (
+                <div className="inline-flex items-center gap-2">
                   <a
                     href={certificate.imageSrc}
                     download={`JNTUGV_Certificate_${certificate.slug}.jpg`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-sm"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span>Download HD Image</span>
+                    <span>Download Full HD</span>
                   </a>
                 </div>
-              </div>
+              )}
+            </div>
+
+            {/* High-Definition Original Certificate Image View or Verified Placeholder */}
+            <div className="relative rounded-2xl overflow-hidden bg-card/60 dark:bg-slate-900/60 border border-border p-4 sm:p-8 shadow-2xl flex flex-col items-center">
+              {certificate.imageSrc ? (
+                <div className="relative max-w-3xl w-full mx-auto rounded-xl overflow-hidden shadow-2xl border-4 border-amber-600/30 group">
+                  <img
+                    src={certificate.imageSrc}
+                    alt={`Certificate of Appreciation - ${certificate.name}`}
+                    className="w-full h-auto object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.01]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-6">
+                    <span className="text-white text-xs font-semibold tracking-wide">
+                      Official Certificate • JNTU-GV CEV Engineer's Day 2026
+                    </span>
+                    <a
+                      href={certificate.imageSrc}
+                      download={`JNTUGV_Certificate_${certificate.slug}.jpg`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md transition-colors"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Download HD Image</span>
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <div className="relative max-w-2xl w-full mx-auto rounded-2xl border-2 border-dashed border-amber-500/40 bg-gradient-to-b from-amber-500/5 to-primary/5 p-8 sm:p-12 text-center space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-500">
+                    <Award className="w-8 h-8" />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Official Record Registered & Verified
+                    </div>
+                    <h4 className="text-2xl font-bold font-display text-foreground pt-2">
+                      {certificate.name}
+                    </h4>
+                    <p className="text-xs font-mono text-primary font-bold">
+                      {certificate.id} • {certificate.department}
+                    </p>
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+                    This credential has been officially verified and endorsed for the <strong>Summer Internship</strong> on <strong>Engineer's Day 2026</strong>. The high-resolution certificate image scan will appear here once uploaded by the university administration.
+                  </p>
+                  <div className="pt-2">
+                    <a
+                      href="/admin/certifications"
+                      className="inline-flex items-center gap-1.5 text-xs text-primary font-medium hover:underline"
+                    >
+                      <span>Upload certificate scan in Admin Portal</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
+              )}
 
               <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  High Resolution (300 DPI Original)
+                  Official JNTU-GV Registry
                 </span>
                 <span>•</span>
                 <span>Recipient: {certificate.name}</span>

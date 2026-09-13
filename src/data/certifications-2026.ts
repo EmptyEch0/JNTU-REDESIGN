@@ -1,6 +1,6 @@
 export interface CertificationRecord {
   id: string; // e.g., 'JNTUGV-ED26-001'
-  slug: string; // e.g., 'teki-chaitanya-lakshmi'
+  slug: string;
   name: string;
   honorific?: string;
   department: string;
@@ -31,12 +31,84 @@ export interface CertificationRecord {
   }[];
 }
 
-export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = [
-  {
-    id: "JNTUGV-ED26-001",
-    slug: "teki-chaitanya-lakshmi",
-    name: "Teki Chaitanya Lakshmi",
-    honorific: "Ms.",
+const COMMON_SIGNATORIES = [
+  { title: "HOD", designation: "Head of the Department" },
+  { title: "Principal", designation: "JNTU-GV CEV" },
+  { title: "Registrar", designation: "JNTU-GV Vizianagaram" },
+  { title: "Vice-Chancellor", designation: "JNTU-GV Vizianagaram" },
+];
+
+const COMMON_HIGHLIGHTS = [
+  { label: "Initiative", value: "Summer Internship — Web Modernization Cell" },
+  { label: "National Mission", value: "Viksit Bharat @2047 (Self-Reliant India)" },
+  { label: "Occasion", value: "National Engineer's Day 2026" },
+  { label: "Issuing Authority", value: "JNTU-GV Vizianagaram (CEV)" },
+  { label: "Authenticity", value: "100% Officially Verified" },
+];
+
+const COMMON_SKILLS = [
+  "Modern Web Architecture",
+  "UI/UX Systems",
+  "Full-Stack Development",
+  "Viksit Bharat @2047 Initiative",
+  "Performance Tuning",
+  "Responsive Digital Ecosystems",
+];
+
+const MEMBER_NAMES = [
+  "M Likhith Kumar",
+  "P Sai Vamsi",
+  "P Anitha",
+  "Ch Sai Rupini",
+  "B Akhil",
+  "P Jaya Kumar",
+  "Y Tejaswini",
+  "Lavanya D",
+  "Sk Asma",
+  "K Pravallika",
+  "D Gnaneswar",
+  "G Nandini",
+  "Y Naveen",
+  "Lavanya Y",
+  "Shabira Begum",
+  "Sailaja S",
+  "T Chaitanya Lakshmi",
+  "Mounika D",
+  "Y Ghana Satya Karthik",
+  "V Charu Brunda Hasini",
+  "Yuva Teja",
+  "Sahithya",
+  "B. Chakradhar",
+  "D. Yaswanth",
+  "G. Anil Kumar",
+  "J. Sai Saketh",
+  "S. Praveen",
+  "T. Surya Prakash",
+  "M. Uma Mahesh",
+  "Ch. Siddartha",
+  "K. Rama Swamy",
+  "Y. Pavan Kumar",
+  "M. Madhan Kumar",
+  "M. Ajay",
+  "N. Vishal",
+  "T. Ananda Harsha",
+  "K. Manogna Sasidhar",
+  "R.V. Sriteja",
+];
+
+export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = MEMBER_NAMES.map((name, index) => {
+  const num = index + 1;
+  const id = `JNTUGV-ED26-${String(num).padStart(3, "0")}`;
+  const slug = name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return {
+    id,
+    slug,
+    name: name.trim(),
+    honorific: "Mr./Ms.",
     department: "Computer Science & Engineering",
     college: "JNTU-GV College of Engineering Vizianagaram",
     university: "Jawaharlal Nehru Technological University Gurajada Vizianagaram",
@@ -48,46 +120,30 @@ export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = [
     formattedDate: "September 15, 2026",
     certificateType: "Appreciation",
     citation:
-      "Awarded in recognition of the valuable contribution as a member of a team of four towards the development of the JNTUGVCEV website, sincere dedication, and commendable efforts demonstrated during the Summer Internship. The internship was successfully undertaken in alignment with the vision of a developed and self-reliant India and India's ambitious vision of Viksit Bharat @2047. The commitment and professionalism demonstrated throughout the internship are highly appreciated and commendable.",
+      "Awarded in recognition of the valuable contribution towards the development of the JNTUGVCEV website, sincere dedication, and commendable efforts demonstrated during the Summer Internship. The internship was successfully undertaken in alignment with the vision of a developed and self-reliant India and India's ambitious vision of Viksit Bharat @2047. The commitment and professionalism demonstrated throughout the internship are highly appreciated and commendable.",
     status: "VERIFIED",
-    verificationHash: "SHA256: 8c94a20b771e16bfa58d4a7c06c3912a7bf89d2c41804b7e923e7102e3b15ad6",
-    securityCode: "JNTUGV-AUTH-2026-VB47",
-    imageSrc: "/images/certifications/teki-chaitanya-lakshmi-engineers-day-2026.jpg",
-    skills: [
-      "Modern Web Architecture",
-      "UI/UX Systems",
-      "Full-Stack Development",
-      "Viksit Bharat @2047 Initiative",
-      "Performance Tuning",
-      "Responsive Digital Ecosystems",
-    ],
-    signatories: [
-      { title: "HOD", designation: "Head of the Department" },
-      { title: "Principal", designation: "JNTU-GV CEV" },
-      { title: "Registrar", designation: "JNTU-GV Vizianagaram" },
-      { title: "Vice-Chancellor", designation: "JNTU-GV Vizianagaram" },
-    ],
-    highlights: [
-      { label: "Initiative", value: "Summer Internship — Web Modernization Cell" },
-      { label: "National Mission", value: "Viksit Bharat @2047 (Self-Reliant India)" },
-      { label: "Occasion", value: "National Engineer's Day 2026" },
-      { label: "Issuing Authority", value: "JNTU-GV Vizianagaram (CEV)" },
-      { label: "Authenticity", value: "100% Officially Verified" },
-    ],
-  },
-];
+    verificationHash: `SHA256: ed2026-${String(num).padStart(3, "0")}-jntugv-${slug}-auth`,
+    securityCode: `JNTUGV-AUTH-2026-ED${String(num).padStart(2, "0")}`,
+    imageSrc: "", // Blank placeholder for now as requested; user will upload certificate images in bulk
+    skills: COMMON_SKILLS,
+    signatories: COMMON_SIGNATORIES,
+    highlights: COMMON_HIGHLIGHTS,
+  };
+});
 
 export function getCertificateById(idOrSlug?: string | null): CertificationRecord | undefined {
   if (!idOrSlug) return ENGINEERS_DAY_2026_CERTIFICATES[0];
   const clean = idOrSlug.trim().toLowerCase();
-  return ENGINEERS_DAY_2026_CERTIFICATES.find(
-    (c) =>
-      c.id.toLowerCase() === clean ||
-      c.slug.toLowerCase() === clean ||
-      c.name.toLowerCase() === clean ||
-      clean.includes(c.slug.toLowerCase()) ||
-      c.id.toLowerCase().replace(/-/g, "") === clean.replace(/-/g, "")
-  ) || ENGINEERS_DAY_2026_CERTIFICATES[0];
+  return (
+    ENGINEERS_DAY_2026_CERTIFICATES.find(
+      (c) =>
+        c.id.toLowerCase() === clean ||
+        c.slug.toLowerCase() === clean ||
+        c.name.toLowerCase() === clean ||
+        clean.includes(c.slug.toLowerCase()) ||
+        c.id.toLowerCase().replace(/-/g, "") === clean.replace(/-/g, "")
+    ) || ENGINEERS_DAY_2026_CERTIFICATES[0]
+  );
 }
 
 export function getDefaultCertificate(): CertificationRecord {

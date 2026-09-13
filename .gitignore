@@ -42,6 +42,7 @@ package-lock.json
 /iNDEPENDECE*.jpg
 hod-credentials-*.txt
 *.xlsx
+!JNTUGV_Engineers_Day_2026_Certificates_QR.xlsx
 __pycache__/
 *.py[cod]
 scratch/

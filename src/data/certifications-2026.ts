@@ -458,30 +458,34 @@ export const MEMBERS_ROSTER: MemberRosterEntry[] = [
     department: "Computer Science & Engineering",
     project: "Development & Modernization of JNTUGV Official Web Systems",
   },
-  // 56 to 59: Additional Members
+  // 56 to 59: Additional IT Members (Hostel Management System)
   {
     name: "Chidwilash",
-    fullName: "Chidwilash",
-    department: "Computer Science & Engineering",
-    project: "Development & Modernization of JNTUGV Official Web Systems",
+    fullName: "Salapu Chidwilash",
+    department: "Information Technology",
+    project: "HOSTEL MANAGEMENT SYSTEM website & application",
+    imageSrc: "/images/certifications/JNTUGV-ED26-056-salapu-chidwilash.png",
   },
   {
     name: "G Dhana Sai",
-    fullName: "G Dhana Sai",
-    department: "Computer Science & Engineering",
-    project: "Development & Modernization of JNTUGV Official Web Systems",
+    fullName: "Gundumogula Dhana Sai",
+    department: "Information Technology",
+    project: "HOSTEL MANAGEMENT SYSTEM website & application",
+    imageSrc: "/images/certifications/JNTUGV-ED26-057-gundumogula-dhana-sai.png",
   },
   {
     name: "Vinay D",
-    fullName: "Vinay D",
-    department: "Computer Science & Engineering",
-    project: "Development & Modernization of JNTUGV Official Web Systems",
+    fullName: "Dammu Hari Venkata Vinay",
+    department: "Information Technology",
+    project: "HOSTEL MANAGEMENT SYSTEM website & application",
+    imageSrc: "/images/certifications/JNTUGV-ED26-058-dammu-hari-venkata-vinay.png",
   },
   {
     name: "Mohan S",
-    fullName: "Mohan S",
-    department: "Computer Science & Engineering",
-    project: "Development & Modernization of JNTUGV Official Web Systems",
+    fullName: "Saladi Mohan Kumar",
+    department: "Information Technology",
+    project: "HOSTEL MANAGEMENT SYSTEM website & application",
+    imageSrc: "/images/certifications/JNTUGV-ED26-059-saladi-mohan-kumar.png",
   },
 ];
 

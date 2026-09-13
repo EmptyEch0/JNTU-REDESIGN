@@ -48,7 +48,7 @@ export const ENGINEERS_DAY_2026_CERTIFICATES: CertificationRecord[] = [
     formattedDate: "September 15, 2026",
     certificateType: "Appreciation",
     citation:
-      "Awarded in recognition of the valuable contributions towards Developing JNTUGVCEV website, sincere dedication, and commendable efforts demonstrated during the Summer Internship. The internship was successfully undertaken towards the vision of a developed and self-reliant India, in alignment with the India's ambitious vision of Viksit Bharat @2047. The commitment and professionalism demonstrated throughout the internship are highly appreciated and commendable.",
+      "Awarded in recognition of the valuable contribution as a member of a team of four towards the development of the JNTUGVCEV website, sincere dedication, and commendable efforts demonstrated during the Summer Internship. The internship was successfully undertaken in alignment with the vision of a developed and self-reliant India and India's ambitious vision of Viksit Bharat @2047. The commitment and professionalism demonstrated throughout the internship are highly appreciated and commendable.",
     status: "VERIFIED",
     verificationHash: "SHA256: 8c94a20b771e16bfa58d4a7c06c3912a7bf89d2c41804b7e923e7102e3b15ad6",
     securityCode: "JNTUGV-AUTH-2026-VB47",

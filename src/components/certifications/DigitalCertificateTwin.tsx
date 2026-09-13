@@ -106,12 +106,12 @@ export function DigitalCertificateTwin({ certificate, verificationUrl }: Props) 
         {/* Citation Text */}
         <div className="max-w-3xl mx-auto text-xs sm:text-sm md:text-[15px] leading-relaxed text-slate-800 text-justify sm:text-center font-serif px-2 sm:px-6 my-4">
           <p>
-            Awarded in recognition of the valuable contributions towards{" "}
-            <strong className="text-blue-950 font-bold">Developing JNTUGVCEV website</strong>, sincere
+            Awarded in recognition of the valuable contribution as a member of a team of four towards
+            the development of the <strong className="text-blue-950 font-bold">JNTUGVCEV website</strong>, sincere
             dedication, and commendable efforts demonstrated during the{" "}
             <strong className="text-blue-950 font-bold">Summer Internship</strong>. The internship was
-            successfully undertaken towards the vision of a developed and self-reliant India, in
-            alignment with India's ambitious vision of{" "}
+            successfully undertaken in alignment with the vision of a developed and self-reliant India
+            and India's ambitious vision of{" "}
             <strong className="text-amber-900 font-bold italic">Viksit Bharat @2047</strong>. The
             commitment and professionalism demonstrated throughout the internship are highly appreciated
             and commendable.

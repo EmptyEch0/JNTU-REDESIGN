@@ -60,15 +60,6 @@ export default defineConfig({
     },
   },
   vite: {
-    ssr: {
-      external: [
-        "@xenova/transformers",
-        "onnxruntime-node",
-        "onnxruntime-common",
-        "onnxruntime-web",
-        "sharp",
-      ],
-    },
     // Fix: Use a stable port so Vite never wastes time scanning for a free one
     server: {
       port: 5173,

@@ -9,7 +9,6 @@ import {
 } from "@/data/certifications-2026";
 import { getAdminCertificates } from "@/funcs/certifications.server";
 import { VerificationScannerModal } from "@/components/certifications/VerificationScannerModal";
-import { DigitalCertificateTwin } from "@/components/certifications/DigitalCertificateTwin";
 import { QRCodeTool } from "@/components/certifications/QRCodeTool";
 import {
   ShieldCheck,
@@ -26,8 +25,6 @@ import {
   UserCheck,
   Search,
   ExternalLink,
-  Layers,
-  Image as ImageIcon,
   Check,
   Code2,
   Globe2,
@@ -97,7 +94,6 @@ function EngineersDayCertificationsPage() {
         c.id.toLowerCase().replace(/-/g, "") === certId.replace(/-/g, "")
     ) || allCertificates[0] || ENGINEERS_DAY_2026_CERTIFICATES[0];
 
-  const [activeTab, setActiveTab] = useState<"original" | "digital">("original");
   const [showScannerModal, setShowScannerModal] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedLink, setCopiedLink] = useState(false);
@@ -225,93 +221,72 @@ function EngineersDayCertificationsPage() {
           </div>
         </RevealOnScroll>
 
-        {/* Dual Mode Certificate Viewer Section */}
+        {/* Official Certificate Viewer Section */}
         <RevealOnScroll>
           <div className="space-y-6">
-            {/* View Mode Toggle Header */}
+            {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2 border-b border-border">
               <div>
                 <h3 className="text-xl sm:text-2xl font-bold text-foreground font-display flex items-center gap-2">
                   <Award className="w-6 h-6 text-amber-500" />
-                  Certificate Showcase
+                  Official Certificate Showcase
                 </h3>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  Switch between the original high-definition issued certificate and the interactive digital twin.
+                  High-definition verified certificate presented on the occasion of Engineer's Day - 2026.
                 </p>
               </div>
 
-              <div className="inline-flex p-1 rounded-xl bg-muted border border-border">
-                <button
-                  onClick={() => setActiveTab("original")}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-                    activeTab === "original"
-                      ? "bg-card text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
+              <div className="inline-flex items-center gap-2">
+                <a
+                  href={certificate.imageSrc}
+                  download={`JNTUGV_Certificate_${certificate.slug}.jpg`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-sm"
                 >
-                  <ImageIcon className="w-3.5 h-3.5" />
-                  <span>Original Issued Certificate (HD)</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab("digital")}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-                    activeTab === "digital"
-                      ? "bg-card text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>Digital Twin (Interactive / Print)</span>
-                </button>
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download Full HD</span>
+                </a>
               </div>
             </div>
 
-            {/* Tab 1: High-Definition Original Certificate Image View */}
-            {activeTab === "original" && (
-              <div className="relative rounded-2xl overflow-hidden bg-card/60 dark:bg-slate-900/60 border border-border p-4 sm:p-8 shadow-2xl flex flex-col items-center">
-                <div className="relative max-w-3xl w-full mx-auto rounded-xl overflow-hidden shadow-2xl border-4 border-amber-600/30 group">
-                  <img
-                    src={certificate.imageSrc}
-                    alt={`Certificate of Appreciation - ${certificate.name}`}
-                    className="w-full h-auto object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.01]"
-                  />
-                  {/* Subtle hover overlay for download */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-6">
-                    <span className="text-white text-xs font-semibold tracking-wide">
-                      Official Certificate • JNTU-GV CEV Engineer's Day 2026
-                    </span>
-                    <a
-                      href={certificate.imageSrc}
-                      download={`JNTUGV_Certificate_${certificate.slug}.jpg`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md transition-colors"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>Download HD Image</span>
-                    </a>
-                  </div>
-                </div>
-
-                <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
-                  <span className="inline-flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                    High Resolution (300 DPI Original)
+            {/* High-Definition Original Certificate Image View */}
+            <div className="relative rounded-2xl overflow-hidden bg-card/60 dark:bg-slate-900/60 border border-border p-4 sm:p-8 shadow-2xl flex flex-col items-center">
+              <div className="relative max-w-3xl w-full mx-auto rounded-xl overflow-hidden shadow-2xl border-4 border-amber-600/30 group">
+                <img
+                  src={certificate.imageSrc}
+                  alt={`Certificate of Appreciation - ${certificate.name}`}
+                  className="w-full h-auto object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.01]"
+                />
+                {/* Subtle hover overlay for download */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-6">
+                  <span className="text-white text-xs font-semibold tracking-wide">
+                    Official Certificate • JNTU-GV CEV Engineer's Day 2026
                   </span>
-                  <span>•</span>
-                  <span>Recipient: {certificate.name}</span>
-                  <span>•</span>
-                  <span>Presented by Vice-Chancellor & Leadership</span>
+                  <a
+                    href={certificate.imageSrc}
+                    download={`JNTUGV_Certificate_${certificate.slug}.jpg`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md transition-colors"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download HD Image</span>
+                  </a>
                 </div>
               </div>
-            )}
 
-            {/* Tab 2: Digital Twin Certificate (Rendered & Print Ready) */}
-            {activeTab === "digital" && (
-              <div className="p-2 sm:p-6 bg-muted/30 rounded-2xl border border-border">
-                <DigitalCertificateTwin certificate={certificate} verificationUrl={verificationUrl} />
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
+                <span className="inline-flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  High Resolution (300 DPI Original)
+                </span>
+                <span>•</span>
+                <span>Recipient: {certificate.name}</span>
+                <span>•</span>
+                <span>Presented by Vice-Chancellor & Leadership</span>
               </div>
-            )}
+            </div>
           </div>
         </RevealOnScroll>
 

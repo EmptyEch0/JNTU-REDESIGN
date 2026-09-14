@@ -5,15 +5,10 @@ import {
   GraduationCap,
   Linkedin,
   Code2,
-  Layers,
   Heart,
   ExternalLink,
   ChevronRight,
   ShieldCheck,
-  Cpu,
-  Palette,
-  Terminal,
-  Database,
   Quote,
   MessageSquareQuote,
   CheckCircle2,
@@ -68,12 +63,12 @@ const DEVELOPERS: TeamMember[] = [
     id: "likhith",
     name: "Likhith",
     fullName: "Likhith Kumar Mankala",
-    role: "Lead Full-Stack Architect & Core Developer",
+    role: "Lead Developer",
     department: "Information Technology · JNTU-GV CEV",
     image: "/images/team/likhith.png",
     portrait: "/images/team/likhith_portrait.png",
     linkedin: "https://www.linkedin.com/in/likhithmankala/",
-    badge: "Lead Full Stack Architect",
+    badge: "Lead Developer",
     badgeColor: "from-sky-500 to-blue-600 text-white shadow-sky-500/20",
     message:
       "This internship was a new and valuable experience for me, giving me the opportunity to work with a new team and contribute to our college website.\n\nIt was a great pleasure and an honour to work on something meaningful for my own college, and I sincerely thank W. Anil Sir for this opportunity.\n\nI learned many new things, faced challenges, and experienced several sleepless nights while completing our work.\n\nWorking with the team helped me improve my technical, communication, teamwork, and problem-solving skills.\n\nOverall, this journey gave me valuable experiences and lessons that I will carry forward in my academic and professional life.",
@@ -83,18 +78,18 @@ const DEVELOPERS: TeamMember[] = [
       "Administrative Dashboard & Role Security",
       "Performance & Edge Caching Optimization",
     ],
-    skills: ["React 19", "TanStack Start", "TypeScript", "Tailwind CSS v4", "Cloudflare R2", "System Architecture"],
+    skills: [],
   },
   {
     id: "sai-rupini",
     name: "Sai Rupini",
     fullName: "Sai Rupini Chitikesi",
-    role: "Frontend Developer & UI/UX Designer",
+    role: "Full Stack Developer",
     department: "Information Technology · JNTU-GV CEV",
     image: "/images/team/sai_rupini.png",
     portrait: "/images/team/sai_rupini_portrait.png",
     linkedin: "https://www.linkedin.com/in/sairupini-chitikesi/",
-    badge: "UI/UX & Frontend Lead",
+    badge: "Full Stack Developer",
     badgeColor: "from-rose-500 to-pink-600 text-white shadow-pink-500/20",
     message:
       "Working on our college website with a team of four gave me an opportunity to step beyond academics and gain real experience in web development. I contributed to developing the Departments module and worked on login functionality for HODs and faculty members. I enjoyed collaborating with my teammates, sharing ideas, solving challenges, and seeing our work become a useful part of the college website. One of the most valuable new experiences for me was working with a VPS, which helped me understand how websites are deployed and managed beyond the local development environment. This experience taught me a lot about teamwork, responsibility, problem-solving, and applying my technical skills to a real-world project. I’m really glad I got to be part of this journey and contribute something meaningful to my college.",
@@ -104,17 +99,17 @@ const DEVELOPERS: TeamMember[] = [
       "High-Fidelity Glassmorphism Design System",
       "VPS Deployment & Environment Management",
     ],
-    skills: ["UI/UX Design", "Frontend Engineering", "VPS Management", "React Components", "Accessibility", "Visual Aesthetics"],
+    skills: [],
   },
   {
     id: "sai-vamsi",
     name: "Sai Vamsi",
     fullName: "Sai Vamsi",
-    role: "Full Stack Developer & Systems Engineer",
+    role: "Full Stack Developer",
     department: "Information Technology · JNTU-GV CEV",
     image: "/images/team/sai_vamsi.png",
     portrait: "/images/team/sai_vamsi_portrait.png",
-    badge: "Full Stack & Systems",
+    badge: "Full Stack Developer",
     badgeColor: "from-emerald-500 to-teal-600 text-white shadow-emerald-500/20",
     message:
       "Being part of this work experience gave me an opportunity to step beyond academics and learn through practical involvement. I enjoyed working with my teammates, sharing ideas, taking responsibility, and contributing to the work we were doing. Every task helped me improve my communication, teamwork, and problem-solving skills while also giving me more confidence in my abilities. Seeing our efforts come together and contribute to something meaningful made the experience truly rewarding. I’m grateful for this opportunity, as it taught me valuable lessons that I can carry forward in both my academic and professional journey.",
@@ -124,18 +119,18 @@ const DEVELOPERS: TeamMember[] = [
       "Campus Life & Hostels Module Integration",
       "Data Validation & State Management",
     ],
-    skills: ["Full Stack", "APIs & Endpoints", "Database Systems", "TypeScript", "Problem Solving", "Team Collaboration"],
+    skills: [],
   },
   {
     id: "anitha",
     name: "Anitha",
     fullName: "Anitha Palavalasa",
-    role: "Frontend Developer & Content Coordinator",
+    role: "Full Stack Developer",
     department: "Information Technology · JNTU-GV CEV",
     image: "/images/team/anitha.png",
     portrait: "/images/team/anitha_portrait.png",
     linkedin: "https://www.linkedin.com/in/anitha-palavalasa/",
-    badge: "Frontend & Content Coordinator",
+    badge: "Full Stack Developer",
     badgeColor: "from-amber-500 to-orange-600 text-white shadow-amber-500/20",
     message:
       "Working on this college website redesign provided me an invaluable platform to translate classroom knowledge into real-world application. I focused on developing accessible UI components, structured information flows, and ensuring statutory and compliance modules are easy to navigate for all campus visitors. I'm thankful for this opportunity to contribute to our college.",
@@ -145,7 +140,7 @@ const DEVELOPERS: TeamMember[] = [
       "Campus Life & Women Empowerment Sections",
       "Component Quality Assurance & Cross-Testing",
     ],
-    skills: ["Frontend UI", "Information Architecture", "Content Workflows", "React Testing", "CSS Modernization"],
+    skills: [],
   },
 ];
 
@@ -384,18 +379,6 @@ export function TeamShowcase() {
                     </p>
                   </div>
 
-                  {/* Tech Skills Pills */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {dev.skills.slice(0, 3).map((skill, sIdx) => (
-                      <span
-                        key={sIdx}
-                        className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-sand-deep text-foreground/80 border border-border/40"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-
                   {/* Read Message & LinkedIn */}
                   <div className="pt-3 border-t border-border/60 flex items-center justify-between gap-2">
                     <button
@@ -554,45 +537,6 @@ export function TeamShowcase() {
                 Department of Information Technology · JNTU-GV College of Engineering Vizianagaram
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TECH STACK HIGHLIGHTS & ARCHITECTURE */}
-      <section className="container-narrow mb-12">
-        <div className="rounded-3xl bg-card border border-border/80 p-6 sm:p-8 shadow-md">
-          <div className="text-center mb-8 space-y-1">
-            <div className="text-eyebrow text-accent uppercase tracking-widest text-xs font-bold">
-              Engineering Architecture
-            </div>
-            <h3 className="text-display text-xl sm:text-2xl font-bold text-ink">
-              Modern Web Stack Powering JNTU-GV
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-            {[
-              { title: "React 19", desc: "Modern UI Components", icon: Cpu },
-              { title: "TanStack Start", desc: "SSR & Dynamic Routing", icon: Terminal },
-              { title: "Tailwind CSS v4", desc: "Design System & Tokens", icon: Palette },
-              { title: "TypeScript", desc: "Type-Safe Architecture", icon: Code2 },
-              { title: "Cloudflare R2", desc: "High-Speed Media CDN", icon: Layers },
-              { title: "Drizzle & SQLite", desc: "Relational Campus Data", icon: Database },
-            ].map((tech, idx) => {
-              const Icon = tech.icon;
-              return (
-                <div
-                  key={idx}
-                  className="p-4 rounded-2xl bg-sand/60 border border-border/60 text-center flex flex-col items-center justify-center space-y-1.5 hover:bg-card hover:border-accent/40 hover:shadow-md transition-all duration-200"
-                >
-                  <div className="p-2 rounded-xl bg-accent/10 text-accent mb-1">
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div className="text-xs font-bold text-ink">{tech.title}</div>
-                  <div className="text-[10px] text-muted-foreground leading-tight">{tech.desc}</div>
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>

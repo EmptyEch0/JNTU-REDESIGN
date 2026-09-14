@@ -52,6 +52,7 @@ function serveLocalAssets(): Plugin {
 const isDev = process.env.NODE_ENV !== "production";
 
 export default (defineConfig as any)({
+  cloudflare: false,
   nitro: {
     preset: "node-server",
     output: {

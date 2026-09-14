@@ -62,6 +62,11 @@ export default (defineConfig as any)({
     },
   },
   vite: {
+    resolve: {
+      alias: {
+        postgres: path.resolve(process.cwd(), "node_modules/postgres/src/index.js"),
+      },
+    },
     // Fix: Use a stable port so Vite never wastes time scanning for a free one
     server: {
       port: 5173,

@@ -51,7 +51,7 @@ function serveLocalAssets(): Plugin {
 
 const isDev = process.env.NODE_ENV !== "production";
 
-export default defineConfig({
+export default (defineConfig as any)({
   nitro: {
     preset: "node-server",
     output: {
@@ -130,7 +130,7 @@ export default defineConfig({
       chunkSizeWarningLimit: 1000,
       rollupOptions: {
         output: {
-          manualChunks(id) {
+          manualChunks(id: string) {
             if (id.includes("node_modules")) {
               if (id.includes("react-dom") || /[\\/]react[\\/]/.test(id)) {
                 return "vendor-react";

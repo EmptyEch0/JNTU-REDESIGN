@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail, Sparkles, ArrowRight, Code2 } from "lucide-react";
 import { SITE } from "@/lib/site";
 
 export function Footer() {
@@ -69,6 +69,12 @@ export function Footer() {
             <li>
               <Link to="/placements" className="hover:text-white transition-colors">
                 Placements
+              </Link>
+            </li>
+            <li>
+              <Link to="/team" className="text-accent hover:text-white transition-colors inline-flex items-center gap-1 font-medium">
+                <Sparkles className="h-3 w-3" />
+                <span>Developer Team</span>
               </Link>
             </li>
           </ul>
@@ -174,41 +180,51 @@ export function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-narrow py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/50">
+        <div className="container-narrow py-5 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/50">
           <div className="text-center md:text-left">
             © {new Date().getFullYear()} {SITE.fullName}. All rights reserved.
           </div>
 
-          <div className="text-center">
+          <div className="text-center flex flex-wrap items-center justify-center gap-x-1.5 gap-y-2">
             <span>Developed by </span>
-            <a
-              href="https://www.linkedin.com/in/likhithmankala/"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/team"
               className="text-white hover:text-accent font-medium transition-colors"
             >
               Likhith
-            </a>
+            </Link>
             <span>, </span>
-            <a
-              href="https://www.linkedin.com/in/sairupini-chitikesi/"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/team"
               className="text-white hover:text-accent font-medium transition-colors"
             >
               Sai Rupini
-            </a>
+            </Link>
             <span>, </span>
-            <a
-              href="https://www.linkedin.com/in/anitha-palavalasa/"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/team"
               className="text-white hover:text-accent font-medium transition-colors"
             >
               Anitha
-            </a>
+            </Link>
             <span>, and </span>
-            <span className="text-white font-medium">Sai Vamsi</span>
+            <Link
+              to="/team"
+              className="text-white hover:text-accent font-medium transition-colors"
+            >
+              Sai Vamsi
+            </Link>
+
+            {/* "Know About Us" / Meet the Team Symbol & Badge */}
+            <Link
+              to="/team"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 ml-1.5 rounded-full bg-accent/20 hover:bg-accent/30 text-accent hover:text-white border border-accent/40 text-[11px] font-semibold tracking-wide transition-all duration-200 shadow-xs group cursor-pointer"
+              title="Know About Us · Meet the Developer Team & Supervisor"
+            >
+              <Sparkles className="h-3 w-3 text-accent group-hover:scale-110 group-hover:rotate-12 transition-transform" />
+              <span>Know About Us</span>
+              <ArrowRight className="h-2.5 w-2.5 opacity-70 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           </div>
 
           <div className="text-center md:text-right text-white/40">
@@ -219,3 +235,4 @@ export function Footer() {
     </footer>
   );
 }
+

@@ -71,18 +71,18 @@ export interface MemberRosterEntry {
 export const MEMBERS_ROSTER: MemberRosterEntry[] = [
   // 1 to 22 Information Technology Students with Uploaded Official Certificates
   {
-    name: "M Likhith Kumar",
-    fullName: "Mankala Likhith Kumar",
-    department: "Information Technology",
-    project: "Development & Modernization of JNTUGVCEV Official Web Portal",
-    imageSrc: "/images/certifications/JNTUGV-ED26-001-mankala-likhith-kumar.png",
-  },
-  {
     name: "P Sai Vamsi",
     fullName: "Panchangam Sai Vamsi",
     department: "Information Technology",
     project: "Development & Modernization of JNTUGVCEV Official Web Portal",
-    imageSrc: "/images/certifications/JNTUGV-ED26-002-panchangam-sai-vamsi.png",
+    imageSrc: "/images/certifications/JNTUGV-ED26-001-panchangam-sai-vamsi.png",
+  },
+  {
+    name: "M Likhith Kumar",
+    fullName: "Mankala Likhith Kumar",
+    department: "Information Technology",
+    project: "Development & Modernization of JNTUGVCEV Official Web Portal",
+    imageSrc: "/images/certifications/JNTUGV-ED26-002-mankala-likhith-kumar.png",
   },
   {
     name: "P Anitha",

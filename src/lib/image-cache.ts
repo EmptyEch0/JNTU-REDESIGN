@@ -26,22 +26,25 @@ export async function preloadImage(url: string | null | undefined): Promise<void
     // ignore
   }
 
-  // 2. Cache API persistence for offline/instant repeat hits
-  if ("caches" in window) {
+  // 2. Cache API persistence for same-origin images only
+  //    External URLs (e.g. api.jntugv.edu.in) don't allow CORS fetch,
+  //    so we skip the Cache API for them — the browser's native img cache handles those.
+  const isSameOrigin =
+    cleanUrl.startsWith("/") ||
+    cleanUrl.startsWith(window.location.origin);
+
+  if (isSameOrigin && "caches" in window) {
     try {
       const cache = await window.caches.open(CACHE_NAME);
       const match = await cache.match(cleanUrl);
       if (!match) {
-        // Fetch and put in cache in background without blocking UI
-        fetch(cleanUrl, { mode: "cors", credentials: "omit" })
+        fetch(cleanUrl, { credentials: "omit" })
           .then((res) => {
             if (res.ok) {
               cache.put(cleanUrl, res);
             }
           })
-          .catch(() => {
-            // Silently swallow fetch errors for local dev fallback
-          });
+          .catch(() => {});
       }
     } catch {
       // Ignore cache storage permission/sandbox errors

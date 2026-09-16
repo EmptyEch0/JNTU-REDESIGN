@@ -29,6 +29,7 @@ import {
   User,
   KeyRound,
   Eye,
+  EyeOff,
   Building,
   Calendar,
   Layers,
@@ -55,6 +56,7 @@ function AdminCertificationsPage() {
   // Login form state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Active view tab
@@ -285,13 +287,26 @@ function AdminCertificationsPage() {
                     <KeyRound className="h-4 w-4" />
                   </div>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="block w-full pl-10 pr-3 py-2.5 bg-muted/50 border border-input rounded-xl text-sm focus:ring-2 focus:ring-primary focus:outline-none"
+                    className="block w-full pl-10 pr-10 py-2.5 bg-muted/50 border border-input rounded-xl text-sm focus:ring-2 focus:ring-primary focus:outline-none"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground transition-colors p-1"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
                 </div>
               </div>
 

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useQuery } from "@tanstack/react-query";
 import { getDepartments } from "@/lib/departments";
-import { Lock, ShieldCheck, ExternalLink, Shield, ChevronDown, Building2, Check } from "lucide-react";
+import { Lock, ShieldCheck, ExternalLink, Shield, ChevronDown, Building2, Check, Eye, EyeOff } from "lucide-react";
 
 export const Route = createFileRoute("/dept-7e1c4d8a")({
   component: HodLoginPage,
@@ -13,6 +13,7 @@ function HodLoginPage() {
   const [selectedSlug, setSelectedSlug] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -242,15 +243,28 @@ function HodLoginPage() {
                       <Lock className="w-4 h-4" />
                     </div>
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       required
                       autoFocus
                       placeholder="••••••••"
-                      className="login-input"
+                      className="login-input !pr-11"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       disabled={loading}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors p-1"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      tabIndex={-1}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
+                    </button>
                   </div>
                 </div>
 

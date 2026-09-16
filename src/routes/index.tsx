@@ -65,6 +65,7 @@ import { ImageWithLoader } from "@/components/ImageWithLoader";
 import { LatestUpdatesSection } from "@/components/LatestUpdatesSection";
 import { HomeNotificationsSection } from "@/components/HomeNotificationsSection";
 import { HeroGalleryMiniCarousel } from "@/components/HeroGalleryMiniCarousel";
+import { preloadImages } from "@/lib/image-cache";
 
 
 export const Route = createFileRoute("/")({
@@ -428,9 +429,30 @@ function HomePage() {
     ...QUERY_CACHE,
   });
 
-  // Select the latest items sorted strictly by date descending (NO random, only latest unique events)
+  // Select the latest items sorted strictly by date descending with Engineers Day 2026 featured prominently
   const homepageSelectedImages = useMemo(() => {
-    if (!galleryImages || galleryImages.length === 0) return [];
+    const featuredHomepageMoments = [
+      {
+        id: 201,
+        title: "Engineering Day Celebrations 2026",
+        date: "2026-09-15",
+        file_path: "uploads/2026/09/Main.jpeg",
+        imglink: "uploads/2026/09/Main.jpeg",
+        description: "Engineering Day Celebrations 2026",
+        hoverTitle: "Engineering Day Celebrations 2026",
+      },
+      {
+        id: 202,
+        title: "Developers of JNTUGVCEV website have been felicitated",
+        date: "2026-09-15",
+        file_path: "uploads/2026/09/IT GROUP.jpeg",
+        imglink: "uploads/2026/09/IT GROUP.jpeg",
+        description: "Developers of JNTUGVCEV website have been felicitated",
+        hoverTitle: "Developers of JNTUGVCEV website have been felicitated",
+      },
+    ];
+
+    if (!galleryImages || galleryImages.length === 0) return featuredHomepageMoments;
 
     // Strictly sort by date descending (latest first)
     const sorted = [...galleryImages].sort((a, b) => {
@@ -439,21 +461,43 @@ function HomePage() {
       return timeB - timeA;
     });
 
-    // Deduplicate so each unique event gets 1 prominent card
-    const uniqueList: typeof galleryImages = [];
-    const seenTitles = new Set<string>();
+    // Deduplicate so each unique event gets 1 prominent card, skipping the two primary featured cards
+    const uniqueList: any[] = [...featuredHomepageMoments];
+    const seenTitles = new Set<string>([
+      "engineering day celebrations 2026",
+      "developers of jntugvcev website have been felicitated",
+      "main.jpeg",
+      "it group.jpeg",
+    ]);
 
     for (const item of sorted) {
       const cleanKey = (item.title || "").trim().toLowerCase();
-      if (cleanKey && !seenTitles.has(cleanKey)) {
+      const cleanFile = (item.file_path || item.imglink || "").split("/").pop()?.toLowerCase() || "";
+      if (cleanKey && !seenTitles.has(cleanKey) && !seenTitles.has(cleanFile)) {
         seenTitles.add(cleanKey);
-        uniqueList.push(item);
+        if (cleanFile) seenTitles.add(cleanFile);
+        uniqueList.push({
+          ...item,
+          hoverTitle: cleanKey.includes("it group")
+            ? "Developers of JNTUGVCEV website have been felicitated"
+            : (cleanKey.includes("engineer") || cleanKey.includes("engineering"))
+              ? "Engineering Day Celebrations 2026"
+              : item.title,
+        });
       }
       if (uniqueList.length >= 7) break;
     }
 
     return uniqueList;
   }, [galleryImages]);
+
+  // Eagerly pre-cache all homepage moments into browser memory and CacheStorage
+  useEffect(() => {
+    const urls = homepageSelectedImages
+      .map((img) => (img.imglink?.startsWith("http") || img.imglink?.startsWith("/") ? img.imglink : getAssetUrl(img.imglink)))
+      .filter(Boolean);
+    preloadImages(urls);
+  }, [homepageSelectedImages]);
 
   const getFacilityImage = (title: string, staticImg: string) => {
     let dbImgUrl: string | undefined;
@@ -522,7 +566,7 @@ function HomePage() {
 
               {/* Right Column: Sleek Mini Highlights Carousel */}
               <div className="lg:col-span-6 xl:col-span-6 flex justify-start lg:justify-end w-full lg:pr-2 xl:pr-4 animate-[fade-up_0.5s_ease-out_0.8s_both]">
-                <HeroGalleryMiniCarousel galleryImages={galleryImages} dbGallery={dbGallery} />
+                <HeroGalleryMiniCarousel galleryImages={galleryImages} dbGallery={dbGallery} homeRecords={homeRecords} />
               </div>
             </div>
           </div>
@@ -1304,9 +1348,9 @@ function HomePage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-300 pointer-events-none z-10" />
                       <div className="absolute bottom-0 inset-x-0 p-5 md:p-6 text-white z-20 pointer-events-none">
                         <p className="text-sm md:text-base font-extrabold text-white leading-snug line-clamp-2 drop-shadow-md group-hover:text-amber-300 transition-colors">
-                          {img.title}
+                          {img.hoverTitle || img.title}
                         </p>
-                        {img.description && img.description !== img.title && (
+                        {img.description && img.description !== (img.hoverTitle || img.title) && (
                           <p className="text-xs text-white/70 line-clamp-1 mt-1 font-medium">
                             {img.description}
                           </p>

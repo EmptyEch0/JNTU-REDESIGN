@@ -27,12 +27,12 @@ export function DownloadCard({
 
   const handlePreview = (e: React.MouseEvent) => {
     e.stopPropagation();
-    previewFile(targetUrl);
+    previewFile(targetUrl, title, category);
   };
 
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
-    downloadFile(targetUrl, `${title}.pdf`);
+    downloadFile(targetUrl, `${title}.pdf`, title, category);
   };
 
   return (

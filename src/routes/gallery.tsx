@@ -1,6 +1,7 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { imageUrl, getAssetUrl } from "@/lib/assets";
+import { preloadImages } from "@/lib/image-cache";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SubNav } from "@/components/SubNav";
@@ -100,7 +101,7 @@ function GalleryPage() {
   // Convert API images to the same shape as local records
   const apiGalleryItems = apiImages.map((img) => ({
     id: -(img.id + 1000), // negative IDs to avoid collision
-    src: img.imglink,
+    src: img.imglink || img.file_path,
     caption: img.title || img.description,
     date: img.date,
     isExternal: true,
@@ -117,13 +118,13 @@ function GalleryPage() {
     ...(apiGalleryItems.length === 0 && localImages.length === 0 ? DEFAULT_IMAGES : []),
   ];
 
-  // Strictly deduplicate by caption/title and src, then sort strictly by date descending
-  const seenKeys = new Set<string>();
+  // Strictly deduplicate by unique image source path, then sort strictly by date descending
+  const seenSrcs = new Set<string>();
   const images = rawImages
     .filter((img) => {
-      const key = (img.caption || img.src || "").trim().toLowerCase();
-      if (!key || seenKeys.has(key)) return false;
-      seenKeys.add(key);
+      const srcKey = (img.src || img.file_path || "").trim().toLowerCase();
+      if (!srcKey || seenSrcs.has(srcKey)) return false;
+      seenSrcs.add(srcKey);
       return true;
     })
     .sort((a: any, b: any) => {
@@ -131,6 +132,12 @@ function GalleryPage() {
       const timeB = new Date(b.date || 0).getTime();
       return timeB - timeA;
     });
+
+  // Pre-cache the top 16 gallery images eagerly
+  useEffect(() => {
+    const urls = images.slice(0, 16).map((img) => getAssetUrl(img.src || img.file_path)).filter(Boolean);
+    preloadImages(urls);
+  }, [images]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

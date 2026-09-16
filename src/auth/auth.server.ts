@@ -2,9 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { redirect } from "@tanstack/react-router";
 
 async function getRequestContext() {
-  const { getRequestHeader, getRequestIP } = await import("@tanstack/react-start/server");
-  const userAgent = getRequestHeader("user-agent") || null;
-  const ipAddress = getRequestIP({ xForwardedFor: true }) || null;
+  const server = await import("@tanstack/react-start/server");
+  const userAgent = (typeof server.getRequestHeader === "function" ? server.getRequestHeader("user-agent") : null) || null;
+  const ipAddress = (typeof server.getRequestIP === "function" ? server.getRequestIP({ xForwardedFor: true }) : null) || null;
   return { userAgent, ipAddress };
 }
 
@@ -108,7 +108,7 @@ export const getCurrentAdmin = createServerFn({
   const { userAgent, ipAddress } = await getRequestContext();
   const { authService } = await import("./auth.service");
   const { getCookie, deleteCookie } = await import("@tanstack/react-start/server");
-  const token = getCookie("admin_session_token");
+  const token = typeof getCookie === "function" ? getCookie("admin_session_token") : undefined;
 
   if (!token) {
     return null;
@@ -118,7 +118,9 @@ export const getCurrentAdmin = createServerFn({
     const admin = await authService.validateSession(token, ipAddress, userAgent);
     if (!admin) {
       // Clean up invalid session cookie
-      deleteCookie("admin_session_token", { path: "/" });
+      if (typeof deleteCookie === "function") {
+        deleteCookie("admin_session_token", { path: "/" });
+      }
       return null;
     }
 
@@ -132,7 +134,9 @@ export const getCurrentAdmin = createServerFn({
     };
   } catch (err) {
     console.error("Session verification failed:", err);
-    deleteCookie("admin_session_token", { path: "/" });
+    if (typeof deleteCookie === "function") {
+      deleteCookie("admin_session_token", { path: "/" });
+    }
     return null;
   }
 });
@@ -143,7 +147,7 @@ export const getCurrentAdmin = createServerFn({
 export const changeAdminCredentials = createServerFn({
   method: "POST",
 })
-  .inputValidator((d: { currentPassword: string; newPassword: string }) => d)
+  .validator((d: { currentPassword: string; newPassword: string }) => d)
   .handler(async ({ data }) => {
     const { currentPassword, newPassword } = data;
     const { userAgent, ipAddress } = await getRequestContext();

@@ -68,7 +68,7 @@ export const changeHodCredentials = createServerFn({ method: "POST" })
  * Super-admin only: set or reset a department HOD portal password.
  */
 export const setHodPasswordByAdmin = createServerFn({ method: "POST" })
-  .inputValidator((d: { deptId: string; newPassword: string }) => d)
+  .validator((d: { deptId: string; newPassword: string }) => d)
   .handler(async ({ data }) => {
     const { deptId, newPassword } = data;
 

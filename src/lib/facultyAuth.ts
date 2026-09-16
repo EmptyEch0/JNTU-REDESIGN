@@ -193,7 +193,7 @@ export const setFacultyCredentials = createServerFn({ method: "POST" })
   });
 
 export const listFacultyLoginsByDept = createServerFn({ method: "POST" })
-  .inputValidator((d: { deptId: string }) => d)
+  .validator((d: { deptId: string }) => d)
   .handler(async ({ data }) => {
     const { getCookie } = await import("@tanstack/react-start/server");
     const { db } = await import("../db");

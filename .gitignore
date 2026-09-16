@@ -40,6 +40,7 @@ src/routeTree.gen.ts
 package-lock.json
 /iNDEPENDECE DAY.jpg
 /iNDEPENDECE*.jpg
+/ENGINEERS DAY/
 hod-credentials-*.txt
 *.xlsx
 !JNTUGV_Engineers_Day_2026_Certificates_QR.xlsx

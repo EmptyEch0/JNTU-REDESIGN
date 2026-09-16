@@ -101,6 +101,8 @@ const DEFAULT_MTECH = [
   },
 ];
 
+import { resolveRegulationPdf } from "@/lib/regulations-resolver";
+
 function RegulationsPage() {
   const dbData = Route.useLoaderData() as any[];
   const { isEditMode } = useAdmin();
@@ -114,8 +116,18 @@ function RegulationsPage() {
     link: "",
   });
 
-  const btechRegs = dbData.length > 0 ? dbData.filter((r) => r.category === "B.Tech") : DEFAULT_BTECH;
-  const mtechRegs = dbData.length > 0 ? dbData.filter((r) => r.category === "M.Tech") : DEFAULT_MTECH;
+  const rawBTech = dbData.length > 0 ? dbData.filter((r) => r.category === "B.Tech") : DEFAULT_BTECH;
+  const rawMTech = dbData.length > 0 ? dbData.filter((r) => r.category !== "B.Tech") : DEFAULT_MTECH;
+
+  const btechRegs = rawBTech.map((r) => ({
+    ...r,
+    link: resolveRegulationPdf(r.link, r.title, r.category || "B.Tech"),
+  }));
+
+  const mtechRegs = rawMTech.map((r) => ({
+    ...r,
+    link: resolveRegulationPdf(r.link, r.title, r.category || "M.Tech"),
+  }));
 
   async function handleAdd() {
     if (!newReg.title.trim()) return;

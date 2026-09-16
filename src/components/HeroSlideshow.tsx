@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { preloadImages } from "@/lib/image-cache";
 
 interface Props {
   images: { src: string; alt: string }[];
@@ -18,14 +19,10 @@ export function HeroSlideshow({
   const [active, setActive] = useState(0);
   const [visited, setVisited] = useState<Record<number, boolean>>({ 0: true });
 
-  // Preload all slideshow images in the background so transitions are instant
+  // Preload all slideshow images eagerly in memory & CacheStorage
   useEffect(() => {
-    images.forEach((img) => {
-      if (img.src) {
-        const i = new Image();
-        i.src = img.src;
-      }
-    });
+    const urls = images.map((img) => img.src).filter(Boolean);
+    preloadImages(urls);
   }, [images]);
 
   useEffect(() => {

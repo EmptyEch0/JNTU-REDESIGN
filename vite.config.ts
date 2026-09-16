@@ -13,7 +13,7 @@ function serveLocalAssets(): Plugin {
       server.middlewares.use(
         "/local-assets",
         (req, res, next) => {
-          const safePath = (req.url || "").split("?")[0];
+          const safePath = decodeURIComponent((req.url || "").split("?")[0]);
           const filePath = path.join(process.cwd(), "local-assets", safePath);
           const resolved = path.resolve(filePath);
           const allowed = path.resolve(path.join(process.cwd(), "local-assets"));

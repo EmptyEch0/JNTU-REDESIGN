@@ -6,21 +6,11 @@ function patchFile(filePath) {
   let content = fs.readFileSync(filePath, "utf-8");
   let modified = false;
 
-  // 1. Replace server$1 object definition if present
-  const patchedServer1 = content.replace(
-    /const server\$1\s*=\s*\/\* @__PURE__ \*\/ Object\.freeze\([\s\S]*?Symbol\.toStringTag,\s*\{\s*value:\s*"Module"\s*\}\s*\)\);/g,
-    "const server$1 = {};"
-  );
-  if (patchedServer1 !== content) {
-    content = patchedServer1;
-    modified = true;
-  }
-
-  // 2. Replace shorthand references if present in object literals or exports
+  // Replace missing tree-shaken identifier references with undefined inside object literals
   const patchedRefs = content
-    .replace(/createRequestHandler,/g, "createRequestHandler: undefined,")
-    .replace(/transformPipeableStreamWithRouter,/g, "transformPipeableStreamWithRouter: undefined,")
-    .replace(/transformReadableStreamWithRouter,/g, "transformReadableStreamWithRouter: undefined,");
+    .replace(/(?<=[\s,{])createRequestHandler(?=,|\s*\n)/g, "createRequestHandler: undefined")
+    .replace(/(?<=[\s,{])transformPipeableStreamWithRouter(?=,|\s*\n)/g, "transformPipeableStreamWithRouter: undefined")
+    .replace(/(?<=[\s,{])transformReadableStreamWithRouter(?=,|\s*\n)/g, "transformReadableStreamWithRouter: undefined");
 
   if (patchedRefs !== content) {
     content = patchedRefs;

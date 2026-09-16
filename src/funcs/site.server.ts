@@ -501,6 +501,42 @@ export const getJntugvGalleryImages = createServerFn({
 
   const featuredItems: JntugvGalleryItem[] = [
     {
+      id: 201,
+      date: "2026-09-15",
+      title: "Engineering Day Celebrations 2026",
+      file_path: "uploads/2026/09/Main.jpeg",
+      description: "Engineering Day Celebrations 2026",
+      submitted: "University Admin",
+      admin_approval: "accepted",
+      carousel_scrolling: "yes",
+      gallery_scrolling: "yes",
+      imglink: "uploads/2026/09/Main.jpeg",
+    },
+    {
+      id: 202,
+      date: "2026-09-15",
+      title: "Developers of JNTUGVCEV website have been felicitated",
+      file_path: "uploads/2026/09/IT GROUP.jpeg",
+      description: "Developers of JNTUGVCEV website have been felicitated",
+      submitted: "University Admin",
+      admin_approval: "accepted",
+      carousel_scrolling: "yes",
+      gallery_scrolling: "yes",
+      imglink: "uploads/2026/09/IT GROUP.jpeg",
+    },
+    {
+      id: 203,
+      date: "2026-09-15",
+      title: "Engineering Day Celebrations 2026",
+      file_path: "uploads/2026/09/Civil Group.jpeg",
+      description: "Engineering Day Celebrations 2026",
+      submitted: "University Admin",
+      admin_approval: "accepted",
+      carousel_scrolling: "yes",
+      gallery_scrolling: "yes",
+      imglink: "uploads/2026/09/Civil Group.jpeg",
+    },
+    {
       id: 166,
       date: "2026-08-15",
       title: "80th Independence Day Celebrations at JNTU-GV",
@@ -544,11 +580,10 @@ export const getJntugvGalleryImages = createServerFn({
     const fallback = jntugvGalleryData as JntugvGalleryItem[];
     const filtered = fallback.filter(
       (img) =>
-        img.id !== 166 && // Prevent duplicate of featured item 166
         img.admin_approval === "accepted" &&
         (img.carousel_scrolling === "yes" || img.gallery_scrolling === "yes"),
     );
-    rawPool = [...featuredItems, ...filtered];
+    rawPool = filtered;
   }
 
   // Sort rawPool strictly by date descending (latest first)

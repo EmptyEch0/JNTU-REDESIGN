@@ -1,5 +1,6 @@
 import { getAssetUrl } from "./assets";
 import { toast } from "sonner";
+import { resolveRegulationPdf } from "./regulations-resolver";
 
 /**
  * Initiates a direct file download onto the user's device.
@@ -8,17 +9,22 @@ import { toast } from "sonner";
  *
  * @param url The relative or absolute URL of the asset/PDF to download
  * @param defaultFilename Optional custom name for the saved file on disk
+ * @param title Optional title for smart fallback resolution
+ * @param category Optional category for smart fallback resolution
  */
 export async function downloadFile(
   url: string | null | undefined,
-  defaultFilename?: string
+  defaultFilename?: string,
+  title?: string,
+  category?: string
 ): Promise<void> {
-  if (!url || url.trim() === "" || url.trim() === "#") {
+  const target = resolveRegulationPdf(url, title, category);
+  if (!target || target.trim() === "" || target.trim() === "#") {
     toast.error("File is not available for download.");
     return;
   }
 
-  const resolvedUrl = getAssetUrl(url.trim());
+  const resolvedUrl = getAssetUrl(target.trim());
 
   // Formulate clean filename
   let filename = defaultFilename?.trim();
@@ -34,7 +40,7 @@ export async function downloadFile(
         filename = decodeURIComponent(last);
       }
     } catch {
-      filename = url.split("/").pop() || "document.pdf";
+      filename = target.split("/").pop() || "document.pdf";
     }
   }
 
@@ -104,12 +110,20 @@ export async function downloadFile(
  * Opens a file in a new browser tab for inline preview.
  *
  * @param url The relative or absolute URL of the asset/PDF to preview
+ * @param title Optional title for smart fallback resolution
+ * @param category Optional category for smart fallback resolution
  */
-export function previewFile(url: string | null | undefined): void {
-  if (!url || url.trim() === "" || url.trim() === "#") {
+export function previewFile(
+  url: string | null | undefined,
+  title?: string,
+  category?: string
+): void {
+  const target = resolveRegulationPdf(url, title, category);
+  if (!target || target.trim() === "" || target.trim() === "#") {
     toast.error("Document preview is currently unavailable.");
     return;
   }
-  const resolvedUrl = getAssetUrl(url.trim());
+  const resolvedUrl = getAssetUrl(target.trim());
   window.open(resolvedUrl, "_blank", "noopener,noreferrer");
 }
+

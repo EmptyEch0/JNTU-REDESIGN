@@ -34,7 +34,9 @@ import {
   Radio,
   X,
   UserCircle,
-  Newspaper
+  Newspaper,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
@@ -161,6 +163,7 @@ const GoogleIcon = () => (
 function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAdmin();
@@ -342,14 +345,27 @@ function AdminLoginPage() {
                       <Lock className="w-4 h-4" />
                     </div>
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
-                      className="login-input"
+                      className="login-input !pr-11"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       disabled={loading}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors p-1"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      tabIndex={-1}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
+                    </button>
                   </div>
                 </div>
 

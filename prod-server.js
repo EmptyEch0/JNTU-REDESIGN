@@ -7,7 +7,7 @@ import { Readable } from "node:stream";
 const PORT = parseInt(process.env.PORT || process.env.NITRO_PORT || "8081", 10);
 const HOST = process.env.HOST || "0.0.0.0";
 const CLIENT_DIR = path.resolve("dist/client");
-const PUBLIC_DIR = path.resolve("public");
+const PUBLIC_DIR = path.resolve("dist/public");
 const LOCAL_ASSETS_DIR = path.resolve("local-assets");
 
 const MIME_TYPES = {
@@ -27,56 +27,52 @@ const MIME_TYPES = {
   ".woff2": "font/woff2",
   ".ttf": "font/ttf",
   ".pdf": "application/pdf",
+  ".mp4": "video/mp4",
+  ".avif": "image/avif",
 };
 
 async function main() {
-  let fetchHandler = null;
-  const candidatePaths = [
-    "./dist/server/server.js",
-    "./dist/server/_ssr/index.mjs",
-    "./dist/server/index.mjs",
-    "./dist/server/index.js",
-  ];
-
-  for (const p of candidatePaths) {
-    const resolvedPath = path.resolve(p);
-    if (!fs.existsSync(resolvedPath)) continue;
-
-    try {
-      const mod = await import(p);
-
-      if (typeof mod?.default?.fetch === "function") {
-        fetchHandler = mod.default.fetch.bind(mod.default);
-        break;
-      } else if (typeof mod?.fetch === "function") {
-        fetchHandler = mod.fetch.bind(mod);
-        break;
-      } else if (typeof mod?.default === "function") {
-        fetchHandler = mod.default.bind(mod);
-        break;
-      } else if (typeof mod?.server?.fetch === "function") {
-        fetchHandler = mod.server.fetch.bind(mod.server);
-        break;
-      } else if (typeof mod?.createServerEntry === "function") {
-        const entry = mod.createServerEntry();
-        if (typeof entry?.fetch === "function") {
-          fetchHandler = entry.fetch.bind(entry);
-          break;
-        }
-      } else if (mod?.s?.createStartHandler && mod?.s?.defaultStreamHandler) {
-        const handler = mod.s.createStartHandler(mod.s.defaultStreamHandler);
-        fetchHandler = typeof handler?.fetch === "function" ? handler.fetch.bind(handler) : handler;
-        break;
-      }
-    } catch (err) {
-      console.warn(`Could not load candidate ${p}:`, err.message);
-    }
+  // ── 1. Load the TanStack Start server entry ────────────────────────
+  const serverJsPath = path.resolve("dist/server/server.js");
+  if (!fs.existsSync(serverJsPath)) {
+    throw new Error(
+      `Build output not found at ${serverJsPath}.\n` +
+        `Run "npm run build" (or "bun run build") first.`
+    );
   }
 
-  if (!fetchHandler) {
-    throw new Error("Could not find a valid fetch handler in dist/server/");
+  console.log("Loading server entry from dist/server/server.js …");
+  let mod;
+  try {
+    mod = await import("./dist/server/server.js");
+  } catch (err) {
+    throw new Error(
+      `Failed to import dist/server/server.js:\n${err.stack || err.message}\n\n` +
+        `Make sure you ran "npm run build" on this machine after pulling changes.`
+    );
   }
 
+  // The build exports: default → { fetch(request) → Response }
+  const fetchHandler =
+    mod?.default?.fetch?.bind(mod.default) ??
+    mod?.fetch?.bind(mod) ??
+    null;
+
+  if (typeof fetchHandler !== "function") {
+    // Debug: print what we actually got so the deploy log is helpful
+    console.error("Module exports:", Object.keys(mod));
+    console.error("mod.default type:", typeof mod.default);
+    if (mod.default) console.error("mod.default keys:", Object.keys(mod.default));
+    throw new Error(
+      "dist/server/server.js did not export a valid fetch handler.\n" +
+        "Expected mod.default.fetch to be a function.\n" +
+        'Try deleting the dist/ folder and rebuilding: rm -rf dist && npm run build'
+    );
+  }
+
+  console.log("✓ Fetch handler loaded successfully");
+
+  // ── 2. Static file server ──────────────────────────────────────────
   function tryServeStatic(req, res, filePath, isImmutable = false) {
     try {
       if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
@@ -97,32 +93,37 @@ async function main() {
     return false;
   }
 
+  // ── 3. HTTP server ─────────────────────────────────────────────────
   const server = http.createServer(async (req, res) => {
     try {
       const parsedUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
       const pathname = decodeURIComponent(parsedUrl.pathname);
 
-      // 1. Check dist/client
+      // Static: dist/client/assets (hashed, immutable)
       if (pathname.startsWith("/assets/")) {
         const clientAssetPath = path.join(CLIENT_DIR, pathname);
         if (tryServeStatic(req, res, clientAssetPath, true)) return;
       }
 
-      // 2. Check general static file in dist/client
+      // Static: other files in dist/client
       const directClientPath = path.join(CLIENT_DIR, pathname);
       if (pathname !== "/" && tryServeStatic(req, res, directClientPath)) return;
 
-      // 3. Check public folder
-      const publicPath = path.join(PUBLIC_DIR, pathname);
+      // Static: dist/public
+      const publicDistPath = path.join(PUBLIC_DIR, pathname);
+      if (pathname !== "/" && tryServeStatic(req, res, publicDistPath)) return;
+
+      // Static: project root public/
+      const publicPath = path.join(path.resolve("public"), pathname);
       if (pathname !== "/" && tryServeStatic(req, res, publicPath)) return;
 
-      // 4. Check local-assets folder
+      // Static: local-assets/
       if (pathname.startsWith("/local-assets/")) {
         const localAssetPath = path.join(LOCAL_ASSETS_DIR, pathname.replace(/^\/local-assets\//, ""));
         if (tryServeStatic(req, res, localAssetPath)) return;
       }
 
-      // 5. Build standard Web Request for TanStack Start SSR
+      // ── SSR via TanStack Start fetch handler ──
       const headers = new Headers();
       for (const [key, value] of Object.entries(req.headers)) {
         if (value) {
@@ -145,10 +146,9 @@ async function main() {
         duplex: hasBody ? "half" : undefined,
       });
 
-      // 6. Handle with TanStack Start
       const webResponse = await fetchHandler(webRequest);
 
-      // 7. Write headers and status to Node response
+      // Write response
       res.statusCode = webResponse.status;
       webResponse.headers.forEach((val, key) => {
         if (key.toLowerCase() === "set-cookie") {
@@ -159,7 +159,6 @@ async function main() {
         }
       });
 
-      // 8. Stream response body
       if (webResponse.body) {
         const nodeStream = Readable.fromWeb(webResponse.body);
         nodeStream.pipe(res);

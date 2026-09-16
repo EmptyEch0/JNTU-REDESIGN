@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "cross-env NITRO_PRESET=node-server vite build && node scripts/patch-build.js",
-    "start": "node --env-file=.env server.js",
+    "start": "node --env-file=.env prod-server.js",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",

@@ -30,29 +30,51 @@ const MIME_TYPES = {
 };
 
 async function main() {
-  let serverEntryModule;
+  let fetchHandler = null;
   const candidatePaths = [
     "./dist/server/server.js",
-    "./dist/server/index.mjs",
     "./dist/server/_ssr/index.mjs",
+    "./dist/server/index.mjs",
     "./dist/server/index.js",
   ];
+
   for (const p of candidatePaths) {
-    if (fs.existsSync(path.resolve(p))) {
-      serverEntryModule = await import(p);
-      break;
+    const resolvedPath = path.resolve(p);
+    if (!fs.existsSync(resolvedPath)) continue;
+
+    try {
+      const mod = await import(p);
+
+      if (typeof mod?.default?.fetch === "function") {
+        fetchHandler = mod.default.fetch.bind(mod.default);
+        break;
+      } else if (typeof mod?.fetch === "function") {
+        fetchHandler = mod.fetch.bind(mod);
+        break;
+      } else if (typeof mod?.default === "function") {
+        fetchHandler = mod.default.bind(mod);
+        break;
+      } else if (typeof mod?.server?.fetch === "function") {
+        fetchHandler = mod.server.fetch.bind(mod.server);
+        break;
+      } else if (typeof mod?.createServerEntry === "function") {
+        const entry = mod.createServerEntry();
+        if (typeof entry?.fetch === "function") {
+          fetchHandler = entry.fetch.bind(entry);
+          break;
+        }
+      } else if (mod?.s?.createStartHandler && mod?.s?.defaultStreamHandler) {
+        const handler = mod.s.createStartHandler(mod.s.defaultStreamHandler);
+        fetchHandler = typeof handler?.fetch === "function" ? handler.fetch.bind(handler) : handler;
+        break;
+      }
+    } catch (err) {
+      console.warn(`Could not load candidate ${p}:`, err.message);
     }
   }
-  if (!serverEntryModule) {
-    throw new Error("No server entry found in dist/server/");
-  }
 
-  const serverHandler = serverEntryModule.default?.fetch
-    ? serverEntryModule.default
-    : serverEntryModule.server || serverEntryModule;
-
-  if (!serverHandler?.fetch) {
-    throw new Error("Server entry does not export a valid fetch handler");
+  if (!fetchHandler) {
+    throw new Error("Could not find a valid fetch handler in dist/server/");
   }
 
   function tryServeStatic(req, res, filePath, isImmutable = false) {
@@ -124,7 +146,7 @@ async function main() {
       });
 
       // 6. Handle with TanStack Start
-      const webResponse = await serverHandler.fetch(webRequest);
+      const webResponse = await fetchHandler(webRequest);
 
       // 7. Write headers and status to Node response
       res.statusCode = webResponse.status;

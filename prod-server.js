@@ -1,9 +1,10 @@
+import "dotenv/config";
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { Readable } from "node:stream";
 
-const PORT = parseInt(process.env.PORT || "3000", 10);
+const PORT = parseInt(process.env.PORT || process.env.NITRO_PORT || "8081", 10);
 const HOST = process.env.HOST || "0.0.0.0";
 const CLIENT_DIR = path.resolve("dist/client");
 const PUBLIC_DIR = path.resolve("public");

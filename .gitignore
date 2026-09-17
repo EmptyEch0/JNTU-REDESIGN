@@ -45,7 +45,16 @@ package-lock.json
 /Valedictory/
 hod-credentials-*.txt
 *.xlsx
-!JNTUGV_Engineers_Day_2026_Certificates_QR.xlsx
+*.xls
+*.csv
+*.docx
+*.doc
+*.pdf
+JNTUGV_Document_*
+JNTUGV_Login_Credentials.*
+JNTUGV_Department_URLs*
+JNTUGV_Engineers_Day*
+facilities_and_student_corner.md
 __pycache__/
 *.py[cod]
 scratch/

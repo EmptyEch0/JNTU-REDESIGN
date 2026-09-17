@@ -41,12 +41,19 @@ export interface SlideItem {
 
 const DEFAULT_FEATURED_SLIDES: SlideItem[] = [
   {
+    id: "featured-sih-2026",
+    title: "JNTU-GV CEV successfully completed SIH internal hackthon 2026",
+    date: "Sep 16, 2026",
+    src: "uploads/2026/09/SIH2026/Main.JPG",
+    description: "JNTU-GV CEV successfully completed SIH internal hackthon 2026 valedictory ceremony.",
+    isNew: true,
+  },
+  {
     id: "featured-engineers-day-civil",
     title: "Engineer's Day Celebrations 2026 — Civil Engineering Dept",
     date: "Sep 15, 2026",
     src: "uploads/2026/09/Civil Group.jpeg",
     description: "Civil Engineering Department faculty and students during Engineer's Day 2026.",
-    isNew: true,
   },
   {
     id: "featured-independence-day",
@@ -151,7 +158,20 @@ export function HeroGalleryMiniCarousel({
       return true;
     };
 
-    // 1. Featured Engineer's Day 2026 Celebration (Civil Group ONLY)
+    // 1. Featured SIH 2026 Hackathon Valedictory
+    addSlide(
+      {
+        id: "featured-sih-2026",
+        title: "JNTU-GV CEV successfully completed SIH internal hackthon 2026",
+        date: "Sep 16, 2026",
+        src: "uploads/2026/09/SIH2026/Main.JPG",
+        description: "JNTU-GV CEV successfully completed SIH internal hackthon 2026 valedictory ceremony.",
+        isNew: true,
+      },
+      "sih-2026"
+    );
+
+    // 2. Featured Engineer's Day 2026 Celebration (Civil Group ONLY)
     addSlide(
       {
         id: "featured-engineers-day-civil",
@@ -159,7 +179,6 @@ export function HeroGalleryMiniCarousel({
         date: "Sep 15, 2026",
         src: "uploads/2026/09/Civil Group.jpeg",
         description: "Civil Engineering Department faculty and students during Engineer's Day 2026.",
-        isNew: true,
       },
       "engineers-day"
     );
@@ -182,14 +201,20 @@ export function HeroGalleryMiniCarousel({
       const cleanSrc = dbItem.src.toLowerCase();
       const cleanTitle = (dbItem.caption || "Campus Moment").trim().toLowerCase();
 
-      // Skip Independence Day (already added above) & Engineer's Day variants
+      // Skip Independence Day, Engineer's Day, and extra SIH photos (SIH Main.JPG already added as slide 1)
       if (
         cleanSrc.includes("independence") ||
         cleanTitle.includes("independence") ||
         cleanSrc.includes("it group") ||
         cleanSrc.includes("main.jpeg") ||
         cleanSrc.includes("civil group") ||
-        cleanTitle.includes("engineer")
+        cleanTitle.includes("engineer") ||
+        cleanSrc.includes("sih") ||
+        cleanTitle.includes("sih") ||
+        cleanTitle.includes("hackthon") ||
+        cleanTitle.includes("hackathon") ||
+        cleanSrc.includes("valedictory") ||
+        cleanSrc.includes("p1170")
       ) {
         continue;
       }
@@ -227,9 +252,15 @@ export function HeroGalleryMiniCarousel({
         cleanTitle.includes("main.jpeg") ||
         cleanTitle.includes("civil group") ||
         cleanTitle.includes("engineer") ||
+        cleanTitle.includes("sih") ||
+        cleanTitle.includes("hackthon") ||
+        cleanTitle.includes("hackathon") ||
         rawSrc.includes("it group") ||
         rawSrc.includes("main.jpeg") ||
-        rawSrc.includes("civil group")
+        rawSrc.includes("civil group") ||
+        rawSrc.includes("sih") ||
+        rawSrc.includes("valedictory") ||
+        rawSrc.includes("p1170")
       ) {
         continue;
       }
@@ -515,7 +546,10 @@ export function HeroGalleryMiniCarousel({
             </div>
 
             {/* Carousel Slide Stage */}
-            <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900/40">
+            <div
+              className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900/40"
+              title={currentSlide.title}
+            >
               <AnimatePresence initial={false} custom={direction}>
                 <motion.div
                   key={currentSlide.id}
@@ -529,6 +563,7 @@ export function HeroGalleryMiniCarousel({
                   <img
                     src={getAssetUrl(currentSlide.src)}
                     alt={currentSlide.title}
+                    title={currentSlide.title}
                     className="w-full h-full object-cover"
                     loading="eager"
                     decoding="async"

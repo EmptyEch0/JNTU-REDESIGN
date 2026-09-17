@@ -501,6 +501,18 @@ export const getJntugvGalleryImages = createServerFn({
 
   const featuredItems: JntugvGalleryItem[] = [
     {
+      id: 301,
+      date: "2026-09-16",
+      title: "JNTU-GV CEV successfully completed SIH internal hackthon 2026",
+      file_path: "uploads/2026/09/SIH2026/Main.JPG",
+      description: "JNTU-GV CEV successfully completed SIH internal hackthon 2026",
+      submitted: "University Admin",
+      admin_approval: "accepted",
+      carousel_scrolling: "yes",
+      gallery_scrolling: "yes",
+      imglink: "uploads/2026/09/SIH2026/Main.JPG",
+    },
+    {
       id: 201,
       date: "2026-09-15",
       title: "Engineering Day Celebrations 2026",
@@ -593,17 +605,17 @@ export const getJntugvGalleryImages = createServerFn({
     return timeB - timeA;
   });
 
-  // Strictly deduplicate by ID and cleaned Title
+  // Strictly deduplicate by ID and unique image source path
   const seenIds = new Set<number>();
-  const seenTitles = new Set<string>();
+  const seenSrcs = new Set<string>();
   const combined: JntugvGalleryItem[] = [];
 
   for (const item of rawPool) {
     const formattedTitle = formatGalleryTitle(item.title);
-    const cleanKey = formattedTitle.toLowerCase();
-    if (!seenIds.has(item.id) && !seenTitles.has(cleanKey)) {
+    const srcKey = (item.file_path || item.imglink || "").trim().toLowerCase();
+    if (!seenIds.has(item.id) && (!srcKey || !seenSrcs.has(srcKey))) {
       seenIds.add(item.id);
-      if (cleanKey) seenTitles.add(cleanKey);
+      if (srcKey) seenSrcs.add(srcKey);
 
       const cleanImglink = item.imglink?.startsWith("http")
         ? encodeURI(item.imglink)

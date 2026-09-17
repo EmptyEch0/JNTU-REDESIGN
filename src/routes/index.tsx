@@ -433,6 +433,15 @@ function HomePage() {
   const homepageSelectedImages = useMemo(() => {
     const featuredHomepageMoments = [
       {
+        id: 301,
+        title: "JNTU-GV CEV successfully completed SIH internal hackthon 2026",
+        date: "2026-09-16",
+        file_path: "uploads/2026/09/SIH2026/Main.JPG",
+        imglink: "uploads/2026/09/SIH2026/Main.JPG",
+        description: "JNTU-GV CEV successfully completed SIH internal hackthon 2026",
+        hoverTitle: "JNTU-GV CEV successfully completed SIH internal hackthon 2026",
+      },
+      {
         id: 201,
         title: "Engineering Day Celebrations 2026",
         date: "2026-09-15",
@@ -461,11 +470,15 @@ function HomePage() {
       return timeB - timeA;
     });
 
-    // Deduplicate so each unique event gets 1 prominent card, skipping the two primary featured cards
+    // Deduplicate so each unique event gets 1 prominent card, skipping the primary featured cards
     const uniqueList: any[] = [...featuredHomepageMoments];
     const seenTitles = new Set<string>([
+      "jntu-gv cev successfully completed sih internal hackthon 2026",
+      "sih2026",
+      "sih 2026",
       "engineering day celebrations 2026",
       "developers of jntugvcev website have been felicitated",
+      "main.jpg",
       "main.jpeg",
       "it group.jpeg",
     ]);
@@ -478,7 +491,9 @@ function HomePage() {
         if (cleanFile) seenTitles.add(cleanFile);
         uniqueList.push({
           ...item,
-          hoverTitle: cleanKey.includes("it group")
+          hoverTitle: cleanKey.includes("sih") || cleanFile.includes("sih")
+            ? "JNTU-GV CEV successfully completed SIH internal hackthon 2026"
+            : cleanKey.includes("it group")
             ? "Developers of JNTUGVCEV website have been felicitated"
             : (cleanKey.includes("engineer") || cleanKey.includes("engineering"))
               ? "Engineering Day Celebrations 2026"
@@ -1325,6 +1340,7 @@ function HomePage() {
                     <Link
                       key={img.id}
                       to="/gallery"
+                      title={img.hoverTitle || img.title}
                       className={`${colClass} w-full rounded-3xl hover-lift overflow-hidden relative group bg-slate-900 shadow-md border border-border/30`}
                     >
                       <ImageWithLoader

@@ -123,6 +123,12 @@ async function main() {
         if (tryServeStatic(req, res, localAssetPath)) return;
       }
 
+      // Static: /uploads/ directly mapped to local-assets/uploads/
+      if (pathname.startsWith("/uploads/")) {
+        const directUploadPath = path.join(LOCAL_ASSETS_DIR, pathname);
+        if (tryServeStatic(req, res, directUploadPath)) return;
+      }
+
       // ── SSR via TanStack Start fetch handler ──
       const headers = new Headers();
       for (const [key, value] of Object.entries(req.headers)) {

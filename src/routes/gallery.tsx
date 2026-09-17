@@ -386,6 +386,7 @@ function GalleryPage() {
               return (
                 <div
                   key={img.id || i}
+                  title={img.caption || "Campus Moment"}
                   className="break-inside-avoid mb-5 overflow-hidden rounded-2xl hover-lift relative group transition-all duration-300"
                 >
                   <ImageWithLoader

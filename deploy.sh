@@ -9,13 +9,6 @@ echo "═══ JNTU Website Deploy ═══"
 echo "→ Pulling latest code…"
 git pull origin main
 
-# Sync uploaded assets to VPS local-assets folders if they exist
-echo "→ Syncing uploads to local-assets…"
-mkdir -p /var/www/local-assets/uploads 2>/dev/null || true
-mkdir -p local-assets/uploads 2>/dev/null || true
-cp -rn public/uploads/* /var/www/local-assets/uploads/ 2>/dev/null || true
-cp -rn public/uploads/* local-assets/uploads/ 2>/dev/null || true
-
 # 2. Install dependencies (only if package.json changed)
 echo "→ Installing dependencies…"
 bun install --frozen-lockfile 2>/dev/null || bun install

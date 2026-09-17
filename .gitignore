@@ -22,6 +22,7 @@ dist-ssr
 
 # Uploaded local assets (stored at project root, NOT committed to git)
 /local-assets
+/public/uploads
 
 # Editor directories and files
 .vscode/*

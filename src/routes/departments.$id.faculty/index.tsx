@@ -9,15 +9,29 @@ import { toast } from "sonner";
 import { getAssetUrl } from "@/lib/assets";
 import { SafeImage } from "@/components/SafeImage";
 import { PersonAvatarUpload } from "@/components/AdminEditPanel";
+import { DEPARTMENT_EXPLICIT_FACULTY_PROFILES } from "@/data/department-faculty-data";
 
 export const Route = createFileRoute("/departments/$id/faculty/")({
+  head: ({ loaderData }) => {
+    const data = loaderData as DepartmentData | undefined;
+    const name = data?.name || "Department";
+    return {
+      meta: [
+        { title: `Faculty Profiles — Department of ${name} | JNTU-GV CEV` },
+        {
+          name: "description",
+          content: `Distinguished faculty members, professors, and researchers in the Department of ${name} at JNTU-GV College of Engineering Vizianagaram.`,
+        },
+      ],
+    };
+  },
   component: FacultyPage,
 });
 
 // Define an interface for the component props
 interface FacultyCardProps {
   f: {
-    id: string;
+    id: string | number;
     name: string;
     designation: string;
     photo_url?: string | null;
@@ -33,7 +47,7 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
   return (
     <div className={`p-6 border rounded-3xl bg-white flex gap-6 items-center relative transition-all h-full ${isEditMode ? 'border-amber-200 ring-2 ring-amber-50' : 'border-slate-100 shadow-sm'}`}>
       {isEditMode && (
-        <button onClick={() => removeFaculty(f.id)} className="absolute top-3 right-3 p-1.5 text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+        <button onClick={() => removeFaculty(String(f.id))} className="absolute top-3 right-3 p-1.5 text-red-500 hover:bg-red-50 rounded-xl transition-colors">
           <Trash2 size={16} />
         </button>
       )}
@@ -42,7 +56,7 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
         <div className="flex-shrink-0">
           <PersonAvatarUpload
             value={f.photo_url || ""}
-            onChange={(newUrl) => handleUpdate(f.id, "photo_url", newUrl)}
+            onChange={(newUrl) => handleUpdate(String(f.id), "photo_url", newUrl)}
             module="departments"
             category="faculty"
             size={88}
@@ -69,13 +83,13 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
               className="w-full font-bold text-blue-900 border-b border-amber-100 focus:border-amber-500 outline-none text-base" 
               value={f.name} 
               placeholder="Faculty Name"
-              onChange={(e) => handleUpdate(f.id, "name", e.target.value)} 
+              onChange={(e) => handleUpdate(String(f.id), "name", e.target.value)} 
             />
             <input 
               className="w-full text-sm text-slate-600 border-b border-amber-100 focus:border-amber-500 outline-none" 
               value={f.designation} 
               placeholder="Designation (e.g. Assistant Professor)"
-              onChange={(e) => handleUpdate(f.id, "designation", e.target.value)} 
+              onChange={(e) => handleUpdate(String(f.id), "designation", e.target.value)} 
             />
             <div className="flex items-center gap-1 text-[11px] text-amber-700 font-medium pt-0.5">
               <ImageIcon size={12} className="text-amber-500" />
@@ -117,6 +131,13 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
   );
 }
 
+function getNormalizedFacultyName(raw: string): string {
+  return (raw || "")
+    .toLowerCase()
+    .replace(/\b(dr|prof|mr|mrs|ms|assistant professor|associate professor|hod|head of department)\b\.?/gi, "")
+    .replace(/[^a-z0-9]/g, "");
+}
+
 function FacultyPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
   const router = useRouter();
@@ -124,16 +145,52 @@ function FacultyPage() {
 
   // Extract the parent route parameter ($id) cleanly
   const { id: deptId } = useParams({ from: "/departments/$id/faculty/" });
+  const deptKey = (deptId || "").toLowerCase();
 
   // Evaluate edit permissions using the active branch slug (e.g., "cse", "it")
   const { isDeptEditing } = useAdmin();
   const isEditMode = isDeptEditing(deptId || "");
 
-  const [facultyList, setFacultyList] = useState(data?.faculty || []);
+  const explicitList = DEPARTMENT_EXPLICIT_FACULTY_PROFILES[deptKey] || (data?.slug ? DEPARTMENT_EXPLICIT_FACULTY_PROFILES[data.slug.toLowerCase()] : undefined);
+
+  const [facultyList, setFacultyList] = useState<any[]>(() => {
+    if (explicitList) {
+      return explicitList;
+    }
+    return data?.faculty || [];
+  });
 
   useEffect(() => {
-    if (data?.faculty) setFacultyList(data.faculty);
-  }, [data]);
+    const activeExplicit = DEPARTMENT_EXPLICIT_FACULTY_PROFILES[deptKey] || (data?.slug ? DEPARTMENT_EXPLICIT_FACULTY_PROFILES[data.slug.toLowerCase()] : undefined);
+    if (activeExplicit && !isEditMode) {
+      const merged = activeExplicit.map((exp) => {
+        // Priority 1: Match strictly by exact ID
+        const foundById = (data?.faculty || []).find((f: any) => String(f.id) === String(exp.id));
+        if (foundById) {
+          return {
+            ...exp,
+            photo_url: exp.photo_url || foundById.photo_url || "",
+          };
+        }
+
+        // Priority 2: Match by exact normalized name
+        const expNorm = getNormalizedFacultyName(exp.name);
+        const foundByName = (data?.faculty || []).find((f: any) => {
+          const fNorm = getNormalizedFacultyName(f.name || "");
+          return fNorm && expNorm && fNorm === expNorm;
+        });
+
+        return {
+          ...exp,
+          id: foundByName?.id ? String(foundByName.id) : exp.id,
+          photo_url: exp.photo_url || foundByName?.photo_url || "",
+        };
+      });
+      setFacultyList(merged);
+    } else if (data?.faculty) {
+      setFacultyList(data.faculty);
+    }
+  }, [data, deptKey, isEditMode]);
 
   const mutation = useMutation({
     mutationFn: (newList: any[]) => 
@@ -164,9 +221,12 @@ function FacultyPage() {
   const otherFaculty = facultyList.filter(f => !/hod|head of (the )?department/i.test(f.designation || ""));
 
   return (
-    <div className="animate-in fade-in duration-200">
+    <div className="space-y-6 animate-in fade-in duration-200">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold text-slate-900">Faculty Members</h2>
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Faculty Profiles</h2>
+          <p className="text-sm text-slate-600 mt-1">Detailed profiles, research domains, and academic credentials of department faculty.</p>
+        </div>
         {isEditMode && (
           <div className="flex gap-2">
             <button onClick={addFaculty} className="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors">

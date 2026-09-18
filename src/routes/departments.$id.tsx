@@ -22,6 +22,20 @@ import {
   Menu,
   X,
   LogOut,
+  ChevronDown,
+  List,
+  UserCheck,
+  Briefcase,
+  Settings,
+  Calculator,
+  Atom,
+  Landmark,
+  Plus,
+  FolderPlus,
+  Award,
+  FileText,
+  Download,
+  Sparkles,
 } from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id")({
@@ -73,7 +87,6 @@ export const Route = createFileRoute("/departments/$id")({
 import { getDepartmentNavItems, type DepartmentNavItem } from "@/funcs/department-cms.server";
 import { SidebarManagerModal } from "@/components/cms/SidebarManagerModal";
 import { useQuery } from "@tanstack/react-query";
-import { Settings, Plus, FolderPlus, Award, FileText, Download, Sparkles } from "lucide-react";
 
 function getNavIcon(iconName: string) {
   switch (iconName) {
@@ -81,6 +94,13 @@ function getNavIcon(iconName: string) {
       return <BookOpen size={18} />;
     case "Users":
       return <Users size={18} />;
+    case "UserCheck":
+      return <UserCheck size={16} />;
+    case "List":
+    case "ListFilter":
+      return <List size={16} />;
+    case "Briefcase":
+      return <Briefcase size={16} />;
     case "GraduationCap":
       return <GraduationCap size={18} />;
     case "FlaskConical":
@@ -111,6 +131,13 @@ function DepartmentLayout() {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSidebarManagerOpen, setIsSidebarManagerOpen] = useState(false);
+
+  const isFacultySection = Boolean(loaderData?.slug && location.pathname.includes(`/departments/${loaderData.slug}/faculty`));
+  const [isFacultyExpanded, setIsFacultyExpanded] = useState(isFacultySection);
+
+  useEffect(() => {
+    setIsFacultyExpanded(isFacultySection);
+  }, [isFacultySection]);
 
   // Redirect guard for HOD sessions trying to roam to other departments
   useEffect(() => {
@@ -326,9 +353,208 @@ function DepartmentLayout() {
                 {dynamicNavItems.map((item) => {
                   const subPath = item.slug ? `/${item.slug}` : "";
                   const fullPath = `/departments/${loaderData.slug}${subPath}`;
-                  const isActive = subPath === ""
+                  const isFacultyItem = item.slug === "faculty" || item.pageType === "faculty";
+                  const isFacultySection = location.pathname.includes(`/departments/${loaderData.slug}/faculty`);
+
+                  const isActive = isFacultyItem
+                    ? isFacultySection
+                    : subPath === ""
                     ? location.pathname === fullPath
                     : location.pathname.startsWith(fullPath);
+
+                  if (isFacultyItem) {
+                    const isBshssDept = ["bshss", "sh", "bsh", "basic-sciences", "humanities-and-basic-sciences", "basic-sciences-and-humanities"].includes((loaderData?.slug || "").toLowerCase());
+                    const searchParams = new URLSearchParams(location.search);
+                    const activeSubject = (searchParams.get("subject") || "").toLowerCase();
+                    const isListActive = location.pathname.includes(`/departments/${loaderData.slug}/faculty/list`);
+                    const isNonTeachingActive = location.pathname.includes(`/departments/${loaderData.slug}/faculty/non-teaching`);
+                    const isProfilesActive = isFacultySection && !isListActive && !isNonTeachingActive;
+
+                    const handleFacultyClick = () => {
+                      if (isFacultySection) {
+                        // Already inside faculty section: toggle folded/unfolded
+                        setIsFacultyExpanded((prev) => !prev);
+                      } else {
+                        // Navigating into faculty: unfold and close mobile drawer
+                        setIsFacultyExpanded(true);
+                        setIsMobileMenuOpen(false);
+                      }
+                    };
+
+                    const facultyRootPath = isBshssDept ? `/departments/${loaderData.slug}/faculty/list` : fullPath;
+
+                    return (
+                      <div key={item.id} className="space-y-1">
+                        <div className="flex items-center">
+                          <Link
+                            to={facultyRootPath}
+                            onClick={handleFacultyClick}
+                            className={`flex-1 flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${
+                              isActive
+                                ? "bg-primary text-white shadow-md shadow-primary/25"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              {getNavIcon(item.icon)} <span>{item.title}</span>
+                            </div>
+                            <ChevronDown
+                              size={16}
+                              className={`transition-transform duration-200 ${
+                                isFacultyExpanded ? "rotate-0 opacity-90" : "-rotate-90 opacity-60"
+                              }`}
+                            />
+                          </Link>
+                        </div>
+
+                        {/* Dropdown Options */}
+                        {isFacultyExpanded && (
+                          <div className="pl-4 space-y-1 pt-1 border-l-2 border-primary/30 ml-4.5 my-1 animate-in fade-in slide-in-from-top-1 duration-150">
+                            {isBshssDept ? (
+                              <>
+                                <Link
+                                  to={`/departments/${loaderData.slug}/faculty/list`}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                    isListActive && !activeSubject
+                                      ? "bg-primary text-white shadow-xs font-bold"
+                                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                  }`}
+                                >
+                                  <List size={14} />
+                                  <span>Faculty List</span>
+                                </Link>
+
+                                <Link
+                                  to={`/departments/${loaderData.slug}/faculty/list`}
+                                  search={{ subject: "Mathematics" }}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                    isListActive && activeSubject === "mathematics"
+                                      ? "bg-primary text-white shadow-xs font-bold"
+                                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                  }`}
+                                >
+                                  <Calculator size={14} />
+                                  <span>Mathematics</span>
+                                </Link>
+
+                                <Link
+                                  to={`/departments/${loaderData.slug}/faculty/list`}
+                                  search={{ subject: "Physics" }}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                    isListActive && activeSubject === "physics"
+                                      ? "bg-primary text-white shadow-xs font-bold"
+                                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                  }`}
+                                >
+                                  <Atom size={14} />
+                                  <span>Physics</span>
+                                </Link>
+
+                                <Link
+                                  to={`/departments/${loaderData.slug}/faculty/list`}
+                                  search={{ subject: "Chemistry" }}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                    isListActive && activeSubject === "chemistry"
+                                      ? "bg-primary text-white shadow-xs font-bold"
+                                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                  }`}
+                                >
+                                  <FlaskConical size={14} />
+                                  <span>Chemistry</span>
+                                </Link>
+
+                                <Link
+                                  to={`/departments/${loaderData.slug}/faculty/list`}
+                                  search={{ subject: "English" }}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                    isListActive && activeSubject === "english"
+                                      ? "bg-primary text-white shadow-xs font-bold"
+                                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                  }`}
+                                >
+                                  <BookOpen size={14} />
+                                  <span>English</span>
+                                </Link>
+
+                                <Link
+                                  to={`/departments/${loaderData.slug}/faculty/list`}
+                                  search={{ subject: "Commerce" }}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                    isListActive && (activeSubject === "commerce" || activeSubject === "economics")
+                                      ? "bg-primary text-white shadow-xs font-bold"
+                                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                  }`}
+                                >
+                                  <Landmark size={14} />
+                                  <span>Commerce</span>
+                                </Link>
+
+                                <Link
+                                  to={`/departments/${loaderData.slug}/faculty/non-teaching`}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                    isNonTeachingActive
+                                      ? "bg-primary text-white shadow-xs font-bold"
+                                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                  }`}
+                                >
+                                  <Briefcase size={14} />
+                                  <span>Non Teaching Staff</span>
+                                </Link>
+                              </>
+                            ) : (
+                              <>
+                                <Link
+                                  to={`/departments/${loaderData.slug}/faculty`}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                    isProfilesActive
+                                      ? "bg-primary text-white shadow-xs font-bold"
+                                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                  }`}
+                                >
+                                  <UserCheck size={14} />
+                                  <span>Faculty Profiles</span>
+                                </Link>
+
+                                <Link
+                                  to={`/departments/${loaderData.slug}/faculty/list`}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                    isListActive
+                                      ? "bg-primary text-white shadow-xs font-bold"
+                                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                  }`}
+                                >
+                                  <List size={14} />
+                                  <span>Faculty List</span>
+                                </Link>
+
+                                <Link
+                                  to={`/departments/${loaderData.slug}/faculty/non-teaching`}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                    isNonTeachingActive
+                                      ? "bg-primary text-white shadow-xs font-bold"
+                                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                  }`}
+                                >
+                                  <Briefcase size={14} />
+                                  <span>Non Teaching Staff</span>
+                                </Link>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
 
                   return (
                     <div key={item.id} className="space-y-1">

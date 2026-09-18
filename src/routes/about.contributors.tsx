@@ -8,7 +8,7 @@ export const Route = createFileRoute("/about/contributors")({
       {
         name: "description",
         content:
-          "Meet the student development team (Likhith, Sai Rupini, Sai Vamsi, Anitha) and faculty supervisor Dr. W. Anil behind the JNTU-GV web portal.",
+          "Meet the student development team (Likhith, Sai Rupini, Sai Vamsi, Anitha) and faculty supervisor Mr. Anil Wurity behind the JNTU-GV web portal.",
       },
     ],
   }),

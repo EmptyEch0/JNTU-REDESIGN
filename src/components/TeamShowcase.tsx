@@ -34,7 +34,7 @@ interface TeamMember {
 }
 
 const SUPERVISOR = {
-  name: "Dr. W. Anil",
+  name: "Mr. Anil Wurity",
   title: "Associate Professor",
   department: "Department of Information Technology",
   institution: "JNTU-GV College of Engineering, Vizianagaram",
@@ -71,7 +71,7 @@ const DEVELOPERS: TeamMember[] = [
     badge: "Lead Developer",
     badgeColor: "from-sky-500 to-blue-600 text-white shadow-sky-500/20",
     message:
-      "This internship was a new and valuable experience for me, giving me the opportunity to work with a new team and contribute to our college website.\n\nIt was a great pleasure and an honour to work on something meaningful for my own college, and I sincerely thank W. Anil Sir for this opportunity.\n\nI learned many new things, faced challenges, and experienced several sleepless nights while completing our work.\n\nWorking with the team helped me improve my technical, communication, teamwork, and problem-solving skills.\n\nOverall, this journey gave me valuable experiences and lessons that I will carry forward in my academic and professional life.",
+      "This internship was a new and valuable experience for me, giving me the opportunity to work with a new team and contribute to our college website.\n\nIt was a great pleasure and an honour to work on something meaningful for my own college, and I sincerely thank Mr. Anil Wurity Sir for this opportunity.\n\nI learned many new things, faced challenges, and experienced several sleepless nights while completing our work.\n\nWorking with the team helped me improve my technical, communication, teamwork, and problem-solving skills.\n\nOverall, this journey gave me valuable experiences and lessons that I will carry forward in my academic and professional life.",
     highlights: [
       "System Architecture & SSR Pipeline",
       "Dynamic Routing & Department Portals",

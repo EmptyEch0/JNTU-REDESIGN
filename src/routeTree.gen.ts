@@ -133,6 +133,8 @@ import { Route as ApiAdminSocialHealthRouteImport } from './routes/api.admin.soc
 import { Route as ApiAdminSocialStatusRouteImport } from './routes/api.admin.social.status'
 import { Route as DepartmentsIdFacultyIndexRouteImport } from './routes/departments.$id.faculty/index'
 import { Route as DepartmentsIdFacultyFacultyIdRouteImport } from './routes/departments.$id.faculty/$facultyId'
+import { Route as DepartmentsIdFacultyListRouteImport } from './routes/departments.$id.faculty/list'
+import { Route as DepartmentsIdFacultyNonTeachingRouteImport } from './routes/departments.$id.faculty/non-teaching'
 import { Route as ApiAdminGalleryIdInstagramRouteImport } from './routes/api.admin.gallery.$id.instagram'
 import { Route as ApiAdminGalleryIdLinkedinRouteImport } from './routes/api.admin.gallery.$id.linkedin'
 import { Route as ApiAdminNotificationsIdInstagramRouteImport } from './routes/api.admin.notifications.$id.instagram'
@@ -784,6 +786,18 @@ const DepartmentsIdFacultyFacultyIdRoute =
     path: '/faculty/$facultyId',
     getParentRoute: () => DepartmentsIdRoute,
   } as any)
+const DepartmentsIdFacultyListRoute =
+  DepartmentsIdFacultyListRouteImport.update({
+    id: '/faculty/list',
+    path: '/faculty/list',
+    getParentRoute: () => DepartmentsIdRoute,
+  } as any)
+const DepartmentsIdFacultyNonTeachingRoute =
+  DepartmentsIdFacultyNonTeachingRouteImport.update({
+    id: '/faculty/non-teaching',
+    path: '/faculty/non-teaching',
+    getParentRoute: () => DepartmentsIdRoute,
+  } as any)
 const ApiAdminGalleryIdInstagramRoute =
   ApiAdminGalleryIdInstagramRouteImport.update({
     id: '/api/admin/gallery/$id/instagram',
@@ -957,6 +971,8 @@ export interface FileRoutesByFullPath {
   '/api/admin/social/health': typeof ApiAdminSocialHealthRoute
   '/api/admin/social/status': typeof ApiAdminSocialStatusRoute
   '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
+  '/departments/$id/faculty/list': typeof DepartmentsIdFacultyListRoute
+  '/departments/$id/faculty/non-teaching': typeof DepartmentsIdFacultyNonTeachingRoute
   '/departments/$id/faculty/': typeof DepartmentsIdFacultyIndexRoute
   '/api/admin/gallery/$id/instagram': typeof ApiAdminGalleryIdInstagramRoute
   '/api/admin/gallery/$id/linkedin': typeof ApiAdminGalleryIdLinkedinRoute
@@ -1081,6 +1097,8 @@ export interface FileRoutesByTo {
   '/api/admin/social/health': typeof ApiAdminSocialHealthRoute
   '/api/admin/social/status': typeof ApiAdminSocialStatusRoute
   '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
+  '/departments/$id/faculty/list': typeof DepartmentsIdFacultyListRoute
+  '/departments/$id/faculty/non-teaching': typeof DepartmentsIdFacultyNonTeachingRoute
   '/departments/$id/faculty': typeof DepartmentsIdFacultyIndexRoute
   '/api/admin/gallery/$id/instagram': typeof ApiAdminGalleryIdInstagramRoute
   '/api/admin/gallery/$id/linkedin': typeof ApiAdminGalleryIdLinkedinRoute
@@ -1216,6 +1234,8 @@ export interface FileRoutesById {
   '/api/admin/social/health': typeof ApiAdminSocialHealthRoute
   '/api/admin/social/status': typeof ApiAdminSocialStatusRoute
   '/departments/$id/faculty/$facultyId': typeof DepartmentsIdFacultyFacultyIdRoute
+  '/departments/$id/faculty/list': typeof DepartmentsIdFacultyListRoute
+  '/departments/$id/faculty/non-teaching': typeof DepartmentsIdFacultyNonTeachingRoute
   '/departments/$id/faculty/': typeof DepartmentsIdFacultyIndexRoute
   '/api/admin/gallery/$id/instagram': typeof ApiAdminGalleryIdInstagramRoute
   '/api/admin/gallery/$id/linkedin': typeof ApiAdminGalleryIdLinkedinRoute
@@ -1352,6 +1372,8 @@ export interface FileRouteTypes {
     | '/api/admin/social/health'
     | '/api/admin/social/status'
     | '/departments/$id/faculty/$facultyId'
+    | '/departments/$id/faculty/list'
+    | '/departments/$id/faculty/non-teaching'
     | '/departments/$id/faculty/'
     | '/api/admin/gallery/$id/instagram'
     | '/api/admin/gallery/$id/linkedin'
@@ -1476,6 +1498,8 @@ export interface FileRouteTypes {
     | '/api/admin/social/health'
     | '/api/admin/social/status'
     | '/departments/$id/faculty/$facultyId'
+    | '/departments/$id/faculty/list'
+    | '/departments/$id/faculty/non-teaching'
     | '/departments/$id/faculty'
     | '/api/admin/gallery/$id/instagram'
     | '/api/admin/gallery/$id/linkedin'
@@ -1610,6 +1634,8 @@ export interface FileRouteTypes {
     | '/api/admin/social/health'
     | '/api/admin/social/status'
     | '/departments/$id/faculty/$facultyId'
+    | '/departments/$id/faculty/list'
+    | '/departments/$id/faculty/non-teaching'
     | '/departments/$id/faculty/'
     | '/api/admin/gallery/$id/instagram'
     | '/api/admin/gallery/$id/linkedin'
@@ -2558,6 +2584,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsIdFacultyFacultyIdRouteImport
       parentRoute: typeof DepartmentsIdRoute
     }
+    '/departments/$id/faculty/list': {
+      id: '/departments/$id/faculty/list'
+      path: '/faculty/list'
+      fullPath: '/departments/$id/faculty/list'
+      preLoaderRoute: typeof DepartmentsIdFacultyListRouteImport
+      parentRoute: typeof DepartmentsIdRoute
+    }
+    '/departments/$id/faculty/non-teaching': {
+      id: '/departments/$id/faculty/non-teaching'
+      path: '/faculty/non-teaching'
+      fullPath: '/departments/$id/faculty/non-teaching'
+      preLoaderRoute: typeof DepartmentsIdFacultyNonTeachingRouteImport
+      parentRoute: typeof DepartmentsIdRoute
+    }
     '/api/admin/gallery/$id/instagram': {
       id: '/api/admin/gallery/$id/instagram'
       path: '/api/admin/gallery/$id/instagram'
@@ -2844,6 +2884,8 @@ interface DepartmentsIdRouteChildren {
   DepartmentsIdTimetablesRoute: typeof DepartmentsIdTimetablesRoute
   DepartmentsIdIndexRoute: typeof DepartmentsIdIndexRoute
   DepartmentsIdFacultyFacultyIdRoute: typeof DepartmentsIdFacultyFacultyIdRoute
+  DepartmentsIdFacultyListRoute: typeof DepartmentsIdFacultyListRoute
+  DepartmentsIdFacultyNonTeachingRoute: typeof DepartmentsIdFacultyNonTeachingRoute
   DepartmentsIdFacultyIndexRoute: typeof DepartmentsIdFacultyIndexRoute
 }
 
@@ -2857,6 +2899,8 @@ const DepartmentsIdRouteChildren: DepartmentsIdRouteChildren = {
   DepartmentsIdTimetablesRoute: DepartmentsIdTimetablesRoute,
   DepartmentsIdIndexRoute: DepartmentsIdIndexRoute,
   DepartmentsIdFacultyFacultyIdRoute: DepartmentsIdFacultyFacultyIdRoute,
+  DepartmentsIdFacultyListRoute: DepartmentsIdFacultyListRoute,
+  DepartmentsIdFacultyNonTeachingRoute: DepartmentsIdFacultyNonTeachingRoute,
   DepartmentsIdFacultyIndexRoute: DepartmentsIdFacultyIndexRoute,
 }
 

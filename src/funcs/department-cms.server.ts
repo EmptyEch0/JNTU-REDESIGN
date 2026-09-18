@@ -201,9 +201,13 @@ const BUILT_IN_SLUGS = new Set([
   "hod",
   "courses",
   "faculty",
+  "faculty/list",
+  "faculty/non-teaching",
+  "faculty/profiles",
   "labs",
   "achievements",
   "gallery",
+  "timetables",
 ]);
 
 function isDynamicCmsPage(slug: string) {

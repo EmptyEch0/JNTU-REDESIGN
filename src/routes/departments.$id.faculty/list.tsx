@@ -1,8 +1,8 @@
 import { createFileRoute, useLoaderData, useParams, Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
 import { DEPARTMENT_FACULTY_LIST, type DepartmentFacultyListItem } from "@/data/department-faculty-data";
-import { useState, useMemo, useEffect } from "react";
-import { Search, Users, ShieldCheck, ArrowRight, Filter } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Search, Users, ShieldCheck, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id/faculty/list")({
   head: ({ loaderData }) => {
@@ -30,14 +30,7 @@ function FacultyListPage() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Read subject query parameter from URL
-  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
-  const urlSubject = searchParams.get("subject") || "";
-  const [selectedSubject, setSelectedSubject] = useState(urlSubject);
 
-  useEffect(() => {
-    setSelectedSubject(urlSubject);
-  }, [urlSubject]);
 
   // Check if explicit verified faculty list exists for this department
   const allFacultyItems: DepartmentFacultyListItem[] = useMemo(() => {
@@ -61,47 +54,16 @@ function FacultyListPage() {
     }));
   }, [deptKey, data]);
 
-  // Unique subjects available for filtering (e.g. Mathematics, Physics, Chemistry, English, Commerce)
-  const availableSubjects = useMemo(() => {
-    const subjects = new Set<string>();
-    allFacultyItems.forEach((f) => {
-      if (f.subject && f.subject !== "—" && f.subject.trim() !== "") {
-        // Map common subject names cleanly
-        const sub = f.subject.trim();
-        if (sub.toLowerCase().includes("math")) subjects.add("Mathematics");
-        else if (sub.toLowerCase().includes("physic")) subjects.add("Physics");
-        else if (sub.toLowerCase().includes("chem")) subjects.add("Chemistry");
-        else if (sub.toLowerCase().includes("english")) subjects.add("English");
-        else if (sub.toLowerCase().includes("commerce") || sub.toLowerCase().includes("econ")) subjects.add("Commerce");
-        else subjects.add(sub);
-      }
-    });
-    return Array.from(subjects);
-  }, [allFacultyItems]);
+
 
   const hasExperienceColumn = useMemo(() => {
     return allFacultyItems.some((f) => Boolean(f.totalExperience));
   }, [allFacultyItems]);
 
-  // Filtered roster
+  // Filtered roster (search only)
   const filteredFaculty = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
     return allFacultyItems.filter((f) => {
-      // Subject filter match
-      if (selectedSubject) {
-        const selLower = selectedSubject.toLowerCase();
-        const fSubLower = (f.subject || "").toLowerCase();
-        const matchesSubject =
-          fSubLower.includes(selLower) ||
-          (selLower === "commerce" && fSubLower.includes("econ")) ||
-          (selLower === "mathematics" && fSubLower.includes("math")) ||
-          (selLower === "physics" && fSubLower.includes("physic")) ||
-          (selLower === "chemistry" && fSubLower.includes("chem"));
-
-        if (!matchesSubject) return false;
-      }
-
-      // Search query match
-      const query = searchQuery.toLowerCase().trim();
       if (!query) return true;
       return (
         (f.name || "").toLowerCase().includes(query) ||
@@ -113,22 +75,9 @@ function FacultyListPage() {
         (f.totalExperience || "").toLowerCase().includes(query)
       );
     });
-  }, [allFacultyItems, searchQuery, selectedSubject]);
+  }, [allFacultyItems, searchQuery]);
 
-  const handleSubjectChange = (subject: string) => {
-    setSelectedSubject(subject);
-    const newParams = new URLSearchParams(location.search);
-    if (subject) {
-      newParams.set("subject", subject);
-    } else {
-      newParams.delete("subject");
-    }
-    const searchStr = newParams.toString();
-    navigate({
-      to: `/departments/${deptId}/faculty/list${searchStr ? `?${searchStr}` : ""}`,
-      replace: true,
-    });
-  };
+
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
@@ -158,35 +107,7 @@ function FacultyListPage() {
             />
           </div>
 
-          {availableSubjects.length > 1 && (
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-              <button
-                onClick={() => handleSubjectChange("")}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                  !selectedSubject
-                    ? "bg-primary text-white shadow-xs"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                All
-              </button>
-              {availableSubjects.map((sub) => {
-                return (
-                  <button
-                    key={sub}
-                    onClick={() => handleSubjectChange(sub)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                      selectedSubject.toLowerCase() === sub.toLowerCase()
-                        ? "bg-primary text-white shadow-xs"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                    }`}
-                  >
-                    {sub}
-                  </button>
-                );
-              })}
-            </div>
-          )}
+          
         </div>
       </div>
 

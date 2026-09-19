@@ -1,9 +1,8 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { imageUrl, getAssetUrl } from "@/lib/assets";
 import { preloadImages } from "@/lib/image-cache";
 import { PageHero } from "@/components/PageHero";
-import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SubNav } from "@/components/SubNav";
 import { STUDENT_SUBNAV } from "@/lib/site";
 import { getCampusGallery, getJntugvGalleryImages, addCampusGalleryItem, deleteCampusGalleryItem } from "@/funcs/site.server";
@@ -11,7 +10,9 @@ import { useQuery } from "@tanstack/react-query";
 import { ImageWithLoader } from "@/components/ImageWithLoader";
 import { useAdmin } from "@/context/AdminContext";
 import { SocialPublishingPanel } from "@/components/SocialPublishingPanel";
+import { downloadFile } from "@/lib/download";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Share2,
   Plus,
@@ -22,9 +23,15 @@ import {
   Instagram,
   Linkedin,
   Image as ImageIcon,
-  CheckCircle2,
-  Send,
   Calendar,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Maximize2,
+  Sparkles,
+  Layers,
+  Check,
 } from "lucide-react";
 
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
@@ -35,7 +42,7 @@ export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
       { title: "Gallery — JNTU-GV CEV" },
-      { name: "description", content: "Moments from across the JNTU-GV Vizianagaram campus." },
+      { name: "description", content: "Moments, events, and life across the JNTU-GV Vizianagaram campus." },
       { property: "og:title", content: "Gallery — JNTU-GV CEV" },
       {
         property: "og:description",
@@ -63,6 +70,18 @@ const DEFAULT_IMAGES = [
   { id: -9, src: "uploads/photo-gallery/IMG_6920.JPG", caption: "Placements Drive & Auditorium Session" },
 ];
 
+const CATEGORIES = [
+  { id: "all", label: "All Moments" },
+  { id: "sih", label: "SIH Hackathon 2026" },
+  { id: "engineers", label: "Engineer's Day 2026" },
+  { id: "celebrations", label: "Celebrations & Fests" },
+  { id: "campus", label: "Campus & Infrastructure" },
+  { id: "academics", label: "Labs & Academics" },
+];
+
+const INITIAL_BATCH_SIZE = 18;
+const LOAD_MORE_BATCH_SIZE = 15;
+
 function normalizeSrcForStorage(src: string): string {
   const trimmed = src.trim();
   const legacyHostPattern = /^https?:\/\/89\.116\.134\.182(:\d+)?\/local-assets\//;
@@ -79,6 +98,14 @@ function GalleryPage() {
   const { isAdmin } = useAdmin();
   const router = useRouter();
 
+  // Filter & Search states
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH_SIZE);
+
+  // Lightbox Modal state
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   // Admin upload modal / state
   const [showAddForm, setShowAddForm] = useState(false);
   const [newImage, setNewImage] = useState({ src: "", caption: "" });
@@ -90,6 +117,9 @@ function GalleryPage() {
     targetPlatform: TargetPlatform;
   } | null>(null);
 
+  // Sentinel ref for progressive top-to-bottom infinite load
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
   // Fetch live images from the JNTU-GV external API with memory caching
   const { data: apiImages = [] } = useQuery({
     queryKey: ["jntugv-gallery"],
@@ -99,45 +129,141 @@ function GalleryPage() {
   });
 
   // Convert API images to the same shape as local records
-  const apiGalleryItems = apiImages.map((img) => ({
-    id: -(img.id + 1000), // negative IDs to avoid collision
-    src: img.imglink || img.file_path,
-    caption: img.title || img.description,
-    date: img.date,
-    isExternal: true,
-  }));
+  const apiGalleryItems = useMemo(() => {
+    return apiImages.map((img) => ({
+      id: -(img.id + 1000), // negative IDs to avoid collision
+      src: img.imglink || img.file_path,
+      caption: img.title || img.description,
+      date: img.date,
+      isExternal: true,
+    }));
+  }, [apiImages]);
 
-  const localImages = (records.length > 0 ? records : []).map((r: any) => ({
-    ...r,
-    date: r.createdAt ? new Date(r.createdAt).toISOString().split("T")[0] : undefined,
-  }));
+  const localImages = useMemo(() => {
+    return (records.length > 0 ? records : []).map((r: any) => ({
+      ...r,
+      date: r.createdAt ? new Date(r.createdAt).toISOString().split("T")[0] : undefined,
+    }));
+  }, [records]);
 
-  const rawImages = [
-    ...localImages,
-    ...apiGalleryItems,
-    ...(apiGalleryItems.length === 0 && localImages.length === 0 ? DEFAULT_IMAGES : []),
-  ];
+  // Merge and strictly deduplicate images by unique path & sort by date descending
+  const allImages = useMemo(() => {
+    const rawImages = [
+      ...localImages,
+      ...apiGalleryItems,
+      ...(apiGalleryItems.length === 0 && localImages.length === 0 ? DEFAULT_IMAGES : []),
+    ];
 
-  // Strictly deduplicate by unique image source path, then sort strictly by date descending
-  const seenSrcs = new Set<string>();
-  const images = rawImages
-    .filter((img) => {
-      const srcKey = (img.src || img.file_path || "").trim().toLowerCase();
-      if (!srcKey || seenSrcs.has(srcKey)) return false;
-      seenSrcs.add(srcKey);
+    const seenSrcs = new Set<string>();
+    return rawImages
+      .filter((img) => {
+        const srcKey = (img.src || img.file_path || "").trim().toLowerCase();
+        if (!srcKey || seenSrcs.has(srcKey)) return false;
+        seenSrcs.add(srcKey);
+        return true;
+      })
+      .sort((a: any, b: any) => {
+        const timeA = new Date(a.date || 0).getTime();
+        const timeB = new Date(b.date || 0).getTime();
+        return timeB - timeA;
+      });
+  }, [localImages, apiGalleryItems]);
+
+  // Filtered dataset based on active category tab & search query
+  const filteredImages = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    return allImages.filter((img) => {
+      const title = (img.caption || img.title || "").toLowerCase();
+      const src = (img.src || "").toLowerCase();
+
+      // Category matching
+      if (activeCategory === "sih") {
+        const matches = title.includes("sih") || title.includes("hackthon") || title.includes("hackathon") || src.includes("sih");
+        if (!matches) return false;
+      } else if (activeCategory === "engineers") {
+        const matches = title.includes("engineer") || title.includes("felicitated") || src.includes("civil group") || src.includes("it group") || src.includes("main.jpeg");
+        if (!matches) return false;
+      } else if (activeCategory === "celebrations") {
+        const matches = title.includes("independence") || title.includes("cultural") || title.includes("fest") || title.includes("celebration") || title.includes("sports");
+        if (!matches) return false;
+      } else if (activeCategory === "campus") {
+        const matches = title.includes("building") || title.includes("administration") || title.includes("library") || title.includes("hostel") || title.includes("campus") || src.includes("img_68");
+        if (!matches) return false;
+      } else if (activeCategory === "academics") {
+        const matches = title.includes("lab") || title.includes("classroom") || title.includes("auditorium") || title.includes("placement") || title.includes("workshop");
+        if (!matches) return false;
+      }
+
+      // Search query matching
+      if (query) {
+        const matchesQuery = title.includes(query) || (img.date && img.date.includes(query));
+        if (!matchesQuery) return false;
+      }
+
       return true;
-    })
-    .sort((a: any, b: any) => {
-      const timeA = new Date(a.date || 0).getTime();
-      const timeB = new Date(b.date || 0).getTime();
-      return timeB - timeA;
     });
+  }, [allImages, activeCategory, searchQuery]);
 
-  // Pre-cache the top 16 gallery images eagerly
+  // Reset pagination when category or search changes
   useEffect(() => {
-    const urls = images.slice(0, 16).map((img) => getAssetUrl(img.src || img.file_path)).filter(Boolean);
-    preloadImages(urls);
-  }, [images]);
+    setVisibleCount(INITIAL_BATCH_SIZE);
+  }, [activeCategory, searchQuery]);
+
+  // Slice visible items progressively from top to bottom
+  const visibleImages = useMemo(() => {
+    return filteredImages.slice(0, visibleCount);
+  }, [filteredImages, visibleCount]);
+
+  const hasMore = visibleCount < filteredImages.length;
+
+  // Eagerly pre-cache only the top 6 images for rapid Largest Contentful Paint (LCP)
+  useEffect(() => {
+    const topUrls = visibleImages.slice(0, 6).map((img) => {
+      const raw = img.src || img.file_path;
+      return raw.startsWith("http") ? raw : getAssetUrl(raw);
+    }).filter(Boolean);
+    preloadImages(topUrls);
+  }, [visibleImages]);
+
+  // Progressive infinite scrolling: load next batch as user scrolls near bottom
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setVisibleCount((prev) => Math.min(prev + LOAD_MORE_BATCH_SIZE, filteredImages.length));
+        }
+      },
+      {
+        rootMargin: "600px 0px", // Trigger early so user experiences seamless scrolling
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMore, filteredImages.length]);
+
+  // Keyboard navigation for Lightbox
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLightboxIndex(null);
+      } else if (e.key === "ArrowRight") {
+        setLightboxIndex((prev) => (prev !== null && prev < filteredImages.length - 1 ? prev + 1 : 0));
+      } else if (e.key === "ArrowLeft") {
+        setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : filteredImages.length - 1));
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxIndex, filteredImages.length]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -200,7 +326,6 @@ function GalleryPage() {
       setShowAddForm(false);
       router.invalidate();
 
-      // Open specific social platform modal if specified
       if (targetPlatform && res && res.id) {
         setActiveShareItem({
           item: addedItem,
@@ -224,12 +349,14 @@ function GalleryPage() {
     }
   };
 
+  const activeLightboxItem = lightboxIndex !== null ? filteredImages[lightboxIndex] : null;
+
   return (
     <>
       <PageHero
-        eyebrow="Gallery"
+        eyebrow="Campus Gallery"
         title="A campus, in moments."
-        subtitle="A growing visual record of the rhythms, faces and seasons of life at JNTU-GV CEV."
+        subtitle="Explore verified photographs of university fests, celebrations, student achievements, and world-class academic infrastructure."
         image={cultureImg}
       />
       <SubNav items={STUDENT_SUBNAV} />
@@ -369,10 +496,86 @@ function GalleryPage() {
         </div>
       )}
 
-      <section className="py-20 container-narrow">
-        <RevealOnScroll>
+      {/* Main Gallery Container */}
+      <section className="py-12 md:py-16 container-narrow">
+        {/* Controls Header: Category Tabs & Instant Search */}
+        <div className="mb-10 space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            {/* Category Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2 md:pb-0">
+              {CATEGORIES.map((cat) => {
+                const isActive = activeCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setActiveCategory(cat.id)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                      isActive
+                        ? "bg-[#0F4C81] text-white shadow-md shadow-blue-900/20 scale-[1.02]"
+                        : "bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300"
+                    }`}
+                  >
+                    {isActive && <Check className="w-3.5 h-3.5" />}
+                    <span>{cat.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Instant Search Bar */}
+            <div className="relative w-full md:w-72">
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Search moments..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-8 py-2 bg-slate-100 dark:bg-slate-800/80 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-200 placeholder-slate-400 border border-transparent focus:border-blue-500/50 outline-none transition"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-0.5"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Status counter & speed badge */}
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1">
+            <div className="flex items-center gap-2 font-medium">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Showing <strong>{visibleImages.length}</strong> of <strong>{filteredImages.length}</strong> photographs</span>
+            </div>
+            {filteredImages.length > visibleCount && (
+              <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400">
+                Smooth top-to-bottom lazy streaming active
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Masonry Image Gallery Grid */}
+        {filteredImages.length === 0 ? (
+          <div className="py-20 text-center bg-slate-50 dark:bg-slate-850/50 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
+            <ImageIcon className="w-12 h-12 mx-auto text-slate-400 mb-3 opacity-60" />
+            <h3 className="text-base font-bold text-slate-700 dark:text-slate-300">No moments found</h3>
+            <p className="text-xs text-slate-500 mt-1">Try selecting another category or clearing your search query.</p>
+            <button
+              onClick={() => {
+                setActiveCategory("all");
+                setSearchQuery("");
+              }}
+              className="mt-4 px-4 py-2 bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 text-xs font-bold rounded-xl hover:bg-blue-100 transition"
+            >
+              Reset Filters
+            </button>
+          </div>
+        ) : (
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">
-            {images.map((img, i) => {
+            {visibleImages.map((img, i) => {
               const isDatabaseItem = typeof img.id === "number" && img.id > 0;
               const formattedItem = {
                 id: isDatabaseItem ? img.id : Math.abs(img.id || i + 1),
@@ -383,18 +586,37 @@ function GalleryPage() {
                 linkedinPosted: img.linkedinPosted || false,
               };
 
+              // Top 6 images are given priority for instant above-the-fold display
+              const isPriority = i < 6;
+              const resolvedSrc = img.src.startsWith("http") ? img.src : getAssetUrl(img.src);
+
               return (
                 <div
-                  key={img.id || i}
+                  key={img.id || img.src || i}
                   title={img.caption || "Campus Moment"}
-                  className="break-inside-avoid mb-5 overflow-hidden rounded-2xl hover-lift relative group transition-all duration-300"
+                  className="break-inside-avoid mb-5 overflow-hidden rounded-2xl relative group transition-all duration-300 shadow-xs hover:shadow-xl bg-slate-100 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800"
                 >
-                  <ImageWithLoader
-                    src={img.src.startsWith("http") ? img.src : getAssetUrl(img.src)}
-                    alt={img.caption || "Campus Moment"}
-                    smartFit={true}
-                    wrapperClassName="w-full min-h-[220px] max-h-[480px] rounded-2xl border border-border/40 shadow-sm"
-                  />
+                  {/* Clickable Image Container for Lightbox Preview */}
+                  <div
+                    onClick={() => setLightboxIndex(i)}
+                    className="cursor-pointer block relative overflow-hidden"
+                  >
+                    <ImageWithLoader
+                      src={resolvedSrc}
+                      alt={img.caption || "Campus Moment"}
+                      priority={isPriority}
+                      smartFit={false}
+                      className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500"
+                      wrapperClassName="w-full min-h-[200px] max-h-[500px]"
+                    />
+
+                    {/* Hover Overlay with View Icon */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none z-10">
+                      <div className="p-3 rounded-full bg-white/90 text-slate-900 shadow-lg transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                        <Maximize2 className="w-5 h-5" />
+                      </div>
+                    </div>
+                  </div>
 
                   {/* Date Badge Overlay */}
                   {img.date && (
@@ -406,16 +628,17 @@ function GalleryPage() {
                     </div>
                   )}
 
-                  {/* Admin Direct Platform Controls Overlay on Image */}
+                  {/* Admin Direct Platform Controls Overlay */}
                   {isAdmin && (
                     <div className="absolute top-3 right-3 z-30 flex items-center gap-1.5 bg-slate-950/90 backdrop-blur-md p-1.5 rounded-2xl border border-white/20 shadow-xl opacity-90 hover:opacity-100 transition-opacity duration-200">
                       <button
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setActiveShareItem({
                             item: formattedItem,
                             targetPlatform: "linkedin",
-                          })
-                        }
+                          });
+                        }}
                         className="px-2.5 py-1 bg-[#0A66C2] hover:bg-[#084e96] text-white rounded-xl text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 shadow transition cursor-pointer active:scale-95"
                         title="Post on LinkedIn"
                       >
@@ -424,12 +647,13 @@ function GalleryPage() {
                       </button>
 
                       <button
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setActiveShareItem({
                             item: formattedItem,
                             targetPlatform: "instagram",
-                          })
-                        }
+                          });
+                        }}
                         className="px-2.5 py-1 bg-[#E4405F] hover:bg-[#c12a45] text-white rounded-xl text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 shadow transition cursor-pointer active:scale-95"
                         title="Post on Instagram"
                       >
@@ -438,12 +662,13 @@ function GalleryPage() {
                       </button>
 
                       <button
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setActiveShareItem({
                             item: formattedItem,
                             targetPlatform: "combined",
-                          })
-                        }
+                          });
+                        }}
                         className="p-1 bg-gradient-to-r from-pink-600 to-blue-600 hover:from-pink-500 hover:to-blue-500 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 shadow transition cursor-pointer active:scale-95"
                         title="Share on Both Platforms"
                       >
@@ -452,7 +677,10 @@ function GalleryPage() {
 
                       {isDatabaseItem && (
                         <button
-                          onClick={() => handleDeleteItem(img.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteItem(img.id);
+                          }}
                           className="p-1 bg-rose-500/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-xl border border-rose-500/30 transition cursor-pointer"
                           title="Delete photo"
                         >
@@ -462,18 +690,134 @@ function GalleryPage() {
                     </div>
                   )}
 
+                  {/* Caption Footer */}
                   {img.caption && (
-                    <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
-                      <p className="text-xs font-semibold tracking-wide uppercase text-primary-glow">Moment</p>
-                      <p className="text-sm font-medium mt-1">{img.caption}</p>
+                    <div className="p-3.5 bg-white dark:bg-slate-850 border-t border-slate-100 dark:border-slate-800/80">
+                      <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 line-clamp-2 leading-relaxed">
+                        {img.caption}
+                      </p>
                     </div>
                   )}
                 </div>
               );
             })}
           </div>
-        </RevealOnScroll>
+        )}
+
+        {/* Intersection Observer Sentinel for Auto Top-to-Bottom Lazy Loading */}
+        <div ref={sentinelRef} className="h-10 w-full" />
+
+        {/* Manual Load More Trigger & Progress Bar */}
+        {hasMore && (
+          <div className="mt-8 text-center space-y-3">
+            <button
+              onClick={() => setVisibleCount((prev) => Math.min(prev + LOAD_MORE_BATCH_SIZE, filteredImages.length))}
+              className="px-6 py-3 rounded-2xl bg-white dark:bg-slate-800 text-slate-800 dark:text-white font-bold text-xs shadow-md hover:shadow-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 transition-all duration-300 cursor-pointer inline-flex items-center gap-2 group"
+            >
+              <Layers className="w-4 h-4 text-blue-500 group-hover:scale-110 transition-transform" />
+              <span>Load More Photographs ({filteredImages.length - visibleCount} remaining)</span>
+            </button>
+            <div className="max-w-xs mx-auto bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+              <div
+                className="bg-[#0F4C81] h-full rounded-full transition-all duration-300"
+                style={{ width: `${(visibleImages.length / filteredImages.length) * 100}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Completed Footer Notice */}
+        {!hasMore && filteredImages.length > 0 && (
+          <div className="mt-12 text-center text-xs text-slate-400 dark:text-slate-500 font-medium py-6 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-center gap-2">
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            <span>You've reached the end of the campus collection ({filteredImages.length} moments loaded)</span>
+          </div>
+        )}
       </section>
+
+      {/* High-Resolution Interactive Lightbox Modal */}
+      <AnimatePresence>
+        {activeLightboxItem && lightboxIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[110] bg-black/95 backdrop-blur-md flex flex-col justify-between p-4 sm:p-6 select-none"
+          >
+            {/* Top Toolbar */}
+            <div className="flex items-center justify-between z-20 text-white pb-4">
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-bold">
+                  {lightboxIndex + 1} / {filteredImages.length}
+                </span>
+                {activeLightboxItem.date && (
+                  <span className="px-3 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-semibold flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5" />
+                    {activeLightboxItem.date}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const dlUrl = activeLightboxItem.src.startsWith("http") ? activeLightboxItem.src : getAssetUrl(activeLightboxItem.src);
+                    downloadFile(dlUrl, `${activeLightboxItem.caption || 'Campus_Moment'}.jpg`);
+                  }}
+                  className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition cursor-pointer"
+                  title="Download Image"
+                >
+                  <Download className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setLightboxIndex(null)}
+                  className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition cursor-pointer"
+                  title="Close (Esc)"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Central Image View with Prev / Next Buttons */}
+            <div className="relative flex-1 flex items-center justify-center overflow-hidden my-auto">
+              <button
+                onClick={() => setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : filteredImages.length - 1))}
+                className="absolute left-2 sm:left-4 z-20 p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition cursor-pointer backdrop-blur-xs"
+                title="Previous (Left Arrow)"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+
+              <motion.img
+                key={activeLightboxItem.src}
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                src={activeLightboxItem.src.startsWith("http") ? activeLightboxItem.src : getAssetUrl(activeLightboxItem.src)}
+                alt={activeLightboxItem.caption || "Campus Moment"}
+                className="max-h-[75vh] max-w-[92vw] object-contain rounded-2xl shadow-2xl"
+              />
+
+              <button
+                onClick={() => setLightboxIndex((prev) => (prev !== null && prev < filteredImages.length - 1 ? prev + 1 : 0))}
+                className="absolute right-2 sm:right-4 z-20 p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition cursor-pointer backdrop-blur-xs"
+                title="Next (Right Arrow)"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Bottom Caption Bar */}
+            <div className="pt-4 text-center z-20 max-w-2xl mx-auto">
+              <p className="text-white text-sm sm:text-base font-semibold drop-shadow-md">
+                {activeLightboxItem.caption || "Campus Moment"}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Social Media Publishing Modal with Auto-Opened Platform Preview */}
       {activeShareItem && (

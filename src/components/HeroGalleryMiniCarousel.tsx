@@ -49,11 +49,11 @@ const DEFAULT_FEATURED_SLIDES: SlideItem[] = [
     isNew: true,
   },
   {
-    id: "featured-engineers-day-civil",
-    title: "Engineer's Day Celebrations 2026 — Civil Engineering Dept",
+    id: "featured-engineers-day-developers",
+    title: "Developers of JNTUGVCEV website have been felicitated",
     date: "Sep 15, 2026",
-    src: "uploads/2026/09/Civil Group.jpeg",
-    description: "Civil Engineering Department faculty and students during Engineer's Day 2026.",
+    src: "uploads/2026/09/IT GROUP.jpeg",
+    description: "Developers of JNTUGVCEV website felicitated during Engineer's Day 2026 celebrations.",
   },
   {
     id: "featured-independence-day",
@@ -171,14 +171,14 @@ export function HeroGalleryMiniCarousel({
       "sih-2026"
     );
 
-    // 2. Featured Engineer's Day 2026 Celebration (Civil Group ONLY)
+    // 2. Featured Engineer's Day 2026 - Developers of JNTUGVCEV website felicitated
     addSlide(
       {
-        id: "featured-engineers-day-civil",
-        title: "Engineer's Day Celebrations 2026 — Civil Engineering Dept",
+        id: "featured-engineers-day-developers",
+        title: "Developers of JNTUGVCEV website have been felicitated",
         date: "Sep 15, 2026",
-        src: "uploads/2026/09/Civil Group.jpeg",
-        description: "Civil Engineering Department faculty and students during Engineer's Day 2026.",
+        src: "uploads/2026/09/IT GROUP.jpeg",
+        description: "Developers of JNTUGVCEV website felicitated during Engineer's Day 2026 celebrations.",
       },
       "engineers-day"
     );

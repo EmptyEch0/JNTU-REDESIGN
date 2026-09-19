@@ -47,6 +47,8 @@ function getItemIcon(label: string) {
   if (l.includes("rti")) return FileText;
   if (l.includes("nss") || l.includes("women")) return Heart;
   if (l.includes("edc") || l.includes("placement")) return Briefcase;
+  if (l.includes("alumni")) return Users;
+  if (l.includes("portal") || l.includes("academic portal") || l.includes("cap")) return Globe;
   return BookOpen;
 }
 
@@ -155,7 +157,11 @@ export function MegaMenu() {
 
   const handleResultSelect = (to: string) => {
     closeAll();
-    navigate({ to });
+    if (to.startsWith("http://") || to.startsWith("https://") || to.startsWith("//")) {
+      window.open(to, "_blank", "noopener,noreferrer");
+    } else {
+      navigate({ to });
+    }
   };
 
   return (
@@ -265,27 +271,53 @@ export function MegaMenu() {
                                     }`}>
                                     {g.items.map((it) => {
                                       const ItemIcon = getItemIcon(it.label);
+                                      const isExternal = it.to.startsWith("http://") || it.to.startsWith("https://") || it.to.startsWith("//");
                                       return (
                                         <li key={it.label}>
-                                          <Link
-                                            to={it.to}
-                                            className="group flex items-center gap-2.5 p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.14] border border-white/10 hover:border-white/25 transition-all duration-200 cursor-pointer"
-                                          >
-                                            <div className="w-8.5 h-8.5 shrink-0 rounded-xl bg-white/10 border border-white/20 text-blue-200 flex items-center justify-center group-hover:bg-blue-600/40 group-hover:text-white transition-all shadow-inner">
-                                              <ItemIcon className="w-4 h-4" />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                              <div className="text-xs font-semibold text-white group-hover:text-cyan-200 transition-colors leading-tight">
-                                                {it.label}
+                                          {isExternal ? (
+                                            <a
+                                              href={it.to}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="group flex items-center gap-2.5 p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.14] border border-white/10 hover:border-white/25 transition-all duration-200 cursor-pointer"
+                                            >
+                                              <div className="w-8.5 h-8.5 shrink-0 rounded-xl bg-white/10 border border-white/20 text-blue-200 flex items-center justify-center group-hover:bg-blue-600/40 group-hover:text-white transition-all shadow-inner">
+                                                <ItemIcon className="w-4 h-4" />
                                               </div>
-                                              {it.desc && (
-                                                <div className="text-[10px] text-white/60 group-hover:text-white/85 transition-colors leading-tight mt-0.5 line-clamp-1">
-                                                  {it.desc}
+                                              <div className="flex-1 min-w-0">
+                                                <div className="text-xs font-semibold text-white group-hover:text-cyan-200 transition-colors leading-tight flex items-center gap-1">
+                                                  <span>{it.label}</span>
+                                                  <span className="text-[10px] text-cyan-300/80">↗</span>
                                                 </div>
-                                              )}
-                                            </div>
-                                            <ChevronRight className="w-3.5 h-3.5 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all ml-auto shrink-0" />
-                                          </Link>
+                                                {it.desc && (
+                                                  <div className="text-[10px] text-white/60 group-hover:text-white/85 transition-colors leading-tight mt-0.5 line-clamp-1">
+                                                    {it.desc}
+                                                  </div>
+                                                )}
+                                              </div>
+                                              <ChevronRight className="w-3.5 h-3.5 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all ml-auto shrink-0" />
+                                            </a>
+                                          ) : (
+                                            <Link
+                                              to={it.to}
+                                              className="group flex items-center gap-2.5 p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.14] border border-white/10 hover:border-white/25 transition-all duration-200 cursor-pointer"
+                                            >
+                                              <div className="w-8.5 h-8.5 shrink-0 rounded-xl bg-white/10 border border-white/20 text-blue-200 flex items-center justify-center group-hover:bg-blue-600/40 group-hover:text-white transition-all shadow-inner">
+                                                <ItemIcon className="w-4 h-4" />
+                                              </div>
+                                              <div className="flex-1 min-w-0">
+                                                <div className="text-xs font-semibold text-white group-hover:text-cyan-200 transition-colors leading-tight">
+                                                  {it.label}
+                                                </div>
+                                                {it.desc && (
+                                                  <div className="text-[10px] text-white/60 group-hover:text-white/85 transition-colors leading-tight mt-0.5 line-clamp-1">
+                                                    {it.desc}
+                                                  </div>
+                                                )}
+                                              </div>
+                                              <ChevronRight className="w-3.5 h-3.5 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all ml-auto shrink-0" />
+                                            </Link>
+                                          )}
                                         </li>
                                       );
                                     })}
@@ -582,7 +614,33 @@ export function MegaMenu() {
                               <div className="grid grid-cols-1 gap-1.5">
                                 {g.items.map((it) => {
                                   const ItemIcon = getItemIcon(it.label);
-                                  return (
+                                  const isExternal = it.to.startsWith("http://") || it.to.startsWith("https://") || it.to.startsWith("//");
+                                  return isExternal ? (
+                                    <a
+                                      key={it.label}
+                                      href={it.to}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={closeAll}
+                                      className="flex items-center gap-3 p-2.5 rounded-xl bg-white hover:bg-blue-50/80 active:scale-[0.98] transition-all border border-slate-200/70 hover:border-blue-200 shadow-2xs group/sub"
+                                    >
+                                      <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200/60 text-blue-700 group-hover/sub:bg-blue-600 group-hover/sub:text-white group-hover/sub:border-blue-600 flex items-center justify-center shrink-0 transition-colors shadow-2xs">
+                                        <ItemIcon className="w-4 h-4" />
+                                      </div>
+                                      <div className="min-w-0 flex-1">
+                                        <div className="text-xs font-bold text-slate-800 group-hover/sub:text-blue-900 leading-tight break-words flex items-center gap-1">
+                                          <span>{it.label}</span>
+                                          <span className="text-[10px] text-blue-600 font-semibold">↗</span>
+                                        </div>
+                                        {it.desc && (
+                                          <div className="text-[10px] text-slate-500 group-hover/sub:text-slate-600 leading-tight mt-0.5 break-words line-clamp-1">
+                                            {it.desc}
+                                          </div>
+                                        )}
+                                      </div>
+                                      <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover/sub:text-blue-600 group-hover/sub:translate-x-0.5 transition-all shrink-0 ml-auto" />
+                                    </a>
+                                  ) : (
                                     <Link
                                       key={it.label}
                                       to={it.to}

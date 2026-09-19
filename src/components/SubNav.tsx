@@ -41,6 +41,7 @@ export function SubNav({ items }: { items: Item[] }) {
   }, [isOpen]);
 
   const isItemActive = (it: Item) => {
+    if (it.to.startsWith("http://") || it.to.startsWith("https://") || it.to.startsWith("//")) return false;
     const cleanPath = path.replace(/\/$/, "");
     const cleanTo = it.to.replace(/\/$/, "");
 
@@ -63,6 +64,21 @@ export function SubNav({ items }: { items: Item[] }) {
       <div className="hidden md:flex pointer-events-auto rounded-full bg-[oklch(0.16_0.04_255/0.88)] backdrop-blur-2xl shadow-[0_12px_40px_-12px_oklch(0.20_0.10_255/0.6),inset_0_1px_0_oklch(1_0_0/0.1)] border border-white/10 p-1.5 gap-1 items-center max-w-max">
         {items.map((it) => {
           const active = isItemActive(it);
+          const isExternal = it.to.startsWith("http://") || it.to.startsWith("https://") || it.to.startsWith("//");
+          if (isExternal) {
+            return (
+              <a
+                key={it.to}
+                href={it.to}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 px-4 py-1.5 rounded-full text-[13px] font-medium transition-all text-white/60 hover:text-white hover:bg-white/5 inline-flex items-center gap-1"
+              >
+                <span>{it.label}</span>
+                <span className="text-[10px] text-cyan-300">↗</span>
+              </a>
+            );
+          }
           return (
             <Link
               key={it.to}
@@ -106,6 +122,24 @@ export function SubNav({ items }: { items: Item[] }) {
             <div className="absolute top-full left-0 right-0 mt-2 p-1.5 rounded-2xl bg-[oklch(0.16_0.04_255/0.95)] backdrop-blur-2xl border border-white/15 shadow-2xl flex flex-col gap-1 z-50 max-h-[60vh] overflow-y-auto no-scrollbar animate-[fade-in_0.2s_ease-out]">
               {items.map((it) => {
                 const active = isItemActive(it);
+                const isExternal = it.to.startsWith("http://") || it.to.startsWith("https://") || it.to.startsWith("//");
+                if (isExternal) {
+                  return (
+                    <a
+                      key={it.to}
+                      href={it.to}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setIsOpen(false)}
+                      className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-[13px] font-medium transition-colors text-white/70 hover:text-white hover:bg-white/10"
+                    >
+                      <span className="flex items-center gap-1">
+                        <span>{it.label}</span>
+                        <span className="text-[10px] text-cyan-300 font-semibold">↗</span>
+                      </span>
+                    </a>
+                  );
+                }
                 return (
                   <Link
                     key={it.to}

@@ -184,15 +184,16 @@ export const NAV: {
           ],
         },
         {
-          title: "Campus Life",
+          title: "Campus Life & Portals",
           items: [
+            { label: "Student Alumni", to: "https://alumni.jntugv.edu.in", desc: "Networking platform for former & current students" },
+            { label: "Central Academic Portal", to: "https://cap.jntugv.edu.in", desc: "Official student academic portal (CAP)" },
             { label: "Gallery", to: "/gallery", desc: "Moments on campus" },
             {
               label: "Engineer's Day 2026 Certifications",
               to: "/engineersday2026/certifications",
               desc: "Official digital certificate verification",
             },
-            { label: "Connect to Alumni", to: "https://alumni.jntugv.edu.in/", desc: "Networking platform for former & current students" },
           ],
         },
         {
@@ -503,10 +504,16 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   { label: "Anti-Ragging Committee", to: "/anti-ragging", group: "Student Corner", keywords: "anti ragging arc aicte ugc act 26 penalties toll free 1800-180-5522 affidavit helpline squad" },
   { label: "Right to Information (RTI)", to: "/rti", group: "Statutory", keywords: "rti act 2005 public information officer pio apio appellate authority transparency jntu act goms 14" },
   {
-    label: "Alumni Portal",
+    label: "Student Alumni",
     group: "Student Corner",
-    keywords: "alumni portal former students passouts networking graduates register",
+    keywords: "student alumni portal former students passouts networking graduates register",
     to: "https://alumni.jntugv.edu.in",
+  },
+  {
+    label: "Central Academic Portal",
+    group: "Student Corner",
+    keywords: "central academic portal cap marks attendance results student portal jntugv",
+    to: "https://cap.jntugv.edu.in",
   },
   {
     label: "EDC",
@@ -592,7 +599,8 @@ export const STUDENT_SUBNAV = [
   { label: "NSS", to: "/nss" },
   { label: "Women Empowerment", to: "/women-empowerment" },
   { label: "Anti-Ragging", to: "/anti-ragging" },
-  { label: "Connect to Alumni", to: "https://alumni.jntugv.edu.in/" },
+  { label: "Student Alumni", to: "https://alumni.jntugv.edu.in" },
+  { label: "Central Academic Portal", to: "https://cap.jntugv.edu.in" },
   { label: "RTI Act", to: "/rti" },
   { label: "EDC", to: "/edc" },
   { label: "Professional Bodies", to: "/professional-bodies" },

@@ -1165,11 +1165,15 @@ export const notices = pgTable("notices", {
 
 export const academicRegulations = pgTable("academic_regulations", {
   id: serial("id").primaryKey(),
+  level: text("level"),
+  program_name: text("program_name"),
+  regulation: text("regulation"),
   title: text("title").notNull(),
-  category: text("category").notNull(), // 'B.Tech' or 'M.Tech'
+  category: text("category").notNull(),
   size: text("size").notNull(),
   date: text("date").notNull(),
   link: text("link").default("#"),
+  pdf_url: text("pdf_url").notNull(),
 });
 
 export const campusGallery = pgTable("campus_gallery", {

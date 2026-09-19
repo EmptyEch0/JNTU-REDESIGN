@@ -91,25 +91,25 @@ export const getAssetUrl = (
         resolvedUrl = `${BASE}/${relativePath}`;
       } else if (trimmedPath.includes("89.116.134.182:8080")) {
         resolvedUrl = trimmedPath.replace("http://89.116.134.182:8080", "https://jntugvcev.edu.in").replace("89.116.134.182:8080", "jntugvcev.edu.in");
-      } else if (trimmedPath.startsWith("http://jntugvcev.edu.in")) {
-        resolvedUrl = trimmedPath.replace("http://jntugvcev.edu.in", "https://jntugvcev.edu.in");
       } else if (trimmedPath.startsWith("http://localhost:8081/")) {
         const relativePath = trimmedPath.replace("http://localhost:8081/", "");
         resolvedUrl = `${BASE}/${relativePath.replace(/\\/g, "/").replace(/^\/+/, "")}`;
-      } else if (trimmedPath.includes("jntugvcev.edu.in/wp-content/")) {
-        const wpPath = trimmedPath.match(/wp-content\/(.+)/);
-        if (wpPath) {
-          const SPECIAL_WP_FILES = [
-            "EEE-3.Dr_.V.S.VAKULA-Asst-Prof.jpg",
-            "V.-Mani-Kumar-Photo-Mech.jpg",
-            "WhatsApp-Image-2020-08-26-at-10.23.09-AM.jpeg",
-          ];
-          if (SPECIAL_WP_FILES.some((f) => trimmedPath.includes(f))) {
-            resolvedUrl = `${BASE}/${wpPath[1]}`;
+      } else if (
+        trimmedPath.startsWith("http://jntugvcev.edu.in/") ||
+        trimmedPath.startsWith("https://jntugvcev.edu.in/")
+      ) {
+        try {
+          const parsed = new URL(trimmedPath);
+          const relativeAsset = parsed.pathname.replace(/^\/wp-content\//, "").replace(/^\/+/, "");
+          const isDevEnv = 
+            (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) ||
+            (typeof process !== "undefined" && process.env?.NODE_ENV !== "production");
+          if (isDevEnv) {
+            resolvedUrl = `/local-assets/${relativeAsset}`;
           } else {
-            resolvedUrl = `${BASE}/wp-content/${wpPath[1]}`;
+            resolvedUrl = `${BASE}/${relativeAsset}`;
           }
-        } else {
+        } catch {
           resolvedUrl = trimmedPath;
         }
       } else {
@@ -118,6 +118,7 @@ export const getAssetUrl = (
     } else {
       let cleanPath = trimmedPath.replace(/\\/g, "/");
       if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
+      if (cleanPath.startsWith("wp-content/")) cleanPath = cleanPath.substring("wp-content/".length);
       if (cleanPath.startsWith("uploads/")) cleanPath = `local-assets/${cleanPath}`;
       if (cleanPath.startsWith("facilities/")) cleanPath = `local-assets/uploads/${cleanPath}`;
       const isDevEnv = 
@@ -166,25 +167,5 @@ export const wpUrl = (
   oldUrl: string | null | undefined,
 ): string => {
   if (!oldUrl) return undefined as unknown as string;
-
-  const wpMatch = oldUrl.match(/wp-content\/(.+)/);
-
-  if (wpMatch) {
-    return `${BASE}/wp-content/${wpMatch[1]}`;
-  }
-
-  const localMatch = oldUrl.match(/localhost:\d+\/(.+)/);
-
-  if (localMatch) {
-    return `${BASE}/${localMatch[1]}`;
-  }
-
-  if (
-    oldUrl.startsWith("/uploads/") ||
-    oldUrl.startsWith("/images/")
-  ) {
-    return `${BASE}${oldUrl}`;
-  }
-
-  return assetUrl(oldUrl);
+  return getAssetUrl(oldUrl);
 };

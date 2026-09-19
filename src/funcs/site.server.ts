@@ -267,29 +267,44 @@ export const addAcademicRegulation = createServerFn({
   method: "POST",
 })
   .validator(
-    (data: { title: string; category: string; link: string }) => data
+    (data: {
+      title: string;
+      category: string;
+      link?: string;
+      pdf_url?: string;
+      size?: string;
+      date?: string;
+      level?: string;
+      program_name?: string;
+      regulation?: string;
+    }) => data
   )
   .handler(async ({ data }) => {
     try {
+      const fileUrl = data.pdf_url || data.link || "#";
       const inserted = await db
         .insert(academicRegulations)
         .values({
           title: data.title,
           category: data.category,
-          size: "PDF",
-          date: new Date().toLocaleDateString(),
-          link: data.link,
+          level: data.level || (data.category === "B.Tech" ? "UG" : "PG"),
+          program_name: data.program_name || data.category,
+          regulation: data.regulation || data.title.split(" ")[0] || "R23",
+          size: data.size || "PDF",
+          date: data.date || new Date().toLocaleDateString(),
+          link: fileUrl,
+          pdf_url: fileUrl,
         })
         .returning({ id: academicRegulations.id });
 
       const regId = inserted[0].id;
       const chunkSource = `regulation:${regId}`;
-      const chunkText = `Academic Regulation: ${data.title}. Category: ${data.category}. Download: ${data.link}`;
-      ingestSingleChunk(chunkText, chunkSource, "regulation", { link: data.link, category: data.category }).catch(
+      const chunkText = `Academic Regulation: ${data.title}. Category: ${data.category}. Download: ${fileUrl}`;
+      ingestSingleChunk(chunkText, chunkSource, "regulation", { link: fileUrl, category: data.category }).catch(
         (err) => console.error("RAG auto-ingest regulation error:", err)
       );
 
-      return { success: true };
+      return { success: true, id: regId };
     } catch (err) {
       console.error("Add regulation failed:", err);
       throw new Error("Failed to add regulation");

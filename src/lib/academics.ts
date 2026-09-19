@@ -180,22 +180,31 @@ export const upsertAcademicsRegulation = createServerFn({ method: "POST" })
   .validator((d: any) => d)
   .handler(async ({ data }) => {
     memoryCache.invalidatePrefix("academics:");
+    const fileUrl = data.pdf_url || data.link || "#";
     if (data.id) {
       await db.update(academicRegulations).set({
         title: data.title,
         category: data.category,
-        size: data.size || "Unknown Size",
+        level: data.level || (data.category === "B.Tech" ? "UG" : "PG"),
+        program_name: data.program_name || data.category,
+        regulation: data.regulation || data.title?.split(" ")[0] || "R23",
+        size: data.size || "PDF",
         date: data.date || new Date().toLocaleDateString(),
-        link: data.link || "#"
+        link: fileUrl,
+        pdf_url: fileUrl,
       }).where(eq(academicRegulations.id, data.id));
       return { success: true };
     } else {
       await db.insert(academicRegulations).values({
         title: data.title,
         category: data.category,
-        size: data.size || "Unknown Size",
+        level: data.level || (data.category === "B.Tech" ? "UG" : "PG"),
+        program_name: data.program_name || data.category,
+        regulation: data.regulation || data.title?.split(" ")[0] || "R23",
+        size: data.size || "PDF",
         date: data.date || new Date().toLocaleDateString(),
-        link: data.link || "#"
+        link: fileUrl,
+        pdf_url: fileUrl,
       });
       return { success: true };
     }

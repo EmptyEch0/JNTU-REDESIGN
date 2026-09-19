@@ -10,41 +10,50 @@ function serveLocalAssets(): Plugin {
   return {
     name: "serve-local-assets",
     configureServer(server) {
-      server.middlewares.use(
-        "/local-assets",
-        (req, res, next) => {
-          const safePath = decodeURIComponent((req.url || "").split("?")[0]);
-          const filePath = path.join(process.cwd(), "local-assets", safePath);
-          const resolved = path.resolve(filePath);
-          const allowed = path.resolve(path.join(process.cwd(), "local-assets"));
+      const handleAsset = (prefix: string) => (req: any, res: any, next: any) => {
+        const urlPart = (req.url || "").split("?")[0];
+        const safePath = decodeURIComponent(urlPart);
+        const relativeTarget = prefix === "/uploads"
+          ? path.join("uploads", safePath)
+          : prefix === "/wp-content/uploads"
+          ? path.join("uploads", safePath)
+          : safePath;
 
-          if (!resolved.startsWith(allowed)) {
-            res.statusCode = 403;
-            res.end("Forbidden");
-            return;
-          }
-          if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
-            res.writeHead(302, { Location: `https://jntugvcev.edu.in/local-assets${safePath}` });
-            res.end();
-            return;
-          }
+        const filePath = path.join(process.cwd(), "local-assets", relativeTarget);
+        const resolved = path.resolve(filePath);
+        const allowed = path.resolve(path.join(process.cwd(), "local-assets"));
 
-          const ext = path.extname(resolved).toLowerCase();
-          const mimeMap: Record<string, string> = {
-            ".jpg": "image/jpeg",
-            ".jpeg": "image/jpeg",
-            ".png": "image/png",
-            ".webp": "image/webp",
-            ".gif": "image/gif",
-            ".svg": "image/svg+xml",
-            ".pdf": "application/pdf",
-          };
+        if (!resolved.startsWith(allowed)) {
+          res.statusCode = 403;
+          res.end("Forbidden");
+          return;
+        }
+        if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
+          next();
+          return;
+        }
 
-          res.setHeader("Content-Type", mimeMap[ext] || "application/octet-stream");
-          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-          fs.createReadStream(resolved).pipe(res);
-        },
-      );
+        const ext = path.extname(resolved).toLowerCase();
+        const mimeMap: Record<string, string> = {
+          ".jpg": "image/jpeg",
+          ".jpeg": "image/jpeg",
+          ".png": "image/png",
+          ".webp": "image/webp",
+          ".gif": "image/gif",
+          ".svg": "image/svg+xml",
+          ".pdf": "application/pdf",
+          ".doc": "application/msword",
+          ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        };
+
+        res.setHeader("Content-Type", mimeMap[ext] || "application/octet-stream");
+        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        fs.createReadStream(resolved).pipe(res);
+      };
+
+      server.middlewares.use("/local-assets", handleAsset("/local-assets"));
+      server.middlewares.use("/uploads", handleAsset("/uploads"));
+      server.middlewares.use("/wp-content/uploads", handleAsset("/wp-content/uploads"));
     },
   };
 }

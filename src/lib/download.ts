@@ -64,6 +64,12 @@ export async function downloadFile(
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
+    const contentType = response.headers.get("content-type") || "";
+    // If the response is HTML, it means the server returned an error page rather than the file
+    if (contentType.includes("text/html")) {
+      throw new Error("Received HTML error page instead of PDF document");
+    }
+
     const blob = await response.blob();
     const blobUrl = window.URL.createObjectURL(blob);
 
@@ -81,7 +87,7 @@ export async function downloadFile(
 
     toast.success("Download completed!", { id: toastId });
   } catch (err: any) {
-    console.warn("Direct blob download failed, falling back to standard anchor:", err);
+    console.warn("Direct blob download failed, falling back to direct anchor:", err);
 
     try {
       const anchor = document.createElement("a");
@@ -97,7 +103,7 @@ export async function downloadFile(
         document.body.removeChild(anchor);
       }, 1000);
 
-      toast.success("Download started!", { id: toastId });
+      toast.info(`Opening ${filename}...`, { id: toastId });
     } catch (fallbackErr) {
       console.error("Download fallback failed:", fallbackErr);
       toast.error("Could not download file directly. Opening in new tab...", { id: toastId });
@@ -126,4 +132,3 @@ export function previewFile(
   const resolvedUrl = getAssetUrl(target.trim());
   window.open(resolvedUrl, "_blank", "noopener,noreferrer");
 }
-

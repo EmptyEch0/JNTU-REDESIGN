@@ -55,14 +55,7 @@ const DEFAULT_FEATURED_SLIDES: SlideItem[] = [
     src: "uploads/2026/09/IT GROUP.jpeg",
     description: "Developers of JNTUGVCEV website felicitated during Engineer's Day 2026 celebrations.",
   },
-  {
-    id: "featured-sankhya-placements",
-    title: "10 Students Selected in Sankhya Technologies Campus Placement Drive",
-    date: "Sep 10, 2026",
-    src: "uploads/2026/09/sankhya-placement-congrats.jpeg",
-    description: "Special appreciation to Ms. Surla Sailaja and 9 other selected students from IT, M.Tech (DS) & MCA.",
-    isNew: true,
-  },
+
   {
     id: "featured-independence-day",
     title: "80th Independence Day Celebrations at JNTU-GV",
@@ -191,18 +184,7 @@ export function HeroGalleryMiniCarousel({
       "engineers-day"
     );
 
-    // 3. Featured Sankhya Technologies Campus Placement Drive
-    addSlide(
-      {
-        id: "featured-sankhya-placements",
-        title: "10 Students Selected in Sankhya Technologies Campus Placement Drive",
-        date: "Sep 10, 2026",
-        src: "uploads/2026/09/sankhya-placement-congrats.jpeg",
-        description: "Special appreciation to Ms. Surla Sailaja and 9 other selected students from IT, M.Tech (DS) & MCA.",
-        isNew: true,
-      },
-      "sankhya-placements"
-    );
+
 
     // 4. Featured Independence Day celebration (GUARANTEED SINGLE INSTANCE)
     addSlide(

@@ -134,6 +134,14 @@ export const updatePageSection = createServerFn({
     }
   });
 
+const SANKHYA_PLACEMENT_NOTICE = {
+  id: 401,
+  title: "Congratulations: 10 Students Selected in Sankhya Technologies Campus Placement Drive (Dept. of IT)",
+  date: "10 Sep 2026",
+  tag: "Placements",
+  url: "uploads/2026/09/sankhya-technologies-placement-notice.pdf",
+};
+
 export const getNotices = createServerFn({
   method: "GET",
 }).handler(async () => {
@@ -143,10 +151,14 @@ export const getNotices = createServerFn({
 
   try {
     const results = await db.select().from(notices).orderBy(desc(notices.id));
-    serverCache.set(cacheKey, results, 15 * 60 * 1000); // 15 mins
-    return results;
+    const hasSankhya = results.some(
+      (n) => (n.title || "").toLowerCase().includes("sankhya") || (n.url || "").includes("sankhya")
+    );
+    const finalResults = hasSankhya ? results : [SANKHYA_PLACEMENT_NOTICE, ...results];
+    serverCache.set(cacheKey, finalResults, 15 * 60 * 1000); // 15 mins
+    return finalResults;
   } catch {
-    return [];
+    return [SANKHYA_PLACEMENT_NOTICE];
   }
 });
 

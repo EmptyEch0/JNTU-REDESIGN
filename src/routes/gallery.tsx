@@ -165,7 +165,7 @@ function GalleryPage() {
     const rawImages = [
       ...localImages,
       ...apiGalleryItems,
-      ...(apiGalleryItems.length === 0 && localImages.length === 0 ? DEFAULT_IMAGES : []),
+      ...DEFAULT_IMAGES,
     ];
 
     const seenSrcs = new Set<string>();

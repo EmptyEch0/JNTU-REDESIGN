@@ -189,11 +189,6 @@ export const NAV: {
             { label: "Student Alumni", to: "https://alumni.jntugv.edu.in", desc: "Networking platform for former & current students" },
             { label: "Central Academic Portal", to: "https://cap.jntugv.edu.in", desc: "Official student academic portal (CAP)" },
             { label: "Gallery", to: "/gallery", desc: "Moments on campus" },
-            {
-              label: "Engineer's Day 2026 Certifications",
-              to: "/engineersday2026/certifications",
-              desc: "Official digital certificate verification",
-            },
           ],
         },
         {

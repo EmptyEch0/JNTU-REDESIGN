@@ -646,7 +646,7 @@ export const getJntugvGalleryImages = createServerFn({
         img.admin_approval === "accepted" &&
         (img.carousel_scrolling === "yes" || img.gallery_scrolling === "yes"),
     );
-    rawPool = filtered;
+    rawPool = [...featuredItems, ...filtered];
   }
 
   // Sort rawPool strictly by date descending (latest first)

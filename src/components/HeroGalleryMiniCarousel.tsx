@@ -204,7 +204,7 @@ export function HeroGalleryMiniCarousel({
       const cleanSrc = dbItem.src.toLowerCase();
       const cleanTitle = (dbItem.caption || "Campus Moment").trim().toLowerCase();
 
-      // Skip Independence Day, Engineer's Day, and extra SIH photos (SIH Main.JPG already added as slide 1)
+      // Skip Independence Day, Engineer's Day, Sankhya, and extra SIH photos
       if (
         cleanSrc.includes("independence") ||
         cleanTitle.includes("independence") ||
@@ -217,7 +217,11 @@ export function HeroGalleryMiniCarousel({
         cleanTitle.includes("hackthon") ||
         cleanTitle.includes("hackathon") ||
         cleanSrc.includes("valedictory") ||
-        cleanSrc.includes("p1170")
+        cleanSrc.includes("p1170") ||
+        cleanSrc.includes("sankhya") ||
+        cleanTitle.includes("sankhya") ||
+        cleanTitle.includes("placement") ||
+        cleanSrc.includes("placement")
       ) {
         continue;
       }
@@ -249,6 +253,8 @@ export function HeroGalleryMiniCarousel({
 
       if (
         img.id === 166 ||
+        img.id === 401 ||
+        img.id === 402 ||
         cleanTitle.includes("independence") ||
         rawSrc.includes("independence") ||
         cleanTitle.includes("it group") ||
@@ -258,12 +264,16 @@ export function HeroGalleryMiniCarousel({
         cleanTitle.includes("sih") ||
         cleanTitle.includes("hackthon") ||
         cleanTitle.includes("hackathon") ||
+        cleanTitle.includes("sankhya") ||
+        cleanTitle.includes("placement") ||
         rawSrc.includes("it group") ||
         rawSrc.includes("main.jpeg") ||
         rawSrc.includes("civil group") ||
         rawSrc.includes("sih") ||
         rawSrc.includes("valedictory") ||
-        rawSrc.includes("p1170")
+        rawSrc.includes("p1170") ||
+        rawSrc.includes("sankhya") ||
+        rawSrc.includes("placement")
       ) {
         continue;
       }

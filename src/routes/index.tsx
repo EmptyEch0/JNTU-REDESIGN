@@ -429,7 +429,7 @@ function HomePage() {
     ...QUERY_CACHE,
   });
 
-  // Select the latest items sorted strictly by date descending with Engineers Day 2026 featured prominently
+  // Select the latest items sorted strictly by date descending with Engineers Day 2026 and Sankhya Placements featured prominently
   const homepageSelectedImages = useMemo(() => {
     const featuredHomepageMoments = [
       {
@@ -449,6 +449,24 @@ function HomePage() {
         imglink: "uploads/2026/09/Main.jpeg",
         description: "Engineering Day Celebrations 2026",
         hoverTitle: "Engineering Day Celebrations 2026",
+      },
+      {
+        id: 401,
+        title: "Congratulations to 10 IT Students Selected in Sankhya Technologies Campus Placement Drive",
+        date: "2026-09-10",
+        file_path: "uploads/2026/09/sankhya-placement-congrats.jpeg",
+        imglink: "uploads/2026/09/sankhya-placement-congrats.jpeg",
+        description: "10 students from IT, M.Tech (Data Science) and MCA selected in Sankhya Technologies campus placement drive.",
+        hoverTitle: "Congratulations to 10 IT Students Selected in Sankhya Technologies Campus Placement Drive",
+      },
+      {
+        id: 402,
+        title: "Sankhya Technologies Placement Drive — Selected Students with Faculty & Administration",
+        date: "2026-09-10",
+        file_path: "uploads/2026/09/sankhya-placement-students-group.jpeg",
+        imglink: "uploads/2026/09/sankhya-placement-students-group.jpeg",
+        description: "Selected students congratulated by Head of the Department and College Administration.",
+        hoverTitle: "Sankhya Technologies Placement Drive — Selected Students with Faculty & Administration",
       },
       {
         id: 202,
@@ -478,9 +496,13 @@ function HomePage() {
       "sih 2026",
       "engineering day celebrations 2026",
       "developers of jntugvcev website have been felicitated",
+      "congratulations to 10 it students selected in sankhya technologies campus placement drive",
+      "sankhya technologies placement drive — selected students with faculty & administration",
       "main.jpg",
       "main.jpeg",
       "it group.jpeg",
+      "sankhya-placement-congrats.jpeg",
+      "sankhya-placement-students-group.jpeg",
     ]);
 
     for (const item of sorted) {

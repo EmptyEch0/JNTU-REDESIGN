@@ -56,9 +56,22 @@ export const Route = createFileRoute("/gallery")({
 
 const DEFAULT_IMAGES = [
   {
+    id: -10,
+    src: "uploads/2026/09/sankhya-placement-congrats.jpeg",
+    caption: "Congratulations to 10 IT Students Selected in Sankhya Technologies Campus Placement Drive",
+    date: "2026-09-10",
+  },
+  {
+    id: -11,
+    src: "uploads/2026/09/sankhya-placement-students-group.jpeg",
+    caption: "Sankhya Technologies Placement Drive — Selected Students with Faculty & Administration",
+    date: "2026-09-10",
+  },
+  {
     id: -1,
     src: "uploads/photo-gallery/independence_day.jpeg",
     caption: "80th Independence Day Celebrations on Campus in Presence of Hon'ble Vice-Chancellor",
+    date: "2026-08-15",
   },
   { id: -2, src: "uploads/photo-gallery/IMG_6832.JPG", caption: "Campus Administration & Main Building" },
   { id: -3, src: "uploads/photo-gallery/IMG_6840.JPG", caption: "Cultural Fest & Student Celebrations" },
@@ -72,6 +85,7 @@ const DEFAULT_IMAGES = [
 
 const CATEGORIES = [
   { id: "all", label: "All Moments" },
+  { id: "placements", label: "Placements & Drives" },
   { id: "sih", label: "SIH Hackathon 2026" },
   { id: "engineers", label: "Engineer's Day 2026" },
   { id: "celebrations", label: "Celebrations & Fests" },
@@ -178,7 +192,10 @@ function GalleryPage() {
       const src = (img.src || "").toLowerCase();
 
       // Category matching
-      if (activeCategory === "sih") {
+      if (activeCategory === "placements") {
+        const matches = title.includes("placement") || title.includes("sankhya") || title.includes("recruitment") || title.includes("selected") || title.includes("offer") || src.includes("sankhya") || src.includes("placement") || src.includes("img_6920");
+        if (!matches) return false;
+      } else if (activeCategory === "sih") {
         const matches = title.includes("sih") || title.includes("hackthon") || title.includes("hackathon") || src.includes("sih");
         if (!matches) return false;
       } else if (activeCategory === "engineers") {

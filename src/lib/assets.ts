@@ -63,15 +63,21 @@ export const getAssetUrl = (
       "logo.jpeg": "/logo-circle.png",
       // Department banner instant local fallbacks
       "cse-banner.jpg": `${BASE}/uploads/departments/banners/cse-banner.jpg`,
-  "ece-banner.jpg": `${BASE}/uploads/departments/banners/ece-banner.jpg`,
-  "eee-banner.jpg": `${BASE}/uploads/departments/banners/eee-banner.jpg`,
-  "it-banner.jpg": `${BASE}/uploads/departments/banners/it-banner.jpg`,
-  "mech-banner.jpg": `${BASE}/uploads/departments/banners/mech-banner.jpg`,
-  "met-banner.jpg": `${BASE}/uploads/departments/banners/met-banner.jpg`,
-  "sh-banner.jpg": `${BASE}/uploads/departments/banners/sh-banner.jpg`,
-  "bshss-banner.jpg": `${BASE}/uploads/departments/banners/sh-banner.jpg`,
-  "bsh-banner.jpg": `${BASE}/uploads/departments/banners/sh-banner.jpg`,
-  "mba-banner.jpg": `${BASE}/uploads/departments/banners/mba-banner.jpg`,
+      "ece-banner.jpg": `${BASE}/uploads/departments/banners/ece-banner.jpg`,
+      "eee-banner.jpg": `${BASE}/uploads/departments/banners/eee-banner.jpg`,
+      "it-banner.jpg": `${BASE}/uploads/departments/banners/it-banner.jpg`,
+      "mech-banner.jpg": `${BASE}/uploads/departments/banners/mech-banner.jpg`,
+      "met-banner.jpg": `${BASE}/uploads/departments/banners/met-banner.jpg`,
+      "sh-banner.jpg": `${BASE}/uploads/departments/banners/sh-banner.jpg`,
+      "bshss-banner.jpg": `${BASE}/uploads/departments/banners/sh-banner.jpg`,
+      "bsh-banner.jpg": `${BASE}/uploads/departments/banners/sh-banner.jpg`,
+      "mba-banner.jpg": `${BASE}/uploads/departments/banners/mba-banner.jpg`,
+      // Sankhya Technologies Placement Assets
+      "sankhya-technologies-placement-notice.pdf": `${BASE}/uploads/2026/09/sankhya-technologies-placement-notice.pdf`,
+      "Sankhya Technologies.pdf": `${BASE}/uploads/2026/09/sankhya-technologies-placement-notice.pdf`,
+      "sankhya-placement-congrats.jpeg": `${BASE}/uploads/2026/09/sankhya-placement-congrats.jpeg`,
+      "congrats.jpeg": `${BASE}/uploads/2026/09/sankhya-placement-congrats.jpeg`,
+      "sankhya-placement-students-group.jpeg": `${BASE}/uploads/2026/09/sankhya-placement-students-group.jpeg`,
     };
 
     if (filename.startsWith("IMG_") && (filename.endsWith(".JPG") || filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".webp"))) {

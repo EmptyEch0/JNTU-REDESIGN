@@ -6,6 +6,11 @@ import { getAssetUrl } from "@/lib/assets";
 
 const NOTICES = [
   {
+    title: "🎉 Congratulations: 10 Students Selected in Sankhya Technologies Campus Placement Drive (Dept. of IT)",
+    date: "September 10, 2026",
+    url: getAssetUrl("uploads/2026/09/sankhya-technologies-placement-notice.pdf"),
+  },
+  {
     title: "Academic Calendar for I B.Tech (2026–2027)",
     date: "August 21, 2026",
     url: "https://jntugvcev.edu.in/wp-content/uploads/2026/08/academic-calendar-for-i-b-tech-2026-27.pdf",
@@ -97,22 +102,44 @@ export function NoticeTicker() {
         <div className="flex-1 overflow-hidden relative h-full flex items-center">
           <div className="flex items-center whitespace-nowrap gap-8 h-full">
             <div className="flex items-center gap-10 animate-marquee">
-              {[...NOTICES, ...NOTICES].map((notice, i) => (
-                <Link
-                  key={i}
-                  to="/notices"
-                  className="flex items-center gap-2.5 shrink-0 group/item cursor-pointer text-slate-200 hover:text-white transition-colors"
-                >
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#38bdf8]" />
-                  <span className="text-xs font-medium tracking-tight group-hover/item:text-cyan-200 group-hover/item:underline">
-                    {notice.title}
-                  </span>
-                  <span className="text-[10px] font-medium text-slate-400">
-                    {notice.date}
-                  </span>
-                  <ArrowRight className="h-3 w-3 text-cyan-400 opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
-                </Link>
-              ))}
+              {[...NOTICES, ...NOTICES].map((notice, i) => {
+                const isExternalOrPdf = Boolean(notice.url && (notice.url.endsWith(".pdf") || notice.url.startsWith("http") || notice.url.startsWith("/")));
+                const targetUrl = notice.url ? (notice.url.startsWith("http") ? notice.url : getAssetUrl(notice.url)) : "/notices";
+
+                return isExternalOrPdf ? (
+                  <a
+                    key={i}
+                    href={targetUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 shrink-0 group/item cursor-pointer text-slate-200 hover:text-white transition-colors"
+                  >
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#38bdf8]" />
+                    <span className="text-xs font-medium tracking-tight group-hover/item:text-cyan-200 group-hover/item:underline">
+                      {notice.title}
+                    </span>
+                    <span className="text-[10px] font-medium text-slate-400">
+                      {notice.date}
+                    </span>
+                    <ArrowRight className="h-3 w-3 text-cyan-400 opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
+                  </a>
+                ) : (
+                  <Link
+                    key={i}
+                    to="/notices"
+                    className="flex items-center gap-2.5 shrink-0 group/item cursor-pointer text-slate-200 hover:text-white transition-colors"
+                  >
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#38bdf8]" />
+                    <span className="text-xs font-medium tracking-tight group-hover/item:text-cyan-200 group-hover/item:underline">
+                      {notice.title}
+                    </span>
+                    <span className="text-[10px] font-medium text-slate-400">
+                      {notice.date}
+                    </span>
+                    <ArrowRight className="h-3 w-3 text-cyan-400 opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all" />
+                  </Link>
+                );
+              })}
             </div>
           </div>
           

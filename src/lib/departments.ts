@@ -89,6 +89,14 @@ export const STATIC_DEPARTMENTS: StaticDepartment[] = [
     description: "Building strong foundational knowledge in Mathematics, Physics, Chemistry, and Professional Communication skills.",
     image: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/sh-banner.jpg",
   },
+  {
+    id: "civil",
+    slug: "civil",
+    name: "Civil Engineering",
+    hod: "Dr. G. Appala Naidu",
+    description: "Advancing sustainable infrastructure, structural design, and disaster‑resilient engineering.",
+    image: "uploads/departments/banner/civil-banner.jpg",
+  },
 ];
 
 // --- Department Core ---
@@ -132,6 +140,7 @@ export const updateDepartment = createServerFn({ method: "POST" })
         bshss: "Dr. G. J. Naga Raju",
         sh: "Dr. G. J. Naga Raju",
         mba: "Dr. K. V. S. M. Ramanesh",
+        civil: "Dr. G. Appala Naidu",
       };
       const rawHod = (updatedDept.hod || "").trim();
       const hodName = rawHod.length > 5 ? rawHod : (HOD_MAP[updatedDept.slug?.toLowerCase() || ""] || rawHod);

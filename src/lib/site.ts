@@ -118,20 +118,15 @@ export const NAV: {
         {
           title: "",
           items: [
-            { label: "Computer Science Engineering", to: "/departments/cse" },
+            { label: "Basic Sciences and Humanities and Social Sciences (BS&HSS)", to: "/departments/bshss" },
             { label: "Civil Engineering", to: "/departments/civil" },
-            { label: "Electronics and Communication Engineering", to: "/departments/ece" },
+            { label: "Computer Science Engineering", to: "/departments/cse" },
             { label: "Electrical and Electronics Engineering", to: "/departments/eee" },
-            { label: "Mechanical Engineering", to: "/departments/mech" },
-          ],
-        },
-        {
-          title: "",
-          items: [
-            { label: "Metallurgical Engineering", to: "/departments/met" },
+            { label: "Electronics and Communication Engineering", to: "/departments/ece" },
             { label: "Information Technology", to: "/departments/it" },
             { label: "Master of Business Administration (MBA)", to: "/departments/mba" },
-            { label: "Basic Sciences and Humanities and Social Sciences (BS&HSS)", to: "/departments/bshss" },
+            { label: "Mechanical Engineering", to: "/departments/mech" },
+            { label: "Metallurgical Engineering", to: "/departments/met" },
           ],
         },
       ],

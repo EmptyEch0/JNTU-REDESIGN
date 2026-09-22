@@ -354,8 +354,8 @@ function HomePage() {
 
   const principalPhoto =
     principalActive?.image &&
-    !principalActive.image.includes("placeholder") &&
-    !principalActive.image.endsWith("Principal.png")
+      !principalActive.image.includes("placeholder") &&
+      !principalActive.image.endsWith("Principal.png")
       ? getAssetUrl(principalActive.image)
       : vakulaImg;
 
@@ -516,10 +516,10 @@ function HomePage() {
           hoverTitle: cleanKey.includes("sih") || cleanFile.includes("sih")
             ? "JNTU-GV CEV successfully completed SIH internal hackthon 2026"
             : cleanKey.includes("it group")
-            ? "Developers of JNTUGVCEV website have been felicitated"
-            : (cleanKey.includes("engineer") || cleanKey.includes("engineering"))
-              ? "Engineering Day Celebrations 2026"
-              : item.title,
+              ? "Developers of JNTUGVCEV website have been felicitated"
+              : (cleanKey.includes("engineer") || cleanKey.includes("engineering"))
+                ? "Engineering Day Celebrations 2026"
+                : item.title,
         });
       }
       if (uniqueList.length >= 7) break;
@@ -1117,12 +1117,12 @@ function HomePage() {
           <RevealOnScroll>
             <SectionLabel
               eyebrow="Departments"
-              title="Eight departments. One academic culture."
+              title="Nine departments. One academic culture."
               subtitle="Each department is led by faculty who teach with conviction, mentor with care and research with rigour."
             />
           </RevealOnScroll>
 
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {departmentsList.map((d: any, index: number) => {
               const deptSlug = (d.slug || "").toLowerCase();
 

@@ -107,7 +107,7 @@ function DepartmentsPage() {
     <>
       <PageHero
         eyebrow="Departments"
-        title="Eight departments. One academic culture."
+        title="Nine departments. One academic culture."
         subtitle="Each department is led by faculty who teach with conviction, mentor with care and research with rigour."
         image={labImg}
       />
@@ -122,7 +122,7 @@ function DepartmentsPage() {
           </RevealOnScroll>
 
           {!isError && (
-            <div className="mt-12 grid auto-rows-[280px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 dept-section-wrapper">
+            <div className="mt-12 grid auto-rows-[280px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 dept-section-wrapper">
               {sortedData.map((dept, index) => (
                 <DepartmentCard
                   key={dept.id || dept.slug}

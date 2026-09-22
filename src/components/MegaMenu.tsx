@@ -4,7 +4,8 @@ import {
   Menu, X, ChevronDown, ChevronRight, GraduationCap, Search, CornerDownLeft, FileText, ArrowRight,
   Users, ShieldCheck, BookOpen, Building2, Landmark, Award, Globe, Compass, Plane,
   Sparkles, Clock, Download, Home, HeartPulse, Library, Trophy, Briefcase,
-  Microscope, Heart, Info, MapPin, Layers, Scale, Lightbulb, Users2, FileCode, Activity
+  Microscope, Heart, Info, MapPin, Layers, Scale, Lightbulb, Users2, FileCode, Activity,
+  Cpu, Wifi, Radio, Zap, Cog, Hammer, FlaskConical, Sigma, LineChart
 } from "lucide-react";
 import { NAV, SEARCH_INDEX, SITE } from "@/lib/site";
 import { uploadUrl } from "@/lib/assets";
@@ -13,6 +14,15 @@ import { NoticeTicker } from "@/components/NoticeTicker";
 
 function getItemIcon(label: string) {
   const l = label.toLowerCase();
+  if (l.includes("computer science") || l === "cse") return Cpu;
+  if (l.includes("information technology") || l === "it") return Wifi;
+  if (l.includes("electronics and communication") || l.includes("ece")) return Radio;
+  if (l.includes("electrical and electronics") || l.includes("eee")) return Zap;
+  if (l.includes("mechanical")) return Cog;
+  if (l.includes("civil")) return Hammer;
+  if (l.includes("metallurg")) return Layers;
+  if (l.includes("mba") || l.includes("business administration") || l.includes("management")) return Briefcase;
+  if (l.includes("basic sciences") || l.includes("humanities") || l.includes("bs&hss")) return FlaskConical;
   if (l.includes("principal") && !l.includes("vice")) return Landmark;
   if (l.includes("vice principal")) return Users;
   if (l.includes("iqac")) return ShieldCheck;
@@ -108,11 +118,6 @@ export function MegaMenu() {
   };
 
   // Click outside + Escape
-  // NOTE: the mobile drawer is now rendered as a fixed, full-screen overlay that
-  // lives OUTSIDE the `islandRef` pill (so it is never clipped/squashed by the
-  // pill's own width/flex layout). Because of that we also need to check clicks
-  // against `mobileDrawerRef` here, otherwise every click inside the drawer would
-  // be treated as an "outside click" and immediately close the menu.
   useEffect(() => {
     if (openIdx === null && !mobileOpen && !searchOpen) return;
     const onClick = (e: MouseEvent) => {
@@ -197,8 +202,8 @@ export function MegaMenu() {
                       <Link
                         to={item.to}
                         className={`px-3 py-1.5 text-[13.5px] font-semibold rounded-full transition-all flex items-center gap-1.5 ${active || openIdx === i
-                            ? "bg-white/20 text-white shadow-sm"
-                            : "text-white/85 hover:text-white hover:bg-white/10"
+                          ? "bg-white/20 text-white shadow-sm"
+                          : "text-white/85 hover:text-white hover:bg-white/10"
                           }`}
                       >
                         {item.label === "Home" && <Home className="h-3.5 w-3.5 text-cyan-300" />}
@@ -212,8 +217,8 @@ export function MegaMenu() {
                     ) : (
                       <button
                         className={`flex items-center gap-1.5 px-3 py-1.5 text-[13.5px] font-semibold rounded-full transition-all cursor-pointer ${active || openIdx === i
-                            ? "bg-white/20 text-white shadow-sm"
-                            : "text-white/85 hover:text-white hover:bg-white/10"
+                          ? "bg-white/20 text-white shadow-sm"
+                          : "text-white/85 hover:text-white hover:bg-white/10"
                           }`}
                       >
                         <span>{item.label}</span>
@@ -225,8 +230,20 @@ export function MegaMenu() {
 
                     {/* Groups dropdown — glassmorphic popover */}
                     {openIdx === i && item.groups && !searchOpen && (
-                      <div className={`absolute top-full pt-2.5 z-50 animate-[fade-in_0.2s_ease-out] ${i <= 1 ? "left-0" : i >= NAV.length - 2 ? "right-0" : "left-1/2 -translate-x-1/2"
-                        }`}>
+                      <div
+                        ref={(el) => {
+                          if (!el) return;
+                          const rect = el.getBoundingClientRect();
+                          const margin = 16;
+                          if (rect.left < margin) {
+                            el.style.transform = `translateX(${margin - rect.left}px)`;
+                          } else if (rect.right > window.innerWidth - margin) {
+                            el.style.transform = `translateX(${window.innerWidth - margin - rect.right}px)`;
+                          }
+                        }}
+                        className={`absolute top-full pt-2.5 z-50 animate-[fade-in_0.2s_ease-out] ${i <= 1 ? "left-0" : i >= NAV.length - 2 ? "right-0" : "left-1/2 -translate-x-1/2"
+                          }`}
+                      >
                         {/* Top Caret Arrow Notch */}
                         <div
                           className={`absolute top-[4px] w-3.5 h-3.5 rotate-45 z-10 pointer-events-none ${i <= 1 ? "left-8" : i >= NAV.length - 2 ? "right-8" : "left-1/2 -translate-x-1/2"
@@ -239,11 +256,17 @@ export function MegaMenu() {
                         />
 
                         <div
-                          className={`relative p-3.5 w-max ${item.groups.length === 1 && item.groups[0].items.length > 4 ? "min-w-[480px]" :
-                              item.groups.length === 1 ? "min-w-[270px] max-w-[310px]" :
-                                item.groups.length === 2 ? "min-w-[480px]" :
-                                  item.groups.length === 3 ? "min-w-[700px]" :
-                                    "min-w-[860px]"
+                          className={`relative p-3.5 w-max max-w-[calc(100vw-2rem)] ${item.groups.length === 1 && item.groups[0].items.length > 6
+                            ? "min-w-[760px]"
+                            : item.groups.length === 1 && item.groups[0].items.length > 4
+                              ? "min-w-[480px]"
+                              : item.groups.length === 1
+                                ? "min-w-[270px] max-w-[310px]"
+                                : item.groups.length === 2
+                                  ? "min-w-[480px]"
+                                  : item.groups.length === 3
+                                    ? "min-w-[860px]"
+                                    : "min-w-[860px]"
                             }`}
                           style={{
                             background: "rgba(15, 30, 55, 0.95)",
@@ -256,18 +279,30 @@ export function MegaMenu() {
                           }}
                         >
                           {item.groups && item.groups.length > 0 && (
-                            <div className={`grid gap-3.5 ${item.groups.length === 1 && item.groups[0]?.items.length > 4 ? "grid-cols-1" :
-                                item.groups.length === 1 ? "grid-cols-1" :
-                                  item.groups.length === 2 ? "grid-cols-2" :
-                                    item.groups.length === 3 ? "grid-cols-3" :
-                                      "grid-cols-4"
-                              }`}>
+                            <div
+                              className={`grid gap-3.5 ${item.groups.length === 1 && item.groups[0]?.items.length > 6
+                                ? "grid-cols-1"
+                                : item.groups.length === 1 && item.groups[0]?.items.length > 4
+                                  ? "grid-cols-1"
+                                  : item.groups.length === 1
+                                    ? "grid-cols-1"
+                                    : item.groups.length === 2
+                                      ? "grid-cols-2"
+                                      : item.groups.length === 3
+                                        ? "grid-cols-3 divide-x divide-white/10 [&>div]:px-3 [&>div:first-child]:pl-0 [&>div:last-child]:pr-0"
+                                        : "grid-cols-4"
+                                }`}
+                            >
                               {item.groups.map((g) => (
                                 <div key={g.title}>
-                                  <div className="text-[10px] uppercase tracking-[0.2em] font-extrabold text-blue-300 px-2 mb-1.5">
+                                  <div className="text-[10px] uppercase tracking-[0.2em] font-extrabold text-blue-300 px-2 mb-2 pb-1.5 border-b border-white/10">
                                     {g.title}
                                   </div>
-                                  <ul className={`space-y-1 ${item.groups?.length === 1 && g.items.length > 4 ? "grid grid-cols-2 gap-x-3 gap-y-1 space-y-0" : ""
+                                  <ul className={`space-y-1 ${item.groups?.length === 1 && g.items.length > 6
+                                    ? "grid grid-cols-3 gap-x-3 gap-y-1 space-y-0"
+                                    : item.groups?.length === 1 && g.items.length > 4
+                                      ? "grid grid-cols-2 gap-x-3 gap-y-1 space-y-0"
+                                      : ""
                                     }`}>
                                     {g.items.map((it) => {
                                       const ItemIcon = getItemIcon(it.label);
@@ -516,8 +551,8 @@ export function MegaMenu() {
                         }
                       }}
                       className={`shrink-0 px-3.5 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border cursor-pointer active:scale-95 ${isActive
-                          ? "bg-gradient-to-r from-blue-700 to-indigo-700 text-white font-extrabold border-transparent shadow-md shadow-blue-500/20"
-                          : "bg-white text-slate-700 border-slate-200/90 hover:border-blue-300 hover:text-blue-700 shadow-2xs"
+                        ? "bg-gradient-to-r from-blue-700 to-indigo-700 text-white font-extrabold border-transparent shadow-md shadow-blue-500/20"
+                        : "bg-white text-slate-700 border-slate-200/90 hover:border-blue-300 hover:text-blue-700 shadow-2xs"
                         }`}
                     >
                       <span>{item.label}</span>
@@ -576,8 +611,8 @@ export function MegaMenu() {
                       id={`mobile-cat-${item.label}`}
                       key={item.label}
                       className={`rounded-2xl border transition-all duration-200 overflow-hidden ${isExpanded
-                          ? "bg-white border-blue-500/70 shadow-md shadow-blue-500/5 ring-1 ring-blue-500/20"
-                          : "bg-white border-slate-200/90 shadow-2xs hover:border-slate-300"
+                        ? "bg-white border-blue-500/70 shadow-md shadow-blue-500/5 ring-1 ring-blue-500/20"
+                        : "bg-white border-slate-200/90 shadow-2xs hover:border-slate-300"
                         }`}
                     >
                       {/* Category Accordion Header */}

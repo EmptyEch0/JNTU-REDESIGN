@@ -35,7 +35,7 @@ interface TeamMember {
 
 const SUPERVISOR = {
   name: "Mr. Anil Wurity",
-  title: "Associate Professor",
+  title: "Assistant Professor",
   department: "Department of Information Technology",
   institution: "JNTU-GV College of Engineering, Vizianagaram",
   role: "Faculty Guide & Project Supervisor",
@@ -44,7 +44,7 @@ const SUPERVISOR = {
   message:
     "Providing visionary leadership, architectural mentorship, and continuous guidance to modernise the digital campus of JNTU-GV with student-led technological innovation.",
   credentials: [
-    "Associate Professor in IT",
+    "Assistant Professor in IT",
     "Faculty Project Coordinator",
     "Campus Digital Transformation Mentor",
     "Research & Technical Advisor",

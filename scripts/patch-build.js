@@ -7,11 +7,10 @@ function patchFile(filePath) {
   let modified = false;
 
   // Replace missing tree-shaken identifier references with undefined inside object literals
-  const patchedRefs = content
-    .replace(/(?<=[\s,{])createRequestHandler(?=,|\s*\n)/g, "createRequestHandler: undefined")
-    .replace(/(?<=[\s,{])transformPipeableStreamWithRouter(?=,|\s*\n)/g, "transformPipeableStreamWithRouter: undefined")
-    .replace(/(?<=[\s,{])transformReadableStreamWithRouter(?=,|\s*\n)/g, "transformReadableStreamWithRouter: undefined");
-
+    const patchedRefs = content
+    .replace(/(?<![\w$])(?<!as )createRequestHandler(?=,|\s*\n)/g, "createRequestHandler: undefined")
+    .replace(/(?<![\w$])(?<!as )transformPipeableStreamWithRouter(?=,|\s*\n)/g, "transformPipeableStreamWithRouter: undefined")
+    .replace(/(?<![\w$])(?<!as )transformReadableStreamWithRouter(?=,|\s*\n)/g, "transformReadableStreamWithRouter: undefined");
   if (patchedRefs !== content) {
     content = patchedRefs;
     modified = true;

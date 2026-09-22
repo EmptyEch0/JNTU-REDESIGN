@@ -6,7 +6,7 @@ import { Readable } from "node:stream";
 
 const PORT = parseInt(process.env.PORT || process.env.NITRO_PORT || "8081", 10);
 const HOST = process.env.HOST || "0.0.0.0";
-const CLIENT_DIR = path.resolve("dist/client");
+const CLIENT_DIR = path.resolve("dist/public");
 const PUBLIC_DIR = path.resolve("dist/public");
 const LOCAL_ASSETS_DIR = path.resolve("local-assets");
 
@@ -33,7 +33,7 @@ const MIME_TYPES = {
 
 async function main() {
   // ── 1. Load the TanStack Start server entry ────────────────────────
-  const serverJsPath = path.resolve("dist/server/server.js");
+  const serverJsPath = path.resolve("dist/server/index.mjs");
   if (!fs.existsSync(serverJsPath)) {
     throw new Error(
       `Build output not found at ${serverJsPath}.\n` +
@@ -41,13 +41,13 @@ async function main() {
     );
   }
 
-  console.log("Loading server entry from dist/server/server.js …");
+  console.log("Loading server entry from dist/server/index.mjs …");
   let mod;
   try {
-    mod = await import("./dist/server/server.js");
+    mod = await import("./dist/server/index.mjs");
   } catch (err) {
     throw new Error(
-      `Failed to import dist/server/server.js:\n${err.stack || err.message}\n\n` +
+      `Failed to import dist/server/index.mjs:\n${err.stack || err.message}\n\n` +
         `Make sure you ran "npm run build" on this machine after pulling changes.`
     );
   }
@@ -64,7 +64,7 @@ async function main() {
     console.error("mod.default type:", typeof mod.default);
     if (mod.default) console.error("mod.default keys:", Object.keys(mod.default));
     throw new Error(
-      "dist/server/server.js did not export a valid fetch handler.\n" +
+      "dist/server/index.mjs did not export a valid fetch handler.\n" +
         "Expected mod.default.fetch to be a function.\n" +
         'Try deleting the dist/ folder and rebuilding: rm -rf dist && npm run build'
     );

@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData, useParams, Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
-import { DEPARTMENT_FACULTY_LIST, type DepartmentFacultyListItem } from "@/data/department-faculty-data";
+import { DEPARTMENT_FACULTY_LIST, type DepartmentFacultyListItem, sortFacultyList } from "@/data/department-faculty-data";
 import { useState, useMemo } from "react";
 import { Search, Users, ShieldCheck, ArrowRight } from "lucide-react";
 
@@ -30,27 +30,34 @@ function FacultyListPage() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-
-
-  // Check if explicit verified faculty list exists for this department
+  // Check if explicit verified faculty list exists for this department and sort hierarchically
   const allFacultyItems: DepartmentFacultyListItem[] = useMemo(() => {
     const directList = DEPARTMENT_FACULTY_LIST[deptKey] || (data?.slug ? DEPARTMENT_FACULTY_LIST[data.slug.toLowerCase()] : undefined);
+    let rawList: DepartmentFacultyListItem[] = [];
     if (directList && directList.length > 0) {
-      return directList;
+      rawList = directList;
+    } else {
+      const fromLoader = data?.faculty || [];
+      rawList = fromLoader.map((f, idx) => ({
+        sNo: idx + 1,
+        name: f.name || "Faculty Member",
+        qualification: f.qualification || (Array.isArray(f.qualifications) && f.qualifications.length > 0 ? f.qualifications.join(", ") : "Ph.D / M.Tech"),
+        studiedUniversity: f.studied_university || f.university || "—",
+        graduationYear: f.year_of_graduation || f.graduation_year || "—",
+        designation: f.designation || "Assistant Professor",
+        dateOfJoining: f.date_of_joining || f.joining_date || "—",
+        subject: f.subject || f.specialization || data?.name || "—",
+        associationType: f.employment_type || f.association_type || "Regular",
+        totalExperience: f.total_experience || f.experience || undefined,
+        id: f.id,
+      }));
     }
-    const fromLoader = data?.faculty || [];
-    return fromLoader.map((f, idx) => ({
+    
+    // Sort by rank: Professor -> Associate Professor -> Assistant Professor -> Assistant Professor (Contract)
+    const sorted = sortFacultyList(rawList);
+    return sorted.map((item, idx) => ({
+      ...item,
       sNo: idx + 1,
-      name: f.name || "Faculty Member",
-      qualification: f.qualification || (Array.isArray(f.qualifications) && f.qualifications.length > 0 ? f.qualifications.join(", ") : "Ph.D / M.Tech"),
-      studiedUniversity: f.studied_university || f.university || "—",
-      graduationYear: f.year_of_graduation || f.graduation_year || "—",
-      designation: f.designation || "Assistant Professor",
-      dateOfJoining: f.date_of_joining || f.joining_date || "—",
-      subject: f.subject || f.specialization || data?.name || "—",
-      associationType: f.employment_type || f.association_type || "Regular",
-      totalExperience: f.total_experience || f.experience || undefined,
-      id: f.id,
     }));
   }, [deptKey, data]);
 
@@ -196,13 +203,6 @@ function FacultyListPage() {
                 ))}
               </tbody>
             </table>
-          </div>
-
-          <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span>Academic Faculty Directory</span>
-            <span className="flex items-center gap-1 text-emerald-700 font-semibold">
-              <ShieldCheck size={14} /> Official University Records
-            </span>
           </div>
         </div>
       ) : (

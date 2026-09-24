@@ -87,7 +87,7 @@ const COMMITTEE_MEMBERS = [
   },
   {
     sNo: 7,
-    name: "Dr. T. S. N. Murthy",
+    name: "Dr. V. S. Vakula",
     designation: "Head of ECE",
     role: "Member",
     roleBadge: "bg-slate-100 text-slate-700 border-slate-200",

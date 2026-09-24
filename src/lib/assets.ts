@@ -1,12 +1,13 @@
 const rawBase = (
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_ASSETS_URL) ||
   (typeof process !== "undefined" && process.env?.VITE_ASSETS_URL) ||
-  "https://jntugvcev.edu.in/local-assets"
+  ""
 ).replace(/\/$/, "");
 const BASE = rawBase
   .replace("89.116.134.182:8080", "jntugvcev.edu.in")
   .replace("http://89.116.134.182", "https://jntugvcev.edu.in")
-  .replace("http://jntugvcev.edu.in", "https://jntugvcev.edu.in");
+  .replace("http://jntugvcev.edu.in", "https://jntugvcev.edu.in")
+  .replace(/\/local-assets$/, "");
 
 const assetUrlCache = new Map<string, string>();
 
@@ -24,7 +25,7 @@ export const getAssetUrl = (
     trimmedPath.includes("Dr-G-J-NAGA-RAJU-latest.jpg") ||
     trimmedPath.includes("Dr.-G.-J.-Naga-Raju")
   ) {
-    resolvedUrl = `${BASE}/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`;
+    resolvedUrl = `/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`;
   } else if (
     trimmedPath.startsWith("data:") ||
     trimmedPath.startsWith("/src/") ||
@@ -58,26 +59,26 @@ export const getAssetUrl = (
       "independence_day.webp": "/images/independence_day.webp",
       "independence_day.jpeg": "/images/independence_day.webp",
       "independence-day-2026.jpg": "/images/independence_day.webp",
-      "Dr.-G.-J.-Naga-Raju1.png": `${BASE}/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`,
-      "Dr-G-J-NAGA-RAJU-latest.jpg": `${BASE}/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`,
+      "Dr.-G.-J.-Naga-Raju1.png": `/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`,
+      "Dr-G-J-NAGA-RAJU-latest.jpg": `/uploads/images/administration/Dr-G-J-NAGA-RAJU-latest.jpg`,
       "logo.jpeg": "/logo-circle.png",
       // Department banner instant local fallbacks
-      "cse-banner.jpg": `${BASE}/uploads/departments/banners/cse-banner.jpg`,
-      "ece-banner.jpg": `${BASE}/uploads/departments/banners/ece-banner.jpg`,
-      "eee-banner.jpg": `${BASE}/uploads/departments/banners/eee-banner.jpg`,
-      "it-banner.jpg": `${BASE}/uploads/departments/banners/it-banner.jpg`,
-      "mech-banner.jpg": `${BASE}/uploads/departments/banners/mech-banner.jpg`,
-      "met-banner.jpg": `${BASE}/uploads/departments/banners/met-banner.jpg`,
-      "sh-banner.jpg": `${BASE}/uploads/departments/banners/sh-banner.jpg`,
-      "bshss-banner.jpg": `${BASE}/uploads/departments/banners/sh-banner.jpg`,
-      "bsh-banner.jpg": `${BASE}/uploads/departments/banners/sh-banner.jpg`,
-      "mba-banner.jpg": `${BASE}/uploads/departments/banners/mba-banner.jpg`,
+      "cse-banner.jpg": `/uploads/departments/banners/cse-banner.jpg`,
+      "ece-banner.jpg": `/uploads/departments/banners/ece-banner.jpg`,
+      "eee-banner.jpg": `/uploads/departments/banners/eee-banner.jpg`,
+      "it-banner.jpg": `/uploads/departments/banners/it-banner.jpg`,
+      "mech-banner.jpg": `/uploads/departments/banners/mech-banner.jpg`,
+      "met-banner.jpg": `/uploads/departments/banners/met-banner.jpg`,
+      "sh-banner.jpg": `/uploads/departments/banners/sh-banner.jpg`,
+      "bshss-banner.jpg": `/uploads/departments/banners/sh-banner.jpg`,
+      "bsh-banner.jpg": `/uploads/departments/banners/sh-banner.jpg`,
+      "mba-banner.jpg": `/uploads/departments/banners/mba-banner.jpg`,
       // Sankhya Technologies Placement Assets
-      "sankhya-technologies-placement-notice.pdf": `${BASE}/uploads/2026/09/sankhya-technologies-placement-notice.pdf`,
-      "Sankhya Technologies.pdf": `${BASE}/uploads/2026/09/sankhya-technologies-placement-notice.pdf`,
-      "sankhya-placement-congrats.jpeg": `${BASE}/uploads/2026/09/sankhya-placement-congrats.jpeg`,
-      "congrats.jpeg": `${BASE}/uploads/2026/09/sankhya-placement-congrats.jpeg`,
-      "sankhya-placement-students-group.jpeg": `${BASE}/uploads/2026/09/sankhya-placement-students-group.jpeg`,
+      "sankhya-technologies-placement-notice.pdf": `/uploads/2026/09/sankhya-technologies-placement-notice.pdf`,
+      "Sankhya Technologies.pdf": `/uploads/2026/09/sankhya-technologies-placement-notice.pdf`,
+      "sankhya-placement-congrats.jpeg": `/uploads/2026/09/sankhya-placement-congrats.jpeg`,
+      "congrats.jpeg": `/uploads/2026/09/sankhya-placement-congrats.jpeg`,
+      "sankhya-placement-students-group.jpeg": `/uploads/2026/09/sankhya-placement-students-group.jpeg`,
     };
 
     if (filename.startsWith("IMG_") && (filename.endsWith(".JPG") || filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".webp"))) {
@@ -94,27 +95,20 @@ export const getAssetUrl = (
       );
       if (vpsMatch) {
         const relativePath = vpsMatch[1].replace(/\\/g, "/").replace(/^\/+/, "");
-        resolvedUrl = `${BASE}/${relativePath}`;
+        resolvedUrl = `/${relativePath.startsWith("uploads/") ? relativePath : "uploads/" + relativePath}`;
       } else if (trimmedPath.includes("89.116.134.182:8080")) {
-        resolvedUrl = trimmedPath.replace("http://89.116.134.182:8080", "https://jntugvcev.edu.in").replace("89.116.134.182:8080", "jntugvcev.edu.in");
+        resolvedUrl = trimmedPath.replace("http://89.116.134.182:8080", "https://jntugvcev.edu.in").replace("89.116.134.182:8080", "jntugvcev.edu.in").replace("/local-assets/", "/");
       } else if (trimmedPath.startsWith("http://localhost:8081/")) {
-        const relativePath = trimmedPath.replace("http://localhost:8081/", "");
-        resolvedUrl = `${BASE}/${relativePath.replace(/\\/g, "/").replace(/^\/+/, "")}`;
+        const relativePath = trimmedPath.replace("http://localhost:8081/", "").replace(/^local-assets\//, "");
+        resolvedUrl = `/${relativePath.replace(/\\/g, "/").replace(/^\/+/, "")}`;
       } else if (
         trimmedPath.startsWith("http://jntugvcev.edu.in/") ||
         trimmedPath.startsWith("https://jntugvcev.edu.in/")
       ) {
         try {
           const parsed = new URL(trimmedPath);
-          const relativeAsset = parsed.pathname.replace(/^\/wp-content\//, "").replace(/^\/+/, "");
-          const isDevEnv = 
-            (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) ||
-            (typeof process !== "undefined" && process.env?.NODE_ENV !== "production");
-          if (isDevEnv) {
-            resolvedUrl = `/local-assets/${relativeAsset}`;
-          } else {
-            resolvedUrl = `${BASE}/${relativeAsset}`;
-          }
+          let relativeAsset = parsed.pathname.replace(/^\/wp-content\//, "").replace(/^\/local-assets\//, "").replace(/^\/+/, "");
+          resolvedUrl = `/${relativeAsset}`;
         } catch {
           resolvedUrl = trimmedPath;
         }
@@ -125,23 +119,21 @@ export const getAssetUrl = (
       let cleanPath = trimmedPath.replace(/\\/g, "/");
       if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
       if (cleanPath.startsWith("wp-content/")) cleanPath = cleanPath.substring("wp-content/".length);
-      if (cleanPath.startsWith("uploads/")) cleanPath = `local-assets/${cleanPath}`;
-      if (cleanPath.startsWith("facilities/")) cleanPath = `local-assets/uploads/${cleanPath}`;
-      const isDevEnv = 
-        (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) ||
-        (typeof process !== "undefined" && process.env?.NODE_ENV !== "production");
-
-      if (cleanPath.startsWith("local-assets/")) {
-        if (isDevEnv) {
-          resolvedUrl = `/${cleanPath}`;
-        } else {
-          const subPath = cleanPath.substring("local-assets/".length);
-          resolvedUrl = `${BASE}/${subPath}`;
-        }
+      if (cleanPath.startsWith("local-assets/")) cleanPath = cleanPath.substring("local-assets/".length);
+      
+      if (cleanPath.startsWith("uploads/")) {
+        resolvedUrl = `/${cleanPath}`;
+      } else if (cleanPath.startsWith("facilities/")) {
+        resolvedUrl = `/uploads/${cleanPath}`;
       } else {
-        resolvedUrl = `${BASE}/${cleanPath}`;
+        resolvedUrl = `/${cleanPath}`;
       }
     }
+  }
+
+  // Prepend BASE if set, otherwise clean root path
+  if (BASE && !resolvedUrl.startsWith("http") && !resolvedUrl.startsWith("data:")) {
+    resolvedUrl = `${BASE}${resolvedUrl}`;
   }
 
   assetUrlCache.set(trimmedPath, resolvedUrl);

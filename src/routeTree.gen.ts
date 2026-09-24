@@ -81,6 +81,7 @@ import { Route as CertificationsEngineersDay2026RouteImport } from './routes/cer
 import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
 import { Route as DepartmentsIdRouteImport } from './routes/departments.$id'
 import { Route as DispensaryIndexRouteImport } from './routes/dispensary.index'
+import { Route as DocsSplatRouteImport } from './routes/docs.$'
 import { Route as Engineersday2026CertificationsRouteImport } from './routes/engineersday2026.certifications'
 import { Route as LatestUpdatesIndexRouteImport } from './routes/latest-updates.index'
 import { Route as NssIndexRouteImport } from './routes/nss.index'
@@ -510,6 +511,11 @@ const DispensaryIndexRoute = DispensaryIndexRouteImport.update({
   path: '/dispensary/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsSplatRoute = DocsSplatRouteImport.update({
+  id: '/docs/$',
+  path: '/docs/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Engineersday2026CertificationsRoute =
   Engineersday2026CertificationsRouteImport.update({
     id: '/engineersday2026/certifications',
@@ -915,6 +921,7 @@ export interface FileRoutesByFullPath {
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
   '/certifications/engineers-day-2026': typeof CertificationsEngineersDay2026Route
   '/departments/$id': typeof DepartmentsIdRouteWithChildren
+  '/docs/$': typeof DocsSplatRoute
   '/engineersday2026/certifications': typeof Engineersday2026CertificationsRouteWithChildren
   '/nss/activities': typeof NssActivitiesRoute
   '/nss/special-camp': typeof NssSpecialCampRoute
@@ -1041,6 +1048,7 @@ export interface FileRoutesByTo {
   '/campus-life/music-club': typeof CampusLifeMusicClubRoute
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
   '/certifications/engineers-day-2026': typeof CertificationsEngineersDay2026Route
+  '/docs/$': typeof DocsSplatRoute
   '/engineersday2026/certifications': typeof Engineersday2026CertificationsRouteWithChildren
   '/nss/activities': typeof NssActivitiesRoute
   '/nss/special-camp': typeof NssSpecialCampRoute
@@ -1178,6 +1186,7 @@ export interface FileRoutesById {
   '/campus-life/student-activity-club': typeof CampusLifeStudentActivityClubRoute
   '/certifications/engineers-day-2026': typeof CertificationsEngineersDay2026Route
   '/departments/$id': typeof DepartmentsIdRouteWithChildren
+  '/docs/$': typeof DocsSplatRoute
   '/engineersday2026/certifications': typeof Engineersday2026CertificationsRouteWithChildren
   '/nss/activities': typeof NssActivitiesRoute
   '/nss/special-camp': typeof NssSpecialCampRoute
@@ -1316,6 +1325,7 @@ export interface FileRouteTypes {
     | '/campus-life/student-activity-club'
     | '/certifications/engineers-day-2026'
     | '/departments/$id'
+    | '/docs/$'
     | '/engineersday2026/certifications'
     | '/nss/activities'
     | '/nss/special-camp'
@@ -1442,6 +1452,7 @@ export interface FileRouteTypes {
     | '/campus-life/music-club'
     | '/campus-life/student-activity-club'
     | '/certifications/engineers-day-2026'
+    | '/docs/$'
     | '/engineersday2026/certifications'
     | '/nss/activities'
     | '/nss/special-camp'
@@ -1578,6 +1589,7 @@ export interface FileRouteTypes {
     | '/campus-life/student-activity-club'
     | '/certifications/engineers-day-2026'
     | '/departments/$id'
+    | '/docs/$'
     | '/engineersday2026/certifications'
     | '/nss/activities'
     | '/nss/special-camp'
@@ -1689,6 +1701,7 @@ export interface RootRouteChildren {
   ApiUploadRoute: typeof ApiUploadRoute
   CertificationsEngineersDay2026Route: typeof CertificationsEngineersDay2026Route
   DepartmentsIdRoute: typeof DepartmentsIdRouteWithChildren
+  DocsSplatRoute: typeof DocsSplatRoute
   Engineersday2026CertificationsRoute: typeof Engineersday2026CertificationsRouteWithChildren
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
   DispensaryIndexRoute: typeof DispensaryIndexRoute
@@ -2218,6 +2231,13 @@ declare module '@tanstack/react-router' {
       path: '/dispensary'
       fullPath: '/dispensary/'
       preLoaderRoute: typeof DispensaryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/$': {
+      id: '/docs/$'
+      path: '/docs/$'
+      fullPath: '/docs/$'
+      preLoaderRoute: typeof DocsSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/engineersday2026/certifications': {
@@ -2965,6 +2985,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiUploadRoute: ApiUploadRoute,
   CertificationsEngineersDay2026Route: CertificationsEngineersDay2026Route,
   DepartmentsIdRoute: DepartmentsIdRouteWithChildren,
+  DocsSplatRoute: DocsSplatRoute,
   Engineersday2026CertificationsRoute:
     Engineersday2026CertificationsRouteWithChildren,
   DepartmentsIndexRoute: DepartmentsIndexRoute,

@@ -172,16 +172,6 @@ function NonTeachingStaffPage() {
             </tbody>
           </table>
         </div>
-
-        <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-          <span className="flex items-center gap-1.5">
-            <Info size={14} className="text-blue-600" />
-            <span>Official University Non-Teaching Registry</span>
-          </span>
-          <span className="flex items-center gap-1 text-emerald-700 font-semibold">
-            <ShieldCheck size={14} /> JNTU-GV CEV
-          </span>
-        </div>
       </div>
     </div>
   );

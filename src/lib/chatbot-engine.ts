@@ -309,7 +309,7 @@ const KB = {
   ],
   hods: [
     { code: "CSE", name: "Dr. R. Rajeswara Rao", dept: "Computer Science & Engineering", designation: "Professor & HOD", email: "hod.cse@jntugvcev.edu.in" },
-    { code: "ECE", name: "Dr. K. Babulu", dept: "Electronics & Communication Engineering", designation: "Professor & HOD", email: "hod.ece@jntugvcev.edu.in" },
+    { code: "ECE", name: "Dr. V. S. Vakula", dept: "Electronics & Communication Engineering", designation: "Professor & HOD", email: "hod.ece@jntugvcev.edu.in" },
     { code: "EEE", name: "Dr. K. Sri Kumar", dept: "Electrical & Electronics Engineering", designation: "Professor & HOD", email: "hod.eee@jntugvcev.edu.in" },
     { code: "MECH", name: "Dr. R. Umamaheswara Rao", dept: "Mechanical Engineering", designation: "Professor & HOD", email: "hod.me@jntugvcev.edu.in" },
     { code: "MET", name: "Dr. G. Swami Naidu", dept: "Metallurgical Engineering", designation: "Professor & HOD", email: "hod.met@jntugvcev.edu.in" },

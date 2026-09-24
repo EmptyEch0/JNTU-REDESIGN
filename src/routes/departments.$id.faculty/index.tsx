@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { getAssetUrl } from "@/lib/assets";
 import { SafeImage } from "@/components/SafeImage";
 import { PersonAvatarUpload } from "@/components/AdminEditPanel";
-import { DEPARTMENT_EXPLICIT_FACULTY_PROFILES } from "@/data/department-faculty-data";
+import { DEPARTMENT_EXPLICIT_FACULTY_PROFILES, sortFacultyList } from "@/data/department-faculty-data";
 
 export const Route = createFileRoute("/departments/$id/faculty/")({
   head: ({ loaderData }) => {
@@ -218,7 +218,7 @@ function FacultyPage() {
 
   // UI Segmentation Logic: Isolate HOD from remaining profiles
   const hodMember = facultyList.find(f => /hod|head of (the )?department/i.test(f.designation || ""));
-  const otherFaculty = facultyList.filter(f => !/hod|head of (the )?department/i.test(f.designation || ""));
+  const otherFaculty = sortFacultyList(facultyList.filter(f => !/hod|head of (the )?department/i.test(f.designation || "")));
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">

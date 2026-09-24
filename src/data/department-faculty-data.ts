@@ -12,6 +12,50 @@ export interface DepartmentFacultyListItem {
   id?: string | number;
 }
 
+export function getFacultyRank(designation: string = "", associationType: string = ""): number {
+  const d = designation.toLowerCase().trim();
+  const a = associationType.toLowerCase().trim();
+
+  // 1. Professor (Senior Professor, Professor & HOD, Professor)
+  if (d.includes("professor") && !d.includes("associate") && !d.includes("assistant") && !d.includes("asst")) {
+    return 1;
+  }
+  // 2. Associate Professor
+  if (d.includes("associate") || d.includes("assoc")) {
+    return 2;
+  }
+  // 3. Assistant Professor (Regular)
+  if (
+    (d.includes("assistant") || d.includes("asst")) &&
+    (a.includes("regular") || (!d.includes("(c)") && !d.includes("contract") && !d.includes("ad-hoc") && !a.includes("contract") && !a.includes("ad-hoc")))
+  ) {
+    return 3;
+  }
+  // 4. Assistant Professor (Contract / Ad-hoc)
+  if (
+    d.includes("assistant") ||
+    d.includes("asst") ||
+    d.includes("(c)") ||
+    d.includes("contract") ||
+    d.includes("ad-hoc") ||
+    a.includes("contract") ||
+    a.includes("ad-hoc")
+  ) {
+    return 4;
+  }
+  // 5. Other Technical / Non-teaching / Staff
+  return 5;
+}
+
+export function sortFacultyList<T extends { designation: string; associationType?: string; name: string }>(list: T[]): T[] {
+  return [...list].sort((a, b) => {
+    const rankA = getFacultyRank(a.designation, a.associationType);
+    const rankB = getFacultyRank(b.designation, b.associationType);
+    if (rankA !== rankB) return rankA - rankB;
+    return a.name.localeCompare(b.name);
+  });
+}
+
 export interface DepartmentNonTeachingStaffItem {
   sNo: number;
   name: string;
@@ -482,15 +526,15 @@ export const DEPARTMENT_FACULTY_LIST: Record<string, DepartmentFacultyListItem[]
   ece: [
     {
       sNo: 1,
-      name: "Dr. T.S.N Murthy",
+      name: "Dr. V. S. Vakula",
       qualification: "Ph.D",
-      studiedUniversity: "OU",
-      graduationYear: "2016",
-      designation: "Asst.Prof & HOD",
-      dateOfJoining: "08.01.2013",
+      studiedUniversity: "JNTUK",
+      graduationYear: "2013",
+      designation: "Assistant Professor & HOD",
+      dateOfJoining: "10.01.2013",
       subject: "ECE",
       associationType: "Regular",
-      id: "42",
+      id: "28",
     },
     {
       sNo: 2,
@@ -505,7 +549,7 @@ export const DEPARTMENT_FACULTY_LIST: Record<string, DepartmentFacultyListItem[]
       id: "43",
     },
     {
-      sNo: 3,
+      sNo: 2,
       name: "Dr. Ch Srinivasarao",
       qualification: "Ph.D",
       studiedUniversity: "JNTUK",
@@ -1489,13 +1533,13 @@ export const DEPARTMENT_EXPLICIT_FACULTY_PROFILES: Record<string, DepartmentFacu
     { id: "226", name: "Bobbadi Manasa", designation: "Assistant Professor (C)", photo_url: "uploads/departments/faculty_photos/it/bobbadi-manasa.jpg" },
   ],
   ece: [
-    { id: "48", name: "Gottapu Appala Naidu", designation: "Assistant Professor & HoD", photo_url: "uploads/departments/faculty_photos/ece/gottapu-appala-naidu.jpeg" },
-    { id: "42", name: "Dr. T S N Murthy", designation: "Assistant Professor", photo_url: "uploads/departments/faculty_photos/ece/dr--t--s--n--murthy.jpg" },
+    { id: "28", name: "Dr. V. S. Vakula", designation: "Assistant Professor & HOD", photo_url: "/uploads/images/administration/principal-1788413473-42996f.jpg" },
     { id: "43", name: "Prof. K. Babulu", designation: "Professor", photo_url: "uploads/departments/faculty_photos/ece/k-babulu.jpg" },
     { id: "44", name: "Prof. Ch. Srinivasa Rao", designation: "Professor", photo_url: "uploads/departments/faculty_photos/ece/ch-srinivasa-rao.jpg" },
     { id: "45", name: "Prof. N. Balaji", designation: "Professor", photo_url: "uploads/departments/faculty_photos/ece/n-balaji.jpg" },
     { id: "46", name: "Prof. K. C. B. Rao", designation: "Professor of ECE", photo_url: "uploads/departments/faculty_photos/ece/k-c-b-rao.jpg" },
     { id: "47", name: "Dr. Ravva Gurunadha", designation: "Associate Professor", photo_url: "uploads/departments/faculty_photos/ece/dr--ravva-gurunadha.jpg" },
+    { id: "48", name: "Gottapu Appala Naidu", designation: "Assistant Professor", photo_url: "uploads/departments/faculty_photos/ece/gottapu-appala-naidu.jpeg" },
     { id: "49", name: "Dr. Nalini Bodasingi", designation: "Assistant Professor", photo_url: "https://dmc.jntugv.edu.in/static/media/Coordnitor_dmc.85b4a83327642f173145.jpg" },
     { id: "50", name: "Akurathi Gangadhar", designation: "Assistant Professor", photo_url: "uploads/departments/faculty_photos/ece/a--gangadhar.jpg" },
     { id: "51", name: "Dr. M. Hema", designation: "Assistant Professor", photo_url: "uploads/departments/faculty_photos/ece/dr--m-hema.jpg" },

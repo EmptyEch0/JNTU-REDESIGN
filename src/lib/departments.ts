@@ -37,7 +37,7 @@ export const STATIC_DEPARTMENTS: StaticDepartment[] = [
     id: "ece",
     slug: "ece",
     name: "Electronics & Communication Engineering",
-    hod: "Dr. K. Babulu",
+    hod: "Dr. V. S. Vakula",
     description: "Advancing frontier innovation in VLSI design, signal processing, embedded systems, and wireless communications.",
     image: "https://jntugvcev.edu.in/local-assets/uploads/departments/banners/ece-banner.jpg",
   },
@@ -131,7 +131,7 @@ export const updateDepartment = createServerFn({ method: "POST" })
     if (updatedDept) {
       const HOD_MAP: Record<string, string> = {
         cse: "Dr. R. Rajeswara Rao",
-        ece: "Dr. K. Babulu",
+        ece: "Dr. V. S. Vakula",
         eee: "Dr. K. Sri Kumar",
         mech: "Dr. R. Umamaheswara Rao",
         met: "Dr. G. Swami Naidu",

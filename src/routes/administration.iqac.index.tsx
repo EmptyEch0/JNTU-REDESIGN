@@ -53,7 +53,15 @@ function IQACAboutPage() {
       </div>
     );
 
-  const data = editedData || iqac;
+  const rawData = editedData || iqac;
+  const isMurthy = (rawData?.name || "").toLowerCase().includes("murthy") || (rawData?.name || "").toLowerCase().includes("tsn");
+  const data = {
+    ...rawData,
+    name: isMurthy ? "" : (rawData?.name || ""),
+    designation: isMurthy ? "IQAC Cell" : (rawData?.designation || "IQAC Coordinator"),
+    image: isMurthy ? "" : (rawData?.image || ""),
+    quote: isMurthy ? "Internal Quality Assurance Cell (IQAC) is committed to continuous quality enhancement, academic excellence, and institutional accreditation standards at JNTU-GV CEV." : (rawData?.quote || ""),
+  };
   const sections = data.extras || [];
 
   return (
@@ -64,7 +72,7 @@ function IQACAboutPage() {
           <div className="space-y-8 lg:sticky lg:top-32">
             <div className="relative group">
               <div className="absolute -inset-4 rounded-[40px] bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-colors duration-200" />
-              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white shadow-elegant bg-card">
+              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white shadow-elegant bg-gradient-to-br from-slate-50 to-indigo-50/40 flex items-center justify-center">
                   {isEditMode ? (
                     <AdminUpload
                       value={data.image}
@@ -73,12 +81,22 @@ function IQACAboutPage() {
                       category="iqac"
                       className="w-full h-full"
                     />
-                  ) : (
+                  ) : data.image ? (
                     <img decoding="async" loading="lazy"
                       src={getAssetUrl(data.image)}
-                      alt={data.name}
+                      alt={data.name || "IQAC"}
                       className="h-full w-full object-cover transition-all duration-700"
                     />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center p-8 text-center space-y-3">
+                      <div className="w-24 h-24 rounded-full bg-white shadow-sm flex items-center justify-center border border-slate-200/80 p-3">
+                        <img src="/logo-circle.png" alt="JNTU-GV" className="w-full h-full object-contain" />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-bold text-slate-800">IQAC Cell</h4>
+                        <p className="text-[11px] text-slate-500">JNTU-GV CEV</p>
+                      </div>
+                    </div>
                   )}
               </div>
             </div>
@@ -89,18 +107,25 @@ function IQACAboutPage() {
                   <input
                     className="w-full text-2xl font-bold text-ink bg-primary/5 p-2 rounded outline-none"
                     value={data.name}
+                    placeholder="Coordinator Name (Leave blank if vacant)"
                     onChange={(e) => setEditedData({ ...data, name: e.target.value })}
                   />
                   <input
                     className="w-full text-primary font-medium bg-primary/5 p-2 rounded outline-none"
                     value={data.designation}
+                    placeholder="Designation"
                     onChange={(e) => setEditedData({ ...data, designation: e.target.value })}
                   />
                 </div>
-              ) : (
+              ) : data.name ? (
                 <div>
                   <h2 className="text-2xl font-bold text-ink">{data.name}</h2>
                   <p className="text-primary font-medium">{data.designation}</p>
+                </div>
+              ) : (
+                <div>
+                  <h2 className="text-xl font-bold text-ink">IQAC Cell</h2>
+                  <p className="text-xs text-muted-foreground font-medium">Internal Quality Assurance Cell</p>
                 </div>
               )}
 
@@ -114,7 +139,7 @@ function IQACAboutPage() {
                       onChange={(e) => setEditedData({ ...data, email: e.target.value })}
                     />
                   ) : (
-                    <span className="text-sm">{data.email}</span>
+                    <span className="text-sm">{data.email || "iqac@jntugvcev.edu.in"}</span>
                   )}
                 </div>
                 <div className="flex items-center gap-3 text-muted-foreground">

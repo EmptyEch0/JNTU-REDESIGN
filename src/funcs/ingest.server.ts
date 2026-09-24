@@ -51,7 +51,7 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
       // 4. Departments & HODs
       const HOD_MAP: Record<string, string> = {
         cse: "Dr. R. Rajeswara Rao",
-        ece: "Dr. K. Babulu",
+        ece: "Dr. V. S. Vakula",
         eee: "Dr. K. Sri Kumar",
         mech: "Dr. R. Umamaheswara Rao",
         met: "Dr. G. Swami Naidu",

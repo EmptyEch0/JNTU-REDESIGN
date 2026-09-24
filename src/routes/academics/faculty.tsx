@@ -102,9 +102,9 @@ const FALLBACK_PRINCIPALS = [
   {
     id: 1,
     name: "Dr. V. S. Vakula",
-    designation: "Principal, College of Engineering",
+    designation: "Principal (i/c), College of Engineering",
     message: "Our focus is to provide high-quality technical education, promote research activities, and ensure our graduates are equipped with values and competencies for global success.",
-    image_url: "https://jntugvcev.edu.in/local-assets/uploads/images/administration/principal-1788413473-42996f.jpg",
+    image_url: "/uploads/images/administration/principal-1788413473-42996f.jpg",
   },
 ];
 
@@ -115,16 +115,16 @@ const FALLBACK_HODS = [
     name: "Dr. P. Aruna Kumari",
     designation: "Head of Department, CSE",
     message: "The Department of CSE is committed to producing technically competent graduates with strong ethical values and research acumen, ready to take on global challenges.",
-    image_url: "https://jntugvcev.edu.in/local-assets/uploads/departments/hod_photos/cse-hod.jpg",
+    image_url: "/uploads/departments/hod_photos/cse-hod.jpg",
     achievements: "State-of-the-art labs, NPTEL certified faculty, 100% placement.",
   },
   {
     id: 2,
     department: "Electronics & Communication Engineering",
-    name: "Dr. T. S. N. Murthy",
+    name: "Dr. V. S. Vakula",
     designation: "Head of Department, ECE",
     message: "ECE at JNTU-GV focuses on innovation in embedded systems, communication technologies, and VLSI design, bridging academia and industry.",
-    image_url: "https://jntugvcev.edu.in/local-assets/uploads/departments/hod_photos/ece-hod.jpeg",
+    image_url: "/uploads/images/administration/principal-1788413473-42996f.jpg",
     achievements: "Research grants from DST, ISRO collaborative projects.",
   },
 ];

@@ -882,7 +882,7 @@ function HomePage() {
                       <div className="flex-1 flex flex-col justify-between self-stretch text-center sm:text-left">
                         <div>
                           <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1">
-                            Principal
+                            Principal (i/c)
                           </div>
                           {isEditMode ? (
                             <div className="space-y-2 mt-1">

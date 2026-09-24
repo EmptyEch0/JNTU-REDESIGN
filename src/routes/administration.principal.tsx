@@ -200,7 +200,11 @@ function PrincipalPage() {
                 ) : (
                   <div>
                     <h2 className="text-2xl font-bold text-ink">{data.name}</h2>
-                    <p className="text-primary font-medium">{data.designation}</p>
+                    <p className="text-primary font-medium">
+                      {data.designation?.includes("(i/c)") || data.designation?.includes("(I/C)") || data.designation?.includes("(I/c)")
+                        ? data.designation
+                        : `${data.designation || "Principal"} (i/c)`}
+                    </p>
                   </div>
                 )}
 

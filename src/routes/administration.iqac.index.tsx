@@ -54,13 +54,23 @@ function IQACAboutPage() {
     );
 
   const rawData = editedData || iqac;
-  const isMurthy = (rawData?.name || "").toLowerCase().includes("murthy") || (rawData?.name || "").toLowerCase().includes("tsn");
+  const isMurthy =
+    !editedData &&
+    (!rawData?.name ||
+      (rawData?.name || "").toLowerCase().includes("murthy") ||
+      (rawData?.name || "").toLowerCase().includes("tsn") ||
+      (rawData?.name || "").toLowerCase().includes("t.s.n") ||
+      (rawData?.name || "").toLowerCase().includes("t. s. n") ||
+      (rawData?.image || "").toLowerCase().includes("murthy") ||
+      (rawData?.image || "").toLowerCase().includes("tsn") ||
+      (rawData?.image || "").toLowerCase().includes("iqac"));
+
   const data = {
     ...rawData,
     name: isMurthy ? "" : (rawData?.name || ""),
     designation: isMurthy ? "IQAC Cell" : (rawData?.designation || "IQAC Coordinator"),
     image: isMurthy ? "" : (rawData?.image || ""),
-    quote: isMurthy ? "Internal Quality Assurance Cell (IQAC) is committed to continuous quality enhancement, academic excellence, and institutional accreditation standards at JNTU-GV CEV." : (rawData?.quote || ""),
+    quote: isMurthy ? "Internal Quality Assurance Cell (IQAC) is committed to continuous quality enhancement, academic excellence, and institutional accreditation standards at JNTU-GV CEV." : (rawData?.quote || "Internal Quality Assurance Cell (IQAC) is committed to continuous quality enhancement, academic excellence, and institutional accreditation standards at JNTU-GV CEV."),
   };
   const sections = data.extras || [];
 

@@ -71,12 +71,6 @@ export function Footer() {
                 Placements
               </Link>
             </li>
-            <li>
-              <Link to="/team" className="text-accent hover:text-white transition-colors inline-flex items-center gap-1 font-medium">
-                <Sparkles className="h-3 w-3" />
-                <span>Developer Team</span>
-              </Link>
-            </li>
           </ul>
         </div>
 

@@ -95,8 +95,7 @@ export function LatestUpdatesSection() {
       const urls: Record<string, string> = {};
       loadedVideos.forEach(video => {
         if (video.youtubeId) {
-          // Start with maxres, will fallback if needed
-          urls[video.id] = `https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`;
+          urls[video.id] = `https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`;
         }
       });
       setThumbnailUrls(urls);
@@ -270,7 +269,7 @@ export function LatestUpdatesSection() {
     // Set initial thumbnail URL
     setThumbnailUrls(prev => ({
       ...prev,
-      [newVideo.id]: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+      [newVideo.id]: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
     }));
 
     setNewVideoForm({
@@ -306,30 +305,23 @@ export function LatestUpdatesSection() {
   const getThumbnailUrl = (videoId: string): string => {
     if (!videoId) return "/images/hero-carousal/hero-campus.webp";
 
-    // Return the stored thumbnail URL or default to maxres
-    return thumbnailUrls[videoId] || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    // Return the stored thumbnail URL or default to hqdefault
+    return thumbnailUrls[videoId] || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   };
 
   // Handle thumbnail error - try fallback
   const handleThumbnailError = (videoId: string, videoItemId: string) => {
     const currentUrl = thumbnailUrls[videoItemId] || '';
 
-    // If currently using maxres, try hqdefault
-    if (currentUrl.includes('maxresdefault')) {
-      setThumbnailUrls(prev => ({
-        ...prev,
-        [videoItemId]: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
-      }));
-    }
     // If hqdefault fails, try sddefault
-    else if (currentUrl.includes('hqdefault')) {
+    if (currentUrl.includes('hqdefault')) {
       setThumbnailUrls(prev => ({
         ...prev,
         [videoItemId]: `https://img.youtube.com/vi/${videoId}/sddefault.jpg`
       }));
     }
-    // If all fail, use a placeholder
-    else if (currentUrl.includes('sddefault')) {
+    // If all fail, use local placeholder
+    else {
       setThumbnailUrls(prev => ({
         ...prev,
         [videoItemId]: '/images/hero-carousal/hero-campus.webp'

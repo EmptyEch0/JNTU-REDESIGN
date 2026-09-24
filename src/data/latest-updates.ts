@@ -274,7 +274,7 @@ export function extractYouTubeId(urlOrId: string): string {
 
 export function getYouTubeThumbnail(videoId: string): string {
   if (!videoId) return "/images/hero-carousal/hero-campus.webp";
-  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 }
 
 export function getYouTubeFallbackThumbnail(videoId: string): string {

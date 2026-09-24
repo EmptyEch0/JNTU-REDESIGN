@@ -6,8 +6,11 @@ import { Readable } from "node:stream";
 
 const PORT = parseInt(process.env.PORT || process.env.NITRO_PORT || "8081", 10);
 const HOST = process.env.HOST || "0.0.0.0";
-const CLIENT_DIR = path.resolve("dist/public");
-const PUBLIC_DIR = path.resolve("dist/public");
+const CLIENT_DIRS = [
+  path.resolve("dist/client"),
+  path.resolve("dist/public"),
+  path.resolve("public"),
+];
 const LOCAL_ASSETS_DIR = path.resolve("local-assets");
 
 const MIME_TYPES = {
@@ -33,21 +36,32 @@ const MIME_TYPES = {
 
 async function main() {
   // ── 1. Load the TanStack Start server entry ────────────────────────
-  const serverJsPath = path.resolve("dist/server/index.mjs");
-  if (!fs.existsSync(serverJsPath)) {
+  const candidatePaths = [
+    path.resolve("dist/server/server.js"),
+    path.resolve("dist/server/index.mjs"),
+    path.resolve("dist/server/index.js"),
+    path.resolve(".output/server/index.mjs"),
+  ];
+
+  let serverJsPath = candidatePaths.find((p) => fs.existsSync(p));
+  if (!serverJsPath) {
     throw new Error(
-      `Build output not found at ${serverJsPath}.\n` +
-        `Run "npm run build" (or "bun run build") first.`
+      `Build output not found in any of:\n` +
+        candidatePaths.map((p) => ` - ${p}`).join("\n") +
+        `\nRun "npm run build" (or "bun run build") first.`
     );
   }
 
-  console.log("Loading server entry from dist/server/index.mjs …");
+  console.log(`Loading server entry from ${serverJsPath} …`);
   let mod;
   try {
-    mod = await import("./dist/server/index.mjs");
+    const fileUrl = path.isAbsolute(serverJsPath)
+      ? new URL(`file://${serverJsPath.replace(/\\/g, "/")}`).href
+      : serverJsPath;
+    mod = await import(fileUrl);
   } catch (err) {
     throw new Error(
-      `Failed to import dist/server/index.mjs:\n${err.stack || err.message}\n\n` +
+      `Failed to import ${serverJsPath}:\n${err.stack || err.message}\n\n` +
         `Make sure you ran "npm run build" on this machine after pulling changes.`
     );
   }
@@ -56,7 +70,7 @@ async function main() {
   const fetchHandler =
     mod?.default?.fetch?.bind(mod.default) ??
     mod?.fetch?.bind(mod) ??
-    null;
+    (typeof mod?.default === "function" ? mod.default : null);
 
   if (typeof fetchHandler !== "function") {
     // Debug: print what we actually got so the deploy log is helpful
@@ -64,8 +78,8 @@ async function main() {
     console.error("mod.default type:", typeof mod.default);
     if (mod.default) console.error("mod.default keys:", Object.keys(mod.default));
     throw new Error(
-      "dist/server/index.mjs did not export a valid fetch handler.\n" +
-        "Expected mod.default.fetch to be a function.\n" +
+      `${serverJsPath} did not export a valid fetch handler.\n` +
+        "Expected mod.default.fetch or mod.fetch to be a function.\n" +
         'Try deleting the dist/ folder and rebuilding: rm -rf dist && npm run build'
     );
   }
@@ -99,23 +113,13 @@ async function main() {
       const parsedUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
       const pathname = decodeURIComponent(parsedUrl.pathname);
 
-      // Static: dist/client/assets (hashed, immutable)
-      if (pathname.startsWith("/assets/")) {
-        const clientAssetPath = path.join(CLIENT_DIR, pathname);
-        if (tryServeStatic(req, res, clientAssetPath, true)) return;
+      // Static: Check client build and public directories
+      for (const baseDir of CLIENT_DIRS) {
+        const directPath = path.join(baseDir, pathname);
+        const isHashedAsset = pathname.startsWith("/assets/");
+        if (pathname === "/" && isHashedAsset === false) continue;
+        if (tryServeStatic(req, res, directPath, isHashedAsset)) return;
       }
-
-      // Static: other files in dist/client
-      const directClientPath = path.join(CLIENT_DIR, pathname);
-      if (pathname !== "/" && tryServeStatic(req, res, directClientPath)) return;
-
-      // Static: dist/public
-      const publicDistPath = path.join(PUBLIC_DIR, pathname);
-      if (pathname !== "/" && tryServeStatic(req, res, publicDistPath)) return;
-
-      // Static: project root public/
-      const publicPath = path.join(path.resolve("public"), pathname);
-      if (pathname !== "/" && tryServeStatic(req, res, publicPath)) return;
 
       // Static: local-assets/
       if (pathname.startsWith("/local-assets/")) {

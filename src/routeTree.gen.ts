@@ -38,6 +38,7 @@ import { Route as PlacementsRouteImport } from './routes/placements'
 import { Route as ProfessionalBodiesRouteImport } from './routes/professional-bodies'
 import { Route as RdCellRouteImport } from './routes/rd-cell'
 import { Route as RtiRouteImport } from './routes/rti'
+import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as SportsRouteImport } from './routes/sports'
 import { Route as Staff2b9f6e3dRouteImport } from './routes/staff-2b9f6e3d'
 import { Route as TeamRouteImport } from './routes/team'
@@ -288,6 +289,11 @@ const RdCellRoute = RdCellRouteImport.update({
 const RtiRoute = RtiRouteImport.update({
   id: '/rti',
   path: '/rti',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapRoute = SitemapRouteImport.update({
+  id: '/sitemap',
+  path: '/sitemap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SportsRoute = SportsRouteImport.update({
@@ -883,6 +889,7 @@ export interface FileRoutesByFullPath {
   '/professional-bodies': typeof ProfessionalBodiesRoute
   '/rd-cell': typeof RdCellRouteWithChildren
   '/rti': typeof RtiRoute
+  '/sitemap': typeof SitemapRoute
   '/sports': typeof SportsRoute
   '/staff-2b9f6e3d': typeof Staff2b9f6e3dRoute
   '/team': typeof TeamRoute
@@ -1013,6 +1020,7 @@ export interface FileRoutesByTo {
   '/other-amenities': typeof OtherAmenitiesRouteWithChildren
   '/professional-bodies': typeof ProfessionalBodiesRoute
   '/rti': typeof RtiRoute
+  '/sitemap': typeof SitemapRoute
   '/sports': typeof SportsRoute
   '/staff-2b9f6e3d': typeof Staff2b9f6e3dRoute
   '/team': typeof TeamRoute
@@ -1148,6 +1156,7 @@ export interface FileRoutesById {
   '/professional-bodies': typeof ProfessionalBodiesRoute
   '/rd-cell': typeof RdCellRouteWithChildren
   '/rti': typeof RtiRoute
+  '/sitemap': typeof SitemapRoute
   '/sports': typeof SportsRoute
   '/staff-2b9f6e3d': typeof Staff2b9f6e3dRoute
   '/team': typeof TeamRoute
@@ -1287,6 +1296,7 @@ export interface FileRouteTypes {
     | '/professional-bodies'
     | '/rd-cell'
     | '/rti'
+    | '/sitemap'
     | '/sports'
     | '/staff-2b9f6e3d'
     | '/team'
@@ -1417,6 +1427,7 @@ export interface FileRouteTypes {
     | '/other-amenities'
     | '/professional-bodies'
     | '/rti'
+    | '/sitemap'
     | '/sports'
     | '/staff-2b9f6e3d'
     | '/team'
@@ -1551,6 +1562,7 @@ export interface FileRouteTypes {
     | '/professional-bodies'
     | '/rd-cell'
     | '/rti'
+    | '/sitemap'
     | '/sports'
     | '/staff-2b9f6e3d'
     | '/team'
@@ -1689,6 +1701,7 @@ export interface RootRouteChildren {
   ProfessionalBodiesRoute: typeof ProfessionalBodiesRoute
   RdCellRoute: typeof RdCellRouteWithChildren
   RtiRoute: typeof RtiRoute
+  SitemapRoute: typeof SitemapRoute
   SportsRoute: typeof SportsRoute
   Staff2b9f6e3dRoute: typeof Staff2b9f6e3dRoute
   TeamRoute: typeof TeamRoute
@@ -1930,6 +1943,13 @@ declare module '@tanstack/react-router' {
       path: '/rti'
       fullPath: '/rti'
       preLoaderRoute: typeof RtiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap': {
+      id: '/sitemap'
+      path: '/sitemap'
+      fullPath: '/sitemap'
+      preLoaderRoute: typeof SitemapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sports': {
@@ -2973,6 +2993,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfessionalBodiesRoute: ProfessionalBodiesRoute,
   RdCellRoute: RdCellRouteWithChildren,
   RtiRoute: RtiRoute,
+  SitemapRoute: SitemapRoute,
   SportsRoute: SportsRoute,
   Staff2b9f6e3dRoute: Staff2b9f6e3dRoute,
   TeamRoute: TeamRoute,

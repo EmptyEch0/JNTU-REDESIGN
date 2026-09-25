@@ -27,6 +27,7 @@ import { SafeImage } from "@/components/SafeImage";
 import { PageHero } from "@/components/PageHero";
 import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
+import { formatCleanDesignation } from "@/data/department-faculty-data";
 
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
@@ -68,7 +69,7 @@ function FacultyCard({ f }: FacultyCardProps) {
               </span>
             )}
             <h3 className="text-xl font-bold text-blue-900 leading-snug">{f.name}</h3>
-            <p className="text-slate-600 font-medium text-sm">{f.designation}</p>
+            <p className="text-slate-600 font-medium text-sm">{formatCleanDesignation(f.designation)}</p>
           </div>
           
           <div className="pt-2">

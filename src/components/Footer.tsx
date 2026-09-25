@@ -71,6 +71,11 @@ export function Footer() {
                 Placements
               </Link>
             </li>
+            <li>
+              <Link to="/sitemap" className="hover:text-white transition-colors flex items-center gap-1.5">
+                <span>Sitemap</span>
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -175,8 +180,15 @@ export function Footer() {
 
       <div className="border-t border-white/10">
         <div className="container-narrow py-5 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/50">
-          <div className="text-center md:text-left">
-            © {new Date().getFullYear()} {SITE.fullName}. All rights reserved.
+          <div className="text-center md:text-left flex flex-wrap items-center justify-center md:justify-start gap-2">
+            <span>© {new Date().getFullYear()} {SITE.fullName}. All rights reserved.</span>
+            <span className="text-white/20 hidden sm:inline">·</span>
+            <Link
+              to="/sitemap"
+              className="text-white/70 hover:text-accent font-medium underline decoration-white/20 underline-offset-2 transition-colors"
+            >
+              Sitemap
+            </Link>
           </div>
 
           <div className="text-center flex flex-wrap items-center justify-center gap-x-1.5 gap-y-2">

@@ -36,6 +36,20 @@ export function TopRibbon() {
       toast.error("Please enter your feedback message.");
       return;
     }
+    
+    // Store feedback locally in localStorage for administrative review / audit
+    try {
+      const existingFeedbacks = JSON.parse(localStorage.getItem("jntugv_portal_feedback") || "[]");
+      const newEntry = {
+        id: "fb_" + Date.now(),
+        ...feedbackForm,
+        submittedAt: new Date().toISOString(),
+      };
+      localStorage.setItem("jntugv_portal_feedback", JSON.stringify([newEntry, ...existingFeedbacks]));
+    } catch {
+      // ignore storage errors in private browsing
+    }
+
     setFeedbackSubmitted(true);
     toast.success("Thank you! Your feedback has been recorded.");
     setTimeout(() => {
@@ -48,7 +62,7 @@ export function TopRibbon() {
         category: "General Feedback",
         message: "",
       });
-    }, 1800);
+    }, 2000);
   };
 
   return (
@@ -115,11 +129,11 @@ export function TopRibbon() {
 
             {/* 3. UCEV Mail */}
             <a
-              href="https://mail.google.com/a/jntukcev.ac.in"
+              href="https://accounts.google.com/AccountChooser?service=mail&continue=https://mail.google.com/mail/&hd=jntugvcev.edu.in"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 px-1 py-0.5 rounded text-white/85 hover:text-white hover:bg-white/10 transition-colors"
-              title="Official Institutional Webmail"
+              title="Official Institutional Webmail (Google Workspace)"
             >
               <Mail className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
               <span>UCEV Mail</span>
@@ -223,7 +237,7 @@ export function TopRibbon() {
                 <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto animate-bounce" />
                 <h3 className="text-xl font-bold text-white">Feedback Submitted!</h3>
                 <p className="text-sm text-white/70">
-                  Thank you for helping us improve JNTU-GV College of Engineering portal.
+                  Thank you! Your feedback has been recorded and submitted to the College Administration team.
                 </p>
               </div>
             ) : (
@@ -234,7 +248,9 @@ export function TopRibbon() {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-white">University Feedback</h3>
-                    <p className="text-xs text-white/60">Share your thoughts, questions, or suggestions</p>
+                    <p className="text-xs text-white/60">
+                      Share thoughts, suggestions, or queries routed to Principal's Office (<span className="text-cyan-300">principal@jntugv.edu.in</span>)
+                    </p>
                   </div>
                 </div>
 

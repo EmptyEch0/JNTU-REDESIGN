@@ -12,6 +12,49 @@ export interface DepartmentFacultyListItem {
   id?: string | number;
 }
 
+export function formatCleanDesignation(raw: string = ""): string {
+  if (!raw) return "Assistant Professor";
+  let d = raw.trim();
+
+  // 1. Remove administrative roles like "& HOD", "& Head", "& Principal", "& Vice Principal", etc.
+  d = d.replace(/\s*&\s*(hod|head of the department|head of department|head|principal|vice principal|director|coordinator)\b/gi, "");
+  d = d.replace(/\s*\/\s*(hod|head|principal|vice principal)\b/gi, "");
+  d = d.replace(/^(hod|head|principal|vice principal)\s*&\s*/gi, "");
+  d = d.replace(/\((hod|head|principal|vice principal)\)/gi, "");
+
+  // 2. Remove contract / temporary markers like (c), (C), (Contract), (Ad-hoc), etc.
+  d = d.replace(/\s*\((c|contract|ad-hoc|adhoc|temporary|temp|regular)\)/gi, "");
+  d = d.replace(/\s*-\s*(contract|regular|adhoc|ad-hoc)\b/gi, "");
+  d = d.replace(/\s*\b(contract|adhoc|ad-hoc)\b/gi, "");
+
+  // 3. Normalize abbreviations & spacing
+  d = d.replace(/^asst\.?\s*prof\.?/i, "Assistant Professor");
+  d = d.replace(/^assistant\s*prof\.?$/i, "Assistant Professor");
+  d = d.replace(/^assoc\.?\s*prof\.?/i, "Associate Professor");
+  d = d.replace(/^associate\s*prof\.?$/i, "Associate Professor");
+  d = d.replace(/^prof\.?$/i, "Professor");
+  d = d.replace(/\s+/g, " ").trim();
+
+  if (!d || d === "&" || d === "-") {
+    return "Assistant Professor";
+  }
+
+  return d;
+}
+
+export function getCleanAssociationType(associationType: string = "", designation: string = ""): string {
+  const a = (associationType || "").toLowerCase().trim();
+  const d = (designation || "").toLowerCase().trim();
+
+  if (a.includes("contract") || d.includes("(c)") || d.includes("contract") || d.includes("adhoc") || d.includes("ad-hoc")) {
+    return "Contract";
+  }
+  if (a.includes("adjunct") || d.includes("adjunct")) {
+    return "Adjunct";
+  }
+  return "Regular";
+}
+
 export function getFacultyRank(designation: string = "", associationType: string = ""): number {
   const d = designation.toLowerCase().trim();
   const a = associationType.toLowerCase().trim();

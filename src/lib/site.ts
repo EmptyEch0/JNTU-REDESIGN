@@ -524,6 +524,18 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
     group: "Student Corner",
     keywords: "industry interaction consultancy internships",
   },
+  {
+    label: "Sitemap & Page Directory",
+    to: "/sitemap",
+    group: "Pages",
+    keywords: "sitemap index directory all pages links list full site map navigation",
+  },
+  {
+    label: "UCEV Google Workspace Mail",
+    to: "https://accounts.google.com/AccountChooser?service=mail&continue=https://mail.google.com/mail/&hd=jntugvcev.edu.in",
+    group: "Student Corner",
+    keywords: "mail webmail gmail email login inbox ucev google workspace",
+  },
 ];
 
 export const ACADEMICS_SUBNAV = [

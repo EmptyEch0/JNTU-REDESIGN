@@ -1,6 +1,12 @@
 import { createFileRoute, useLoaderData, useParams, Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
-import { DEPARTMENT_FACULTY_LIST, type DepartmentFacultyListItem, sortFacultyList } from "@/data/department-faculty-data";
+import {
+  DEPARTMENT_FACULTY_LIST,
+  type DepartmentFacultyListItem,
+  sortFacultyList,
+  formatCleanDesignation,
+  getCleanAssociationType,
+} from "@/data/department-faculty-data";
 import { useState, useMemo } from "react";
 import { Search, Users, ShieldCheck, ArrowRight } from "lucide-react";
 
@@ -35,7 +41,11 @@ function FacultyListPage() {
     const directList = DEPARTMENT_FACULTY_LIST[deptKey] || (data?.slug ? DEPARTMENT_FACULTY_LIST[data.slug.toLowerCase()] : undefined);
     let rawList: DepartmentFacultyListItem[] = [];
     if (directList && directList.length > 0) {
-      rawList = directList;
+      rawList = directList.map((item) => ({
+        ...item,
+        designation: formatCleanDesignation(item.designation),
+        associationType: getCleanAssociationType(item.associationType, item.designation),
+      }));
     } else {
       const fromLoader = data?.faculty || [];
       rawList = fromLoader.map((f, idx) => ({
@@ -44,16 +54,16 @@ function FacultyListPage() {
         qualification: f.qualification || (Array.isArray(f.qualifications) && f.qualifications.length > 0 ? f.qualifications.join(", ") : "Ph.D / M.Tech"),
         studiedUniversity: f.studied_university || f.university || "—",
         graduationYear: f.year_of_graduation || f.graduation_year || "—",
-        designation: f.designation || "Assistant Professor",
+        designation: formatCleanDesignation(f.designation || "Assistant Professor"),
         dateOfJoining: f.date_of_joining || f.joining_date || "—",
         subject: f.subject || f.specialization || data?.name || "—",
-        associationType: f.employment_type || f.association_type || "Regular",
+        associationType: getCleanAssociationType(f.employment_type || f.association_type || "Regular", f.designation),
         totalExperience: f.total_experience || f.experience || undefined,
         id: f.id,
       }));
     }
     
-    // Sort by rank: Professor -> Associate Professor -> Assistant Professor -> Assistant Professor (Contract)
+    // Sort by rank: Professor -> Associate Professor -> Assistant Professor (Regular) -> Assistant Professor (Contract)
     const sorted = sortFacultyList(rawList);
     return sorted.map((item, idx) => ({
       ...item,

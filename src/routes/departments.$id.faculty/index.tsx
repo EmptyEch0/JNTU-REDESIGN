@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { getAssetUrl } from "@/lib/assets";
 import { SafeImage } from "@/components/SafeImage";
 import { PersonAvatarUpload } from "@/components/AdminEditPanel";
-import { DEPARTMENT_EXPLICIT_FACULTY_PROFILES, sortFacultyList } from "@/data/department-faculty-data";
+import { DEPARTMENT_EXPLICIT_FACULTY_PROFILES, sortFacultyList, formatCleanDesignation } from "@/data/department-faculty-data";
 
 export const Route = createFileRoute("/departments/$id/faculty/")({
   head: ({ loaderData }) => {
@@ -111,7 +111,7 @@ function FacultyCard({ f, isEditMode, deptId, handleUpdate, removeFaculty }: Fac
           <div className="flex flex-col h-full justify-between">
             <div>
               <h3 className="text-xl font-bold text-blue-900 leading-snug">{f.name}</h3>
-              <p className="text-slate-600 font-medium text-sm">{f.designation}</p>
+              <p className="text-slate-600 font-medium text-sm">{formatCleanDesignation(f.designation)}</p>
             </div>
             
             {/* Public View Profile Button */}

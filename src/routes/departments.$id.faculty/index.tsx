@@ -261,6 +261,66 @@ function getNormalizedFacultyName(raw: string): string {
     .replace(/[^a-z0-9]/g, "");
 }
 
+function getInitialDeletedCards(deptKey: string, data: DepartmentData | undefined): any[] {
+  const deletedMap = new Map<string, any>();
+
+  // 1. From jntugv_deleted_faculty_${deptKey}
+  try {
+    const stored = localStorage.getItem(`jntugv_deleted_faculty_${deptKey}`);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        parsed.forEach((item: any) => {
+          const norm = getNormalizedFacultyName(item.name || "");
+          const key = item.id ? String(item.id) : norm;
+          if (key) deletedMap.set(key, item);
+        });
+      }
+    }
+  } catch {}
+
+  // 2. From jntugv_deleted_faculty_rows_${deptKey}
+  try {
+    const storedRows = localStorage.getItem(`jntugv_deleted_faculty_rows_${deptKey}`);
+    if (storedRows) {
+      const parsed = JSON.parse(storedRows);
+      if (Array.isArray(parsed)) {
+        parsed.forEach((item: any) => {
+          const norm = getNormalizedFacultyName(item.name || "");
+          const key = item.id ? String(item.id) : norm;
+          if (key && !deletedMap.has(key)) deletedMap.set(key, item);
+        });
+      }
+    }
+  } catch {}
+
+  // 3. Any explicit profile item missing from data.faculty when DB is populated
+  if (data?.faculty && data.faculty.length > 0) {
+    const explicit =
+      DEPARTMENT_EXPLICIT_FACULTY_PROFILES[deptKey] ||
+      (data?.slug ? DEPARTMENT_EXPLICIT_FACULTY_PROFILES[data.slug.toLowerCase()] : undefined) ||
+      [];
+
+    explicit.forEach((exp: any) => {
+      const expNorm = getNormalizedFacultyName(exp.name || "");
+      const existsInDb = data.faculty.some((dbF: any) => {
+        if (exp.id && dbF.id && String(exp.id) === String(dbF.id)) return true;
+        const dbNorm = getNormalizedFacultyName(dbF.name || "");
+        return dbNorm && expNorm && dbNorm === expNorm;
+      });
+
+      if (!existsInDb) {
+        const key = exp.id ? String(exp.id) : expNorm;
+        if (key && !deletedMap.has(key)) {
+          deletedMap.set(key, exp);
+        }
+      }
+    });
+  }
+
+  return Array.from(deletedMap.values());
+}
+
 function FacultyPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
   const router = useRouter();
@@ -272,52 +332,74 @@ function FacultyPage() {
   const { isDeptEditing } = useAdmin();
   const isEditMode = isDeptEditing(deptId || "");
 
+  // Deleted/Archived faculty list (Admin & HOD only)
+  const [deletedFacultyList, setDeletedFacultyList] = useState<any[]>(() => {
+    return getInitialDeletedCards(deptKey, data);
+  });
+
   const explicitList =
     DEPARTMENT_EXPLICIT_FACULTY_PROFILES[deptKey] ||
     (data?.slug ? DEPARTMENT_EXPLICIT_FACULTY_PROFILES[data.slug.toLowerCase()] : undefined);
 
   const [facultyList, setFacultyList] = useState<any[]>(() => {
-    if (explicitList) {
-      return explicitList;
+    const currentDeleted = getInitialDeletedCards(deptKey, data);
+    const isDeleted = (item: any) => {
+      const itemNorm = getNormalizedFacultyName(item.name || "");
+      return currentDeleted.some((d) => {
+        if (item.id && d.id && String(item.id) === String(d.id)) return true;
+        const dNorm = getNormalizedFacultyName(d.name || "");
+        return dNorm && itemNorm && dNorm === itemNorm;
+      });
+    };
+
+    if (data?.faculty && data.faculty.length > 0) {
+      return data.faculty.filter((f: any) => !isDeleted(f));
     }
-    return data?.faculty || [];
+    if (explicitList) {
+      return explicitList.filter((f: any) => !isDeleted(f));
+    }
+    return [];
   });
 
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
   const dragItemNode = useRef<number | null>(null);
 
   useEffect(() => {
+    const currentDeleted = deletedFacultyList.length > 0 ? deletedFacultyList : getInitialDeletedCards(deptKey, data);
+    const isDeleted = (item: any) => {
+      const itemNorm = getNormalizedFacultyName(item.name || "");
+      return currentDeleted.some((d) => {
+        if (item.id && d.id && String(item.id) === String(d.id)) return true;
+        const dNorm = getNormalizedFacultyName(d.name || "");
+        return dNorm && itemNorm && dNorm === itemNorm;
+      });
+    };
+
     const activeExplicit =
       DEPARTMENT_EXPLICIT_FACULTY_PROFILES[deptKey] ||
       (data?.slug ? DEPARTMENT_EXPLICIT_FACULTY_PROFILES[data.slug.toLowerCase()] : undefined);
 
-    if (activeExplicit && !isEditMode) {
-      const merged = activeExplicit.map((exp) => {
-        const foundById = (data?.faculty || []).find((f: any) => String(f.id) === String(exp.id));
-        if (foundById) {
-          return {
-            ...exp,
-            photo_url: exp.photo_url || foundById.photo_url || "",
-          };
-        }
-
-        const expNorm = getNormalizedFacultyName(exp.name);
-        const foundByName = (data?.faculty || []).find((f: any) => {
-          const fNorm = getNormalizedFacultyName(f.name || "");
-          return fNorm && expNorm && fNorm === expNorm;
+    if (data?.faculty && data.faculty.length > 0) {
+      const activeDb = data.faculty.filter((f: any) => !isDeleted(f));
+      // Enrich with explicit photos if needed
+      const enriched = activeDb.map((dbF: any) => {
+        if (dbF.photo_url) return dbF;
+        const dbNorm = getNormalizedFacultyName(dbF.name || "");
+        const expMatch = (activeExplicit || []).find((exp: any) => {
+          if (exp.id && dbF.id && String(exp.id) === String(dbF.id)) return true;
+          const expNorm = getNormalizedFacultyName(exp.name || "");
+          return expNorm && dbNorm && expNorm === dbNorm;
         });
-
         return {
-          ...exp,
-          id: foundByName?.id ? String(foundByName.id) : exp.id,
-          photo_url: exp.photo_url || foundByName?.photo_url || "",
+          ...dbF,
+          photo_url: expMatch?.photo_url || dbF.photo_url || "",
         };
       });
-      setFacultyList(merged);
-    } else if (data?.faculty) {
-      setFacultyList(data.faculty);
+      setFacultyList(enriched);
+    } else if (activeExplicit) {
+      setFacultyList(activeExplicit.filter((f: any) => !isDeleted(f)));
     }
-  }, [data, deptKey, isEditMode]);
+  }, [data, deptKey, deletedFacultyList]);
 
   const mutation = useMutation({
     mutationFn: (newList: any[]) =>
@@ -353,18 +435,6 @@ function FacultyPage() {
 
   const [facultyToDelete, setFacultyToDelete] = useState<{ id: string | number; name: string } | null>(null);
 
-  // Deleted/Archived faculty list (Admin & HOD only)
-  const [deletedFacultyList, setDeletedFacultyList] = useState<any[]>(() => {
-    try {
-      const stored = localStorage.getItem(`jntugv_deleted_faculty_${deptKey}`);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) return parsed;
-      }
-    } catch {}
-    return [];
-  });
-
   // Direct remove faculty implementation and move to Deleted Faculty archive
   const confirmDeleteFaculty = () => {
     if (facultyToDelete) {
@@ -376,6 +446,7 @@ function FacultyPage() {
         setDeletedFacultyList(updatedDeleted);
         try {
           localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
+          localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
         } catch {}
       }
 
@@ -394,6 +465,7 @@ function FacultyPage() {
     setDeletedFacultyList(updatedDeleted);
     try {
       localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
+      localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
     } catch {}
 
     toast.success(`Restored "${item.name}" to active roster. Click 'Save Roster' to save.`);
@@ -406,6 +478,7 @@ function FacultyPage() {
     setDeletedFacultyList(updatedDeleted);
     try {
       localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
+      localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
     } catch {}
     toast.info("Removed permanently from archive.");
   };
@@ -415,6 +488,7 @@ function FacultyPage() {
     setDeletedFacultyList([]);
     try {
       localStorage.removeItem(`jntugv_deleted_faculty_${deptKey}`);
+      localStorage.removeItem(`jntugv_deleted_faculty_rows_${deptKey}`);
     } catch {}
     toast.info("Cleared all archived faculty records.");
   };

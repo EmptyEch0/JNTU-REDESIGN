@@ -47,6 +47,80 @@ function getNormalizedFacultyName(raw: string): string {
     .toLowerCase()
     .replace(/\b(dr|prof|mr|mrs|ms|assistant professor|associate professor|hod|head of department)\b\.?/gi, "")
     .replace(/[^a-z0-9]/g, "");
+}function getInitialDeletedList(deptKey: string, data: DepartmentData | undefined): DepartmentFacultyListItem[] {
+  const deletedMap = new Map<string, DepartmentFacultyListItem>();
+
+  // 1. Load from shared jntugv_deleted_faculty_${deptKey}
+  try {
+    const stored = localStorage.getItem(`jntugv_deleted_faculty_${deptKey}`);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        parsed.forEach((item: any) => {
+          const norm = getNormalizedFacultyName(item.name || "");
+          const key = item.id ? String(item.id) : norm;
+          if (key) {
+            deletedMap.set(key, {
+              sNo: deletedMap.size + 1,
+              id: item.id,
+              name: item.name || "Faculty Member",
+              designation: formatCleanDesignation(item.designation || "Assistant Professor"),
+              qualification: item.qualification || (Array.isArray(item.qualifications) ? item.qualifications.join(", ") : "Ph.D / M.Tech"),
+              studiedUniversity: item.studiedUniversity || item.studied_university || "—",
+              graduationYear: item.graduationYear || item.year_of_graduation || "—",
+              dateOfJoining: item.dateOfJoining || item.date_of_joining || "—",
+              subject: item.subject || item.specialization || "—",
+              associationType: getCleanAssociationType(item.associationType || item.employment_type || "Regular", item.designation),
+              totalExperience: item.totalExperience || (item.experience_years ? `${item.experience_years} Years` : "—"),
+            });
+          }
+        });
+      }
+    }
+  } catch {}
+
+  // 2. Load from jntugv_deleted_faculty_rows_${deptKey}
+  try {
+    const storedRows = localStorage.getItem(`jntugv_deleted_faculty_rows_${deptKey}`);
+    if (storedRows) {
+      const parsed = JSON.parse(storedRows);
+      if (Array.isArray(parsed)) {
+        parsed.forEach((item: any) => {
+          const norm = getNormalizedFacultyName(item.name || "");
+          const key = item.id ? String(item.id) : norm;
+          if (key && !deletedMap.has(key)) {
+            deletedMap.set(key, item);
+          }
+        });
+      }
+    }
+  } catch {}
+
+  // 3. Any static DEPARTMENT_FACULTY_LIST item missing from data.faculty when DB has faculty
+  if (data?.faculty && data.faculty.length > 0) {
+    const directList =
+      DEPARTMENT_FACULTY_LIST[deptKey] ||
+      (data?.slug ? DEPARTMENT_FACULTY_LIST[data.slug.toLowerCase()] : undefined) ||
+      [];
+
+    directList.forEach((staticItem) => {
+      const sNorm = getNormalizedFacultyName(staticItem.name || "");
+      const foundInDb = data.faculty.some((dbF: any) => {
+        if (staticItem.id && dbF.id && String(staticItem.id) === String(dbF.id)) return true;
+        const dbNorm = getNormalizedFacultyName(dbF.name || "");
+        return dbNorm && sNorm && dbNorm === sNorm;
+      });
+
+      if (!foundInDb) {
+        const key = staticItem.id ? String(staticItem.id) : sNorm;
+        if (key && !deletedMap.has(key)) {
+          deletedMap.set(key, staticItem);
+        }
+      }
+    });
+  }
+
+  return Array.from(deletedMap.values());
 }
 
 function FacultyListPage() {
@@ -60,108 +134,83 @@ function FacultyListPage() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Deleted / Archived Faculty Table Rows (Admin & HOD only)
+  const [deletedRowsList, setDeletedRowsList] = useState<DepartmentFacultyListItem[]>(() => {
+    return getInitialDeletedList(deptKey, data);
+  });
+
   // Construct initial dynamic faculty list merged with live database updates
   const defaultList: DepartmentFacultyListItem[] = useMemo(() => {
     const directList =
       DEPARTMENT_FACULTY_LIST[deptKey] ||
-      (data?.slug ? DEPARTMENT_FACULTY_LIST[data.slug.toLowerCase()] : undefined);
-    
-    const dbFaculty = data?.faculty || [];
+      (data?.slug ? DEPARTMENT_FACULTY_LIST[data.slug.toLowerCase()] : undefined) ||
+      [];
 
-    if (directList && directList.length > 0) {
-      // Merge live DB edits (name, designation, photo, qualifications) into the directList
-      const merged = directList.map((item) => {
-        const itemNorm = getNormalizedFacultyName(item.name);
-        const match = dbFaculty.find((f: any) => {
-          if (item.id && f.id && String(item.id) === String(f.id)) return true;
-          const fNorm = getNormalizedFacultyName(f.name || "");
-          return fNorm && itemNorm && fNorm === itemNorm;
+    const dbFaculty = data?.faculty || [];
+    const currentDeleted = deletedRowsList.length > 0 ? deletedRowsList : getInitialDeletedList(deptKey, data);
+
+    const isItemDeleted = (item: any) => {
+      const itemNorm = getNormalizedFacultyName(item.name || "");
+      return currentDeleted.some((d) => {
+        if (item.id && d.id && String(item.id) === String(d.id)) return true;
+        const dNorm = getNormalizedFacultyName(d.name || "");
+        return dNorm && itemNorm && dNorm === itemNorm;
+      });
+    };
+
+    if (dbFaculty && dbFaculty.length > 0) {
+      // 1. Filter active dbFaculty that are not in the deleted list
+      const activeDb = dbFaculty.filter((dbF: any) => !isItemDeleted(dbF));
+
+      // 2. Map every active dbFaculty member to a table row
+      const result: DepartmentFacultyListItem[] = activeDb.map((dbF: any) => {
+        const dbNorm = getNormalizedFacultyName(dbF.name || "");
+
+        // Find matching static item to inherit background columns if available
+        const staticMatch = directList.find((s) => {
+          if (dbF.id && s.id && String(dbF.id) === String(s.id)) return true;
+          const sNorm = getNormalizedFacultyName(s.name || "");
+          return sNorm && dbNorm && sNorm === dbNorm;
         });
 
-        if (match) {
-          return {
-            ...item,
-            id: match.id ? String(match.id) : item.id,
-            name: match.name || item.name,
-            designation: formatCleanDesignation(match.designation || item.designation),
-            qualification: match.qualifications && Array.isArray(match.qualifications) && match.qualifications.length > 0
-              ? match.qualifications.join(", ")
-              : match.qualification || item.qualification,
-            associationType: getCleanAssociationType(match.employment_type || match.association_type || item.associationType, match.designation || item.designation),
-            totalExperience: match.experience_years ? `${match.experience_years} Years` : match.total_experience || item.totalExperience,
-          };
-        }
+        const qual = dbF.qualifications && Array.isArray(dbF.qualifications) && dbF.qualifications.length > 0
+          ? dbF.qualifications.join(", ")
+          : (dbF.qualification || staticMatch?.qualification || "—");
+
+        const univ = dbF.studied_university || dbF.university || staticMatch?.studiedUniversity || "—";
+        const gradYr = dbF.year_of_graduation || dbF.graduation_year || staticMatch?.graduationYear || "—";
+        const doj = dbF.date_of_joining || dbF.joining_date || staticMatch?.dateOfJoining || "—";
+        const subj = dbF.subject || dbF.specialization || staticMatch?.subject || "—";
+        const assoc = getCleanAssociationType(dbF.employment_type || dbF.association_type || staticMatch?.associationType || "Regular", dbF.designation);
+        const exp = dbF.experience_years ? `${dbF.experience_years} Years` : (dbF.total_experience || staticMatch?.totalExperience || "—");
 
         return {
-          ...item,
-          designation: formatCleanDesignation(item.designation),
-          associationType: getCleanAssociationType(item.associationType, item.designation),
+          sNo: 0,
+          id: dbF.id,
+          name: dbF.name || staticMatch?.name || "Faculty Member",
+          qualification: qual,
+          studiedUniversity: univ,
+          graduationYear: gradYr,
+          designation: formatCleanDesignation(dbF.designation || staticMatch?.designation || "Assistant Professor"),
+          dateOfJoining: doj,
+          subject: subj,
+          associationType: assoc,
+          totalExperience: exp,
         };
       });
 
-      // Also append any newly created DB faculty members that aren't in directList
-      dbFaculty.forEach((dbF: any, idx: number) => {
-        const dbNorm = getNormalizedFacultyName(dbF.name || "");
-        const alreadyExists = merged.some((m) => {
-          if (m.id && dbF.id && String(m.id) === String(dbF.id)) return true;
-          const mNorm = getNormalizedFacultyName(m.name);
-          return mNorm && dbNorm && mNorm === dbNorm;
-        });
-
-        if (!alreadyExists) {
-          merged.push({
-            sNo: merged.length + 1,
-            name: dbF.name || "Faculty Member",
-            qualification: dbF.qualification || (Array.isArray(dbF.qualifications) && dbF.qualifications.length > 0 ? dbF.qualifications.join(", ") : "Ph.D / M.Tech"),
-            studiedUniversity: dbF.studied_university || dbF.university || "—",
-            graduationYear: dbF.year_of_graduation || dbF.graduation_year || "—",
-            designation: formatCleanDesignation(dbF.designation || "Assistant Professor"),
-            dateOfJoining: dbF.date_of_joining || dbF.joining_date || "—",
-            subject: dbF.subject || dbF.specialization || data?.name || "—",
-            associationType: getCleanAssociationType(dbF.employment_type || dbF.association_type || "Regular", dbF.designation),
-            totalExperience: dbF.experience_years ? `${dbF.experience_years} Years` : dbF.total_experience || undefined,
-            id: dbF.id,
-          });
-        }
-      });
-
-      return sortFacultyList(merged).map((item, idx) => ({ ...item, sNo: idx + 1 }));
+      return sortFacultyList(result).map((item, idx) => ({ ...item, sNo: idx + 1 }));
     }
 
-    // Fallback: derive purely from data.faculty
-    const fallbackList = dbFaculty.map((f: any, idx: number) => ({
-      sNo: idx + 1,
-      name: f.name || "Faculty Member",
-      qualification: f.qualification || (Array.isArray(f.qualifications) && f.qualifications.length > 0 ? f.qualifications.join(", ") : "Ph.D / M.Tech"),
-      studiedUniversity: f.studied_university || f.university || "—",
-      graduationYear: f.year_of_graduation || f.graduation_year || "—",
-      designation: formatCleanDesignation(f.designation || "Assistant Professor"),
-      dateOfJoining: f.date_of_joining || f.joining_date || "—",
-      subject: f.subject || f.specialization || data?.name || "—",
-      associationType: getCleanAssociationType(f.employment_type || f.association_type || "Regular", f.designation),
-      totalExperience: f.experience_years ? `${f.experience_years} Years` : f.total_experience || undefined,
-      id: f.id,
-    }));
-
-    return sortFacultyList(fallbackList).map((item, idx) => ({ ...item, sNo: idx + 1 }));
-  }, [deptKey, data]);
+    // Fallback if DB has no faculty seeded yet: directList excluding deleted items
+    const nonDeletedDirect = directList.filter((item) => !isItemDeleted(item));
+    return sortFacultyList(nonDeletedDirect).map((item, idx) => ({ ...item, sNo: idx + 1 }));
+  }, [deptKey, data, deletedRowsList]);
 
   const [facultyList, setFacultyList] = useState<DepartmentFacultyListItem[]>(defaultList);
   const [facultyRowToDelete, setFacultyRowToDelete] = useState<{ index: number; name: string } | null>(null);
 
-  // Deleted / Archived Faculty Table Rows (Admin & HOD only)
-  const [deletedRowsList, setDeletedRowsList] = useState<DepartmentFacultyListItem[]>(() => {
-    try {
-      const stored = localStorage.getItem(`jntugv_deleted_faculty_rows_${deptKey}`);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) return parsed;
-      }
-    } catch {}
-    return [];
-  });
-
-  // Load stored faculty list from localStorage if available, merging latest live DB updates
+  // Synchronize dynamic updates and localStorage
   useEffect(() => {
     try {
       const stored = localStorage.getItem(`jntugv_faculty_list_${deptKey}`);
@@ -169,7 +218,20 @@ function FacultyListPage() {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
           const dbFaculty = data?.faculty || [];
-          const updatedWithDb = parsed.map((item: DepartmentFacultyListItem) => {
+          const currentDeleted = deletedRowsList.length > 0 ? deletedRowsList : getInitialDeletedList(deptKey, data);
+
+          // Filter out deleted items
+          const filteredParsed = parsed.filter((item: any) => {
+            const itemNorm = getNormalizedFacultyName(item.name || "");
+            return !currentDeleted.some((d) => {
+              if (item.id && d.id && String(item.id) === String(d.id)) return true;
+              const dNorm = getNormalizedFacultyName(d.name || "");
+              return dNorm && itemNorm && dNorm === itemNorm;
+            });
+          });
+
+          // Overlay live DB profile edits
+          const updatedWithDb = filteredParsed.map((item: DepartmentFacultyListItem) => {
             const itemNorm = getNormalizedFacultyName(item.name);
             const match = dbFaculty.find((f: any) => {
               if (item.id && f.id && String(item.id) === String(f.id)) return true;
@@ -192,20 +254,56 @@ function FacultyListPage() {
             }
             return item;
           });
-          setFacultyList(updatedWithDb);
+
+          // Also check for newly added dbFaculty members that are not in stored list
+          dbFaculty.forEach((dbF: any) => {
+            const dbNorm = getNormalizedFacultyName(dbF.name || "");
+            const isDel = currentDeleted.some((d) => {
+              if (dbF.id && d.id && String(dbF.id) === String(d.id)) return true;
+              const dNorm = getNormalizedFacultyName(d.name || "");
+              return dNorm && dbNorm && dNorm === dbNorm;
+            });
+            if (isDel) return;
+
+            const alreadyExists = updatedWithDb.some((m) => {
+              if (m.id && dbF.id && String(m.id) === String(dbF.id)) return true;
+              const mNorm = getNormalizedFacultyName(m.name);
+              return mNorm && dbNorm && mNorm === dbNorm;
+            });
+
+            if (!alreadyExists) {
+              updatedWithDb.push({
+                sNo: updatedWithDb.length + 1,
+                name: dbF.name || "Faculty Member",
+                qualification: dbF.qualifications && Array.isArray(dbF.qualifications) && dbF.qualifications.length > 0 ? dbF.qualifications.join(", ") : (dbF.qualification || "—"),
+                studiedUniversity: dbF.studied_university || dbF.university || "—",
+                graduationYear: dbF.year_of_graduation || dbF.graduation_year || "—",
+                designation: formatCleanDesignation(dbF.designation || "Assistant Professor"),
+                dateOfJoining: dbF.date_of_joining || dbF.joining_date || "—",
+                subject: dbF.subject || dbF.specialization || "—",
+                associationType: getCleanAssociationType(dbF.employment_type || dbF.association_type || "Regular", dbF.designation),
+                totalExperience: dbF.experience_years ? `${dbF.experience_years} Years` : (dbF.total_experience || "—"),
+                id: dbF.id,
+              });
+            }
+          });
+
+          setFacultyList(sortFacultyList(updatedWithDb).map((it, idx) => ({ ...it, sNo: idx + 1 })));
           return;
         }
       }
     } catch {}
     setFacultyList(defaultList);
-  }, [deptKey, defaultList, data]);
+  }, [deptKey, defaultList, data, deletedRowsList]);
 
   const mutation = useMutation({
     mutationFn: async (updatedList: DepartmentFacultyListItem[]) => {
       // Persist in localStorage
       localStorage.setItem(`jntugv_faculty_list_${deptKey}`, JSON.stringify(updatedList));
+      localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(deletedRowsList));
+      localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(deletedRowsList));
 
-      // Also sync core fields (name, designation, photo) to department faculty table
+      // Sync active faculty roster to PostgreSQL backend
       const backendPayload = updatedList.map((item) => {
         const existingF = (data?.faculty || []).find((f: any) => String(f.id) === String(item.id));
         return {
@@ -216,6 +314,10 @@ function FacultyListPage() {
           qualification: item.qualification,
           subject: item.subject,
           association_type: item.associationType,
+          studied_university: item.studiedUniversity !== "—" ? item.studiedUniversity : undefined,
+          year_of_graduation: item.graduationYear !== "—" ? item.graduationYear : undefined,
+          date_of_joining: item.dateOfJoining !== "—" ? item.dateOfJoining : undefined,
+          total_experience: item.totalExperience !== "—" ? item.totalExperience : undefined,
         };
       });
 
@@ -248,13 +350,13 @@ function FacultyListPage() {
       id: newId,
       name: "New Faculty Member",
       qualification: "Ph.D / M.Tech",
-      studiedUniversity: "JNTU-GV / Andhra University",
-      graduationYear: String(new Date().getFullYear()),
+      studiedUniversity: "—",
+      graduationYear: "—",
       designation: "Assistant Professor",
-      dateOfJoining: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
-      subject: data?.name || "Engineering",
+      dateOfJoining: "—",
+      subject: "—",
       associationType: "Regular",
-      totalExperience: "1 Year",
+      totalExperience: "—",
     };
     setFacultyList((prev) => [newRow, ...prev].map((item, idx) => ({ ...item, sNo: idx + 1 })));
     toast.info("Added new faculty row at the top. Fill details and click 'Save Faculty List'.");
@@ -263,9 +365,10 @@ function FacultyListPage() {
   const removeFacultyRow = (index: number) => {
     const itemToDelete = facultyList[index];
     if (itemToDelete) {
-      const updatedDeleted = [itemToDelete, ...deletedRowsList];
+      const updatedDeleted = [itemToDelete, ...deletedRowsList.filter((d) => String(d.id) !== String(itemToDelete.id))];
       setDeletedRowsList(updatedDeleted);
       try {
+        localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
         localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
       } catch {}
     }
@@ -287,11 +390,12 @@ function FacultyListPage() {
 
   const restoreFacultyRow = (item: DepartmentFacultyListItem, archiveIdx: number) => {
     const restored = { ...item, sNo: facultyList.length + 1 };
-    setFacultyList((prev) => [restored, ...prev].map((it, idx) => ({ ...it, sNo: idx + 1 })));
+    setFacultyList((prev) => sortFacultyList([restored, ...prev]).map((it, idx) => ({ ...it, sNo: idx + 1 })));
 
     const updatedDeleted = deletedRowsList.filter((_, i) => i !== archiveIdx);
     setDeletedRowsList(updatedDeleted);
     try {
+      localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
       localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
     } catch {}
 
@@ -302,6 +406,7 @@ function FacultyListPage() {
     const updatedDeleted = deletedRowsList.filter((_, i) => i !== archiveIdx);
     setDeletedRowsList(updatedDeleted);
     try {
+      localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
       localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
     } catch {}
     toast.info("Permanently removed from archive.");
@@ -310,6 +415,7 @@ function FacultyListPage() {
   const clearAllDeletedRows = () => {
     setDeletedRowsList([]);
     try {
+      localStorage.removeItem(`jntugv_deleted_faculty_${deptKey}`);
       localStorage.removeItem(`jntugv_deleted_faculty_rows_${deptKey}`);
     } catch {}
     toast.info("Cleared all archived faculty rows.");
@@ -318,7 +424,10 @@ function FacultyListPage() {
   const resetToOriginal = () => {
     try {
       localStorage.removeItem(`jntugv_faculty_list_${deptKey}`);
+      localStorage.removeItem(`jntugv_deleted_faculty_${deptKey}`);
+      localStorage.removeItem(`jntugv_deleted_faculty_rows_${deptKey}`);
     } catch {}
+    setDeletedRowsList([]);
     setFacultyList(defaultList);
     toast.info("Reset to original faculty list.");
   };

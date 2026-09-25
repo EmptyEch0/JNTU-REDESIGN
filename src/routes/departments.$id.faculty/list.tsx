@@ -1,4 +1,4 @@
-import { createFileRoute, useLoaderData, useParams, Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, useParams, Link } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
 import {
   DEPARTMENT_FACULTY_LIST,
@@ -7,8 +7,23 @@ import {
   formatCleanDesignation,
   getCleanAssociationType,
 } from "@/data/department-faculty-data";
-import { useState, useMemo } from "react";
-import { Search, Users, ShieldCheck, ArrowRight } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { useAdmin } from "@/context/AdminContext";
+import { syncFaculty } from "@/lib/departments";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Search,
+  Users,
+  Plus,
+  Trash2,
+  Save,
+  RotateCcw,
+  AlertTriangle,
+  ArrowRight,
+  UserCheck,
+} from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id/faculty/list")({
   head: ({ loaderData }) => {
@@ -27,61 +42,296 @@ export const Route = createFileRoute("/departments/$id/faculty/list")({
   component: FacultyListPage,
 });
 
+function getNormalizedFacultyName(raw: string): string {
+  return (raw || "")
+    .toLowerCase()
+    .replace(/\b(dr|prof|mr|mrs|ms|assistant professor|associate professor|hod|head of department)\b\.?/gi, "")
+    .replace(/[^a-z0-9]/g, "");
+}
+
 function FacultyListPage() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
   const { id: deptId } = useParams({ from: "/departments/$id/faculty/list" });
-  const location = useLocation();
-  const navigate = useNavigate();
   const deptKey = (deptId || "").toLowerCase();
+  const queryClient = useQueryClient();
+
+  const { isDeptEditing } = useAdmin();
+  const isEditMode = isDeptEditing(deptId || "");
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Check if explicit verified faculty list exists for this department and sort hierarchically
-  const allFacultyItems: DepartmentFacultyListItem[] = useMemo(() => {
-    const directList = DEPARTMENT_FACULTY_LIST[deptKey] || (data?.slug ? DEPARTMENT_FACULTY_LIST[data.slug.toLowerCase()] : undefined);
-    let rawList: DepartmentFacultyListItem[] = [];
-    if (directList && directList.length > 0) {
-      rawList = directList.map((item) => ({
-        ...item,
-        designation: formatCleanDesignation(item.designation),
-        associationType: getCleanAssociationType(item.associationType, item.designation),
-      }));
-    } else {
-      const fromLoader = data?.faculty || [];
-      rawList = fromLoader.map((f, idx) => ({
-        sNo: idx + 1,
-        name: f.name || "Faculty Member",
-        qualification: f.qualification || (Array.isArray(f.qualifications) && f.qualifications.length > 0 ? f.qualifications.join(", ") : "Ph.D / M.Tech"),
-        studiedUniversity: f.studied_university || f.university || "—",
-        graduationYear: f.year_of_graduation || f.graduation_year || "—",
-        designation: formatCleanDesignation(f.designation || "Assistant Professor"),
-        dateOfJoining: f.date_of_joining || f.joining_date || "—",
-        subject: f.subject || f.specialization || data?.name || "—",
-        associationType: getCleanAssociationType(f.employment_type || f.association_type || "Regular", f.designation),
-        totalExperience: f.total_experience || f.experience || undefined,
-        id: f.id,
-      }));
-    }
+  // Construct initial dynamic faculty list merged with live database updates
+  const defaultList: DepartmentFacultyListItem[] = useMemo(() => {
+    const directList =
+      DEPARTMENT_FACULTY_LIST[deptKey] ||
+      (data?.slug ? DEPARTMENT_FACULTY_LIST[data.slug.toLowerCase()] : undefined);
     
-    // Sort by rank: Professor -> Associate Professor -> Assistant Professor (Regular) -> Assistant Professor (Contract)
-    const sorted = sortFacultyList(rawList);
-    return sorted.map((item, idx) => ({
+    const dbFaculty = data?.faculty || [];
+
+    if (directList && directList.length > 0) {
+      // Merge live DB edits (name, designation, photo, qualifications) into the directList
+      const merged = directList.map((item) => {
+        const itemNorm = getNormalizedFacultyName(item.name);
+        const match = dbFaculty.find((f: any) => {
+          if (item.id && f.id && String(item.id) === String(f.id)) return true;
+          const fNorm = getNormalizedFacultyName(f.name || "");
+          return fNorm && itemNorm && fNorm === itemNorm;
+        });
+
+        if (match) {
+          return {
+            ...item,
+            id: match.id ? String(match.id) : item.id,
+            name: match.name || item.name,
+            designation: formatCleanDesignation(match.designation || item.designation),
+            qualification: match.qualifications && Array.isArray(match.qualifications) && match.qualifications.length > 0
+              ? match.qualifications.join(", ")
+              : match.qualification || item.qualification,
+            associationType: getCleanAssociationType(match.employment_type || match.association_type || item.associationType, match.designation || item.designation),
+            totalExperience: match.experience_years ? `${match.experience_years} Years` : match.total_experience || item.totalExperience,
+          };
+        }
+
+        return {
+          ...item,
+          designation: formatCleanDesignation(item.designation),
+          associationType: getCleanAssociationType(item.associationType, item.designation),
+        };
+      });
+
+      // Also append any newly created DB faculty members that aren't in directList
+      dbFaculty.forEach((dbF: any, idx: number) => {
+        const dbNorm = getNormalizedFacultyName(dbF.name || "");
+        const alreadyExists = merged.some((m) => {
+          if (m.id && dbF.id && String(m.id) === String(dbF.id)) return true;
+          const mNorm = getNormalizedFacultyName(m.name);
+          return mNorm && dbNorm && mNorm === dbNorm;
+        });
+
+        if (!alreadyExists) {
+          merged.push({
+            sNo: merged.length + 1,
+            name: dbF.name || "Faculty Member",
+            qualification: dbF.qualification || (Array.isArray(dbF.qualifications) && dbF.qualifications.length > 0 ? dbF.qualifications.join(", ") : "Ph.D / M.Tech"),
+            studiedUniversity: dbF.studied_university || dbF.university || "—",
+            graduationYear: dbF.year_of_graduation || dbF.graduation_year || "—",
+            designation: formatCleanDesignation(dbF.designation || "Assistant Professor"),
+            dateOfJoining: dbF.date_of_joining || dbF.joining_date || "—",
+            subject: dbF.subject || dbF.specialization || data?.name || "—",
+            associationType: getCleanAssociationType(dbF.employment_type || dbF.association_type || "Regular", dbF.designation),
+            totalExperience: dbF.experience_years ? `${dbF.experience_years} Years` : dbF.total_experience || undefined,
+            id: dbF.id,
+          });
+        }
+      });
+
+      return sortFacultyList(merged).map((item, idx) => ({ ...item, sNo: idx + 1 }));
+    }
+
+    // Fallback: derive purely from data.faculty
+    const fallbackList = dbFaculty.map((f: any, idx: number) => ({
+      sNo: idx + 1,
+      name: f.name || "Faculty Member",
+      qualification: f.qualification || (Array.isArray(f.qualifications) && f.qualifications.length > 0 ? f.qualifications.join(", ") : "Ph.D / M.Tech"),
+      studiedUniversity: f.studied_university || f.university || "—",
+      graduationYear: f.year_of_graduation || f.graduation_year || "—",
+      designation: formatCleanDesignation(f.designation || "Assistant Professor"),
+      dateOfJoining: f.date_of_joining || f.joining_date || "—",
+      subject: f.subject || f.specialization || data?.name || "—",
+      associationType: getCleanAssociationType(f.employment_type || f.association_type || "Regular", f.designation),
+      totalExperience: f.experience_years ? `${f.experience_years} Years` : f.total_experience || undefined,
+      id: f.id,
+    }));
+
+    return sortFacultyList(fallbackList).map((item, idx) => ({ ...item, sNo: idx + 1 }));
+  }, [deptKey, data]);
+
+  const [facultyList, setFacultyList] = useState<DepartmentFacultyListItem[]>(defaultList);
+  const [facultyRowToDelete, setFacultyRowToDelete] = useState<{ index: number; name: string } | null>(null);
+
+  // Deleted / Archived Faculty Table Rows (Admin & HOD only)
+  const [deletedRowsList, setDeletedRowsList] = useState<DepartmentFacultyListItem[]>(() => {
+    try {
+      const stored = localStorage.getItem(`jntugv_deleted_faculty_rows_${deptKey}`);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {}
+    return [];
+  });
+
+  // Load stored faculty list from localStorage if available, merging latest live DB updates
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(`jntugv_faculty_list_${deptKey}`);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const dbFaculty = data?.faculty || [];
+          const updatedWithDb = parsed.map((item: DepartmentFacultyListItem) => {
+            const itemNorm = getNormalizedFacultyName(item.name);
+            const match = dbFaculty.find((f: any) => {
+              if (item.id && f.id && String(item.id) === String(f.id)) return true;
+              const fNorm = getNormalizedFacultyName(f.name || "");
+              return fNorm && itemNorm && fNorm === itemNorm;
+            });
+
+            if (match) {
+              return {
+                ...item,
+                id: match.id ? String(match.id) : item.id,
+                name: match.name || item.name,
+                designation: formatCleanDesignation(match.designation || item.designation),
+                qualification: match.qualifications && Array.isArray(match.qualifications) && match.qualifications.length > 0
+                  ? match.qualifications.join(", ")
+                  : match.qualification || item.qualification,
+                associationType: getCleanAssociationType(match.employment_type || match.association_type || item.associationType, match.designation || item.designation),
+                totalExperience: match.experience_years ? `${match.experience_years} Years` : match.total_experience || item.totalExperience,
+              };
+            }
+            return item;
+          });
+          setFacultyList(updatedWithDb);
+          return;
+        }
+      }
+    } catch {}
+    setFacultyList(defaultList);
+  }, [deptKey, defaultList, data]);
+
+  const mutation = useMutation({
+    mutationFn: async (updatedList: DepartmentFacultyListItem[]) => {
+      // Persist in localStorage
+      localStorage.setItem(`jntugv_faculty_list_${deptKey}`, JSON.stringify(updatedList));
+
+      // Also sync core fields (name, designation, photo) to department faculty table
+      const backendPayload = updatedList.map((item) => {
+        const existingF = (data?.faculty || []).find((f: any) => String(f.id) === String(item.id));
+        return {
+          id: item.id || `fac_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+          name: item.name,
+          designation: item.designation,
+          photo_url: existingF?.photo_url || "",
+          qualification: item.qualification,
+          subject: item.subject,
+          association_type: item.associationType,
+        };
+      });
+
+      if (data?.id) {
+        await syncFaculty({ data: { deptId: data.id, facultyList: backendPayload } });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
+      toast.success("Faculty list updated & synchronized successfully!");
+    },
+    onError: (err: any) => toast.error(err?.message || "Failed to save faculty list."),
+  });
+
+  const handleUpdate = (index: number, field: keyof DepartmentFacultyListItem, value: any) => {
+    setFacultyList((prev) => {
+      const copy = [...prev];
+      copy[index] = {
+        ...copy[index],
+        [field]: value,
+      };
+      return copy;
+    });
+  };
+
+  const addFacultyRow = () => {
+    const newId = `fac_${Date.now()}`;
+    const newRow: DepartmentFacultyListItem = {
+      sNo: facultyList.length + 1,
+      id: newId,
+      name: "New Faculty Member",
+      qualification: "Ph.D / M.Tech",
+      studiedUniversity: "JNTU-GV / Andhra University",
+      graduationYear: String(new Date().getFullYear()),
+      designation: "Assistant Professor",
+      dateOfJoining: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
+      subject: data?.name || "Engineering",
+      associationType: "Regular",
+      totalExperience: "1 Year",
+    };
+    setFacultyList((prev) => [newRow, ...prev].map((item, idx) => ({ ...item, sNo: idx + 1 })));
+    toast.info("Added new faculty row at the top. Fill details and click 'Save Faculty List'.");
+  };
+
+  const removeFacultyRow = (index: number) => {
+    const itemToDelete = facultyList[index];
+    if (itemToDelete) {
+      const updatedDeleted = [itemToDelete, ...deletedRowsList];
+      setDeletedRowsList(updatedDeleted);
+      try {
+        localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
+      } catch {}
+    }
+
+    const updated = facultyList.filter((_, i) => i !== index).map((item, idx) => ({
       ...item,
       sNo: idx + 1,
     }));
-  }, [deptKey, data]);
+    setFacultyList(updated);
+  };
 
+  const confirmDeleteFacultyRow = () => {
+    if (facultyRowToDelete !== null) {
+      removeFacultyRow(facultyRowToDelete.index);
+      toast.success(`Removed "${facultyRowToDelete.name}" to Deleted Faculty Archive below.`);
+      setFacultyRowToDelete(null);
+    }
+  };
 
+  const restoreFacultyRow = (item: DepartmentFacultyListItem, archiveIdx: number) => {
+    const restored = { ...item, sNo: facultyList.length + 1 };
+    setFacultyList((prev) => [restored, ...prev].map((it, idx) => ({ ...it, sNo: idx + 1 })));
+
+    const updatedDeleted = deletedRowsList.filter((_, i) => i !== archiveIdx);
+    setDeletedRowsList(updatedDeleted);
+    try {
+      localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
+    } catch {}
+
+    toast.success(`Restored "${item.name}". Click 'Save Faculty List' to save changes.`);
+  };
+
+  const purgeDeletedRow = (archiveIdx: number) => {
+    const updatedDeleted = deletedRowsList.filter((_, i) => i !== archiveIdx);
+    setDeletedRowsList(updatedDeleted);
+    try {
+      localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
+    } catch {}
+    toast.info("Permanently removed from archive.");
+  };
+
+  const clearAllDeletedRows = () => {
+    setDeletedRowsList([]);
+    try {
+      localStorage.removeItem(`jntugv_deleted_faculty_rows_${deptKey}`);
+    } catch {}
+    toast.info("Cleared all archived faculty rows.");
+  };
+
+  const resetToOriginal = () => {
+    try {
+      localStorage.removeItem(`jntugv_faculty_list_${deptKey}`);
+    } catch {}
+    setFacultyList(defaultList);
+    toast.info("Reset to original faculty list.");
+  };
 
   const hasExperienceColumn = useMemo(() => {
-    return allFacultyItems.some((f) => Boolean(f.totalExperience));
-  }, [allFacultyItems]);
+    return facultyList.some((f) => Boolean(f.totalExperience));
+  }, [facultyList]);
 
-  // Filtered roster (search only)
+  // Filtered roster (search only applied in public view or view mode)
   const filteredFaculty = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
-    return allFacultyItems.filter((f) => {
-      if (!query) return true;
+    if (!query || isEditMode) return facultyList;
+    return facultyList.filter((f) => {
       return (
         (f.name || "").toLowerCase().includes(query) ||
         (f.designation || "").toLowerCase().includes(query) ||
@@ -92,74 +342,133 @@ function FacultyListPage() {
         (f.totalExperience || "").toLowerCase().includes(query)
       );
     });
-  }, [allFacultyItems, searchQuery]);
-
-
+  }, [facultyList, searchQuery, isEditMode]);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
-      {/* Header Banner */}
+      {/* Header Banner & Admin Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-            Faculty List
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <span>Faculty List</span>
+            {isEditMode && (
+              <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+                Editing Mode
+              </span>
+            )}
           </h2>
           <p className="text-sm text-slate-600 mt-1 max-w-2xl">
-            Detailed academic qualifications, graduation background, and association details of faculty members in the Department of {data?.name}.
+            {isEditMode
+              ? "Edit academic qualifications, designations, joining dates, and employment status. Click 'Save Faculty List' to apply."
+              : `Detailed academic qualifications, graduation background, and association details of faculty members in the Department of ${data?.name}.`}
           </p>
         </div>
-      </div>
 
-      {/* Filter and Search Bar */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-3">
-        <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-          <div className="relative w-full max-w-md">
-            <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search by name, qualification, designation or subject..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-            />
+        {/* Admin Action Buttons */}
+        {isEditMode && (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={resetToOriginal}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors cursor-pointer"
+              title="Reset to default roster"
+            >
+              <RotateCcw size={14} />
+              <span>Reset</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={addFacultyRow}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-900 bg-amber-100 hover:bg-amber-200 border border-amber-300 transition-colors cursor-pointer"
+            >
+              <Plus size={14} />
+              <span>Add Faculty Row</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => mutation.mutate(facultyList)}
+              disabled={mutation.isPending}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 transition-colors shadow-sm cursor-pointer disabled:opacity-60"
+            >
+              <Save size={14} />
+              <span>{mutation.isPending ? "Saving..." : "Save Faculty List"}</span>
+            </button>
           </div>
-
-          
-        </div>
+        )}
       </div>
+
+      {/* Filter and Search Bar (Public View) */}
+      {!isEditMode && (
+        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-3">
+          <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+            <div className="relative w-full max-w-md">
+              <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search by name, qualification, designation or subject..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Faculty Table View */}
       {filteredFaculty.length > 0 ? (
-        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className={`bg-white rounded-3xl border shadow-xs overflow-hidden ${isEditMode ? "border-amber-300 ring-2 ring-amber-400/20" : "border-slate-200/80"}`}>
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[950px]">
+            <table className="w-full text-left border-collapse min-w-[1000px]">
               <thead>
                 <tr className="bg-slate-50/90 border-b border-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wider">
-                  <th className="py-4 px-4 w-16 text-center">S.No</th>
-                  <th className="py-4 px-4">Name of the faculty Member</th>
-                  <th className="py-4 px-4">Qualification</th>
-                  <th className="py-4 px-4">Studied University</th>
-                  <th className="py-4 px-4">Year of graduation</th>
-                  <th className="py-4 px-4">Current Designation</th>
-                  <th className="py-4 px-4">Date of joining</th>
-                  <th className="py-4 px-4">Subject</th>
-                  <th className="py-4 px-4">Regular/contract/adjunct</th>
-                  {hasExperienceColumn && (
-                    <th className="py-4 px-4">Total Experience</th>
-                  )}
+                  <th className="py-4 px-3 w-14 text-center">S.No</th>
+                  <th className="py-4 px-3 min-w-[200px]">Name of the faculty Member</th>
+                  <th className="py-4 px-3 min-w-[140px]">Qualification</th>
+                  <th className="py-4 px-3 min-w-[150px]">Studied University</th>
+                  <th className="py-4 px-3 min-w-[110px]">Year of grad.</th>
+                  <th className="py-4 px-3 min-w-[160px]">Current Designation</th>
+                  <th className="py-4 px-3 min-w-[120px]">Date of joining</th>
+                  <th className="py-4 px-3 min-w-[130px]">Subject</th>
+                  <th className="py-4 px-3 min-w-[130px]">Regular/contract</th>
+                  <th className="py-4 px-3 min-w-[110px]">Total Experience</th>
+                  {isEditMode && <th className="py-4 px-3 w-16 text-center">Action</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm">
                 {filteredFaculty.map((f, idx) => (
                   <tr
-                    key={f.id ? String(f.id) : `${f.sNo}-${f.name}`}
+                    key={f.id ? String(f.id) : `row_${idx}`}
                     className="hover:bg-blue-50/40 transition-colors group"
                   >
-                    <td className="py-3.5 px-4 text-center font-bold text-slate-400 text-xs">
+                    <td className="py-3 px-3 text-center font-bold text-slate-400 text-xs">
                       {f.sNo || idx + 1}
                     </td>
-                    <td className="py-3.5 px-4">
-                      {f.id ? (
+
+                    {/* Faculty Name */}
+                    <td className="py-3 px-3">
+                      {isEditMode ? (
+                        <div className="space-y-1">
+                          <input
+                            type="text"
+                            value={f.name}
+                            onChange={(e) => handleUpdate(idx, "name", e.target.value)}
+                            className="w-full p-1.5 text-xs font-bold text-slate-900 border border-amber-300 bg-amber-50/30 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
+                          />
+                          {f.id && (
+                            <Link
+                              to="/departments/$id/faculty/$facultyId"
+                              params={{ id: deptId, facultyId: String(f.id) }}
+                              className="text-[10px] text-amber-800 hover:underline flex items-center gap-1 font-semibold"
+                            >
+                              <UserCheck size={10} />
+                              <span>Deep Edit Profile</span>
+                            </Link>
+                          )}
+                        </div>
+                      ) : f.id ? (
                         <Link
                           to="/departments/$id/faculty/$facultyId"
                           params={{ id: deptId, facultyId: String(f.id) }}
@@ -173,40 +482,157 @@ function FacultyListPage() {
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-700 text-xs font-semibold">
-                      {f.qualification}
+
+                    {/* Qualification */}
+                    <td className="py-3 px-3">
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          value={f.qualification || ""}
+                          onChange={(e) => handleUpdate(idx, "qualification", e.target.value)}
+                          className="w-full p-1.5 text-xs font-semibold text-slate-700 border border-amber-300 bg-amber-50/30 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
+                        />
+                      ) : (
+                        <span className="text-slate-700 text-xs font-semibold">
+                          {f.qualification}
+                        </span>
+                      )}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-600 text-xs">
-                      {f.studiedUniversity}
+
+                    {/* Studied University */}
+                    <td className="py-3 px-3">
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          value={f.studiedUniversity || ""}
+                          onChange={(e) => handleUpdate(idx, "studiedUniversity", e.target.value)}
+                          className="w-full p-1.5 text-xs text-slate-700 border border-amber-300 bg-amber-50/30 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
+                        />
+                      ) : (
+                        <span className="text-slate-600 text-xs">
+                          {f.studiedUniversity}
+                        </span>
+                      )}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-600 text-xs font-medium">
-                      {f.graduationYear}
+
+                    {/* Year of Graduation */}
+                    <td className="py-3 px-3">
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          value={f.graduationYear || ""}
+                          onChange={(e) => handleUpdate(idx, "graduationYear", e.target.value)}
+                          className="w-full p-1.5 text-xs text-slate-700 border border-amber-300 bg-amber-50/30 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
+                        />
+                      ) : (
+                        <span className="text-slate-600 text-xs font-medium">
+                          {f.graduationYear}
+                        </span>
+                      )}
                     </td>
-                    <td className="py-3.5 px-4">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-800 border border-slate-200/60">
-                        {f.designation}
-                      </span>
+
+                    {/* Designation */}
+                    <td className="py-3 px-3">
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          value={f.designation || ""}
+                          onChange={(e) => handleUpdate(idx, "designation", e.target.value)}
+                          className="w-full p-1.5 text-xs font-semibold text-slate-800 border border-amber-300 bg-amber-50/30 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
+                        />
+                      ) : (
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-800 border border-slate-200/60">
+                          {f.designation}
+                        </span>
+                      )}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-600 text-xs">
-                      {f.dateOfJoining}
+
+                    {/* Date of Joining */}
+                    <td className="py-3 px-3">
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          value={f.dateOfJoining || ""}
+                          onChange={(e) => handleUpdate(idx, "dateOfJoining", e.target.value)}
+                          className="w-full p-1.5 text-xs text-slate-700 border border-amber-300 bg-amber-50/30 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
+                        />
+                      ) : (
+                        <span className="text-slate-600 text-xs">
+                          {f.dateOfJoining}
+                        </span>
+                      )}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-700 text-xs font-medium">
-                      {f.subject}
+
+                    {/* Subject */}
+                    <td className="py-3 px-3">
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          value={f.subject || ""}
+                          onChange={(e) => handleUpdate(idx, "subject", e.target.value)}
+                          className="w-full p-1.5 text-xs text-slate-700 border border-amber-300 bg-amber-50/30 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
+                        />
+                      ) : (
+                        <span className="text-slate-700 text-xs font-medium">
+                          {f.subject}
+                        </span>
+                      )}
                     </td>
-                    <td className="py-3.5 px-4 text-xs">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-semibold border ${
-                          f.associationType.toLowerCase() === "regular"
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200/60"
-                            : "bg-blue-50 text-blue-700 border-blue-200/60"
-                        }`}
-                      >
-                        {f.associationType}
-                      </span>
+
+                    {/* Regular / Contract / Adjunct */}
+                    <td className="py-3 px-3 text-xs">
+                      {isEditMode ? (
+                        <select
+                          value={f.associationType || "Regular"}
+                          onChange={(e) => handleUpdate(idx, "associationType", e.target.value)}
+                          className="w-full p-1.5 text-xs font-semibold text-slate-800 border border-amber-300 bg-amber-50/30 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
+                        >
+                          <option value="Regular">Regular</option>
+                          <option value="Contract">Contract</option>
+                          <option value="Adjunct">Adjunct</option>
+                          <option value="Ad-hoc">Ad-hoc</option>
+                        </select>
+                      ) : (
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-semibold border ${
+                            (f.associationType || "").toLowerCase() === "regular"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200/60"
+                              : "bg-blue-50 text-blue-700 border-blue-200/60"
+                          }`}
+                        >
+                          {f.associationType}
+                        </span>
+                      )}
                     </td>
-                    {hasExperienceColumn && (
-                      <td className="py-3.5 px-4 text-slate-700 text-xs font-semibold whitespace-nowrap">
-                        {f.totalExperience || "—"}
+
+                    {/* Total Experience */}
+                    <td className="py-3 px-3 text-xs">
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          value={f.totalExperience || ""}
+                          placeholder="e.g. 5 Years"
+                          onChange={(e) => handleUpdate(idx, "totalExperience", e.target.value)}
+                          className="w-full p-1.5 text-xs text-slate-700 border border-amber-300 bg-amber-50/30 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
+                        />
+                      ) : (
+                        <span className="text-slate-700 font-semibold whitespace-nowrap">
+                          {f.totalExperience || "—"}
+                        </span>
+                      )}
+                    </td>
+
+                    {/* Action Column for Admin Edit Mode */}
+                    {isEditMode && (
+                      <td className="py-3 px-3 text-center">
+                        <button
+                          type="button"
+                          onClick={() => setFacultyRowToDelete({ index: idx, name: f.name || `Faculty Member #${idx + 1}` })}
+                          className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                          title="Delete faculty row"
+                        >
+                          <Trash2 size={15} />
+                        </button>
                       </td>
                     )}
                   </tr>
@@ -238,6 +664,14 @@ function FacultyListPage() {
             >
               Clear Search Filter
             </button>
+          ) : isEditMode ? (
+            <button
+              onClick={addFacultyRow}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-600 text-white hover:bg-amber-700 transition-colors shadow-sm cursor-pointer"
+            >
+              <Plus size={14} />
+              <span>Add First Faculty Member</span>
+            </button>
           ) : (
             <Link
               to="/departments/$id/faculty"
@@ -250,6 +684,134 @@ function FacultyListPage() {
           )}
         </div>
       )}
+
+      {/* ─── DELETED / ARCHIVED FACULTY ROWS SECTION (ADMIN & HOD ONLY) ─── */}
+      {isEditMode && deletedRowsList.length > 0 && (
+        <div className="pt-8 border-t-2 border-dashed border-rose-200/80 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-rose-50/70 border border-rose-200 rounded-2xl p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center border border-rose-300 flex-shrink-0">
+                <Trash2 size={18} />
+              </div>
+              <div>
+                <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
+                  <span>Deleted Faculty Rows Archive</span>
+                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-200 text-rose-900">
+                    {deletedRowsList.length}
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Visible <strong>only to Admin & HOD</strong>. Click <strong>"Restore"</strong> to add any faculty row back to the active table.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={clearAllDeletedRows}
+              className="text-xs font-semibold text-rose-700 hover:text-rose-900 hover:bg-rose-100 px-3 py-1.5 rounded-lg border border-rose-200 transition-colors self-start sm:self-auto cursor-pointer"
+            >
+              Clear Archive
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {deletedRowsList.map((df, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-2xl border border-rose-200 bg-rose-50/30 flex items-center justify-between gap-4 transition-all hover:bg-rose-50/60"
+              >
+                <div className="min-w-0 space-y-1">
+                  <h4 className="font-bold text-slate-800 text-sm truncate line-through decoration-rose-400">
+                    {df.name}
+                  </h4>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                    <span className="font-semibold text-slate-600">{df.designation}</span>
+                    <span>•</span>
+                    <span>{df.qualification}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => restoreFacultyRow(df, idx)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xs transition-colors cursor-pointer"
+                    title="Restore to Active Faculty Table"
+                  >
+                    <RotateCcw size={13} />
+                    <span>Restore</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => purgeDeletedRow(idx)}
+                    className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-100 rounded-lg transition-colors cursor-pointer"
+                    title="Permanently remove from archive"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Delete Row Confirmation Modal */}
+      <AnimatePresence>
+        {facultyRowToDelete !== null && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150"
+            onClick={() => setFacultyRowToDelete(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 12 }}
+              transition={{ type: "spring", stiffness: 400, damping: 28 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-5"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-rose-100 border border-rose-200 text-rose-600 flex items-center justify-center flex-shrink-0">
+                  <AlertTriangle size={24} />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                    Delete Faculty Table Row?
+                  </h3>
+                  <p className="text-sm text-slate-600">
+                    Are you sure you want to remove <span className="font-bold text-slate-900">"{facultyRowToDelete.name}"</span> from the tabular faculty list?
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-3 bg-amber-50/80 rounded-xl border border-amber-200/80 text-xs text-amber-800 leading-relaxed">
+                <strong>Notice:</strong> The row will be moved to the Deleted Archive below. Click <strong>"Save Faculty List"</strong> to save changes permanently.
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setFacultyRowToDelete(null)}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDeleteFacultyRow}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors shadow-xs cursor-pointer"
+                >
+                  <Trash2 size={14} />
+                  <span>Yes, Delete</span>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

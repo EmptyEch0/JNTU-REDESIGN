@@ -55,6 +55,18 @@ function NonTeachingStaffPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [staffToDelete, setStaffToDelete] = useState<{ index: number; name: string } | null>(null);
 
+  // Deleted non-teaching staff archive (Admin & HOD only)
+  const [deletedStaffList, setDeletedStaffList] = useState<DepartmentNonTeachingStaffItem[]>(() => {
+    try {
+      const stored = localStorage.getItem(`jntugv_deleted_non_teaching_${deptKey}`);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {}
+    return [];
+  });
+
   // Load custom stored staff from localStorage if available
   useEffect(() => {
     try {
@@ -97,6 +109,15 @@ function NonTeachingStaffPage() {
   };
 
   const removeStaffMember = (index: number) => {
+    const itemToDelete = staffList[index];
+    if (itemToDelete) {
+      const updatedDeleted = [itemToDelete, ...deletedStaffList];
+      setDeletedStaffList(updatedDeleted);
+      try {
+        localStorage.setItem(`jntugv_deleted_non_teaching_${deptKey}`, JSON.stringify(updatedDeleted));
+      } catch {}
+    }
+
     const updated = staffList.filter((_, i) => i !== index).map((item, idx) => ({
       ...item,
       sNo: idx + 1,
@@ -107,9 +128,39 @@ function NonTeachingStaffPage() {
   const confirmDeleteStaff = () => {
     if (staffToDelete !== null) {
       removeStaffMember(staffToDelete.index);
-      toast.success(`Removed "${staffToDelete.name}". Click 'Save Staff Roster' to finalize.`);
+      toast.success(`Removed "${staffToDelete.name}" to Deleted Staff Archive below.`);
       setStaffToDelete(null);
     }
+  };
+
+  const restoreStaff = (item: DepartmentNonTeachingStaffItem, archiveIdx: number) => {
+    const restored = { ...item, sNo: staffList.length + 1 };
+    setStaffList((prev) => [...prev, restored]);
+
+    const updatedDeleted = deletedStaffList.filter((_, i) => i !== archiveIdx);
+    setDeletedStaffList(updatedDeleted);
+    try {
+      localStorage.setItem(`jntugv_deleted_non_teaching_${deptKey}`, JSON.stringify(updatedDeleted));
+    } catch {}
+
+    toast.success(`Restored "${item.name}". Click 'Save Staff Roster' to save.`);
+  };
+
+  const purgeDeletedStaff = (archiveIdx: number) => {
+    const updatedDeleted = deletedStaffList.filter((_, i) => i !== archiveIdx);
+    setDeletedStaffList(updatedDeleted);
+    try {
+      localStorage.setItem(`jntugv_deleted_non_teaching_${deptKey}`, JSON.stringify(updatedDeleted));
+    } catch {}
+    toast.info("Removed permanently from archive.");
+  };
+
+  const clearAllDeletedStaff = () => {
+    setDeletedStaffList([]);
+    try {
+      localStorage.removeItem(`jntugv_deleted_non_teaching_${deptKey}`);
+    } catch {}
+    toast.info("Cleared all archived staff records.");
   };
 
   const handleSave = () => {
@@ -366,6 +417,79 @@ function NonTeachingStaffPage() {
           </table>
         </div>
       </div>
+
+      {/* ─── DELETED / ARCHIVED NON-TEACHING STAFF SECTION (ADMIN & HOD ONLY) ─── */}
+      {isEditMode && deletedStaffList.length > 0 && (
+        <div className="pt-8 border-t-2 border-dashed border-rose-200/80 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-rose-50/70 border border-rose-200 rounded-2xl p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center border border-rose-300 flex-shrink-0">
+                <Trash2 size={18} />
+              </div>
+              <div>
+                <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
+                  <span>Deleted Staff Archive</span>
+                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-200 text-rose-900">
+                    {deletedStaffList.length}
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Visible <strong>only to Admin & HOD</strong>. Click <strong>"Restore"</strong> to add any staff member back to the active directory.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={clearAllDeletedStaff}
+              className="text-xs font-semibold text-rose-700 hover:text-rose-900 hover:bg-rose-100 px-3 py-1.5 rounded-lg border border-rose-200 transition-colors self-start sm:self-auto cursor-pointer"
+            >
+              Clear Archive
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {deletedStaffList.map((ds, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-2xl border border-rose-200 bg-rose-50/30 flex items-center justify-between gap-4 transition-all hover:bg-rose-50/60"
+              >
+                <div className="min-w-0 space-y-1">
+                  <h4 className="font-bold text-slate-800 text-sm truncate line-through decoration-rose-400">
+                    {ds.name}
+                  </h4>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                    <span className="font-semibold text-slate-600">{ds.designation}</span>
+                    <span>•</span>
+                    <span>{ds.qualification}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => restoreStaff(ds, idx)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xs transition-colors cursor-pointer"
+                    title="Restore to Active Directory"
+                  >
+                    <RotateCcw size={13} />
+                    <span>Restore</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => purgeDeletedStaff(idx)}
+                    className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-100 rounded-lg transition-colors cursor-pointer"
+                    title="Permanently remove from archive"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Delete Staff Confirmation Modal */}
       <AnimatePresence>

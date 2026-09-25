@@ -353,18 +353,70 @@ function FacultyPage() {
 
   const [facultyToDelete, setFacultyToDelete] = useState<{ id: string | number; name: string } | null>(null);
 
-  // Direct remove faculty implementation after user confirmation
-  const removeFaculty = (id: string | number) => {
-    const targetId = String(id);
-    setFacultyList((prev) => prev.filter((f) => String(f.id) !== targetId));
-  };
+  // Deleted/Archived faculty list (Admin & HOD only)
+  const [deletedFacultyList, setDeletedFacultyList] = useState<any[]>(() => {
+    try {
+      const stored = localStorage.getItem(`jntugv_deleted_faculty_${deptKey}`);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {}
+    return [];
+  });
 
+  // Direct remove faculty implementation and move to Deleted Faculty archive
   const confirmDeleteFaculty = () => {
     if (facultyToDelete) {
-      removeFaculty(facultyToDelete.id);
-      toast.success(`Removed "${facultyToDelete.name}". Click 'Save Roster' to finalize.`);
+      const targetId = String(facultyToDelete.id);
+      const itemToDelete = facultyList.find((f) => String(f.id) === targetId);
+
+      if (itemToDelete) {
+        const updatedDeleted = [itemToDelete, ...deletedFacultyList.filter((f) => String(f.id) !== targetId)];
+        setDeletedFacultyList(updatedDeleted);
+        try {
+          localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
+        } catch {}
+      }
+
+      setFacultyList((prev) => prev.filter((f) => String(f.id) !== targetId));
+      toast.success(`Removed "${facultyToDelete.name}" to Deleted/Archived archive below.`);
       setFacultyToDelete(null);
     }
+  };
+
+  // Restore deleted faculty member back into active roster
+  const restoreFaculty = (item: any) => {
+    const targetId = String(item.id);
+    setFacultyList((prev) => [item, ...prev]);
+
+    const updatedDeleted = deletedFacultyList.filter((f) => String(f.id) !== targetId);
+    setDeletedFacultyList(updatedDeleted);
+    try {
+      localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
+    } catch {}
+
+    toast.success(`Restored "${item.name}" to active roster. Click 'Save Roster' to save.`);
+  };
+
+  // Permanently purge a deleted faculty item from the archive
+  const purgeDeletedFaculty = (id: string | number) => {
+    const targetId = String(id);
+    const updatedDeleted = deletedFacultyList.filter((f) => String(f.id) !== targetId);
+    setDeletedFacultyList(updatedDeleted);
+    try {
+      localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
+    } catch {}
+    toast.info("Removed permanently from archive.");
+  };
+
+  // Clear all archived faculty items
+  const clearAllDeletedFaculty = () => {
+    setDeletedFacultyList([]);
+    try {
+      localStorage.removeItem(`jntugv_deleted_faculty_${deptKey}`);
+    } catch {}
+    toast.info("Cleared all archived faculty records.");
   };
 
   // Move faculty card up/down with 1 click
@@ -533,6 +585,87 @@ function FacultyPage() {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* ─── DELETED / ARCHIVED FACULTY SECTION (ADMIN & HOD ONLY) ─── */}
+        {isEditMode && deletedFacultyList.length > 0 && (
+          <div className="pt-8 border-t-2 border-dashed border-rose-200/80 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-rose-50/70 border border-rose-200 rounded-2xl p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center border border-rose-300 flex-shrink-0">
+                  <Trash2 size={18} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
+                    <span>Deleted Faculty Archive</span>
+                    <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-200 text-rose-900">
+                      {deletedFacultyList.length}
+                    </span>
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Visible <strong>only to Admin & HOD</strong>. Click <strong>"Restore"</strong> to add any faculty back to the active roster.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={clearAllDeletedFaculty}
+                className="text-xs font-semibold text-rose-700 hover:text-rose-900 hover:bg-rose-100 px-3 py-1.5 rounded-lg border border-rose-200 transition-colors self-start sm:self-auto cursor-pointer"
+              >
+                Clear Archive
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {deletedFacultyList.map((df) => (
+                <div
+                  key={String(df.id)}
+                  className="p-4 rounded-2xl border border-rose-200 bg-rose-50/30 flex items-center justify-between gap-4 transition-all hover:bg-rose-50/60"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
+                      <SafeImage
+                        src={df.photo_url}
+                        alt={df.name}
+                        fallbackName={df.name}
+                        className="w-full h-full object-cover grayscale"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-slate-800 text-sm truncate line-through decoration-rose-400">
+                        {df.name}
+                      </h4>
+                      <p className="text-xs text-slate-500 truncate">
+                        {formatCleanDesignation(df.designation) || "Assistant Professor"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => restoreFaculty(df)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xs transition-colors cursor-pointer"
+                      title="Restore to Active Roster"
+                    >
+                      <RotateCcw size={13} />
+                      <span>Restore</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => purgeDeletedFaculty(df.id)}
+                      className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-100 rounded-lg transition-colors cursor-pointer"
+                      title="Permanently remove from archive"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Delete Confirmation Modal */}

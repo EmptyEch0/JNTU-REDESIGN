@@ -17,6 +17,7 @@ import {
   ArrowDown,
   RotateCcw,
   Sparkles,
+  AlertTriangle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -58,7 +59,7 @@ interface FacultyCardProps {
   deptId: string;
   isDragging?: boolean;
   handleUpdate: (id: string | number, field: string, value: string) => void;
-  removeFaculty: (id: string | number) => void;
+  onRequestDelete: (target: { id: string | number; name: string }) => void;
   moveFaculty: (index: number, direction: "up" | "down") => void;
   onDragStart: (e: React.DragEvent, index: number) => void;
   onDragEnter: (e: React.DragEvent, index: number) => void;
@@ -74,7 +75,7 @@ function FacultyCard({
   deptId,
   isDragging,
   handleUpdate,
-  removeFaculty,
+  onRequestDelete,
   moveFaculty,
   onDragStart,
   onDragEnter,
@@ -149,7 +150,7 @@ function FacultyCard({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              removeFaculty(cardId);
+              onRequestDelete({ id: cardId, name: f.name || "Faculty Member" });
             }}
             className="p-1 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
             title="Delete Faculty Member"
@@ -350,11 +351,20 @@ function FacultyPage() {
     toast.info("Added new faculty card at the top. Fill in details and click 'Save Roster'.");
   };
 
-  // Delete faculty member with reliable string-matching
+  const [facultyToDelete, setFacultyToDelete] = useState<{ id: string | number; name: string } | null>(null);
+
+  // Direct remove faculty implementation after user confirmation
   const removeFaculty = (id: string | number) => {
     const targetId = String(id);
     setFacultyList((prev) => prev.filter((f) => String(f.id) !== targetId));
-    toast.success("Faculty card deleted. Click 'Save Roster' to finalize.");
+  };
+
+  const confirmDeleteFaculty = () => {
+    if (facultyToDelete) {
+      removeFaculty(facultyToDelete.id);
+      toast.success(`Removed "${facultyToDelete.name}". Click 'Save Roster' to finalize.`);
+      setFacultyToDelete(null);
+    }
   };
 
   // Move faculty card up/down with 1 click
@@ -486,7 +496,7 @@ function FacultyPage() {
                 isEditMode={false}
                 deptId={deptId}
                 handleUpdate={handleUpdate}
-                removeFaculty={removeFaculty}
+                onRequestDelete={(target) => setFacultyToDelete(target)}
                 moveFaculty={moveFaculty}
                 onDragStart={handleDragStart}
                 onDragEnter={handleDragEnter}
@@ -513,7 +523,7 @@ function FacultyPage() {
                 deptId={deptId}
                 isDragging={draggingIndex === idx}
                 handleUpdate={handleUpdate}
-                removeFaculty={removeFaculty}
+                onRequestDelete={(target) => setFacultyToDelete(target)}
                 moveFaculty={moveFaculty}
                 onDragStart={handleDragStart}
                 onDragEnter={handleDragEnter}
@@ -524,6 +534,61 @@ function FacultyPage() {
           </AnimatePresence>
         </motion.div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {facultyToDelete && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150"
+            onClick={() => setFacultyToDelete(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 12 }}
+              transition={{ type: "spring", stiffness: 400, damping: 28 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-5"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-rose-100 border border-rose-200 text-rose-600 flex items-center justify-center flex-shrink-0">
+                  <AlertTriangle size={24} />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                    Delete Faculty Member?
+                  </h3>
+                  <p className="text-sm text-slate-600">
+                    Are you sure you want to remove <span className="font-bold text-slate-900">"{facultyToDelete.name}"</span> from the faculty roster?
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-3 bg-amber-50/80 rounded-xl border border-amber-200/80 text-xs text-amber-800 leading-relaxed">
+                <strong>Notice:</strong> The card will be removed from your view. Click <strong>"Save Roster"</strong> to apply changes permanently, or reload the page to undo.
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setFacultyToDelete(null)}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDeleteFaculty}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors shadow-xs cursor-pointer"
+                >
+                  <Trash2 size={14} />
+                  <span>Yes, Delete</span>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

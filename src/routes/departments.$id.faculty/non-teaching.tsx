@@ -16,7 +16,9 @@ import {
   Trash2,
   Save,
   RotateCcw,
+  AlertTriangle,
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Route = createFileRoute("/departments/$id/faculty/non-teaching")({
   head: ({ loaderData }) => {
@@ -51,6 +53,7 @@ function NonTeachingStaffPage() {
 
   const [staffList, setStaffList] = useState<DepartmentNonTeachingStaffItem[]>(defaultList);
   const [isSaving, setIsSaving] = useState(false);
+  const [staffToDelete, setStaffToDelete] = useState<{ index: number; name: string } | null>(null);
 
   // Load custom stored staff from localStorage if available
   useEffect(() => {
@@ -99,6 +102,14 @@ function NonTeachingStaffPage() {
       sNo: idx + 1,
     }));
     setStaffList(updated);
+  };
+
+  const confirmDeleteStaff = () => {
+    if (staffToDelete !== null) {
+      removeStaffMember(staffToDelete.index);
+      toast.success(`Removed "${staffToDelete.name}". Click 'Save Staff Roster' to finalize.`);
+      setStaffToDelete(null);
+    }
   };
 
   const handleSave = () => {
@@ -292,7 +303,7 @@ function NonTeachingStaffPage() {
                       <td className="py-3.5 px-4 text-center">
                         <button
                           type="button"
-                          onClick={() => removeStaffMember(idx)}
+                          onClick={() => setStaffToDelete({ index: idx, name: s.name || `Staff Member #${idx + 1}` })}
                           className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                           title="Delete staff row"
                         >
@@ -355,6 +366,61 @@ function NonTeachingStaffPage() {
           </table>
         </div>
       </div>
+
+      {/* Delete Staff Confirmation Modal */}
+      <AnimatePresence>
+        {staffToDelete !== null && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150"
+            onClick={() => setStaffToDelete(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 12 }}
+              transition={{ type: "spring", stiffness: 400, damping: 28 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-5"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-rose-100 border border-rose-200 text-rose-600 flex items-center justify-center flex-shrink-0">
+                  <AlertTriangle size={24} />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                    Delete Staff Record?
+                  </h3>
+                  <p className="text-sm text-slate-600">
+                    Are you sure you want to remove <span className="font-bold text-slate-900">"{staffToDelete.name}"</span> from the staff directory?
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-3 bg-amber-50/80 rounded-xl border border-amber-200/80 text-xs text-amber-800 leading-relaxed">
+                <strong>Notice:</strong> The row will be removed. Click <strong>"Save Staff Roster"</strong> to save changes permanently, or reload the page to undo.
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setStaffToDelete(null)}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDeleteStaff}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors shadow-xs cursor-pointer"
+                >
+                  <Trash2 size={14} />
+                  <span>Yes, Delete</span>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

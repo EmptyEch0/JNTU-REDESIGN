@@ -29,6 +29,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ActionFeedbackOverlay } from "@/components/ActionFeedbackOverlay";
 import { NotFound } from "@/components/NotFound";
 import { PushNotificationBanner } from "@/components/PushNotificationBanner";
+import { SessionTimeoutModal } from "@/components/SessionTimeoutModal";
 
 function NotFoundComponent() {
   return <NotFound />;
@@ -148,6 +149,7 @@ function RootComponent() {
           <PushNotificationBanner />
           <Toaster richColors position="top-right" />
           <ActionFeedbackOverlay />
+          <SessionTimeoutModal />
         </FacultyProvider>
       </AdminProvider>
     </QueryClientProvider>

@@ -260,7 +260,7 @@ export const loginHod = createServerFn({ method: "POST" })
       secure: process.env.NODE_ENV === "production",
       path: "/",
       sameSite: "lax",
-      maxAge: 60 * 60 * 8,
+      maxAge: 60 * 60 * 1, // 1 hour session
     });
 
     return { success: true, deptSlug };

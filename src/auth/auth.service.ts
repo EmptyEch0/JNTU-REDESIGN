@@ -2,8 +2,8 @@ import bcrypt from "bcryptjs";
 import { authRepository, NewAuditLog } from "./auth.repository";
 
 export class AuthService {
-  // Session duration: 2 hours (in milliseconds)
-  private readonly SESSION_DURATION_MS = 2 * 60 * 60 * 1000;
+  // Session duration: 1 hour (in milliseconds)
+  private readonly SESSION_DURATION_MS = 1 * 60 * 60 * 1000;
 
   /**
    * Password Operations

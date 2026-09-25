@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 
 const COOKIE_NAME = "faculty_session_id";
-const COOKIE_MAX_AGE = 60 * 60 * 8; // 8 hours, same as HOD
+const COOKIE_MAX_AGE = 60 * 60 * 1; // 1 hour session (3600s)
 
 /**
  * Faculty login via email + password.

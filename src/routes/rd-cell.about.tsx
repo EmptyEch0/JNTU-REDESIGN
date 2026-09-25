@@ -164,10 +164,10 @@ function AboutResearchPage() {
             <div className="relative group md:sticky md:top-32 text-center">
               <div
                 aria-hidden
-                className="absolute -inset-3 rounded-3xl opacity-40 blur-2xl transition-opacity group-hover:opacity-70"
+                className="pointer-events-none absolute -inset-3 rounded-3xl opacity-40 blur-2xl transition-opacity group-hover:opacity-70"
                 style={{ background: "var(--gradient-royal)" }}
               />
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-elegant bg-card flex flex-col items-center justify-center">
+              <div className="relative z-10 aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-elegant bg-card flex flex-col items-center justify-center">
                 {isEditMode ? (
                   <AdminUpload
                     value={coordinatorImg}
@@ -179,6 +179,7 @@ function AboutResearchPage() {
                     }
                     module="research-development"
                     category="coordinator"
+                    aspect="aspect-[4/5] w-full h-full"
                     className="w-full h-full"
                   />
                 ) : (
@@ -192,17 +193,18 @@ function AboutResearchPage() {
                 )}
               </div>
 
-              <div className="mt-4">
+              <div className="mt-4 relative z-30">
                 {isEditMode ? (
-                  <div className="space-y-2 p-3 rounded-2xl bg-amber-500/5 border border-amber-500/20 text-left">
+                  <div className="space-y-3 p-4 rounded-2xl bg-white border-2 border-amber-400 shadow-md text-left relative z-30">
                     <div>
-                      <label className="text-[9px] font-bold text-amber-900 uppercase tracking-wider block mb-1">
+                      <label className="text-[10px] font-black text-amber-900 uppercase tracking-wider block mb-1">
                         Coordinator Name
                       </label>
                       <input
-                        className="w-full font-bold text-ink bg-white border border-amber-500/30 px-3 py-1.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500/20"
+                        type="text"
+                        className="w-full font-bold text-slate-900 bg-amber-50/50 border border-amber-300 px-3 py-2 rounded-xl text-sm outline-none focus:bg-white focus:ring-2 focus:ring-amber-500 cursor-text relative z-30 transition-all"
                         value={coordinatorName}
-                        placeholder="Coordinator Name"
+                        placeholder="e.g. Dr. G. Naga Raju"
                         onChange={(e) =>
                           setEditedCoordinator((prev: any) => ({
                             ...prev,
@@ -212,13 +214,14 @@ function AboutResearchPage() {
                       />
                     </div>
                     <div>
-                      <label className="text-[9px] font-bold text-amber-900 uppercase tracking-wider block mb-1">
+                      <label className="text-[10px] font-black text-amber-900 uppercase tracking-wider block mb-1">
                         Designation / Role
                       </label>
                       <input
-                        className="w-full text-xs text-primary font-semibold bg-white border border-amber-500/30 px-3 py-1.5 rounded-lg outline-none focus:ring-2 focus:ring-amber-500/20"
+                        type="text"
+                        className="w-full text-xs text-primary font-bold bg-amber-50/50 border border-amber-300 px-3 py-2 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-amber-500 cursor-text relative z-30 transition-all"
                         value={coordinatorRole}
-                        placeholder="Designation / Role"
+                        placeholder="e.g. Research Coordinator"
                         onChange={(e) =>
                           setEditedCoordinator((prev: any) => ({
                             ...prev,

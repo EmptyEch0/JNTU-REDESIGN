@@ -218,6 +218,7 @@ export function AdminUpload({
   name,
   subfolder,
   allowPdf = true,
+  aspect = "aspect-[16/9] max-h-48",
   placeholder = "Drag & drop or click to upload...",
   className = "",
 }: {
@@ -229,6 +230,7 @@ export function AdminUpload({
   name?: string;
   subfolder?: string;
   allowPdf?: boolean;
+  aspect?: string;
   placeholder?: string;
   className?: string;
 }) {
@@ -347,7 +349,7 @@ export function AdminUpload({
   return (
     <div className={`space-y-2 ${className}`}>
       {previewUrl ? (
-        <div className="relative group rounded-xl overflow-hidden border-2 border-amber-200 aspect-[16/9] max-h-48 bg-slate-50 flex items-center justify-center shadow-inner">
+        <div className={`relative group rounded-xl overflow-hidden border-2 border-amber-200 ${aspect} bg-slate-50 flex items-center justify-center shadow-inner`}>
           {isValuePdf ? (
             <div className="flex flex-col items-center justify-center p-4 text-center">
               <span className="text-2xl mb-1">📄</span>

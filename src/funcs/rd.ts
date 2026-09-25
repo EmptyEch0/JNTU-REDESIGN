@@ -273,10 +273,22 @@ export const updateCoordinatorMessage = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { id, ...update } = data;
     return rdMutate(async () => {
-      await db
-        .update(rdCoordinatorMessage)
-        .set(update)
-        .where(eq(rdCoordinatorMessage.id, id));
+      if (id) {
+        await db
+          .update(rdCoordinatorMessage)
+          .set(update)
+          .where(eq(rdCoordinatorMessage.id, id));
+      } else {
+        const existing = await db.select().from(rdCoordinatorMessage).limit(1);
+        if (existing.length > 0) {
+          await db
+            .update(rdCoordinatorMessage)
+            .set(update)
+            .where(eq(rdCoordinatorMessage.id, existing[0].id));
+        } else {
+          await db.insert(rdCoordinatorMessage).values(update as any);
+        }
+      }
       return { success: true };
     });
   });

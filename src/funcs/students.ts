@@ -78,5 +78,16 @@ export const getStudentsByYear = createServerFn({ method: "GET" })
     serverCache.set(cacheKey, records);
 
     return records;
-  },
-);
+  });
+
+export const deleteStudentsByYear = createServerFn({ method: "POST" })
+  .validator((d: { year: string }) => d)
+  .handler(async ({ data: { year } }) => {
+    return studentMutate(() =>
+      db
+        .delete(students)
+        .where(eq(students.year, year))
+        .returning()
+    );
+  });
+

@@ -24,7 +24,6 @@ import {
   UserCheck,
   ArrowUp,
   ArrowDown,
-  Crown,
 } from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id/faculty/list")({
@@ -787,8 +786,8 @@ function FacultyListPage() {
                       <td className="py-3 px-3 text-center">
                         <div className="flex items-center justify-center gap-1">
                           {/hod|head of (the )?department/i.test(f.designation || "") ? (
-                            <span title="Current HOD" className="p-1 text-amber-500 bg-amber-50 rounded-lg">
-                              <Crown size={14} className="fill-amber-400 text-amber-600" />
+                            <span title="Current HOD" className="px-1.5 py-0.5 text-[10px] font-extrabold text-amber-900 bg-amber-100 border border-amber-300 rounded-md">
+                              HOD
                             </span>
                           ) : (
                             <button
@@ -797,7 +796,7 @@ function FacultyListPage() {
                               className="p-1 rounded-lg text-slate-400 hover:text-amber-700 hover:bg-amber-100 transition-colors cursor-pointer"
                               title="Make as Head of Department"
                             >
-                              <Crown size={13} />
+                              <UserCheck size={13} />
                             </button>
                           )}
                           <button

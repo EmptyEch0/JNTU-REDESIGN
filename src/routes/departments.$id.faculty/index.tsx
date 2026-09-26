@@ -18,7 +18,6 @@ import {
   RotateCcw,
   Sparkles,
   AlertTriangle,
-  Crown,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -189,7 +188,7 @@ function FacultyCard({
             decoding="async"
             loading="lazy"
             fallbackName={f.name}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover object-top"
           />
         </div>
       )}
@@ -225,9 +224,8 @@ function FacultyCard({
             {/* Actions: Make as HOD + Deep Link Edit Profile */}
             <div className="pt-1 flex flex-wrap items-center gap-2">
               {isHod ? (
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-900 bg-amber-200/90 px-2.5 py-1 rounded-lg border border-amber-300 shadow-2xs">
-                  <Crown size={12} className="text-amber-700 fill-amber-500" />
-                  <span>★ Current HOD</span>
+                <span className="inline-flex items-center text-[11px] font-bold text-amber-900 bg-amber-100/90 px-2.5 py-1 rounded-lg border border-amber-300 shadow-2xs">
+                  <span>Current HOD</span>
                 </span>
               ) : onMakeHod ? (
                 <button
@@ -239,7 +237,7 @@ function FacultyCard({
                   className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-800 hover:text-amber-950 bg-amber-100/90 hover:bg-amber-200 px-2.5 py-1 rounded-lg border border-amber-300/80 transition-colors shadow-2xs cursor-pointer"
                   title="Designate this member as Head of Department and move to top"
                 >
-                  <Crown size={12} className="text-amber-600" />
+                  <UserCheck size={12} className="text-amber-700" />
                   <span>Make as HOD</span>
                 </button>
               ) : null}
@@ -259,8 +257,7 @@ function FacultyCard({
             <div>
               {isHod && (
                 <div className="mb-1">
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-900 bg-amber-100 border border-amber-300/80 px-2.5 py-0.5 rounded-full shadow-2xs">
-                    <Crown size={11} className="text-amber-600 fill-amber-500" />
+                  <span className="inline-flex items-center text-[11px] font-bold text-amber-900 bg-amber-100/90 border border-amber-300/80 px-2.5 py-0.5 rounded-full shadow-2xs">
                     <span>Head of Department</span>
                   </span>
                 </div>

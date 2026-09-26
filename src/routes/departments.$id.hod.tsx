@@ -147,14 +147,14 @@ function HodPage() {
                 {/* Profile Image & Photo URL Edit */}
                 <div className="relative -mt-16 px-6 text-center">
                   <div className="relative inline-block">
-                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white mx-auto">
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-slate-50 mx-auto">
                       <SafeImage
                         src={activePhoto}
                         alt={hodName}
                         fallbackName={hodName}
                         loading="lazy"
                         decoding="async"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover object-top"
                       />
                     </div>
                   </div>
@@ -176,10 +176,10 @@ function HodPage() {
 
                   <h2 className="text-2xl font-bold text-slate-900 mt-4">{hodName}</h2>
                   <p className="text-blue-600 font-semibold mt-1">Head of the Department</p>
-                  <p className="text-slate-500 text-sm mt-2">Dept. of {data.name}</p>
+                  <p className="text-slate-500 text-sm mt-1">Dept. of {data.name}</p>
 
                   {/* Contact Edit */}
-                  <div className="mt-6 pt-6 border-t border-slate-100 pb-6">
+                  <div className="mt-5 pt-4 border-t border-slate-100 pb-4">
                     {isEditMode ? (
                       <div className="text-left">
                         <label className="text-[10px] font-bold text-amber-600 uppercase flex items-center gap-1 mb-1">
@@ -193,16 +193,16 @@ function HodPage() {
                         />
                       </div>
                     ) : displayContact && (
-                      <a
-                        href={`mailto:${displayContact}`}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all shadow-md"
-                      >
-                        <Mail size={18} />
-                        <span className="font-medium">Email HOD</span>
-                      </a>
-                    )}
-                    {displayContact && !isEditMode && (
-                      <p className="text-xs text-slate-400 mt-3 break-all">{displayContact}</p>
+                      <div className="flex flex-col items-center">
+                        <a
+                          href={`mailto:${displayContact}`}
+                          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-xl transition-all shadow-sm text-xs font-semibold"
+                        >
+                          <Mail size={14} />
+                          <span>Email HOD</span>
+                        </a>
+                        <p className="text-[11px] text-slate-400 mt-2 break-all select-all font-mono">{displayContact}</p>
+                      </div>
                     )}
                   </div>
                 </div>

@@ -79,6 +79,25 @@ export const getAssetUrl = (
       "sankhya-placement-congrats.jpeg": `/uploads/2026/09/sankhya-placement-congrats.jpeg`,
       "congrats.jpeg": `/uploads/2026/09/sankhya-placement-congrats.jpeg`,
       "sankhya-placement-students-group.jpeg": `/uploads/2026/09/sankhya-placement-students-group.jpeg`,
+      // Civil Department Faculty Assets
+      "CIVIL-1-D.-Jagan-Mohan.jpg": "/images/faculty/civil/CIVIL-1-D.-Jagan-Mohan.jpg",
+      "CIVIL-1-D.-Jagan-Mohan-150x150.jpg": "/images/faculty/civil/CIVIL-1-D.-Jagan-Mohan.jpg",
+      "CIVIL-2-R.-Balamurali-krishna.jpg": "/images/faculty/civil/CIVIL-2-R.-Balamurali-krishna.jpg",
+      "CIVIL-2-R.-Balamurali-krishna-150x150.jpg": "/images/faculty/civil/CIVIL-2-R.-Balamurali-krishna.jpg",
+      "CIVIL-4-Ch.Giridhar-Kumar.jpg": "/images/faculty/civil/CIVIL-4-Ch.Giridhar-Kumar.jpg",
+      "CIVIL-4-Ch.Giridhar-Kumar-150x150.jpg": "/images/faculty/civil/CIVIL-4-Ch.Giridhar-Kumar.jpg",
+      "CIVIL-5-T.S.D.Phanindranath.jpg": "/images/faculty/civil/CIVIL-5-T.S.D.Phanindranath.jpg",
+      "CIVIL-5-T.S.D.Phanindranath-140x150.jpg": "/images/faculty/civil/CIVIL-5-T.S.D.Phanindranath.jpg",
+      // Shared / HOD Faculty Assets
+      "dr-k-srinivasa-prasad.jpg": "/images/faculty/mech/dr-k-srinivasa-prasad.jpg",
+      "dr--k--srinivasa-prasad.jpg": "/images/faculty/mech/dr-k-srinivasa-prasad.jpg",
+      "6.Mr_.K.-Srinivasa-Prasad.jpg": "/images/faculty/mech/dr-k-srinivasa-prasad.jpg",
+      "6.Mr_.K.-Srinivasa-Prasad-150x150.jpg": "/images/faculty/mech/dr-k-srinivasa-prasad.jpg",
+      "dr-g-appala-naidu.jpg": "/images/faculty/ece/dr-g-appala-naidu.jpg",
+      "ECE-6-G.Appalanaidu.jpg": "/images/faculty/ece/dr-g-appala-naidu.jpg",
+      "ECE-6-G.Appalanaidu-60x60.jpg": "/images/faculty/ece/dr-g-appala-naidu.jpg",
+      "gottapu-appala-naidu.jpeg": "/images/faculty/ece/dr-g-appala-naidu.jpg",
+      "gottapu-appala-naidu.jpg": "/images/faculty/ece/dr-g-appala-naidu.jpg",
     };
 
     if (filename.startsWith("IMG_") && (filename.endsWith(".JPG") || filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".webp"))) {
@@ -131,8 +150,17 @@ export const getAssetUrl = (
     }
   }
 
-  // Prepend BASE if set, otherwise clean root path
-  if (BASE && !resolvedUrl.startsWith("http") && !resolvedUrl.startsWith("data:")) {
+  // Prepend BASE only for remote uploads/media, NEVER for local static assets
+  const isLocalStatic =
+    resolvedUrl.startsWith("/images/") ||
+    resolvedUrl.startsWith("/assets/") ||
+    resolvedUrl.startsWith("/src/") ||
+    resolvedUrl.startsWith("/@fs/") ||
+    resolvedUrl === "/logo-circle.png" ||
+    resolvedUrl === "/logo.png" ||
+    resolvedUrl === "/favicon.png";
+
+  if (BASE && !isLocalStatic && !resolvedUrl.startsWith("http") && !resolvedUrl.startsWith("data:")) {
     resolvedUrl = `${BASE}${resolvedUrl}`;
   }
 

@@ -443,8 +443,9 @@ function FacultyPage() {
       // 1. Save faculty list in database
       await syncFaculty({ data: { deptId: data.id, facultyList: newList } });
 
-      // 2. Also sync department HOD metadata to match the designated HOD
-      const designatedHod = newList.find((f) => /hod|head of (the )?department/i.test(f.designation || "")) || newList[0];
+      // 2. Also sync department HOD metadata to match the designated HOD.
+      // No HOD on the roster means an additional-charge HOD, so leave departments.hod alone.
+      const designatedHod = newList.find((f) => /hod|head of (the )?department/i.test(f.designation || ""));
       if (designatedHod && designatedHod.name) {
         await updateDepartment({
           data: {
@@ -663,9 +664,12 @@ function FacultyPage() {
   };
 
   // In non-edit mode, display HOD at top and rest sorted. In edit mode, display full reorderable list.
-  const hodMember = !isEditMode
+  const rosterHod = !isEditMode
     ? facultyList.find((f) => /hod|head of (the )?department/i.test(f.designation || ""))
     : null;
+  // Fall back to an additional-charge HOD from another department's roster; their profile lives there
+  const hodMember = rosterHod || (!isEditMode ? data?.hod_member : null) || null;
+  const hodProfileDeptId = rosterHod ? deptId : data?.hod_member?.dept_slug || deptId;
 
   const displayList = !isEditMode
     ? sortFacultyList(
@@ -738,7 +742,7 @@ function FacultyPage() {
                 index={0}
                 totalCount={1}
                 isEditMode={false}
-                deptId={deptId}
+                deptId={hodProfileDeptId}
                 isHod={true}
                 handleUpdate={handleUpdate}
                 onRequestDelete={(target) => setFacultyToDelete(target)}

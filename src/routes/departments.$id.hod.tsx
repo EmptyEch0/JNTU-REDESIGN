@@ -105,7 +105,7 @@ function HodPage() {
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-blue-900 via-blue-800 to-slate-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black/20 z-10"></div>
-        <div className="relative z-20 max-w-7xl mx-auto px-6 py-16 md:py-20">
+        <div className="relative z-20 max-w-[1380px] mx-auto px-6 py-16 md:py-20">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-6">
               <GraduationCap className="w-4 h-4 text-blue-300" />
@@ -122,7 +122,7 @@ function HodPage() {
         <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-slate-50 to-transparent z-20"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-[1380px] mx-auto px-6 py-16">
         {isEditMode && (
           <div className="mb-8 p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl flex items-center justify-between">
             <p className="text-amber-800 text-sm font-medium">

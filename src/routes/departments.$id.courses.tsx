@@ -79,7 +79,7 @@ function ProgrammesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 animate-in fade-in slide-in-from-bottom-6 duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="w-full mx-auto px-2 sm:px-4 lg:px-6 py-8">
 
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">

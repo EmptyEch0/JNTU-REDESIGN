@@ -14,12 +14,47 @@ export type DepartmentData = {
   hod_photo?: string;
   hod_message?: string;
   hod_contact?: string;
+  // Set when the HOD is not on this department's own roster (additional charge)
+  hod_member?: {
+    id: number;
+    name: string;
+    designation: string;
+    photo_url?: string | null;
+    dept_slug: string;
+  } | null;
   faculty: any[];
   gallery: any[];
   courses: any[];
   laboratories: any[];
   achievements: any[];
 };
+
+const HOD_DESIGNATION = /hod|head of (the )?department/i;
+
+function nameWords(raw: string): string[] {
+  return raw
+    .toLowerCase()
+    .replace(/\b(dr|prof|mr|mrs|ms|smt|sri)\b\.?/g, " ")
+    .split(/[^a-z]+/)
+    .filter(Boolean);
+}
+
+// Loose name match across rosters, e.g. "Dr. G. Appala Naidu" ~ "Gottapu Appala Naidu":
+// every full word must appear (spacing ignored) and every initial must start some word.
+function isSamePerson(a: string, b: string): boolean {
+  const aWords = nameWords(a);
+  const bWords = nameWords(b);
+  const aFull = aWords.filter((w) => w.length > 1).join("");
+  const bFull = bWords.filter((w) => w.length > 1).join("");
+  if (!aFull || !bFull) return false;
+  if (!aFull.includes(bFull) && !bFull.includes(aFull)) return false;
+  const initialsMatch = (initials: string[], other: string[]) =>
+    initials.every((i) => other.some((w) => w.startsWith(i)));
+  return (
+    initialsMatch(aWords.filter((w) => w.length === 1), bWords) &&
+    initialsMatch(bWords.filter((w) => w.length === 1), aWords)
+  );
+}
 
 export const getDepartmentDetails = createServerFn({ method: "GET" })
   .validator((slug: string) => slug)
@@ -54,7 +89,34 @@ export const getDepartmentDetails = createServerFn({ method: "GET" })
         sql`SELECT * FROM achievements WHERE dept_id = ${dept.id} ORDER BY year DESC`,
       ]);
 
-      // 5. MERGE: Create a new object containing EVERYTHING
+      // 5. Additional-charge HOD: if nobody on this roster is marked HOD, find the
+      // department's HOD (dept.hod) on their home department's roster instead.
+      let hodMember: DepartmentData["hod_member"] = null;
+      const rosterHasHod = (faculty || []).some((f: any) => HOD_DESIGNATION.test(f.designation || ""));
+      if (!rosterHasHod && dept.hod) {
+        const others = await sql`
+          SELECT f.id, f.name, f.designation, f.photo_url, d.slug AS dept_slug
+          FROM faculty f
+          JOIN departments d ON f.dept_id = d.id
+          WHERE f.dept_id <> ${dept.id}
+          ORDER BY f.id ASC
+        `;
+        const hodKey = nameWords(dept.hod).join("");
+        const match =
+          others.find((f: any) => nameWords(f.name).join("") === hodKey) ||
+          others.find((f: any) => isSamePerson(dept.hod, f.name));
+        if (match) {
+          hodMember = {
+            id: match.id,
+            name: match.name,
+            designation: match.designation,
+            photo_url: match.photo_url || dept.hod_photo,
+            dept_slug: match.dept_slug,
+          };
+        }
+      }
+
+      // 6. MERGE: Create a new object containing EVERYTHING
       const completeData = {
         id: dept.id,
         name: dept.name,
@@ -68,6 +130,7 @@ export const getDepartmentDetails = createServerFn({ method: "GET" })
         hod_photo: dept.hod_photo,
         hod_message: dept.hod_message,
         hod_contact: dept.hod_contact,
+        hod_member: hodMember,
         faculty: (faculty || []).map((row) => ({ ...row })),
         gallery: (gallery || []).map((row) => ({ ...row })),
         laboratories: (laboratories || []).map((row) => ({ ...row })),

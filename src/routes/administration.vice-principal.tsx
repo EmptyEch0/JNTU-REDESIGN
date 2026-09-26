@@ -12,6 +12,7 @@ import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { getLeadershipData, updateLeadershipData } from "@/funcs/leadership";
 import { AdminUpload } from "@/components/AdminEditPanel";
+import { FacultyProfileLink } from "@/components/FacultyProfileLink";
 
 export const Route = createFileRoute("/administration/vice-principal")({
   head: () => ({
@@ -115,7 +116,9 @@ function VicePrincipalPage() {
                   </div>
                 ) : (
                   <div>
-                    <h2 className="text-2xl font-bold text-ink">{data.name}</h2>
+                    <h2 className="text-2xl font-bold text-ink">
+                      <FacultyProfileLink name={data.name} />
+                    </h2>
                     <p className="text-primary font-medium">{data.designation}</p>
                   </div>
                 )}

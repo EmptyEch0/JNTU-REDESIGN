@@ -15,6 +15,7 @@ import { imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
+import { FacultyProfileLink } from "@/components/FacultyProfileLink";
 
 const campusImg = imageUrl("hero-carousal/hero-campus.jpg");
 
@@ -269,7 +270,9 @@ function CACPage() {
                           <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400">
                             {m.role}
                           </span>
-                          <h3 className="text-base font-extrabold text-slate-900 dark:text-white mt-1 group-hover:text-blue-600 transition-colors line-clamp-1">{m.name}</h3>
+                          <h3 className="text-base font-extrabold text-slate-900 dark:text-white mt-1 group-hover:text-blue-600 transition-colors line-clamp-1">
+                            <FacultyProfileLink name={m.name} />
+                          </h3>
                           <p className="text-xs text-slate-500 dark:text-slate-400 leading-snug line-clamp-2">{m.designation || "Committee Panelist"}</p>
                         </div>
                       </div>

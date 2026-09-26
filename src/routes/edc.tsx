@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
+import { FacultyProfileLink } from "@/components/FacultyProfileLink";
 
 export const Route = createFileRoute("/edc")({
   head: () => ({
@@ -493,7 +494,7 @@ function EdcPage() {
                               }
                             />
                           ) : (
-                            m.name
+                            <FacultyProfileLink name={m.name} designation={m.designation} showIcon={true} />
                           )}
                         </td>
                         <td className="px-6 py-4">

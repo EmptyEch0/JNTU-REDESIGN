@@ -17,7 +17,10 @@ import { SafeImage } from "@/components/SafeImage";
 import { PersonAvatarUpload, AdminUpload } from "@/components/AdminEditPanel";
 import { PasswordInput, TextInput } from "@/components/AccountSettingsLayout";
 import axios from "axios";
-import { DEPARTMENT_EXPLICIT_FACULTY_PROFILES } from "@/data/department-faculty-data";
+import {
+  DEPARTMENT_EXPLICIT_FACULTY_PROFILES,
+  DEPARTMENT_FACULTY_LIST,
+} from "@/data/department-faculty-data";
 
 export const Route = createFileRoute("/departments/$id/faculty/$facultyId")({
   component: FacultyDetailProfilePage,
@@ -203,8 +206,14 @@ function FacultyDetailProfilePage() {
   const { isDeptEditing } = useAdmin();
   const { isOwnProfile } = useFaculty();
 
-  const facultyRaw = data?.faculty?.find((f: any) => String(f.id) === String(facultyId)) ||
-    DEPARTMENT_EXPLICIT_FACULTY_PROFILES[(deptId || "").toLowerCase()]?.find((f: any) => String(f.id) === String(facultyId));
+  const facultyRaw =
+    data?.faculty?.find((f: any) => String(f.id) === String(facultyId)) ||
+    DEPARTMENT_EXPLICIT_FACULTY_PROFILES[(deptId || "").toLowerCase()]?.find(
+      (f: any) => String(f.id) === String(facultyId)
+    ) ||
+    DEPARTMENT_FACULTY_LIST[(deptId || "").toLowerCase()]?.find(
+      (f: any) => String(f.id || f.sNo) === String(facultyId)
+    );
   const isDeptLevelEdit = isDeptEditing(deptId || ""); // admin/HOD
   const isFacultySelfEdit = isOwnProfile(facultyId);    // the faculty member themself
 

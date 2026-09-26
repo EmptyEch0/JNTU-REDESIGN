@@ -8,7 +8,7 @@ import {
 } from "@/data/department-faculty-data";
 import { useState, useMemo, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
-import { syncFaculty } from "@/lib/departments";
+import { syncFaculty, updateDepartment } from "@/lib/departments";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,6 +24,7 @@ import {
   UserCheck,
   ArrowUp,
   ArrowDown,
+  Crown,
 } from "lucide-react";
 
 export const Route = createFileRoute("/departments/$id/faculty/list")({
@@ -48,8 +49,22 @@ function getNormalizedFacultyName(raw: string): string {
     .toLowerCase()
     .replace(/\b(dr|prof|mr|mrs|ms|assistant professor|associate professor|hod|head of department)\b\.?/gi, "")
     .replace(/[^a-z0-9]/g, "");
-}function getInitialDeletedList(deptKey: string, data: DepartmentData | undefined): DepartmentFacultyListItem[] {
+}
+
+function getInitialDeletedList(deptKey: string, data: DepartmentData | undefined): DepartmentFacultyListItem[] {
   const deletedMap = new Map<string, DepartmentFacultyListItem>();
+  const restoredSet = new Set<string>();
+
+  // Check restored set from localStorage
+  try {
+    const restoredStored = localStorage.getItem(`jntugv_restored_faculty_${deptKey}`);
+    if (restoredStored) {
+      const parsed = JSON.parse(restoredStored);
+      if (Array.isArray(parsed)) {
+        parsed.forEach((id: string) => restoredSet.add(String(id)));
+      }
+    }
+  } catch {}
 
   // 1. Load from shared jntugv_deleted_faculty_${deptKey}
   try {
@@ -60,7 +75,7 @@ function getNormalizedFacultyName(raw: string): string {
         parsed.forEach((item: any) => {
           const norm = getNormalizedFacultyName(item.name || "");
           const key = item.id ? String(item.id) : norm;
-          if (key) {
+          if (key && !restoredSet.has(key) && !restoredSet.has(norm)) {
             deletedMap.set(key, {
               sNo: deletedMap.size + 1,
               id: item.id,
@@ -89,37 +104,13 @@ function getNormalizedFacultyName(raw: string): string {
         parsed.forEach((item: any) => {
           const norm = getNormalizedFacultyName(item.name || "");
           const key = item.id ? String(item.id) : norm;
-          if (key && !deletedMap.has(key)) {
+          if (key && !deletedMap.has(key) && !restoredSet.has(key) && !restoredSet.has(norm)) {
             deletedMap.set(key, item);
           }
         });
       }
     }
   } catch {}
-
-  // 3. Any static DEPARTMENT_FACULTY_LIST item missing from data.faculty when DB has faculty
-  if (data?.faculty && data.faculty.length > 0) {
-    const directList =
-      DEPARTMENT_FACULTY_LIST[deptKey] ||
-      (data?.slug ? DEPARTMENT_FACULTY_LIST[data.slug.toLowerCase()] : undefined) ||
-      [];
-
-    directList.forEach((staticItem) => {
-      const sNorm = getNormalizedFacultyName(staticItem.name || "");
-      const foundInDb = data.faculty.some((dbF: any) => {
-        if (staticItem.id && dbF.id && String(staticItem.id) === String(dbF.id)) return true;
-        const dbNorm = getNormalizedFacultyName(dbF.name || "");
-        return dbNorm && sNorm && dbNorm === sNorm;
-      });
-
-      if (!foundInDb) {
-        const key = staticItem.id ? String(staticItem.id) : sNorm;
-        if (key && !deletedMap.has(key)) {
-          deletedMap.set(key, staticItem);
-        }
-      }
-    });
-  }
 
   return Array.from(deletedMap.values());
 }
@@ -317,11 +308,23 @@ function FacultyListPage() {
 
       if (data?.id) {
         await syncFaculty({ data: { deptId: data.id, facultyList: backendPayload } });
+
+        // Also sync department HOD metadata to match the designated HOD
+        const designatedHod = updatedList.find((f) => /hod|head of (the )?department/i.test(f.designation || "")) || updatedList[0];
+        if (designatedHod && designatedHod.name) {
+          await updateDepartment({
+            data: {
+              id: data.id,
+              hod: designatedHod.name,
+            },
+          });
+        }
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["departments"] });
-      toast.success("Faculty list updated & synchronized successfully!");
+      queryClient.invalidateQueries({ queryKey: ["department", data.slug] });
+      toast.success("Faculty list & HOD leadership updated successfully!");
     },
     onError: (err: any) => toast.error(err?.message || "Failed to save faculty list."),
   });
@@ -349,10 +352,40 @@ function FacultyListPage() {
     });
   };
 
+  const makeHodRow = (index: number) => {
+    const targetMember = facultyList[index];
+    if (!targetMember) return;
+
+    let baseRank = targetMember.designation || "Assistant Professor";
+    baseRank = baseRank.replace(/\s*&\s*(hod|head of (the )?department)/gi, "").trim();
+    if (!baseRank || /^hod$/i.test(baseRank)) baseRank = "Assistant Professor";
+    const newHodDesignation = `${baseRank} & HOD`;
+
+    const updatedList = facultyList.map((f, i) => {
+      if (i === index) {
+        return { ...f, designation: newHodDesignation };
+      }
+      if (/hod|head of (the )?department/i.test(f.designation || "")) {
+        const cleanPrevRank = (f.designation || "")
+          .replace(/\s*&\s*(hod|head of (the )?department)/gi, "")
+          .trim() || "Professor";
+        return { ...f, designation: cleanPrevRank };
+      }
+      return f;
+    });
+
+    const newHod = updatedList[index];
+    const others = updatedList.filter((_, i) => i !== index);
+
+    const reordered = [newHod, ...others].map((item, idx) => ({ ...item, sNo: idx + 1 }));
+    setFacultyList(reordered);
+    toast.success(`Set "${targetMember.name}" as Head of Department (${newHodDesignation}). Click 'Save Faculty List' to save.`);
+  };
+
   const addFacultyRow = () => {
     const newId = `fac_${Date.now()}`;
     const newRow: DepartmentFacultyListItem = {
-      sNo: facultyList.length + 1,
+      sNo: 1,
       id: newId,
       name: "New Faculty Member",
       qualification: "Ph.D / M.Tech",
@@ -376,6 +409,14 @@ function FacultyListPage() {
       try {
         localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
         localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
+        // Remove from restored set if deleted again
+        const restoredKey = `jntugv_restored_faculty_${deptKey}`;
+        const prevRestored: string[] = JSON.parse(localStorage.getItem(restoredKey) || "[]");
+        const itemNorm = getNormalizedFacultyName(itemToDelete.name || "");
+        localStorage.setItem(
+          restoredKey,
+          JSON.stringify(prevRestored.filter((k) => k !== String(itemToDelete.id) && k !== itemNorm))
+        );
       } catch {}
     }
 
@@ -403,6 +444,10 @@ function FacultyListPage() {
     try {
       localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
       localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
+      const restoredKey = `jntugv_restored_faculty_${deptKey}`;
+      const prevRestored = JSON.parse(localStorage.getItem(restoredKey) || "[]");
+      const itemNorm = getNormalizedFacultyName(item.name || "");
+      localStorage.setItem(restoredKey, JSON.stringify([...new Set([...prevRestored, String(item.id), itemNorm])]));
     } catch {}
 
     toast.success(`Restored "${item.name}". Click 'Save Faculty List' to save changes.`);
@@ -741,6 +786,20 @@ function FacultyListPage() {
                     {isEditMode && (
                       <td className="py-3 px-3 text-center">
                         <div className="flex items-center justify-center gap-1">
+                          {/hod|head of (the )?department/i.test(f.designation || "") ? (
+                            <span title="Current HOD" className="p-1 text-amber-500 bg-amber-50 rounded-lg">
+                              <Crown size={14} className="fill-amber-400 text-amber-600" />
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => makeHodRow(idx)}
+                              className="p-1 rounded-lg text-slate-400 hover:text-amber-700 hover:bg-amber-100 transition-colors cursor-pointer"
+                              title="Make as Head of Department"
+                            >
+                              <Crown size={13} />
+                            </button>
+                          )}
                           <button
                             type="button"
                             disabled={idx === 0}

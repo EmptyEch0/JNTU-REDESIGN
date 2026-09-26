@@ -30,6 +30,7 @@ import {
 import { LocalSubNav } from "@/components/LocalSubNav";
 import { getAssetUrl } from "@/lib/assets";
 import { AdminUpload, PersonAvatarUpload } from "@/components/AdminEditPanel";
+import { FacultyProfileLink } from "@/components/FacultyProfileLink";
 
 export const Route = createFileRoute("/engineering-cell")({
   loader: async () => await getEngineeringData(),
@@ -268,7 +269,9 @@ function EngineeringCellPage() {
                             alt={electrical?.engineer || "Engineer"}
                           />
                         </div>
-                        <h4 className="font-display font-black text-[17px] text-slate-900 mb-1 leading-snug">{electrical?.engineer || "Dr. A. Padmaja"}</h4>
+                        <h4 className="font-display font-black text-[17px] text-slate-900 mb-1 leading-snug">
+                          <FacultyProfileLink name={electrical?.engineer || "Dr. A. Padmaja"} />
+                        </h4>
                         <div className="inline-flex bg-indigo-50 border border-indigo-100 text-[oklch(0.42_0.18_265)] text-[10px] font-black tracking-widest uppercase px-3.5 py-1 rounded-lg shadow-sm">{electrical?.designation || "Project Engineer"}</div>
                       </div>
                     )}
@@ -516,7 +519,9 @@ function StaffRegistryEditable({ data, type, isEdit, onRefetch }: any) {
                       {isEdit ? (
                         <InlineCellEdit val={s.name} onCommit={async (n)=>{ await updateStaffMember({data:{...s, name:n}}); onRefetch(); }} />
                       ) : (
-                        <span className="text-slate-900 font-extrabold tracking-tight">{s.name}</span>
+                        <span className="text-slate-900 font-extrabold tracking-tight">
+                          <FacultyProfileLink name={s.name} />
+                        </span>
                       )}
                     </div>
                   </td>

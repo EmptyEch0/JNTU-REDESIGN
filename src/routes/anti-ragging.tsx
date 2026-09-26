@@ -3,6 +3,7 @@ import { imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
+import { FacultyProfileLink } from "@/components/FacultyProfileLink";
 import {
   ShieldAlert,
   AlertTriangle,
@@ -341,7 +342,7 @@ function AntiRaggingPage() {
                         </td>
                         <td className="py-4 px-6 font-bold text-slate-900 flex items-center gap-2.5">
                           <div className="h-2 w-2 rounded-full bg-primary/60 shrink-0" />
-                          {member.name}
+                          <FacultyProfileLink name={member.name} designation={member.designation} showIcon={true} />
                         </td>
                         <td className="py-4 px-6 text-slate-600 font-medium">
                           {member.designation}

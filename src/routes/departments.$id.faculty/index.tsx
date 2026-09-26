@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData, Link, useParams, useRouter } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
-import { syncFaculty } from "@/lib/departments";
+import { syncFaculty, updateDepartment } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
 import { useState, useEffect, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -18,6 +18,7 @@ import {
   RotateCcw,
   Sparkles,
   AlertTriangle,
+  Crown,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -58,8 +59,10 @@ interface FacultyCardProps {
   isEditMode: boolean;
   deptId: string;
   isDragging?: boolean;
+  isHod?: boolean;
   handleUpdate: (id: string | number, field: string, value: string) => void;
   onRequestDelete: (target: { id: string | number; name: string }) => void;
+  onMakeHod?: (targetId: string | number) => void;
   moveFaculty: (index: number, direction: "up" | "down") => void;
   onDragStart: (e: React.DragEvent, index: number) => void;
   onDragEnter: (e: React.DragEvent, index: number) => void;
@@ -74,8 +77,10 @@ function FacultyCard({
   isEditMode,
   deptId,
   isDragging,
+  isHod,
   handleUpdate,
   onRequestDelete,
+  onMakeHod,
   moveFaculty,
   onDragStart,
   onDragEnter,
@@ -92,15 +97,19 @@ function FacultyCard({
       exit={{ opacity: 0, scale: 0.85, y: -10, transition: { duration: 0.2 } }}
       transition={{ type: "spring", stiffness: 380, damping: 28 }}
       draggable={isEditMode}
-      onDragStart={(e) => onDragStart(e, index)}
-      onDragEnter={(e) => onDragEnter(e, index)}
-      onDragEnd={onDragEnd}
-      onDragOver={onDragOver}
+      onDragStart={(e: any) => onDragStart(e, index)}
+      onDragEnter={(e: any) => onDragEnter(e, index)}
+      onDragEnd={(e: any) => onDragEnd(e)}
+      onDragOver={(e: any) => onDragOver(e)}
       className={`p-6 border rounded-3xl bg-white flex gap-5 items-center relative transition-all h-full select-none ${
         isDragging
           ? "opacity-40 border-dashed border-amber-500 bg-amber-50/40 scale-[0.98] shadow-inner"
           : isEditMode
-          ? "border-amber-200 hover:border-amber-400 ring-2 ring-amber-50 shadow-sm hover:shadow-md cursor-grab active:cursor-grabbing"
+          ? isHod
+            ? "border-amber-400 bg-amber-50/20 ring-2 ring-amber-300 shadow-sm cursor-grab active:cursor-grabbing"
+            : "border-amber-200 hover:border-amber-400 ring-2 ring-amber-50 shadow-sm hover:shadow-md cursor-grab active:cursor-grabbing"
+          : isHod
+          ? "border-amber-300/80 bg-gradient-to-br from-amber-50/30 via-white to-amber-50/10 shadow-md ring-2 ring-amber-100"
           : "border-slate-100 shadow-sm hover:border-blue-500/20 hover:shadow-md"
       }`}
     >
@@ -173,7 +182,7 @@ function FacultyCard({
           />
         </div>
       ) : (
-        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 border-slate-50 bg-slate-100 shadow-xs">
+        <div className={`h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 bg-slate-100 shadow-xs ${isHod ? 'border-amber-400 ring-2 ring-amber-200' : 'border-slate-50'}`}>
           <SafeImage
             src={f.photo_url}
             alt={f.name}
@@ -208,26 +217,54 @@ function FacultyCard({
               <input
                 className="w-full text-xs font-semibold text-slate-700 bg-amber-50/30 border border-amber-200 rounded-lg px-2.5 py-1 outline-none focus:ring-2 focus:ring-amber-400/40 focus:bg-white transition-all"
                 value={f.designation}
-                placeholder="Designation (e.g. Assistant Professor)"
+                placeholder="Designation (e.g. Assistant Professor & HOD)"
                 onChange={(e) => handleUpdate(cardId, "designation", e.target.value)}
               />
             </div>
 
-            {/* Deep Link Edit Profile Button */}
-            <div className="pt-1 flex items-center gap-2">
+            {/* Actions: Make as HOD + Deep Link Edit Profile */}
+            <div className="pt-1 flex flex-wrap items-center gap-2">
+              {isHod ? (
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-900 bg-amber-200/90 px-2.5 py-1 rounded-lg border border-amber-300 shadow-2xs">
+                  <Crown size={12} className="text-amber-700 fill-amber-500" />
+                  <span>★ Current HOD</span>
+                </span>
+              ) : onMakeHod ? (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onMakeHod(cardId);
+                  }}
+                  className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-800 hover:text-amber-950 bg-amber-100/90 hover:bg-amber-200 px-2.5 py-1 rounded-lg border border-amber-300/80 transition-colors shadow-2xs cursor-pointer"
+                  title="Designate this member as Head of Department and move to top"
+                >
+                  <Crown size={12} className="text-amber-600" />
+                  <span>Make as HOD</span>
+                </button>
+              ) : null}
+
               <Link
                 to="/departments/$id/faculty/$facultyId"
                 params={{ id: deptId, facultyId: cardId }}
-                className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1 rounded-lg transition-colors border border-amber-200/60 shadow-2xs"
+                className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-lg transition-colors border border-slate-200 shadow-2xs"
               >
                 <UserCheck size={12} />
-                <span>Edit Full Profile & Research</span>
+                <span>Edit Full Profile</span>
               </Link>
             </div>
           </div>
         ) : (
           <div className="flex flex-col h-full justify-between">
             <div>
+              {isHod && (
+                <div className="mb-1">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-900 bg-amber-100 border border-amber-300/80 px-2.5 py-0.5 rounded-full shadow-2xs">
+                    <Crown size={11} className="text-amber-600 fill-amber-500" />
+                    <span>Head of Department</span>
+                  </span>
+                </div>
+              )}
               <h3 className="text-xl font-bold text-blue-900 leading-snug truncate" title={f.name}>
                 {f.name}
               </h3>
@@ -241,7 +278,11 @@ function FacultyCard({
               <Link
                 to="/departments/$id/faculty/$facultyId"
                 params={{ id: deptId, facultyId: cardId }}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl transition-colors shadow-2xs"
+                className={`inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-2xs ${
+                  isHod
+                    ? 'text-amber-900 bg-amber-100/90 hover:bg-amber-200 border border-amber-200'
+                    : 'text-slate-700 bg-slate-100 hover:bg-slate-200'
+                }`}
               >
                 <Eye size={14} />
                 <span>View Profile</span>
@@ -263,6 +304,18 @@ function getNormalizedFacultyName(raw: string): string {
 
 function getInitialDeletedCards(deptKey: string, data: DepartmentData | undefined): any[] {
   const deletedMap = new Map<string, any>();
+  const restoredSet = new Set<string>();
+
+  // Check restored set from localStorage
+  try {
+    const restoredStored = localStorage.getItem(`jntugv_restored_faculty_${deptKey}`);
+    if (restoredStored) {
+      const parsed = JSON.parse(restoredStored);
+      if (Array.isArray(parsed)) {
+        parsed.forEach((id: string) => restoredSet.add(String(id)));
+      }
+    }
+  } catch {}
 
   // 1. From jntugv_deleted_faculty_${deptKey}
   try {
@@ -273,7 +326,9 @@ function getInitialDeletedCards(deptKey: string, data: DepartmentData | undefine
         parsed.forEach((item: any) => {
           const norm = getNormalizedFacultyName(item.name || "");
           const key = item.id ? String(item.id) : norm;
-          if (key) deletedMap.set(key, item);
+          if (key && !restoredSet.has(key) && !restoredSet.has(norm)) {
+            deletedMap.set(key, item);
+          }
         });
       }
     }
@@ -288,35 +343,13 @@ function getInitialDeletedCards(deptKey: string, data: DepartmentData | undefine
         parsed.forEach((item: any) => {
           const norm = getNormalizedFacultyName(item.name || "");
           const key = item.id ? String(item.id) : norm;
-          if (key && !deletedMap.has(key)) deletedMap.set(key, item);
+          if (key && !deletedMap.has(key) && !restoredSet.has(key) && !restoredSet.has(norm)) {
+            deletedMap.set(key, item);
+          }
         });
       }
     }
   } catch {}
-
-  // 3. Any explicit profile item missing from data.faculty when DB is populated
-  if (data?.faculty && data.faculty.length > 0) {
-    const explicit =
-      DEPARTMENT_EXPLICIT_FACULTY_PROFILES[deptKey] ||
-      (data?.slug ? DEPARTMENT_EXPLICIT_FACULTY_PROFILES[data.slug.toLowerCase()] : undefined) ||
-      [];
-
-    explicit.forEach((exp: any) => {
-      const expNorm = getNormalizedFacultyName(exp.name || "");
-      const existsInDb = data.faculty.some((dbF: any) => {
-        if (exp.id && dbF.id && String(exp.id) === String(dbF.id)) return true;
-        const dbNorm = getNormalizedFacultyName(dbF.name || "");
-        return dbNorm && expNorm && dbNorm === expNorm;
-      });
-
-      if (!existsInDb) {
-        const key = exp.id ? String(exp.id) : expNorm;
-        if (key && !deletedMap.has(key)) {
-          deletedMap.set(key, exp);
-        }
-      }
-    });
-  }
 
   return Array.from(deletedMap.values());
 }
@@ -363,9 +396,16 @@ function FacultyPage() {
 
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
   const dragItemNode = useRef<number | null>(null);
+  const lastDeptRef = useRef<string>(deptKey);
 
   useEffect(() => {
-    const currentDeleted = deletedFacultyList.length > 0 ? deletedFacultyList : getInitialDeletedCards(deptKey, data);
+    // Only re-sync when department or server data genuinely changes
+    if (lastDeptRef.current !== deptKey) {
+      lastDeptRef.current = deptKey;
+      setDeletedFacultyList(getInitialDeletedCards(deptKey, data));
+    }
+
+    const currentDeleted = getInitialDeletedCards(deptKey, data);
     const isDeleted = (item: any) => {
       const itemNorm = getNormalizedFacultyName(item.name || "");
       return currentDeleted.some((d) => {
@@ -399,15 +439,30 @@ function FacultyPage() {
     } else if (activeExplicit) {
       setFacultyList(activeExplicit.filter((f: any) => !isDeleted(f)));
     }
-  }, [data, deptKey, deletedFacultyList]);
+  }, [data?.id, data?.slug, deptKey]);
 
   const mutation = useMutation({
-    mutationFn: (newList: any[]) =>
-      syncFaculty({ data: { deptId: data.id, facultyList: newList } }),
+    mutationFn: async (newList: any[]) => {
+      // 1. Save faculty list in database
+      await syncFaculty({ data: { deptId: data.id, facultyList: newList } });
+
+      // 2. Also sync department HOD metadata to match the designated HOD
+      const designatedHod = newList.find((f) => /hod|head of (the )?department/i.test(f.designation || "")) || newList[0];
+      if (designatedHod && designatedHod.name) {
+        await updateDepartment({
+          data: {
+            id: data.id,
+            hod: designatedHod.name,
+            hod_photo: designatedHod.photo_url || data.hod_photo,
+          },
+        });
+      }
+    },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["departments"] });
+      queryClient.invalidateQueries({ queryKey: ["department", data.slug] });
       await router.invalidate();
-      toast.success("Faculty roster and positions saved successfully!");
+      toast.success("Faculty roster, positions, and HOD saved successfully!");
     },
     onError: (err: any) => toast.error(err?.message || "Failed to save changes."),
   });
@@ -433,6 +488,43 @@ function FacultyPage() {
     toast.info("Added new faculty card at the top. Fill in details and click 'Save Roster'.");
   };
 
+  // Designate a faculty member as HOD with automatic designation formatting and top repositioning
+  const makeHod = (targetId: string | number) => {
+    const tId = String(targetId);
+    const targetMember = facultyList.find((f) => String(f.id) === tId);
+    if (!targetMember) return;
+
+    // Determine base academic title
+    let baseRank = targetMember.designation || "Assistant Professor";
+    baseRank = baseRank.replace(/\s*&\s*(hod|head of (the )?department)/gi, "").trim();
+    if (!baseRank || /^hod$/i.test(baseRank)) baseRank = "Assistant Professor";
+
+    // Standardized combined HOD title (shows in the input box immediately!)
+    const newHodDesignation = `${baseRank} & HOD`;
+
+    // Revert previous HOD's designation back to their base academic rank
+    const updatedList = facultyList.map((f) => {
+      if (String(f.id) === tId) {
+        return { ...f, designation: newHodDesignation };
+      }
+      if (/hod|head of (the )?department/i.test(f.designation || "")) {
+        const cleanPrevRank = (f.designation || "")
+          .replace(/\s*&\s*(hod|head of (the )?department)/gi, "")
+          .trim() || "Professor";
+        return { ...f, designation: cleanPrevRank };
+      }
+      return f;
+    });
+
+    // Move target to index 0 (Top), followed by the rest sorted by hierarchy
+    const newHod = updatedList.find((f) => String(f.id) === tId)!;
+    const others = updatedList.filter((f) => String(f.id) !== tId);
+    const sortedOthers = sortFacultyList(others);
+
+    setFacultyList([newHod, ...sortedOthers]);
+    toast.success(`Set "${targetMember.name}" as Head of Department (${newHodDesignation}). Click 'Save Roster' to save.`);
+  };
+
   const [facultyToDelete, setFacultyToDelete] = useState<{ id: string | number; name: string } | null>(null);
 
   // Direct remove faculty implementation and move to Deleted Faculty archive
@@ -447,6 +539,14 @@ function FacultyPage() {
         try {
           localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
           localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
+          // Remove from restored set if deleted again
+          const restoredKey = `jntugv_restored_faculty_${deptKey}`;
+          const prevRestored: string[] = JSON.parse(localStorage.getItem(restoredKey) || "[]");
+          const itemNorm = getNormalizedFacultyName(itemToDelete.name || "");
+          localStorage.setItem(
+            restoredKey,
+            JSON.stringify(prevRestored.filter((k) => k !== targetId && k !== itemNorm))
+          );
         } catch {}
       }
 
@@ -459,13 +559,34 @@ function FacultyPage() {
   // Restore deleted faculty member back into active roster
   const restoreFaculty = (item: any) => {
     const targetId = String(item.id);
-    setFacultyList((prev) => [item, ...prev]);
+    const targetNorm = getNormalizedFacultyName(item.name || "");
 
-    const updatedDeleted = deletedFacultyList.filter((f) => String(f.id) !== targetId);
+    // 1. Remove from deletedFacultyList state
+    const updatedDeleted = deletedFacultyList.filter((f) => {
+      if (f.id && item.id && String(f.id) === targetId) return false;
+      const fNorm = getNormalizedFacultyName(f.name || "");
+      return !(fNorm && targetNorm && fNorm === targetNorm);
+    });
     setDeletedFacultyList(updatedDeleted);
+
+    // 2. Add to active facultyList state (avoid duplicates)
+    setFacultyList((prev) => {
+      const exists = prev.some((f) => {
+        if (f.id && item.id && String(f.id) === targetId) return true;
+        const fNorm = getNormalizedFacultyName(f.name || "");
+        return fNorm && targetNorm && fNorm === targetNorm;
+      });
+      if (exists) return prev;
+      return [item, ...prev];
+    });
+
+    // 3. Update localStorage
     try {
       localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
       localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
+      const restoredKey = `jntugv_restored_faculty_${deptKey}`;
+      const prevRestored = JSON.parse(localStorage.getItem(restoredKey) || "[]");
+      localStorage.setItem(restoredKey, JSON.stringify([...new Set([...prevRestored, targetId, targetNorm])]));
     } catch {}
 
     toast.success(`Restored "${item.name}" to active roster. Click 'Save Roster' to save.`);
@@ -572,7 +693,7 @@ function FacultyPage() {
           </h2>
           <p className="text-sm text-slate-600 mt-1 max-w-2xl">
             {isEditMode
-              ? "Hold and drag cards, or use arrow buttons to rearrange positions. Add, edit, or remove faculty members and click 'Save Roster'."
+              ? "Hold and drag cards, or use arrow buttons to rearrange positions. Click 'Make as HOD' to change leadership. Add, edit, or remove faculty members and click 'Save Roster'."
               : "Detailed profiles, research domains, and academic credentials of department faculty."}
           </p>
         </div>
@@ -621,8 +742,10 @@ function FacultyPage() {
                 totalCount={1}
                 isEditMode={false}
                 deptId={deptId}
+                isHod={true}
                 handleUpdate={handleUpdate}
                 onRequestDelete={(target) => setFacultyToDelete(target)}
+                onMakeHod={makeHod}
                 moveFaculty={moveFaculty}
                 onDragStart={handleDragStart}
                 onDragEnter={handleDragEnter}
@@ -639,24 +762,29 @@ function FacultyPage() {
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           <AnimatePresence mode="popLayout">
-            {displayList.map((f, idx) => (
-              <FacultyCard
-                key={f.id ? String(f.id) : `idx_${idx}`}
-                f={f}
-                index={idx}
-                totalCount={displayList.length}
-                isEditMode={isEditMode}
-                deptId={deptId}
-                isDragging={draggingIndex === idx}
-                handleUpdate={handleUpdate}
-                onRequestDelete={(target) => setFacultyToDelete(target)}
-                moveFaculty={moveFaculty}
-                onDragStart={handleDragStart}
-                onDragEnter={handleDragEnter}
-                onDragEnd={handleDragEnd}
-                onDragOver={handleDragOver}
-              />
-            ))}
+            {displayList.map((f, idx) => {
+              const cardIsHod = /hod|head of (the )?department/i.test(f.designation || "");
+              return (
+                <FacultyCard
+                  key={f.id ? String(f.id) : `idx_${idx}`}
+                  f={f}
+                  index={idx}
+                  totalCount={displayList.length}
+                  isEditMode={isEditMode}
+                  deptId={deptId}
+                  isDragging={draggingIndex === idx}
+                  isHod={cardIsHod}
+                  handleUpdate={handleUpdate}
+                  onRequestDelete={(target) => setFacultyToDelete(target)}
+                  onMakeHod={makeHod}
+                  moveFaculty={moveFaculty}
+                  onDragStart={handleDragStart}
+                  onDragEnter={handleDragEnter}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={handleDragOver}
+                />
+              );
+            })}
           </AnimatePresence>
         </motion.div>
 

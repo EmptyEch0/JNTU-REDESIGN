@@ -1,4 +1,5 @@
 import { User } from "lucide-react";
+import { FacultyProfileLink } from "./FacultyProfileLink";
 
 interface Props {
   name: string;
@@ -28,7 +29,9 @@ export function ProfileCard({ name, role, detail, badge }: Props) {
         </div>
         <div className="min-w-0">
           {badge && <div className="text-eyebrow mb-1">{badge}</div>}
-          <h3 className="text-base font-semibold text-ink leading-tight">{name}</h3>
+          <h3 className="text-base font-semibold text-ink leading-tight">
+            <FacultyProfileLink name={name} designation={detail || role} showIcon={true} />
+          </h3>
           <p className="text-sm text-primary mt-0.5 font-medium">{role}</p>
           {detail && <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{detail}</p>}
         </div>

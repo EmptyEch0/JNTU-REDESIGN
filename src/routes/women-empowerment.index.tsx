@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
+import { FacultyProfileLink } from "@/components/FacultyProfileLink";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/women-empowerment/")({
@@ -469,7 +470,7 @@ function WEAboutPage() {
                         ) : (
                           <div>
                             <h4 className="font-bold text-ink text-sm leading-tight">
-                              {member.name}
+                              <FacultyProfileLink name={member.name} designation={member.role} showIcon={true} />
                             </h4>
                             <p className="text-xs text-primary font-bold mt-1 tracking-tight leading-snug">
                               {member.role}

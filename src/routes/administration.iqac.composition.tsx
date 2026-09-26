@@ -15,6 +15,7 @@ import { Users, Plus, Trash2, Save, X, Edit3, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
+import { FacultyProfileLink } from "@/components/FacultyProfileLink";
 
 export const Route = createFileRoute("/administration/iqac/composition")({
   head: () => ({
@@ -321,7 +322,7 @@ function CompositionPage() {
                               />
                             ) : (
                               <span className="text-sm font-bold text-ink group-hover:text-primary transition-colors">
-                                {member.name}
+                                <FacultyProfileLink name={member.name} />
                               </span>
                             )}
                           </td>

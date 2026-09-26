@@ -387,7 +387,7 @@ function DepartmentLayout() {
                       <div key={item.id} className="space-y-1">
                         <div className="flex items-center">
                           <Link
-                            to={facultyRootPath}
+                            to={facultyRootPath as any}
                             onClick={handleFacultyClick}
                             className={`flex-1 flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${
                               isActive
@@ -413,7 +413,7 @@ function DepartmentLayout() {
                             {isBshssDept ? (
                               <>
                                 <Link
-                                  to={`/departments/${loaderData.slug}/faculty/list`}
+                                  to={`/departments/${loaderData.slug}/faculty/list` as any}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                                     isListActive && !activeSubject
@@ -426,8 +426,8 @@ function DepartmentLayout() {
                                 </Link>
 
                                 <Link
-                                  to={`/departments/${loaderData.slug}/faculty/list`}
-                                  search={{ subject: "Mathematics" }}
+                                  to={`/departments/${loaderData.slug}/faculty/list` as any}
+                                  search={{ subject: "Mathematics" } as any}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                                     isListActive && activeSubject === "mathematics"
@@ -440,8 +440,8 @@ function DepartmentLayout() {
                                 </Link>
 
                                 <Link
-                                  to={`/departments/${loaderData.slug}/faculty/list`}
-                                  search={{ subject: "Physics" }}
+                                  to={`/departments/${loaderData.slug}/faculty/list` as any}
+                                  search={{ subject: "Physics" } as any}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                                     isListActive && activeSubject === "physics"
@@ -454,8 +454,8 @@ function DepartmentLayout() {
                                 </Link>
 
                                 <Link
-                                  to={`/departments/${loaderData.slug}/faculty/list`}
-                                  search={{ subject: "Chemistry" }}
+                                  to={`/departments/${loaderData.slug}/faculty/list` as any}
+                                  search={{ subject: "Chemistry" } as any}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                                     isListActive && activeSubject === "chemistry"
@@ -468,8 +468,8 @@ function DepartmentLayout() {
                                 </Link>
 
                                 <Link
-                                  to={`/departments/${loaderData.slug}/faculty/list`}
-                                  search={{ subject: "English" }}
+                                  to={`/departments/${loaderData.slug}/faculty/list` as any}
+                                  search={{ subject: "English" } as any}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                                     isListActive && activeSubject === "english"
@@ -482,8 +482,8 @@ function DepartmentLayout() {
                                 </Link>
 
                                 <Link
-                                  to={`/departments/${loaderData.slug}/faculty/list`}
-                                  search={{ subject: "Commerce" }}
+                                  to={`/departments/${loaderData.slug}/faculty/list` as any}
+                                  search={{ subject: "Commerce" } as any}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                                     isListActive && (activeSubject === "commerce" || activeSubject === "economics")
@@ -496,7 +496,7 @@ function DepartmentLayout() {
                                 </Link>
 
                                 <Link
-                                  to={`/departments/${loaderData.slug}/faculty/non-teaching`}
+                                  to={`/departments/${loaderData.slug}/faculty/non-teaching` as any}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                                     isNonTeachingActive
@@ -511,7 +511,7 @@ function DepartmentLayout() {
                             ) : (
                               <>
                                 <Link
-                                  to={`/departments/${loaderData.slug}/faculty`}
+                                  to={`/departments/${loaderData.slug}/faculty` as any}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                                     isProfilesActive
@@ -524,7 +524,7 @@ function DepartmentLayout() {
                                 </Link>
 
                                 <Link
-                                  to={`/departments/${loaderData.slug}/faculty/list`}
+                                  to={`/departments/${loaderData.slug}/faculty/list` as any}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                                     isListActive
@@ -537,7 +537,7 @@ function DepartmentLayout() {
                                 </Link>
 
                                 <Link
-                                  to={`/departments/${loaderData.slug}/faculty/non-teaching`}
+                                  to={`/departments/${loaderData.slug}/faculty/non-teaching` as any}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                                     isNonTeachingActive

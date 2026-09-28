@@ -8,7 +8,7 @@ import {
 } from "@/data/department-faculty-data";
 import { useState, useMemo, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
-import { syncFaculty, updateDepartment } from "@/lib/departments";
+import { syncFaculty, updateDepartment, deleteFaculty } from "@/lib/departments";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -417,6 +417,13 @@ function FacultyListPage() {
           JSON.stringify(prevRestored.filter((k) => k !== String(itemToDelete.id) && k !== itemNorm))
         );
       } catch {}
+    }
+
+    const numId = Number(itemToDelete.id);
+    if (!isNaN(numId) && numId > 0) {
+      deleteFaculty({ data: { id: numId } }).catch((err) =>
+        console.error("Failed to delete faculty from DB:", err)
+      );
     }
 
     const updated = facultyList.filter((_, i) => i !== index).map((item, idx) => ({

@@ -51,31 +51,118 @@ export const Route = createFileRoute("/departments/$id")({
   head: ({ loaderData }) => {
     const data = loaderData as DepartmentData | undefined;
     const name = data?.name || "Department";
-    const desc = data?.description || `Department details, syllabus, courses, faculty and laboratories at JNTU-GV College of Engineering Vizianagaram.`;
+    const slug = (data?.slug || "").toLowerCase();
+
+    const deptCodeMap: Record<string, string> = {
+      it: "IT",
+      cse: "CSE",
+      ece: "ECE",
+      eee: "EEE",
+      mech: "MECH",
+      met: "MET",
+      civil: "CIVIL",
+      mba: "MBA",
+      bshss: "BSH",
+    };
+    const deptCode = deptCodeMap[slug] || slug.toUpperCase();
+
+    const pageTitle = `${name} (${deptCode}) | JNTU-GV Vizianagaram (${deptCode} JNTU GV)`;
+    const desc =
+      data?.description?.replace(/\s+/g, " ").trim().slice(0, 160) ||
+      `Department of ${name} (${deptCode}) at JNTU-GV College of Engineering Vizianagaram (JNTU-GV). Explore faculty roster, academic curriculum, syllabus, lab facilities, and HOD desk.`;
+    const canonicalUrl = `https://jntugvcev.edu.in/departments/${slug}`;
+    const subdomainUrl = `https://${slug}.jntugv.edu.in/`;
+
+    const keywords = [
+      `${deptCode} JNTU GV`,
+      `${deptCode} JNTUGV`,
+      `${deptCode} JNTU Vizianagaram`,
+      `${slug} jntu gv`,
+      `${slug} jntugv`,
+      `Department of ${name} JNTU GV`,
+      `${name} JNTU-GV`,
+      `${deptCode} engineering jntugv`,
+      `${deptCode} faculty jntu gv`,
+      `${deptCode} syllabus jntu gv`,
+      `JNTUGV CEV ${deptCode}`,
+    ].join(", ");
+
     return {
       meta: [
-        { title: `${name} — JNTU-GV CEV` },
+        { title: pageTitle },
         { name: "description", content: desc },
-        { property: "og:title", content: `${name} — JNTU-GV CEV` },
+        { name: "keywords", content: keywords },
+        { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" },
+        { property: "og:title", content: pageTitle },
         { property: "og:description", content: desc },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: canonicalUrl },
+        { property: "og:site_name", content: "JNTU-GV College of Engineering Vizianagaram" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: pageTitle },
+        { name: "twitter:description", content: desc },
       ],
       links: [
-        { rel: "canonical", href: `https://jntugvcev.edu.in/departments/${data?.slug || ""}` }
+        { rel: "canonical", href: canonicalUrl },
+        { rel: "alternate", href: subdomainUrl },
       ],
       scripts: [
         {
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "EducationalOrganization",
-            "name": `${name} - JNTU-GV CEV`,
-            "description": desc,
-            "url": `https://jntugvcev.edu.in/departments/${data?.slug || ""}`,
-            "parentOrganization": {
-              "@type": "EducationalOrganization",
-              "name": "JNTU-GV College of Engineering Vizianagaram",
-              "url": "https://jntugvcev.edu.in/"
-            }
+            "@graph": [
+              {
+                "@type": "AcademicDepartment",
+                "@id": `${canonicalUrl}#department`,
+                "name": `Department of ${name}`,
+                "alternateName": [
+                  `${deptCode} JNTU GV`,
+                  `${deptCode} JNTUGV`,
+                  `${name} JNTU Vizianagaram`,
+                  `${deptCode} Department JNTU-GV`,
+                  subdomainUrl,
+                ],
+                "url": canonicalUrl,
+                "description": desc,
+                "parentOrganization": {
+                  "@type": "CollegeOrUniversity",
+                  "name": "Jawaharlal Nehru Technological University Gurajada Vizianagaram (JNTU-GV)",
+                  "url": "https://jntugvcev.edu.in/",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Dwarapudi",
+                    "addressLocality": "Vizianagaram",
+                    "addressRegion": "Andhra Pradesh",
+                    "postalCode": "535003",
+                    "addressCountry": "IN"
+                  }
+                }
+              },
+              {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://jntugvcev.edu.in/"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Departments",
+                    "item": "https://jntugvcev.edu.in/departments"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": `${name} (${deptCode})`,
+                    "item": canonicalUrl
+                  }
+                ]
+              }
+            ]
           })
         }
       ]

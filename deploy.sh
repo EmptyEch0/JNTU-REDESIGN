@@ -13,6 +13,10 @@ git pull origin main
 echo "→ Installing dependencies…"
 bun install --frozen-lockfile 2>/dev/null || bun install
 
+# 2.5 Run database migrations
+echo "→ Running database schema migrations…"
+npx tsx scratch/add_is_former_column.ts || true
+
 # 3. Build
 echo "→ Building production bundle…"
 rm -rf dist

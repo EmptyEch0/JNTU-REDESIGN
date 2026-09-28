@@ -193,6 +193,7 @@ export const syncFaculty = createServerFn({ method: "POST" })
             name: f.name,
             designation: f.designation,
             photo_url: f.photo_url,
+            is_former: Boolean(f.is_former),
           })
           .where(eq(faculty.id, numericId));
       } else {
@@ -201,6 +202,7 @@ export const syncFaculty = createServerFn({ method: "POST" })
           designation: f.designation,
           photo_url: f.photo_url,
           dept_id: deptId,
+          is_former: Boolean(f.is_former),
         });
       }
     }
@@ -464,12 +466,28 @@ export const updateFacultyProfile = createServerFn({ method: "POST" })
         fdps_attended: profileData.fdps_attended,
         conferences_attended: profileData.conferences_attended,
         documents: profileData.documents || [],
+        is_former: Boolean(profileData.is_former),
       })
       .where(eq(faculty.id, Number(facultyId)));
 
     invalidateDeptCache();
     serverCache.invalidate("faculty_all");
 
+    return { success: true };
+  });
+
+export const toggleFormerFaculty = createServerFn({ method: "POST" })
+  .validator((d: { id: number | string; is_former: boolean }) => d)
+  .handler(async ({ data }) => {
+    const numId = Number(data.id);
+    if (!isNaN(numId)) {
+      await db
+        .update(faculty)
+        .set({ is_former: data.is_former })
+        .where(eq(faculty.id, numId));
+    }
+    invalidateDeptCache();
+    serverCache.invalidate("faculty_all");
     return { success: true };
   });
 

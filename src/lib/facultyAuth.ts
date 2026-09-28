@@ -255,3 +255,95 @@ export const listFacultyLoginsByDept = createServerFn({ method: "POST" })
       photo_url: r.photo_url,
     }));
   });
+
+export const createFacultyWithLogin = createServerFn({ method: "POST" })
+  .validator(
+    (d: {
+      deptId: string;
+      name: string;
+      designation: string;
+      email: string;
+      password: string;
+    }) => d,
+  )
+  .handler(async ({ data }) => {
+    const { deptId, name, designation, email, password } = data;
+    const { getCookie } = await import("@tanstack/react-start/server");
+    const { db } = await import("../db");
+    const { faculty, departments, admins, adminSessions } = await import("../db/schema");
+    const { eq } = await import("drizzle-orm");
+    const bcrypt = (await import("bcryptjs")).default;
+    const { serverCache } = await import("./server-cache");
+
+    if (!name || !name.trim()) throw new Error("Name is required");
+    if (!email || !email.includes("@")) throw new Error("A valid email is required");
+    if (!password || password.length < 8) {
+      throw new Error("Password must be at least 8 characters");
+    }
+
+    const [dept] = await db
+      .select({ id: departments.id, slug: departments.slug })
+      .from(departments)
+      .where(eq(departments.id, deptId))
+      .limit(1);
+
+    if (!dept) throw new Error("Department not found");
+
+    const adminToken = getCookie("admin_session_token");
+    const hodSlug = getCookie("hod_session_dept");
+    let allowed = false;
+
+    if (adminToken) {
+      const [session] = await db
+        .select({ role: admins.role, authorizedDepts: admins.authorizedDepts })
+        .from(adminSessions)
+        .innerJoin(admins, eq(adminSessions.adminId, admins.adminId))
+        .where(eq(adminSessions.id, adminToken))
+        .limit(1);
+
+      if (session?.role === "super_admin") allowed = true;
+      else if (
+        session &&
+        Array.isArray(session.authorizedDepts) &&
+        (session.authorizedDepts.includes(dept.slug) ||
+          session.authorizedDepts.includes(dept.id))
+      ) {
+        allowed = true;
+      }
+    }
+
+    if (!allowed && hodSlug === dept.slug) allowed = true;
+    if (!allowed) throw new Error("Unauthorized");
+
+    // Check if email is already taken
+    const [existing] = await db
+      .select({ id: faculty.id })
+      .from(faculty)
+      .where(eq(faculty.faculty_email, email.toLowerCase().trim()))
+      .limit(1);
+
+    if (existing) {
+      throw new Error(`A faculty account with email ${email} already exists.`);
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+
+    const [newFaculty] = await db
+      .insert(faculty)
+      .values({
+        dept_id: deptId,
+        name: name.trim(),
+        designation: designation?.trim() || "Assistant Professor",
+        faculty_email: email.toLowerCase().trim(),
+        faculty_password_hash: hash,
+        photo_url: "",
+        is_former: false,
+      })
+      .returning();
+
+    serverCache.invalidate("dept_details_", true);
+    serverCache.invalidate("faculty_all");
+    serverCache.invalidate("departments_list");
+
+    return { success: true, facultyId: newFaculty.id, name: newFaculty.name };
+  });

@@ -1040,6 +1040,7 @@ export const faculty = pgTable("faculty", {
   biography: text("biography").default(""),
   faculty_email: text("faculty_email").unique(),
   faculty_password_hash: text("faculty_password_hash"),
+  is_former: boolean("is_former").default(false).notNull(),
 
   // Section 1: Profile Details
   qualifications: text("qualifications").array().default([]),

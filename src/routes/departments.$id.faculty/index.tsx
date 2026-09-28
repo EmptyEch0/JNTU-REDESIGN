@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData, Link, useParams, useRouter } from "@tanstack/react-router";
 import { type DepartmentData } from "@/functions/departments";
-import { syncFaculty, updateDepartment } from "@/lib/departments";
+import { syncFaculty, updateDepartment, deleteFaculty } from "@/lib/departments";
 import { useAdmin } from "@/context/AdminContext";
 import { useState, useEffect, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -18,6 +18,9 @@ import {
   RotateCcw,
   Sparkles,
   AlertTriangle,
+  GraduationCap,
+  History,
+  UserMinus,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -33,14 +36,36 @@ export const Route = createFileRoute("/departments/$id/faculty/")({
   head: ({ loaderData }) => {
     const data = loaderData as DepartmentData | undefined;
     const name = data?.name || "Department";
+    const slug = (data?.slug || "").toLowerCase();
+    const deptCodeMap: Record<string, string> = {
+      it: "IT",
+      cse: "CSE",
+      ece: "ECE",
+      eee: "EEE",
+      mech: "MECH",
+      met: "MET",
+      civil: "CIVIL",
+      mba: "MBA",
+      bshss: "BSH",
+    };
+    const deptCode = deptCodeMap[slug] || slug.toUpperCase();
+    const pageTitle = `Faculty Members & Profiles — Department of ${name} (${deptCode}) | JNTU-GV`;
+    const desc = `Distinguished faculty members, professors, associate professors, and researchers in the Department of ${name} (${deptCode}) at JNTU-GV College of Engineering Vizianagaram.`;
+    const canonicalUrl = `https://jntugvcev.edu.in/departments/${slug}/faculty`;
+
     return {
       meta: [
-        { title: `Faculty Profiles — Department of ${name} | JNTU-GV CEV` },
+        { title: pageTitle },
+        { name: "description", content: desc },
         {
-          name: "description",
-          content: `Distinguished faculty members, professors, and researchers in the Department of ${name} at JNTU-GV College of Engineering Vizianagaram.`,
+          name: "keywords",
+          content: `${deptCode} faculty JNTU GV, ${deptCode} professors JNTUGV, ${deptCode} teachers jntu gv, Department of ${name} faculty list, JNTU GV ${deptCode} hod`,
         },
+        { property: "og:title", content: pageTitle },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: canonicalUrl },
       ],
+      links: [{ rel: "canonical", href: canonicalUrl }],
     };
   },
   component: FacultyPage,
@@ -52,6 +77,7 @@ interface FacultyCardProps {
     name: string;
     designation: string;
     photo_url?: string | null;
+    is_former?: boolean;
   };
   index: number;
   totalCount: number;
@@ -59,9 +85,11 @@ interface FacultyCardProps {
   deptId: string;
   isDragging?: boolean;
   isHod?: boolean;
+  isFormer?: boolean;
   handleUpdate: (id: string | number, field: string, value: string) => void;
   onRequestDelete: (target: { id: string | number; name: string }) => void;
   onMakeHod?: (targetId: string | number) => void;
+  onToggleFormer?: (targetId: string | number) => void;
   moveFaculty: (index: number, direction: "up" | "down") => void;
   onDragStart: (e: React.DragEvent, index: number) => void;
   onDragEnter: (e: React.DragEvent, index: number) => void;
@@ -77,9 +105,11 @@ function FacultyCard({
   deptId,
   isDragging,
   isHod,
+  isFormer,
   handleUpdate,
   onRequestDelete,
   onMakeHod,
+  onToggleFormer,
   moveFaculty,
   onDragStart,
   onDragEnter,
@@ -87,6 +117,7 @@ function FacultyCard({
   onDragOver,
 }: FacultyCardProps) {
   const cardId = String(f.id);
+  const cardIsFormer = isFormer ?? Boolean(f.is_former);
 
   return (
     <motion.div
@@ -106,9 +137,13 @@ function FacultyCard({
           : isEditMode
           ? isHod
             ? "border-amber-400 bg-amber-50/20 ring-2 ring-amber-300 shadow-sm cursor-grab active:cursor-grabbing"
+            : cardIsFormer
+            ? "border-slate-300 bg-slate-50/70 hover:border-amber-400 ring-2 ring-slate-100 shadow-sm hover:shadow-md cursor-grab active:cursor-grabbing"
             : "border-amber-200 hover:border-amber-400 ring-2 ring-amber-50 shadow-sm hover:shadow-md cursor-grab active:cursor-grabbing"
           : isHod
           ? "border-amber-300/80 bg-gradient-to-br from-amber-50/30 via-white to-amber-50/10 shadow-md ring-2 ring-amber-100"
+          : cardIsFormer
+          ? "border-slate-200/90 bg-slate-50/60 shadow-xs hover:border-slate-300 hover:shadow-sm"
           : "border-slate-100 shadow-sm hover:border-blue-500/20 hover:shadow-md"
       }`}
     >
@@ -181,7 +216,7 @@ function FacultyCard({
           />
         </div>
       ) : (
-        <div className={`h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 bg-slate-100 shadow-xs ${isHod ? 'border-amber-400 ring-2 ring-amber-200' : 'border-slate-50'}`}>
+        <div className={`h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-2 bg-slate-100 shadow-xs ${isHod ? 'border-amber-400 ring-2 ring-amber-200' : cardIsFormer ? 'border-slate-200 grayscale-25' : 'border-slate-50'}`}>
           <SafeImage
             src={f.photo_url}
             alt={f.name}
@@ -198,8 +233,13 @@ function FacultyCard({
         {isEditMode ? (
           <div className="space-y-2 pr-12">
             <div className="space-y-1">
-              <label className="text-[10px] uppercase font-bold tracking-wider text-amber-700/80">
-                Faculty Name
+              <label className="text-[10px] uppercase font-bold tracking-wider text-amber-700/80 flex items-center justify-between">
+                <span>Faculty Name</span>
+                {cardIsFormer && (
+                  <span className="text-[9px] font-bold text-slate-500 bg-slate-200 px-1.5 py-0.2 rounded">
+                    Former
+                  </span>
+                )}
               </label>
               <input
                 className="w-full font-bold text-blue-900 bg-amber-50/30 border border-amber-200 rounded-lg px-2.5 py-1 text-sm outline-none focus:ring-2 focus:ring-amber-400/40 focus:bg-white transition-all"
@@ -221,34 +261,67 @@ function FacultyCard({
               />
             </div>
 
-            {/* Actions: Make as HOD + Deep Link Edit Profile */}
-            <div className="pt-1 flex flex-wrap items-center gap-2">
-              {isHod ? (
-                <span className="inline-flex items-center text-[11px] font-bold text-amber-900 bg-amber-100/90 px-2.5 py-1 rounded-lg border border-amber-300 shadow-2xs">
-                  <span>Current HOD</span>
-                </span>
-              ) : onMakeHod ? (
+            {/* Actions: Make as HOD + Toggle Former + Deep Link Edit Profile */}
+            <div className="pt-1 flex flex-wrap items-center gap-1.5">
+              {!cardIsFormer && (
+                <>
+                  {isHod ? (
+                    <span className="inline-flex items-center text-[11px] font-bold text-amber-900 bg-amber-100/90 px-2 py-1 rounded-lg border border-amber-300 shadow-2xs">
+                      <span>Current HOD</span>
+                    </span>
+                  ) : onMakeHod ? (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onMakeHod(cardId);
+                      }}
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 hover:text-amber-950 bg-amber-100/90 hover:bg-amber-200 px-2 py-1 rounded-lg border border-amber-300/80 transition-colors shadow-2xs cursor-pointer"
+                      title="Designate this member as Head of Department and move to top"
+                    >
+                      <UserCheck size={12} className="text-amber-700" />
+                      <span>Make as HOD</span>
+                    </button>
+                  ) : null}
+                </>
+              )}
+
+              {/* Toggle Former Faculty Button */}
+              {onToggleFormer && (
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onMakeHod(cardId);
+                    onToggleFormer(cardId);
                   }}
-                  className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-800 hover:text-amber-950 bg-amber-100/90 hover:bg-amber-200 px-2.5 py-1 rounded-lg border border-amber-300/80 transition-colors shadow-2xs cursor-pointer"
-                  title="Designate this member as Head of Department and move to top"
+                  className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-1 rounded-lg transition-colors shadow-2xs cursor-pointer border ${
+                    cardIsFormer
+                      ? "text-emerald-800 bg-emerald-100 hover:bg-emerald-200 border-emerald-300"
+                      : "text-slate-700 bg-slate-100 hover:bg-slate-200 border-slate-300"
+                  }`}
+                  title={cardIsFormer ? "Restore member to active faculty roster" : "Move member to Former Faculty Members section"}
                 >
-                  <UserCheck size={12} className="text-amber-700" />
-                  <span>Make as HOD</span>
+                  {cardIsFormer ? (
+                    <>
+                      <UserCheck size={12} className="text-emerald-700" />
+                      <span>Restore to Active</span>
+                    </>
+                  ) : (
+                    <>
+                      <GraduationCap size={12} className="text-slate-600" />
+                      <span>Mark as Former</span>
+                    </>
+                  )}
                 </button>
-              ) : null}
+              )}
 
               <Link
                 to="/departments/$id/faculty/$facultyId"
                 params={{ id: deptId, facultyId: cardId }}
-                className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-lg transition-colors border border-slate-200 shadow-2xs"
+                className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg transition-colors border border-slate-200 shadow-2xs"
               >
                 <UserCheck size={12} />
-                <span>Edit Full Profile</span>
+                <span>Edit Profile</span>
               </Link>
             </div>
           </div>
@@ -259,6 +332,14 @@ function FacultyCard({
                 <div className="mb-1">
                   <span className="inline-flex items-center text-[11px] font-bold text-amber-900 bg-amber-100/90 border border-amber-300/80 px-2.5 py-0.5 rounded-full shadow-2xs">
                     <span>Head of Department</span>
+                  </span>
+                </div>
+              )}
+              {cardIsFormer && (
+                <div className="mb-1">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full shadow-2xs">
+                    <GraduationCap size={11} className="text-slate-500" />
+                    <span>Former Faculty Member</span>
                   </span>
                 </div>
               )}
@@ -278,6 +359,8 @@ function FacultyCard({
                 className={`inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-2xs ${
                   isHod
                     ? 'text-amber-900 bg-amber-100/90 hover:bg-amber-200 border border-amber-200'
+                    : cardIsFormer
+                    ? 'text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200'
                     : 'text-slate-700 bg-slate-100 hover:bg-slate-200'
                 }`}
               >
@@ -523,10 +606,29 @@ function FacultyPage() {
     toast.success(`Set "${targetMember.name}" as Head of Department (${newHodDesignation}). Click 'Save Roster' to save.`);
   };
 
+  // Toggle Former Faculty status
+  const toggleFormer = (targetId: string | number) => {
+    const tId = String(targetId);
+    setFacultyList((prev) =>
+      prev.map((f) => {
+        if (String(f.id) === tId) {
+          const nextFormer = !f.is_former;
+          let nextDesig = f.designation || "Assistant Professor";
+          if (nextFormer) {
+            nextDesig = nextDesig.replace(/\s*&\s*(hod|head of (the )?department)/gi, "").trim();
+          }
+          return { ...f, is_former: nextFormer, designation: nextDesig };
+        }
+        return f;
+      })
+    );
+    toast.info("Updated faculty status. Click 'Save Roster' to save changes.");
+  };
+
   const [facultyToDelete, setFacultyToDelete] = useState<{ id: string | number; name: string } | null>(null);
 
   // Direct remove faculty implementation and move to Deleted Faculty archive
-  const confirmDeleteFaculty = () => {
+  const confirmDeleteFaculty = async () => {
     if (facultyToDelete) {
       const targetId = String(facultyToDelete.id);
       const itemToDelete = facultyList.find((f) => String(f.id) === targetId);
@@ -549,7 +651,17 @@ function FacultyPage() {
       }
 
       setFacultyList((prev) => prev.filter((f) => String(f.id) !== targetId));
-      toast.success(`Removed "${facultyToDelete.name}" to Deleted/Archived archive below.`);
+
+      const numId = Number(targetId);
+      if (!isNaN(numId) && numId > 0) {
+        try {
+          await deleteFaculty({ data: { id: numId } });
+        } catch (e) {
+          console.error("Failed to delete faculty from DB:", e);
+        }
+      }
+
+      toast.success(`Removed "${facultyToDelete.name}".`);
       setFacultyToDelete(null);
     }
   };
@@ -591,7 +703,7 @@ function FacultyPage() {
   };
 
   // Permanently purge a deleted faculty item from the archive
-  const purgeDeletedFaculty = (id: string | number) => {
+  const purgeDeletedFaculty = async (id: string | number) => {
     const targetId = String(id);
     const updatedDeleted = deletedFacultyList.filter((f) => String(f.id) !== targetId);
     setDeletedFacultyList(updatedDeleted);
@@ -599,6 +711,14 @@ function FacultyPage() {
       localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
       localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
     } catch {}
+
+    const numId = Number(targetId);
+    if (!isNaN(numId) && numId > 0) {
+      try {
+        await deleteFaculty({ data: { id: numId } });
+      } catch {}
+    }
+
     toast.info("Removed permanently from archive.");
   };
 
@@ -663,21 +783,25 @@ function FacultyPage() {
     setDraggingIndex(null);
   };
 
+  // Active vs Former partition
+  const activeFaculty = facultyList.filter((f) => !f.is_former);
+  const formerFaculty = facultyList.filter((f) => Boolean(f.is_former));
+
   // In non-edit mode, display HOD at top and rest sorted. In edit mode, display full reorderable list.
   const rosterHod = !isEditMode
-    ? facultyList.find((f) => /hod|head of (the )?department/i.test(f.designation || ""))
+    ? activeFaculty.find((f) => /hod|head of (the )?department/i.test(f.designation || ""))
     : null;
   // Fall back to an additional-charge HOD from another department's roster; their profile lives there
   const hodMember = rosterHod || (!isEditMode ? data?.hod_member : null) || null;
   const hodProfileDeptId = rosterHod ? deptId : data?.hod_member?.dept_slug || deptId;
 
-  const displayList = !isEditMode
+  const displayActiveList = !isEditMode
     ? sortFacultyList(
-        facultyList.filter(
+        activeFaculty.filter(
           (f) => !/hod|head of (the )?department/i.test(f.designation || "")
         )
       )
-    : facultyList;
+    : activeFaculty;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
@@ -694,8 +818,8 @@ function FacultyPage() {
           </h2>
           <p className="text-sm text-slate-600 mt-1 max-w-2xl">
             {isEditMode
-              ? "Hold and drag cards, or use arrow buttons to rearrange positions. Click 'Make as HOD' to change leadership. Add, edit, or remove faculty members and click 'Save Roster'."
-              : "Detailed profiles, research domains, and academic credentials of department faculty."}
+              ? "Hold and drag cards, or use arrow buttons to rearrange positions. Click 'Make as HOD' to change leadership. Mark members as Former Faculty or Delete as needed, then click 'Save Roster'."
+              : `Distinguished faculty members, professors, and researchers in the Department of ${data?.name || "the department"}.`}
           </p>
         </div>
 
@@ -732,7 +856,7 @@ function FacultyPage() {
         )}
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Isolated Centered Row for HOD in Public View */}
         {hodMember && (
           <div className="flex justify-center w-full mb-2">
@@ -747,6 +871,7 @@ function FacultyPage() {
                 handleUpdate={handleUpdate}
                 onRequestDelete={(target) => setFacultyToDelete(target)}
                 onMakeHod={makeHod}
+                onToggleFormer={toggleFormer}
                 moveFaculty={moveFaculty}
                 onDragStart={handleDragStart}
                 onDragEnter={handleDragEnter}
@@ -757,37 +882,105 @@ function FacultyPage() {
           </div>
         )}
 
-        {/* Animated Auto-Adjustable 2-Column Grid Layout */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
-          <AnimatePresence mode="popLayout">
-            {displayList.map((f, idx) => {
-              const cardIsHod = /hod|head of (the )?department/i.test(f.designation || "");
-              return (
-                <FacultyCard
-                  key={f.id ? String(f.id) : `idx_${idx}`}
-                  f={f}
-                  index={idx}
-                  totalCount={displayList.length}
-                  isEditMode={isEditMode}
-                  deptId={deptId}
-                  isDragging={draggingIndex === idx}
-                  isHod={cardIsHod}
-                  handleUpdate={handleUpdate}
-                  onRequestDelete={(target) => setFacultyToDelete(target)}
-                  onMakeHod={makeHod}
-                  moveFaculty={moveFaculty}
-                  onDragStart={handleDragStart}
-                  onDragEnter={handleDragEnter}
-                  onDragEnd={handleDragEnd}
-                  onDragOver={handleDragOver}
-                />
-              );
-            })}
-          </AnimatePresence>
-        </motion.div>
+        {/* ─── ACTIVE FACULTY SECTION ─── */}
+        <div>
+          {isEditMode && (
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                <Users size={16} className="text-blue-600" />
+                <span>Active Faculty Members ({displayActiveList.length})</span>
+              </h3>
+            </div>
+          )}
+          <motion.div
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            <AnimatePresence mode="popLayout">
+              {displayActiveList.map((f, idx) => {
+                const cardIsHod = /hod|head of (the )?department/i.test(f.designation || "");
+                return (
+                  <FacultyCard
+                    key={f.id ? String(f.id) : `active_${idx}`}
+                    f={f}
+                    index={idx}
+                    totalCount={displayActiveList.length}
+                    isEditMode={isEditMode}
+                    deptId={deptId}
+                    isDragging={draggingIndex === idx}
+                    isHod={cardIsHod}
+                    handleUpdate={handleUpdate}
+                    onRequestDelete={(target) => setFacultyToDelete(target)}
+                    onMakeHod={makeHod}
+                    onToggleFormer={toggleFormer}
+                    moveFaculty={moveFaculty}
+                    onDragStart={handleDragStart}
+                    onDragEnter={handleDragEnter}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={handleDragOver}
+                  />
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+
+        {/* ─── FORMER FACULTY MEMBERS SECTION ─── */}
+        {(formerFaculty.length > 0 || isEditMode) && (
+          <div className="pt-8 border-t-2 border-slate-200/80 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-slate-100 via-slate-50 to-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center flex-shrink-0 shadow-2xs">
+                  <GraduationCap size={22} />
+                </div>
+                <div>
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                    <span>Former Faculty Members</span>
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-900 border border-indigo-200">
+                      {formerFaculty.length}
+                    </span>
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+                    Honoring the distinguished professors and faculty members who have served in the Department of {data?.name || "the department"}.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {formerFaculty.length === 0 ? (
+              <div className="p-8 text-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-xs text-slate-500">
+                No former faculty members designated yet. Click <strong>"Mark as Former"</strong> on any active faculty card above to move them here.
+              </div>
+            ) : (
+              <motion.div
+                layout
+                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              >
+                <AnimatePresence mode="popLayout">
+                  {formerFaculty.map((f, idx) => (
+                    <FacultyCard
+                      key={f.id ? String(f.id) : `former_${idx}`}
+                      f={f}
+                      index={idx}
+                      totalCount={formerFaculty.length}
+                      isEditMode={isEditMode}
+                      deptId={deptId}
+                      isFormer={true}
+                      handleUpdate={handleUpdate}
+                      onRequestDelete={(target) => setFacultyToDelete(target)}
+                      onToggleFormer={toggleFormer}
+                      moveFaculty={moveFaculty}
+                      onDragStart={handleDragStart}
+                      onDragEnter={handleDragEnter}
+                      onDragEnd={handleDragEnd}
+                      onDragOver={handleDragOver}
+                    />
+                  ))}
+                </AnimatePresence>
+              </motion.div>
+            )}
+          </div>
+        )}
 
         {/* ─── DELETED / ARCHIVED FACULTY SECTION (ADMIN & HOD ONLY) ─── */}
         {isEditMode && deletedFacultyList.length > 0 && (

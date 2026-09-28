@@ -216,6 +216,108 @@ export const listAdminsForManagement = createServerFn({
   return authRepository.listAdmins();
 });
 
+export const createAdminAccount = createServerFn({
+  method: "POST",
+})
+  .validator(
+    (d: {
+      name: string;
+      email: string;
+      role: "super_admin" | "department_admin";
+      authProvider: "email" | "google";
+      password?: string;
+      authorizedDepts?: string[];
+    }) => d,
+  )
+  .handler(async ({ data }) => {
+    const { name, email, role, authProvider, password, authorizedDepts = [] } = data;
+    const { userAgent, ipAddress } = await getRequestContext();
+    const { authService } = await import("./auth.service");
+    const { authRepository } = await import("./auth.repository");
+    const { getCookie } = await import("@tanstack/react-start/server");
+
+    const token = getCookie("admin_session_token");
+    if (!token) throw new Error("Unauthorized");
+
+    const currentAdmin = await authService.validateSession(token, ipAddress, userAgent);
+    if (!currentAdmin || currentAdmin.role !== "super_admin") {
+      throw new Error("Only super administrators can create new admin accounts.");
+    }
+
+    if (!name || !name.trim()) throw new Error("Name is required");
+    if (!email || !email.includes("@")) throw new Error("A valid email is required");
+
+    const existing = await authRepository.findAdminByEmail(email);
+    if (existing) {
+      throw new Error(`An administrator with email ${email} already exists.`);
+    }
+
+    let passwordHash: string | null = null;
+    if (authProvider === "email") {
+      if (!password || password.length < 12) {
+        throw new Error("Initial password must be at least 12 characters");
+      }
+      passwordHash = await authService.hashPassword(password);
+    }
+
+    const newAdmin = await authRepository.createAdmin({
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+      role,
+      authProvider,
+      passwordHash,
+      authorizedDepts,
+    });
+
+    await authService.logAction({
+      adminId: currentAdmin.adminId,
+      action: "ADMIN_CREATED",
+      ipAddress,
+      userAgent,
+      details: `Created admin ${email} with role ${role}`,
+    });
+
+    return { success: true, admin: newAdmin };
+  });
+
+export const deleteAdminAccount = createServerFn({
+  method: "POST",
+})
+  .validator((d: { adminId: string }) => d)
+  .handler(async ({ data }) => {
+    const { adminId } = data;
+    const { userAgent, ipAddress } = await getRequestContext();
+    const { authService } = await import("./auth.service");
+    const { db } = await import("../db");
+    const { admins } = await import("../db/schema");
+    const { eq } = await import("drizzle-orm");
+    const { getCookie } = await import("@tanstack/react-start/server");
+
+    const token = getCookie("admin_session_token");
+    if (!token) throw new Error("Unauthorized");
+
+    const currentAdmin = await authService.validateSession(token, ipAddress, userAgent);
+    if (!currentAdmin || currentAdmin.role !== "super_admin") {
+      throw new Error("Only super administrators can delete admin accounts.");
+    }
+
+    if (currentAdmin.adminId === adminId) {
+      throw new Error("You cannot delete your own active super admin account.");
+    }
+
+    await db.delete(admins).where(eq(admins.adminId, adminId));
+
+    await authService.logAction({
+      adminId: currentAdmin.adminId,
+      action: "ADMIN_DELETED",
+      ipAddress,
+      userAgent,
+      details: `Deleted admin ${adminId}`,
+    });
+
+    return { success: true };
+  });
+
 /**
  * Controller endpoint to log out the active Admin
  */

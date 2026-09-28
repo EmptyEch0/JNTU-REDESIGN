@@ -934,11 +934,8 @@ function FacultyPage() {
                   <GraduationCap size={22} />
                 </div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                    <span>Former Faculty Members</span>
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-900 border border-indigo-200">
-                      {formerFaculty.length}
-                    </span>
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+                    Former Faculty Members
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
                     Honoring the distinguished professors and faculty members who have served in the Department of {data?.name || "the department"}.

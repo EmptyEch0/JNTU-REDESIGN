@@ -200,10 +200,9 @@ const SITEMAP_DATA: SitemapSection[] = [
       },
       {
         label: "Central Academic Portal (CAP)",
-        to: "https://cap.jntugv.edu.in",
-        desc: "JNTU-GV University attendance and examination records",
-        isExternal: true,
-        badge: "Portal",
+        to: "/cap",
+        desc: "JNTU-GV Centralized Academic Platform overview, story & portal access",
+        badge: "Platform",
       },
       {
         label: "Student Alumni Network",

@@ -18,6 +18,7 @@ import { Route as AdministrationRouteImport } from './routes/administration'
 import { Route as AntiRaggingRouteImport } from './routes/anti-ragging'
 import { Route as BankingRouteImport } from './routes/banking'
 import { Route as CampusLifeRouteImport } from './routes/campus-life'
+import { Route as CapRouteImport } from './routes/cap'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ContributorsRouteImport } from './routes/contributors'
 import { Route as Dept7e1c4d8aRouteImport } from './routes/dept-7e1c4d8a'
@@ -189,6 +190,11 @@ const BankingRoute = BankingRouteImport.update({
 const CampusLifeRoute = CampusLifeRouteImport.update({
   id: '/campus-life',
   path: '/campus-life',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CapRoute = CapRouteImport.update({
+  id: '/cap',
+  path: '/cap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -869,6 +875,7 @@ export interface FileRoutesByFullPath {
   '/anti-ragging': typeof AntiRaggingRoute
   '/banking': typeof BankingRoute
   '/campus-life': typeof CampusLifeRouteWithChildren
+  '/cap': typeof CapRoute
   '/contact': typeof ContactRoute
   '/contributors': typeof ContributorsRoute
   '/dept-7e1c4d8a': typeof Dept7e1c4d8aRoute
@@ -1004,6 +1011,7 @@ export interface FileRoutesByTo {
   '/administration': typeof AdministrationRouteWithChildren
   '/anti-ragging': typeof AntiRaggingRoute
   '/banking': typeof BankingRoute
+  '/cap': typeof CapRoute
   '/contact': typeof ContactRoute
   '/contributors': typeof ContributorsRoute
   '/dept-7e1c4d8a': typeof Dept7e1c4d8aRoute
@@ -1136,6 +1144,7 @@ export interface FileRoutesById {
   '/anti-ragging': typeof AntiRaggingRoute
   '/banking': typeof BankingRoute
   '/campus-life': typeof CampusLifeRouteWithChildren
+  '/cap': typeof CapRoute
   '/contact': typeof ContactRoute
   '/contributors': typeof ContributorsRoute
   '/dept-7e1c4d8a': typeof Dept7e1c4d8aRoute
@@ -1276,6 +1285,7 @@ export interface FileRouteTypes {
     | '/anti-ragging'
     | '/banking'
     | '/campus-life'
+    | '/cap'
     | '/contact'
     | '/contributors'
     | '/dept-7e1c4d8a'
@@ -1411,6 +1421,7 @@ export interface FileRouteTypes {
     | '/administration'
     | '/anti-ragging'
     | '/banking'
+    | '/cap'
     | '/contact'
     | '/contributors'
     | '/dept-7e1c4d8a'
@@ -1542,6 +1553,7 @@ export interface FileRouteTypes {
     | '/anti-ragging'
     | '/banking'
     | '/campus-life'
+    | '/cap'
     | '/contact'
     | '/contributors'
     | '/dept-7e1c4d8a'
@@ -1681,6 +1693,7 @@ export interface RootRouteChildren {
   AntiRaggingRoute: typeof AntiRaggingRoute
   BankingRoute: typeof BankingRoute
   CampusLifeRoute: typeof CampusLifeRouteWithChildren
+  CapRoute: typeof CapRoute
   ContactRoute: typeof ContactRoute
   ContributorsRoute: typeof ContributorsRoute
   Dept7e1c4d8aRoute: typeof Dept7e1c4d8aRoute
@@ -1803,6 +1816,13 @@ declare module '@tanstack/react-router' {
       path: '/campus-life'
       fullPath: '/campus-life'
       preLoaderRoute: typeof CampusLifeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cap': {
+      id: '/cap'
+      path: '/cap'
+      fullPath: '/cap'
+      preLoaderRoute: typeof CapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -2973,6 +2993,7 @@ const rootRouteChildren: RootRouteChildren = {
   AntiRaggingRoute: AntiRaggingRoute,
   BankingRoute: BankingRoute,
   CampusLifeRoute: CampusLifeRouteWithChildren,
+  CapRoute: CapRoute,
   ContactRoute: ContactRoute,
   ContributorsRoute: ContributorsRoute,
   Dept7e1c4d8aRoute: Dept7e1c4d8aRoute,

@@ -183,7 +183,7 @@ export const NAV: {
           title: "Campus Life & Portals",
           items: [
             { label: "Student Alumni", to: "https://alumni.jntugv.edu.in", desc: "Networking platform for former & current students" },
-            { label: "Central Academic Portal", to: "https://cap.jntugv.edu.in", desc: "Official student academic portal (CAP)" },
+            { label: "Central Academic Portal", to: "/cap", desc: "Official student academic portal (CAP)" },
             { label: "Gallery", to: "/gallery", desc: "Moments on campus" },
           ],
         },
@@ -503,8 +503,8 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   {
     label: "Central Academic Portal",
     group: "Student Corner",
-    keywords: "central academic portal cap marks attendance results student portal jntugv",
-    to: "https://cap.jntugv.edu.in",
+    keywords: "central academic portal cap marks attendance results student portal jntugv start here",
+    to: "/cap",
   },
   {
     label: "EDC",
@@ -603,7 +603,7 @@ export const STUDENT_SUBNAV = [
   { label: "Women Empowerment", to: "/women-empowerment" },
   { label: "Anti-Ragging", to: "/anti-ragging" },
   { label: "Student Alumni", to: "https://alumni.jntugv.edu.in" },
-  { label: "Central Academic Portal", to: "https://cap.jntugv.edu.in" },
+  { label: "Central Academic Portal", to: "/cap" },
   { label: "RTI Act", to: "/rti" },
   { label: "EDC", to: "/edc" },
   { label: "Professional Bodies", to: "/professional-bodies" },

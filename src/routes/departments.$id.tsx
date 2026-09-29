@@ -364,7 +364,7 @@ function DepartmentLayout() {
         </div>
       </div>
 
-      <div className="max-w-[1380px] w-full mx-auto py-10 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 relative">
+      <div className={`max-w-[1380px] w-full mx-auto py-10 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 relative ${isDeptSite && !isEditMode ? "dept-standalone" : ""}`}>
         
         {/* Floating Toggle Button for Mobile Screen with Safe Area Offset */}
         <button 

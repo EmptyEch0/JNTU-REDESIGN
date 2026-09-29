@@ -653,3 +653,9 @@ body {
   pointer-events: none;
   opacity: 0.08;
 }
+/* Department standalone sites: the top navbar replaces the sidebar */
+.dept-standalone > aside,
+.dept-standalone > button,
+.dept-standalone > div[aria-hidden="true"] {
+  display: none !important;
+}

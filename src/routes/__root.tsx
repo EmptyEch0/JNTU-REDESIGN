@@ -32,6 +32,7 @@ import { PushNotificationBanner } from "@/components/PushNotificationBanner";
 import { SessionTimeoutModal } from "@/components/SessionTimeoutModal";
 import { createServerFn } from "@tanstack/react-start";
 import { deptFromHostname } from "@/lib/dept-host";
+import { DeptTopNav } from "@/components/departments/DeptTopNav";
 
 const getRequestHostFn = createServerFn({ method: "GET" }).handler(async () => {
   const { getRequestHost } = await import("@tanstack/react-start/server");
@@ -294,7 +295,7 @@ function AdminContent() {
           </div>
 
           {/* Floating Dynamic Capsule Navigation Bar (Overlays directly on hero carousel / page hero with zero background) */}
-          {!isDeptSite && <MegaMenu />}
+          {isDeptSite ? <DeptTopNav slug={hostDept!} /> : <MegaMenu />}
         </div>
       )}
 

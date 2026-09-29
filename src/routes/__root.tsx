@@ -30,6 +30,13 @@ import { ActionFeedbackOverlay } from "@/components/ActionFeedbackOverlay";
 import { NotFound } from "@/components/NotFound";
 import { PushNotificationBanner } from "@/components/PushNotificationBanner";
 import { SessionTimeoutModal } from "@/components/SessionTimeoutModal";
+import { createServerFn } from "@tanstack/react-start";
+import { deptFromHostname } from "@/lib/dept-host";
+
+const getRequestHostFn = createServerFn({ method: "GET" }).handler(async () => {
+  const { getRequestHost } = await import("@tanstack/react-start/server");
+  return { host: getRequestHost({ xForwardedHost: true }) };
+});
 
 function NotFoundComponent() {
   return <NotFound />;
@@ -57,6 +64,12 @@ function GlobalSpinner() {
 // 2. The most stable way to define the route with types
 export const Route = createRootRoute({
   pendingComponent: GlobalSpinner,
+  loader: async () => {
+    const host = typeof window !== "undefined"
+      ? window.location.hostname
+      : (await getRequestHostFn()).host.split(":")[0];
+    return { hostDept: deptFromHostname(host) };
+  },
   context: () => ({}) as MyRootContext,
   head: () => ({
     meta: [
@@ -159,6 +172,8 @@ function RootComponent() {
 function AdminContent() {
   // 1. Safely pull the active pathname string
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const { hostDept } = Route.useLoaderData();
+  const isDeptSite = Boolean(hostDept);
 
   // 2. Defer Chatbot mount until the browser is idle — prevents the lazy
   //    bundle from being requested or rendered during initial paint.
@@ -269,17 +284,17 @@ function AdminContent() {
         <div className={`sticky ${isAdmin ? "top-12" : "top-0"} z-50 w-full pointer-events-none transition-all duration-200`}>
           <div className="pointer-events-auto shadow-md">
             {/* Top Navy Blue Ribbon with Quick Links & Social */}
-            <TopRibbon />
+            {!isDeptSite && <TopRibbon />}
 
             {/* Official College Header Banner */}
             <HeaderBanner />
 
             {/* Updates / Notice Marquee Ticker */}
-            <NoticeTicker />
+            {!isDeptSite && <NoticeTicker />}
           </div>
 
           {/* Floating Dynamic Capsule Navigation Bar (Overlays directly on hero carousel / page hero with zero background) */}
-          <MegaMenu />
+          {!isDeptSite && <MegaMenu />}
         </div>
       )}
 

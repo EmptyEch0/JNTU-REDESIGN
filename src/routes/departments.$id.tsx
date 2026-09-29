@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation, useNavigate, useLoaderData } from "@tanstack/react-router";
 import { getDepartmentDetails, type DepartmentData } from "@/functions/departments";
 import { SafeImage } from "@/components/SafeImage";
 import { getAssetUrl, updateDepartment } from "@/lib/departments";
@@ -71,7 +71,7 @@ export const Route = createFileRoute("/departments/$id")({
       data?.description?.replace(/\s+/g, " ").trim().slice(0, 160) ||
       `Department of ${name} (${deptCode}) at JNTU-GV College of Engineering Vizianagaram (JNTU-GV). Explore faculty roster, academic curriculum, syllabus, lab facilities, and HOD desk.`;
     const canonicalUrl = `https://jntugvcev.edu.in/departments/${slug}`;
-    const subdomainUrl = `https://${slug}.jntugv.edu.in/`;
+    const subdomainUrl = `https://${slug}.jntugvcev.edu.in/`;
 
     const keywords = [
       `${deptCode} JNTU GV`,
@@ -213,6 +213,8 @@ function DepartmentLayout() {
   const loaderData = Route.useLoaderData() as unknown as DepartmentData;
   const location = useLocation();
   const navigate = useNavigate();
+  const { hostDept } = useLoaderData({ from: "__root__" }) as { hostDept?: string };
+  const isDeptSite = Boolean(hostDept);
   const { isAdmin, role, hodDeptId, hasEditPermission, isDeptEditing, setDeptEditing, logout } = useAdmin();
   const queryClient = useQueryClient();
 
@@ -349,7 +351,7 @@ function DepartmentLayout() {
             ) : (
               <div>
                 <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight uppercase">Department of {loaderData.name}</h1>
-                <div className="mt-4 flex items-center justify-center gap-2 text-blue-300 font-medium text-sm">
+                <div className={isDeptSite ? "hidden" : "mt-4 flex items-center justify-center gap-2 text-blue-300 font-medium text-sm"}>
                   <Link to="/" className="hover:text-white">Home</Link>
                   <ChevronRight size={14} />
                   <Link to="/departments" className="hover:text-white">Departments</Link>

@@ -1,6 +1,7 @@
 import { createRouter, useRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { getQueryClient } from "@/lib/query-client";
+import { deptFromHostname, isPassThrough } from "@/lib/dept-host";
 
 function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
@@ -68,6 +69,25 @@ export const getRouter = () => {
     defaultPendingMs: 150,
     defaultPendingMinMs: 200,
     defaultErrorComponent: DefaultErrorComponent,
+    rewrite: {
+      // it.jntugvcev.edu.in/hod  ->  internal /departments/it/hod
+      input: ({ url }) => {
+        const slug = deptFromHostname(url.hostname);
+        if (!slug || isPassThrough(url.pathname)) return url;
+        url.pathname = `/departments/${slug}${url.pathname === "/" ? "" : url.pathname}`;
+        return url;
+      },
+      // internal /departments/it/hod  ->  shown as /hod
+      output: ({ url }) => {
+        const slug = deptFromHostname(url.hostname);
+        if (!slug) return url;
+        const prefix = `/departments/${slug}`;
+        if (url.pathname === prefix || url.pathname.startsWith(prefix + "/")) {
+          url.pathname = url.pathname.slice(prefix.length) || "/";
+        }
+        return url;
+      },
+    },
   });
 
   return router;

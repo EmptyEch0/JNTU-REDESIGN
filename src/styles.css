@@ -659,3 +659,9 @@ body {
 .dept-standalone > div[aria-hidden="true"] {
   display: none !important;
 }
+
+/* Department domains: About must not stretch to the viewport height (keeps the gap above the HOD section constant) */
+.dept-about > * {
+  min-height: 0 !important;
+  padding-bottom: 1.5rem !important;
+}

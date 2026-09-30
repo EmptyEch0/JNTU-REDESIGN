@@ -1,7 +1,26 @@
 import { useEffect } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 import { MapPin, Phone, Mail, Sparkles, ArrowRight, Code2 } from "lucide-react";
 import { SITE } from "@/lib/site";
+
+const MAIN_SITE = "https://jntugvcev.edu.in";
+
+// On department domains, footer links go to the main college website.
+function FLink({ to, children, ...rest }: any) {
+  const data = useLoaderData({ strict: false }) as { hostDept?: string } | undefined;
+  if (data?.hostDept) {
+    return (
+      <a href={`${MAIN_SITE}${to}`} {...rest}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link to={to} {...rest}>
+      {children}
+    </Link>
+  );
+}
 
 export function Footer() {
   useEffect(() => {
@@ -47,34 +66,34 @@ export function Footer() {
           <div className="text-eyebrow text-accent mb-4">Explore</div>
           <ul className="space-y-2.5 text-sm">
             <li>
-              <Link to="/about" className="hover:text-white transition-colors">
+              <FLink to="/about" className="hover:text-white transition-colors">
                 About
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/academics" className="hover:text-white transition-colors">
+              <FLink to="/academics" className="hover:text-white transition-colors">
                 Academics
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/departments" className="hover:text-white transition-colors">
+              <FLink to="/departments" className="hover:text-white transition-colors">
                 Departments
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/academics/admissions" className="hover:text-white transition-colors">
+              <FLink to="/academics/admissions" className="hover:text-white transition-colors">
                 Admissions
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/placements" className="hover:text-white transition-colors">
+              <FLink to="/placements" className="hover:text-white transition-colors">
                 Placements
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/sitemap" className="hover:text-white transition-colors flex items-center gap-1.5">
+              <FLink to="/sitemap" className="hover:text-white transition-colors flex items-center gap-1.5">
                 <span>Sitemap</span>
-              </Link>
+              </FLink>
             </li>
           </ul>
         </div>
@@ -83,29 +102,29 @@ export function Footer() {
           <div className="text-eyebrow text-accent mb-4">Campus</div>
           <ul className="space-y-2.5 text-sm">
             <li>
-              <Link to="/hostels" className="hover:text-white transition-colors">
+              <FLink to="/hostels" className="hover:text-white transition-colors">
                 Hostels
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/library" className="hover:text-white transition-colors">
+              <FLink to="/library" className="hover:text-white transition-colors">
                 Library
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/sports" className="hover:text-white transition-colors">
+              <FLink to="/sports" className="hover:text-white transition-colors">
                 Sports
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/dispensary" className="hover:text-white transition-colors">
+              <FLink to="/dispensary" className="hover:text-white transition-colors">
                 Dispensary
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/rd-cell" className="hover:text-white transition-colors">
+              <FLink to="/rd-cell" className="hover:text-white transition-colors">
                 R&D Cell
-              </Link>
+              </FLink>
             </li>
           </ul>
         </div>
@@ -114,29 +133,29 @@ export function Footer() {
           <div className="text-eyebrow text-accent mb-4">Statutory & Acts</div>
           <ul className="space-y-2.5 text-sm">
             <li>
-              <Link to="/anti-ragging" className="hover:text-white transition-colors">
+              <FLink to="/anti-ragging" className="hover:text-white transition-colors">
                 Anti-Ragging
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/rti" className="hover:text-white transition-colors">
+              <FLink to="/rti" className="hover:text-white transition-colors">
                 RTI Act 2005
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/about/norms" className="hover:text-white transition-colors">
+              <FLink to="/about/norms" className="hover:text-white transition-colors">
                 Norms & Compliance
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/women-empowerment" className="hover:text-white transition-colors">
+              <FLink to="/women-empowerment" className="hover:text-white transition-colors">
                 Women Cell
-              </Link>
+              </FLink>
             </li>
             <li>
-              <Link to="/administration/iqac" className="hover:text-white transition-colors">
+              <FLink to="/administration/iqac" className="hover:text-white transition-colors">
                 IQAC
-              </Link>
+              </FLink>
             </li>
             <li>
               <a
@@ -183,46 +202,46 @@ export function Footer() {
           <div className="text-center md:text-left flex flex-wrap items-center justify-center md:justify-start gap-2">
             <span>© {new Date().getFullYear()} {SITE.fullName}. All rights reserved.</span>
             <span className="text-white/20 hidden sm:inline">·</span>
-            <Link
+            <FLink
               to="/sitemap"
               className="text-white/70 hover:text-accent font-medium underline decoration-white/20 underline-offset-2 transition-colors"
             >
               Sitemap
-            </Link>
+            </FLink>
           </div>
 
           <div className="text-center flex flex-wrap items-center justify-center gap-x-1.5 gap-y-2">
             <span>Developed by </span>
-            <Link
+            <FLink
               to="/team"
               className="text-white hover:text-accent font-medium transition-colors"
             >
               Likhith
-            </Link>
+            </FLink>
             <span>, </span>
-            <Link
+            <FLink
               to="/team"
               className="text-white hover:text-accent font-medium transition-colors"
             >
               Sai Rupini
-            </Link>
+            </FLink>
             <span>, </span>
-            <Link
+            <FLink
               to="/team"
               className="text-white hover:text-accent font-medium transition-colors"
             >
               Anitha
-            </Link>
+            </FLink>
             <span>, and </span>
-            <Link
+            <FLink
               to="/team"
               className="text-white hover:text-accent font-medium transition-colors"
             >
               Sai Vamsi
-            </Link>
+            </FLink>
 
             {/* "Know About Us" / Meet the Team Symbol & Badge */}
-            <Link
+            <FLink
               to="/team"
               className="inline-flex items-center gap-1.5 px-2.5 py-1 ml-1.5 rounded-full bg-accent/20 hover:bg-accent/30 text-accent hover:text-white border border-accent/40 text-[11px] font-semibold tracking-wide transition-all duration-200 shadow-xs group cursor-pointer"
               title="Know About Us · Meet the Developer Team & Supervisor"
@@ -230,7 +249,7 @@ export function Footer() {
               <Sparkles className="h-3 w-3 text-accent group-hover:scale-110 group-hover:rotate-12 transition-transform" />
               <span>Know About Us</span>
               <ArrowRight className="h-2.5 w-2.5 opacity-70 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
+            </FLink>
           </div>
 
           <div className="text-center md:text-right text-white/40">

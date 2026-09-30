@@ -19,7 +19,7 @@ import { AdminProvider, useAdmin } from "@/context/AdminContext";
 import { FacultyProvider } from "@/context/FacultyContext";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { PageProgressBar } from "@/components/PageProgressBar";
-import { lazy, Suspense, useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect, useRef } from "react";
 
 const Chatbot = lazy(() =>
   import("@/components/Chatbot").then((m) => ({ default: m.Chatbot }))
@@ -175,6 +175,17 @@ function AdminContent() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { hostDept } = Route.useLoaderData();
   const isDeptSite = Boolean(hostDept);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [headerH, setHeaderH] = useState(84);
+  useEffect(() => {
+    if (!isDeptSite || !headerRef.current) return;
+    const el = headerRef.current;
+    const update = () => setHeaderH(el.offsetHeight);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [isDeptSite, path]);
 
   // 2. Defer Chatbot mount until the browser is idle — prevents the lazy
   //    bundle from being requested or rendered during initial paint.
@@ -280,9 +291,10 @@ function AdminContent() {
         </div>
       )}
 
+      {isDeptSite && <div aria-hidden="true" style={{ height: headerH }} />}
       {/* Unified Persistent Sticky Header Suite — hidden on login pages */}
       {!isLoginPage && (
-        <div className={`sticky ${isAdmin ? "top-12" : "top-0"} z-50 w-full pointer-events-none transition-all duration-200`}>
+        <div ref={headerRef} className={`${isDeptSite ? "fixed left-0 right-0" : "sticky"} ${isAdmin ? "top-12" : "top-0"} z-50 w-full pointer-events-none transition-all duration-200`}>
           <div className="pointer-events-auto shadow-md">
             {/* Top Navy Blue Ribbon with Quick Links & Social */}
             {!isDeptSite && <TopRibbon />}

@@ -1,4 +1,5 @@
 import { createFileRoute, useLoaderData, useParams } from "@tanstack/react-router";
+import { HodSection } from "@/components/departments/HodSection";
 import { updateDepartment } from "@/lib/departments";
 import { type DepartmentData } from "@/functions/departments";
 import {
@@ -430,6 +431,16 @@ function HeroCarousel({
 /* ------------------------------------------------------------------ */
 
 function AboutPage() {
+  const { hostDept } = useLoaderData({ from: "__root__" }) as { hostDept?: string };
+  return (
+    <>
+      <div className={hostDept ? "dept-about" : undefined}><AboutPageInner /></div>
+      {hostDept && <HodSection embedded />}
+    </>
+  );
+}
+
+function AboutPageInner() {
   const data = useLoaderData({ from: "/departments/$id" }) as unknown as DepartmentData;
   const queryClient = useQueryClient();
   const { id: routeSlug } = useParams({ from: "/departments/$id" });

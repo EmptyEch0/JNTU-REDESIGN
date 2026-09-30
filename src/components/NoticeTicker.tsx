@@ -6,6 +6,11 @@ import { getAssetUrl } from "@/lib/assets";
 
 const NOTICES = [
   {
+    title: "📅 Timetable for M.Tech III-Semester I-Mid Examinations, October-2026 (M.Tech 3rd Semester 1st Mid Timetable Released)",
+    date: "October 2026",
+    url: getAssetUrl("uploads/2026/10/m-tech-iii-sem-i-mid-time-table-oct-2026.pdf"),
+  },
+  {
     title: "🎉 Congratulations: 10 Students Selected in Sankhya Technologies Campus Placement Drive (Dept. of IT)",
     date: "September 10, 2026",
     url: getAssetUrl("uploads/2026/09/sankhya-technologies-placement-notice.pdf"),

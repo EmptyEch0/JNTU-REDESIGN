@@ -73,6 +73,9 @@ export const getAssetUrl = (
       "bshss-banner.jpg": `/uploads/departments/banners/sh-banner.jpg`,
       "bsh-banner.jpg": `/uploads/departments/banners/sh-banner.jpg`,
       "mba-banner.jpg": `/uploads/departments/banners/mba-banner.jpg`,
+      // M.Tech III Sem I Mid Timetable Oct-2026
+      "m-tech-iii-sem-i-mid-time-table-oct-2026.pdf": `/uploads/2026/10/m-tech-iii-sem-i-mid-time-table-oct-2026.pdf`,
+      "M.Tech III SEM I MID TIME TABALE OCT-2026.pdf": `/uploads/2026/10/m-tech-iii-sem-i-mid-time-table-oct-2026.pdf`,
       // Sankhya Technologies Placement Assets
       "sankhya-technologies-placement-notice.pdf": `/uploads/2026/09/sankhya-technologies-placement-notice.pdf`,
       "Sankhya Technologies.pdf": `/uploads/2026/09/sankhya-technologies-placement-notice.pdf`,

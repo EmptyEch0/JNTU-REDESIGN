@@ -29,6 +29,13 @@ export const Route = createFileRoute("/academics/examination")({
 // Static Required Notifications
 const STATIC_NOTIFICATIONS = [
   {
+    id: "sn-mtech-3sem-1mid-2026",
+    title: "Timetable for M.Tech III-Semester I-Mid Examinations, October-2026 (M.Tech 3rd Semester 1st Mid Timetable Released)",
+    date: "Oct 2026",
+    description: "Official 1st Mid-term examination schedule for M.Tech 3rd semester postgraduate candidates.",
+    file_url: "/uploads/2026/10/m-tech-iii-sem-i-mid-time-table-oct-2026.pdf"
+  },
+  {
     id: "sn-1",
     title: "Notification for I-M.Tech I-Semester Regular (R25) / Supplementary (R19) Examinations, February-2026",
     date: "Feb 2026",

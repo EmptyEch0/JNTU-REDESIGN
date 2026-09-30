@@ -134,6 +134,14 @@ export const updatePageSection = createServerFn({
     }
   });
 
+const MTECH_MID_NOTICE = {
+  id: 402,
+  title: "Timetable for M.Tech III-Semester I-Mid Examinations, October-2026 (M.Tech 3rd Semester 1st Mid Timetable Released)",
+  date: "30 Sep 2026",
+  tag: "Exams",
+  url: "uploads/2026/10/m-tech-iii-sem-i-mid-time-table-oct-2026.pdf",
+};
+
 const SANKHYA_PLACEMENT_NOTICE = {
   id: 401,
   title: "Congratulations: 10 Students Selected in Sankhya Technologies Campus Placement Drive (Dept. of IT)",
@@ -151,14 +159,19 @@ export const getNotices = createServerFn({
 
   try {
     const results = await db.select().from(notices).orderBy(desc(notices.id));
+    const hasMtech = results.some(
+      (n) => (n.title || "").toLowerCase().includes("m.tech iii") || (n.url || "").includes("m-tech-iii-sem-i-mid")
+    );
     const hasSankhya = results.some(
       (n) => (n.title || "").toLowerCase().includes("sankhya") || (n.url || "").includes("sankhya")
     );
-    const finalResults = hasSankhya ? results : [SANKHYA_PLACEMENT_NOTICE, ...results];
+    let finalResults: any[] = results;
+    if (!hasSankhya) finalResults = [SANKHYA_PLACEMENT_NOTICE, ...finalResults];
+    if (!hasMtech) finalResults = [MTECH_MID_NOTICE, ...finalResults];
     serverCache.set(cacheKey, finalResults, 15 * 60 * 1000); // 15 mins
-    return finalResults;
+    return finalResults as any[];
   } catch {
-    return [SANKHYA_PLACEMENT_NOTICE];
+    return [MTECH_MID_NOTICE, SANKHYA_PLACEMENT_NOTICE] as any[];
   }
 });
 

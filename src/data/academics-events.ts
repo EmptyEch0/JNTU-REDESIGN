@@ -24,6 +24,16 @@ export interface TickerNotification {
 }
 
 export const TICKER_NOTIFICATIONS: TickerNotification[] = [
+  // ── Timetable Releases ──────────────────────────────────────────────────
+  {
+    id: "tt-mtech-3sem-1mid-2026",
+    source: "timetable",
+    label: "Timetable",
+    text: "Timetable Released — M.Tech 3rd Semester 1st Mid Examinations (October 2026)",
+    date: "Oct 2026",
+    to: "/uploads/2026/10/m-tech-iii-sem-i-mid-time-table-oct-2026.pdf",
+    urgent: true,
+  },
   // ── Academic Calendar Events ──────────────────────────────────────────────
   {
     id: "cal-1",

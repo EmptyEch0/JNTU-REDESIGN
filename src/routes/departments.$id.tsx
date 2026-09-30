@@ -71,7 +71,7 @@ export const Route = createFileRoute("/departments/$id")({
       data?.description?.replace(/\s+/g, " ").trim().slice(0, 160) ||
       `Department of ${name} (${deptCode}) at JNTU-GV College of Engineering Vizianagaram (JNTU-GV). Explore faculty roster, academic curriculum, syllabus, lab facilities, and HOD desk.`;
     const canonicalUrl = `https://jntugvcev.edu.in/departments/${slug}`;
-    const subdomainUrl = `https://${slug}.jntugvcev.edu.in/`;
+    const subdomainUrl = `https://${slug === "bshss" ? "bs-hss" : slug}.jntugvcev.edu.in/`;
 
     const keywords = [
       `${deptCode} JNTU GV`,

@@ -6,7 +6,8 @@ const DEPT_SUBDOMAINS: Record<string, string> = {
   mba: "mba",
   mech: "mech",
   met: "met",
-  sh: "bshss",
+  sh: "bshss", // legacy alias
+  "bs-hss": "bshss",
   civil: "civil",
 };
 
@@ -21,7 +22,7 @@ const PASS_THROUGH = [
 ];
 
 export function deptFromHostname(host?: string): string | undefined {
-  const m = (host || "").toLowerCase().match(/^([a-z]+)\.jntugvcev\.edu\.in$/);
+  const m = (host || "").toLowerCase().match(/^([a-z-]+)\.jntugvcev\.edu\.in$/);
   return m ? DEPT_SUBDOMAINS[m[1]] : undefined;
 }
 

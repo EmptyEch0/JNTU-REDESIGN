@@ -278,6 +278,10 @@ function AdminContent() {
             <Link to="/admin/users" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Users</Link>
             <Link to="/admin/placements" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Placements</Link>
             <Link to="/admin/certifications" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Certificates & QR</Link>
+            <Link to="/admin/chatbot-analytics" className="text-[10px] md:text-[11px] font-bold text-sky-400 hover:text-sky-300 transition-colors shrink-0 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+              Bot Analytics
+            </Link>
             <Link to="/admin-account-settings" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Account</Link>
 
             <Link

@@ -107,13 +107,23 @@ const COMMON_CONVERSATIONS: Record<string, ConversationEntry> = {
     patterns: [
       "who are you", "what are you", "tell me about yourself",
       "introduce yourself", "who is this", "what is your name",
-      "who made you", "what can you do", "whats your name",
-      "what are you doing", "who built you", "who created you",
-      "your name", "are you a bot", "are you ai", "are you human",
+      "what can you do", "whats your name",
+      "what are you doing", "your name", "are you a bot", "are you ai", "are you human",
       "who is jntu ai",
     ],
     responses: [
       "I'm **JNTU AI** 🤖, your Smart Campus Companion for **JNTU-GV College of Engineering Vizianagaram**!\n\nI can help you with:\n• 📄 Syllabus & Regulations (R23, R20, R25)\n• 📝 Exam timetables & results\n• 🏠 Hostel & fee information\n• 👨‍🏫 Faculty & HOD details\n• 🏢 Placements & campus life\n• 📢 Latest notifications\n\nJust ask me anything about JNTU-GV! 😊",
+    ],
+  },
+
+  who_made_you: {
+    patterns: [
+      "who made you", "who built you", "who created you", "who designed you",
+      "who developed you", "who built this website", "who made this website",
+      "who developed this website", "developers", "contributors", "development team",
+    ],
+    responses: [
+      "I was developed by the student engineering team at **JNTU-GV CEV** 👨‍💻👩‍💻:\n\n• **Likhith Kumar** (Core Architecture & Fullstack Lead)\n• **S.G. Charan Teja** (Product Design & Frontend Lead)\n• **Sai Rupini** (Frontend Engineering)\n• **Sai Vamsi** (Backend & Database)\n• **Anitha** (Testing & QA)\n\nUnder the supervision of **Mr. Anil Wurity** (Assistant Professor)! 🎓\n\n🌐 [Meet the Contributors](/about/contributors)",
     ],
   },
 

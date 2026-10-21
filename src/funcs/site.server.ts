@@ -1,10 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "../db";
-import { siteContent, notices, academicRegulations, campusGallery, leadership, academicSyllabus, academicDownloads, academicTimetables, academicsExamCell, academicFeeStructure, academicCalendars } from "../db/schema";
+import { siteContent, notices, academicRegulations, campusGallery, leadership, academicSyllabus, academicDownloads, academicTimetables, academicsExamCell, academicFeeStructure, academicCalendars, chatbotLogs } from "../db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { serverCache } from "../lib/server-cache";
 import { ingestSingleChunk, deleteSingleChunk } from "../lib/ingest";
-import { runChatbotEngine } from "../lib/chatbot-engine";
+import { runChatbotEngine, detectIntents, detectLanguage } from "../lib/chatbot-engine";
 
 // ── Singleton embedder + Query Vector cache (0ms for repeated queries) ──
 let _embedder: any = null;
@@ -465,7 +465,8 @@ export const queryChatbot = createServerFn({ method: "POST" })
       }
     }
 
-    // 3. If query mentions syllabus, pull live syllabus entries directly from DB
+    // 3. Live DB retrieval for dynamic academic records
+    // (a) Syllabus
     if (/syllabus|curriculum|r23|r20|r25/i.test(query)) {
       try {
         const sylRows = await db.select().from(academicSyllabus);
@@ -487,8 +488,118 @@ export const queryChatbot = createServerFn({ method: "POST" })
       }
     }
 
+    // (b) Latest Notices & Circulars
+    if (/notice|circular|announcement|notification|latest updates|updates|bulletin/i.test(query)) {
+      try {
+        const noticeRows = await db.select().from(notices).orderBy(desc(notices.id)).limit(8);
+        for (const n of noticeRows) {
+          chunks.push({
+            content: `Notice (${n.date}) [${n.tag}]: [${n.title}](${n.url || "/notices"})`,
+            source_type: "notice",
+            metadata: { title: n.title, date: n.date, url: n.url, tag: n.tag },
+            similarity: 1.0,
+          });
+        }
+      } catch (err) {
+        console.error("Error pulling live notices:", err);
+      }
+    }
+
+    // (c) Timetables
+    if (/timetable|time table|class schedule|exam schedule|mid schedule/i.test(query)) {
+      try {
+        const ttRows = await db.select().from(academicTimetables).orderBy(desc(academicTimetables.id)).limit(8);
+        for (const t of ttRows) {
+          chunks.push({
+            content: `Timetable: ${t.program_name} ${t.branch} (${t.semester} Sem) - ${t.subject_name || ""} (${t.regulation}, AY ${t.academic_year}). [Download Timetable PDF](${t.pdf_url})`,
+            source_type: "timetable",
+            metadata: { program: t.program_name, branch: t.branch, pdf_url: t.pdf_url },
+            similarity: 1.0,
+          });
+        }
+      } catch (err) {
+        console.error("Error pulling live timetables:", err);
+      }
+    }
+
+    // (d) Academic Calendar
+    if (/calendar|holiday|vacation|semester date|working day/i.test(query)) {
+      try {
+        const calRows = await db.select().from(academicCalendars).limit(6);
+        for (const c of calRows) {
+          chunks.push({
+            content: `Academic Calendar (${c.academic_year} ${c.calendar_type}): ${c.program_name} (${c.regulation}). [Download Calendar PDF](${c.pdf_url})`,
+            source_type: "academic_calendar",
+            metadata: { program: c.program_name, pdf_url: c.pdf_url },
+            similarity: 1.0,
+          });
+        }
+      } catch (err) {
+        console.error("Error pulling live calendar:", err);
+      }
+    }
+
+    // (e) Downloads & Forms
+    if (/download|forms|application form|proforma|format/i.test(query)) {
+      try {
+        const dlRows = await db.select().from(academicDownloads).limit(8);
+        for (const d of dlRows) {
+          chunks.push({
+            content: `Download: ${d.document_name} (${d.category}). [Download Document](${d.pdf_url})`,
+            source_type: "academic_download",
+            metadata: { title: d.document_name, pdf_url: d.pdf_url },
+            similarity: 1.0,
+          });
+        }
+      } catch (err) {
+        console.error("Error pulling live downloads:", err);
+      }
+    }
+
+    // (f) Fee Structure
+    if (/fee|tuition|charges|payment/i.test(query)) {
+      try {
+        const feeRows = await db.select().from(academicFeeStructure);
+        for (const f of feeRows) {
+          chunks.push({
+            content: `Fee Structure: ${f.title} (${f.program_name} - ${f.level}). [Download Fee Notification PDF](${f.pdf_url})`,
+            source_type: "fee",
+            metadata: { program: f.program_name, pdf_url: f.pdf_url },
+            similarity: 1.0,
+          });
+        }
+      } catch (err) {
+        console.error("Error pulling live fee structure:", err);
+      }
+    }
+
     // 4. Local Intelligent Engine: Intent detection + BM25 Rerank + Multi-chunk synthesis
     const reply = runChatbotEngine({ query, chunks });
+
+    // 5. Asynchronously log query into chatbotLogs for Admin Analytics
+    try {
+      const intents = detectIntents(query);
+      const primaryIntent = intents[0] || "general";
+      const lang = detectLanguage(query);
+      const hasLiveDb = chunks.some((c) => c.similarity >= 0.85);
+      const source = hasLiveDb ? "live_db" : intents.length > 0 ? "dedicated_kb" : "rag_fallback";
+      const confidence = intents.length > 0 || hasLiveDb ? "high" : "fallback";
+
+      db.insert(chatbotLogs)
+        .values({
+          question: query,
+          answer: reply,
+          intent: primaryIntent,
+          language: lang,
+          source,
+          confidence,
+          rating: "unreviewed",
+        })
+        .catch((err) => console.error("Chatbot query logging error:", err));
+    } catch {
+      // Non-blocking background log
+    }
+
     return { reply };
   });
 

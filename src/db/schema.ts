@@ -1558,3 +1558,20 @@ export const pushSubscriptions = pgTable("push_subscriptions", {
   userAgent: text("user_agent"),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+export const chatbotLogs = pgTable("chatbot_logs", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id"),
+  question: text("question").notNull(),
+  answer: text("answer").notNull(),
+  intent: text("intent").default("unknown").notNull(),
+  language: text("language").default("english").notNull(),
+  source: text("source").default("server").notNull(),
+  confidence: text("confidence").default("high").notNull(),
+  rating: text("rating").default("unreviewed").notNull(),
+  adminNotes: text("admin_notes"),
+  suggestedAnswer: text("suggested_answer"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+

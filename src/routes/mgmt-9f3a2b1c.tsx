@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { getAssetUrl } from "@/lib/assets";
@@ -36,7 +36,9 @@ import {
   UserCircle,
   Newspaper,
   Eye,
-  EyeOff
+  EyeOff,
+  Bot,
+  ArrowUpRight,
 } from "lucide-react";
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
@@ -986,6 +988,18 @@ function AdminDashboard() {
           >
             <Globe className="w-4 h-4" /> Connections
           </button>
+
+          <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800">
+            <Link
+              to="/admin/chatbot-analytics"
+              className="w-full text-left px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-between transition cursor-pointer text-blue-600 bg-blue-50/80 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:bg-blue-900/40 border border-blue-200/70 dark:border-blue-800/50 shadow-2xs group"
+            >
+              <span className="flex items-center gap-2.5">
+                <Bot className="w-4 h-4 text-blue-600 dark:text-blue-400" /> AI Bot Analytics
+              </span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-blue-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </Link>
+          </div>
         </aside>
 
         {/* Content Pane */}
@@ -1047,6 +1061,30 @@ function AdminDashboard() {
                     <Camera className="w-5 h-5" />
                   </div>
                 </div>
+              </div>
+
+              {/* AI Chatbot Analytics Feature Card */}
+              <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 rounded-3xl p-6 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-6 border border-blue-900/40">
+                <div className="flex items-start md:items-center gap-4">
+                  <div className="p-3.5 bg-blue-500/20 rounded-2xl border border-blue-400/30 text-blue-300 shrink-0">
+                    <Bot className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-base font-bold font-display uppercase tracking-wider text-white">AI Chatbot Intelligence Center</h3>
+                      <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Live Insights</span>
+                    </div>
+                    <p className="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                      View daily inquiry volumes, inspect questions & bot answers, evaluate good vs. change-needed responses, and draft revisions to maintain 100% campus accuracy.
+                    </p>
+                  </div>
+                </div>
+                <Link
+                  to="/admin/chatbot-analytics"
+                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow-lg shadow-blue-500/30 transition-all shrink-0 cursor-pointer active:scale-95 whitespace-nowrap"
+                >
+                  Open Bot Analytics Studio <ChevronRight className="w-4 h-4" />
+                </Link>
               </div>
 
               {/* Connections Summary & Health Details */}

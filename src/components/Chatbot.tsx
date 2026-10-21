@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { X, SendHorizontal, Bot, User, Sparkles } from "lucide-react";
 import { queryChatbot } from "@/funcs/site.server";
 import { tryInstantResponse } from "@/lib/chatbot-instant";
+import { recordChatbotQuery } from "@/funcs/chatbot-analytics.server";
 
 // Lazy-load DotLottie so it NEVER runs during SSR (avoids the addListener WASM crash)
 const DotLottieReact = lazy(() =>
@@ -320,6 +321,19 @@ export function Chatbot() {
           isStreaming: true,
         },
       ]);
+
+      // Asynchronously log instant query to analytics
+      recordChatbotQuery({
+        data: {
+          question: queryText.trim(),
+          answer: instantReply,
+          intent: /likhith|charan|rupini|vamsi|anitha|anil/i.test(queryText) ? "contributors" : "instant_greeting",
+          language: "english",
+          source: "instant_client",
+          confidence: "high",
+        },
+      }).catch(() => {});
+
       return;
     }
 
@@ -374,6 +388,41 @@ export function Chatbot() {
         } else {
           setChips(["📄 Show R23 Syllabus", "🕒 Exam Timetables", "🏠 Hostel Fee Structure"]);
         }
+      } else if (/placement|job|salary|package|recruit|tpo/i.test(qLower)) {
+        setChips([
+          "Highest Package",
+          "Top Recruiters",
+          "Placement Training",
+          "Placement Rate",
+        ]);
+      } else if (/admission|eamcet|eapcet|rank|cutoff|seat/i.test(qLower)) {
+        setChips([
+          "EAMCET Cutoffs",
+          "Lateral Entry ECET",
+          "Fee Structure",
+          "PG Admissions",
+        ]);
+      } else if (/hostel|mess|accommodation|dorm/i.test(qLower)) {
+        setChips([
+          "Hostel Fees",
+          "Mess Facilities",
+          "Boys Hostel",
+          "Girls Hostel",
+        ]);
+      } else if (/exam|result|revaluation|grade|marks|supply/i.test(qLower)) {
+        setChips([
+          "Exam Timetables",
+          "Revaluation Process",
+          "Academic Calendar",
+          "CBCS Grading",
+        ]);
+      } else if (/department|branch|course|hod/i.test(qLower)) {
+        setChips([
+          "CSE Department",
+          "ECE Department",
+          "All HODs",
+          "Campus Labs",
+        ]);
       } else {
         const isAskingRegulation =
           reply.toLowerCase().includes("r20") && reply.toLowerCase().includes("r23");

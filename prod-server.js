@@ -108,10 +108,37 @@ async function main() {
   }
 
   // ── 3. HTTP server ─────────────────────────────────────────────────
+  // Common bot/scanner patterns to reject immediately
+  const BOT_PATTERNS = [
+    /\/wp-(?:admin|login|includes|content)/i,  // WordPress scanners
+    /\/xmlrpc\.php/i,                           // WordPress XML-RPC
+    /\/\.env/i,                                 // .env file scanners
+    /\/phpmyadmin/i,                            // phpMyAdmin scanners
+    /\/admin\/config/i,                         // Config scanners
+  ];
+
   const server = http.createServer(async (req, res) => {
     try {
-      const parsedUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+      // ── Validate URL early — reject malformed requests before SSR ──
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+      } catch {
+        res.statusCode = 400;
+        res.setHeader("Content-Type", "text/plain");
+        res.end("Bad Request");
+        return;
+      }
+
       const pathname = decodeURIComponent(parsedUrl.pathname);
+
+      // ── Block known bot/scanner patterns ──
+      if (BOT_PATTERNS.some((p) => p.test(pathname))) {
+        res.statusCode = 403;
+        res.setHeader("Content-Type", "text/plain");
+        res.end("Forbidden");
+        return;
+      }
 
       // Static: Check client build and public directories
       for (const baseDir of CLIENT_DIRS) {

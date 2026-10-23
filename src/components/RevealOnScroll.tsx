@@ -18,19 +18,31 @@ export function RevealOnScroll({ children, className = "", delay = 0, as: Tag = 
       setVisible(true);
       return;
     }
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setVisible(true);
+      return;
+    }
+
+    const fallbackTimer = setTimeout(() => setVisible(true), 2500);
+
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
             setTimeout(() => setVisible(true), delay);
             obs.unobserve(e.target);
+            clearTimeout(fallbackTimer);
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" },
     );
     obs.observe(el);
-    return () => obs.disconnect();
+    return () => {
+      obs.disconnect();
+      clearTimeout(fallbackTimer);
+    };
   }, [delay]);
 
   return (

@@ -33,6 +33,7 @@ import { SessionTimeoutModal } from "@/components/SessionTimeoutModal";
 import { createServerFn } from "@tanstack/react-start";
 import { deptFromHostname } from "@/lib/dept-host";
 import { DeptTopNav } from "@/components/departments/DeptTopNav";
+import { BackToTop } from "@/components/BackToTop";
 
 const getRequestHostFn = createServerFn({ method: "GET" }).handler(async () => {
   const { getRequestHost } = await import("@tanstack/react-start/server");
@@ -320,6 +321,7 @@ function AdminContent() {
       </main>
 
       {!isLoginPage && <Footer />}
+      {!isLoginPage && <BackToTop />}
       {!isLoginPage && chatbotReady && (
         <Suspense fallback={null}>
           <Chatbot />

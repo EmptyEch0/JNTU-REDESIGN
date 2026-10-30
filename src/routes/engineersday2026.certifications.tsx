@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -16,6 +16,8 @@ import {
   FileCheck2,
   Printer,
   Download,
+  FileText,
+  Loader2,
   Share2,
   Sparkles,
   QrCode,
@@ -27,6 +29,11 @@ import {
   Check,
   Code2,
   Globe2,
+  Search,
+  Eye,
+  GraduationCap,
+  X,
+  Filter,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -204,6 +211,140 @@ function EngineersDayCertificationsPage() {
     window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank");
   };
 
+  const [downloadingCertKey, setDownloadingCertKey] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedDeptFilter, setSelectedDeptFilter] = useState("All");
+
+  const filteredCertificates = allCertificates.filter((c: CertificationRecord) => {
+    const q = searchQuery.trim().toLowerCase();
+    const matchesDept =
+      selectedDeptFilter === "All" ||
+      c.department.toLowerCase().includes(selectedDeptFilter.toLowerCase());
+
+    if (!q) return matchesDept;
+
+    return (
+      matchesDept &&
+      (c.name.toLowerCase().includes(q) ||
+        c.id.toLowerCase().includes(q) ||
+        (c.rollNumber && c.rollNumber.toLowerCase().includes(q)) ||
+        c.slug.toLowerCase().includes(q) ||
+        c.department.toLowerCase().includes(q) ||
+        c.project.toLowerCase().includes(q))
+    );
+  });
+
+  const handleDownloadCertificate = async (
+    format: "pdf" | "image",
+    targetCert: CertificationRecord = certificate
+  ) => {
+    if (!targetCert.imageSrc) {
+      toast.error(`No certificate document available for ${targetCert.name} yet.`);
+      return;
+    }
+
+    const key = `${targetCert.id}-${format}`;
+    setDownloadingCertKey(key);
+    const toastId = toast.loading(`Preparing ${format.toUpperCase()} for ${targetCert.name}...`);
+
+    try {
+      // Resolve the actual file URL with fallback alias support
+      let targetUrl = targetCert.imageSrc;
+      if (targetUrl.includes("JNTUGV-ED26-002-panchangam-sai-vamsi")) {
+        targetUrl = targetUrl.replace(
+          "JNTUGV-ED26-002-panchangam-sai-vamsi",
+          "JNTUGV-ED26-001-panchangam-sai-vamsi"
+        );
+      }
+
+      const response = await fetch(targetUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to load certificate file (HTTP ${response.status})`);
+      }
+
+      const contentType = response.headers.get("content-type") || "";
+      if (contentType.includes("text/html")) {
+        throw new Error("Received HTML instead of certificate document. The file may be unavailable or moved.");
+      }
+
+      const blob = await response.blob();
+      const isAlreadyPdf = blob.type.includes("pdf") || targetUrl.toLowerCase().endsWith(".pdf");
+
+      if (format === "pdf") {
+        if (isAlreadyPdf) {
+          // Direct PDF download
+          const blobUrl = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = blobUrl;
+          a.download = `JNTUGV_Certificate_${targetCert.slug}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(blobUrl);
+          document.body.removeChild(a);
+        } else {
+          // Convert Image to Official High-Definition PDF using jsPDF
+          const { jsPDF } = await import("jspdf");
+          const reader = new FileReader();
+          const dataUrl = await new Promise<string>((resolve, reject) => {
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
+
+          const img = new Image();
+          await new Promise<void>((resolve, reject) => {
+            img.onload = () => resolve();
+            img.onerror = reject;
+            img.src = dataUrl;
+          });
+
+          // Standard A4 landscape is 297mm x 210mm
+          const pdf = new jsPDF({
+            orientation: img.width >= img.height ? "landscape" : "portrait",
+            unit: "mm",
+            format: "a4",
+          });
+
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+
+          const margin = 5;
+          const maxW = pageWidth - margin * 2;
+          const maxH = pageHeight - margin * 2;
+
+          const ratio = Math.min(maxW / img.width, maxH / img.height);
+          const renderW = img.width * ratio;
+          const renderH = img.height * ratio;
+          const offsetX = (pageWidth - renderW) / 2;
+          const offsetY = (pageHeight - renderH) / 2;
+
+          const imageFormat = blob.type.includes("png") ? "PNG" : "JPEG";
+          pdf.addImage(dataUrl, imageFormat, offsetX, offsetY, renderW, renderH, undefined, "FAST");
+          pdf.save(`JNTUGV_Certificate_${targetCert.slug}.pdf`);
+        }
+        toast.success(`Certificate PDF downloaded for ${targetCert.name}!`, { id: toastId });
+      } else {
+        // Image format download with correct extension
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        const ext = blob.type.includes("png") ? ".png" : blob.type.includes("pdf") ? ".pdf" : ".jpg";
+        a.download = `JNTUGV_Certificate_${targetCert.slug}${ext}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(blobUrl);
+        document.body.removeChild(a);
+        toast.success(`Certificate image downloaded for ${targetCert.name}!`, { id: toastId });
+      }
+    } catch (err: any) {
+      console.error("Certificate download error:", err);
+      toast.error(err.message || "Unable to download certificate file.", { id: toastId });
+    } finally {
+      setDownloadingCertKey(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-amber-500/30">
       {/* Holographic Verification Scan Pop-up Animation */}
@@ -262,15 +403,28 @@ function EngineersDayCertificationsPage() {
               <div className="flex flex-wrap lg:flex-col gap-2.5 w-full lg:w-auto shrink-0">
                 <button
                   onClick={() => setShowScannerModal(true)}
-                  className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/25 transition-all hover:scale-105"
+                  className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/25 transition-all hover:scale-105 cursor-pointer"
                 >
                   <QrCode className="w-4 h-4" />
                   <span>Replay Scan Animation</span>
                 </button>
 
                 <button
+                  onClick={() => handleDownloadCertificate("pdf")}
+                  disabled={downloadingCertKey !== null}
+                  className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/25 transition-all hover:scale-105 cursor-pointer disabled:opacity-60"
+                >
+                  {downloadingCertKey === `${certificate.id}-pdf` ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <FileText className="w-4 h-4" />
+                  )}
+                  <span>Download Official PDF</span>
+                </button>
+
+                <button
                   onClick={handlePrint}
-                  className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs border border-white/20 backdrop-blur-sm transition-colors"
+                  className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs border border-white/20 backdrop-blur-sm transition-colors cursor-pointer"
                 >
                   <Printer className="w-4 h-4" />
                   <span>Print Certificate</span>
@@ -278,7 +432,7 @@ function EngineersDayCertificationsPage() {
 
                 <button
                   onClick={handleCopyShareLink}
-                  className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs border border-white/20 backdrop-blur-sm transition-colors"
+                  className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs border border-white/20 backdrop-blur-sm transition-colors cursor-pointer"
                 >
                   {copiedLink ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
                   <span>{copiedLink ? "Link Copied!" : "Share Verification"}</span>
@@ -288,9 +442,186 @@ function EngineersDayCertificationsPage() {
           </div>
         </RevealOnScroll>
 
+        {/* Search & Explore Other Student Certificates */}
+        <RevealOnScroll>
+          <div className="bg-card/90 dark:bg-slate-900/90 border border-border rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 mb-2">
+                  <Search className="w-3.5 h-3.5" />
+                  <span>Student Registry Search</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold font-display text-foreground">
+                  Search & Download Student Certificates
+                </h3>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                  Search across all 55 verified student certificates by student name, roll number, or certificate ID.
+                </p>
+              </div>
+
+              {/* Department Filter Pills */}
+              <div className="flex flex-wrap items-center gap-1.5 shrink-0">
+                {["All", "Information Technology", "Civil Engineering"].map((dept) => (
+                  <button
+                    key={dept}
+                    onClick={() => setSelectedDeptFilter(dept)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                      selectedDeptFilter === dept
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground border border-border/60"
+                    }`}
+                  >
+                    {dept === "Information Technology" ? "IT" : dept === "Civil Engineering" ? "Civil" : dept}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Search Input Box */}
+            <div className="relative">
+              <Search className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by student name (e.g. Sai Vamsi, Likhith, Akhil), roll no, or ID..."
+                className="w-full bg-background border border-border rounded-xl pl-10 pr-10 py-3 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                  title="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Results Grid */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-xs text-muted-foreground font-medium">
+                <span>
+                  Showing {filteredCertificates.length} {filteredCertificates.length === 1 ? "certificate" : "certificates"}
+                </span>
+                {searchQuery && (
+                  <span className="text-primary font-semibold">
+                    Matching "{searchQuery}"
+                  </span>
+                )}
+              </div>
+
+              {filteredCertificates.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 max-h-[460px] overflow-y-auto pr-1">
+                  {filteredCertificates.map((certItem: CertificationRecord) => {
+                    const isCurrent = certItem.id.toLowerCase() === certificate.id.toLowerCase();
+                    const isDownloadingThisPdf = downloadingCertKey === `${certItem.id}-pdf`;
+                    const isDownloadingThisImg = downloadingCertKey === `${certItem.id}-image`;
+
+                    return (
+                      <div
+                        key={certItem.id}
+                        className={`p-4 rounded-xl border transition-all duration-200 flex flex-col justify-between gap-3 ${
+                          isCurrent
+                            ? "border-amber-500/60 bg-amber-500/5 shadow-md ring-1 ring-amber-500/30"
+                            : "border-border bg-card/60 hover:border-primary/40 hover:bg-muted/40"
+                        }`}
+                      >
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                              {certItem.id}
+                            </span>
+                            {isCurrent && (
+                              <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1">
+                                <CheckCircle2 className="w-3 h-3" /> Current View
+                              </span>
+                            )}
+                          </div>
+
+                          <h4 className="text-sm font-bold text-foreground line-clamp-1">
+                            {certItem.honorific} {certItem.name}
+                          </h4>
+
+                          <p className="text-[11px] text-muted-foreground line-clamp-1">
+                            {certItem.department}
+                          </p>
+                          <p className="text-[10px] text-muted-foreground/80 line-clamp-1 italic">
+                            Project: {certItem.project}
+                          </p>
+                        </div>
+
+                        {/* Action Buttons for this student */}
+                        <div className="flex items-center gap-1.5 pt-2 border-t border-border/60">
+                          <button
+                            onClick={() => {
+                              navigate({
+                                to: "/engineersday2026/certifications",
+                                search: { id: certItem.id, scan: "false" },
+                              });
+                              const el = document.getElementById("certificate-showcase");
+                              if (el) el.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className={`flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                              isCurrent
+                                ? "bg-amber-500 text-slate-950 font-bold"
+                                : "bg-primary/10 hover:bg-primary/20 text-primary"
+                            }`}
+                            title="Inspect verified credentials in viewer"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>{isCurrent ? "Viewing" : "View"}</span>
+                          </button>
+
+                          <button
+                            onClick={() => handleDownloadCertificate("pdf", certItem)}
+                            disabled={downloadingCertKey !== null}
+                            className="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-xs cursor-pointer disabled:opacity-60"
+                            title="Download official PDF for this student"
+                          >
+                            {isDownloadingThisPdf ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <FileText className="w-3.5 h-3.5" />
+                            )}
+                            <span>PDF</span>
+                          </button>
+
+                          <button
+                            onClick={() => handleDownloadCertificate("image", certItem)}
+                            disabled={downloadingCertKey !== null}
+                            className="inline-flex items-center justify-center p-1.5 rounded-lg bg-muted hover:bg-muted/80 text-foreground text-xs font-medium border border-border/80 transition cursor-pointer disabled:opacity-60"
+                            title="Download HD Image"
+                          >
+                            {isDownloadingThisImg ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <Download className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="py-8 text-center space-y-2 rounded-xl border border-dashed border-border bg-muted/20">
+                  <GraduationCap className="w-8 h-8 text-muted-foreground mx-auto opacity-50" />
+                  <p className="text-xs text-muted-foreground font-medium">
+                    No certificates found matching "<span className="text-foreground font-bold">{searchQuery}</span>".
+                  </p>
+                  <p className="text-[11px] text-muted-foreground/70">
+                    Try searching by first name (e.g. "Sai", "Vamsi", "Likhith") or by certificate number (e.g. "001", "023").
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </RevealOnScroll>
+
         {/* Official Certificate Viewer Section */}
         <RevealOnScroll>
-          <div className="space-y-6">
+          <div id="certificate-showcase" className="space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2 border-b border-border">
               <div>
@@ -304,17 +635,32 @@ function EngineersDayCertificationsPage() {
               </div>
 
               {certificate.imageSrc && (
-                <div className="inline-flex items-center gap-2">
-                  <a
-                    href={certificate.imageSrc}
-                    download={`JNTUGV_Certificate_${certificate.slug}.jpg`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-sm"
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => handleDownloadCertificate("pdf")}
+                    disabled={downloadingCertKey !== null}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold transition-colors shadow-sm cursor-pointer disabled:opacity-60"
                   >
-                    <Download className="w-3.5 h-3.5" />
+                    {downloadingCertKey === `${certificate.id}-pdf` ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <FileText className="w-3.5 h-3.5" />
+                    )}
+                    <span>Download PDF</span>
+                  </button>
+
+                  <button
+                    onClick={() => handleDownloadCertificate("image")}
+                    disabled={downloadingCertKey !== null}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-sm cursor-pointer disabled:opacity-60"
+                  >
+                    {downloadingCertKey === `${certificate.id}-image` ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Download className="w-3.5 h-3.5" />
+                    )}
                     <span>Download Full HD</span>
-                  </a>
+                  </button>
                 </div>
               )}
             </div>
@@ -332,16 +678,25 @@ function EngineersDayCertificationsPage() {
                     <span className="text-white text-xs font-semibold tracking-wide">
                       Official Certificate • JNTU-GV CEV Engineer's Day 2026
                     </span>
-                    <a
-                      href={certificate.imageSrc}
-                      download={`JNTUGV_Certificate_${certificate.slug}.jpg`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md transition-colors"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>Download HD Image</span>
-                    </a>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleDownloadCertificate("pdf")}
+                        disabled={downloadingCertKey !== null}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md transition-colors cursor-pointer disabled:opacity-60"
+                      >
+                        <FileText className="w-3.5 h-3.5" />
+                        <span>PDF</span>
+                      </button>
+
+                      <button
+                        onClick={() => handleDownloadCertificate("image")}
+                        disabled={downloadingCertKey !== null}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md transition-colors cursor-pointer disabled:opacity-60"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>HD Image</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               ) : (

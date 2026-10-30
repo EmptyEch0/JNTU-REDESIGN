@@ -219,6 +219,67 @@ export const addNotice = createServerFn({
     }
   });
 
+export const addMultipleNotices = createServerFn({
+  method: "POST",
+})
+  .validator(
+    (items: Array<{ title: string; date: string; tag: string; link?: string }>) => items
+  )
+  .handler(async ({ data: items }) => {
+    try {
+      if (!items || items.length === 0) {
+        throw new Error("No notices provided");
+      }
+
+      const inserted = await db
+        .insert(notices)
+        .values(
+          items.map((item) => ({
+            title: item.title,
+            date: item.date,
+            tag: item.tag,
+            url: item.link || null,
+          }))
+        )
+        .returning({ id: notices.id, title: notices.title, tag: notices.tag, date: notices.date, url: notices.url });
+
+      serverCache.invalidate("notices_all");
+
+      for (const row of inserted) {
+        const chunkSource = `notice:${row.id}`;
+        const chunkText = `Notice: ${row.title}. Category: ${row.tag}. Date: ${row.date}`;
+        ingestSingleChunk(chunkText, chunkSource, "notice", { date: row.date, tag: row.tag }).catch(
+          (err) => console.error("RAG auto-ingest notice error:", err)
+        );
+      }
+
+      // Web Push Notification broadcast
+      import("./push.server").then(({ sendPushToAllSubscribers }) => {
+        const pushTitle =
+          inserted.length === 1
+            ? `📢 New Notice: ${inserted[0].title}`
+            : `📢 ${inserted.length} New University Notices Published`;
+
+        const pushBody =
+          inserted.length === 1
+            ? `Category: ${inserted[0].tag} • ${inserted[0].date}`
+            : `Latest: ${inserted[0].title}. Tap to check all circulars.`;
+
+        sendPushToAllSubscribers({
+          title: pushTitle,
+          body: pushBody,
+          url: "/notices",
+          tag: `notices-batch-${Date.now()}`,
+        }).catch((err) => console.error("Push notification broadcast error on addMultipleNotices:", err));
+      }).catch(() => {});
+
+      return { success: true, count: inserted.length, notices: inserted };
+    } catch (err: any) {
+      console.error("Add multiple notices failed:", err);
+      throw new Error(err.message || "Failed to add multiple notices");
+    }
+  });
+
 export const updateNotice = createServerFn({
   method: "POST",
 })

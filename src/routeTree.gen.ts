@@ -86,6 +86,7 @@ import { Route as DepartmentsIdRouteImport } from './routes/departments.$id'
 import { Route as DispensaryIndexRouteImport } from './routes/dispensary.index'
 import { Route as DocsSplatRouteImport } from './routes/docs.$'
 import { Route as Engineersday2026CertificationsRouteImport } from './routes/engineersday2026.certifications'
+import { Route as ImagesSplatRouteImport } from './routes/images.$'
 import { Route as LatestUpdatesIndexRouteImport } from './routes/latest-updates.index'
 import { Route as NssIndexRouteImport } from './routes/nss.index'
 import { Route as NssActivitiesRouteImport } from './routes/nss.activities'
@@ -540,6 +541,11 @@ const Engineersday2026CertificationsRoute =
     path: '/engineersday2026/certifications',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ImagesSplatRoute = ImagesSplatRouteImport.update({
+  id: '/images/$',
+  path: '/images/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LatestUpdatesIndexRoute = LatestUpdatesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -944,6 +950,7 @@ export interface FileRoutesByFullPath {
   '/departments/$id': typeof DepartmentsIdRouteWithChildren
   '/docs/$': typeof DocsSplatRoute
   '/engineersday2026/certifications': typeof Engineersday2026CertificationsRouteWithChildren
+  '/images/$': typeof ImagesSplatRoute
   '/nss/activities': typeof NssActivitiesRoute
   '/nss/special-camp': typeof NssSpecialCampRoute
   '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
@@ -1074,6 +1081,7 @@ export interface FileRoutesByTo {
   '/certifications/engineers-day-2026': typeof CertificationsEngineersDay2026Route
   '/docs/$': typeof DocsSplatRoute
   '/engineersday2026/certifications': typeof Engineersday2026CertificationsRouteWithChildren
+  '/images/$': typeof ImagesSplatRoute
   '/nss/activities': typeof NssActivitiesRoute
   '/nss/special-camp': typeof NssSpecialCampRoute
   '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
@@ -1215,6 +1223,7 @@ export interface FileRoutesById {
   '/departments/$id': typeof DepartmentsIdRouteWithChildren
   '/docs/$': typeof DocsSplatRoute
   '/engineersday2026/certifications': typeof Engineersday2026CertificationsRouteWithChildren
+  '/images/$': typeof ImagesSplatRoute
   '/nss/activities': typeof NssActivitiesRoute
   '/nss/special-camp': typeof NssSpecialCampRoute
   '/other-amenities/guest-house': typeof OtherAmenitiesGuestHouseRoute
@@ -1357,6 +1366,7 @@ export interface FileRouteTypes {
     | '/departments/$id'
     | '/docs/$'
     | '/engineersday2026/certifications'
+    | '/images/$'
     | '/nss/activities'
     | '/nss/special-camp'
     | '/other-amenities/guest-house'
@@ -1487,6 +1497,7 @@ export interface FileRouteTypes {
     | '/certifications/engineers-day-2026'
     | '/docs/$'
     | '/engineersday2026/certifications'
+    | '/images/$'
     | '/nss/activities'
     | '/nss/special-camp'
     | '/other-amenities/guest-house'
@@ -1627,6 +1638,7 @@ export interface FileRouteTypes {
     | '/departments/$id'
     | '/docs/$'
     | '/engineersday2026/certifications'
+    | '/images/$'
     | '/nss/activities'
     | '/nss/special-camp'
     | '/other-amenities/guest-house'
@@ -1742,6 +1754,7 @@ export interface RootRouteChildren {
   DepartmentsIdRoute: typeof DepartmentsIdRouteWithChildren
   DocsSplatRoute: typeof DocsSplatRoute
   Engineersday2026CertificationsRoute: typeof Engineersday2026CertificationsRouteWithChildren
+  ImagesSplatRoute: typeof ImagesSplatRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
   DispensaryIndexRoute: typeof DispensaryIndexRoute
   ApiPushKeyRoute: typeof ApiPushKeyRoute
@@ -2305,6 +2318,13 @@ declare module '@tanstack/react-router' {
       path: '/engineersday2026/certifications'
       fullPath: '/engineersday2026/certifications'
       preLoaderRoute: typeof Engineersday2026CertificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/images/$': {
+      id: '/images/$'
+      path: '/images/$'
+      fullPath: '/images/$'
+      preLoaderRoute: typeof ImagesSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/latest-updates/': {
@@ -3051,6 +3071,7 @@ const rootRouteChildren: RootRouteChildren = {
   DocsSplatRoute: DocsSplatRoute,
   Engineersday2026CertificationsRoute:
     Engineersday2026CertificationsRouteWithChildren,
+  ImagesSplatRoute: ImagesSplatRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,
   DispensaryIndexRoute: DispensaryIndexRoute,
   ApiPushKeyRoute: ApiPushKeyRoute,

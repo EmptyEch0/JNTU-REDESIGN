@@ -44,7 +44,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
 import { notices, campusGallery, socialPosts, socialConnections, pushSubscriptions } from "@/db/schema";
 import { desc, count, eq } from "drizzle-orm";
-import { addNotice, updateNotice, deleteNotice, addCampusGalleryItem, deleteCampusGalleryItem } from "@/funcs/site.server";
+import { addNotice, addMultipleNotices, updateNotice, deleteNotice, addCampusGalleryItem, deleteCampusGalleryItem } from "@/funcs/site.server";
 import { SocialPublishingPanel } from "@/components/SocialPublishingPanel";
 import { FileUploadDropzone } from "@/components/FileUploadDropzone";
 import {
@@ -475,8 +475,11 @@ function AdminDashboard() {
   const [refreshing, setRefreshing] = useState(false);
 
   // Forms states
-  const [newNotice, setNewNotice] = useState({ title: "", tag: "Academic", url: "" });
+  const [noticeDrafts, setNoticeDrafts] = useState<Array<{ clientId: string; title: string; tag: string; url: string }>>([
+    { clientId: "notice-draft-1", title: "", tag: "Academic", url: "" },
+  ]);
   const [editingNotice, setEditingNotice] = useState<{ id: number; title: string; tag: string; url?: string } | null>(null);
+  const [publishingNotices, setPublishingNotices] = useState(false);
   const [uploadingNoticeFile, setUploadingNoticeFile] = useState(false);
   const [testingPush, setTestingPush] = useState(false);
   const [showCustomPushModal, setShowCustomPushModal] = useState(false);
@@ -625,47 +628,56 @@ function AdminDashboard() {
     fetchAllData();
   }, []);
 
-  const handleNoticeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleAddNoticeDraft = () => {
+    const lastDraft = noticeDrafts[noticeDrafts.length - 1];
+    const nextId = `notice-draft-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    setNoticeDrafts((prev) => [
+      ...prev,
+      {
+        clientId: nextId,
+        title: "",
+        tag: lastDraft?.tag || "Academic",
+        url: "",
+      },
+    ]);
+  };
 
-    setUploadingNoticeFile(true);
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("module", "notices");
-    formData.append("category", newNotice.tag || "circulars");
-    if (newNotice.title) formData.append("name", newNotice.title);
-
-    const tId = toast.loading(`Uploading document ${file.name}...`);
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const json = await res.json();
-      if (json.success) {
-        const assetUrl = json.path;
-        setNewNotice((prev) => ({ ...prev, url: assetUrl }));
-        toast.success(`File uploaded successfully!`, { id: tId });
-      } else {
-        toast.error(json.error || "Upload failed", { id: tId });
-      }
-    } catch (err: any) {
-      toast.error("Failed to upload file", { id: tId });
-    } finally {
-      setUploadingNoticeFile(false);
+  const handleRemoveNoticeDraft = (clientId: string) => {
+    if (noticeDrafts.length <= 1) {
+      setNoticeDrafts([{ clientId: `notice-draft-${Date.now()}`, title: "", tag: "Academic", url: "" }]);
+      return;
     }
+    setNoticeDrafts((prev) => prev.filter((d) => d.clientId !== clientId));
+  };
+
+  const handleUpdateNoticeDraft = (clientId: string, field: "title" | "tag" | "url", value: string) => {
+    setNoticeDrafts((prev) =>
+      prev.map((d) => (d.clientId === clientId ? { ...d, [field]: value } : d))
+    );
   };
 
   const handleAddNoticeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newNotice.title.trim()) {
-      toast.error("Please enter notice title.");
+
+    const validDrafts = noticeDrafts.filter((d) => d.title.trim().length > 0);
+    if (validDrafts.length === 0) {
+      toast.error("Please enter a notice title for at least one announcement.");
       return;
     }
 
+    const emptyDrafts = noticeDrafts.filter((d) => !d.title.trim() && (d.url.trim() || noticeDrafts.length > 1));
+    if (emptyDrafts.length > 0) {
+      toast.error("Please provide a title for all added notices, or remove the empty ones.");
+      return;
+    }
+
+    setPublishingNotices(true);
     setSavedNoticeItem(null);
-    const tId = toast.loading("Publishing notice...");
+    const count = validDrafts.length;
+    const tId = toast.loading(
+      count === 1 ? "Publishing notice & broadcasting alert..." : `Publishing ${count} notices & broadcasting alerts...`
+    );
+
     try {
       const dateStr = new Date().toLocaleDateString("en-US", {
         month: "long",
@@ -673,33 +685,43 @@ function AdminDashboard() {
         year: "numeric",
       });
 
-      const res = await addNotice({
-        data: {
-          title: newNotice.title.trim(),
-          tag: newNotice.tag,
-          link: newNotice.url || undefined,
-          date: dateStr,
-        },
+      const payload = validDrafts.map((d) => ({
+        title: d.title.trim(),
+        tag: d.tag,
+        link: d.url.trim() || undefined,
+        date: dateStr,
+      }));
+
+      const res = await addMultipleNotices({
+        data: payload,
       });
 
-      toast.success("Notice added successfully!", { id: tId });
-      if (res && res.id) {
-        const itemObj = {
-          id: res.id,
-          title: newNotice.title.trim(),
-          tag: newNotice.tag,
-          url: newNotice.url,
+      toast.success(
+        count === 1 ? "Notice published successfully!" : `${count} notices published successfully!`,
+        { id: tId }
+      );
+
+      if (res && res.notices && res.notices.length > 0) {
+        const lastCreated = res.notices[res.notices.length - 1];
+        setSavedNoticeItem({
+          id: lastCreated.id,
+          title: lastCreated.title,
+          tag: lastCreated.tag,
+          url: lastCreated.url,
           date: dateStr,
           instagramPosted: false,
           linkedinPosted: false,
-        };
-        setSavedNoticeItem(itemObj);
-        setSelectedNoticeForShare(res.id);
+        });
+        setSelectedNoticeForShare(lastCreated.id);
       }
-      setNewNotice({ title: "", tag: "Academic", url: "" });
+
+      setNoticeDrafts([{ clientId: `notice-draft-${Date.now()}`, title: "", tag: "Academic", url: "" }]);
       fetchAllData();
     } catch (err: any) {
-      toast.error("Failed to publish notice.", { id: tId });
+      console.error("Batch notice publish error:", err);
+      toast.error(err.message || "Failed to publish notice.", { id: tId });
+    } finally {
+      setPublishingNotices(false);
     }
   };
 
@@ -1365,67 +1387,147 @@ function AdminDashboard() {
                   </div>
 
                   <form onSubmit={editingNotice ? handleUpdateNoticeSubmit : handleAddNoticeSubmit} className="space-y-4">
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Notice Title</label>
-                      <input
-                        type="text"
-                        placeholder="e.g. B.Tech Exams circular postponed..."
-                        className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 focus:border-[#0F4C81] dark:text-white"
-                        value={editingNotice ? editingNotice.title : newNotice.title}
-                        onChange={(e) => {
-                          if (editingNotice) {
-                            setEditingNotice({ ...editingNotice, title: e.target.value });
-                          } else {
-                            setNewNotice({ ...newNotice, title: e.target.value });
-                          }
-                        }}
-                        required
-                      />
-                    </div>
+                    {editingNotice ? (
+                      /* Single Notice Edit Mode */
+                      <>
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Notice Title</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. B.Tech Exams circular postponed..."
+                            className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 focus:border-[#0F4C81] dark:text-white"
+                            value={editingNotice.title}
+                            onChange={(e) => setEditingNotice({ ...editingNotice, title: e.target.value })}
+                            required
+                          />
+                        </div>
 
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Category Tag</label>
-                      <select
-                        className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 cursor-pointer dark:text-white"
-                        value={editingNotice ? editingNotice.tag : newNotice.tag}
-                        onChange={(e) => {
-                          if (editingNotice) {
-                            setEditingNotice({ ...editingNotice, tag: e.target.value });
-                          } else {
-                            setNewNotice({ ...newNotice, tag: e.target.value });
-                          }
-                        }}
-                      >
-                        {noticeCategories.map((c) => (
-                          <option key={c} value={c}>{c}</option>
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Category Tag</label>
+                          <select
+                            className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 cursor-pointer dark:text-white"
+                            value={editingNotice.tag}
+                            onChange={(e) => setEditingNotice({ ...editingNotice, tag: e.target.value })}
+                          >
+                            {noticeCategories.map((c) => (
+                              <option key={c} value={c}>{c}</option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <FileUploadDropzone
+                          label="Notice Attachment (PDF, Image, Word Doc, Excel, Zip)"
+                          sublabel="Drag & drop any file (PDF, JPG, PNG, DOCX, XLSX, ZIP up to 50MB) or browse"
+                          value={editingNotice.url}
+                          onChange={(uploadedPath) => setEditingNotice((prev: any) => ({ ...prev, url: uploadedPath }))}
+                          module="notices"
+                          category={editingNotice.tag}
+                          fileNamePrefix={editingNotice.title}
+                        />
+                      </>
+                    ) : (
+                      /* Create Mode: Supports Multi-Notice / Batch Publishing */
+                      <div className="space-y-6">
+                        {noticeDrafts.map((draft, idx) => (
+                          <div
+                            key={draft.clientId}
+                            className={`space-y-4 ${
+                              noticeDrafts.length > 1
+                                ? "p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-950/30 relative"
+                                : ""
+                            }`}
+                          >
+                            {noticeDrafts.length > 1 && (
+                              <div className="flex items-center justify-between pb-2 border-b border-slate-200/60 dark:border-slate-800">
+                                <span className="text-[11px] font-black uppercase tracking-wider text-[#0F4C81] dark:text-cyan-400 flex items-center gap-1.5">
+                                  <span className="w-5 h-5 rounded-full bg-[#0F4C81]/10 dark:bg-cyan-400/10 flex items-center justify-center text-[10px]">
+                                    {idx + 1}
+                                  </span>
+                                  Notice #{idx + 1}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveNoticeDraft(draft.clientId)}
+                                  className="text-[10px] font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1 cursor-pointer transition uppercase tracking-wider"
+                                  title="Remove this notice"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" /> Remove
+                                </button>
+                              </div>
+                            )}
+
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                                Notice Title {noticeDrafts.length > 1 && `(#${idx + 1})`}
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="e.g. B.Tech Exams circular postponed..."
+                                className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 focus:border-[#0F4C81] dark:text-white"
+                                value={draft.title}
+                                onChange={(e) => handleUpdateNoticeDraft(draft.clientId, "title", e.target.value)}
+                                required={idx === 0}
+                              />
+                            </div>
+
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                                Category Tag
+                              </label>
+                              <select
+                                className="w-full bg-slate-50/50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-[#0F4C81]/25 cursor-pointer dark:text-white"
+                                value={draft.tag}
+                                onChange={(e) => handleUpdateNoticeDraft(draft.clientId, "tag", e.target.value)}
+                              >
+                                {noticeCategories.map((c) => (
+                                  <option key={c} value={c}>{c}</option>
+                                ))}
+                              </select>
+                            </div>
+
+                            <FileUploadDropzone
+                              label={`Attachment (PDF, Doc, Image) ${noticeDrafts.length > 1 ? `— Notice #${idx + 1}` : ""}`}
+                              sublabel="Drag & drop any file (PDF, JPG, PNG, DOCX, XLSX, ZIP up to 50MB) or browse"
+                              value={draft.url}
+                              onChange={(uploadedPath) => handleUpdateNoticeDraft(draft.clientId, "url", uploadedPath)}
+                              module="notices"
+                              category={draft.tag}
+                              fileNamePrefix={draft.title || `notice-${idx + 1}`}
+                            />
+                          </div>
                         ))}
-                      </select>
-                    </div>
 
-                    <FileUploadDropzone
-                      label="Notice Attachment (PDF, Image, Word Doc, Excel, Zip)"
-                      sublabel="Drag & drop any file (PDF, JPG, PNG, DOCX, XLSX, ZIP up to 50MB) or browse"
-                      value={editingNotice ? editingNotice.url : newNotice.url}
-                      onChange={(uploadedPath) => {
-                        if (editingNotice) {
-                          setEditingNotice((prev: any) => ({ ...prev, url: uploadedPath }));
-                        } else {
-                          setNewNotice((prev) => ({ ...prev, url: uploadedPath }));
-                        }
-                      }}
-                      module="notices"
-                      category={editingNotice ? editingNotice.tag : newNotice.tag}
-                      fileNamePrefix={editingNotice ? editingNotice.title : newNotice.title}
-                    />
+                        {/* Plus (+) Button to Add Multiple Notices */}
+                        <div className="pt-1">
+                          <button
+                            type="button"
+                            onClick={handleAddNoticeDraft}
+                            className="w-full py-2.5 px-3 rounded-xl border-2 border-dashed border-blue-300 dark:border-blue-900/60 hover:border-[#0F4C81] dark:hover:border-cyan-400 text-[#0F4C81] dark:text-cyan-400 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+                          >
+                            <Plus className="w-4 h-4" />
+                            <span>Add Another Notice (+)</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="pt-2">
                       <button
                         type="submit"
-                        className="w-full bg-[#0F4C81] hover:bg-[#0D3F6D] text-white font-bold py-3 rounded-xl transition shadow-md text-xs flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider"
+                        disabled={publishingNotices}
+                        className="w-full bg-[#0F4C81] hover:bg-[#0D3F6D] text-white font-bold py-3 rounded-xl transition shadow-md text-xs flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider disabled:opacity-60"
                       >
                         {editingNotice ? (
                           <>
                             <Pencil className="w-4 h-4" /> Update & Send Push Alert
+                          </>
+                        ) : publishingNotices ? (
+                          <>
+                            <RefreshCw className="w-4 h-4 animate-spin" /> Publishing...
+                          </>
+                        ) : noticeDrafts.length > 1 ? (
+                          <>
+                            <Plus className="w-4 h-4" /> Publish All ({noticeDrafts.length}) Announcements & Send Push Alerts
                           </>
                         ) : (
                           <>

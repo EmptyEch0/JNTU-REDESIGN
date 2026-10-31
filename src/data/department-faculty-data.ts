@@ -617,7 +617,7 @@ export const DEPARTMENT_FACULTY_LIST: Record<string, DepartmentFacultyListItem[]
     },
     {
       sNo: 5,
-      name: "Dr. K.C.B Rao",
+      name: "Prof. Kota Chandra Bhushana Rao",
       qualification: "Ph.D",
       studiedUniversity: "AU",
       graduationYear: "1992",
@@ -1581,7 +1581,7 @@ export const DEPARTMENT_EXPLICIT_FACULTY_PROFILES: Record<string, DepartmentFacu
     { id: "43", name: "Prof. K. Babulu", designation: "Professor", photo_url: "uploads/departments/faculty_photos/ece/k-babulu.jpg" },
     { id: "44", name: "Prof. Ch. Srinivasa Rao", designation: "Professor", photo_url: "uploads/departments/faculty_photos/ece/ch-srinivasa-rao.jpg" },
     { id: "45", name: "Prof. N. Balaji", designation: "Professor", photo_url: "uploads/departments/faculty_photos/ece/n-balaji.jpg" },
-    { id: "46", name: "Prof. K. C. B. Rao", designation: "Professor of ECE", photo_url: "uploads/departments/faculty_photos/ece/k-c-b-rao.jpg" },
+    { id: "46", name: "Prof. Kota Chandra Bhushana Rao", designation: "Professor", photo_url: "/images/faculty/ece/dr-k-chandra-bhushana-rao.jpg" },
     { id: "47", name: "Dr. Ravva Gurunadha", designation: "Associate Professor", photo_url: "uploads/departments/faculty_photos/ece/dr--ravva-gurunadha.jpg" },
     { id: "49", name: "Dr. Nalini Bodasingi", designation: "Assistant Professor", photo_url: "https://dmc.jntugv.edu.in/static/media/Coordnitor_dmc.85b4a83327642f173145.jpg" },
     { id: "50", name: "Akurathi Gangadhar", designation: "Assistant Professor", photo_url: "uploads/departments/faculty_photos/ece/a--gangadhar.jpg" },

@@ -5,7 +5,7 @@ import {
   Users, ShieldCheck, BookOpen, Building2, Landmark, Award, Globe, Compass, Plane,
   Sparkles, Clock, Download, Home, HeartPulse, Library, Trophy, Briefcase,
   Microscope, Heart, Info, MapPin, Layers, Scale, Lightbulb, Users2, FileCode, Activity,
-  Cpu, Wifi, Radio, Zap, Cog, Hammer, FlaskConical, Sigma, LineChart
+  Cpu, Wifi, Radio, Zap, Cog, Hammer, FlaskConical, Sigma, LineChart, Calendar
 } from "lucide-react";
 import { NAV, SEARCH_INDEX, SITE } from "@/lib/site";
 import { uploadUrl } from "@/lib/assets";
@@ -33,6 +33,7 @@ function getItemIcon(label: string) {
   if (l.includes("vizianagaram")) return MapPin;
   if (l.includes("reach")) return Compass;
   if (l.includes("program")) return GraduationCap;
+  if (l.includes("calendar")) return Calendar;
   if (l.includes("regulation")) return Scale;
   if (l.includes("syllabus")) return FileText;
   if (l.includes("scholarship")) return Sparkles;

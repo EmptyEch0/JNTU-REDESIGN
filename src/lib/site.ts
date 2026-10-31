@@ -98,6 +98,11 @@ export const NAV: {
               to: "/academics/regulations",
               desc: "R20, R23 frameworks",
             },
+            {
+              label: "Academic Calendar",
+              to: "/academics/academic-calendar",
+              desc: "Semester dates & schedules",
+            },
           ],
         },
         {
@@ -420,6 +425,7 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
 
   { label: "Programs Offered", to: "/academics/programs", group: "Academics" },
   { label: "Academic Regulations", to: "/academics/regulations", group: "Academics" },
+  { label: "Academic Calendar", to: "/academics/academic-calendar", group: "Academics", keywords: "calendar semester schedule instruction dates exams" },
   { label: "Syllabus", to: "/academics/syllabus", group: "Academics" },
   { label: "Scholarships", to: "/academics/scholarships", group: "Academics" },
   {

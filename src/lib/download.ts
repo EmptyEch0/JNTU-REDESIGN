@@ -132,3 +132,125 @@ export function previewFile(
   const resolvedUrl = getAssetUrl(target.trim());
   window.open(resolvedUrl, "_blank", "noopener,noreferrer");
 }
+
+/**
+ * Shares a file or document link via the Web Share API if supported,
+ * or copies the link to the clipboard as a fallback.
+ *
+ * @param url The relative or absolute URL of the asset/PDF to share
+ * @param title Optional title for the share payload
+ * @param category Optional category for smart fallback resolution
+ */
+export async function shareFile(
+  url: string | null | undefined,
+  title?: string,
+  category?: string
+): Promise<void> {
+  const target = resolveRegulationPdf(url, title, category);
+  if (!target || target.trim() === "" || target.trim() === "#") {
+    toast.error("Document link is not available to share.");
+    return;
+  }
+  const resolvedUrl = getAssetUrl(target.trim());
+  const absoluteUrl = resolvedUrl.startsWith("http")
+    ? resolvedUrl
+    : typeof window !== "undefined"
+      ? `${window.location.origin}${resolvedUrl}`
+      : resolvedUrl;
+
+  const shareTitle = title ? `JNTU-GV — ${title}` : "JNTU-GV Academic Document";
+
+  if (typeof navigator !== "undefined" && navigator.share) {
+    try {
+      await navigator.share({
+        title: shareTitle,
+        text: title ? `Check out ${title} on JNTU-GV CEV:` : "Check out this document on JNTU-GV CEV:",
+        url: absoluteUrl,
+      });
+      toast.success("Shared successfully!");
+      return;
+    } catch (err: any) {
+      if (err.name === "AbortError") {
+        return;
+      }
+    }
+  }
+
+  // Fallback: copy to clipboard
+  try {
+    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(absoluteUrl);
+      toast.success("Link copied to clipboard!");
+    } else {
+      const textArea = document.createElement("textarea");
+      textArea.value = absoluteUrl;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      toast.success("Link copied to clipboard!");
+    }
+  } catch (err) {
+    console.error("Clipboard copy failed:", err);
+    toast.error("Failed to copy link to clipboard.");
+  }
+}
+
+/**
+ * Shares an arbitrary link (e.g. current page with filters) via Web Share API or copies it to clipboard.
+ *
+ * @param url The page URL or destination link to share
+ * @param title Optional title for the share payload
+ */
+export async function shareLink(url: string, title?: string): Promise<void> {
+  const absoluteUrl = url.startsWith("http")
+    ? url
+    : typeof window !== "undefined"
+      ? `${window.location.origin}${url}`
+      : url;
+
+  const shareTitle = title ? `JNTU-GV — ${title}` : "JNTU-GV Academics";
+
+  if (typeof navigator !== "undefined" && navigator.share) {
+    try {
+      await navigator.share({
+        title: shareTitle,
+        text: title ? `Check out ${title} on JNTU-GV CEV:` : "Check out this link on JNTU-GV CEV:",
+        url: absoluteUrl,
+      });
+      toast.success("Shared successfully!");
+      return;
+    } catch (err: any) {
+      if (err.name === "AbortError") {
+        return;
+      }
+    }
+  }
+
+  // Fallback: copy to clipboard
+  try {
+    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(absoluteUrl);
+      toast.success("Link copied to clipboard!");
+    } else {
+      const textArea = document.createElement("textarea");
+      textArea.value = absoluteUrl;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      toast.success("Link copied to clipboard!");
+    }
+  } catch (err) {
+    console.error("Clipboard copy failed:", err);
+    toast.error("Failed to copy link to clipboard.");
+  }
+}

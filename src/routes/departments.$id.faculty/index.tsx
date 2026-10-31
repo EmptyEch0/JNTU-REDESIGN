@@ -892,37 +892,58 @@ function FacultyPage() {
               </h3>
             </div>
           )}
-          <motion.div
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          >
-            <AnimatePresence mode="popLayout">
-              {displayActiveList.map((f, idx) => {
-                const cardIsHod = /hod|head of (the )?department/i.test(f.designation || "");
-                return (
-                  <FacultyCard
-                    key={f.id ? String(f.id) : `active_${idx}`}
-                    f={f}
-                    index={idx}
-                    totalCount={displayActiveList.length}
-                    isEditMode={isEditMode}
-                    deptId={deptId}
-                    isDragging={draggingIndex === idx}
-                    isHod={cardIsHod}
-                    handleUpdate={handleUpdate}
-                    onRequestDelete={(target) => setFacultyToDelete(target)}
-                    onMakeHod={makeHod}
-                    onToggleFormer={toggleFormer}
-                    moveFaculty={moveFaculty}
-                    onDragStart={handleDragStart}
-                    onDragEnter={handleDragEnter}
-                    onDragEnd={handleDragEnd}
-                    onDragOver={handleDragOver}
-                  />
-                );
-              })}
-            </AnimatePresence>
-          </motion.div>
+          {displayActiveList.length === 0 && !hodMember ? (
+            <div className="flex flex-col items-center justify-center py-20 px-6 bg-slate-50/60 rounded-[2.5rem] border border-dashed border-slate-200 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+                <Users size={28} className="opacity-80" />
+              </div>
+              <p className="text-slate-700 font-semibold text-lg">No faculty profiles added</p>
+              <p className="text-slate-400 text-xs mt-1 max-w-sm">
+                Faculty profiles for this department will be listed here.
+              </p>
+              {isEditMode && (
+                <button
+                  type="button"
+                  onClick={addFaculty}
+                  className="mt-6 flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-2xl font-bold text-xs hover:bg-blue-700 shadow-lg shadow-blue-100 transition-all cursor-pointer"
+                >
+                  <UserPlus size={15} /> Add First Faculty
+                </button>
+              )}
+            </div>
+          ) : (
+            <motion.div
+              layout
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              <AnimatePresence mode="popLayout">
+                {displayActiveList.map((f, idx) => {
+                  const cardIsHod = /hod|head of (the )?department/i.test(f.designation || "");
+                  return (
+                    <FacultyCard
+                      key={f.id ? String(f.id) : `active_${idx}`}
+                      f={f}
+                      index={idx}
+                      totalCount={displayActiveList.length}
+                      isEditMode={isEditMode}
+                      deptId={deptId}
+                      isDragging={draggingIndex === idx}
+                      isHod={cardIsHod}
+                      handleUpdate={handleUpdate}
+                      onRequestDelete={(target) => setFacultyToDelete(target)}
+                      onMakeHod={makeHod}
+                      onToggleFormer={toggleFormer}
+                      moveFaculty={moveFaculty}
+                      onDragStart={handleDragStart}
+                      onDragEnter={handleDragEnter}
+                      onDragEnd={handleDragEnd}
+                      onDragOver={handleDragOver}
+                    />
+                  );
+                })}
+              </AnimatePresence>
+            </motion.div>
+          )}
         </div>
 
         {/* ─── FORMER FACULTY MEMBERS SECTION ─── */}

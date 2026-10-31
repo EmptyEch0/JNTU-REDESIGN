@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { Download, Eye, FileText } from "lucide-react";
-import { downloadFile, previewFile } from "@/lib/download";
+import { Download, Eye, FileText, Share2 } from "lucide-react";
+import { downloadFile, previewFile, shareFile } from "@/lib/download";
 
 interface DownloadCardProps {
   title: string;
@@ -33,6 +33,11 @@ export function DownloadCard({
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
     downloadFile(targetUrl, `${title}.pdf`, title, category);
+  };
+
+  const handleShare = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    shareFile(targetUrl, `${title} (${category})`, category);
   };
 
   return (
@@ -79,6 +84,14 @@ export function DownloadCard({
           className="w-9 h-9 rounded-full flex items-center justify-center bg-red-50 text-red-600 hover:bg-red-600 hover:text-white hover:shadow-lg hover:shadow-red-600/20 transition-all focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900 cursor-pointer"
         >
           <Download className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={handleShare}
+          title="Share Regulation Link"
+          className="w-9 h-9 rounded-full flex items-center justify-center bg-gray-100 hover:bg-blue-50 dark:bg-zinc-800 dark:hover:bg-blue-950/40 text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-all focus:outline-none cursor-pointer"
+        >
+          <Share2 className="w-4 h-4" />
         </button>
       </div>
     </motion.div>

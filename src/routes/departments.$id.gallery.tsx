@@ -108,84 +108,114 @@ function GalleryPage() {
       </div>
 
       {/* Masonry Grid */}
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
-        {filteredImages.map((image: any) => (
-          <div
-            key={image.id}
-            className={`relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-slate-100 border transition-all duration-200 ${isEditMode ? 'border-indigo-400 ring-4 ring-indigo-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}
-          >
-            {image.image_url ? (
-              <SafeImage src={image.image_url} alt={image.title || "Gallery image"}
-          
-              loading="lazy"
-    decoding="async"
-              
-              className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-            ) : (
-              <div className="h-48 flex items-center justify-center bg-slate-200 text-slate-400">
-                <ImageIcon size={32} />
-              </div>
-            )}
-
-            {isEditMode ? (
-              <div className="p-6 bg-white border-t border-slate-100 space-y-4">
-                {/* Image Upload */}
-                <div className="space-y-1">
-                  <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><ImageIcon size={10}/> Image Upload</label>
-                  <AdminUpload
-                    value={image.image_url}
-                    onChange={(newUrl) => updateImage(image.id, "image_url", newUrl)}
-                    module="departments"
-                    category="gallery"
-                    placeholder="Upload image"
-                  />
-                </div>
-
-                {/* Title and Category Row */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><Type size={10} /> Title</label>
-                    <input className="w-full bg-slate-50 border border-slate-100 p-2 rounded-xl text-[11px] outline-none font-bold text-slate-800" value={image.title} onChange={(e) => updateImage(image.id, "title", e.target.value)} placeholder="Title" />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><Tag size={10} /> Category</label>
-                    <input className="w-full bg-slate-50 border border-slate-100 p-2 rounded-xl text-[10px] outline-none font-black uppercase text-indigo-600" value={image.category} onChange={(e) => updateImage(image.id, "category", e.target.value)} placeholder="Category" />
-                  </div>
-                </div>
-
-                {/* Description Input */}
-                <div className="space-y-1">
-                  <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><AlignLeft size={10} /> Description</label>
-                  <textarea
-                    className="w-full bg-slate-50 border border-slate-100 p-2 rounded-xl text-[11px] outline-none text-slate-500 min-h-[60px] resize-none"
-                    value={image.description}
-                    onChange={(e) => updateImage(image.id, "description", e.target.value)}
-                    placeholder="Brief details about this photo..."
-                  />
-                </div>
-
-                <button onClick={() => removeImage(image.id)} className="w-full py-2 bg-red-50 text-red-500 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2">
-                  <Trash2 size={12} /> Remove Image
-                </button>
-              </div>
-            ) : (
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-8 cursor-pointer"
-                onClick={() => setSelectedImage(image)}
-              >
-                <span className="text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-2">{image.category}</span>
-                <h4 className="text-white font-bold text-lg leading-tight mb-1">{image.title}</h4>
-                {image.description && (
-                  <p className="text-slate-300 text-xs line-clamp-2 italic">"{image.description}"</p>
-                )}
-                <div className="mt-4 flex items-center gap-2 text-white/50 text-[10px] font-bold">
-                  <Maximize2 size={12} /> Click to expand
-                </div>
-              </div>
-            )}
+      {galleryList.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 px-6 bg-slate-50/60 rounded-[2.5rem] border border-dashed border-slate-200 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4">
+            <Camera size={28} className="opacity-80" />
           </div>
-        ))}
-      </div>
+          <p className="text-slate-700 font-semibold text-lg">No gallery photos added</p>
+          <p className="text-slate-400 text-xs mt-1 max-w-sm">
+            There are currently no photos uploaded to the gallery for this department.
+          </p>
+          {isEditMode && (
+            <button
+              onClick={addImage}
+              className="mt-6 flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-2xl font-bold text-xs hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all cursor-pointer"
+            >
+              <Plus size={16} /> Add First Image
+            </button>
+          )}
+        </div>
+      ) : filteredImages.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 px-6 bg-slate-50/60 rounded-[2.5rem] border border-dashed border-slate-200 text-center">
+          <p className="text-slate-700 font-semibold text-base">No photos found in category "{activeFilter}"</p>
+          <button
+            onClick={() => setActiveFilter("All")}
+            className="mt-3 text-xs font-bold text-indigo-600 hover:underline cursor-pointer"
+          >
+            View all categories
+          </button>
+        </div>
+      ) : (
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+          {filteredImages.map((image: any) => (
+            <div
+              key={image.id}
+              className={`relative group break-inside-avoid rounded-[2rem] overflow-hidden bg-slate-100 border transition-all duration-200 ${isEditMode ? 'border-indigo-400 ring-4 ring-indigo-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}
+            >
+              {image.image_url ? (
+                <SafeImage src={image.image_url} alt={image.title || "Gallery image"}
+            
+                loading="lazy"
+      decoding="async"
+                
+                className="w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              ) : (
+                <div className="h-48 flex items-center justify-center bg-slate-200 text-slate-400">
+                  <ImageIcon size={32} />
+                </div>
+              )}
+
+              {isEditMode ? (
+                <div className="p-6 bg-white border-t border-slate-100 space-y-4">
+                  {/* Image Upload */}
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><ImageIcon size={10}/> Image Upload</label>
+                    <AdminUpload
+                      value={image.image_url}
+                      onChange={(newUrl) => updateImage(image.id, "image_url", newUrl)}
+                      module="departments"
+                      category="gallery"
+                      placeholder="Upload image"
+                    />
+                  </div>
+
+                  {/* Title and Category Row */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><Type size={10} /> Title</label>
+                      <input className="w-full bg-slate-50 border border-slate-100 p-2 rounded-xl text-[11px] outline-none font-bold text-slate-800" value={image.title} onChange={(e) => updateImage(image.id, "title", e.target.value)} placeholder="Title" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><Tag size={10} /> Category</label>
+                      <input className="w-full bg-slate-50 border border-slate-100 p-2 rounded-xl text-[10px] outline-none font-black uppercase text-indigo-600" value={image.category} onChange={(e) => updateImage(image.id, "category", e.target.value)} placeholder="Category" />
+                    </div>
+                  </div>
+
+                  {/* Description Input */}
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-1"><AlignLeft size={10} /> Description</label>
+                    <textarea
+                      className="w-full bg-slate-50 border border-slate-100 p-2 rounded-xl text-[11px] outline-none text-slate-500 min-h-[60px] resize-none"
+                      value={image.description}
+                      onChange={(e) => updateImage(image.id, "description", e.target.value)}
+                      placeholder="Brief details about this photo..."
+                    />
+                  </div>
+
+                  <button onClick={() => removeImage(image.id)} className="w-full py-2 bg-red-50 text-red-500 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2">
+                    <Trash2 size={12} /> Remove Image
+                  </button>
+                </div>
+              ) : (
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-8 cursor-pointer"
+                  onClick={() => setSelectedImage(image)}
+                >
+                  <span className="text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-2">{image.category}</span>
+                  <h4 className="text-white font-bold text-lg leading-tight mb-1">{image.title}</h4>
+                  {image.description && (
+                    <p className="text-slate-300 text-xs line-clamp-2 italic">"{image.description}"</p>
+                  )}
+                  <div className="mt-4 flex items-center gap-2 text-white/50 text-[10px] font-bold">
+                    <Maximize2 size={12} /> Click to expand
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Lightbox Modal */}
 {selectedImage && !isEditMode && (

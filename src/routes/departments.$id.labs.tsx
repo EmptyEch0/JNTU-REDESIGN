@@ -121,106 +121,126 @@ function LaboratoriesPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-12">
-        {labList.map((lab: any) => (
-          <div key={lab.id} className={`group bg-white border rounded-[3rem] overflow-hidden transition-all duration-300 relative ${isEditMode ? 'border-blue-400 ring-4 ring-blue-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}>
+      {labList.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 px-6 bg-slate-50/60 rounded-[2.5rem] border border-dashed border-slate-200 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+            <Microscope size={28} className="opacity-80" />
+          </div>
+          <p className="text-slate-700 font-semibold text-lg">No laboratories added</p>
+          <p className="text-slate-400 text-xs mt-1 max-w-sm">
+            There are currently no laboratory facilities listed for this department.
+          </p>
+          {isEditMode && (
+            <button
+              onClick={addLab}
+              className="mt-6 flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-2xl font-bold text-xs hover:bg-blue-700 shadow-lg shadow-blue-100 transition-all cursor-pointer"
+            >
+              <Plus size={16} /> Add First Laboratory
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-12">
+          {labList.map((lab: any) => (
+            <div key={lab.id} className={`group bg-white border rounded-[3rem] overflow-hidden transition-all duration-300 relative ${isEditMode ? 'border-blue-400 ring-4 ring-blue-50' : 'border-slate-200 shadow-sm hover:shadow-2xl'}`}>
 
-            {isEditMode && (
-              <button onClick={() => removeLab(lab.id)} className="absolute top-6 right-6 p-3 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 z-20 transition-transform active:scale-90">
-                <Trash2 size={18} />
-              </button>
-            )}
+              {isEditMode && (
+                <button onClick={() => removeLab(lab.id)} className="absolute top-6 right-6 p-3 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 z-20 transition-transform active:scale-90">
+                  <Trash2 size={18} />
+                </button>
+              )}
 
-            <div className="flex flex-col xl:flex-row">
-              {/* Visual Section */}
-              <div className="xl:w-[400px] p-8 bg-slate-50/50 border-r border-slate-100">
-                <div className="relative h-64 w-full rounded-[2.5rem] overflow-hidden mb-6 shadow-md border-4 border-white flex flex-col items-center justify-center bg-slate-100">
+              <div className="flex flex-col xl:flex-row">
+                {/* Visual Section */}
+                <div className="xl:w-[400px] p-8 bg-slate-50/50 border-r border-slate-100">
+                  <div className="relative h-64 w-full rounded-[2.5rem] overflow-hidden mb-6 shadow-md border-4 border-white flex flex-col items-center justify-center bg-slate-100">
+                    {isEditMode ? (
+                      <AdminUpload
+                        value={lab.photo_url || ""}
+                        onChange={(newUrl) => updateLab(lab.id, "photo_url", newUrl)}
+                        module="departments"
+                        category="labs"
+                        placeholder="Drag & drop laboratory photo"
+                        className="w-full h-full"
+                      />
+                    ) : lab.photo_url ? (
+                      <SafeImage src={lab.photo_url} alt={lab.name} fallbackName={lab.name} 
+                      loading="lazy"
+      decoding="async"
+                      className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center bg-white text-slate-200">
+                        <Microscope size={64} strokeWidth={1} />
+                      </div>
+                    )}
+                  </div>
+
                   {isEditMode ? (
-                    <AdminUpload
-                      value={lab.photo_url || ""}
-                      onChange={(newUrl) => updateLab(lab.id, "photo_url", newUrl)}
-                      module="departments"
-                      category="labs"
-                      placeholder="Drag & drop laboratory photo"
-                      className="w-full h-full"
-                    />
-                  ) : lab.photo_url ? (
-                    <SafeImage src={lab.photo_url} alt={lab.name} fallbackName={lab.name} 
-                    loading="lazy"
-    decoding="async"
-                    className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                    <div className="space-y-3">
+                      <input className="text-2xl font-black text-slate-900 w-full bg-transparent border-b border-blue-200 outline-none" value={lab.name} onChange={(e) => updateLab(lab.id, "name", e.target.value)} placeholder="Lab Name" />
+                      <div className="flex items-center gap-2 text-blue-600 bg-white p-2 rounded-xl border border-blue-100 shadow-sm">
+                        <MapPin size={14} />
+                        <input className="text-[10px] font-bold uppercase tracking-wider w-full outline-none" value={lab.location || ""} onChange={(e) => updateLab(lab.id, "location", e.target.value)} placeholder="Location" />
+                      </div>
+                      <textarea className="w-full text-slate-500 text-sm italic leading-relaxed bg-white border border-slate-200 p-3 rounded-2xl outline-none" rows={3} value={lab.description || ""} onChange={(e) => updateLab(lab.id, "description", e.target.value)} placeholder="Description" />
+                    </div>
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center bg-white text-slate-200">
-                      <Microscope size={64} strokeWidth={1} />
-                    </div>
+                    <>
+                      <h3 className="text-2xl font-black text-slate-900 leading-tight mb-2 group-hover:text-blue-600 transition-colors">{lab.name}</h3>
+                      <div className="flex items-center gap-2 text-slate-500 font-bold text-[10px] uppercase tracking-wider mb-4">
+                        <MapPin size={14} className="text-blue-500" /> {lab.location || "Department Block"}
+                      </div>
+                      <p className="text-slate-500 text-sm leading-relaxed italic">"{lab.description}"</p>
+                    </>
                   )}
                 </div>
 
-                {isEditMode ? (
-                  <div className="space-y-3">
-                    <input className="text-2xl font-black text-slate-900 w-full bg-transparent border-b border-blue-200 outline-none" value={lab.name} onChange={(e) => updateLab(lab.id, "name", e.target.value)} placeholder="Lab Name" />
-                    <div className="flex items-center gap-2 text-blue-600 bg-white p-2 rounded-xl border border-blue-100 shadow-sm">
-                      <MapPin size={14} />
-                      <input className="text-[10px] font-bold uppercase tracking-wider w-full outline-none" value={lab.location || ""} onChange={(e) => updateLab(lab.id, "location", e.target.value)} placeholder="Location" />
+                {/* Technical Inventory Section */}
+                <div className="flex-grow p-8 lg:p-12 bg-white relative">
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center gap-2 text-slate-400 uppercase text-[10px] font-black tracking-[0.2em]">
+                      <Cpu size={16} className="text-blue-500" /> Technical Resource Inventory
                     </div>
-                    <textarea className="w-full text-slate-500 text-sm italic leading-relaxed bg-white border border-slate-200 p-3 rounded-2xl outline-none" rows={3} value={lab.description || ""} onChange={(e) => updateLab(lab.id, "description", e.target.value)} placeholder="Description" />
+                    {isEditMode && (
+                      <button onClick={() => addSpec(lab.id)} className="flex items-center gap-2 text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+                        <Plus size={14} /> Add Item
+                      </button>
+                    )}
                   </div>
-                ) : (
-                  <>
-                    <h3 className="text-2xl font-black text-slate-900 leading-tight mb-2 group-hover:text-blue-600 transition-colors">{lab.name}</h3>
-                    <div className="flex items-center gap-2 text-slate-500 font-bold text-[10px] uppercase tracking-wider mb-4">
-                      <MapPin size={14} className="text-blue-500" /> {lab.location || "Department Block"}
-                    </div>
-                    <p className="text-slate-500 text-sm leading-relaxed italic">"{lab.description}"</p>
-                  </>
-                )}
-              </div>
 
-              {/* Technical Inventory Section */}
-              <div className="flex-grow p-8 lg:p-12 bg-white relative">
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-2 text-slate-400 uppercase text-[10px] font-black tracking-[0.2em]">
-                    <Cpu size={16} className="text-blue-500" /> Technical Resource Inventory
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {lab.specs && lab.specs.map((spec: any, idx: number) => (
+                      <div key={idx} className={`flex items-center justify-between p-4 rounded-3xl transition-all duration-300 ${isEditMode ? 'bg-blue-50/50 border border-blue-200' : 'bg-slate-50 border border-slate-100 hover:border-blue-200'}`}>
+                        <div className="flex items-center gap-3 flex-1">
+                          <div className="h-2 w-2 rounded-full bg-blue-400" />
+                          {isEditMode ? (
+                            <input className="text-[13px] font-bold text-slate-700 bg-transparent outline-none w-full border-b border-transparent focus:border-blue-400" value={spec.item} onChange={(e) => updateSpec(lab.id, idx, "item", e.target.value)} />
+                          ) : (
+                            <span className="text-[13px] font-bold text-slate-700">{spec.item}</span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 ml-4">
+                          {isEditMode ? (
+                            <>
+                              <input className="w-12 px-2 py-1 bg-white text-blue-600 text-[11px] font-black rounded-lg border border-blue-200 text-center outline-none" value={spec.count} onChange={(e) => updateSpec(lab.id, idx, "count", e.target.value)} />
+                              <button onClick={() => removeSpec(lab.id, idx)} className="text-red-400 hover:text-red-600"><Trash2 size={12} /></button>
+                            </>
+                          ) : (
+                            <span className="px-4 py-1 bg-white text-blue-600 text-[11px] font-black rounded-xl border border-slate-200 shadow-sm">{spec.count}</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    {(!lab.specs || lab.specs.length === 0) && !isEditMode && (
+                      <div className="col-span-full py-10 text-center text-slate-300 text-sm">Specs coming soon...</div>
+                    )}
                   </div>
-                  {isEditMode && (
-                    <button onClick={() => addSpec(lab.id)} className="flex items-center gap-2 text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
-                      <Plus size={14} /> Add Item
-                    </button>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {lab.specs && lab.specs.map((spec: any, idx: number) => (
-                    <div key={idx} className={`flex items-center justify-between p-4 rounded-3xl transition-all duration-300 ${isEditMode ? 'bg-blue-50/50 border border-blue-200' : 'bg-slate-50 border border-slate-100 hover:border-blue-200'}`}>
-                      <div className="flex items-center gap-3 flex-1">
-                        <div className="h-2 w-2 rounded-full bg-blue-400" />
-                        {isEditMode ? (
-                          <input className="text-[13px] font-bold text-slate-700 bg-transparent outline-none w-full border-b border-transparent focus:border-blue-400" value={spec.item} onChange={(e) => updateSpec(lab.id, idx, "item", e.target.value)} />
-                        ) : (
-                          <span className="text-[13px] font-bold text-slate-700">{spec.item}</span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 ml-4">
-                        {isEditMode ? (
-                          <>
-                            <input className="w-12 px-2 py-1 bg-white text-blue-600 text-[11px] font-black rounded-lg border border-blue-200 text-center outline-none" value={spec.count} onChange={(e) => updateSpec(lab.id, idx, "count", e.target.value)} />
-                            <button onClick={() => removeSpec(lab.id, idx)} className="text-red-400 hover:text-red-600"><Trash2 size={12} /></button>
-                          </>
-                        ) : (
-                          <span className="px-4 py-1 bg-white text-blue-600 text-[11px] font-black rounded-xl border border-slate-200 shadow-sm">{spec.count}</span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  {(!lab.specs || lab.specs.length === 0) && !isEditMode && (
-                    <div className="col-span-full py-10 text-center text-slate-300 text-sm">Specs coming soon...</div>
-                  )}
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

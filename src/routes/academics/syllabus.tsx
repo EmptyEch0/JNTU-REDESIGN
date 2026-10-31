@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GlassCard } from "@/components/academics/ui/GlassCard";
-import { BookOpen, Search, Download, Eye, RotateCcw, Plus, Trash2, Edit2, Save } from "lucide-react";
+import { BookOpen, Search, Download, Eye, RotateCcw, Plus, Trash2, Edit2, Save, Share2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
@@ -12,7 +12,7 @@ import {
   deleteAcademicsSyllabus
 } from "@/lib/academics";
 import { getAssetUrl, imageUrl } from "@/lib/assets";
-import { downloadFile, previewFile } from "@/lib/download";
+import { downloadFile, previewFile, shareFile, shareLink } from "@/lib/download";
 import { PageHero } from "@/components/PageHero";
 import { VerticalSubNav } from "@/components/VerticalSubNav";
 import { ACADEMICS_SUBNAV } from "@/lib/site";
@@ -509,6 +509,28 @@ function SyllabusPage() {
   const [selectedSem, setSelectedSem] = useState("All");
   const [selectedBranch, setSelectedBranch] = useState("All");
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get("q");
+      const reg = params.get("reg");
+      const cat = params.get("cat");
+      const prog = params.get("prog");
+      const branch = params.get("branch");
+      const sem = params.get("sem");
+
+      if (q) setSearchTerm(q);
+      if (reg) setSelectedReg(reg);
+      if (cat) setSelectedCat(cat);
+      if (prog) setSelectedProg(prog);
+      if (branch) setSelectedBranch(branch);
+      if (sem) setSelectedSem(sem);
+    } catch (e) {
+      // ignore
+    }
+  }, []);
+
   // State for Editing/Adding
   const [editSyllabusId, setEditSyllabusId] = useState<number | null>(null);
   const [sLevel, setSLevel] = useState<"UG" | "PG">("UG");
@@ -637,7 +659,7 @@ function SyllabusPage() {
         subtitle="Access structured, branch-wise syllabus records for all JNTU-GV academic regulations and semesters."
         image={campusImg}
       />
-      <div className="container-narrow py-12 flex flex-col md:flex-row gap-8 items-start">
+      <div className="max-w-[1536px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row gap-8 items-start">
         <VerticalSubNav items={ACADEMICS_SUBNAV} />
         <div className="flex-1 min-w-0 space-y-6">
 
@@ -851,10 +873,28 @@ function SyllabusPage() {
           </select>
         </div>
 
-        <div className="flex justify-end pt-2 font-sans">
+        <div className="flex items-center justify-end gap-2 pt-2 font-sans">
+          <button 
+            onClick={() => {
+              if (typeof window === "undefined") return;
+              const url = new URL(window.location.origin + window.location.pathname);
+              if (selectedReg !== "All") url.searchParams.set("reg", selectedReg);
+              if (selectedCat !== "All") url.searchParams.set("cat", selectedCat);
+              if (selectedProg !== "All") url.searchParams.set("prog", selectedProg);
+              if (selectedBranch !== "All") url.searchParams.set("branch", selectedBranch);
+              if (selectedSem !== "All") url.searchParams.set("sem", selectedSem);
+              if (searchTerm.trim()) url.searchParams.set("q", searchTerm.trim());
+              shareLink(url.toString(), "JNTU-GV Course Syllabus");
+            }}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300 cursor-pointer"
+            title="Share Syllabus Link with current filters"
+          >
+            <Share2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+            Share Syllabus
+          </button>
           <button 
             onClick={resetFilters}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 hover:bg-blue-100 transition-all duration-300"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 hover:bg-blue-100 transition-all duration-300 cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset Filters
@@ -962,6 +1002,16 @@ function SyllabusPage() {
                                   title="Download Syllabus PDF to Device"
                                 >
                                   <Download className="w-3.5 h-3.5" />
+                                </button>
+                                <button 
+                                  onClick={() => shareFile(
+                                    item.pdf_url,
+                                    `${item.program_name || ''} ${item.regulation || ''} ${item.branch || ''} - ${item.subject_name || 'Syllabus'}`
+                                  )}
+                                  className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-600 dark:bg-emerald-950/30 dark:hover:bg-emerald-900/40 dark:text-emerald-400 transition-colors cursor-pointer"
+                                  title="Share Syllabus Link"
+                                >
+                                  <Share2 className="w-3.5 h-3.5" />
                                 </button>
                               </>
                             ) : (

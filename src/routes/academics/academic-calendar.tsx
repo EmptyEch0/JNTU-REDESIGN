@@ -318,174 +318,220 @@ function AcademicCalendarPage() {
         )}
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8 items-start">
+      <div className="space-y-6">
         
-        {/* Left Column: Timeline list */}
-        <div className="lg:col-span-2 space-y-6">
+        {/* Toolbar: Search & Section Filter */}
+        <GlassCard className="p-4 flex flex-col md:flex-row gap-4 items-center justify-between overflow-visible z-20">
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input 
+              type="text" 
+              placeholder="Search by program, regulation..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800/50 border-none rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500/50 outline-none transition-all placeholder:text-slate-500"
+            />
+          </div>
           
-          {/* Toolbar */}
-          <GlassCard className="p-4 flex flex-col md:flex-row gap-4 items-center justify-between overflow-visible z-20">
-            <div className="relative w-full md:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <input 
-                type="text" 
-                placeholder="Search by program, regulation..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800/50 border-none rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-550/50 outline-none transition-all placeholder:text-slate-500"
-              />
-            </div>
-            
-            <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
-              <Filter className="w-4 h-4 text-slate-400 mr-2 flex-shrink-0" />
-              {["All", "Academic Schedule", "Examinations", "Holidays"].map((tag) => (
-                <button
-                  key={tag}
-                  onClick={() => setActiveSection(tag as any)}
-                  className={`px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
-                    activeSection === tag 
-                      ? "bg-blue-600 text-white shadow-md shadow-blue-500/10" 
-                      : "bg-slate-100 dark:bg-slate-800/50 text-slate-650 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
-                  }`}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
-          </GlassCard>
+          <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+            <Filter className="w-4 h-4 text-slate-400 mr-2 flex-shrink-0" />
+            {["All", "Academic Schedule", "Examinations", "Holidays"].map((tag) => (
+              <button
+                key={tag}
+                onClick={() => setActiveSection(tag as any)}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                  activeSection === tag 
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-500/20" 
+                    : "bg-slate-100 dark:bg-slate-800/50 text-slate-650 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </GlassCard>
 
-          {/* Timeline / Card Elements */}
-          <div className="space-y-4">
-            {isLoading ? (
-              <div className="text-center py-12 text-slate-500 font-medium">Loading Academic Calendars...</div>
-            ) : filteredEvents.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <AnimatePresence mode="popLayout">
-                  {filteredEvents.map((event, idx) => {
-                    const dbType = event.calendar_type === "Academic" ? "Academic Schedule" : event.calendar_type;
-                    return (
-                      <motion.div 
-                        key={event.id}
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ delay: idx * 0.04 }}
-                      >
-                        <GlassCard className="p-5 group hover:border-blue-500/30 transition-all duration-300 relative h-full flex flex-col justify-between">
-                          <div>
-                            <div className="flex items-start justify-between gap-2 mb-3">
-                              {/* Dynamic Icon */}
-                              <div className={`p-2.5 rounded-xl ${
-                                dbType === "Examinations" ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40" 
-                                : dbType === "Holidays" ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40" 
-                                : "bg-blue-50 text-blue-600 dark:bg-blue-950/40"
-                              }`}>
-                                {dbType === "Examinations" ? <GraduationCap size={20} /> 
-                                 : dbType === "Holidays" ? <Palmtree size={20} /> 
-                                 : <CalendarIcon size={20} />}
-                              </div>
-
-                              <span className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full ${
-                                 dbType === 'Examinations' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30' 
-                                 : dbType === 'Holidays' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30' 
-                                 : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30'
-                              }`}>
-                                {dbType}
-                              </span>
-                            </div>
-
-                            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1 group-hover:text-blue-600 transition-colors">
-                              {event.program_name} ({event.level})
-                            </h3>
-                            
-                            <div className="text-xs text-slate-500 space-y-1 mt-2 mb-4">
-                              <p><span className="font-semibold">Regulation:</span> {event.regulation}</p>
-                              <p><span className="font-semibold">Academic Year:</span> {event.academic_year}</p>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-                            <button
-                              onClick={() => handlePreviewPDF(event.pdf_url)}
-                              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 transition-colors"
-                              title="Preview Calendar Online"
-                            >
-                              <Eye size={14} />
-                            </button>
-                            <button
-                              onClick={() => handleDownloadPDF(event.pdf_url, `${event.program_name}_${event.regulation}_${event.academic_year}`)}
-                              className="flex-1 flex items-center justify-center gap-1.5 bg-blue-50 dark:bg-slate-800 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 text-blue-600 dark:text-slate-200 py-2 rounded-lg text-xs font-bold transition-all"
-                              title="Download Calendar PDF to Device"
-                            >
-                              <Download size={14} /> Download PDF
-                            </button>
-
-                            {/* Admin Action Buttons */}
-                            {isEditMode && (
-                              <div className="flex items-center gap-1">
-                                <button 
-                                  onClick={() => startEditEvent(event)}
-                                  className="p-2 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-lg"
-                                  title="Edit"
-                                >
-                                  <Edit2 size={13} />
-                                </button>
-                                <button 
-                                  onClick={() => { if(confirm("Are you sure you want to delete this calendar record?")) deleteEventMutation.mutate(event.id); }}
-                                  className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg"
-                                  title="Delete"
-                                >
-                                  <Trash2 size={13} />
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        </GlassCard>
-                      </motion.div>
-                    );
-                  })}
-                </AnimatePresence>
+        {/* Top Reference & Official Notice Banner Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          
+          {/* Active Reference Calendar Card (5 columns) */}
+          <div className="lg:col-span-5 flex flex-col">
+            <div className="h-full rounded-2xl p-5 bg-gradient-to-br from-[#0c2340] via-[#0f2d52] to-[#133763] text-white border border-blue-900/40 relative overflow-hidden shadow-lg shadow-blue-950/20 flex flex-col justify-between">
+              <div className="absolute -bottom-8 -right-8 w-28 h-28 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-blue-300/90 flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-cyan-400" /> Active Reference Calendar
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-200 border border-blue-400/20">
+                    {activeCategory === "All" ? "All Programs" : `${activeCategory} Level`}
+                  </span>
+                </div>
+                {latestCalendar ? (
+                  <div>
+                    <h4 className="text-lg font-bold text-white tracking-tight flex items-baseline gap-2">
+                      <span>{latestCalendar.program_name}</span>
+                      <span className="text-xs px-2 py-0.5 rounded-md bg-white/10 font-semibold text-blue-100">
+                        {latestCalendar.regulation}
+                      </span>
+                    </h4>
+                    <p className="text-cyan-300 text-xs sm:text-sm font-semibold mt-1">
+                      Academic Year: {latestCalendar.academic_year}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-300">Select another category or add records to view reference metrics.</p>
+                )}
               </div>
-            ) : (
-              <div className="text-center py-16 bg-white/40 backdrop-blur-sm rounded-2xl border border-slate-200/50">
-                <AlertCircle className="w-10 h-10 text-slate-400 mx-auto mb-2" />
-                <p className="text-slate-500 font-semibold text-sm">No academic calendars found matching your filters.</p>
+
+              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-blue-200/80">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Latest addition for {activeCategory === "All" ? "All" : activeCategory} level
+                </span>
+                {latestCalendar && (
+                  <button
+                    onClick={() => handlePreviewPDF(latestCalendar.pdf_url)}
+                    className="hover:text-white underline underline-offset-2 transition-colors flex items-center gap-1 font-medium"
+                  >
+                    <Eye size={12} /> View PDF
+                  </button>
+                )}
               </div>
-            )}
+            </div>
+          </div>
+
+          {/* Official CAC Notice Card (7 columns) */}
+          <div className="lg:col-span-7 flex flex-col">
+            <div className="h-full rounded-2xl p-5 bg-blue-50/70 dark:bg-blue-950/20 border border-blue-200/80 dark:border-blue-900/40 backdrop-blur-sm flex flex-col justify-between shadow-sm">
+              <div className="flex items-start gap-3.5">
+                <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5">
+                  <AlertCircle className="w-4 h-4" />
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-300">
+                      Official Notice
+                    </h4>
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
+                      College Academic Committee
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Academic calendars are designed and ratified by the <strong>College Academic Committee (CAC)</strong> in compliance with JNTU-GV guidelines. Any emergency rescheduling or holiday updates will be updated here in real-time.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-3 pt-2.5 border-t border-blue-100 dark:border-blue-900/30 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                <span>Ratified for Academic Year 2026–2027 & Ongoing Batches</span>
+                <span className="font-semibold text-blue-700 dark:text-blue-400">JNTU-GV Guidelines</span>
+              </div>
+            </div>
           </div>
 
         </div>
 
-        {/* Right Column: Information Panel */}
-        <div className="lg:col-span-1 space-y-6">
-          
-          <GlassCard className="p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white border-none relative overflow-hidden shadow-xl">
-            <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-blue-400" /> Active Reference Calendar
-            </h3>
-            {latestCalendar ? (
-              <div>
-                <p className="text-lg font-bold mb-1 line-clamp-2">{latestCalendar.program_name} ({latestCalendar.regulation})</p>
-                <p className="text-blue-400 text-sm font-semibold mb-4">Academic Year: {latestCalendar.academic_year}</p>
-                <div className="w-full h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-600 w-3/4 rounded-full"></div>
-                </div>
-                <p className="text-[10px] text-slate-400 mt-2 text-right">Latest addition for {activeCategory} level</p>
-              </div>
-            ) : (
-              <p className="text-sm text-slate-400">Select another category or add records to view reference metrics.</p>
-            )}
-          </GlassCard>
+        {/* 3-Column Academic Calendars Grid */}
+        <div className="space-y-4 pt-2">
+          {isLoading ? (
+            <div className="text-center py-16 text-slate-500 font-medium">Loading Academic Calendars...</div>
+          ) : filteredEvents.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <AnimatePresence mode="popLayout">
+                {filteredEvents.map((event, idx) => {
+                  const dbType = event.calendar_type === "Academic" ? "Academic Schedule" : event.calendar_type;
+                  return (
+                    <motion.div 
+                      key={event.id}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ delay: idx * 0.03 }}
+                    >
+                      <GlassCard className="p-5 group hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300 relative h-full flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-start justify-between gap-2 mb-3">
+                            {/* Dynamic Icon */}
+                            <div className={`p-2.5 rounded-xl ${
+                              dbType === "Examinations" ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40" 
+                              : dbType === "Holidays" ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40" 
+                              : "bg-blue-50 text-blue-600 dark:bg-blue-950/40"
+                            }`}>
+                              {dbType === "Examinations" ? <GraduationCap size={18} /> 
+                               : dbType === "Holidays" ? <Palmtree size={18} /> 
+                               : <CalendarIcon size={18} />}
+                            </div>
 
-          <GlassCard className="p-5 flex gap-4 border-blue-200 dark:border-blue-900/30 bg-blue-50/50 dark:bg-blue-900/10">
-            <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-blue-800 dark:text-blue-300 leading-relaxed">
-              <strong>Official Notice:</strong> Academic calendars are designed and ratified by the College Academic Committee (CAC) in compliance with JNTU-GV guidelines. Any emergency rescheduling or holiday updates will be updated here in real-time.
-            </p>
-          </GlassCard>
+                            <span className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full ${
+                               dbType === 'Examinations' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30' 
+                               : dbType === 'Holidays' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30' 
+                               : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30'
+                            }`}>
+                              {dbType}
+                            </span>
+                          </div>
 
+                          <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1 group-hover:text-blue-600 transition-colors">
+                            {event.program_name} ({event.level})
+                          </h3>
+                          
+                          <div className="text-xs text-slate-500 dark:text-slate-400 space-y-1 mt-2 mb-4">
+                            <p><span className="font-semibold text-slate-700 dark:text-slate-300">Regulation:</span> {event.regulation}</p>
+                            <p><span className="font-semibold text-slate-700 dark:text-slate-300">Academic Year:</span> {event.academic_year}</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                          <button
+                            onClick={() => handlePreviewPDF(event.pdf_url)}
+                            className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors"
+                            title="Preview Calendar Online"
+                          >
+                            <Eye size={14} />
+                          </button>
+                          <button
+                            onClick={() => handleDownloadPDF(event.pdf_url, `${event.program_name}_${event.regulation}_${event.academic_year}`)}
+                            className="flex-1 flex items-center justify-center gap-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 text-blue-600 dark:text-blue-400 dark:hover:text-white py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm"
+                            title="Download Calendar PDF to Device"
+                          >
+                            <Download size={14} /> Download PDF
+                          </button>
+
+                          {/* Admin Action Buttons */}
+                          {isEditMode && (
+                            <div className="flex items-center gap-1">
+                              <button 
+                                onClick={() => startEditEvent(event)}
+                                className="p-2 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-lg"
+                                title="Edit"
+                              >
+                                <Edit2 size={13} />
+                              </button>
+                              <button 
+                                onClick={() => { if(confirm("Are you sure you want to delete this calendar record?")) deleteEventMutation.mutate(event.id); }}
+                                className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg"
+                                title="Delete"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </GlassCard>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <div className="text-center py-16 bg-white/40 backdrop-blur-sm rounded-2xl border border-slate-200/50">
+              <AlertCircle className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+              <p className="text-slate-500 font-semibold text-sm">No academic calendars found matching your filters.</p>
+            </div>
+          )}
         </div>
+
       </div>
         </div>
       </div>

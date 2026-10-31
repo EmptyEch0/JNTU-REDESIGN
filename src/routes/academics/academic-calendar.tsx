@@ -29,7 +29,7 @@ function AcademicCalendarPage() {
   const queryClient = useQueryClient();
   
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeCategory, setActiveCategory] = useState<"UG" | "PG" | "PhD">("UG");
+  const [activeCategory, setActiveCategory] = useState<"All" | "UG" | "PG" | "PhD">("All");
   const [activeSection, setActiveSection] = useState<"All" | "Academic Schedule" | "Examinations" | "Holidays">("All");
 
   // State for Editing
@@ -87,8 +87,9 @@ function AcademicCalendarPage() {
 
   const startAddEvent = () => {
     setEditEventId(-1);
-    setEventCategory(activeCategory);
-    setEventProgramName(activeCategory === "UG" ? "B.Tech" : activeCategory === "PG" ? "M.Tech" : "PhD");
+    const defaultCat = activeCategory === "All" ? "UG" : activeCategory;
+    setEventCategory(defaultCat);
+    setEventProgramName(defaultCat === "UG" ? "B.Tech" : defaultCat === "PG" ? "M.Tech" : "PhD");
     setEventRegulation("R23");
     setEventAcademicYear("2025-2026");
     setEventCalendarType(
@@ -97,9 +98,15 @@ function AcademicCalendarPage() {
     setEventPdfUrl("");
   };
 
+  // Category counts
+  const totalCount = calendarEvents.length;
+  const ugCount = calendarEvents.filter((e) => e.level === "UG").length;
+  const pgCount = calendarEvents.filter((e) => e.level === "PG").length;
+  const phdCount = calendarEvents.filter((e) => e.level === "PhD").length;
+
   // Filter events based on level (active category), calendar_type (section), and search
   const filteredEvents = calendarEvents.filter((event) => {
-    const matchesCategory = event.level === activeCategory;
+    const matchesCategory = activeCategory === "All" || event.level === activeCategory;
     
     // Normalize type comparison
     const dbType = event.calendar_type === "Academic" ? "Academic Schedule" : event.calendar_type;
@@ -273,20 +280,31 @@ function AcademicCalendarPage() {
 
       {/* Program Categories Tabs & Download Latest Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-2 p-1.5 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl w-fit">
-          {(["UG", "PG", "PhD"] as const).map((cat) => (
-            <button
-              key={cat}
-              onClick={() => { setActiveCategory(cat); setActiveSection("All"); }}
-              className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
-                activeCategory === cat 
-                  ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm" 
-                  : "text-slate-650 dark:text-slate-400 hover:text-blue-600"
-              }`}
-            >
-              {cat === "UG" ? "UG Programs" : cat === "PG" ? "PG Programs" : "PhD Research"}
-            </button>
-          ))}
+        <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl w-fit flex-wrap">
+          {(["All", "UG", "PG", "PhD"] as const).map((cat) => {
+            const count = cat === "All" ? totalCount : cat === "UG" ? ugCount : cat === "PG" ? pgCount : phdCount;
+            const label = cat === "All" ? "All Programs" : cat === "UG" ? "UG Programs" : cat === "PG" ? "PG Programs" : "PhD Research";
+            return (
+              <button
+                key={cat}
+                onClick={() => { setActiveCategory(cat); setActiveSection("All"); }}
+                className={`flex items-center gap-2 px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 ${
+                  activeCategory === cat 
+                    ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm" 
+                    : "text-slate-650 dark:text-slate-400 hover:text-blue-600"
+                }`}
+              >
+                <span>{label}</span>
+                <span className={`px-2 py-0.5 rounded-full text-[11px] font-extrabold ${
+                  activeCategory === cat 
+                    ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200" 
+                    : "bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+                }`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {latestCalendar && (

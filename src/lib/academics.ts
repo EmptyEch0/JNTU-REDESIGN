@@ -131,7 +131,10 @@ export const deleteAcademicFeeStructure = createServerFn({ method: "POST" })
 // 2. Academic Calendar (REAL TABLE: academic_calendars)
 // ----------------------------------------------------
 export const getAcademicsCalendar = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(academicCalendars);
+  return await db
+    .select()
+    .from(academicCalendars)
+    .orderBy(desc(academicCalendars.academic_year), desc(academicCalendars.id));
 });
 
 export const upsertAcademicsCalendarEvent = createServerFn({ method: "POST" })

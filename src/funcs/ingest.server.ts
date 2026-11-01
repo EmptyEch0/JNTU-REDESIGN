@@ -50,16 +50,17 @@ export const triggerDatabaseIngest = createServerFn({ method: "POST" })
 
       // 4. Departments & HODs
       const HOD_MAP: Record<string, string> = {
-        cse: "Dr. R. Rajeswara Rao",
-        ece: "Dr. V. S. Vakula",
-        eee: "Dr. K. Sri Kumar",
-        mech: "Dr. R. Umamaheswara Rao",
-        met: "Dr. G. Swami Naidu",
-        it: "Dr. P. Aruna Kumari",
-        bsh: "Dr. G. J. Naga Raju",
-        bshss: "Dr. G. J. Naga Raju",
-        sh: "Dr. G. J. Naga Raju",
-        mba: "Dr. K. V. S. M. Ramanesh",
+        cse: "Dr. P. Aruna Kumari",
+        ece: "Dr. G. Appala Naidu",
+        eee: "Dr. V. S. Vakula",
+        mech: "Dr. K. Srinivasa Prasad",
+        met: "Dr. K. Srinivasa Prasad",
+        it: "Dr. B. Tirimula Rao",
+        bsh: "Dr. M. Sowbhagya Lakshmi",
+        bshss: "Dr. M. Sowbhagya Lakshmi",
+        sh: "Dr. M. Sowbhagya Lakshmi",
+        mba: "Dr. P. Sree Devi",
+        civil: "Dr. G. Appala Naidu",
       };
 
       const allDepts = await db.select().from(departments);

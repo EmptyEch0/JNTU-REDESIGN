@@ -528,7 +528,7 @@ export const queryChatbot = createServerFn({ method: "POST" })
 
     // 3. Live DB retrieval for dynamic academic records
     // (a) Syllabus
-    if (/syllabus|curriculum|r23|r20|r25/i.test(query)) {
+    if (/syllabus|curriculum|r23|r20|r25|r19|r16|iot|internet\s*of\s*things|embedded|data\s*structures?|dsa|machine\s*learning|artificial\s*intelligence|\bml\b|\bai\b|dbms|operating\s*systems?|\bos\b|computer\s*networks?|\bcn\b|vlsi|cloud/i.test(query)) {
       try {
         const sylRows = await db.select().from(academicSyllabus);
         for (const s of sylRows) {

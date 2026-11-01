@@ -97,16 +97,16 @@ const INTENT_PATTERNS: Array<{ intent: Intent; pattern: RegExp }> = [
   { intent: "greeting",      pattern: /^\s*(hi|hello|hey|namaste|namaskar|good\s*(morning|evening|afternoon)|howdy|sup|hii+|helo)\b/i },
   { intent: "farewell",      pattern: /\b(bye|goodbye|see you|take care|quit|exit|cya)\b/i },
   { intent: "thanks",        pattern: /\b(thank(s| you)|thanks\s*a\s*(lot|ton|bunch)|dhanyavaadalu|dhanyavadalu|ty\b|thx)\b/i },
-  { intent: "vc",            pattern: /\b(vice.?chancellors?|chancellors?|vc\b|registrars?|university\s*officers?|university\s*head)\b/i },
+  { intent: "vc",            pattern: /\b(vice.?chancellors?|chancellors?|vc\b|registrars?|university\s*officers?|university\s*head|subba\s*rao|vv\s*subba\s*rao|chandra\s*bhushan)\b/i },
   { intent: "principal",     pattern: /(?:\b(principals?|head of college|college head|who leads|who is in charge|college chief)\b|ప్రిన్సిప|ప్రధానోపాధ్యాయు)/i },
   { intent: "vice_principal",pattern: /(?:\b(vice.?principals?|vp\b|vice principal)\b|వైస్.?ప్రిన్సిప)/i },
   { intent: "leadership",    pattern: /\b(leadership|management|governing body|administration|officials)\b/i },
-  { intent: "hod",           pattern: /(?:\b(hods?|heads?\s*of\s*(the\s*)?departments?|head\s*of\s*dept|departments?\s*heads?)\b|హెచ్.?ఓ.?డి|విభాగాధిప)/i },
+  { intent: "hod",           pattern: /(?:\b(hods?|heads?\s*of\s*(the\s*)?departments?|head\s*of\s*dept|departments?\s*heads?|tirimula\s*rao|benala|aruna\s*kumari|appala\s*naidu|srinivasa\s*prasad)\b|హెచ్.?ఓ.?డి|విభాగాధిప)/i },
   { intent: "department",    pattern: /\b(departments?|branch(es)?|programs?|streams?|courses?|cse|ece|eee|mba|mechanical|metallurg|civil|it\b|information technology|sciences|humanities|bsh|bshss|s&h|what departments|which branches|how many branch)\b/i },
   { intent: "hostel",        pattern: /\b(hostels?|accommodation|wardens?|mess|rooms?|dormitor(y|ies)|boys\s*hostel|girls\s*hostel|residential|stay in campus)\b/i },
   { intent: "library",       pattern: /\b(librar(y|ies)|books?|journals?|digital library|e-resources?|librarians?|reading room|nlist|ieee)\b/i },
   { intent: "placement",     pattern: /\b(placements?|recruits?|recruiters?|packages?|salary|salaries|tpo|campus drive|internships?|jobs?|lpa|offers?|hire|placed|placement cell)\b/i },
-  { intent: "syllabus",      pattern: /\b(syllabus(es)?|curriculum(s)?|r20|r23|r25|r19|r16|regulations?|subjects?|course\s*structures?|study\s*plans?|schemes?)\b/i },
+  { intent: "syllabus",      pattern: /\b(syllabus(es)?|curriculum(s)?|r20|r23|r25|r19|r16|regulations?|subjects?|course\s*structures?|study\s*plans?|schemes?|iot|internet\s*of\s*things|data\s*structures?|dsa|machine\s*learning|artificial\s*intelligence|deep\s*learning|cloud\s*computing|cyber\s*security|dbms|operating\s*systems?|computer\s*networks?|vlsi|embedded\s*systems?)\b/i },
   { intent: "timetable",     pattern: /\b(timetables?|time\s*tables?|schedules?|class\s*time|lecture\s*schedule|periods?)\b/i },
   { intent: "exam",          pattern: /\b(exams?|examinations?|results?|revaluations?|hall\s*tickets?|mid.?terms?|end.?sems?|suppl(y|ies)|backlogs?|cbcs|grades?|marks|gpa|cgpa)\b/i },
   { intent: "fee",           pattern: /\b(fees?|tuitions?|payments?|fee\s*structures?|college fees|how much cost|charges?|annual fee|semester fee)\b/i },
@@ -354,8 +354,8 @@ const KB = {
   },
   university: {
     name: "Jawaharlal Nehru Technological University Gurajada Vizianagaram (JNTU-GV)",
-    vc: "Prof. K. Venkata Subbaiah (Hon'ble Vice Chancellor)",
-    registrar: "Prof. G. Jaya Suma (Registrar)",
+    vc: "Prof. V. V. Subba Rao (Hon'ble Vice Chancellor)",
+    registrar: "Prof. K. Chandra Bhushan Rao (Registrar)",
     email: "registrar@jntugv.edu.in",
   },
   principal: {
@@ -375,21 +375,28 @@ const KB = {
     "Electrical & Electronics Engineering (EEE)",
     "Mechanical Engineering (MECH)",
     "Metallurgical Engineering (MET)",
+    "Civil Engineering (CIVIL)",
     "Basic Sciences & Humanities (BSH / S&H)",
     "Master of Business Administration (MBA)",
   ],
   hods: [
-    { code: "CSE", name: "Dr. R. Rajeswara Rao", dept: "Computer Science & Engineering", designation: "Professor & HOD", email: "hod.cse@jntugvcev.edu.in" },
-    { code: "ECE", name: "Dr. V. S. Vakula", dept: "Electronics & Communication Engineering", designation: "Professor & HOD", email: "hod.ece@jntugvcev.edu.in" },
-    { code: "EEE", name: "Dr. K. Sri Kumar", dept: "Electrical & Electronics Engineering", designation: "Professor & HOD", email: "hod.eee@jntugvcev.edu.in" },
-    { code: "MECH", name: "Dr. R. Umamaheswara Rao", dept: "Mechanical Engineering", designation: "Professor & HOD", email: "hod.me@jntugvcev.edu.in" },
-    { code: "MET", name: "Dr. G. Swami Naidu", dept: "Metallurgical Engineering", designation: "Professor & HOD", email: "hod.met@jntugvcev.edu.in" },
-    { code: "IT", name: "Dr. P. Aruna Kumari", dept: "Information Technology", designation: "Professor & HOD", email: "hod.it@jntugvcev.edu.in" },
-    { code: "BSH", name: "Dr. G. J. Naga Raju", dept: "Basic Sciences & Humanities (S&H)", designation: "Professor & HOD", email: "hod.bs@jntugvcev.edu.in" },
-    { code: "MBA", name: "Dr. K. V. S. M. Ramanesh", dept: "Master of Business Administration", designation: "Professor & HOD", email: "hod.mba@jntugvcev.edu.in" },
+    { code: "CSE", name: "Dr. P. Aruna Kumari", dept: "Computer Science & Engineering", designation: "Assistant Professor & HOD", email: "hod.cse@jntugvcev.edu.in" },
+    { code: "IT", name: "Dr. B. Tirimula Rao (Dr. Tirimula Rao Benala)", dept: "Information Technology", designation: "Associate Professor & HOD", email: "hod.it@jntugvcev.edu.in" },
+    { code: "ECE", name: "Dr. G. Appala Naidu", dept: "Electronics & Communication Engineering", designation: "Associate Professor & HOD", email: "hod.ece@jntugvcev.edu.in" },
+    { code: "CIVIL", name: "Dr. G. Appala Naidu", dept: "Civil Engineering", designation: "HOD", email: "hod.civil@jntugvcev.edu.in" },
+    { code: "EEE", name: "Dr. V. S. Vakula", dept: "Electrical & Electronics Engineering", designation: "Professor, Principal & HOD", email: "hod.eee@jntugvcev.edu.in" },
+    { code: "MECH", name: "Dr. K. Srinivasa Prasad", dept: "Mechanical Engineering", designation: "Professor & HOD", email: "hod.me@jntugvcev.edu.in" },
+    { code: "MET", name: "Dr. K. Srinivasa Prasad", dept: "Metallurgical Engineering", designation: "Professor & HOD", email: "hod.met@jntugvcev.edu.in" },
+    { code: "BSH", name: "Dr. M. Sowbhagya Lakshmi", dept: "Basic Sciences & Humanities (S&H)", designation: "Associate Professor & HOD", email: "hod.bs@jntugvcev.edu.in" },
+    { code: "MBA", name: "Dr. P. Sree Devi", dept: "Master of Business Administration", designation: "Assistant Professor & HOD", email: "hod.mba@jntugvcev.edu.in" },
   ],
   faculty: [
-    { name: "Prof. G. Jaya Suma", designation: "Professor of CSE & Registrar JNTU-GV", department: "Computer Science & Engineering", email: "registrar@jntugv.edu.in" },
+    { name: "Prof. K. Chandra Bhushan Rao", designation: "Professor of ECE & Registrar JNTU-GV", department: "Electronics & Communication Engineering", email: "registrar@jntugv.edu.in" },
+    { name: "Prof. G. Jaya Suma", designation: "Professor of CSE", department: "Computer Science & Engineering", email: "jayasuma.cse@jntugvcev.edu.in" },
+    { name: "Dr. B. Tirimula Rao", designation: "Associate Professor & HOD of IT", department: "Information Technology", email: "hod.it@jntugvcev.edu.in" },
+    { name: "Dr. P. Aruna Kumari", designation: "Assistant Professor & HOD of CSE", department: "Computer Science & Engineering", email: "hod.cse@jntugvcev.edu.in" },
+    { name: "Dr. G. Appala Naidu", designation: "Associate Professor & HOD of ECE", department: "Electronics & Communication Engineering", email: "hod.ece@jntugvcev.edu.in" },
+    { name: "Dr. K. Srinivasa Prasad", designation: "Professor & HOD of MECH/MET", department: "Mechanical Engineering", email: "hod.me@jntugvcev.edu.in" },
     { name: "Dr. P. Ramakrishna", designation: "Professor of CSE", department: "Computer Science & Engineering", email: "ramakrishna.cse@jntugvcev.edu.in" },
     { name: "Dr. S. V. Narayana", designation: "Associate Professor of ECE", department: "Electronics & Communication Engineering", email: "svnarayana.ece@jntugvcev.edu.in" },
     { name: "Dr. K. Srinivasa Rao", designation: "Professor of Mechanical Engineering", department: "Mechanical Engineering", email: "srinivasarao.me@jntugvcev.edu.in" },
@@ -401,11 +408,12 @@ const KB = {
   programs: {
     ug: [
       { name: "B.Tech Computer Science & Engineering (CSE)", duration: "4 years", intake: 60 },
+      { name: "B.Tech Information Technology (IT)", duration: "4 years", intake: 60 },
       { name: "B.Tech Electronics & Communication Engineering (ECE)", duration: "4 years", intake: 60 },
       { name: "B.Tech Electrical & Electronics Engineering (EEE)", duration: "4 years", intake: 60 },
       { name: "B.Tech Mechanical Engineering (ME)", duration: "4 years", intake: 60 },
       { name: "B.Tech Metallurgical Engineering (MET)", duration: "4 years", intake: 60 },
-      { name: "B.Tech Information Technology (IT)", duration: "4 years", intake: 60 },
+      { name: "B.Tech Civil Engineering (CIVIL)", duration: "4 years", intake: 60 },
     ],
     pg: [
       { name: "M.Tech (CSE / ECE / EEE / ME / IT specializations)", duration: "2 years", intake: 18 },
@@ -445,6 +453,11 @@ const KB = {
       ug: "B.Tech in Information Technology (Intake: 60, Duration: 4 years)",
       pg: "M.Tech in IT / Data Science (Intake: 18, Duration: 2 years)",
       phd: "Ph.D in Information Technology",
+    },
+    CIVIL: {
+      ug: "B.Tech in Civil Engineering (Intake: 60, Duration: 4 years)",
+      pg: "M.Tech in Structural Engineering",
+      phd: "Ph.D in Civil Engineering",
     },
     BSH: {
       ug: "Foundation Sciences (Mathematics, Physics, Chemistry, English, Humanities) for 1st Year B.Tech",
@@ -827,14 +840,15 @@ const KB = {
     chairman: "Principal (Dr. V. S. Vakula) — Dean & Institutional Administrator",
     convener: "Vice Principal (Prof. G. J. Naga Raju) — Academic Coordinator",
     members: [
-      "Head of CSE (Dr. R. Rajeswara Rao)",
-      "Head of ECE (Dr. V. S. Vakula)",
-      "Head of EEE (Dr. K. Sri Kumar)",
-      "Head of Mechanical Engineering (Dr. R. Umamaheswara Rao)",
-      "Head of Metallurgical Engineering (Dr. G. Swami Naidu)",
-      "Head of Information Technology (Dr. P. Aruna Kumari)",
-      "Head of Basic Sciences & Humanities (Dr. G. J. Naga Raju)",
-      "Head of MBA (Dr. K. V. S. M. Ramanesh)",
+      "Head of CSE (Dr. P. Aruna Kumari)",
+      "Head of IT (Dr. B. Tirimula Rao)",
+      "Head of ECE (Dr. G. Appala Naidu)",
+      "Head of Civil Engineering (Dr. G. Appala Naidu)",
+      "Head of EEE (Dr. V. S. Vakula)",
+      "Head of Mechanical Engineering (Dr. K. Srinivasa Prasad)",
+      "Head of Metallurgical Engineering (Dr. K. Srinivasa Prasad)",
+      "Head of Basic Sciences & Humanities (Dr. M. Sowbhagya Lakshmi / Dr. G. J. Naga Raju)",
+      "Head of MBA (Dr. P. Sree Devi / Dr. K. V. S. M. Ramanesh)",
       "Examination Branch Officer (Evaluation Head)",
     ],
     role: "The apex academic body responsible for academic planning, curriculum framing and regulation updates (R23, R20, R25), syllabus approval, student attendance policies, examinations calendar, and academic audits.",
@@ -956,6 +970,21 @@ function buildAnswer(
 
   // ── VC & REGISTRAR ──
   if (intents.includes("vc")) {
+    const qLower = query.toLowerCase();
+    const wantsRegistrar = /registrar|chandra\s*bhushan/i.test(qLower) && !/vice.?chancellor|\bvc\b|subba\s*rao/i.test(qLower);
+    const wantsVC = (/vice.?chancellor|\bvc\b|subba\s*rao/i.test(qLower)) && !/registrar|chandra\s*bhushan/i.test(qLower);
+
+    if (wantsVC) {
+      if (isTe) return `JNTU-GV గౌరవనీయ వైస్ ఛాన్సలర్: **${KB.university.vc}** 🏛️\n📍 JNTU-GV క్యాంపస్, విజయనగరం`;
+      return `**Hon'ble Vice Chancellor (JNTU-GV)** 🏛️\n\n• **Vice Chancellor**: **${KB.university.vc}**\n• **University**: Jawaharlal Nehru Technological University Gurajada Vizianagaram (JNTU-GV)\n• **Campus**: Dwarapudi, Vizianagaram – 535003\n\n🌐 [Administration Details](/administration)`;
+    }
+
+    if (wantsRegistrar) {
+      if (isTe) return `JNTU-GV రిజిస్ట్రార్: **${KB.university.registrar}** 🏛️\n📧 [${KB.university.email}](mailto:${KB.university.email})\n📍 JNTU-GV క్యాంపస్, విజయనగరం`;
+      return `**Registrar of JNTU-GV** 🏛️\n\n• **Registrar**: **${KB.university.registrar}**\n• **Designation**: Professor of ECE & Registrar, JNTU-GV\n• **Email**: [${KB.university.email}](mailto:${KB.university.email})\n• **Campus**: JNTU-GV Campus, Vizianagaram\n\n🌐 [University Administration](/administration)`;
+    }
+
+    if (isTe) return `**విశ్వవిద్యాలయ నాయకత్వం (JNTU-GV)** 🏛️\n\n• **వైస్ ఛాన్సలర్**: ${KB.university.vc}\n• **రిజిస్ట్రార్**: ${KB.university.registrar} — [${KB.university.email}](mailto:${KB.university.email})\n\n📍 JNTU-GV క్యాంపస్, విజయనగరం`;
     return `**University Leadership (JNTU-GV)** 🏛️\n\n• **Vice Chancellor**: ${KB.university.vc}\n• **Registrar**: ${KB.university.registrar} — [${KB.university.email}](mailto:${KB.university.email})\n\n📍 JNTU-GV Campus, Vizianagaram`;
   }
 
@@ -975,12 +1004,30 @@ function buildAnswer(
   // ── LEADERSHIP ──
   if (intents.includes("leadership")) {
     const extra = rel(["principal", "vice", "governing", "administration"]);
-    return `**JNTU-GV CEV Leadership** 🏛️\n\n• **Principal**: ${KB.principal.name} — [${KB.principal.email}](mailto:${KB.principal.email})\n• **Vice Principal**: ${KB.vicePrincipal.name} — [${KB.vicePrincipal.email}](mailto:${KB.vicePrincipal.email})\n• **Registrar**: ${KB.university.registrar}${extra ? `\n\n${extra}` : ""}`;
+    return `**JNTU-GV Leadership** 🏛️\n\n• **Vice Chancellor**: ${KB.university.vc}\n• **Registrar**: ${KB.university.registrar}\n• **Principal**: ${KB.principal.name} — [${KB.principal.email}](mailto:${KB.principal.email})\n• **Vice Principal**: ${KB.vicePrincipal.name} — [${KB.vicePrincipal.email}](mailto:${KB.vicePrincipal.email})${extra ? `\n\n${extra}` : ""}`;
   }
 
   // ── HOD ──
   if (intents.includes("hod")) {
     const qLower = query.toLowerCase();
+
+    // Direct person name searches first
+    if (/tirimula\s*rao|benala/i.test(qLower)) {
+      const h = KB.hods.find(x => x.code === "IT")!;
+      return `**${h.name}** is the Head of Department (HOD) of **${h.dept} (${h.code})** 👨‍🏫\n\n• **Designation**: ${h.designation}\n• **Email**: [${h.email}](mailto:${h.email})\n• **Department**: Department of ${h.dept}, JNTU-GV CEV\n\n🌐 [View IT Department](/departments/it) | [IT Faculty](/departments/it/faculty)`;
+    }
+    if (/aruna\s*kumari/i.test(qLower)) {
+      const h = KB.hods.find(x => x.code === "CSE")!;
+      return `**${h.name}** is the Head of Department (HOD) of **${h.dept} (${h.code})** 👩‍🏫\n\n• **Designation**: ${h.designation}\n• **Email**: [${h.email}](mailto:${h.email})\n• **Department**: Department of ${h.dept}, JNTU-GV CEV\n\n🌐 [View CSE Department](/departments/cse) | [CSE Faculty](/departments/cse/faculty)`;
+    }
+    if (/appala\s*naidu/i.test(qLower)) {
+      const h = KB.hods.find(x => x.code === "ECE")!;
+      return `**${h.name}** is the Head of Department (HOD) of **${h.dept} (${h.code})** & **Civil Engineering** 👨‍🏫\n\n• **Designation**: ${h.designation}\n• **Email**: [${h.email}](mailto:${h.email})\n• **Department**: JNTU-GV CEV\n\n🌐 [View ECE Department](/departments/ece) | [View Civil Department](/departments/civil)`;
+    }
+    if (/srinivasa\s*prasad/i.test(qLower)) {
+      const h = KB.hods.find(x => x.code === "MECH")!;
+      return `**${h.name}** is the Head of Department (HOD) of **Mechanical & Metallurgical Engineering** 👨‍🏫\n\n• **Designation**: ${h.designation}\n• **Email**: [${h.email}](mailto:${h.email})\n• **Department**: JNTU-GV CEV\n\n🌐 [View Mechanical Department](/departments/mech) | [View Metallurgy Department](/departments/met)`;
+    }
 
     const deptMatch =
       /(\bit\b|information technology)/i.test(qLower) ? KB.hods.find(h => h.code === "IT") :
@@ -989,6 +1036,7 @@ function buildAnswer(
       /(\beee\b|electrical)/i.test(qLower) ? KB.hods.find(h => h.code === "EEE") :
       /(\bmech\b|mechanical)/i.test(qLower) ? KB.hods.find(h => h.code === "MECH") :
       /(\bmet\b|metallurg)/i.test(qLower) ? KB.hods.find(h => h.code === "MET") :
+      /(\bcivil\b)/i.test(qLower) ? KB.hods.find(h => h.code === "CIVIL") :
       /(\bbsh\b|\bbshss\b|s&h|sciences|humanities)/i.test(qLower) ? KB.hods.find(h => h.code === "BSH") :
       /(\bmba\b|business)/i.test(qLower) ? KB.hods.find(h => h.code === "MBA") :
       null;
@@ -1002,7 +1050,7 @@ function buildAnswer(
 
     const hodList = KB.hods.map((h) => `• **${h.code}** (${h.dept}): **${h.name}** — [${h.email}](mailto:${h.email})`).join("\n");
     if (isTe) return `**JNTU-GV CEV విభాగాధిపతులు (HODs)** 👨‍🏫\n\n${hodList}`;
-    return `**JNTU-GV CEV Heads of Department (HODs)** 👨‍🏫\n\n${hodList}\n\n🌐 For details, visit [Academics → Faculty](/academics/faculty)`;
+    return `**JNTU-GV CEV Heads of Department (HODs)** 👨‍🏫\n\n${hodList}\n\n🌐 For details, visit [Academics → Faculty](/academics/faculty) or [Departments](/departments)`;
   }
 
   // ── ALUMNI ──
@@ -1044,6 +1092,7 @@ function buildAnswer(
       /(\beee\b|electrical)/i.test(qLower) ? "EEE" :
       /(\bmech\b|mechanical)/i.test(qLower) ? "MECH" :
       /(\bmet\b|metallurg)/i.test(qLower) ? "MET" :
+      /(\bcivil\b)/i.test(qLower) ? "CIVIL" :
       /(\bbsh\b|\bbshss\b|s&h|sciences|humanities)/i.test(qLower) ? "BSH" :
       /(\bmba\b|business)/i.test(qLower) ? "MBA" :
       null;
@@ -1113,30 +1162,42 @@ function buildAnswer(
       /\b(mca|computer applications)\b/i.test(qLower) ? "MCA" :
       null;
 
+    // Subject/Topic Detection
+    const isIoT = /\b(iot|internet\s*of\s*things)\b/i.test(qLower);
+    const isAIML = /\b(machine\s*learning|artificial\s*intelligence|\bai\b|\bml\b|deep\s*learning)\b/i.test(qLower);
+    const isDSA = /\b(data\s*structures?|\bdsa\b|algorithms?)\b/i.test(qLower);
+    const isDBMS = /\b(dbms|database\s*(management)?\s*(systems?)?|sql)\b/i.test(qLower);
+    const isOS = /\b(operating\s*systems?|\bos\b)\b/i.test(qLower);
+    const isCN = /\b(computer\s*networks?|\bcn\b|networking)\b/i.test(qLower);
+    const isCloud = /\b(cloud\s*computing|aws|azure)\b/i.test(qLower);
+    const isCyber = /\b(cyber\s*security|information\s*security|cryptography)\b/i.test(qLower);
+    const isVLSI = /\b(vlsi|embedded\s*systems?)\b/i.test(qLower);
+
+    // Complete Roster of Official Syllabus Items
     const syllabusItems: Array<{ subject: string; reg: string; branch: string; year: string; pdf: string }> = [
-      { subject: "CSE R23 B.Tech Syllabus", reg: "R23", branch: "CSE", year: "1st to 4th Year", pdf: "/uploads/2023/10/CSE-finalR23.pdf" },
-      { subject: "ECE R23 1st Year Syllabus", reg: "R23", branch: "ECE", year: "1st Year", pdf: "/uploads/2023/10/ECE-finalR23.pdf" },
-      { subject: "ECE R23 2nd Year Syllabus", reg: "R23", branch: "ECE", year: "2nd Year", pdf: "/uploads/2024/07/Approved-R23-JNTUGV-CEV-ECE-Course-Structure-total-Second-Year-Syllabus.-.pdf" },
-      { subject: "ECE R23 3rd & 4th Year Syllabus", reg: "R23", branch: "ECE", year: "3rd & 4th Year", pdf: "/uploads/2025/07/R23-III-IV-Course-structure-and-syllabus-with-honors-and-Minors.pdf" },
-      { subject: "EEE R23 Syllabus", reg: "R23", branch: "EEE", year: "1st to 4th Year", pdf: "/uploads/2025/08/JNTUGV-CEV-A-R23-EEE-IV-Years-SYLLABUS-combined-1.pdf" },
-      { subject: "IT R23 Course Structure & Syllabus", reg: "R23", branch: "IT", year: "1st to 4th Year", pdf: "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf" },
-      { subject: "Civil Engineering R23 Syllabus", reg: "R23", branch: "CIVIL", year: "1st to 4th Year", pdf: "/uploads/2023/10/civilfinalR23-1.pdf" },
-      { subject: "Metallurgy R23 Syllabus", reg: "R23", branch: "MET", year: "1st to 4th Year", pdf: "/uploads/2025/08/R23-ME-B.Tech-4-years-CS-SYLLABUS-1.pdf" },
-      { subject: "Mechanical Engineering R23 Syllabus", reg: "R23", branch: "MECH", year: "1st to 4th Year", pdf: "/uploads/2023/10/ME-finalR23.pdf" },
+      { subject: "Computer Science & Engineering (CSE) R23 Course Structure & Syllabus (with Honors & Minors)", reg: "R23", branch: "CSE", year: "1st to 4th Year", pdf: "/uploads/2026/01/R23-CSE-Course-Sructure-and-Syllabus-with-honors-Minors-open-electives.pdf" },
+      { subject: "Information Technology (IT) R23 Course Structure & Complete 4-Year Syllabus", reg: "R23", branch: "IT", year: "1st to 4th Year", pdf: "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf" },
+      { subject: "Electronics & Communication Engineering (ECE) R23 3rd & 4th Year Syllabus (with Honors & Minors)", reg: "R23", branch: "ECE", year: "3rd & 4th Year", pdf: "/uploads/2025/07/R23-III-IV-Course-structure-and-syllabus-with-honors-and-Minors.pdf" },
+      { subject: "Electronics & Communication Engineering (ECE) R23 1st & 2nd Year Syllabus", reg: "R23", branch: "ECE", year: "1st & 2nd Year", pdf: "/uploads/2024/07/I-YEAR-AND-SECOND-YEAR-ECE-R23-SYLLABUS-1.pdf" },
+      { subject: "Electrical & Electronics Engineering (EEE) R23 Complete 4-Year Syllabus", reg: "R23", branch: "EEE", year: "1st to 4th Year", pdf: "/uploads/2025/08/JNTUGV-CEV-A-R23-EEE-IV-Years-SYLLABUS-combined-1.pdf" },
+      { subject: "Mechanical Engineering (MECH) R23 Complete 4-Year Course Structure & Syllabus", reg: "R23", branch: "MECH", year: "1st to 4th Year", pdf: "/uploads/2025/08/R23-ME-B.Tech-4-years-CS-SYLLABUS-1.pdf" },
+      { subject: "Metallurgical Engineering (MET) R23 Complete 4-Year Syllabus", reg: "R23", branch: "MET", year: "1st to 4th Year", pdf: "/uploads/2025/08/R23-MET-B.Tech-four-years-CS-and-Syllabus-1.pdf" },
+      { subject: "Civil Engineering R23 Course Structure & Syllabus", reg: "R23", branch: "CIVIL", year: "1st to 4th Year", pdf: "/uploads/2023/10/civilfinalR23-1.pdf" },
 
-      { subject: "CSE R20 B.Tech Syllabus", reg: "R20", branch: "CSE", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-CSE-SYLLABUS.pdf" },
-      { subject: "ECE R20 B.Tech Syllabus", reg: "R20", branch: "ECE", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-ECE-SYLLABUS.pdf" },
-      { subject: "EEE R20 B.Tech Syllabus", reg: "R20", branch: "EEE", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-EEE-SYLLABUS.pdf" },
-      { subject: "MECH R20 B.Tech Syllabus", reg: "R20", branch: "MECH", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-ME-SYLLABUS.pdf" },
-      { subject: "MET R20 B.Tech Syllabus", reg: "R20", branch: "MET", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-MET-SYLLABUS.pdf" },
-      { subject: "IT R20 B.Tech Syllabus", reg: "R20", branch: "IT", year: "1st to 4th Year", pdf: "/uploads/2021/04/R20-B.TECH-IT-SYLLABUS.pdf" },
+      { subject: "CSE R20 B.Tech Course Structure", reg: "R20", branch: "CSE", year: "1st to 4th Year", pdf: "/uploads/2021/01/R20-I-B-Tech-CSE-Course-structure.pdf" },
+      { subject: "IT R20 Course Structure & Syllabus", reg: "R20", branch: "IT", year: "1st to 4th Year", pdf: "/uploads/2021/10/IT-Course-Structure-Final_compressed.pdf" },
+      { subject: "ECE R20 Course Structure & Syllabus", reg: "R20", branch: "ECE", year: "1st to 4th Year", pdf: "/uploads/2021/01/R20-21-Course-strcture-and-syllabus-ECE.pdf" },
+      { subject: "EEE R20 Final Syllabus", reg: "R20", branch: "EEE", year: "1st to 4th Year", pdf: "/uploads/2021/09/R20-EEE-DEPT-FINAL-SYLLABUS-ACADEMIC-SECTION-WITHOUT-SIGN-compressed.pdf" },
+      { subject: "MECH R20 Course Structure & Syllabus", reg: "R20", branch: "MECH", year: "1st to 4th Year", pdf: "/uploads/2021/01/ME-UCEV-JNTUK-BOS-R20-COURSE-STRUCTURE-and-Syllabus.pdf" },
+      { subject: "MET R20 Course Structure & Syllabus", reg: "R20", branch: "MET", year: "1st to 4th Year", pdf: "/uploads/2021/01/MET-UCEV-JNTUK-BOS-R20-COURSE-STRUCTURE-and-Syllabus.pdf" },
+      { subject: "Civil Engineering R20 Complete Syllabus", reg: "R20", branch: "CIVIL", year: "1st to 4th Year", pdf: "/uploads/2021/09/R20-civil-syllabus-final-compressed.pdf" },
 
-      { subject: "M.Tech IT / Data Science R25 Syllabus", reg: "R25", branch: "IT", year: "1st & 2nd Year", pdf: "/uploads/2025/12/R25_M.Tech_ITDS.pdf" },
-      { subject: "MCA R25 Syllabus & Course Structure", reg: "R25", branch: "MCA", year: "1st & 2nd Year", pdf: "/uploads/2025/11/JNTUGV_R25_MCA_Syllabus-Course-structure.pdf" },
+      { subject: "M.Tech IT & Data Science R25 Course Structure & Syllabus", reg: "R25", branch: "IT", year: "1st & 2nd Year", pdf: "/uploads/2025/12/R25_M.Tech_ITDS.pdf" },
+      { subject: "MCA R25 Course Structure & Syllabus", reg: "R25", branch: "MCA", year: "1st & 2nd Year", pdf: "/uploads/2025/11/JNTUGV_R25_MCA_Syllabus-Course-structure.pdf" },
       { subject: "MBA R25 Course Structure & Syllabus", reg: "R25", branch: "MBA", year: "1st & 2nd Year", pdf: "/uploads/2025/11/MBA-R25-Course-Structure-Syllabus.pdf" },
-      { subject: "M.Tech Thermal Engineering (Mechanical) R25 Syllabus", reg: "R25", branch: "MECH", year: "1st & 2nd Year", pdf: "/uploads/2025/11/R25-MTech-Thermal-Engg_JNTU-GV-CEV-CS-Syllabus-1.pdf" },
-      { subject: "M.Tech Power Systems & Allied Courses (EEE) R25 Syllabus", reg: "R25", branch: "EEE", year: "1st & 2nd Year", pdf: "/uploads/2025/12/JNTUGV-R25-M.tech-Power-systems-Allied-courses-Course-structure-Syllabus-3-1.pdf" },
+      { subject: "M.Tech Power Systems & Allied Courses (EEE) R25 Course Structure & Syllabus", reg: "R25", branch: "EEE", year: "1st & 2nd Year", pdf: "/uploads/2025/12/JNTUGV-R25-M.tech-Power-systems-Allied-courses-Course-structure-Syllabus-3-1.pdf" },
       { subject: "M.Tech VLSI Design & Embedded Systems (ECE) R25 Syllabus", reg: "R25", branch: "ECE", year: "1st & 2nd Year", pdf: "/uploads/2025/12/R-25-M.-Tech-VLSID-ES-Syllabus.pdf" },
+      { subject: "M.Tech Thermal Engineering (MECH) R25 Course Structure & Syllabus", reg: "R25", branch: "MECH", year: "1st & 2nd Year", pdf: "/uploads/2025/11/R25-MTech-Thermal-Engg_JNTU-GV-CEV-CS-Syllabus-1.pdf" },
       { subject: "M.Tech R25 Final Course Structure & Syllabus (General)", reg: "R25", branch: "M.Tech", year: "1st & 2nd Year", pdf: "/uploads/2025/10/M.Tech-R25-Final-Course-Structure-Syllabus.pdf" },
     ];
 
@@ -1155,8 +1216,104 @@ function buildAnswer(
       }
     }
 
+    // ── SPECIFIC SUBJECT: INTERNET OF THINGS (IoT) ──
+    if (isIoT) {
+      const targetReg = reg || "R23";
+      const targetBranch = (deptMatch === "CSE" || deptMatch === "ECE") ? deptMatch : "IT";
+
+      if (targetBranch === "IT") {
+        const itPdf = "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf";
+        if (isTe) {
+          return `**ఇంటర్నెట్ ఆఫ్ థింగ్స్ (IoT) సిలబస్ — ఇన్ఫర్మేషన్ టెక్నాలజీ (IT) [${targetReg} రెగ్యులేషన్]** 📄\n\nJNTU-GV CEV లో **IT విభాగం ${targetReg} రెగ్యులేషన్** ప్రకారం **Internet of Things (IoT)** సిలబస్ అధికారిక 4-సంవత్సరాల కోర్సు నిర్మాణంలో చేర్చబడింది.\n\n• **విభాగం**: ఇన్ఫర్మేషన్ టెక్నాలజీ (IT)\n• **రెగ్యులేషన్**: ${targetReg} (B.Tech)\n• **యూనిట్ 1**: IoT పరిచయం, ఆర్కిటెక్చర్ & ఎనేబ్లింగ్ టెక్నాలజీస్\n• **యూనిట్ 2**: మైక్రోకంట్రోలర్లు (Arduino, Raspberry Pi, ESP32/ESP8266) & సెన్సార్లు\n• **యూనిట్ 3**: IoT ప్రోటోకాల్స్ (MQTT, CoAP, Zigbee, LoRaWAN, BLE, IPv6)\n• **యూనిట్ 4**: క్లౌడ్ ప్లాట్‌ఫామ్‌లు (AWS IoT, Azure IoT) & రియల్-టైమ్ డేటా అనలిటిక్స్\n• **యూనిట్ 5**: IoT సెక్యూరిటీ, ప్రైవసీ & స్మార్ట్ సిటీ / ఇండస్ట్రియల్ అప్లికేషన్లు\n\n👉 **[పూర్తి IT ${targetReg} సిలబస్ PDF డౌన్‌లోడ్ చేసుకోండి (IoT వివరాలతో)](${itPdf})**\n🌐 **[ఆన్‌లైన్ సిలబస్ పేజీ చూడండి](/academics/syllabus?reg=${targetReg}&branch=IT)**`;
+        }
+        return `**Internet of Things (IoT) Syllabus — Information Technology (IT) [${targetReg} Regulation]** 📄\n\nIn the **JNTU-GV CEV Information Technology (IT)** curriculum under **${targetReg} Regulation**, **Internet of Things (IoT)** is an essential course covering embedded devices, wireless communication, sensor networks, and cloud integration.\n\n### 📘 Course Information:\n• **Subject**: Internet of Things (IoT) / IoT & Applications\n• **Department**: Information Technology (IT)\n• **Regulation**: ${targetReg} (UG B.Tech)\n• **Official Curriculum Document**: Information Technology (IT) ${targetReg} Course Structure & Complete 4-Year Syllabus\n\n### 📑 Unit-Wise Syllabus Overview:\n• **Unit I — Introduction to IoT & Architecture**:\n  - Definition, physical design (Things in IoT, protocols), logical design (functional blocks, APIs), IoT enabling technologies, IoT levels & deployment templates, IoT vs M2M.\n• **Unit II — IoT Hardware & Microcontrollers**:\n  - Sensors and actuators, interfacing microcontrollers (Arduino, Raspberry Pi, ESP8266/ESP32), GPIO programming, serial communication (I2C, SPI, UART).\n• **Unit III — IoT Protocols & Wireless Communication**:\n  - Application layer (MQTT, CoAP, XMPP, AMQP, REST/HTTP), Network & Transport layer (IPv6, 6LoWPAN, RPL), Wireless standards (ZigBee, Bluetooth Low Energy (BLE), LoRaWAN, Wi-Fi).\n• **Unit IV — Cloud Platforms & IoT Data Analytics**:\n  - Cloud platforms for IoT (AWS IoT Core, Microsoft Azure IoT, Google Cloud IoT, ThingsBoard), device shadow, data ingestion pipelines, streaming analytics, Edge vs Cloud computing.\n• **Unit V — IoT Security, Privacy & Practical Case Studies**:\n  - Security vulnerabilities, cryptographic countermeasures, firmware updates, Smart Home, Smart Cities, Smart Agriculture, and Industrial IoT (IIoT) applications.\n\n### 📚 Prescribed Textbooks & References:\n1. *Internet of Things: A Hands-On Approach* — Arshdeep Bahga and Vijay Madisetti.\n2. *The Internet of Things: Enabling Technologies, Platforms, and Use Cases* — Pethuru Raj and Anupama C. Raman.\n\n### 📥 Download Syllabus & View Online:\n👉 **[Download Complete IT ${targetReg} Syllabus PDF (contains IoT)](${itPdf})**\n🌐 **[View Online at Academics → Syllabus](/academics/syllabus?reg=${targetReg}&branch=IT)**`;
+      } else if (targetBranch === "CSE") {
+        const csePdf = "/uploads/2026/01/R23-CSE-Course-Sructure-and-Syllabus-with-honors-Minors-open-electives.pdf";
+        return `**Internet of Things (IoT) Syllabus — Computer Science & Engineering (CSE) [${targetReg} Regulation]** 📄\n\nIn **CSE ${targetReg} Regulation**, Internet of Things (IoT) is offered as a professional/open elective subject with complete course details included in the official CSE 4-Year curriculum document.\n\n• **Subject**: Internet of Things (IoT)\n• **Branch**: Computer Science & Engineering (CSE)\n• **Regulation**: ${targetReg}\n• **Key Modules**: IoT Architecture, Sensor Interfacing (Arduino/Raspberry Pi), Protocols (MQTT, CoAP), Cloud IoT & Security.\n\n👉 **[Download CSE ${targetReg} Syllabus PDF (contains IoT)](${csePdf})**\n🌐 **[View Full Syllabus Online](/academics/syllabus?reg=${targetReg}&branch=CSE)**`;
+      } else if (targetBranch === "ECE") {
+        const ecePdf = "/uploads/2025/07/R23-III-IV-Course-structure-and-syllabus-with-honors-and-Minors.pdf";
+        return `**Internet of Things (IoT) Syllabus — Electronics & Communication Engineering (ECE) [${targetReg} Regulation]** 📄\n\nIn **ECE ${targetReg} Regulation**, IoT and Embedded Systems are integrated into the 3rd & 4th year curriculum.\n\n• **Subject**: IoT and Applications / Embedded Systems\n• **Branch**: Electronics & Communication Engineering (ECE)\n• **Regulation**: ${targetReg}\n• **Key Modules**: Embedded Sensors, Microcontrollers, Wireless Protocols (Zigbee, BLE, LoRa), Edge IoT & Real-time Systems.\n\n👉 **[Download ECE ${targetReg} 3rd & 4th Year Syllabus PDF](${ecePdf})**\n🌐 **[View Full Syllabus Online](/academics/syllabus?reg=${targetReg}&branch=ECE)**`;
+      }
+    }
+
+    // ── SPECIFIC SUBJECT: AI / MACHINE LEARNING ──
+    if (isAIML) {
+      const targetReg = reg || "R23";
+      const targetBranch = deptMatch || "CSE";
+      const targetPdf = targetBranch === "IT"
+        ? "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf"
+        : "/uploads/2026/01/R23-CSE-Course-Sructure-and-Syllabus-with-honors-Minors-open-electives.pdf";
+
+      return `**Artificial Intelligence & Machine Learning (AI/ML) Syllabus [${targetReg} Regulation]** 📄\n\nIn **${targetBranch} ${targetReg} Regulation**, AI & Machine Learning are core/professional elective disciplines.\n\n### 📑 Course Modules Overview:\n• **Unit I**: Introduction to AI, Problem Solving, State Space Search, Heuristic Search Strategies (A*, AO*).\n• **Unit II**: Knowledge Representation, Propositional & First-Order Logic, Inference Rules.\n• **Unit III**: Machine Learning Fundamentals, Supervised Learning (Linear Regression, Logistic Regression, Decision Trees, SVM).\n• **Unit IV**: Unsupervised Learning (K-Means, PCA) & Introduction to Neural Networks (Perceptron, Multi-Layer Perceptron).\n• **Unit V**: Deep Learning basics, Natural Language Processing, AI Ethics & Real-world Applications.\n\n👉 **[Download ${targetBranch} ${targetReg} Complete Syllabus PDF](${targetPdf})**\n🌐 **[View Online at Academics → Syllabus](/academics/syllabus?reg=${targetReg}&branch=${targetBranch})**`;
+    }
+
+    // ── SPECIFIC SUBJECT: DATA STRUCTURES (DSA) ──
+    if (isDSA) {
+      const targetReg = reg || "R23";
+      const targetBranch = deptMatch || "CSE";
+      const targetPdf = targetBranch === "IT"
+        ? "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf"
+        : "/uploads/2026/01/R23-CSE-Course-Sructure-and-Syllabus-with-honors-Minors-open-electives.pdf";
+
+      return `**Data Structures & Algorithms (DSA) Syllabus [${targetReg} Regulation]** 📄\n\nIn **${targetBranch} ${targetReg} Regulation**, Data Structures is a foundational core course.\n\n### 📑 Course Modules Overview:\n• **Unit I**: Analysis of Algorithms, Time/Space Complexity, Arrays, Recursion.\n• **Unit II**: Linked Lists (Singly, Doubly, Circular), Stacks & Queues (Implementation & Applications).\n• **Unit III**: Trees, Binary Trees, Binary Search Trees (BST), AVL Trees, Tree Traversals.\n• **Unit IV**: Graphs, Graph Representations, BFS, DFS, Minimum Spanning Trees (Prim's & Kruskal's), Shortest Paths (Dijkstra's).\n• **Unit V**: Sorting & Searching Algorithms (Quick Sort, Merge Sort, Heap Sort), Hashing & Collision Resolution.\n\n👉 **[Download ${targetBranch} ${targetReg} Complete Syllabus PDF](${targetPdf})**\n🌐 **[View Online at Academics → Syllabus](/academics/syllabus?reg=${targetReg}&branch=${targetBranch})**`;
+    }
+
+    // ── SPECIFIC SUBJECT: DBMS ──
+    if (isDBMS) {
+      const targetReg = reg || "R23";
+      const targetBranch = deptMatch || "CSE";
+      const targetPdf = targetBranch === "IT"
+        ? "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf"
+        : "/uploads/2026/01/R23-CSE-Course-Sructure-and-Syllabus-with-honors-Minors-open-electives.pdf";
+
+      return `**Database Management Systems (DBMS) Syllabus [${targetReg} Regulation]** 📄\n\nIn **${targetBranch} ${targetReg} Regulation**, DBMS covers relational database design, SQL querying, and database architecture.\n\n### 📑 Course Modules Overview:\n• **Unit I**: Database System Architecture, Data Models, ER Modeling.\n• **Unit II**: Relational Model, Relational Algebra, SQL Queries, Joins, Triggers & Views.\n• **Unit III**: Schema Refinement, Functional Dependencies, Normalization (1NF, 2NF, 3NF, BCNF, 4NF).\n• **Unit IV**: Transaction Management, ACID Properties, Concurrency Control (Locking, Timestamping), Deadlocks.\n• **Unit V**: Storage & Indexing, File Organizations, B-Trees & B+ Trees, Crash Recovery.\n\n👉 **[Download ${targetBranch} ${targetReg} Complete Syllabus PDF](${targetPdf})**\n🌐 **[View Online at Academics → Syllabus](/academics/syllabus?reg=${targetReg}&branch=${targetBranch})**`;
+    }
+
+    // ── SPECIFIC SUBJECT: OPERATING SYSTEMS (OS) ──
+    if (isOS) {
+      const targetReg = reg || "R23";
+      const targetBranch = deptMatch || "CSE";
+      const targetPdf = targetBranch === "IT"
+        ? "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf"
+        : "/uploads/2026/01/R23-CSE-Course-Sructure-and-Syllabus-with-honors-Minors-open-electives.pdf";
+
+      return `**Operating Systems (OS) Syllabus [${targetReg} Regulation]** 📄\n\nIn **${targetBranch} ${targetReg} Regulation**, Operating Systems covers system software architecture, concurrency, and resource management.\n\n### 📑 Course Modules Overview:\n• **Unit I**: OS Services, System Calls, Process Management, Process States, Threads.\n• **Unit II**: CPU Scheduling Algorithms (FCFS, SJF, Priority, Round Robin), Process Synchronization, Semaphores, Classic IPC Problems.\n• **Unit III**: Deadlock Characterization, Prevention, Avoidance (Banker's Algorithm), Detection & Recovery.\n• **Unit IV**: Memory Management, Paging, Segmentation, Virtual Memory, Page Replacement Algorithms (FIFO, LRU, Optimal).\n• **Unit V**: File System Interface, Directory Structure, Disk Scheduling Algorithms (SSTF, SCAN, C-SCAN), Protection & Security.\n\n👉 **[Download ${targetBranch} ${targetReg} Complete Syllabus PDF](${targetPdf})**\n🌐 **[View Online at Academics → Syllabus](/academics/syllabus?reg=${targetReg}&branch=${targetBranch})**`;
+    }
+
+    // ── SPECIFIC SUBJECT: COMPUTER NETWORKS (CN) ──
+    if (isCN) {
+      const targetReg = reg || "R23";
+      const targetBranch = deptMatch || "CSE";
+      const targetPdf = targetBranch === "IT"
+        ? "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf"
+        : "/uploads/2026/01/R23-CSE-Course-Sructure-and-Syllabus-with-honors-Minors-open-electives.pdf";
+
+      return `**Computer Networks (CN) Syllabus [${targetReg} Regulation]** 📄\n\nIn **${targetBranch} ${targetReg} Regulation**, Computer Networks covers network protocol stacks, routing, and communication systems.\n\n### 📑 Course Modules Overview:\n• **Unit I**: Network Models (OSI & TCP/IP), Physical Layer, Transmission Media, Guided & Unguided Media.\n• **Unit II**: Data Link Layer, Error Detection & Correction (CRC, Hamming), Sliding Window Protocols, MAC Sublayer, CSMA/CD, Ethernet.\n• **Unit III**: Network Layer, IPv4/IPv6 Addressing, Subnetting, Routing Algorithms (Distance Vector, Link State, OSPF, BGP).\n• **Unit IV**: Transport Layer Protocols (TCP vs UDP), Connection Management, Flow Control, TCP Congestion Control.\n• **Unit V**: Application Layer Protocols (DNS, HTTP/HTTPS, FTP, SMTP), Network Security Fundamentals, Cryptography basics.\n\n👉 **[Download ${targetBranch} ${targetReg} Complete Syllabus PDF](${targetPdf})**\n🌐 **[View Online at Academics → Syllabus](/academics/syllabus?reg=${targetReg}&branch=${targetBranch})**`;
+    }
+
+    // ── SPECIFIC SUBJECT: CLOUD COMPUTING ──
+    if (isCloud) {
+      const targetReg = reg || "R23";
+      const itPdf = "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf";
+      return `**Cloud Computing Syllabus [${targetReg} Regulation]** 📄\n\nIn **Information Technology & CSE ${targetReg} Regulation**, Cloud Computing covers virtualization, cloud service models, and distributed deployments.\n\n• **Key Modules**: Virtualization Technologies, Cloud Models (IaaS, PaaS, SaaS, Public/Private/Hybrid), Cloud Storage, AWS/Azure/GCP services, Cloud Security & Containerization (Docker, Kubernetes).\n\n👉 **[Download IT ${targetReg} Syllabus PDF (contains Cloud Computing)](${itPdf})**\n🌐 **[View Full Syllabus Online](/academics/syllabus?reg=${targetReg}&branch=IT)**`;
+    }
+
+    // ── SPECIFIC SUBJECT: CYBER SECURITY ──
+    if (isCyber) {
+      const targetReg = reg || "R23";
+      const itPdf = "/uploads/2025/09/R23DepartmentofITCourseStructureandSyllabus1stYearto4thYear-compressed-1.pdf";
+      return `**Cyber Security & Cryptography Syllabus [${targetReg} Regulation]** 📄\n\nIn **Information Technology & CSE ${targetReg} Regulation**, Cyber Security covers vulnerability assessment, encryption, and digital defenses.\n\n• **Key Modules**: Symmetric & Asymmetric Cryptography (DES, AES, RSA), Hash Functions (SHA), Digital Signatures, Network Security Protocols (SSL/TLS, IPsec), Firewalls, Intrusion Detection Systems (IDS), Cyber Ethics & Legal Frameworks.\n\n👉 **[Download IT ${targetReg} Syllabus PDF (contains Cyber Security)](${itPdf})**\n🌐 **[View Full Syllabus Online](/academics/syllabus?reg=${targetReg}&branch=IT)**`;
+    }
+
+    // ── SPECIFIC SUBJECT: VLSI & EMBEDDED SYSTEMS ──
+    if (isVLSI) {
+      const targetReg = reg || "R23";
+      const ecePdf = "/uploads/2025/07/R23-III-IV-Course-structure-and-syllabus-with-honors-and-Minors.pdf";
+      return `**VLSI Design & Embedded Systems Syllabus [${targetReg} Regulation]** 📄\n\nIn **ECE ${targetReg} Regulation**, VLSI Design and Embedded Systems are core specialized tracks.\n\n• **Key Modules**: MOS Transistor Theory, CMOS Logic Fabrication, Verilog HDL / VHDL modeling, ASIC & FPGA architectures, Microcontroller interfacing (ARM, RISC), Real-Time Operating Systems (RTOS).\n\n👉 **[Download ECE ${targetReg} 3rd & 4th Year Syllabus PDF](${ecePdf})**\n🌐 **[View Full Syllabus Online](/academics/syllabus?reg=${targetReg}&branch=ECE)**`;
+    }
+
     if (!reg && !deptMatch) {
-      return `**Course Syllabus Assistant** 📄\n\nWhich regulation and department syllabus would you like to view?\n\n• **Regulations**: R23, R20, R19, R16, R25 (PG)\n• **Departments**: CSE, ECE, EEE, MECH, MET, IT, Civil, MBA, MCA\n\nClick one of the suggestion chips below, or filter online at [Academics → Syllabus](/academics/syllabus).`;
+      return `**Course Syllabus Assistant** 📄\n\nWhich regulation and department syllabus would you like to view?\n\n• **Regulations**: R23, R20, R19, R16, R25 (PG)\n• **Departments**: CSE, IT, ECE, EEE, MECH, MET, Civil, MBA, MCA\n\nYou can also ask for specific subjects (e.g. *IT R23 IoT syllabus*, *CSE R23 AI syllabus*, *DSA syllabus*), or filter online at [Academics → Syllabus](/academics/syllabus).`;
     }
 
     if (reg && !deptMatch) {
@@ -1188,7 +1345,7 @@ function buildAnswer(
       if (exactMatches.length > 0) {
         let resp = `**${deptMatch} ${reg} Syllabus Information** 📄\n\n`;
         resp += exactMatches.map(item => `• **${item.subject}** (${item.year}):\n  👉 [Download PDF](${item.pdf})`).join("\n\n");
-        resp += `\n\n🌐 View full interactive syllabus list: [Academics → Syllabus](/academics/syllabus)`;
+        resp += `\n\n🌐 View full interactive syllabus list: [Academics → Syllabus](/academics/syllabus?reg=${reg}&branch=${deptMatch})`;
         return resp;
       }
       return `**${deptMatch} ${reg} Syllabus** 📄\n\nWe don't have a specific PDF uploaded for ${deptMatch} under ${reg} regulation yet.\n\n🌐 Check all available syllabus documents on [Academics → Syllabus](/academics/syllabus) or regulations on [Academics → Regulations](/academics/regulations).`;

@@ -12,12 +12,12 @@
     "phone": "+91 8922 244 100",
     "overview": "JNTU-GV College of Engineering Vizianagaram is a premier autonomous university engineering college in North Coastal Andhra Pradesh. Known for technical excellence, state-of-the-art research laboratories, vibrant student culture, and strong placement records."
   },
-  "alumni": {  
-  "portal": "https://alumni.jntugv.edu.in",
-  "description": "JNTU-GV maintains an active alumni network connecting current students with graduates globally. The dedicated Alumni Portal allows alumni to register, share mentorship, interact with departments, and engage in campus events.",
-  "benefits": "Networking opportunities, mentorship programs, career guidance, industry connections, campus event participation, and lifelong community membership.",
-  "how_to_connect": "Visit https://alumni.jntugv.edu.in to register, update profile, connect with fellow alumni, and access exclusive resources."
-},
+  "alumni": {
+    "portal": "https://alumni.jntugv.edu.in",
+    "description": "JNTU-GV maintains an active alumni network connecting current students with graduates globally. The dedicated Alumni Portal allows alumni to register, share mentorship, interact with departments, and engage in campus events.",
+    "benefits": "Networking opportunities, mentorship programs, career guidance, industry connections, campus event participation, and lifelong community membership.",
+    "how_to_connect": "Visit https://alumni.jntugv.edu.in to register, update profile, connect with fellow alumni, and access exclusive resources."
+  },
   "stories_and_experiences": [
     {
       "id": "story_campus_life",
@@ -48,57 +48,64 @@
     {
       "code": "CSE",
       "name": "Computer Science & Engineering",
-      "hod": "Dr. R. Rajeswara Rao",
+      "hod": "Dr. P. Aruna Kumari",
       "intake": "60 (UG B.Tech) + PG M.Tech",
       "highlights": "Advanced AI/ML labs, High-performance computing center, active IEEE and CSI chapters, competitive programming clubs."
     },
     {
       "code": "ECE",
       "name": "Electronics & Communication Engineering",
-      "hod": "Dr. K. Babulu",
+      "hod": "Dr. G. Appala Naidu",
       "intake": "60 (UG B.Tech) + PG M.Tech",
       "highlights": "VLSI design lab, Embedded Systems & IoT center, Signal Processing unit, antenna wave propagation labs."
     },
     {
       "code": "EEE",
       "name": "Electrical & Electronics Engineering",
-      "hod": "Dr. K. Sri Kumar",
+      "hod": "Dr. V. S. Vakula",
       "intake": "60 (UG B.Tech)",
       "highlights": "High Voltage Lab, Power Systems Simulator, Renewable Energy Research Center (Solar & Wind Energy)."
     },
     {
       "code": "ME",
       "name": "Mechanical Engineering",
-      "hod": "Dr. R. Umamaheswara Rao",
+      "hod": "Dr. K. Srinivasa Prasad",
       "intake": "60 (UG B.Tech)",
       "highlights": "CAD/CAM Simulation Center, Thermal Engineering Lab, Robotics & Automation Lab, Workshop & CNC Machining."
     },
     {
       "code": "MET",
       "name": "Metallurgical Engineering",
-      "hod": "Dr. G. Swami Naidu",
+      "hod": "Dr. K. Srinivasa Prasad",
       "intake": "60 (UG B.Tech)",
       "highlights": "Materials Characterisation Lab, Scanning Electron Microscopy (SEM) facilities, Foundry & Heat Treatment workshops."
     },
     {
       "code": "IT",
       "name": "Information Technology",
-      "hod": "Dr. P. Aruna Kumari",
+      "hod": "Dr. B. Tirimula Rao",
       "intake": "60 (UG B.Tech)",
       "highlights": "Cloud Computing Lab, Cybersecurity & Digital Forensics, Data Science & Analytics Research Lab."
     },
     {
       "code": "SH",
       "name": "Basic Sciences & Humanities",
-      "hod": "Dr. G. J. Naga Raju",
+      "hod": "Dr. M. Sowbhagya Lakshmi",
       "highlights": "Phonics & Language Communication Skills Lab, Physics & Chemistry Research Labs, Engineering Mathematics unit."
     },
     {
       "code": "MBA",
       "name": "Master of Business Administration",
-      "hod": "Dr. K. V. S. M. Ramanesh",
+      "hod": "Dr. P. Sree Devi",
       "intake": "60 (PG MBA)",
       "highlights": "Finance, HR, Marketing, Operations specialisations, Management Fests, Entrepreneurship Cell integration."
+    },
+    {
+      "code": "CIVIL",
+      "name": "Civil Engineering",
+      "hod": "Dr. G. Appala Naidu",
+      "intake": "60 (UG B.Tech)",
+      "highlights": "Structural Engineering Lab, Geotechnical Lab, Concrete Technology Lab, Environmental & Surveying Centers."
     }
   ],
   "facilities": {

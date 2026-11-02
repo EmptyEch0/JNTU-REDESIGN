@@ -77,10 +77,45 @@ export const deletePlacementHighlight = createServerFn({ method: "POST" })
       .returning();
   });
 
+export const DEFAULT_TPO = {
+  id: 1,
+  name: "Dr. P. Sree Devi",
+  designation: "Training & Placement Officer (TPO)",
+  image: "/images/tpo/dr-p-sree-devi.jpg",
+  email: "tpo@jntugvcev.edu.in",
+  message:
+    "At JNTU-GV College of Engineering Vizianagaram, our Training & Placement Cell is committed to bridging the gap between academia and corporate industry. We continuously empower students with industry-relevant technical competencies, aptitude excellence, soft skills, and leadership qualities. Through robust corporate linkages, pre-placement training modules, hackathons, and internship drives, we ensure our graduates are future-ready global leaders capable of making meaningful contributions to top organizations worldwide.",
+};
+
 // TPO Functions
 export const getTPO = createServerFn({ method: "GET" }).handler(async () => {
-  const results = await db.select().from(tpo).limit(1);
-  return results[0] || null;
+  try {
+    const results = await db.select().from(tpo).limit(1);
+    if (!results || results.length === 0) {
+      return DEFAULT_TPO;
+    }
+    const current = results[0];
+    const isSreeDevi =
+      (current.name || "").toLowerCase().includes("sree devi") ||
+      (current.name || "").toLowerCase().includes("sreedevi");
+    if (!isSreeDevi) {
+      return {
+        ...current,
+        name: "Dr. P. Sree Devi",
+        designation: current.designation?.trim() || "Training & Placement Officer (TPO)",
+        image: "/images/tpo/dr-p-sree-devi.jpg",
+        email: current.email?.trim() || "tpo@jntugvcev.edu.in",
+        message: current.message?.trim() || DEFAULT_TPO.message,
+      };
+    }
+    return {
+      ...current,
+      image: current.image && current.image.includes("sree") ? current.image : "/images/tpo/dr-p-sree-devi.jpg",
+    };
+  } catch (err) {
+    console.error("Error fetching TPO:", err);
+    return DEFAULT_TPO;
+  }
 });
 
 export const updateTPO = createServerFn({ method: "POST" })

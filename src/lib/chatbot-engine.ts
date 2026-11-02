@@ -388,7 +388,7 @@ const KB = {
     { code: "MECH", name: "Dr. K. Srinivasa Prasad", dept: "Mechanical Engineering", designation: "Professor & HOD", email: "hod.me@jntugvcev.edu.in" },
     { code: "MET", name: "Dr. K. Srinivasa Prasad", dept: "Metallurgical Engineering", designation: "Professor & HOD", email: "hod.met@jntugvcev.edu.in" },
     { code: "BSH", name: "Dr. M. Sowbhagya Lakshmi", dept: "Basic Sciences & Humanities (S&H)", designation: "Associate Professor & HOD", email: "hod.bs@jntugvcev.edu.in" },
-    { code: "MBA", name: "Dr. P. Sree Devi", dept: "Master of Business Administration", designation: "Assistant Professor & HOD", email: "hod.mba@jntugvcev.edu.in" },
+    { code: "MBA", name: "Dr. P. Sree Devi", dept: "Master of Business Administration", designation: "Associate Professor of Commerce & HOD of MBA", email: "hod.mba@jntugvcev.edu.in" },
   ],
   faculty: [
     { name: "Prof. K. Chandra Bhushan Rao", designation: "Professor of ECE & Registrar JNTU-GV", department: "Electronics & Communication Engineering", email: "registrar@jntugv.edu.in" },
@@ -519,6 +519,14 @@ const KB = {
 
   placement: {
     cell: "Training & Placement Cell (T&P Cell)",
+    tpo: {
+      name: "Dr. P. Sree Devi",
+      designation: "Training & Placement Officer (TPO)",
+      qualifications: "M.Com., MBA., M.Phil., Ph.D., PGDES., APSET qualified (Management)",
+      role: "Associate Professor of Commerce & HOD of MBA, TPO JNTU-GV CEV",
+      phone: "9493759290",
+      email: "tpo@jntugvcev.edu.in",
+    },
     highest: "42 LPA (highest package)",
     average: "4.5 – 7 LPA (average package)",
     placementRate: "85%+ placement rate across all branches",
@@ -1097,6 +1105,10 @@ function buildAnswer(
       /(\bmba\b|business)/i.test(qLower) ? "MBA" :
       null;
 
+    if (deptMatch === "MBA" && /vision|mission|goal|objective|about/i.test(qLower)) {
+      return `**Department of Management Studies (MBA) — Approved Vision & Mission** 🎯\n\n### 🌟 Vision\n"To emerge as a center of excellence in management education and research, nurturing ethical, innovative, and socially responsible leaders with a global outlook, capable of navigating complex business environments and contributing towards sustainable development and societal growth."\n\n### 🎯 Mission\n• **Quality Education**: To provide quality management education that integrates academic rigor with industry practices, developing analytical, innovative, and ethical leaders.\n\n• **Research & Entrepreneurship**: To foster research, entrepreneurship, and global perspectives that address business and societal challenges, with a focus on rural and emerging economies.\n\n• **Collaborative Ecosystem**: To build a collaborative learning ecosystem through partnerships with industry, academia, and community, promoting integrity, inclusivity, and sustainable development.\n\n👩‍🏫 **Head of Department (HOD)**: Dr. P. Sree Devi (Associate Professor of Commerce & HOD of MBA)\n📞 **Contact**: 9493759290 | 📧 [hod.mba@jntugvcev.edu.in](mailto:hod.mba@jntugvcev.edu.in)\n🌐 [MBA Department](/departments/mba) | [HOD Desk](/departments/mba/hod)`;
+    }
+
     if (deptMatch && /course|program|degree|curriculum|study|offer/i.test(qLower) && KB.deptCourses[deptMatch as keyof typeof KB.deptCourses]) {
       const c = KB.deptCourses[deptMatch as keyof typeof KB.deptCourses];
       return `**${deptMatch} Department Programs & Courses Offered** 🎓\n\n• **Undergraduate (UG)**: ${c.ug}\n• **Postgraduate (PG)**: ${c.pg}\n• **Doctoral (Ph.D)**: ${c.phd}\n\n🌐 [Department Courses](/departments/${deptMatch.toLowerCase()}/courses) | [View Department](/departments/${deptMatch.toLowerCase()})`;
@@ -1405,6 +1417,10 @@ function buildAnswer(
   // ── PLACEMENT ──
   if (intents.includes("placement")) {
     const qLower = query.toLowerCase();
+    const wantsTPO = /tpo|officer|training & placement officer|placement head|who is tpo|contact tpo|sree devi/i.test(qLower);
+    if (wantsTPO) {
+      return `**Training & Placement Officer (TPO)** 🏢\n\n👩‍🏫 **${KB.placement.tpo.name}**\n• **Designation**: ${KB.placement.tpo.designation}\n• **Qualifications**: ${KB.placement.tpo.qualifications}\n• **Additional Roles**: ${KB.placement.tpo.role}\n• **Mobile / Cell**: 📞 ${KB.placement.tpo.phone}\n• **Email**: 📧 [${KB.placement.tpo.email}](mailto:${KB.placement.tpo.email})\n• **Location**: Training & Placement Cell, JNTU-GV CEV\n\n🌐 [Placement Cell Details](/placements) | [Training & CRT Roadmap](/placements/training)`;
+    }
     const wantsRecruiters = /recruiter|company|companies|who recruit/i.test(qLower);
     const wantsPackage = /package|salary|lpa|highest|average|ctc/i.test(qLower);
 

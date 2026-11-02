@@ -101,6 +101,12 @@ export const getAssetUrl = (
       "ECE-6-G.Appalanaidu-60x60.jpg": "/images/faculty/ece/dr-g-appala-naidu.jpg",
       "gottapu-appala-naidu.jpeg": "/images/faculty/ece/dr-g-appala-naidu.jpg",
       "gottapu-appala-naidu.jpg": "/images/faculty/ece/dr-g-appala-naidu.jpg",
+      // TPO & MBA HOD Dr. P. Sree Devi
+      "dr-p-sree-devi.jpg": "/images/faculty/mba/dr-p-sree-devi.jpg",
+      "sreedevi-photo.jpg": "/images/faculty/mba/dr-p-sree-devi.jpg",
+      "sreedevi-photo-750x410.jpg": "/images/faculty/mba/dr-p-sree-devi.jpg",
+      "1-Dr-PIDUGU-SREEDEVI-JNTUK-UCEV.jpg": "/images/faculty/mba/dr-p-sree-devi.jpg",
+      "P.Sreedevi-Commerce.png": "/images/faculty/mba/dr-p-sree-devi.jpg",
     };
 
     if (filename.startsWith("IMG_") && (filename.endsWith(".JPG") || filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".webp"))) {

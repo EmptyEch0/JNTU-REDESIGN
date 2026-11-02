@@ -109,12 +109,12 @@ function PlacementsPage() {
                     />
                   ) : (
                     <img decoding="async" loading="lazy"
-                      src={getAssetUrl(editedTPO?.image ?? tpoData?.image)}
+                      src={getAssetUrl(editedTPO?.image ?? tpoData?.image ?? "/images/tpo/dr-p-sree-devi.jpg")}
                       alt={tpoData?.name}
                       className="w-40 h-40 rounded-2xl object-cover shadow-lg mb-6"
                       onError={(e) => {
                         e.currentTarget.onerror = null;
-                        e.currentTarget.src = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250";
+                        e.currentTarget.src = "/images/tpo/dr-p-sree-devi.jpg";
                       }}
                     />
                   )}
@@ -126,14 +126,14 @@ function PlacementsPage() {
                         onChange={(e) => setEditedTPO({ ...editedTPO, name: e.target.value })}
                       />
                     ) : (
-                      <h3 className="text-xl font-bold text-ink">{tpoData?.name}</h3>
+                      <h3 className="text-xl font-bold text-ink">{tpoData?.name || "Dr. P. Sree Devi"}</h3>
                     )}
 
-                    <p className="text-primary font-medium text-sm">{tpoData?.designation}</p>
+                    <p className="text-primary font-medium text-sm">{tpoData?.designation || "Training & Placement Officer (TPO)"}</p>
 
                     <div className="flex items-center justify-center gap-2 text-muted-foreground pt-4">
                       <Mail size={14} />
-                      <span className="text-xs">{tpoData?.email}</span>
+                      <span className="text-xs">{tpoData?.email || "tpo@jntugvcev.edu.in"}</span>
                     </div>
                   </div>
                 </div>

@@ -56,6 +56,16 @@ function isSamePerson(a: string, b: string): boolean {
   );
 }
 
+// Approved Departmental Overrides
+const MBA_APPROVED_VISION =
+  "To emerge as a center of excellence in management education and research, nurturing ethical, innovative, and socially responsible leaders with a global outlook, capable of navigating complex business environments and contributing towards sustainable development and societal growth.";
+
+const MBA_APPROVED_MISSION =
+  "• To provide quality management education that integrates academic rigor with industry practices, developing analytical, innovative, and ethical leaders.\n\n• To foster research, entrepreneurship, and global perspectives that address business and societal challenges, with a focus on rural and emerging economies.\n\n• To build a collaborative learning ecosystem through partnerships with industry, academia, and community, promoting integrity, inclusivity, and sustainable development.";
+
+const MBA_APPROVED_HOD_MESSAGE =
+  "Welcome to the Department of Management Studies (MBA) at JNTU-GV College of Engineering Vizianagaram. Our department is committed to emerging as a center of excellence in management education and research. Through an outcome-based curriculum integrating academic rigor with real-world industry practices, we nurture analytical, ethical, and socially responsible leaders capable of navigating complex global business environments. We emphasize continuous learning, entrepreneurship, and collaborative industry partnerships that address modern business challenges with a strong commitment towards sustainable development and societal growth.";
+
 export const getDepartmentDetails = createServerFn({ method: "GET" })
   .validator((slug: string) => slug)
   .handler(async ({ data: slug }) => {
@@ -117,21 +127,54 @@ export const getDepartmentDetails = createServerFn({ method: "GET" })
       }
 
       // 6. MERGE: Create a new object containing EVERYTHING
+      const isMba = dept.slug === "mba" || slug === "mba";
       const completeData = {
         id: dept.id,
         name: dept.name,
-        hod: dept.hod,
+        hod: isMba ? "Dr. P. Sree Devi" : dept.hod,
         description: dept.description,
         image: dept.image,
         slug: dept.slug,
-        vision: dept.vision,
-        mission: dept.mission,
+        vision: isMba ? MBA_APPROVED_VISION : dept.vision,
+        mission: isMba ? MBA_APPROVED_MISSION : dept.mission,
         about_details: dept.about_details,
-        hod_photo: dept.hod_photo,
-        hod_message: dept.hod_message,
-        hod_contact: dept.hod_contact,
-        hod_member: hodMember,
-        faculty: (faculty || []).map((row) => ({ ...row })),
+        hod_photo: isMba ? (dept.hod_photo?.trim() || "/images/faculty/mba/dr-p-sree-devi.jpg") : dept.hod_photo,
+        hod_message: isMba ? (dept.hod_message && dept.hod_message.includes("center of excellence") ? dept.hod_message : MBA_APPROVED_HOD_MESSAGE) : dept.hod_message,
+        hod_contact: isMba ? (dept.hod_contact?.trim() || "hod.mba@jntugvcev.edu.in") : dept.hod_contact,
+        hod_member: isMba
+          ? (hodMember || {
+              id: 91,
+              name: "Dr. P. Sree Devi",
+              designation: "Associate Professor of Commerce & HOD of MBA",
+              photo_url: "/images/faculty/mba/dr-p-sree-devi.jpg",
+              dept_slug: "mba",
+            })
+          : hodMember,
+        faculty: (faculty && faculty.length > 0)
+          ? (faculty || []).map((row) => ({ ...row }))
+          : isMba
+          ? [
+              {
+                id: 91,
+                dept_id: dept.id,
+                name: "Dr. P. Sree Devi",
+                designation: "Associate Professor of Commerce & HOD of MBA",
+                qualification: "M.Com., MBA., M.Phil., Ph.D., PGDES., APSET",
+                email: "hod.mba@jntugvcev.edu.in",
+                phone: "9493759290",
+                photo_url: "/images/faculty/mba/dr-p-sree-devi.jpg",
+              },
+              {
+                id: 92,
+                dept_id: dept.id,
+                name: "Mr. P.L Sunand",
+                designation: "Assistant Professor (C)",
+                qualification: "MBA, M.Com, M.A",
+                email: "sunand.mba@jntugvcev.edu.in",
+                photo_url: null,
+              },
+            ]
+          : [],
         gallery: (gallery || []).map((row) => ({ ...row })),
         laboratories: (laboratories || []).map((row) => ({ ...row })),
         achievements: (achievements || []).map((row) => ({ ...row })),
@@ -162,7 +205,12 @@ export const getAllDepartments = createServerFn({ method: "GET" })
       ORDER BY name ASC
     `;
 
-      const data = result || [];
+      const data = (result || []).map((d: any) => {
+        if (d.slug === "mba") {
+          return { ...d, hod: "Dr. P. Sree Devi" };
+        }
+        return d;
+      });
       serverCache.set(cacheKey, data);
       return data;
     } catch (err) {

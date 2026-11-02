@@ -1,13 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { getAssetUrl } from "@/lib/assets";
-import { Quote, Mail, MapPin, Save, X, Info, LayoutDashboard } from "lucide-react";
+import { Quote, Mail, MapPin, Save, X, Info, LayoutDashboard, Shield, Building2 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { toast } from "sonner";
 import { getLeadershipData, updateLeadershipData } from "@/funcs/leadership";
-import { AdminUpload } from "@/components/AdminEditPanel";
 import {
   Accordion,
   AccordionContent,
@@ -18,6 +17,58 @@ import {
 export const Route = createFileRoute("/administration/iqac/")({
   component: IQACAboutPage,
 });
+
+const DEFAULT_IQAC_SECTIONS = [
+  {
+    title: "About IQACELL",
+    content:
+      "The IQAC is meant for planning, guiding, and monitoring Quality Assurance (QA) and Quality Enhancement (QE) activities of the University. It channelizes and systematizes institutional efforts towards academic excellence. It is not a hierarchical or record-keeping body, but a facilitative and participative organ. The IQAC acts as a driving force to improve quality by identifying deficiencies and implementing strategies for enhancement.",
+  },
+  {
+    title: "🎯 Vision",
+    content:
+      '"To create a benchmark in defining the quality of JNTUK-UCEV as a professional higher education institution in Engineering and Technology through excellence in teaching, learning, research & development, and by fostering a culture of quality with transparent and reliable evaluation methods to meet global standards."',
+  },
+  {
+    title: "🚀 Mission",
+    content:
+      "• To channelize and systematize efforts towards academic excellence.\n• To encourage departments to adopt student-centric learning environments using ICT tools.\n• To promote value-based education.\n• To organize seminars, workshops, and faculty development programs.\n• To ensure transparent academic, administrative, and financial operations.\n• To develop an Institutional MIS for quality information.\n• To ensure proper maintenance of institutional infrastructure.\n• To build stakeholder relationships and promote social responsibility.",
+  },
+  {
+    title: "📌 Strategies & Objectives",
+    content:
+      "• Development and application of quality benchmarks for academic and administrative activities.\n• Creating a learner-centric environment.\n• Collecting feedback from students, parents, and stakeholders.\n• Dissemination of quality-related information in higher education.\n• Organizing workshops and seminars on quality themes.\n• Documentation of activities for continuous improvement.\n• Acting as a nodal agency for quality-related initiatives.\n• Maintaining institutional databases through MIS.\n• Improving academic and administrative performance systematically.\n• Promoting institutional best practices and quality culture.",
+  },
+  {
+    title: "⚙️ Functions",
+    content:
+      "• Developing ethical work culture.\n• Establishing quality benchmarks.\n• Coordinating quality-related institutional activities.\n• Organizing workshops, seminars, and research events.\n• Ensuring a learner-centric environment.\n• Encouraging faculty innovation and technological adoption.\n• Conducting periodic audits.\n• Collecting and analyzing stakeholder feedback.\n• Preparing Annual Quality Assurance Reports (AQAR).\n• Acting as a dynamic system for institutional improvement.",
+  },
+  {
+    title: "🌟 Benefits",
+    content:
+      "• Enhances clarity and focus in institutional functioning.\n• Promotes international quality standards.\n• Improves integration across institutional activities.\n• Supports better decision-making.\n• Acts as a dynamic quality improvement system.\n• Strengthens documentation and internal communication.",
+  },
+  {
+    title: "📊 Monitoring Mechanism",
+    content:
+      "IQAC submits the Annual Quality Assurance Report (AQAR) to NAAC annually. AQAR is prepared based on quality benchmarks. Quality Radars (QRs) are developed bi-annually. Interaction with quality assurance bodies is maintained. Reports are approved by governing bodies.",
+  },
+];
+
+function extractSections(rawExtras: any): Array<{ title: string; content: string }> {
+  if (Array.isArray(rawExtras)) return rawExtras;
+  if (rawExtras && typeof rawExtras === "object") {
+    if (Array.isArray(rawExtras.sections)) return rawExtras.sections;
+    const items: Array<{ title: string; content: string }> = [];
+    Object.keys(rawExtras)
+      .filter((k) => /^\d+$/.test(k) && rawExtras[k] && rawExtras[k].title)
+      .sort((a, b) => Number(a) - Number(b))
+      .forEach((k) => items.push(rawExtras[k]));
+    if (items.length > 0) return items;
+  }
+  return DEFAULT_IQAC_SECTIONS;
+}
 
 function IQACAboutPage() {
   const queryClient = useQueryClient();
@@ -42,7 +93,7 @@ function IQACAboutPage() {
   });
 
   const handleSave = () => {
-    if (!editedData) return;
+    if (!editedData || !iqac?.id) return;
     updateMutation.mutate({ data: { id: iqac.id, ...editedData } });
   };
 
@@ -54,94 +105,61 @@ function IQACAboutPage() {
     );
 
   const rawData = editedData || iqac;
-  const isMurthy =
-    !editedData &&
-    (!rawData?.name ||
-      (rawData?.name || "").toLowerCase().includes("murthy") ||
-      (rawData?.name || "").toLowerCase().includes("tsn") ||
-      (rawData?.name || "").toLowerCase().includes("t.s.n") ||
-      (rawData?.name || "").toLowerCase().includes("t. s. n") ||
-      (rawData?.image || "").toLowerCase().includes("murthy") ||
-      (rawData?.image || "").toLowerCase().includes("tsn") ||
-      (rawData?.image || "").toLowerCase().includes("iqac"));
 
   const data = {
     ...rawData,
-    name: isMurthy ? "" : (rawData?.name || ""),
-    designation: isMurthy ? "IQAC Cell" : (rawData?.designation || "IQAC Coordinator"),
-    image: isMurthy ? "" : (rawData?.image || ""),
-    quote: isMurthy ? "Internal Quality Assurance Cell (IQAC) is committed to continuous quality enhancement, academic excellence, and institutional accreditation standards at JNTU-GV CEV." : (rawData?.quote || "Internal Quality Assurance Cell (IQAC) is committed to continuous quality enhancement, academic excellence, and institutional accreditation standards at JNTU-GV CEV."),
+    name: "", // Institutional cell - no coordinator personal name as per user request
+    designation: "Internal Quality Assurance Cell",
+    image: "", // Institutional cell - no coordinator personal image as per user request
+    quote:
+      rawData?.quote ||
+      "Internal Quality Assurance Cell (IQAC) is committed to continuous quality enhancement, academic excellence, and institutional accreditation standards at JNTU-GV CEV.",
+    message:
+      rawData?.message ||
+      "The IQAC is meant for planning, guiding, and monitoring Quality Assurance (QA) and Quality Enhancement (QE) activities of the University. It channelizes and systematizes institutional efforts towards academic excellence.",
   };
-  const sections = data.extras || [];
+
+  const sections = extractSections(rawData?.extras);
 
   return (
     <section className="py-12 md:py-20">
-      <div className="grid lg:grid-cols-[400px_1fr] gap-16 items-start">
-        {/* Profile Sidebar */}
+      <div className="grid lg:grid-cols-[380px_1fr] gap-12 lg:gap-16 items-start">
+        {/* Institutional Profile Sidebar - No personal photo or coordinator name as requested */}
         <RevealOnScroll>
           <div className="space-y-8 lg:sticky lg:top-32">
             <div className="relative group">
               <div className="absolute -inset-4 rounded-[40px] bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-colors duration-200" />
-              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white shadow-elegant bg-gradient-to-br from-slate-50 to-indigo-50/40 flex items-center justify-center">
-                  {isEditMode ? (
-                    <AdminUpload
-                      value={data.image}
-                      onChange={(newUrl) => setEditedData({ ...data, image: newUrl })}
-                      module="administration"
-                      category="iqac"
-                      className="w-full h-full"
-                    />
-                  ) : data.image ? (
-                    <img decoding="async" loading="lazy"
-                      src={getAssetUrl(data.image)}
-                      alt={data.name || "IQAC"}
-                      className="h-full w-full object-cover transition-all duration-700"
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center justify-center p-8 text-center space-y-3">
-                      <div className="w-24 h-24 rounded-full bg-white shadow-sm flex items-center justify-center border border-slate-200/80 p-3">
-                        <img src="/logo-circle.png" alt="JNTU-GV" className="w-full h-full object-contain" />
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="text-sm font-bold text-slate-800">IQAC Cell</h4>
-                        <p className="text-[11px] text-slate-500">JNTU-GV CEV</p>
-                      </div>
-                    </div>
-                  )}
+              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white shadow-elegant bg-gradient-to-br from-slate-50 via-white to-blue-50/40 flex flex-col items-center justify-center p-8 text-center space-y-5">
+                <div className="w-28 h-28 rounded-full bg-white shadow-md flex items-center justify-center border-2 border-primary/20 p-4 transition-transform duration-300 group-hover:scale-105">
+                  <img
+                    src="/logo-circle.png"
+                    alt="JNTU-GV CEV Emblem"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+                    Institutional Cell
+                  </span>
+                  <h3 className="text-xl font-bold font-display text-slate-900 leading-tight">
+                    Internal Quality Assurance Cell
+                  </h3>
+                  <p className="text-xs text-slate-500 font-semibold">JNTU-GV CEV Vizianagaram</p>
+                </div>
               </div>
             </div>
 
             <div className="space-y-4">
-              {isEditMode ? (
-                <div className="space-y-2">
-                  <input
-                    className="w-full text-2xl font-bold text-ink bg-primary/5 p-2 rounded outline-none"
-                    value={data.name}
-                    placeholder="Coordinator Name (Leave blank if vacant)"
-                    onChange={(e) => setEditedData({ ...data, name: e.target.value })}
-                  />
-                  <input
-                    className="w-full text-primary font-medium bg-primary/5 p-2 rounded outline-none"
-                    value={data.designation}
-                    placeholder="Designation"
-                    onChange={(e) => setEditedData({ ...data, designation: e.target.value })}
-                  />
-                </div>
-              ) : data.name ? (
-                <div>
-                  <h2 className="text-2xl font-bold text-ink">{data.name}</h2>
-                  <p className="text-primary font-medium">{data.designation}</p>
-                </div>
-              ) : (
-                <div>
-                  <h2 className="text-xl font-bold text-ink">IQAC Cell</h2>
-                  <p className="text-xs text-muted-foreground font-medium">Internal Quality Assurance Cell</p>
-                </div>
-              )}
+              <div>
+                <h2 className="text-lg font-bold text-ink">IQAC Secretariat</h2>
+                <p className="text-xs text-primary font-medium mt-0.5">
+                  Academic Quality, Accreditation & Compliance
+                </p>
+              </div>
 
               <div className="space-y-3 pt-4 border-t border-border">
                 <div className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors">
-                  <Mail className="h-4 w-4" />
+                  <Mail className="h-4 w-4 text-primary shrink-0" />
                   {isEditMode ? (
                     <input
                       className="flex-1 bg-primary/5 p-1 rounded outline-none text-sm"
@@ -149,48 +167,55 @@ function IQACAboutPage() {
                       onChange={(e) => setEditedData({ ...data, email: e.target.value })}
                     />
                   ) : (
-                    <span className="text-sm">{data.email || "iqac@jntugvcev.edu.in"}</span>
+                    <a href={`mailto:${data.email || "iqac@jntugvcev.edu.in"}`} className="text-sm hover:underline">
+                      {data.email || "iqac@jntugvcev.edu.in"}
+                    </a>
                   )}
                 </div>
                 <div className="flex items-center gap-3 text-muted-foreground">
-                  <MapPin className="h-4 w-4 text-primary" />
-                  <span className="text-sm">IQAC Cell, Administrative Building</span>
+                  <MapPin className="h-4 w-4 text-primary shrink-0" />
+                  <span className="text-sm">IQAC Cell, Administrative Building, JNTU-GV Campus</span>
                 </div>
               </div>
             </div>
           </div>
         </RevealOnScroll>
 
-        {/* Message Content */}
+        {/* Vision & Message Content */}
         <div className="space-y-12">
+          {/* Quote / Vision Headline */}
           <RevealOnScroll delay={100}>
-            <div className="relative">
-              <Quote className="h-12 w-12 text-primary/10 absolute -top-6 -left-6" />
+            <div className="relative bg-gradient-to-br from-primary/[0.04] to-transparent p-6 sm:p-8 rounded-3xl border border-primary/10">
+              <Quote className="h-10 w-10 text-primary/20 absolute -top-4 -left-4" />
               {isEditMode ? (
                 <textarea
-                  className="w-full text-display text-2xl md:text-3xl text-ink leading-tight italic bg-primary/5 p-4 rounded outline-none min-h-[120px]"
+                  className="w-full text-display text-xl md:text-2xl text-ink leading-relaxed italic bg-white/80 p-4 rounded-2xl border border-primary/20 outline-none min-h-[120px]"
                   value={data.quote}
                   onChange={(e) => setEditedData({ ...data, quote: e.target.value })}
                 />
               ) : (
-                <p className="text-display text-2xl md:text-3xl text-ink leading-tight italic">
+                <p className="text-display text-xl md:text-2xl text-ink leading-relaxed italic">
                   "{data.quote}"
                 </p>
               )}
             </div>
           </RevealOnScroll>
 
+          {/* About IQAC Message */}
           <RevealOnScroll delay={200}>
-            <div className="space-y-6">
-              <div className="text-eyebrow">About IQAC</div>
+            <div className="space-y-4">
+              <div className="text-eyebrow text-primary">About IQAC</div>
+              <h3 className="text-2xl font-bold font-display text-ink">
+                Cultivating Quality & Academic Excellence
+              </h3>
               {isEditMode ? (
                 <textarea
-                  className="w-full text-lg text-muted-foreground leading-relaxed bg-primary/5 p-4 rounded outline-none min-h-[300px]"
+                  className="w-full text-base text-muted-foreground leading-relaxed bg-primary/5 p-4 rounded-2xl outline-none min-h-[200px]"
                   value={data.message}
                   onChange={(e) => setEditedData({ ...data, message: e.target.value })}
                 />
               ) : (
-                <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                <p className="text-base text-muted-foreground leading-relaxed whitespace-pre-wrap">
                   {data.message}
                 </p>
               )}
@@ -199,56 +224,60 @@ function IQACAboutPage() {
         </div>
       </div>
 
-      {/* Structured IQAC Content (Accordion) */}
+      {/* Structured IQAC Framework (Vision, Mission, Strategies, Objectives, etc.) */}
       <RevealOnScroll delay={300}>
-        <div className="mt-24 pt-16 border-t border-border">
-          <div className="flex items-center justify-between mb-12">
+        <div className="mt-20 pt-14 border-t border-border">
+          <div className="flex items-center justify-between mb-10">
             <div className="flex items-center gap-4">
-              <div className="h-14 w-14 rounded-2xl bg-primary/10 grid place-items-center text-primary shadow-sm border border-primary/20">
-                <LayoutDashboard className="h-7 w-7" />
+              <div className="h-12 w-12 rounded-2xl bg-primary/10 grid place-items-center text-primary shadow-xs border border-primary/20">
+                <LayoutDashboard className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-3xl font-bold text-ink tracking-tight">
+                <h3 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight font-display">
                   Institutional Quality Framework
                 </h3>
-                <p className="text-muted-foreground mt-1 text-base">
-                  Explore our mission, vision, and strategic objectives.
+                <p className="text-muted-foreground mt-0.5 text-sm">
+                  Our comprehensive quality benchmarks, vision, mission, and strategic objectives.
                 </p>
               </div>
             </div>
           </div>
 
           {isEditMode ? (
-            <div className="space-y-6 bg-primary/5 p-8 rounded-[32px] border border-primary/10">
+            <div className="space-y-4 bg-primary/5 p-6 rounded-3xl border border-primary/10">
+              <label className="text-xs font-bold text-slate-600 block">Edit Framework Sections (JSON format):</label>
               <textarea
-                className="w-full font-mono text-sm text-muted-foreground leading-relaxed bg-white/50 backdrop-blur-sm p-6 rounded-2xl border border-border outline-none min-h-[500px] shadow-inner"
+                className="w-full font-mono text-xs text-muted-foreground leading-relaxed bg-white/80 p-4 rounded-xl border border-border outline-none min-h-[350px] shadow-inner"
                 value={JSON.stringify(sections, null, 2)}
                 onChange={(e) => {
                   try {
                     const val = JSON.parse(e.target.value);
-                    setEditedData({ ...data, extras: val });
+                    setEditedData({
+                      ...data,
+                      extras: { ...((rawData?.extras as any) || {}), sections: val },
+                    });
                   } catch (err) {}
                 }}
               />
             </div>
           ) : (
-            <Accordion type="single" collapsible className="w-full space-y-4">
+            <Accordion type="single" collapsible className="w-full space-y-3.5">
               {sections.map((section: any, idx: number) => (
                 <AccordionItem
                   key={idx}
                   value={`item-${idx}`}
-                  className="border border-border bg-white rounded-3xl overflow-hidden px-6 transition-all duration-300 data-[state=open]:shadow-elegant data-[state=open]:border-primary/30"
+                  className="border border-border bg-white rounded-2xl overflow-hidden px-6 transition-all duration-300 data-[state=open]:shadow-md data-[state=open]:border-primary/30"
                 >
-                  <AccordionTrigger className="text-xl font-bold text-ink py-6 hover:no-underline group text-left">
-                    <div className="flex items-center gap-4">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-muted/50 text-[13px] font-bold text-muted-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+                  <AccordionTrigger className="text-lg font-bold text-ink py-5 hover:no-underline group text-left">
+                    <div className="flex items-center gap-3.5">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-muted/60 text-xs font-bold text-muted-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                         {idx + 1}
                       </span>
-                      {section.title}
+                      <span>{section.title}</span>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="pb-8 text-lg text-muted-foreground leading-relaxed">
-                    <div className="pl-12 whitespace-pre-wrap border-l-2 border-primary/10">
+                  <AccordionContent className="pb-6 text-base text-muted-foreground leading-relaxed">
+                    <div className="pl-10 whitespace-pre-wrap border-l-2 border-primary/20 py-1">
                       {section.content}
                     </div>
                   </AccordionContent>
@@ -264,13 +293,13 @@ function IQACAboutPage() {
           <div className="flex items-center gap-3 bg-card p-2 rounded-full border border-border shadow-2xl">
             <button
               onClick={() => setEditedData(null)}
-              className="px-5 py-3 rounded-full text-muted-foreground font-medium"
+              className="px-5 py-3 rounded-full text-muted-foreground font-medium cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
             <button
               onClick={handleSave}
-              className="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white shadow-lg font-semibold"
+              className="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white shadow-lg font-semibold cursor-pointer"
             >
               <Save className="h-5 w-5" /> Save Changes
             </button>

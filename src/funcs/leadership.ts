@@ -378,7 +378,20 @@ export const saveLeadershipProfile = createServerFn({ method: "POST" })
     } = data;
 
     const existing = await db.select().from(leadership).where(eq(leadership.slug, slug)).limit(1);
-    const existingExtras = (existing[0]?.extras as any) || {};
+    let existingExtras = (existing[0]?.extras as any) || {};
+
+    if (Array.isArray(existing[0]?.extras)) {
+      existingExtras = { sections: existing[0]?.extras };
+    } else if (existingExtras && typeof existingExtras === "object") {
+      existingExtras = { ...existingExtras };
+      const numericKeys = Object.keys(existingExtras).filter((k) => /^\d+$/.test(k));
+      if (numericKeys.length > 0 && !existingExtras.sections) {
+        existingExtras.sections = numericKeys
+          .sort((a, b) => Number(a) - Number(b))
+          .map((k) => existingExtras[k]);
+        numericKeys.forEach((k) => delete existingExtras[k]);
+      }
+    }
 
     const cleanName = name.trim();
     const cleanImage = image.trim();

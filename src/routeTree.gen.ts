@@ -69,6 +69,7 @@ import { Route as AcademicsTimetablesRouteImport } from './routes/academics/time
 import { Route as AdminCertificationsRouteImport } from './routes/admin.certifications'
 import { Route as AdminChatbotAnalyticsRouteImport } from './routes/admin.chatbot-analytics'
 import { Route as AdminDepartmentsRouteImport } from './routes/admin.departments'
+import { Route as AdminLeadershipRouteImport } from './routes/admin.leadership'
 import { Route as AdminPlacementsRouteImport } from './routes/admin.placements'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdministrationIqacRouteImport } from './routes/administration.iqac'
@@ -449,6 +450,11 @@ const AdminChatbotAnalyticsRoute = AdminChatbotAnalyticsRouteImport.update({
 const AdminDepartmentsRoute = AdminDepartmentsRouteImport.update({
   id: '/admin/departments',
   path: '/admin/departments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLeadershipRoute = AdminLeadershipRouteImport.update({
+  id: '/admin/leadership',
+  path: '/admin/leadership',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminPlacementsRoute = AdminPlacementsRouteImport.update({
@@ -936,6 +942,7 @@ export interface FileRoutesByFullPath {
   '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/chatbot-analytics': typeof AdminChatbotAnalyticsRoute
   '/admin/departments': typeof AdminDepartmentsRoute
+  '/admin/leadership': typeof AdminLeadershipRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/admin/users': typeof AdminUsersRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
@@ -1069,6 +1076,7 @@ export interface FileRoutesByTo {
   '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/chatbot-analytics': typeof AdminChatbotAnalyticsRoute
   '/admin/departments': typeof AdminDepartmentsRoute
+  '/admin/leadership': typeof AdminLeadershipRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/admin/users': typeof AdminUsersRoute
   '/administration/principal': typeof AdministrationPrincipalRoute
@@ -1209,6 +1217,7 @@ export interface FileRoutesById {
   '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/chatbot-analytics': typeof AdminChatbotAnalyticsRoute
   '/admin/departments': typeof AdminDepartmentsRoute
+  '/admin/leadership': typeof AdminLeadershipRoute
   '/admin/placements': typeof AdminPlacementsRoute
   '/admin/users': typeof AdminUsersRoute
   '/administration/iqac': typeof AdministrationIqacRouteWithChildren
@@ -1352,6 +1361,7 @@ export interface FileRouteTypes {
     | '/admin/certifications'
     | '/admin/chatbot-analytics'
     | '/admin/departments'
+    | '/admin/leadership'
     | '/admin/placements'
     | '/admin/users'
     | '/administration/iqac'
@@ -1485,6 +1495,7 @@ export interface FileRouteTypes {
     | '/admin/certifications'
     | '/admin/chatbot-analytics'
     | '/admin/departments'
+    | '/admin/leadership'
     | '/admin/placements'
     | '/admin/users'
     | '/administration/principal'
@@ -1624,6 +1635,7 @@ export interface FileRouteTypes {
     | '/admin/certifications'
     | '/admin/chatbot-analytics'
     | '/admin/departments'
+    | '/admin/leadership'
     | '/admin/placements'
     | '/admin/users'
     | '/administration/iqac'
@@ -1746,6 +1758,7 @@ export interface RootRouteChildren {
   AdminCertificationsRoute: typeof AdminCertificationsRoute
   AdminChatbotAnalyticsRoute: typeof AdminChatbotAnalyticsRoute
   AdminDepartmentsRoute: typeof AdminDepartmentsRoute
+  AdminLeadershipRoute: typeof AdminLeadershipRoute
   AdminPlacementsRoute: typeof AdminPlacementsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   ApiPostsRoute: typeof ApiPostsRoute
@@ -2199,6 +2212,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/departments'
       fullPath: '/admin/departments'
       preLoaderRoute: typeof AdminDepartmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/leadership': {
+      id: '/admin/leadership'
+      path: '/admin/leadership'
+      fullPath: '/admin/leadership'
+      preLoaderRoute: typeof AdminLeadershipRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/placements': {
@@ -3062,6 +3082,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCertificationsRoute: AdminCertificationsRoute,
   AdminChatbotAnalyticsRoute: AdminChatbotAnalyticsRoute,
   AdminDepartmentsRoute: AdminDepartmentsRoute,
+  AdminLeadershipRoute: AdminLeadershipRoute,
   AdminPlacementsRoute: AdminPlacementsRoute,
   AdminUsersRoute: AdminUsersRoute,
   ApiPostsRoute: ApiPostsRoute,

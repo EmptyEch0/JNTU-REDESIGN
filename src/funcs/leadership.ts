@@ -8,6 +8,8 @@ import {
   iqacEvents,
   iqacOutcomes,
   iqacMous,
+  departments,
+  tpo,
 } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { serverCache } from "../lib/server-cache";
@@ -257,3 +259,265 @@ export const deleteLeadershipStaff = createServerFn({ method: "POST" })
     return { success: true };
   });
 
+
+
+export interface LeadershipProfileItem {
+  id: number;
+  slug: string;
+  name: string;
+  image: string;
+  email: string;
+  designation: string;
+  quote: string;
+  message: string;
+  profile: string;
+  extras: {
+    isInCharge?: boolean;
+    category?: "university" | "administration" | "tpo" | "hod" | "custom";
+    department?: string;
+    deptSlug?: string;
+    phone?: string;
+    facultyId?: number | null;
+    order?: number;
+    [key: string]: any;
+  } | null;
+}
+
+export const getAllLeadershipProfiles = createServerFn({ method: "GET" }).handler(async () => {
+  const cacheKey = "all_leadership_profiles";
+  const cached = serverCache.get<LeadershipProfileItem[]>(cacheKey);
+  if (cached) return cached;
+
+  let records: any[] = [];
+  try {
+    records = await db.select().from(leadership);
+  } catch (e) {
+    console.error("Error querying leadership profiles:", e);
+    records = [];
+  }
+
+  const categoryOrder: Record<string, number> = {
+    vc: 1,
+    registrar: 2,
+    principal: 3,
+    "vice-principal": 4,
+    tpo: 5,
+  };
+
+  const sorted = [...records].sort((a, b) => {
+    const orderA = (a.extras as any)?.order ?? categoryOrder[a.slug] ?? (a.slug.startsWith("hod_") ? 10 : 99);
+    const orderB = (b.extras as any)?.order ?? categoryOrder[b.slug] ?? (b.slug.startsWith("hod_") ? 10 : 99);
+    if (orderA !== orderB) return orderA - orderB;
+    return a.id - b.id;
+  });
+
+  serverCache.set(cacheKey, sorted as LeadershipProfileItem[]);
+  return sorted as LeadershipProfileItem[];
+});
+
+export const getAllFacultyRoster = createServerFn({ method: "GET" }).handler(async () => {
+  const cacheKey = "leadership_faculty_roster";
+  const cached = serverCache.get<any[]>(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const { sql } = await import("@/lib/db");
+    const result = await sql`
+      SELECT f.id, f.name, f.designation, f.photo_url, f.faculty_email,
+             d.name as department_name, d.slug as department_slug
+      FROM faculty f
+      LEFT JOIN departments d ON f.dept_id = d.id
+      ORDER BY f.name ASC
+    `;
+    const list = result || [];
+    serverCache.set(cacheKey, list);
+    return list;
+  } catch (err) {
+    console.error("Error querying faculty roster:", err);
+    return [];
+  }
+});
+
+export interface SaveLeadershipInput {
+  id?: number;
+  slug: string;
+  name: string;
+  image: string;
+  email: string;
+  designation: string;
+  quote?: string;
+  message?: string;
+  profile?: string;
+  isInCharge?: boolean;
+  phone?: string;
+  category?: string;
+  department?: string;
+  deptSlug?: string;
+  facultyId?: number | null;
+}
+
+export const saveLeadershipProfile = createServerFn({ method: "POST" })
+  .validator((d: SaveLeadershipInput) => d)
+  .handler(async ({ data }) => {
+    const {
+      id,
+      slug,
+      name,
+      image,
+      email,
+      designation,
+      quote = "",
+      message = "",
+      profile = "",
+      isInCharge = false,
+      phone = "",
+      category,
+      department,
+      deptSlug,
+      facultyId,
+    } = data;
+
+    const existing = await db.select().from(leadership).where(eq(leadership.slug, slug)).limit(1);
+    const existingExtras = (existing[0]?.extras as any) || {};
+
+    const cleanName = name.trim();
+    const cleanImage = image.trim();
+    const cleanEmail = email.trim();
+    const cleanDesignation = designation.trim();
+
+    const mergedExtras = {
+      ...existingExtras,
+      isInCharge: Boolean(isInCharge),
+      phone: phone || existingExtras.phone || "",
+      category: category || existingExtras.category || (slug.startsWith("hod_") ? "hod" : "administration"),
+      department: department || existingExtras.department || "",
+      deptSlug: deptSlug || existingExtras.deptSlug || (slug.startsWith("hod_") ? slug.replace("hod_", "") : ""),
+      facultyId: facultyId !== undefined ? facultyId : existingExtras.facultyId,
+    };
+
+    let savedProfile;
+
+    if (existing.length > 0) {
+      const updated = await db
+        .update(leadership)
+        .set({
+          name: cleanName,
+          image: cleanImage,
+          email: cleanEmail,
+          designation: cleanDesignation,
+          quote: quote.trim(),
+          message: message.trim(),
+          profile: profile.trim(),
+          extras: mergedExtras,
+        })
+        .where(eq(leadership.slug, slug))
+        .returning();
+      savedProfile = updated[0];
+    } else {
+      const inserted = await db
+        .insert(leadership)
+        .values({
+          slug: slug.trim(),
+          name: cleanName,
+          image: cleanImage,
+          email: cleanEmail,
+          designation: cleanDesignation,
+          quote: quote.trim(),
+          message: message.trim(),
+          profile: profile.trim(),
+          extras: mergedExtras,
+        })
+        .returning();
+      savedProfile = inserted[0];
+    }
+
+    // Downstream synchronization:
+    // 1. If HOD role -> sync with departments table
+    if (slug.startsWith("hod_") || mergedExtras.category === "hod") {
+      const targetDeptSlug = mergedExtras.deptSlug || slug.replace("hod_", "");
+      try {
+        const hodDisplayName = isInCharge && !cleanName.includes("(i/c)") ? `${cleanName} (i/c)` : cleanName;
+        await db
+          .update(departments)
+          .set({
+            hod: hodDisplayName,
+            hod_photo: cleanImage,
+            hod_contact: cleanEmail,
+            hod_message: message.trim(),
+          })
+          .where(eq(departments.slug, targetDeptSlug));
+        
+        serverCache.invalidate(`department_${targetDeptSlug}`);
+        serverCache.invalidate("all_departments");
+      } catch (err) {
+        console.error(`Failed to sync HOD downstream for ${targetDeptSlug}:`, err);
+      }
+    }
+
+    // 2. If TPO role -> sync with tpo table
+    if (slug === "tpo" || mergedExtras.category === "tpo") {
+      try {
+        const tpoRows = await db.select().from(tpo).limit(1);
+        const tpoDisplayName = isInCharge && !cleanName.includes("(i/c)") ? `${cleanName} (i/c)` : cleanName;
+        if (tpoRows.length > 0) {
+          await db
+            .update(tpo)
+            .set({
+              name: tpoDisplayName,
+              image: cleanImage,
+              email: cleanEmail,
+              designation: cleanDesignation,
+              message: message.trim(),
+            })
+            .where(eq(tpo.id, tpoRows[0].id));
+        } else {
+          await db.insert(tpo).values({
+            name: tpoDisplayName,
+            image: cleanImage,
+            email: cleanEmail,
+            designation: cleanDesignation,
+            message: message.trim(),
+          });
+        }
+        serverCache.invalidate("tpo", true);
+      } catch (err) {
+        console.error("Failed to sync TPO downstream:", err);
+      }
+    }
+
+    // Invalidate caches
+    serverCache.invalidate("leadership", true);
+    serverCache.invalidate("all_leadership_profiles");
+    serverCache.invalidate(`leadership_${slug}`);
+
+    return { success: true, profile: savedProfile };
+  });
+
+export const deleteLeadershipProfile = createServerFn({ method: "POST" })
+  .validator((d: { slug: string }) => d)
+  .handler(async ({ data }) => {
+    const protectedSlugs = [
+      "vc",
+      "registrar",
+      "principal",
+      "vice-principal",
+      "tpo",
+      "hod_cse",
+      "hod_it",
+      "hod_ece",
+      "hod_eee",
+      "hod_mech",
+      "hod_met",
+      "hod_civil",
+      "hod_bshss",
+      "hod_mba",
+    ];
+    if (protectedSlugs.includes(data.slug)) {
+      throw new Error(`Cannot delete core institutional role '${data.slug}'.`);
+    }
+
+    await db.delete(leadership).where(eq(leadership.slug, data.slug));
+    serverCache.invalidate("leadership", true);
+    serverCache.invalidate("all_leadership_profiles");
+    return { success: true };
+  });

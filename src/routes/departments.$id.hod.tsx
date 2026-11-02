@@ -26,7 +26,7 @@ export const Route = createFileRoute("/departments/$id/hod")({
     const parentData = parentMatch?.loaderData as DepartmentData | undefined;
     const name = parentData?.name || "Department";
     const hodFaculty = parentData?.faculty?.find((f) => /hod|head of (the )?department/i.test(f.designation || ""));
-    const hod = hodFaculty?.name || parentData?.hod || STATIC_DEPARTMENTS.find((d) => d.slug === parentData?.slug || d.id === parentData?.id)?.hod || "Head of Department";
+    const hod = parentData?.hod || hodFaculty?.name || STATIC_DEPARTMENTS.find((d) => d.slug === parentData?.slug || d.id === parentData?.id)?.hod || "Head of Department";
     return {
       meta: [
         { title: `HOD Message — ${name} — JNTU-GV CEV` },

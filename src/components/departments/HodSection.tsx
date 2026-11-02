@@ -34,7 +34,7 @@ export function HodSection({ embedded = false }: { embedded?: boolean }) {
   // 4. Resolve HOD faculty member and fallback data
   const hodDetails = data?.faculty?.find((f) => /hod|head of (the )?department/i.test(f.designation || ""));
   const staticDept = STATIC_DEPARTMENTS.find((d) => d.slug === data?.slug || d.id === data?.id);
-  const rawHodName = (hodDetails?.name || data?.hod || staticDept?.hod || "").trim();
+  const rawHodName = (data?.hod || hodDetails?.name || staticDept?.hod || "").trim();
   const hodName = rawHodName || `Head of Department`;
 
   const defaultEmail = data?.slug

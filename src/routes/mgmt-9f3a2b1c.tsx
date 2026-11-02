@@ -46,6 +46,7 @@ import { notices, campusGallery, socialPosts, socialConnections, pushSubscriptio
 import { desc, count, eq } from "drizzle-orm";
 import { addNotice, addMultipleNotices, updateNotice, deleteNotice, addCampusGalleryItem, deleteCampusGalleryItem } from "@/funcs/site.server";
 import { SocialPublishingPanel } from "@/components/SocialPublishingPanel";
+import { LeadershipManagementPanel } from "@/components/admin/LeadershipManagementPanel";
 import { FileUploadDropzone } from "@/components/FileUploadDropzone";
 import {
   getActivePressNotes,
@@ -447,7 +448,7 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const router = useRouter();
 
-  const [activeTab, setActiveTab] = useState<"overview" | "notices" | "press" | "gallery" | "posts" | "connections">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "notices" | "press" | "gallery" | "posts" | "connections" | "leadership">("overview");
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [healthData, setHealthData] = useState<any>(null);
   const [connections, setConnections] = useState<any>(null);
@@ -1010,8 +1011,26 @@ function AdminDashboard() {
           >
             <Globe className="w-4 h-4" /> Connections
           </button>
+          <button
+            onClick={() => setActiveTab("leadership")}
+            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2.5 transition cursor-pointer ${activeTab === "leadership"
+              ? "bg-[#0F4C81]/15 text-[#0F4C81] dark:bg-sky-500/10 dark:text-sky-400"
+              : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800"
+              }`}
+          >
+            <Users className="w-4 h-4" /> Leadership Directory
+          </button>
 
-          <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
+            <Link
+              to="/admin/leadership"
+              className="w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-between transition cursor-pointer text-indigo-600 bg-indigo-50/80 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:text-indigo-300 dark:hover:bg-indigo-900/40 border border-indigo-200/70 dark:border-indigo-800/50 shadow-2xs group"
+            >
+              <span className="flex items-center gap-2.5">
+                <Users className="w-4 h-4 text-indigo-600 dark:text-indigo-400" /> Leadership Portal
+              </span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-indigo-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </Link>
             <Link
               to="/admin/chatbot-analytics"
               className="w-full text-left px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-between transition cursor-pointer text-blue-600 bg-blue-50/80 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:bg-blue-900/40 border border-blue-200/70 dark:border-blue-800/50 shadow-2xs group"
@@ -2234,6 +2253,11 @@ function AdminDashboard() {
               </div>
             </div>
           )}
+
+          {activeTab === "leadership" && (
+            <LeadershipManagementPanel />
+          )}
+
         </main>
       </div>
     </div>

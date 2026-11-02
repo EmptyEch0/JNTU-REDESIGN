@@ -1954,6 +1954,42 @@ export interface ChatbotEngineInput {
 }
 
 export function runChatbotEngine({ query, chunks }: ChatbotEngineInput): string {
+  // Dynamic overlay of live leadership records from DB chunks
+  const leadChunks = chunks.filter((c) => c.source_type === "leadership");
+  for (const lc of leadChunks) {
+    const meta = lc.metadata;
+    if (!meta) continue;
+    if (meta.slug === "vc") KB.university.vc = meta.name;
+    if (meta.slug === "registrar") {
+      KB.university.registrar = meta.name;
+      if (meta.email) KB.university.email = meta.email;
+    }
+    if (meta.slug === "principal") {
+      KB.principal.name = meta.name;
+      KB.principal.designation = meta.designation;
+      if (meta.email) KB.principal.email = meta.email;
+    }
+    if (meta.slug === "vice-principal") {
+      KB.vicePrincipal.name = meta.name;
+      KB.vicePrincipal.designation = meta.designation;
+      if (meta.email) KB.vicePrincipal.email = meta.email;
+    }
+    if (meta.slug === "tpo") {
+      KB.placement.tpo.name = meta.name;
+      KB.placement.tpo.designation = meta.designation;
+      if (meta.email) KB.placement.tpo.email = meta.email;
+    }
+    if (meta.slug && meta.slug.startsWith("hod_")) {
+      const deptSlug = meta.slug.replace("hod_", "").toUpperCase();
+      const h = KB.hods.find((x) => x.code === deptSlug || (deptSlug === "BSHSS" && x.code === "BSH"));
+      if (h) {
+        h.name = meta.name;
+        h.designation = meta.designation;
+        if (meta.email) h.email = meta.email;
+      }
+    }
+  }
+
   const lang = detectLanguage(query);
   const intents = detectIntents(query);
   const ranked = rerankChunks(chunks, query, intents);

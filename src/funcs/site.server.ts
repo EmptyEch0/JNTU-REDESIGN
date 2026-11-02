@@ -634,6 +634,23 @@ export const queryChatbot = createServerFn({ method: "POST" })
       }
     }
 
+    // (g) Live Leadership & HOD records
+    if (/principal|vice\s*principal|vice\s*chancellor|\bvc\b|registrar|\bhod\b|head of department|\btpo\b|placement\s*officer|leadership/i.test(query)) {
+      try {
+        const leadRows = await db.select().from(leadership);
+        for (const l of leadRows) {
+          chunks.push({
+            content: `Leadership Profile: ${l.name}. Role/Designation: ${l.designation} (${l.slug}). Email: ${l.email}. Quote: ${l.quote || ""}. Message: ${l.message || ""}`,
+            source_type: "leadership",
+            metadata: { name: l.name, designation: l.designation, slug: l.slug, email: l.email },
+            similarity: 1.0,
+          });
+        }
+      } catch (err) {
+        console.error("Error pulling live leadership records for chatbot:", err);
+      }
+    }
+
     // 4. Local Intelligent Engine: Intent detection + BM25 Rerank + Multi-chunk synthesis
     const reply = runChatbotEngine({ query, chunks });
 

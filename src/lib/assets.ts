@@ -31,6 +31,8 @@ export const getAssetUrl = (
     trimmedPath.startsWith("/src/") ||
     trimmedPath.startsWith("/assets/") ||
     trimmedPath.startsWith("/images/") ||
+    trimmedPath.startsWith("/documents/") ||
+    trimmedPath.startsWith("/uploads/") ||
     trimmedPath.startsWith("/@fs/") ||
     trimmedPath.startsWith("blob:") ||
     trimmedPath === "/logo-circle.png" ||
@@ -107,6 +109,11 @@ export const getAssetUrl = (
       "sreedevi-photo-750x410.jpg": "/images/faculty/mba/dr-p-sree-devi.jpg",
       "1-Dr-PIDUGU-SREEDEVI-JNTUK-UCEV.jpg": "/images/faculty/mba/dr-p-sree-devi.jpg",
       "P.Sreedevi-Commerce.png": "/images/faculty/mba/dr-p-sree-devi.jpg",
+      // Official Fee Structure Orders & Circulars
+      "JNTUGV_Course_Fee_Structure_2025-26_Order_2026-07-01.pdf": "/documents/fees/JNTUGV_Course_Fee_Structure_2025-26_Order_2026-07-01.pdf",
+      "JNTUGV_MTech_MCA_MBA_Fee_Circular_2024-25.pdf": "/documents/fees/JNTUGV_MTech_MCA_MBA_Fee_Circular_2024-25.pdf",
+      "JNTUGV_UG_Engineering_Tuition_Fee_Revision_Order_2025-26.pdf": "/documents/fees/JNTUGV_UG_Engineering_Tuition_Fee_Revision_Order_2025-26.pdf",
+      "JNTUGV_UG_PG_Examination_Fee_Revision_Order_2026-06-12.pdf": "/documents/fees/JNTUGV_UG_PG_Examination_Fee_Revision_Order_2026-06-12.pdf",
     };
 
     if (filename.startsWith("IMG_") && (filename.endsWith(".JPG") || filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".webp"))) {

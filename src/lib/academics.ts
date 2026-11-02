@@ -94,8 +94,50 @@ export const deleteAcademicsAdmission = createServerFn({ method: "POST" })
   });
 
 // REAL ACADEMIC FEE STRUCTURE CRUD
+export const DEFAULT_ACADEMIC_FEE_STRUCTURES = [
+  {
+    id: 1,
+    level: "UG & PG",
+    program_name: "B.Tech, M.Tech, MCA, MBA & B.Pharm",
+    title: "Course Fee Structure Order 2025–26 (Proc. No. 99/E1/JNTUGV/CEV & CPS/Fee Structure/2025-2026, dt. 01-07-2026)",
+    pdf_url: "/documents/fees/JNTUGV_Course_Fee_Structure_2025-26_Order_2026-07-01.pdf",
+  },
+  {
+    id: 2,
+    level: "PG",
+    program_name: "M.Tech, MCA & MBA",
+    title: "M.Tech, MCA & MBA Fee Payment Circular 2024–25 (Cir. No. A2/ I M.Tech, I MCA & I MBA/2024-25, dt. 29/11/2024)",
+    pdf_url: "/documents/fees/JNTUGV_MTech_MCA_MBA_Fee_Circular_2024-25.pdf",
+  },
+  {
+    id: 3,
+    level: "UG",
+    program_name: "B.Tech (All Engineering Branches)",
+    title: "Revision of Annual Tuition Fee for UG Engineering (Univ. Order No. JNTUGV/EC(Spl)/Fee/2025, dt. 11.07.2025)",
+    pdf_url: "/documents/fees/JNTUGV_UG_Engineering_Tuition_Fee_Revision_Order_2025-26.pdf",
+  },
+  {
+    id: 4,
+    level: "UG & PG",
+    program_name: "All UG/PG & Ph.D Programmes",
+    title: "Revision of Regular & Supplementary Examination Fee Structure (Procs. No. 92/E1/JNTU-GV/USE/Revision of Examinations Fee Structure/2026, dt. 12-06-2026)",
+    pdf_url: "/documents/fees/JNTUGV_UG_PG_Examination_Fee_Revision_Order_2026-06-12.pdf",
+  },
+];
+
 export const getAcademicFeeStructures = createServerFn({ method: "GET" }).handler(async () => {
-  return await db.select().from(academicFeeStructure);
+  try {
+    const results = await db.select().from(academicFeeStructure);
+    if (!results || results.length === 0) {
+      return DEFAULT_ACADEMIC_FEE_STRUCTURES;
+    }
+    const officialIds = new Set(DEFAULT_ACADEMIC_FEE_STRUCTURES.map(d => d.id));
+    const customResults = results.filter(r => !officialIds.has(r.id));
+    return [...DEFAULT_ACADEMIC_FEE_STRUCTURES, ...customResults];
+  } catch (err) {
+    console.error("Error fetching academic fee structures:", err);
+    return DEFAULT_ACADEMIC_FEE_STRUCTURES;
+  }
 });
 
 export const upsertAcademicFeeStructure = createServerFn({ method: "POST" })

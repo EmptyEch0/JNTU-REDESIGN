@@ -775,12 +775,15 @@ const KB = {
   },
 
   fees: {
-    btech: "B.Tech annual tuition fee: ~₹35,000 (government quota — subject to GO revision). Management quota fees may vary.",
-    mtech: "M.Tech annual fee: ~₹30,000–35,000 (government quota)",
-    mba: "MBA annual fee: ~₹35,000–40,000",
-    other: "Exam fee, lab fee, and library fee charged separately per semester (~₹3,000–5,000)",
-    reimbursement: "Fee reimbursement available for eligible students under Jagananna Vidya Deevena scheme.",
-    note: "Fees are subject to revision by AP State Government / JNTU-GV. Check the latest fee notification on the college website.",
+    btech: "B.Tech (Regular): Year I is ₹45,000 tuition + ₹5,000 special fee + ₹770 exam fee (Total: ₹50,770 p.a. as per EC revision order dt. 11.07.2025). Years II–IV are ₹10,000 tuition + ₹300 special fee + ₹770 exam fee (Total: ₹11,070 p.a.).",
+    mtech: "M.Tech (Self-Finance): Year I is ₹50,000 tuition + ₹5,200 special fee + ₹950 exam fee (Total: ₹56,150 p.a.). Year II is ₹50,000 tuition + ₹3,300 special fee + ₹950 exam fee (Total: ₹54,250 p.a.).",
+    mba: "MBA (Self-Finance): Year I is ₹27,000 tuition + ₹5,200 special fee + ₹950 exam fee (Total: ₹33,150 p.a.). Year II is ₹27,000 tuition + ₹3,300 special fee + ₹950 exam fee (Total: ₹31,250 p.a.).",
+    mca: "MCA (Self-Finance): Year I is ₹27,000 tuition + ₹5,200 special fee + ₹950 exam fee (Total: ₹33,150 p.a.). Year II is ₹27,000 tuition + ₹3,300 special fee + ₹950 exam fee (Total: ₹31,250 p.a.).",
+    bpharm: "B.Pharmacy (Self-Finance - CPS): All years are ₹45,000 tuition + ₹6,500 special fee + ₹770 exam fee (Total: ₹52,270 p.a.).",
+    exam: "Regular Exam Fees (effective June 2026): B.Tech/BBA/BCA/B.Pharm: ₹1,000; Pharm.D: ₹1,300; MBA/MCA/M.Tech/M.Pharm: ₹1,500. Supplementary: ₹400 for 1 sub, ₹700 for 2 subs, ₹900 for 3 subs, ₹1,000–₹1,300 for 4+ subs. Project Viva-Voce: ₹5,000. Pre-PhD: ₹1,500/paper.",
+    paymentMode: "Online via State Bank Collect (www.onlinesbi.sbi/sbicollect/) under 'Principal JNTUK College of Engineering Vizianagaram' with separate categories for Tuition Fee and Special Fee.",
+    reimbursement: "Fee reimbursement available for eligible convenor-quota students under the Andhra Pradesh Jagananna Vidya Deevena (JVD) scheme.",
+    note: "All fee schedules are officially approved vide Registrar Order Proc. No. 99/E1/JNTUGV/CEV & CPS/Fee Structure/2025-2026 and EC Order dt. 11.07.2025.",
     link: "/academics/admissions",
   },
 
@@ -1441,11 +1444,17 @@ function buildAnswer(
 
   // ── FEE ──
   if (intents.includes("fee") && !intents.includes("hostel")) {
-    let resp = `**Fee Structure** 💰\n\n`;
-    resp += `• **B.Tech**: ${KB.fees.btech}\n• **M.Tech**: ${KB.fees.mtech}\n• **MBA**: ${KB.fees.mba}\n• **Other Charges**: ${KB.fees.other}\n\n`;
-    resp += `### Fee Reimbursement\n${KB.fees.reimbursement}\n\n`;
+    let resp = `**Official Course Fee Structure (2025–26)** 💰\n\n`;
+    resp += `• **B.Tech (Regular)**: ${KB.fees.btech}\n\n`;
+    resp += `• **M.Tech (Self-Finance)**: ${KB.fees.mtech}\n\n`;
+    resp += `• **MBA (Self-Finance)**: ${KB.fees.mba}\n\n`;
+    resp += `• **MCA (Self-Finance)**: ${KB.fees.mca}\n\n`;
+    resp += `• **B.Pharmacy (CPS)**: ${KB.fees.bpharm}\n\n`;
+    resp += `### 📝 Examination Fees (Revised June 2026)\n${KB.fees.exam}\n\n`;
+    resp += `### 💳 Online Payment Method\n${KB.fees.paymentMode}\n\n`;
+    resp += `### 🎓 Fee Reimbursement\n${KB.fees.reimbursement}\n\n`;
     resp += `⚠️ ${KB.fees.note}`;
-    resp += `\n\n📞 Office: ${KB.college.phone}\n🌐 [Fee Structure & Admissions](${KB.fees.link}) | [Scholarships](/academics/scholarships)`;
+    resp += `\n\n📞 Office: ${KB.college.phone}\n🌐 [Admissions & Fee Payments](${KB.fees.link}) | [Download Fee PDFs](${KB.fees.link})`;
     return resp;
   }
 

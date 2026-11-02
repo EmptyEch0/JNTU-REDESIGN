@@ -50,6 +50,8 @@ hod-credentials-*.txt
 *.docx
 *.doc
 *.pdf
+!public/documents/fees/*.pdf
+!public/documents/fees
 JNTUGV_Document_*
 JNTUGV_Login_Credentials.*
 JNTUGV_Department_URLs*

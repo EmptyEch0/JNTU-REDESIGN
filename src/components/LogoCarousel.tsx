@@ -37,10 +37,13 @@ export function LogoCarousel({ logos, speed = 60, reverse = false }: Props) {
               onError={(e) => {
                 const t = e.currentTarget;
                 t.style.display = "none";
-                const fallback = document.createElement("span");
-                fallback.textContent = logo.name;
-                fallback.className = "text-ink text-sm font-medium text-center";
-                t.parentElement?.appendChild(fallback);
+                const parent = t.parentElement;
+                if (parent && !parent.querySelector(".logo-fallback")) {
+                  const fallback = document.createElement("span");
+                  fallback.className = "logo-fallback text-ink text-sm font-medium text-center";
+                  fallback.textContent = logo.name;
+                  parent.appendChild(fallback);
+                }
               }}
             />
           </div>

@@ -33,6 +33,7 @@ export const getAssetUrl = (
     trimmedPath.startsWith("/images/") ||
     trimmedPath.startsWith("/documents/") ||
     trimmedPath.startsWith("/uploads/") ||
+    trimmedPath.startsWith("/local-assets/") ||
     trimmedPath.startsWith("/@fs/") ||
     trimmedPath.startsWith("blob:") ||
     trimmedPath === "/logo-circle.png" ||
@@ -116,7 +117,13 @@ export const getAssetUrl = (
       "JNTUGV_UG_PG_Examination_Fee_Revision_Order_2026-06-12.pdf": "/documents/fees/JNTUGV_UG_PG_Examination_Fee_Revision_Order_2026-06-12.pdf",
     };
 
-    if (filename.startsWith("IMG_") && (filename.endsWith(".JPG") || filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".webp"))) {
+    if (trimmedPath.includes("our-recruiters") || trimmedPath.includes("gallery/our-recruiters")) {
+      const recFile = trimmedPath.split("/").pop()?.split("?")[0] || filename;
+      resolvedUrl = `/local-assets/wp-content/gallery/our-recruiters/${recFile}`;
+    } else if (trimmedPath.includes("wp-content/gallery/")) {
+      const parts = trimmedPath.split("wp-content/gallery/");
+      resolvedUrl = `/local-assets/wp-content/gallery/${parts[1]}`;
+    } else if (filename.startsWith("IMG_") && (filename.endsWith(".JPG") || filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".webp"))) {
       const baseName = filename.replace(/\.[^.]+$/, "");
       resolvedUrl = `/images/gallery/${baseName}.webp`;
     } else if (LEGACY_FILENAME_MAP[filename]) {
@@ -130,7 +137,13 @@ export const getAssetUrl = (
       );
       if (vpsMatch) {
         const relativePath = vpsMatch[1].replace(/\\/g, "/").replace(/^\/+/, "");
-        resolvedUrl = `/${relativePath.startsWith("uploads/") ? relativePath : "uploads/" + relativePath}`;
+        if (relativePath.startsWith("wp-content/") || relativePath.startsWith("gallery/")) {
+          resolvedUrl = `/local-assets/${relativePath.startsWith("wp-content/") ? relativePath : "wp-content/" + relativePath}`;
+        } else if (relativePath.startsWith("uploads/")) {
+          resolvedUrl = `/${relativePath}`;
+        } else {
+          resolvedUrl = `/uploads/${relativePath}`;
+        }
       } else if (trimmedPath.includes("89.116.134.182:8080")) {
         resolvedUrl = trimmedPath.replace("http://89.116.134.182:8080", "https://jntugvcev.edu.in").replace("89.116.134.182:8080", "jntugvcev.edu.in").replace("/local-assets/", "/");
       } else if (trimmedPath.startsWith("http://localhost:8081/")) {
@@ -142,8 +155,15 @@ export const getAssetUrl = (
       ) {
         try {
           const parsed = new URL(trimmedPath);
-          let relativeAsset = parsed.pathname.replace(/^\/wp-content\//, "").replace(/^\/local-assets\//, "").replace(/^\/+/, "");
-          resolvedUrl = `/${relativeAsset}`;
+          if (parsed.pathname.startsWith("/local-assets/")) {
+            resolvedUrl = parsed.pathname;
+          } else if (parsed.pathname.includes("our-recruiters")) {
+            const recFile = parsed.pathname.split("/").pop()?.split("?")[0] || "";
+            resolvedUrl = `/local-assets/wp-content/gallery/our-recruiters/${recFile}`;
+          } else {
+            let relativeAsset = parsed.pathname.replace(/^\/wp-content\//, "").replace(/^\/local-assets\//, "").replace(/^\/+/, "");
+            resolvedUrl = `/${relativeAsset}`;
+          }
         } catch {
           resolvedUrl = trimmedPath;
         }
@@ -153,15 +173,22 @@ export const getAssetUrl = (
     } else {
       let cleanPath = trimmedPath.replace(/\\/g, "/");
       if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
-      if (cleanPath.startsWith("wp-content/")) cleanPath = cleanPath.substring("wp-content/".length);
-      if (cleanPath.startsWith("local-assets/")) cleanPath = cleanPath.substring("local-assets/".length);
-      
-      if (cleanPath.startsWith("uploads/")) {
-        resolvedUrl = `/${cleanPath}`;
-      } else if (cleanPath.startsWith("facilities/")) {
-        resolvedUrl = `/uploads/${cleanPath}`;
+      if (cleanPath.includes("our-recruiters")) {
+        const recFile = cleanPath.split("/").pop()?.split("?")[0] || "";
+        resolvedUrl = `/local-assets/wp-content/gallery/our-recruiters/${recFile}`;
+      } else if (cleanPath.startsWith("wp-content/gallery/") || cleanPath.startsWith("local-assets/wp-content/gallery/")) {
+        resolvedUrl = `/${cleanPath.startsWith("local-assets/") ? cleanPath : "local-assets/" + cleanPath}`;
       } else {
-        resolvedUrl = `/${cleanPath}`;
+        if (cleanPath.startsWith("wp-content/")) cleanPath = cleanPath.substring("wp-content/".length);
+        if (cleanPath.startsWith("local-assets/")) cleanPath = cleanPath.substring("local-assets/".length);
+        
+        if (cleanPath.startsWith("uploads/")) {
+          resolvedUrl = `/${cleanPath}`;
+        } else if (cleanPath.startsWith("facilities/")) {
+          resolvedUrl = `/uploads/${cleanPath}`;
+        } else {
+          resolvedUrl = `/${cleanPath}`;
+        }
       }
     }
   }

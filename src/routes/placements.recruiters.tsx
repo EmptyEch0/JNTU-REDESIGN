@@ -164,6 +164,17 @@ function RecruitersPage() {
                         alt={logo.name}
                         loading="lazy"
                         className="max-h-full max-w-full object-contain transition-all duration-200"
+                        onError={(e) => {
+                          const t = e.currentTarget;
+                          t.style.display = "none";
+                          const parent = t.parentElement;
+                          if (parent && !parent.querySelector(".recruiter-fallback")) {
+                            const fallback = document.createElement("div");
+                            fallback.className = "recruiter-fallback text-slate-800 text-xs font-bold text-center px-2 py-1 bg-slate-100 rounded border border-slate-200 shadow-2xs";
+                            fallback.textContent = logo.name;
+                            parent.appendChild(fallback);
+                          }
+                        }}
                       />
                     )}
                   </div>

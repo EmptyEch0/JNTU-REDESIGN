@@ -41,7 +41,8 @@ function VicePrincipalPage() {
   const updateMutation = useMutation({
     mutationFn: updateLeadershipData,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leadership", "vice-principal"] });
+      queryClient.invalidateQueries({ queryKey: ["leadership"] });
+      queryClient.invalidateQueries({ queryKey: ["all-leadership-profiles"] });
       setEditedData(null);
       toast.success("Vice Principal's information updated successfully!");
     },
@@ -51,8 +52,9 @@ function VicePrincipalPage() {
   });
 
   const handleSave = () => {
-    if (!editedData) return;
-    updateMutation.mutate({ data: { id: vicePrincipal.id, ...editedData } });
+    if (!editedData || !vicePrincipal) return;
+    const { id: _ignoredId, ...fields } = editedData;
+    updateMutation.mutate({ data: { id: vicePrincipal.id, ...fields } });
   };
 
   if (isLoading || !vicePrincipal)
@@ -88,6 +90,7 @@ function VicePrincipalPage() {
                       onChange={(newUrl) => setEditedData({ ...data, image: newUrl })}
                       module="administration"
                       category="leadership"
+                      aspect="aspect-[4/5] h-full"
                       className="w-full h-full"
                     />
                   ) : (
@@ -205,6 +208,27 @@ function VicePrincipalPage() {
           </div>
         </div>
       </section>
+
+      {isEditMode && editedData && (
+        <div className="fixed bottom-8 right-8 z-[110] animate-in fade-in zoom-in slide-in-from-bottom-4">
+          <div className="flex items-center gap-3 bg-card p-2 rounded-full border border-border shadow-2xl">
+            <button
+              onClick={() => setEditedData(null)}
+              disabled={updateMutation.isPending}
+              className="flex items-center gap-2 px-5 py-3 rounded-full text-muted-foreground hover:text-ink transition-colors font-medium cursor-pointer"
+            >
+              <X className="h-5 w-5" /> Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={updateMutation.isPending}
+              className="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white shadow-lg hover:scale-105 active:scale-95 transition-all font-semibold cursor-pointer disabled:opacity-60"
+            >
+              <Save className="h-5 w-5" /> {updateMutation.isPending ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

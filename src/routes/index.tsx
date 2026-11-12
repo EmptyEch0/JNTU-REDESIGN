@@ -345,6 +345,7 @@ function HomePage() {
     mutationFn: updateLeadershipData,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["leadership"] });
+      queryClient.invalidateQueries({ queryKey: ["all-leadership-profiles"] });
       setPrincipalEdit(null);
       setVicePrincipalEdit(null);
       toast.success("Leadership profile updated!");
@@ -865,6 +866,7 @@ function HomePage() {
                             }
                             module="administration"
                             category="leadership"
+                            aspect="aspect-[4/5] h-full"
                             className="w-full h-full"
                           />
                         ) : (
@@ -977,6 +979,7 @@ function HomePage() {
                             }
                             module="administration"
                             category="leadership"
+                            aspect="aspect-[4/5] h-full"
                             className="w-full h-full"
                           />
                         ) : (

@@ -225,8 +225,64 @@ export const updateLeadershipData = createServerFn({ method: "POST" })
   .validator((d: any) => d)
   .handler(async ({ data }) => {
     const { id, ...updateData } = data;
-    await db.update(leadership).set(updateData).where(eq(leadership.id, id));
-    serverCache.invalidate("leadership_", true);
+    const updated = await db
+      .update(leadership)
+      .set(updateData)
+      .where(eq(leadership.id, id))
+      .returning();
+
+    const row = updated[0];
+    if (row?.slug) {
+      const slug = row.slug;
+      const extras = (row.extras as any) || {};
+      const isInCharge = Boolean(extras.isInCharge);
+      const cleanName = (row.name || "").trim();
+
+      if (slug.startsWith("hod_") || extras.category === "hod") {
+        const targetDeptSlug = extras.deptSlug || slug.replace("hod_", "");
+        try {
+          const hodDisplayName = isInCharge && !cleanName.includes("(i/c)") ? `${cleanName} (i/c)` : cleanName;
+          await db
+            .update(departments)
+            .set({
+              hod: hodDisplayName,
+              hod_photo: row.image || "",
+              hod_contact: row.email || "",
+              hod_message: row.message || "",
+            })
+            .where(eq(departments.slug, targetDeptSlug));
+          serverCache.invalidate(`department_${targetDeptSlug}`);
+          serverCache.invalidate("all_departments");
+        } catch (err) {
+          console.error(`Failed to sync HOD downstream for ${targetDeptSlug}:`, err);
+        }
+      }
+
+      if (slug === "tpo" || extras.category === "tpo") {
+        try {
+          const tpoRows = await db.select().from(tpo).limit(1);
+          const tpoDisplayName = isInCharge && !cleanName.includes("(i/c)") ? `${cleanName} (i/c)` : cleanName;
+          if (tpoRows.length > 0) {
+            await db
+              .update(tpo)
+              .set({
+                name: tpoDisplayName,
+                image: row.image || "",
+                email: row.email || "",
+                designation: row.designation || "",
+                message: row.message || "",
+              })
+              .where(eq(tpo.id, tpoRows[0].id));
+          }
+          serverCache.invalidate("tpo", true);
+        } catch (err) {
+          console.error("Failed to sync TPO downstream:", err);
+        }
+      }
+    }
+
+    serverCache.invalidate("leadership", true);
+    serverCache.invalidate("all_leadership_profiles");
     return { success: true };
   });
 

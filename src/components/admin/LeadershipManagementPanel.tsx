@@ -33,7 +33,165 @@ import {
   ExternalLink,
   X,
   UserCheck,
+  ChevronDown,
 } from "lucide-react";
+
+const DEPT_SHORT_NAME_MAP: Record<string, string> = {
+  "computer science and engineering": "CSE",
+  "computer science & engineering": "CSE",
+  "information technology": "IT",
+  "electronics and communication engineering": "ECE",
+  "electronics & communication engineering": "ECE",
+  "electrical and electronics engineering": "EEE",
+  "electrical & electronics engineering": "EEE",
+  "mechanical engineering": "Mechanical",
+  "metallurgical engineering": "Metallurgical",
+  "civil engineering": "Civil",
+  "basic sciences and humanities": "BS&H",
+  "basic sciences and humanities and social sciences": "BS&H",
+  "master of business administration": "MBA",
+};
+
+function FacultySwapCombobox({
+  facultyRoster,
+  selectedFacultyId,
+  onSelect,
+}: {
+  facultyRoster: any[];
+  selectedFacultyId: number | null;
+  onSelect: (facultyId: number) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const selectedFaculty = useMemo(
+    () => facultyRoster.find((f: any) => f.id === selectedFacultyId),
+    [facultyRoster, selectedFacultyId]
+  );
+
+  const filteredFaculty = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return facultyRoster;
+    return facultyRoster.filter((f: any) => {
+      const name = (f.name || "").toLowerCase();
+      const dept = (f.department_name || "").toLowerCase();
+      const desig = (f.designation || "").toLowerCase();
+      const email = (f.faculty_email || "").toLowerCase();
+      return name.includes(q) || dept.includes(q) || desig.includes(q) || email.includes(q);
+    });
+  }, [facultyRoster, query]);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <div className="relative flex items-center">
+        <Search className="w-3.5 h-3.5 absolute left-2.5 text-blue-500 pointer-events-none" />
+        <input
+          type="text"
+          value={
+            isOpen
+              ? query
+              : selectedFaculty
+              ? `${selectedFaculty.name} — ${selectedFaculty.department_name || "CEV"}`
+              : query
+          }
+          onFocus={() => {
+            setIsOpen(true);
+            setQuery("");
+          }}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (!isOpen) setIsOpen(true);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setIsOpen(false);
+          }}
+          placeholder={`Search faculty by name (${facultyRoster.length} members)...`}
+          className="w-full bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-700 rounded-lg pl-8 pr-14 py-1.5 text-xs text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition"
+        />
+        <div className="absolute right-1.5 flex items-center gap-0.5">
+          {query && isOpen && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              className="p-1 text-slate-400 hover:text-slate-600 cursor-pointer"
+              title="Clear search"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              setIsOpen((prev) => !prev);
+              if (!isOpen) setQuery("");
+            }}
+            className="p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-700 rounded cursor-pointer"
+            title="Toggle faculty roster"
+          >
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          </button>
+        </div>
+      </div>
+
+      {isOpen && (
+        <div className="absolute left-0 right-0 mt-1.5 z-50 bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 rounded-xl shadow-xl max-h-64 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
+          {filteredFaculty.length === 0 ? (
+            <div className="p-4 text-center text-xs text-slate-400">
+              No faculty matching "{query}"
+            </div>
+          ) : (
+            filteredFaculty.map((fac: any) => {
+              const isSelected = fac.id === selectedFacultyId;
+              return (
+                <button
+                  key={fac.id}
+                  type="button"
+                  onClick={() => {
+                    onSelect(fac.id);
+                    setIsOpen(false);
+                    setQuery("");
+                  }}
+                  className={`w-full text-left px-3 py-2 flex items-center gap-2.5 hover:bg-blue-50/80 dark:hover:bg-slate-800 transition cursor-pointer ${
+                    isSelected ? "bg-blue-50 dark:bg-blue-950/40" : ""
+                  }`}
+                >
+                  <img
+                    src={getAssetUrl(fac.photo_url) || "/images/faculty/default-faculty.jpg"}
+                    alt={fac.name}
+                    className="w-7 h-7 rounded-full object-cover object-top shrink-0 border border-slate-200 bg-slate-100"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = "/images/faculty/default-faculty.jpg";
+                    }}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">
+                      {fac.name}
+                    </div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                      {fac.department_name || "CEV"} • {fac.designation || "Faculty"}
+                    </div>
+                  </div>
+                  {isSelected && <Check className="w-3.5 h-3.5 text-blue-600 shrink-0" />}
+                </button>
+              );
+            })
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface EditableProfileState {
   [slug: string]: {
@@ -207,12 +365,23 @@ export function LeadershipManagementPanel() {
       const current = prev[slug];
       if (!current) return prev;
 
-      // When swapped, update person name, photo (if available), email, and facultyId
+      let nextDesignation = current.designation;
+      if (slug === "vice-principal" && selected.designation) {
+        const rawDept = (selected.department_name || "").trim();
+        const deptLabel = DEPT_SHORT_NAME_MAP[rawDept.toLowerCase()] || rawDept;
+        const icSuffix = current.isInCharge ? " (i/c)" : "";
+        nextDesignation = deptLabel
+          ? `${selected.designation} of ${deptLabel} & Vice Principal${icSuffix}`
+          : `${selected.designation} & Vice Principal${icSuffix}`;
+      }
+
+      // When swapped, update person name, photo (if available), email, designation (for VP), and facultyId
       return {
         ...prev,
         [slug]: {
           ...current,
           name: selected.name,
+          designation: nextDesignation,
           image: selected.photo_url || current.image,
           email: selected.faculty_email || current.email,
           facultyId: selected.id,
@@ -288,6 +457,14 @@ export function LeadershipManagementPanel() {
         console.error(`Failed to save ${slug}:`, e);
       }
     }
+
+    setFormState((prev) => {
+      const next = { ...prev };
+      for (const slug of dirtySlugs) {
+        if (next[slug]) next[slug] = { ...next[slug], isDirty: false };
+      }
+      return next;
+    });
 
     queryClient.invalidateQueries({ queryKey: ["all-leadership-profiles"] });
     queryClient.invalidateQueries({ queryKey: ["leadership"] });
@@ -650,21 +827,11 @@ export function LeadershipManagementPanel() {
                           <ArrowRightLeft className="w-3.5 h-3.5 text-blue-600" />
                           Swap from Existing Faculty Roster:
                         </label>
-                        <select
-                          value={state.facultyId || ""}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            if (val) handleSwapFromFaculty(p.slug, Number(val));
-                          }}
-                          className="w-full bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
-                        >
-                          <option value="">-- Choose faculty member to swap ({facultyRoster.length}) --</option>
-                          {facultyRoster.map((fac: any) => (
-                            <option key={fac.id} value={fac.id}>
-                              {fac.name} — {fac.department_name || "CEV"} ({fac.designation || "Faculty"})
-                            </option>
-                          ))}
-                        </select>
+                        <FacultySwapCombobox
+                          facultyRoster={facultyRoster}
+                          selectedFacultyId={state.facultyId}
+                          onSelect={(facultyId) => handleSwapFromFaculty(p.slug, facultyId)}
+                        />
                       </div>
 
                       {/* Name & In-Charge Row */}

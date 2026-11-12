@@ -58,7 +58,8 @@ function PrincipalPage() {
   const updateMutation = useMutation({
     mutationFn: updateLeadershipData,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leadership", "principal"] });
+      queryClient.invalidateQueries({ queryKey: ["leadership"] });
+      queryClient.invalidateQueries({ queryKey: ["all-leadership-profiles"] });
       setEditedData(null);
       toast.success("Principal's information updated successfully!");
     },
@@ -98,8 +99,9 @@ function PrincipalPage() {
   });
 
   const handleSave = () => {
-    if (!editedData) return;
-    updateMutation.mutate({ data: { id: principal.id, ...editedData } });
+    if (!editedData || !principal) return;
+    const { id: _ignoredId, ...fields } = editedData;
+    updateMutation.mutate({ data: { id: principal.id, ...fields } });
   };
 
   const handleAddStaffSubmit = (e: React.FormEvent) => {
@@ -171,6 +173,7 @@ function PrincipalPage() {
                       onChange={(newUrl) => setEditedData({ ...data, image: newUrl })}
                       module="administration"
                       category="leadership"
+                      aspect="aspect-[4/5] h-full"
                       className="w-full h-full"
                     />
                   ) : (

@@ -35,6 +35,8 @@ import { Plus, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/notices")({
   loader: async () => await getNotices(),
+  validateSearch: (s: Record<string, unknown>): { category?: string } =>
+    typeof s.category === "string" ? { category: s.category } : {},
   head: () => ({
     meta: [
       { title: "Notices & Announcements — JNTU-GV CEV" },
@@ -71,7 +73,10 @@ function NoticesPage() {
   const { isAdmin, isEditMode } = useAdmin();
   const router = useRouter();
 
-  const [activeCategory, setActiveCategory] = useState("All");
+  const { category } = Route.useSearch();
+  const [activeCategory, setActiveCategory] = useState(
+    categories.find((c) => c.toLowerCase() === category?.toLowerCase()) ?? "All",
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [previewNotice, setPreviewNotice] = useState<any | null>(null);
 

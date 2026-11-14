@@ -1,10 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "../db";
 import { siteContent, notices, academicRegulations, campusGallery, leadership, academicSyllabus, academicDownloads, academicTimetables, academicsExamCell, academicFeeStructure, academicCalendars, chatbotLogs } from "../db/schema";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { eq, and, desc, sql, or, ilike } from "drizzle-orm";
 import { serverCache } from "../lib/server-cache";
 import { ingestSingleChunk, deleteSingleChunk } from "../lib/ingest";
-import { runChatbotEngine, detectIntents, detectLanguage } from "../lib/chatbot-engine";
+import { runChatbotEngine, detectIntents, detectLanguage, EXAM_QUERY_RE } from "../lib/chatbot-engine";
 
 // ── Singleton embedder + Query Vector cache (0ms for repeated queries) ──
 let _embedder: any = null;
@@ -563,6 +563,28 @@ export const queryChatbot = createServerFn({ method: "POST" })
         }
       } catch (err) {
         console.error("Error pulling live notices:", err);
+      }
+    }
+
+    // (b2) Exam notices (timetables / notifications) — the source of truth for exam dates
+    if (EXAM_QUERY_RE.test(query)) {
+      try {
+        const examRows = await db
+          .select()
+          .from(notices)
+          .where(or(ilike(notices.tag, "%exam%"), ilike(notices.title, "%examination%")))
+          .orderBy(desc(notices.id))
+          .limit(50);
+        for (const n of examRows) {
+          chunks.push({
+            content: `Exam Notice (${n.date}): [${n.title}](${n.url || "/notices?category=Exams"})`,
+            source_type: "exam_notice",
+            metadata: { title: n.title, date: n.date, url: n.url, tag: n.tag },
+            similarity: 1.0,
+          });
+        }
+      } catch (err) {
+        console.error("Error pulling exam notices:", err);
       }
     }
 

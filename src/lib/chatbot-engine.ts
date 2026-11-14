@@ -1,3 +1,4 @@
+import { getAssetUrl } from "./assets";
 /**
  * JNTU AI — Comprehensive Intelligent Answer Engine v2.0
  * ──────────────────────────────────────────────────────
@@ -1945,6 +1946,92 @@ function buildAnswer(
 }
 
 // ─────────────────────────────────────────────
+// 6b. EXAM SCHEDULE → LIVE EXAM NOTICES
+// Exam dates change every semester, so never answer from static text:
+// match the question against published "Exams" notices and link the PDF.
+// ─────────────────────────────────────────────
+
+export const EXAM_QUERY_RE =
+  /\b(exams?|examinations?|mids?\d?|suppl\w*|backlogs?|hall\s*tickets?|end\s*sem\w*|semester)\b|\b[1-4]\s*-\s*[12]\b/i;
+const EXAM_NON_SCHEDULE_RE = /fee|cell|contact|phone|email|revaluation|grad|gpa|result|marks|syllabus/i;
+
+const ORD: Record<string, string> = { i: "1", ii: "2", iii: "3", iv: "4", first: "1", second: "2", third: "3", fourth: "4", final: "4" };
+const ord = (s: string) => ORD[s] ?? s;
+const N = "(iv|i{1,3}|[1-4]|first|second|third|fourth|final)";
+const YEAR_SEM_RE = new RegExp(`\\b${N}\\s*-\\s*${N}\\b`);
+const YEAR_RE = new RegExp(`\\b${N}(?:st|nd|rd|th)?\\s*-?\\s*(?:year|yr|btech|mtech|mca|mba)\\b`);
+const SEM_RE = new RegExp(`\\b${N}(?:st|nd|rd|th)?\\s*-?\\s*sem(?:ester)?\\b`);
+const MID_AFTER_RE = /\bmid\s*-?\s*(ii|i|[12])\b/; // "mid-2", "mid ii"
+const MID_BEFORE_RE = /(?<![-\d])\b(ii|i|[12]|first|second)(?:st|nd)?\s*-?\s*mid\b/; // "II-Mid", not the "1" of "4-1 mid"
+
+/** Pulls year / sem / mid / exam type / program / regulation out of a question or a notice title. */
+export function examFeatures(text: string): Record<string, string> {
+  const t = text.toLowerCase().replace(/b\.\s*tech/g, "btech").replace(/m\.\s*tech/g, "mtech");
+  const f: Record<string, string> = {};
+  const ys = t.match(YEAR_SEM_RE);
+  if (ys) { f.year = ord(ys[1]); f.sem = ord(ys[2]); }
+  const y = t.match(YEAR_RE);
+  if (y && !f.year) f.year = ord(y[1]);
+  const s = t.match(SEM_RE);
+  if (s && !f.sem) f.sem = ord(s[1]);
+  const m = t.match(MID_AFTER_RE) ?? t.match(MID_BEFORE_RE);
+  if (m) f.mid = ord(m[1]);
+  if (/\bmids?\b|\bmid\s*-?\s*\d/.test(t)) f.type = "mid";
+  else if (/\bend\b/.test(t)) f.type = "end";
+  const sup = /suppl|backlog/.test(t), reg = /regular/.test(t);
+  if (sup || reg) f.supply = [reg && "0", sup && "1"].filter(Boolean).join(","); // "Regular/Supplementary" → "0,1"
+  const prog = t.match(/\b(btech|mtech|mca|mba|pharm)/);
+  if (prog) f.prog = prog[1];
+  const regs = t.match(/\br\d{2}\b/g);
+  if (regs) f.reg = regs.join(",");
+  return f;
+}
+
+// If the student asked for a year / mid / exam type, a notice that doesn't state it is not an answer.
+const REQUIRED_EXAM_KEYS = new Set(["year", "mid", "type"]);
+
+/** +2 per agreeing feature, -1 (excluded) on any conflict. Other missing features are neutral. */
+export function scoreExamNotice(q: Record<string, string>, n: Record<string, string>): number {
+  let score = 0;
+  for (const k of Object.keys(q)) {
+    if (!(k in n)) {
+      if (REQUIRED_EXAM_KEYS.has(k)) return -1;
+      continue;
+    }
+    const overlap = q[k].split(",").some((v) => n[k].split(",").includes(v));
+    if (!overlap) return -1;
+    score += 2;
+  }
+  return score;
+}
+
+function examNoticeAnswer(query: string, examNotices: any[]): string {
+  const q = examFeatures(query);
+  const line = (n: any) =>
+    `• **${n.title}**${n.date ? ` — ${n.date}` : ""}\n  ${n.url ? `[📄 Open Timetable / Notice PDF](${getAssetUrl(n.url)})` : `[📄 View Notice](/notices?category=Exams)`}`;
+  const all = `\n\n👉 All exam timetables & notifications: [Notices → Exams](/notices?category=Exams)`;
+
+  if (Object.keys(q).length === 0) {
+    if (!examNotices.length) return `**Exam Timetables & Notifications** 📝\n\nExam dates are announced through official notices.${all}`;
+    return `**Latest Exam Notices** 📝\n\n${examNotices.slice(0, 4).map(line).join("\n")}\n\nExact dates & timings are inside each PDF.${all}`;
+  }
+
+  const hits = examNotices
+    .map((n, i) => ({ n, i, s: scoreExamNotice(q, examFeatures(n.title || "")) }))
+    .filter((x) => x.s > 0)
+    .sort((a, b) => b.s - a.s || a.i - b.i)
+    .slice(0, 3);
+
+  if (hits.length) {
+    return `**Here's the latest matching exam notice** 📝\n\n${hits.map((h) => line(h.n)).join("\n")}\n\nExact dates & timings are inside the PDF.${all}`;
+  }
+
+  let resp = `I couldn't find a published exam notice matching your question yet 📝\n\nExam dates are announced only through official notices, so please check the Exams section for the latest update.`;
+  if (examNotices.length) resp += `\n\n**Most recent exam notices:**\n${examNotices.slice(0, 3).map(line).join("\n")}`;
+  return resp + all;
+}
+
+// ─────────────────────────────────────────────
 // 7. MAIN ENTRY POINT
 // ─────────────────────────────────────────────
 
@@ -1992,6 +2079,10 @@ export function runChatbotEngine({ query, chunks }: ChatbotEngineInput): string 
 
   const lang = detectLanguage(query);
   const intents = detectIntents(query);
+  if (EXAM_QUERY_RE.test(query) && !EXAM_NON_SCHEDULE_RE.test(query)) {
+    const examNotices = chunks.filter((c) => c.source_type === "exam_notice").map((c) => c.metadata);
+    return examNoticeAnswer(query, examNotices);
+  }
   const ranked = rerankChunks(chunks, query, intents);
   return buildAnswer(intents, query, ranked, lang);
 }

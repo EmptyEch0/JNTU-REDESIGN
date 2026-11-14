@@ -43,6 +43,31 @@ export const Route = createFileRoute("/departments/$id/faculty/list")({
   component: FacultyListPage,
 });
 
+const HOD_REGEX = /hod|head of (the )?department/i;
+
+/**
+ * Single source of truth for row order:
+ *   1. HOD
+ *   2. Regular / Permanent
+ *   3. Contract
+ *   4. Everything else (Adjunct, Ad-hoc, ...)
+ * Array.sort is stable, so the existing order is preserved inside each group
+ * (manual up/down ordering within a group still works).
+ */
+function sortFaculty(list: DepartmentFacultyListItem[]): DepartmentFacultyListItem[] {
+  const rank = (f: DepartmentFacultyListItem) => {
+    if (HOD_REGEX.test(f.designation || "")) return 0;
+    const type = (f.associationType || "").toLowerCase();
+    if (type === "regular" || type === "permanent") return 1;
+    if (type === "contract") return 2;
+    return 3;
+  };
+
+  return [...list]
+    .sort((a, b) => rank(a) - rank(b))
+    .map((item, idx) => ({ ...item, sNo: idx + 1 }));
+}
+
 function getNormalizedFacultyName(raw: string): string {
   return (raw || "")
     .toLowerCase()
@@ -63,7 +88,7 @@ function getInitialDeletedList(deptKey: string, data: DepartmentData | undefined
         parsed.forEach((id: string) => restoredSet.add(String(id)));
       }
     }
-  } catch {}
+  } catch { }
 
   // 1. Load from shared jntugv_deleted_faculty_${deptKey}
   try {
@@ -92,7 +117,7 @@ function getInitialDeletedList(deptKey: string, data: DepartmentData | undefined
         });
       }
     }
-  } catch {}
+  } catch { }
 
   // 2. Load from jntugv_deleted_faculty_rows_${deptKey}
   try {
@@ -109,7 +134,7 @@ function getInitialDeletedList(deptKey: string, data: DepartmentData | undefined
         });
       }
     }
-  } catch {}
+  } catch { }
 
   return Array.from(deletedMap.values());
 }
@@ -130,7 +155,7 @@ function FacultyListPage() {
     return getInitialDeletedList(deptKey, data);
   });
 
-  // Construct initial dynamic faculty list matching exact sequence of Faculty Profiles
+  // Construct initial dynamic faculty list: HOD -> Regular -> Contract
   const defaultList: DepartmentFacultyListItem[] = useMemo(() => {
     const directList =
       DEPARTMENT_FACULTY_LIST[deptKey] ||
@@ -150,10 +175,10 @@ function FacultyListPage() {
     };
 
     if (dbFaculty && dbFaculty.length > 0) {
-      // 1. Filter active dbFaculty in their EXACT profile card sequence
+      // 1. Filter active dbFaculty
       const activeDb = dbFaculty.filter((dbF: any) => !isItemDeleted(dbF));
 
-      // 2. Map every active dbFaculty member to a table row in exact order
+      // 2. Map every active dbFaculty member to a table row
       const result: DepartmentFacultyListItem[] = activeDb.map((dbF: any) => {
         const dbNorm = getNormalizedFacultyName(dbF.name || "");
 
@@ -190,19 +215,18 @@ function FacultyListPage() {
         };
       });
 
-      // Preserve exact index sequence without re-sorting
-      return result.map((item, idx) => ({ ...item, sNo: idx + 1 }));
+      return sortFaculty(result);
     }
 
-    // Fallback if DB has no faculty seeded yet: directList in original sequence excluding deleted items
+    // Fallback if DB has no faculty seeded yet
     const nonDeletedDirect = directList.filter((item) => !isItemDeleted(item));
-    return nonDeletedDirect.map((item, idx) => ({ ...item, sNo: idx + 1 }));
+    return sortFaculty(nonDeletedDirect);
   }, [deptKey, data, deletedRowsList]);
 
   const [facultyList, setFacultyList] = useState<DepartmentFacultyListItem[]>(defaultList);
   const [facultyRowToDelete, setFacultyRowToDelete] = useState<{ index: number; name: string } | null>(null);
 
-  // Synchronize dynamic updates and preserve exact profile sequence
+  // Synchronize dynamic updates; the order is always HOD -> Regular -> Contract
   useEffect(() => {
     try {
       const stored = localStorage.getItem(`jntugv_faculty_list_${deptKey}`);
@@ -212,7 +236,6 @@ function FacultyListPage() {
           const dbFaculty = data?.faculty || [];
           const currentDeleted = deletedRowsList.length > 0 ? deletedRowsList : getInitialDeletedList(deptKey, data);
 
-          // If dbFaculty exists, order strictly according to the live dbFaculty sequence!
           if (dbFaculty.length > 0) {
             const activeDb = dbFaculty.filter((dbF: any) => {
               const itemNorm = getNormalizedFacultyName(dbF.name || "");
@@ -271,12 +294,12 @@ function FacultyListPage() {
               };
             });
 
-            setFacultyList(orderedWithDb.map((it, idx) => ({ ...it, sNo: idx + 1 })));
+            setFacultyList(sortFaculty(orderedWithDb));
             return;
           }
         }
       }
-    } catch {}
+    } catch { }
     setFacultyList(defaultList);
   }, [deptKey, defaultList, data, deletedRowsList]);
 
@@ -309,7 +332,7 @@ function FacultyListPage() {
         await syncFaculty({ data: { deptId: data.id, facultyList: backendPayload } });
 
         // Also sync department HOD metadata to match the designated HOD
-        const designatedHod = updatedList.find((f) => /hod|head of (the )?department/i.test(f.designation || "")) || updatedList[0];
+        const designatedHod = updatedList.find((f) => HOD_REGEX.test(f.designation || "")) || updatedList[0];
         if (designatedHod && designatedHod.name) {
           await updateDepartment({
             data: {
@@ -328,6 +351,13 @@ function FacultyListPage() {
     onError: (err: any) => toast.error(err?.message || "Failed to save faculty list."),
   });
 
+  // Always sort right before saving so the stored order is HOD -> Regular -> Contract
+  const handleSave = () => {
+    const sorted = sortFaculty(facultyList);
+    setFacultyList(sorted);
+    mutation.mutate(sorted);
+  };
+
   const handleUpdate = (index: number, field: keyof DepartmentFacultyListItem, value: any) => {
     setFacultyList((prev) => {
       const copy = [...prev];
@@ -335,8 +365,14 @@ function FacultyListPage() {
         ...copy[index],
         [field]: value,
       };
-      return copy;
+      // Changing the employment type moves the row to its group immediately
+      return field === "associationType" ? sortFaculty(copy) : copy;
     });
+  };
+
+  // Re-sort after the designation input loses focus (so rows don't jump while typing)
+  const resortList = () => {
+    setFacultyList((prev) => sortFaculty(prev));
   };
 
   const moveRow = (index: number, direction: "up" | "down") => {
@@ -347,7 +383,8 @@ function FacultyListPage() {
       const temp = copy[index];
       copy[index] = copy[targetIndex];
       copy[targetIndex] = temp;
-      return copy.map((item, idx) => ({ ...item, sNo: idx + 1 }));
+      // Moves within a group stick; moves across groups snap back to the enforced order
+      return sortFaculty(copy);
     });
   };
 
@@ -364,7 +401,7 @@ function FacultyListPage() {
       if (i === index) {
         return { ...f, designation: newHodDesignation };
       }
-      if (/hod|head of (the )?department/i.test(f.designation || "")) {
+      if (HOD_REGEX.test(f.designation || "")) {
         const cleanPrevRank = (f.designation || "")
           .replace(/\s*&\s*(hod|head of (the )?department)/gi, "")
           .trim() || "Professor";
@@ -373,11 +410,8 @@ function FacultyListPage() {
       return f;
     });
 
-    const newHod = updatedList[index];
-    const others = updatedList.filter((_, i) => i !== index);
-
-    const reordered = [newHod, ...others].map((item, idx) => ({ ...item, sNo: idx + 1 }));
-    setFacultyList(reordered);
+    // New HOD goes to the top; the previous HOD drops into their Regular/Contract group
+    setFacultyList(sortFaculty(updatedList));
     toast.success(`Set "${targetMember.name}" as Head of Department (${newHodDesignation}). Click 'Save Faculty List' to save.`);
   };
 
@@ -396,8 +430,9 @@ function FacultyListPage() {
       associationType: "Regular",
       totalExperience: "—",
     };
-    setFacultyList((prev) => [newRow, ...prev].map((item, idx) => ({ ...item, sNo: idx + 1 })));
-    toast.info("Added new faculty row at the top. Fill details and click 'Save Faculty List'.");
+    // New row is placed at the top of the Regular group (just below the HOD)
+    setFacultyList((prev) => sortFaculty([newRow, ...prev]));
+    toast.info("Added new faculty row at the top of the Regular group. Fill details and click 'Save Faculty List'.");
   };
 
   const removeFacultyRow = (index: number) => {
@@ -416,21 +451,17 @@ function FacultyListPage() {
           restoredKey,
           JSON.stringify(prevRestored.filter((k) => k !== String(itemToDelete.id) && k !== itemNorm))
         );
-      } catch {}
+      } catch { }
+
+      const numId = Number(itemToDelete.id);
+      if (!isNaN(numId) && numId > 0) {
+        deleteFaculty({ data: { id: numId } }).catch((err) =>
+          console.error("Failed to delete faculty from DB:", err)
+        );
+      }
     }
 
-    const numId = Number(itemToDelete.id);
-    if (!isNaN(numId) && numId > 0) {
-      deleteFaculty({ data: { id: numId } }).catch((err) =>
-        console.error("Failed to delete faculty from DB:", err)
-      );
-    }
-
-    const updated = facultyList.filter((_, i) => i !== index).map((item, idx) => ({
-      ...item,
-      sNo: idx + 1,
-    }));
-    setFacultyList(updated);
+    setFacultyList(sortFaculty(facultyList.filter((_, i) => i !== index)));
   };
 
   const confirmDeleteFacultyRow = () => {
@@ -442,8 +473,8 @@ function FacultyListPage() {
   };
 
   const restoreFacultyRow = (item: DepartmentFacultyListItem, archiveIdx: number) => {
-    const restored = { ...item, sNo: facultyList.length + 1 };
-    setFacultyList((prev) => [...prev, restored].map((it, idx) => ({ ...it, sNo: idx + 1 })));
+    // Restored row lands in its proper group automatically
+    setFacultyList((prev) => sortFaculty([...prev, item]));
 
     const updatedDeleted = deletedRowsList.filter((_, i) => i !== archiveIdx);
     setDeletedRowsList(updatedDeleted);
@@ -454,7 +485,7 @@ function FacultyListPage() {
       const prevRestored = JSON.parse(localStorage.getItem(restoredKey) || "[]");
       const itemNorm = getNormalizedFacultyName(item.name || "");
       localStorage.setItem(restoredKey, JSON.stringify([...new Set([...prevRestored, String(item.id), itemNorm])]));
-    } catch {}
+    } catch { }
 
     toast.success(`Restored "${item.name}". Click 'Save Faculty List' to save changes.`);
   };
@@ -465,7 +496,7 @@ function FacultyListPage() {
     try {
       localStorage.setItem(`jntugv_deleted_faculty_${deptKey}`, JSON.stringify(updatedDeleted));
       localStorage.setItem(`jntugv_deleted_faculty_rows_${deptKey}`, JSON.stringify(updatedDeleted));
-    } catch {}
+    } catch { }
     toast.info("Permanently removed from archive.");
   };
 
@@ -474,7 +505,7 @@ function FacultyListPage() {
     try {
       localStorage.removeItem(`jntugv_deleted_faculty_${deptKey}`);
       localStorage.removeItem(`jntugv_deleted_faculty_rows_${deptKey}`);
-    } catch {}
+    } catch { }
     toast.info("Cleared all archived faculty rows.");
   };
 
@@ -483,15 +514,11 @@ function FacultyListPage() {
       localStorage.removeItem(`jntugv_faculty_list_${deptKey}`);
       localStorage.removeItem(`jntugv_deleted_faculty_${deptKey}`);
       localStorage.removeItem(`jntugv_deleted_faculty_rows_${deptKey}`);
-    } catch {}
+    } catch { }
     setDeletedRowsList([]);
     setFacultyList(defaultList);
     toast.info("Reset to original faculty list.");
   };
-
-  const hasExperienceColumn = useMemo(() => {
-    return facultyList.some((f) => Boolean(f.totalExperience));
-  }, [facultyList]);
 
   // Filtered roster (search only applied in public view or view mode)
   const filteredFaculty = useMemo(() => {
@@ -525,7 +552,7 @@ function FacultyListPage() {
           </h2>
           <p className="text-sm text-slate-600 mt-1 max-w-2xl">
             {isEditMode
-              ? "Edit academic qualifications, designations, joining dates, and employment status. Click 'Save Faculty List' to apply."
+              ? "Edit academic qualifications, designations, joining dates, and employment status. The list is always ordered HOD, Regular, then Contract. Click 'Save Faculty List' to apply."
               : `Detailed academic qualifications, graduation background, and association details of faculty members in the Department of ${data?.name}.`}
           </p>
         </div>
@@ -554,7 +581,7 @@ function FacultyListPage() {
 
             <button
               type="button"
-              onClick={() => mutation.mutate(facultyList)}
+              onClick={handleSave}
               disabled={mutation.isPending}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 transition-colors shadow-sm cursor-pointer disabled:opacity-60"
             >
@@ -704,6 +731,7 @@ function FacultyListPage() {
                           type="text"
                           value={f.designation || ""}
                           onChange={(e) => handleUpdate(idx, "designation", e.target.value)}
+                          onBlur={resortList}
                           className="w-full p-1.5 text-xs font-semibold text-slate-800 border border-amber-300 bg-amber-50/30 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
                         />
                       ) : (
@@ -760,11 +788,10 @@ function FacultyListPage() {
                         </select>
                       ) : (
                         <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-semibold border ${
-                            (f.associationType || "").toLowerCase() === "regular"
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-semibold border ${(f.associationType || "").toLowerCase() === "regular"
                               ? "bg-emerald-50 text-emerald-700 border-emerald-200/60"
                               : "bg-blue-50 text-blue-700 border-blue-200/60"
-                          }`}
+                            }`}
                         >
                           {f.associationType}
                         </span>
@@ -792,7 +819,7 @@ function FacultyListPage() {
                     {isEditMode && (
                       <td className="py-3 px-3 text-center">
                         <div className="flex items-center justify-center gap-1">
-                          {/hod|head of (the )?department/i.test(f.designation || "") ? (
+                          {HOD_REGEX.test(f.designation || "") ? (
                             <span title="Current HOD" className="px-1.5 py-0.5 text-[10px] font-extrabold text-amber-900 bg-amber-100 border border-amber-300 rounded-md">
                               HOD
                             </span>
@@ -811,7 +838,7 @@ function FacultyListPage() {
                             disabled={idx === 0}
                             onClick={() => moveRow(idx, "up")}
                             className="p-1 rounded-lg text-slate-400 hover:text-amber-700 hover:bg-amber-100 disabled:opacity-20 disabled:hover:bg-transparent transition-colors cursor-pointer"
-                            title="Move Row Up"
+                            title="Move Row Up (within its group)"
                           >
                             <ArrowUp size={13} />
                           </button>
@@ -820,7 +847,7 @@ function FacultyListPage() {
                             disabled={idx === facultyList.length - 1}
                             onClick={() => moveRow(idx, "down")}
                             className="p-1 rounded-lg text-slate-400 hover:text-amber-700 hover:bg-amber-100 disabled:opacity-20 disabled:hover:bg-transparent transition-colors cursor-pointer"
-                            title="Move Row Down"
+                            title="Move Row Down (within its group)"
                           >
                             <ArrowDown size={13} />
                           </button>

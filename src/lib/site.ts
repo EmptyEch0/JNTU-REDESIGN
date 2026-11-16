@@ -43,11 +43,6 @@ export const NAV: {
               desc: "Our purpose and guiding principles",
             },
             {
-              label: "Norms & Recognition",
-              to: "/about/norms",
-              desc: "UGC status and establishment orders",
-            },
-            {
               label: "RTI Act 2005",
               to: "/rti",
               desc: "Right to Information statutory disclosures",
@@ -248,6 +243,46 @@ export const NAV: {
         },
       ],
     },
+    {
+      label: "Norms",
+      groups: [
+        {
+          title: "Accreditation & Approvals",
+          items: [
+            {
+              label: "All Norms & Overview",
+              to: "/about/norms",
+              desc: "Institutional compliance, certifications & reports",
+            },
+            {
+              label: "AICTE Approvals (EOA)",
+              to: "/about/norms?tab=AICTE",
+              desc: "Extension of Approval & course intake orders",
+            },
+            {
+              label: "NIRF Ranking Reports",
+              to: "/about/norms?tab=NIRF",
+              desc: "National institutional ranking submissions & DCS",
+            },
+          ],
+        },
+        {
+          title: "Statutory & Governance",
+          items: [
+            {
+              label: "UGC 2(f) & 12(B) Status",
+              to: "/about/norms?tab=Institutional",
+              desc: "UGC recognition certificate & grant eligibility",
+            },
+            {
+              label: "University Orders & Acts",
+              to: "/about/norms?tab=Institutional",
+              desc: "Establishment GO MS. 14 & JNTU Act 2008",
+            },
+          ],
+        },
+      ],
+    },
   ];
 
 export const STATS = [
@@ -423,6 +458,31 @@ export const SEARCH_INDEX: { label: string; to: string; group: string; keywords?
   { label: "Scholars under Supervision", to: "/rd-cell/scholars", group: "R&D" },
   { label: "MOUs", to: "/rd-cell/mous", group: "R&D", keywords: "supraja blackbuck sarda" },
 
+  {
+    label: "Norms & Recognition",
+    to: "/about/norms",
+    group: "Norms",
+    keywords: "norms recognition ugc 2f 12b statutory compliance accreditations",
+  },
+  {
+    label: "AICTE Approvals (EOA)",
+    to: "/about/norms?tab=AICTE",
+    group: "Norms",
+    keywords: "aicte eoa extension approval letter technical education sanctioned intake",
+  },
+  {
+    label: "NIRF Ranking Reports",
+    to: "/about/norms?tab=NIRF",
+    group: "Norms",
+    keywords: "nirf rankings dcs mhrd data capturing system national ranking",
+  },
+  {
+    label: "UGC 2(f) & 12(B) Recognition",
+    to: "/about/norms?tab=Institutional",
+    group: "Norms",
+    keywords: "ugc 2f 12b statutory recognition autonomous certificate 1956 act grants",
+  },
+
   { label: "Programs Offered", to: "/academics/programs", group: "Academics" },
   { label: "Academic Regulations", to: "/academics/regulations", group: "Academics" },
   { label: "Academic Calendar", to: "/academics/academic-calendar", group: "Academics", keywords: "calendar semester schedule instruction dates exams" },
@@ -582,6 +642,13 @@ export const RD_SUBNAV = [
   { label: "Publications", to: "/rd-cell/publications" },
   { label: "Scholars", to: "/rd-cell/scholars" },
   { label: "MOUs", to: "/rd-cell/mous" },
+];
+
+export const NORMS_SUBNAV = [
+  { label: "All Norms", to: "/about/norms" },
+  { label: "UGC & Statutory", to: "/about/norms?tab=Institutional" },
+  { label: "AICTE Approvals", to: "/about/norms?tab=AICTE" },
+  { label: "NIRF Rankings", to: "/about/norms?tab=NIRF" },
 ];
 
 export const ADMINISTRATION_SUBNAV = [

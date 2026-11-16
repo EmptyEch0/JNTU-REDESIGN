@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useRouter, useRouterState } from "@tanstack/react-router";
 import { imageUrl } from "@/lib/assets";
 import { useState, useEffect } from "react";
 import { PageHero } from "@/components/PageHero";
@@ -304,9 +304,33 @@ function NormsPage() {
   const { pageContent, regulations } = Route.useLoaderData();
   const { isEditMode } = useAdmin();
   const router = useRouter();
+  const search = useRouterState({ select: (s) => s.location.search }) as any;
 
   const [activeTab, setActiveTab] = useState<"All" | "Institutional" | "AICTE" | "NIRF">("All");
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    let tab = search?.tab;
+    if (!tab && typeof window !== "undefined") {
+      tab = new URLSearchParams(window.location.search).get("tab");
+    }
+    if (tab === "Institutional" || tab === "AICTE" || tab === "NIRF" || tab === "All") {
+      setActiveTab(tab);
+    }
+  }, [search]);
+
+  const handleTabClick = (tab: "All" | "Institutional" | "AICTE" | "NIRF") => {
+    setActiveTab(tab);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      if (tab === "All") {
+        url.searchParams.delete("tab");
+      } else {
+        url.searchParams.set("tab", tab);
+      }
+      window.history.replaceState({}, "", url.pathname + (url.search ? url.search : ""));
+    }
+  };
 
   const heroRec = (pageContent as any[]).find((r: any) => r.sectionKey === "hero") as any;
   const recRec = (pageContent as any[]).find((r: any) => r.sectionKey === "rec") as any;
@@ -608,7 +632,7 @@ function NormsPage() {
             <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100 rounded-2xl border border-slate-200">
               <button
                 type="button"
-                onClick={() => setActiveTab("All")}
+                onClick={() => handleTabClick("All")}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "All"
                     ? "bg-white text-ink shadow-sm font-extrabold"
@@ -619,7 +643,7 @@ function NormsPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setActiveTab("Institutional")}
+                onClick={() => handleTabClick("Institutional")}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "Institutional"
                     ? "bg-white text-ink shadow-sm font-extrabold"
@@ -630,7 +654,7 @@ function NormsPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setActiveTab("AICTE")}
+                onClick={() => handleTabClick("AICTE")}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "AICTE"
                     ? "bg-white text-ink shadow-sm font-extrabold"
@@ -641,7 +665,7 @@ function NormsPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setActiveTab("NIRF")}
+                onClick={() => handleTabClick("NIRF")}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "NIRF"
                     ? "bg-white text-ink shadow-sm font-extrabold"

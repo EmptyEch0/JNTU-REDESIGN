@@ -29,6 +29,10 @@ function getItemIcon(label: string) {
   if (l.includes("institution") || l.includes("about")) return Info;
   if (l.includes("vision")) return Compass;
   if (l.includes("norms") || l.includes("recognition")) return Award;
+  if (l.includes("aicte") || l.includes("eoa") || l.includes("approval")) return ShieldCheck;
+  if (l.includes("nirf") || l.includes("ranking")) return Trophy;
+  if (l.includes("ugc") || l.includes("12(b)") || l.includes("2(f)")) return Award;
+  if (l.includes("act") || l.includes("order") || l.includes("statutory") || l.includes("governance")) return Building2;
   if (l.includes("airport") || l.includes("aviation") || l.includes("connectivity") || l.includes("bhogapuram")) return Plane;
   if (l.includes("vizianagaram")) return MapPin;
   if (l.includes("reach")) return Compass;
@@ -188,11 +192,11 @@ export function MegaMenu() {
             </Link>
 
             {/* Desktop nav - Dynamic Island Menu Items */}
-            <nav className="hidden lg:flex items-center justify-center gap-1">
+            <nav className="hidden lg:flex items-center justify-center gap-0.5 xl:gap-1">
               {NAV.map((item, i) => {
                 const active =
                   item.to === path ||
-                  (item.groups?.some((g) => g.items.some((it) => it.to === path)) ?? false);
+                  (item.groups?.some((g) => g.items.some((it) => it.to === path || it.to.split("?")[0] === path)) ?? false);
                 return (
                   <div
                     key={item.label}
@@ -202,7 +206,7 @@ export function MegaMenu() {
                     {item.to ? (
                       <Link
                         to={item.to}
-                        className={`px-3 py-1.5 text-[13.5px] font-semibold rounded-full transition-all flex items-center gap-1.5 ${active || openIdx === i
+                        className={`px-2.5 xl:px-3 py-1.5 text-[12.5px] xl:text-[13.5px] font-semibold rounded-full transition-all flex items-center gap-1 xl:gap-1.5 ${active || openIdx === i
                           ? "bg-white/20 text-white shadow-sm"
                           : "text-white/85 hover:text-white hover:bg-white/10"
                           }`}
@@ -217,7 +221,7 @@ export function MegaMenu() {
                       </Link>
                     ) : (
                       <button
-                        className={`flex items-center gap-1.5 px-3 py-1.5 text-[13.5px] font-semibold rounded-full transition-all cursor-pointer ${active || openIdx === i
+                        className={`flex items-center gap-1 xl:gap-1.5 px-2.5 xl:px-3 py-1.5 text-[12.5px] xl:text-[13.5px] font-semibold rounded-full transition-all cursor-pointer ${active || openIdx === i
                           ? "bg-white/20 text-white shadow-sm"
                           : "text-white/85 hover:text-white hover:bg-white/10"
                           }`}

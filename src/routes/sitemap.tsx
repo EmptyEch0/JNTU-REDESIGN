@@ -12,6 +12,7 @@ import {
   FlaskConical,
   Users,
   ShieldCheck,
+  Award,
   ExternalLink,
   ChevronRight,
   BookOpen,
@@ -64,7 +65,6 @@ const SITEMAP_DATA: SitemapSection[] = [
     links: [
       { label: "About Institution", to: "/about/institution", desc: "History, campus size, and legacy since 2007" },
       { label: "Vision & Mission", to: "/about/vision-mission", desc: "Guiding purpose and core values" },
-      { label: "Norms & UGC Recognition", to: "/about/norms", desc: "UGC 2(f) & 12(B) compliance status" },
       { label: "Principal's Desk", to: "/administration/principal", desc: "Executive leadership & profile" },
       { label: "Vice Principal", to: "/administration/vice-principal", desc: "Academic administration & duties" },
       { label: "Principal's Office", to: "/administration/principals-office", desc: "Administrative staff & functions" },
@@ -142,6 +142,19 @@ const SITEMAP_DATA: SitemapSection[] = [
       { label: "Research Publications", to: "/rd-cell/publications", desc: "Indexed journals (SCI/Scopus) & conferences" },
       { label: "Ph.D Scholars", to: "/rd-cell/scholars", desc: "Registered research scholars under supervision" },
       { label: "Industrial MOUs", to: "/rd-cell/mous", desc: "Active research collaboration agreements" },
+    ],
+  },
+  {
+    title: "Norms & Statutory Accreditations",
+    description: "UGC recognition, AICTE approvals, national ranking benchmarks, and statutory frameworks.",
+    icon: Award,
+    color: "from-emerald-600 to-teal-700",
+    links: [
+      { label: "All Norms & Overview", to: "/about/norms", desc: "Institutional compliance and regulatory framework" },
+      { label: "AICTE Approvals (EOA)", to: "/about/norms?tab=AICTE", desc: "Extension of Approval & course intake orders" },
+      { label: "NIRF Ranking Reports", to: "/about/norms?tab=NIRF", desc: "National institutional ranking framework & DCS reports" },
+      { label: "UGC 2(f) & 12(B) Recognition", to: "/about/norms?tab=Institutional", desc: "UGC status and research grant eligibility" },
+      { label: "University Orders & Acts", to: "/about/norms?tab=Institutional", desc: "Establishment GO MS. 14 & JNTU Act 2008" },
     ],
   },
   {

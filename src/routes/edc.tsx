@@ -37,6 +37,7 @@ import {
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FacultyProfileLink } from "@/components/FacultyProfileLink";
+import { committeeDesignation } from "@/lib/faculty-directory";
 
 export const Route = createFileRoute("/edc")({
   head: () => ({
@@ -494,7 +495,7 @@ function EdcPage() {
                               }
                             />
                           ) : (
-                            <FacultyProfileLink name={m.name} designation={m.designation} showIcon={true} />
+                            <FacultyProfileLink name={m.name} showIcon={true} />
                           )}
                         </td>
                         <td className="px-6 py-4">
@@ -507,7 +508,7 @@ function EdcPage() {
                               }
                             />
                           ) : (
-                            m.designation
+                            committeeDesignation(m.name, m.designation)
                           )}
                         </td>
                         <td className="px-6 py-4 font-semibold text-primary">

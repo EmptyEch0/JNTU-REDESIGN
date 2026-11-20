@@ -29,6 +29,7 @@ import {
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FacultyProfileLink } from "@/components/FacultyProfileLink";
+import { committeeDesignation } from "@/lib/faculty-directory";
 import { AdminUpload } from "@/components/AdminEditPanel";
 
 export const Route = createFileRoute("/women-empowerment/")({
@@ -470,10 +471,10 @@ function WEAboutPage() {
                         ) : (
                           <div>
                             <h4 className="font-bold text-ink text-sm leading-tight">
-                              <FacultyProfileLink name={member.name} designation={member.role} showIcon={true} />
+                              <FacultyProfileLink name={member.name} showIcon={true} />
                             </h4>
                             <p className="text-xs text-primary font-bold mt-1 tracking-tight leading-snug">
-                              {member.role}
+                              {committeeDesignation(member.name, member.role)}
                             </p>
                           </div>
                         )}

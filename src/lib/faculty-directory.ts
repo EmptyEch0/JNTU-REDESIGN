@@ -115,3 +115,26 @@ export function resolveFacultyProfile(rawName: string, deptHint?: string): Resol
     allAppointments: matches,
   };
 }
+
+/**
+ * Strips rotating administrative posts (Principal, Vice-Principal, HOD / Head of X)
+ * from committee designation text, keeping academic rank and committee role.
+ * Display-time only, so stored CMS text stays untouched.
+ *   "Principal & Chairman WE&GC"            -> "Chairman WE&GC"
+ *   "Professor & HOD of IT, Convener WE&GC" -> "Professor of IT, Convener WE&GC"
+ */
+export function stripAdminTitles(text = ""): string {
+  return text
+    .replace(/\s*&\s*(hod|head)\s+of\b/gi, " of")
+    .replace(/\b(vice[\s-]*principal|principal)\b(\s*\(i\/c\))?/gi, "")
+    .replace(/\b(hod|head)\b(\s+of\s+[^,&/]+)?/gi, "")
+    .replace(/(\s*[,&/]\s*)+(?=[,&/]|$)/g, "")
+    .replace(/^\s*[,&/]\s*/, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+/** Committee member designation: cleaned text, else the member's academic rank from the faculty directory. */
+export function committeeDesignation(name: string, text?: string | null): string {
+  return stripAdminTitles(text || "") || resolveFacultyProfile(name)?.primaryAppointment.designation || "";
+}

@@ -10,6 +10,7 @@ const labels: Record<string, string> = {
   sports: "Sports",
   dispensary: "Dispensary",
   "rd-cell": "R&D Cell",
+  norms: "Norms",
   placements: "Placements",
   nss: "NSS",
   "women-empowerment": "Women Empowerment",

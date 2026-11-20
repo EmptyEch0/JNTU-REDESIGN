@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { committeeDesignation } from "@/lib/faculty-directory";
 import { PageHero } from "@/components/PageHero";
 import { SubNav } from "@/components/SubNav";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -427,7 +428,7 @@ function AboutResearchPage() {
                 ) : (
                   <ProfileCard
                     name={m.name}
-                    role={m.role}
+                    role={committeeDesignation(m.name, m.role)}
                     detail={m.detail}
                     badge={`Member ${String(i + 1).padStart(2, "0")}`}
                   />

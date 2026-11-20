@@ -17,7 +17,7 @@ export function formatCleanDesignation(raw: string = ""): string {
   let d = raw.trim();
 
   // 1. Remove administrative roles like "& HOD", "& Head", "& Principal", "& Vice Principal", etc.
-  d = d.replace(/\s*&\s*(hod|head of the department|head of department|head|principal|vice principal|director|coordinator)\b/gi, "");
+  d = d.replace(/\s*&\s*(hod|head of the department|head of department|head|principal|vice principal|director|coordinator)\b(\s+of\s+[^,&/]+)?/gi, "");
   d = d.replace(/\s*\/\s*(hod|head|principal|vice principal)\b/gi, "");
   d = d.replace(/^(hod|head|principal|vice principal)\s*&\s*/gi, "");
   d = d.replace(/\((hod|head|principal|vice principal)\)/gi, "");

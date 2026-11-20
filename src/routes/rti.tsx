@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { committeeDesignation } from "@/lib/faculty-directory";
 import { imageUrl } from "@/lib/assets";
 import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -193,7 +194,7 @@ function RTIPage() {
                     <div>
                       <h3 className="text-xl font-bold text-slate-900">{officer.name}</h3>
                       <p className="text-sm font-medium text-primary mt-0.5">
-                        {officer.designation}
+                        {committeeDesignation(officer.name, officer.designation)}
                       </p>
                     </div>
 

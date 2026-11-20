@@ -4,6 +4,7 @@ import { PageHero } from "@/components/PageHero";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FacultyProfileLink } from "@/components/FacultyProfileLink";
+import { committeeDesignation } from "@/lib/faculty-directory";
 import {
   ShieldAlert,
   AlertTriangle,
@@ -45,86 +46,57 @@ export const Route = createFileRoute("/anti-ragging")({
 
 const COMMITTEE_MEMBERS = [
   {
-    sNo: 1,
     name: "Prof. R. Rajeswara Rao",
-    designation: "Principal",
     role: "Chairman",
     roleBadge: "bg-red-500/10 text-red-700 border-red-200",
   },
   {
-    sNo: 2,
     name: "Dr. G. J. Naga Raju",
-    designation: "Vice-Principal",
     role: "Convenor",
     roleBadge: "bg-amber-500/10 text-amber-700 border-amber-200",
   },
   {
-    sNo: 3,
     name: "Dr. K. Srinivasa Prasad",
-    designation: "Head of Mechanical Engineering & HMETD",
     role: "Member",
     roleBadge: "bg-slate-100 text-slate-700 border-slate-200",
   },
   {
-    sNo: 4,
     name: "Dr. V. S. Vakula",
-    designation: "Head of EEE",
     role: "Member",
     roleBadge: "bg-slate-100 text-slate-700 border-slate-200",
   },
   {
-    sNo: 5,
     name: "Dr. P. Aruna Kumari",
-    designation: "Head of CSE",
     role: "Member",
     roleBadge: "bg-slate-100 text-slate-700 border-slate-200",
   },
   {
-    sNo: 6,
     name: "Dr. G. Appala Naidu",
-    designation: "Head of Civil Engineering",
     role: "Member",
     roleBadge: "bg-slate-100 text-slate-700 border-slate-200",
   },
   {
-    sNo: 7,
-    name: "Dr. V. S. Vakula",
-    designation: "Head of ECE",
-    role: "Member",
-    roleBadge: "bg-slate-100 text-slate-700 border-slate-200",
-  },
-  {
-    sNo: 8,
     name: "Dr. Ch. Bindu Madhuri",
-    designation: "Head of IT & OIH",
     role: "Member",
     roleBadge: "bg-slate-100 text-slate-700 border-slate-200",
   },
   {
-    sNo: 9,
     name: "Dr. M. Sowbhagya Lakshmi",
-    designation: "Head of BS&HSS",
     role: "Member",
     roleBadge: "bg-slate-100 text-slate-700 border-slate-200",
   },
   {
-    sNo: 10,
     name: "Dr. P. Sree Devi",
-    designation: "Head of MBA",
     role: "Member",
     roleBadge: "bg-slate-100 text-slate-700 border-slate-200",
   },
   {
-    sNo: 11,
     name: "Sri. D. D. V. Siva Ram Rolangi",
-    designation: "Officer In-charge of Library",
     role: "Member",
     roleBadge: "bg-slate-100 text-slate-700 border-slate-200",
   },
   {
-    sNo: 12,
     name: "Dr. A. V. Papa Rao",
-    designation: "Sports Coordinator",
     role: "Member",
     roleBadge: "bg-slate-100 text-slate-700 border-slate-200",
   },
@@ -327,25 +299,25 @@ function AntiRaggingPage() {
                     <tr>
                       <th className="py-4 px-6 font-semibold w-16 text-center">S.No</th>
                       <th className="py-4 px-6 font-semibold">Name of the Member</th>
-                      <th className="py-4 px-6 font-semibold">Institutional Designation</th>
+                      <th className="py-4 px-6 font-semibold">Designation</th>
                       <th className="py-4 px-6 font-semibold text-center">Committee Role</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {COMMITTEE_MEMBERS.map((member) => (
+                    {COMMITTEE_MEMBERS.map((member, idx) => (
                       <tr
-                        key={member.sNo}
+                        key={member.name}
                         className="hover:bg-slate-50/80 transition-colors"
                       >
                         <td className="py-4 px-6 font-mono text-center text-slate-500 font-semibold">
-                          {member.sNo}
+                          {idx + 1}
                         </td>
                         <td className="py-4 px-6 font-bold text-slate-900 flex items-center gap-2.5">
                           <div className="h-2 w-2 rounded-full bg-primary/60 shrink-0" />
-                          <FacultyProfileLink name={member.name} designation={member.designation} showIcon={true} />
+                          <FacultyProfileLink name={member.name} showIcon={true} />
                         </td>
                         <td className="py-4 px-6 text-slate-600 font-medium">
-                          {member.designation}
+                          {committeeDesignation(member.name)}
                         </td>
                         <td className="py-4 px-6 text-center">
                           <span

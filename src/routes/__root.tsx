@@ -308,7 +308,12 @@ function AdminContent() {
             </button>
           </div>
 
-          <div className="relative shrink-0 ml-4" ref={adminMenuRef}>
+          <div
+            className="relative shrink-0 ml-4"
+            ref={adminMenuRef}
+            onMouseEnter={() => setAdminMenuOpen(true)}
+            onMouseLeave={() => setAdminMenuOpen(false)}
+          >
             <button
               onClick={() => setAdminMenuOpen((o) => !o)}
               className="flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-wider bg-primary/20 border border-primary text-primary hover:bg-primary/30 transition-all cursor-pointer"
@@ -319,7 +324,7 @@ function AdminContent() {
             </button>
 
             {adminMenuOpen && (
-              <div className="absolute right-0 top-full mt-2 w-60 bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl py-2 z-[110] animate-[fade-in_0.15s_ease-out]">
+              <div className="fixed right-4 md:right-6 top-12 w-60 bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl py-2 z-[110] animate-[fade-in_0.15s_ease-out]">
                 {adminLinks.map(({ to, label, icon: Icon }) => (
                   <Link
                     key={to}

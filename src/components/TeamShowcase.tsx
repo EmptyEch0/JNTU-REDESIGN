@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
-  Sparkles,
   GraduationCap,
   Linkedin,
   Code2,
@@ -168,11 +167,6 @@ export function TeamShowcase() {
 
       {/* Hero Header Section */}
       <section className="container-narrow mb-14 text-center">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent/15 border border-accent/30 text-ink dark:text-accent text-xs font-semibold tracking-wide mb-4 shadow-xs">
-          <Sparkles className="h-3.5 w-3.5 text-accent animate-pulse" />
-          <span>JNTU-GV Digital Transformation Initiative</span>
-        </div>
-
         <h1 className="text-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-ink font-bold tracking-tight mb-4 max-w-4xl mx-auto">
           Meet the Minds Behind <span className="text-accent underline decoration-accent/40 underline-offset-8">JNTU-GV Portal</span>
         </h1>

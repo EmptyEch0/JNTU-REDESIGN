@@ -36,7 +36,9 @@ pm2 status
 # Quick health check
 echo ""
 echo "→ Health check…"
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/ || echo "FAIL")
+PORT=$(grep -E '^PORT=' .env 2>/dev/null | cut -d= -f2 | tr -d '"\r ')
+PORT=${PORT:-8081}
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --retry 5 --retry-connrefused --retry-delay 1 "http://localhost:$PORT/" || true)
 if [ "$HTTP_CODE" = "200" ]; then
   echo "✓ Server responding with HTTP 200"
 else

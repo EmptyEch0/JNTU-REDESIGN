@@ -20,6 +20,18 @@ import { FacultyProvider } from "@/context/FacultyContext";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { PageProgressBar } from "@/components/PageProgressBar";
 import { lazy, Suspense, useState, useEffect, useRef } from "react";
+import {
+  LayoutGrid,
+  ChevronDown,
+  FileText,
+  Building2,
+  Users,
+  Briefcase,
+  QrCode,
+  Bot,
+  UserCircle,
+  LogOut,
+} from "lucide-react";
 
 const Chatbot = lazy(() =>
   import("@/components/Chatbot").then((m) => ({ default: m.Chatbot }))
@@ -202,6 +214,29 @@ function AdminContent() {
     logout
   } = useAdmin();
 
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+  const adminMenuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!adminMenuOpen) return;
+    const onDocClick = (e: MouseEvent) => {
+      if (adminMenuRef.current && !adminMenuRef.current.contains(e.target as Node)) {
+        setAdminMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, [adminMenuOpen]);
+
+  const adminLinks = [
+    { to: "/mgmt-9f3a2b1c", label: "Notices & Gallery", icon: FileText },
+    { to: "/admin/departments", label: "Departments", icon: Building2 },
+    { to: "/admin/users", label: "Users", icon: Users },
+    { to: "/admin/placements", label: "Placements", icon: Briefcase },
+    { to: "/admin/certifications", label: "Certificates & QR", icon: QrCode },
+    { to: "/admin/chatbot-analytics", label: "Bot Analytics", icon: Bot },
+    { to: "/admin-account-settings", label: "Account", icon: UserCircle },
+  ];
+
   // Entry and account-settings routes where full site chrome (Navbar, Footer, Chatbot) is hidden
   const HIDE_CHROME_ROUTES = new Set([
     "/mgmt-9f3a2b1c",
@@ -273,25 +308,43 @@ function AdminContent() {
             </button>
           </div>
 
-          <div className="flex items-center gap-3 md:gap-5 shrink-0 ml-4">
-            <Link to="/mgmt-9f3a2b1c" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Notices & Gallery</Link>
-            <Link to="/admin/departments" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Departments</Link>
-            <Link to="/admin/users" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Users</Link>
-            <Link to="/admin/placements" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Placements</Link>
-            <Link to="/admin/certifications" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Certificates & QR</Link>
-            <Link to="/admin/chatbot-analytics" className="text-[10px] md:text-[11px] font-bold text-sky-400 hover:text-sky-300 transition-colors shrink-0 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
-              Bot Analytics
-            </Link>
-            <Link to="/admin-account-settings" className="text-[10px] md:text-[11px] font-semibold hover:text-primary transition-colors shrink-0">Account</Link>
-
-            <Link
-              to="/"
-              onClick={() => logout()}
-              className="text-[10px] md:text-[11px] font-semibold text-zinc-400 hover:text-white transition-colors shrink-0"
+          <div className="relative shrink-0 ml-4" ref={adminMenuRef}>
+            <button
+              onClick={() => setAdminMenuOpen((o) => !o)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-wider bg-primary/20 border border-primary text-primary hover:bg-primary/30 transition-all cursor-pointer"
             >
-              Logout
-            </Link>
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Admin Portal</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${adminMenuOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {adminMenuOpen && (
+              <div className="absolute right-0 top-full mt-2 w-60 bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl py-2 z-[110] animate-[fade-in_0.15s_ease-out]">
+                {adminLinks.map(({ to, label, icon: Icon }) => (
+                  <Link
+                    key={to}
+                    to={to}
+                    onClick={() => setAdminMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-[11px] font-semibold text-zinc-300 hover:text-primary hover:bg-white/5 transition-colors"
+                  >
+                    <Icon className="w-4 h-4 shrink-0" />
+                    {label}
+                  </Link>
+                ))}
+                <div className="my-1.5 border-t border-zinc-700/70" />
+                <Link
+                  to="/"
+                  onClick={() => {
+                    setAdminMenuOpen(false);
+                    logout();
+                  }}
+                  className="flex items-center gap-3 px-4 py-2.5 text-[11px] font-semibold text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
+                >
+                  <LogOut className="w-4 h-4 shrink-0" />
+                  Logout
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

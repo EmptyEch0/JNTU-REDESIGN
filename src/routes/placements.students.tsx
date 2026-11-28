@@ -92,15 +92,24 @@ function StudentsPlacedPage() {
     queryFn: () => getStudents(),
   });
 
-  // Group students by academic year
+  const [branchFilter, setBranchFilter] = useState("");
+  const [campusFilter, setCampusFilter] = useState("");
+  const branchOptions = useMemo(
+    () => [...new Set(students.map((s: any) => s.branch).filter(Boolean))].sort(),
+    [students],
+  );
+
+  // Group students by academic year (after branch / campus filters)
   const groupedStudents = useMemo(() => {
     const groups: Record<string, any[]> = {};
     students.forEach((s) => {
+      if (branchFilter && s.branch !== branchFilter) return;
+      if (campusFilter && !s.campusType?.startsWith(campusFilter)) return; // "On Campus" includes "(Virtual)"
       if (!groups[s.year]) groups[s.year] = [];
       groups[s.year].push(s);
     });
     return groups;
-  }, [students]);
+  }, [students, branchFilter, campusFilter]);
 
   // Combined list of all academic years (from placementYears AND students)
   const allDisplayYears = useMemo(() => {
@@ -545,14 +554,45 @@ function StudentsPlacedPage() {
               </div>
             </RevealOnScroll>
 
-            {isEditMode && (
-              <button
-                onClick={() => setIsAddingBatch(true)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-white font-bold text-xs shadow-md hover:bg-primary/90 transition cursor-pointer"
+            <div className="flex flex-wrap items-center gap-3">
+              <select
+                aria-label="Filter by branch"
+                value={branchFilter}
+                onChange={(e) => {
+                  setBranchFilter(e.target.value);
+                  setPages({});
+                }}
+                className="px-4 py-2.5 rounded-full border border-border bg-card text-xs font-bold text-ink outline-none focus:ring-2 focus:ring-primary cursor-pointer"
               >
-                <Plus size={16} /> + Add Academic Year / Batch (e.g. 2025-26)
-              </button>
-            )}
+                <option value="">All Branches</option>
+                {branchOptions.map((b) => (
+                  <option key={b} value={b}>
+                    {b}
+                  </option>
+                ))}
+              </select>
+              <select
+                aria-label="Filter by campus type"
+                value={campusFilter}
+                onChange={(e) => {
+                  setCampusFilter(e.target.value);
+                  setPages({});
+                }}
+                className="px-4 py-2.5 rounded-full border border-border bg-card text-xs font-bold text-ink outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+              >
+                <option value="">On & Off Campus</option>
+                <option value="On Campus">On Campus</option>
+                <option value="Off Campus">Off Campus</option>
+              </select>
+              {isEditMode && (
+                <button
+                  onClick={() => setIsAddingBatch(true)}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-white font-bold text-xs shadow-md hover:bg-primary/90 transition cursor-pointer"
+                >
+                  <Plus size={16} /> + Add Academic Year / Batch (e.g. 2025-26)
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Add New Batch Modal / Dropdown Dialog */}

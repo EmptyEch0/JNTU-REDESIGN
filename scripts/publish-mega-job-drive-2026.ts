@@ -5,8 +5,8 @@ import "dotenv/config";
 import "../src/lib/dns-setup";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
-import { like } from "drizzle-orm";
-import { students } from "../src/db/schema";
+import { eq, like } from "drizzle-orm";
+import { placementYears, students } from "../src/db/schema";
 
 const YEAR = "2026-27";
 const COMPANY = "Mega Job Drive-2026";
@@ -78,6 +78,13 @@ async function main() {
   const fresh = rows.filter((r) => !existing.has(r.rollNo));
   if (fresh.length) await db.insert(students).values(fresh);
   console.log(`inserted ${fresh.length}/${rows.length} into ${YEAR}`);
+
+  // Placement Trend row: 43 offers, 12 recruiters per circular; package not stated (edit in admin).
+  const [trend] = await db.select().from(placementYears).where(eq(placementYears.year, YEAR));
+  if (!trend) {
+    await db.insert(placementYears).values({ year: YEAR, offers: PLACED.length, top: "—", recruiters: 12 });
+    console.log(`inserted trend row ${YEAR}`);
+  }
   await client.end();
 }
 
